@@ -480,8 +480,9 @@ if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName)
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cd "$(SolutionDir)..\BuildScripts"
+if exist post-build-$(ConfigurationName).cmd call  post-build-$(ConfigurationName).cmd $(ProjectDir)
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
