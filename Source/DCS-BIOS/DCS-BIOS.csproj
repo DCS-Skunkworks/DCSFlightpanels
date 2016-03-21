@@ -74,7 +74,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonClassLibraryJD">
-      <HintPath>..\..\CommonClassLibraryJD\CommonClassLibraryJD\bin\Release\CommonClassLibraryJD.dll</HintPath>
+      <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
     </Reference>
     <Reference Include="Jace">
       <HintPath>..\packages\Jace.0.8.7\lib\net40\Jace.dll</HintPath>
@@ -113,8 +113,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cd "C:\dev\visualstudio\Projects\FlightPanels\DCS-BIOS\Scripts"
-powershell.exe .\pre-build.ps1 '$(ConfigurationName)'</PreBuildEvent>
+    <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
+if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName).cmd $(ProjectDir)
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

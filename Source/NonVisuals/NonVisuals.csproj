@@ -70,12 +70,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonClassLibraryJD, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CommonClassLibraryJD\CommonClassLibraryJD\bin\Release\CommonClassLibraryJD.dll</HintPath>
-    </Reference>
-    <Reference Include="HidLibrary">
-      <HintPath>..\..\HidLibrary-master\src\HidLibrary\bin\Release\HidLibrary.dll</HintPath>
+    <Reference Include="CommonClassLibraryJD">
+      <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
     </Reference>
     <Reference Include="Jace">
       <HintPath>..\packages\Jace.0.8.7\lib\net40\Jace.dll</HintPath>
@@ -180,12 +176,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj">
       <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
       <Name>DCS-BIOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HidLibrary\HidLibrary.csproj">
+      <Project>{9e8f1d50-74ea-4c60-bd5c-ab2c5b53bc66}</Project>
+      <Name>HidLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -193,8 +190,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cd "C:\dev\visualstudio\Projects\FlightPanels\NonVisuals\Scripts"
-powershell.exe .\pre-build.ps1 '$(ConfigurationName)'</PreBuildEvent>
+    <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
+if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName).cmd $(ProjectDir)
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
