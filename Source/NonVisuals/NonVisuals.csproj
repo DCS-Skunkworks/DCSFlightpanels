@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{54C2DD8F-259C-41B7-94ED-88F51F698595}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NonVisuals</RootNamespace>
+    <AssemblyName>NonVisuals</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>huey_icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommonClassLibraryJD, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonClassLibraryJD\CommonClassLibraryJD\bin\Release\CommonClassLibraryJD.dll</HintPath>
+    </Reference>
+    <Reference Include="HidLibrary">
+      <HintPath>..\..\HidLibrary-master\src\HidLibrary\bin\Release\HidLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Jace">
+      <HintPath>..\packages\Jace.0.8.7\lib\net40\Jace.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BacklitPanelBIP.cs" />
+    <Compile Include="Common.cs" />
+    <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
+    <Compile Include="DCSBIOSBindingFIP.cs" />
+    <Compile Include="DCSBIOSBindingTPM.cs" />
+    <Compile Include="DCSBIOSBindingPZ70.cs" />
+    <Compile Include="DCSBIOSBindingPZ55.cs" />
+    <Compile Include="DcsOutputAndColorBinding.cs" />
+    <Compile Include="DirectOutputClass.cs" />
+    <Compile Include="FIPHandler.cs" />
+    <Compile Include="FIPPanel.cs" />
+    <Compile Include="FIPPanelA10C.cs" />
+    <Compile Include="HIDHandler.cs" />
+    <Compile Include="IGlobalHandler.cs" />
+    <Compile Include="IProfileHandlerListener.cs" />
+    <Compile Include="IRadioPanel.cs" />
+    <Compile Include="ISaitekPanelListener.cs" />
+    <Compile Include="IUserMessageHandler.cs" />
+    <Compile Include="KeyBindingFIP.cs" />
+    <Compile Include="KeyBindingTPM.cs" />
+    <Compile Include="KnobBindingPZ70.cs" />
+    <Compile Include="KeyBindingPZ55.cs" />
+    <Compile Include="ClickSpeedDetector.cs" />
+    <Compile Include="MultiPanelKnob.cs" />
+    <Compile Include="MultiPanelPZ70.cs" />
+    <Compile Include="OSKeyPress.cs" />
+    <Compile Include="PerformanceTimer.cs" />
+    <Compile Include="ProfileHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RadioPanelKnobKa50.cs" />
+    <Compile Include="RadioPanelKnobMiG21Bis.cs" />
+    <Compile Include="RadioPanelKnobA10C.cs" />
+    <Compile Include="RadioPanelKnobUH1H.cs" />
+    <Compile Include="RadioPanelPZ69Ka50.cs" />
+    <Compile Include="RadioPanelPZ69MiG21Bis.cs" />
+    <Compile Include="RadioPanelPZ69A10C.cs" />
+    <Compile Include="RadioPanelPZ69Base.cs" />
+    <Compile Include="RadioPanelPZ69UH1H.cs" />
+    <Compile Include="SaitekPanel.cs" />
+    <Compile Include="TPMPanelSwitch.cs" />
+    <Compile Include="SwitchPanelKey.cs" />
+    <Compile Include="TPMPanel.cs" />
+    <Compile Include="SwitchPanelPZ55.cs" />
+    <Compile Include="VirtualKeyCode.cs" />
+    <Compile Include="WindowsAPI.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="huey_icon.ico" />
+    <None Include="Resources\A10C_HSI_background_power_on.bmp" />
+    <None Include="Resources\A10C_HSI_background_power_off.bmp" />
+    <None Include="Resources\A10C_HSI_background2_no_data copy.bmp" />
+    <None Include="Resources\A-10C_VVI_background_02_no_data copy.bmp" />
+    <None Include="Resources\A-10C_VVI_background.bmp" />
+    <None Include="Resources\A10C_HSI_number_2_arrow.bmp" />
+    <None Include="Resources\A10C_HSI_number_1_arrow.bmp" />
+    <None Include="Resources\A10C_HSI_course_arrow_to_station_off_course.bmp" />
+    <None Include="Resources\A10C_HSI_course_arrow_to_station_01.bmp" />
+    <None Include="Resources\A10C_HSI_course_arrow_from_station_off_course.bmp" />
+    <None Include="Resources\A10C_HSI_course_arrow_from_station_01.bmp" />
+    <None Include="Resources\A10C_HSI_course_arrow_blank.bmp" />
+    <None Include="Resources\A10C_HSI_off_course_flag.bmp" />
+    <None Include="Resources\A10C_HSI_deviation_line_3.bmp" />
+    <None Include="Resources\A10C_HSI_range_digits_power_off_flag.bmp" />
+    <None Include="Resources\A-10C_VVI_needle02.bmp" />
+    <None Include="Resources\A10C_HSI_arrow_3_small_rnd_dots.bmp" />
+    <None Include="Resources\A10C_HSI_compass_card3.bmp" />
+    <None Include="Resources\A10C_HSI_power_off_flag2.bmp" />
+    <None Include="Resources\A10C_HSI_plane_symbol.bmp" />
+    <None Include="Resources\A10C_HSI_heading_marker.bmp" />
+    <None Include="Resources\A10C_HSI_compass_card2.bmp" />
+    <None Include="Resources\A10C_HSI_background2.bmp" />
+    <None Include="Resources\A10C_HSI_arrow.bmp" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj">
+      <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
+      <Name>DCS-BIOS</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>cd "C:\dev\visualstudio\Projects\FlightPanels\NonVisuals\Scripts"
+powershell.exe .\pre-build.ps1 '$(ConfigurationName)'</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

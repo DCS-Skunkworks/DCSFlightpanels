@@ -1,0 +1,169 @@
+﻿<Window x:Class="ProUsbPanels.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Flightpanels" Height="750" Width="1000" Loaded="WindowLoaded" WindowStartupLocation="CenterScreen"  Icon="/ProUsbPanels;component/Images/huey_icon.ico" Name="FlightpanelsMainWindow" Closing="MainWindowClosing" Closed="MainWindow_OnClosed" LocationChanged="MainWindowLocationChanged" SizeChanged="MainWindowSizeChanged">
+    <Window.Resources>
+    </Window.Resources>
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="37" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="21" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Menu Height="25" HorizontalAlignment="Stretch" Name="MainMenu" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" >
+            <MenuItem Header="File" >
+                <MenuItem Header="New" Name="MenuItemNew" Click="MenuItemNewClick"/>
+                <MenuItem Header="Open" Name="MenuItemOpen" Click="MenuItemOpenClick"/>
+                <MenuItem Header="Save" Name="MenuItemSave" Click="MenuItemSaveClick"/>
+                <MenuItem Header="Save As.." Name="MenuItemSaveAs" Click="MenuItemSaveAsClick"/>
+                <Separator />
+                <MenuItem Header="Exit" Click="MenuItemExitClick" />
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem Name ="MenuItemCheckForDCS" Header="Check for Digital Combat Simulator" Click="MenuItemCheckForDCSClick" IsChecked="True"/>
+                <MenuItem Name ="MenuItemAPI" Header="API Mode">
+                    <MenuItem Name ="MenuItemAPIKeyBdEvent" Header="1. keybd__event()" Click="MenuItemAPIKeyBdEventClick" />
+                    <MenuItem Name ="MenuItemAPISendInput" Header="2. SendInput()" Click="MenuItemAPISendInputClick" />
+                </MenuItem>
+                <MenuItem Name ="MenuItemDCSBIOSSettings" Header="DCS BIOS Settings" Click="MenuItemDCSBIOSSettingsClick" />
+                <MenuItem Name ="MenuItemErrorLog" Header="Open error log" Click="MenuItemErrorLog_OnClick" />
+                <MenuItem Name ="MenuItemDebugLog" Header="Open debug log" Click="MenuItemDebugLog_OnClick" />
+                <MenuItem Name ="MenuItemDebugging" Header="Debugging">
+                    <MenuItem Name ="MenuItemDoDebugging" Header="Debug turned on" Click="MenuItemDoDebugging_OnClick" />
+                    <MenuItem Name ="MenuItemDebugToFile" Header="Debug to file" Click="MenuItemDebugToFile_OnClick" />
+                    </MenuItem>
+                <MenuItem Name ="MenuItemProcessPriority" Header="Process priority">
+                    <!-- <MenuItem Name ="MenuItemProcessPriorityLow" Header="Low" Click="MenuItemProcessPriorityClick" /> -->
+                    <MenuItem Name ="MenuItemProcessPriorityBelowNormal" Header="Below Normal" Click="MenuItemProcessPriorityClick" />
+                    <MenuItem Name ="MenuItemProcessPriorityNormal" Header="Normal" Click="MenuItemProcessPriorityClick"/>
+                    <MenuItem Name ="MenuItemProcessPriorityAboveNormal" Header="Above Normal" Click="MenuItemProcessPriorityClick" />
+                    <MenuItem Name ="MenuItemProcessPriorityHigh" Header="High" Click="MenuItemProcessPriorityClick" />
+                    <MenuItem Name ="MenuItemProcessPriorityRealtime" Header="Realtime" Click="MenuItemProcessPriorityClick" />
+                </MenuItem>
+                
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="Donate" Click="MenuItemDonateClick" />
+                <MenuItem Header="About" Click="MenuItemAboutClick" />
+            </MenuItem>
+        </Menu>
+        <ToolBar Height="35" HorizontalAlignment="Stretch" Name="ToolBarMain" VerticalAlignment="Top" Grid.Column="0" Grid.Row="1" >
+            <Button>
+                <Image Source="/ProUsbPanels;component/Images/NewDocument_32x32.png" Name="ButtonImageNew" MouseDown="ButtonImageNewMouseDown" ToolTip="New"/>
+            </Button>
+            <Button>
+                <Image Source="/ProUsbPanels;component/Images/SaveHL.bmp" Name="ButtonImageSave" MouseDown="ButtonImageSaveMouseDown" ToolTip="Save">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+            </Button>
+            <Button>
+                <Image Source="/ProUsbPanels;component/Images/OpenPL.bmp" Name="ButtonImageOpen" MouseDown="ButtonImageOpenMouseDown"  ToolTip="Open"/>
+            </Button>
+            <Button>
+                <Image Source="/ProUsbPanels;component/Images/112_RefreshArrow_Green_32x32_72.png" Name="ButtonImageRefresh" MouseDown="ButtonImageRefreshMouseDown"  ToolTip="Refresh">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+            </Button>
+            <Button>
+                <Image Source="/ProUsbPanels;component/Images/Notepad_32x32.png" Name="ButtonImageNotepad" MouseDown="ButtonImageNotepadMouseDown"  ToolTip="Open text editor">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+            </Button>
+            <Button>
+                <Image Source="/ProUsbPanels;component/Images/109_AllAnnotations_RedWarning_256.png" Name="ButtonImageDisable" MouseDown="ButtonImageDisableMouseDown"  ToolTip="Disable" Tag="False">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <Trigger Property="Tag" Value="False">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+            </Button>
+
+            <Image Name="ImageDcsBiosConnected"  Source="/ProUsbPanels;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS">
+                <Image.RenderTransform>
+                    <RotateTransform CenterX="9" CenterY="9" />
+                </Image.RenderTransform>
+                <Image.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <Trigger Property="Image.IsEnabled" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Name="GearStoryboard">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                            <Trigger Property="Image.IsEnabled" Value="False">
+                                <Trigger.EnterActions>
+                                    <PauseStoryboard BeginStoryboardName="GearStoryboard">
+                                    </PauseStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+            <Button>
+                <Image Source="/ProUsbPanels;component/Images/black.png" Name="ButtonLoadProfileFast" MouseDown="ImageDcsBiosConnected_OnMouseDown"  ToolTip="Quick load profile (dev)" Tag="False" Visibility="Collapsed">
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <Trigger Property="Tag" Value="False">
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+            </Button>
+
+            <Label Margin="200,0,0,0" Name="LabelAirframe" FontWeight="Bold" Content="None"/>
+        </ToolBar>
+        <TabControl Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" >
+
+        </TabControl>
+        <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="20" Grid.Row="3" VerticalAlignment="Top" >
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
+                <TextBlock Name="LabelInformation" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

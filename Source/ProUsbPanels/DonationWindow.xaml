@@ -1,0 +1,30 @@
+﻿<Window x:Class="ProUsbPanels.DonationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Donate" Height="350" Width="800" Icon="/ProUsbPanels;component/Images/huey_icon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="223*"/>
+                <ColumnDefinition Width="45*"/>
+                <ColumnDefinition Width="526*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Height="300" HorizontalAlignment="Left" Margin="12,12,0,0" Name="TextBlockInformation" Text="" VerticalAlignment="Top" Width="772" TextWrapping="Wrap" FontSize="14" Grid.ColumnSpan="3" >
+                <Bold>
+                    <Run FontSize="16">Flightpanels</Run>
+                </Bold>
+                <Bold>
+                    <Run FontSize="16">, connecting Saitek Pro Flight Panels and Digital Combat Simulator</Run>
+                </Bold>
+                <LineBreak/>
+                <LineBreak/>
+                FlightPanels is made available to the flight sim community 100% free <Bold>although</Bold> donations are important for acquiring hardware and paying for software licenses and also donations to other open source projects Flightpanels rely on.<LineBreak/><LineBreak/>
+                If you use and enjoy FlightPanels, please consider making a small donation.  Thank you.<LineBreak/><LineBreak/>
+                Jerker "ArturDCS" Dahlblom<LineBreak/>
+                KAARINA, Finland
+
+            </TextBlock>
+            <Image Height="44" HorizontalAlignment="Center" Margin="64,244,349,0" Cursor="Hand" Name="Screenshots" Stretch="Uniform" VerticalAlignment="Top" Width="113" Source="/ProUsbPanels;component/Images/paypal_donate.gif" Grid.Column="2" MouseDown="Screenshots_OnMouseDown"/>
+        </Grid>
+    </Grid>
+</Window>
