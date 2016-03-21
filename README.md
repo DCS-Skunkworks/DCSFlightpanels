@@ -1,1 +1,119 @@
 # DCSFlightpanels
+
+v 2.1.204 18 April 2015
+MiG-21bis radio (RSBN/ARC/RADIO) supported.
+A-10C VHF FM modified so that full frequency is used (5 digits) 30.000 -> 76.000.
+Main window shows type of profile opened. 
+
+v2.1.158 [1.4.2015]
+TPM Panel supported
+User gets error message if USB Instance IDs are found in the profile file that cannot be found in Windows.
+New profile file format, easier to read with device Instance ID listed only once.
+
+v2.1.120 [26 March 2015]
+Bugfix, old settings not cleared when opening a new profile. Concerns all panels except Radio Panel.
+Bugfix, Pitch down, Flaps down description not visible and corresponding entry in profile erroneous.
+PZ55 Landing gear lights modification on how new values are treated.
+Added option for user to have a description for DCS-BIOS tied switches, knobs, buttons.
+Added TF-51D as new profile option for development purposes only
+
+v2.1.102 [21 March 2015]
+Duplicate error codes modified to be unique (Baldawg's problems)
+Knob sensitivity added for PZ70 Lcd knob
+Bugfix, pitch down, flaps down not working properly
+
+v2.1.93 [15 March 2015]
+Paul's UH-1H ADF freq correction math formulas added.
+User friendly error messages added when editing DCS-BIOS Input and having an invalid input value
+Several sync/swap bugs fixed (A-10C & UH-1H).
+Added ACT/STBY delay option for the user. Too short and sync will be off. User can set optimal delay.
+Input window text changed
+Rearranged UH-1H radios on the PZ69.
+UH-1H Intercomm (XPDR) revamped, UHF preset right LCD, Intercomm left LCD
+UH-1H PZ69 Large knob operates Intercomm Master volume
+UH-1H :
+COM 1  = AN/ARC-134 VHF COMM
+COM 2  = AN/ARC-51BX UHF
+NAV 1  = ARN-82 VHF Nav
+NAV 2  = ARC-131 VHF FM
+ADF    = AN/ARN-83 ADF
+XPDR   = INTERCOMM
+
+v2.1.34 [9 March 2015]
+UH-1H Radio Panel support
+Bug fixes
+Frequency swap now works (ACT/STBY)
+Refactoring of key emulator code
+Multiple DCS-BIOS controls can now be tied to a single switch/key/knob
+
+v2.0 [* March 2015]
+Now supporting:
+Saitek Multi Panel PZ70
+Saitek Radio Panel PZ69
+Saitek Switch Panel PZ55
+Back Lit Panel (BIP)
+
+*****************************************************
+*****************************************************
+*****************************************************
+v1.7 [11 January 2015]
+-Using [FSF]Ian's DCS-BIOS, now possible to set landing gear lights based on data from DCS
+
+v1.6 [6 January 2015]
+-Now using Windows HID driver.
+-Uses mikeobrien/HidLibrary (see more under About)
+-Possible to click LEDs in interface to have them changed (GREEN/YELLOW/RED/DARK).
+-Threaded key presses. If a long key press is reissued while first issued is still being pressed then first is cancelled and second pressed.
+
+v1.5 [20 April 2014]
+-Added longer options for key presses. Few bug fixes.
+
+v1.4 [17 April 2014]
+-Added option for choosing Windows API:s for keyboard emulation. Alternatives are keybd_event() and SendKeys().
+
+v1.3 [25 Feb 2014]
+-Added option for checking for Digital Combat Simulator before sending key commands. This enables using the program for other simulators.
+
+v1.2(BETA) [12 Feb 2014]
+-Added sequenced key presses. Now possible to add unlimited number of key press sequences. ***VERSION IS BETA***
+
+v1.1 [4 Feb 2014]
+-Added log information when Flightpanels can't find DCS windows -> thus won't send virtual key presses.
+ "DCS window not found. No key press created."
+ NO OTHER CHANGES -> not an important update
+ 
+v1.0 [3 Feb 2014]
+-Added all Virtual Keycodes to configuration file for easier manual editing.
+-Added Disable button. Clicking this button activates "Disable Mode" (Red exclamation mark visible). During this mode
+ no key presses will be sent forward to the operating system/DCS. This is useful when you have respawned in a new airframe and you need
+ to reset all the switches so as to reflect the status of the various components in the new airframe.
+-No key presses will be forwarded unless a valid windows handle is aquired to a window named "Digital Combat Simulator" or "DCS". This ensures that
+ Flighpanels do not forward key presses to other applications (windows).
+
+v0.9 [22 Jan 2014]
+Slight location modfication of image "KNOB BOTH/ALL" to the left. Aligment was slightly off with background image.
+
+v0.8 [16 Jan 2014]
+Added button images to application resources. They were referenced locally on the development computer.
+
+v0.7 [15 Jan 2014]
+Added error codes where messages boxes are shown for Exceptions.
+
+v0.6 [15 Jan 2014]
+Changed from TextBox.KeyDown to TextBox.PreviewKeyDown. This enables reading key presses like LCONTROL + END, LCONTROL + VK_C. Added support thread link to about page.
+
+v0.5 [15 Jan 2014]
+Added settings to store window location and size. Modified about page. Made window smaller (changes to layout grid). Added application icon. Added button to open profile in external text editor. Added tooltips for buttons.
+
+v0.4 [14 Jan 2014]
+GUI revamp. Complete change of main window GUI, control placement. Now using Grid, Canvas, StackedPanel for alignment of Controls.
+Image of switch panel uses a Canvas. (100% XAML editing)
+
+v0.3 [13 Jan 2014]
+Changed Windows API from SendInput to keybd_event. After this LCONTROL, RCONTROL etc works in game & under OPTIONS -> CONTROLS. Added refresh button, to be used when editing the profile with text editor in the background. Proper About page.
+
+v0.2 [12 Jan 2014]
+Added key binding profile handling and length key presses. 
+
+v0.1 [9 Jan 2014]
+Initial release
