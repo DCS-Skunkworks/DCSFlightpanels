@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Windows;
-//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using Jace;

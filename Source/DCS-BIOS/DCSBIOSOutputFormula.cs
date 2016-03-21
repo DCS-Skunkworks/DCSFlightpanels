@@ -9,7 +9,6 @@ namespace DCS_BIOS
     {
         private string _formula;
         private List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
-        //private Expression _expression;
         Dictionary<string, double> _variables = new Dictionary<string, double>();
         CalculationEngine _engine = new CalculationEngine();
 
