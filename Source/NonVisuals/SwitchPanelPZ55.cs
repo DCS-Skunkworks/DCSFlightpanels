@@ -204,11 +204,11 @@ namespace NonVisuals
                 var delayUp = random.Next(1500, 10000);
                 var delayRight = random.Next(1500, 10000);
                 var delayLeft = random.Next(1500, 10000);
-                var millisecsStart = DateTime.Now.Ticks / 10000;
+                var millisecsStart = DateTime.Now.Ticks/10000;
 
                 while (true)
                 {
-                    var millisecsNow = DateTime.Now.Ticks / 10000;
+                    var millisecsNow = DateTime.Now.Ticks/10000;
                     Debug.Print("millisecsNow - millisecsStart > delayUp " + (millisecsNow - millisecsStart) + " " + delayUp);
                     Debug.Print("millisecsNow - millisecsStart > delayRight " + (millisecsNow - millisecsStart) + " " + delayRight);
                     Debug.Print("millisecsNow - millisecsStart > delayLeft " + (millisecsNow - millisecsStart) + " " + delayLeft);
@@ -233,6 +233,9 @@ namespace NonVisuals
                     }
                     Thread.Sleep(10);
                 }
+            }
+            catch (ThreadAbortException ext)
+            {
             }
             catch (Exception ex)
             {

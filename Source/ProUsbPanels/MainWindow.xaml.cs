@@ -716,11 +716,11 @@ namespace ProUsbPanels
         {
             if (_panelProfileHandler.IsNewProfile)
             {
-                Title = _windowName + "      " + Common.GetLocalIPAddress();
+                Title = _windowName;// + "      " + Common.GetLocalIPAddress();
             }
             else
             {
-                Title = _windowName + _panelProfileHandler.Filename + "      " + Common.GetLocalIPAddress();
+                Title = _windowName + _panelProfileHandler.Filename; // + "      " + Common.GetLocalIPAddress();
             }
             if (_panelProfileHandler.IsDirty)
             {
