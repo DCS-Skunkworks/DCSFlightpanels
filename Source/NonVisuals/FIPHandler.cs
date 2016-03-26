@@ -81,7 +81,11 @@ namespace NonVisuals
                 {
                     fipPanel.Shutdown();
                 }
-                var retVal = DirectOutputClass.Deinitialize();
+                if (InitOk)
+                {
+                    //No need to deinit if init never worked. (e.g. missing Saitek Drivers)
+                    DirectOutputClass.Deinitialize();
+                }
                 //Console.WriteLine(retVal);
             }
             catch (Exception e)
