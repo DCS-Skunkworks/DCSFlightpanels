@@ -36,7 +36,7 @@ namespace NonVisuals
                 if (!File.Exists(@"C:\Program Files\Saitek\DirectOutput\DirectOutput.dll"))
                 {
                     //Did not find Saitek drivers
-                    Common.LogError(1, "FIPHandler failed to init. No Saitek drivers found.");
+                    Common.LogError(1, "INFO : No Saitek FIP driver found. FIP support not loaded. (assuming no FIPs are connected)");
                     return false;
                 }
 
@@ -102,7 +102,11 @@ namespace NonVisuals
                 {
                     fipPanel.Close();
                 }*/
-                DirectOutputClass.Deinitialize();
+                if (InitOk)
+                {
+                    //No need to deinit if init never worked. (e.g. missing Saitek Drivers)
+                    DirectOutputClass.Deinitialize();
+                }
             }
             catch (Exception)
             {
