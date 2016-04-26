@@ -126,9 +126,6 @@
     <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DonationWindow.xaml.cs">
-      <DependentUpon>DonationWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="FIPPanelUserControl.xaml.cs">
       <DependentUpon>FIPPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -205,10 +202,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DcsBiosWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DonationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

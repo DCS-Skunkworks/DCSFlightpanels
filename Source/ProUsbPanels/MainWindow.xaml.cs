@@ -997,19 +997,7 @@ namespace ProUsbPanels
                 Common.ShowErrorMessageBox(2026, ex);
             }
         }
-
-        private void MenuItemDonateClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var donationWindow = new DonationWindow();
-                donationWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(9027, ex);
-            }
-        }
+        
 
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
         {

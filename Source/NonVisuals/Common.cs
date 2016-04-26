@@ -18,8 +18,8 @@ namespace NonVisuals
     {
         public static readonly List<SaitekPanelSkeleton> SaitekPanelSkeletons = new List<SaitekPanelSkeleton> { new SaitekPanelSkeleton(SaitekPanelsEnum.PZ55SwitchPanel, 0x6A3, 0xD67), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ69RadioPanel, 0x6A3, 0xD05), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ70MultiPanel, 0x6A3, 0xD06), new SaitekPanelSkeleton(SaitekPanelsEnum.BackLitPanel, 0x6A3, 0xB4E), new SaitekPanelSkeleton(SaitekPanelsEnum.TPM, 0x6A3, 0xB4D) };
 
-        public static object _lockObject = new object();
-
+        public static object _errorLoglockObject = new object();
+        public static object _debugLoglockObject = new object();
         /*
         public static int EvaluateX(int data, String formula)
         {
@@ -115,7 +115,7 @@ namespace NonVisuals
 
         public static void LogError(uint location, Exception ex, string message = null)
         {
-            lock (_lockObject)
+            lock (_errorLoglockObject)
             {
                 var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
                 if (!File.Exists(file))
@@ -142,7 +142,7 @@ namespace NonVisuals
 
         public static void LogError(uint location, string message)
         {
-            lock (_lockObject)
+            lock (_errorLoglockObject)
             {
                 var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
                 if (!File.Exists(file))
@@ -548,7 +548,7 @@ namespace NonVisuals
 
         public static void LogToDebugFile(string message = null)
         {
-            lock (_lockObject)
+            lock (_debugLoglockObject)
             {
                 var file = Path.GetTempPath() + "\\Flightpanels_debug_log.txt";
                 if (!File.Exists(file))

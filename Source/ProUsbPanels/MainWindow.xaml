@@ -47,7 +47,6 @@
                 
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="Donate" Click="MenuItemDonateClick" />
                 <MenuItem Header="About" Click="MenuItemAboutClick" />
             </MenuItem>
         </Menu>

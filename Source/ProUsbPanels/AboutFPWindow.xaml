@@ -51,21 +51,7 @@
                 </Hyperlink>
                 for his initial PZ55 Java project that spawned this project.
                 <LineBreak/>
-                <LineBreak/>
-                Flightpanels are:
-                <LineBreak/>
-                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://forums.eagle.ru/member.php?u=104153">
-                    <Bold>Jerker "ArturDCS" Dahlblom</Bold>
-                </Hyperlink> , coding, design
-                <LineBreak/>
-                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://forums.eagle.ru/member.php?u=89763">
-                    <Bold>Paul "pdmarsh" Marsh</Bold>
-                </Hyperlink> , QA, support and design
-                <LineBreak/>
-                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://forums.eagle.ru/member.php?u=91134">
-                    <Bold>Pierre "Darkwolf" Letourneur</Bold>
-                </Hyperlink> , documentation, support, testing and design
-                <LineBreak/>
+                
                 <LineBreak/>
                 Flightpanels is released under
                 <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://opensource.org/licenses/Simple-2.0">
