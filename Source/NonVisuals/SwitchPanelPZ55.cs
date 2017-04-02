@@ -206,6 +206,14 @@ namespace NonVisuals
                 var delayLeft = random.Next(1500, 10000);
                 var millisecsStart = DateTime.Now.Ticks/10000;
 
+                // Corrected the 'Manual LEDS' operation.
+                // Now when the gear knob selection is changed, just like a real aircraft
+                // the lights go to their 'Transit' state showing RED.
+                // Then afterwards they change to their final colour (GREEN = DOWN, DARK = UP)
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, PanelLEDColor.RED);
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, PanelLEDColor.RED);
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, PanelLEDColor.RED);
+
                 while (true)
                 {
                     var millisecsNow = DateTime.Now.Ticks/10000;
@@ -265,7 +273,8 @@ namespace NonVisuals
                         {
                             _manualLandingGearThread.Abort();
                         }
-                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.RED));
+                        // Changed Lights to go DARK when gear level is selected to UP, instead of RED.
+                        _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.DARK));
                         _manualLandingGearThread.Start();
                     }
                     else if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && switchPanelKey.IsOn)
