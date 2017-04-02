@@ -17,6 +17,7 @@ namespace HidLibrary
         private readonly HidDeviceCapabilities _deviceCapabilities;
         private DeviceMode _deviceReadMode = DeviceMode.NonOverlapped;
         private DeviceMode _deviceWriteMode = DeviceMode.NonOverlapped;
+        private bool? cachedIsConnected = null;
 
         private readonly HidDeviceEventMonitor _deviceEventMonitor;
 
@@ -52,7 +53,7 @@ namespace HidLibrary
 
         public IntPtr Handle { get; private set; }
         public bool IsOpen { get; private set; }
-        public bool IsConnected { get { return HidDevices.IsConnected(_devicePath); } }
+        public bool IsConnected { get { return (bool)(cachedIsConnected ?? (cachedIsConnected = HidDevices.IsConnected(_devicePath))); } }
         public string Description { get { return _description; } }
         public HidDeviceCapabilities Capabilities { get { return _deviceCapabilities; } }
         public HidDeviceAttributes Attributes { get { return _deviceAttributes; } }
