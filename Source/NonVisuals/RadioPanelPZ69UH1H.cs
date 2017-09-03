@@ -18,9 +18,9 @@ namespace NonVisuals
         private volatile uint _intercommSkipper;
         private object _lockIntercommDialObject = new object();
         //private volatile uint _intercommDialPosStandby = 0;  <--- Only active, user operates the knob directly, no need for a standby value
-        //private volatile uint _intercommSavedActiveDialPosition = 0;
-        private DCSBIOSOutput _intercommDcsbiosOutputActivePos;
-        private volatile uint _intercommActiveDial1Pos;
+        //private volatile uint _intercommSavedCockpitDialPosition = 0;
+        private DCSBIOSOutput _intercommDcsbiosOutputCockpitPos;
+        private volatile uint _intercommCockpitDial1Pos;
         private const string IntercommDialCommandInc = "INT_MODE INC\n";
         private const string IntercommDialCommandDec = "INT_MODE DEC\n";
         private long _intercommThreadNowSynching;
@@ -35,15 +35,15 @@ namespace NonVisuals
         private object _lockVhfCommDialsObject2 = new object();
         private volatile uint _vhfCommBigFrequencyStandby = 116;
         private volatile uint _vhfCommSmallFrequencyStandby;
-        private volatile uint _vhfCommSavedActiveSmallFrequency;
-        private volatile uint _vhfCommSavedActiveBigFrequency = 116;
-        private double _vhfCommActiveFrequency = 116.00;
+        private volatile uint _vhfCommSavedCockpitSmallFrequency;
+        private volatile uint _vhfCommSavedCockpitBigFrequency = 116;
+        private double _vhfCommCockpitFrequency = 116.00;
         private long _vhfCommThreadNowSynching;
-        private volatile uint _vhfCommActiveDial1Frequency = 116;
-        private volatile uint _vhfCommActiveDial2Frequency = 95;
+        private volatile uint _vhfCommCockpitDial1Frequency = 116;
+        private volatile uint _vhfCommCockpitDial2Frequency = 95;
         private long _vhfCommDial1FreqWaitingForFeedback;
         private long _vhfCommDial2FreqWaitingForFeedback;
-        private DCSBIOSOutput _vhfCommDcsbiosOutputActiveFrequency;
+        private DCSBIOSOutput _vhfCommDcsbiosOutputCockpitFrequency;
         private const string VhfCommFreq1DialCommand = "VHFCOMM_MHZ ";
         private const string VhfCommFreq2DialCommand = "VHFCOMM_KHZ ";
         private Thread _vhfCommSyncThread;
@@ -53,10 +53,10 @@ namespace NonVisuals
         //Large dial 200-399 [step of 1]
         //Small dial 0.00-0.95 [step of 0.05]
         private bool _uhfIncreasePresetChannel;
-        private uint _uhfActivePresetChannel = 1;
+        private uint _uhfCockpitPresetChannel = 1;
         private const string UhfPresetDialCommandInc = "UHF_PRESET INC\n";
         private const string UhfPresetDialCommandDec = "UHF_PRESET DEC\n";
-        private DCSBIOSOutput _uhfDcsbiosOutputActivePresetChannel;
+        private DCSBIOSOutput _uhfDcsbiosOutputCockpitPresetChannel;
         private object _lockUhfPresetChannelObject = new object();
         //private Thread _uhfPresetChannelSyncThread;
         //private long _uhfPresetChannelThreadNowSynching = 0;
@@ -67,13 +67,13 @@ namespace NonVisuals
         private object _lockUhfDialsObject3 = new object();
         private volatile uint _uhfBigFrequencyStandby = 225;
         private volatile uint _uhfSmallFrequencyStandby;
-        private volatile uint _uhfSavedActiveBigFrequency = 225;
-        private volatile uint _uhfSavedActiveSmallFrequency;
-        private DCSBIOSOutput _uhfDcsbiosOutputActiveFrequency;
-        private double _uhfActiveFrequency = 225.00;
-        private volatile uint _uhfActiveDial1Frequency = 22;
-        private volatile uint _uhfActiveDial2Frequency = 5;
-        private volatile uint _uhfActiveDial3Frequency;
+        private volatile uint _uhfSavedCockpitBigFrequency = 225;
+        private volatile uint _uhfSavedCockpitSmallFrequency;
+        private DCSBIOSOutput _uhfDcsbiosOutputCockpitFrequency;
+        private double _uhfCockpitFrequency = 225.00;
+        private volatile uint _uhfCockpitDial1Frequency = 22;
+        private volatile uint _uhfCockpitDial2Frequency = 5;
+        private volatile uint _uhfCockpitDial3Frequency;
         private const string UhfFreq1DialCommand = "UHF_10MHZ "; // 20-39
         private const string UhfFreq2DialCommand = "UHF_1MHZ "; //0 1 2 3 4 5 6 7 8 9
         private const string UhfFreq3DialCommand = "UHF_50KHZ "; //00 - 95
@@ -90,12 +90,12 @@ namespace NonVisuals
         private object _lockVhfNavDialsObject2 = new object();
         private volatile uint _vhfNavBigFrequencyStandby = 107;
         private volatile uint _vhfNavSmallFrequencyStandby;
-        private volatile uint _vhfNavSavedActiveBigFrequency = 107;
-        private volatile uint _vhfNavSavedActiveSmallFrequency;
-        private DCSBIOSOutput _vhfNavDcsbiosOutputActiveFrequency;
-        private double _vhfNavActiveFrequency = 107.00;
-        private volatile uint _vhfNavActiveDial1Frequency = 107;
-        private volatile uint _vhfNavActiveDial2Frequency;
+        private volatile uint _vhfNavSavedCockpitBigFrequency = 107;
+        private volatile uint _vhfNavSavedCockpitSmallFrequency;
+        private DCSBIOSOutput _vhfNavDcsbiosOutputCockpitFrequency;
+        private double _vhfNavCockpitFrequency = 107.00;
+        private volatile uint _vhfNavCockpitDial1Frequency = 107;
+        private volatile uint _vhfNavCockpitDial2Frequency;
         private const string VhfNavFreq1DialCommand = "VHFNAV_MHZ ";
         private const string VhfNavFreq2DialCommand = "VHFNAV_KHZ ";
         private Thread _vhfNavSyncThread;
@@ -107,8 +107,8 @@ namespace NonVisuals
         /*UH-1H ARC-131 VHF FM*/
         private uint _vhfFmBigFrequencyStandby = 30;
         private uint _vhfFmSmallFrequencyStandby;
-        private uint _vhfFmSavedActiveBigFrequency = 30;
-        private uint _vhfFmSavedActiveSmallFrequency;
+        private uint _vhfFmSavedCockpitBigFrequency = 30;
+        private uint _vhfFmSavedCockpitSmallFrequency;
         private object _lockVhfFmDialsObject1 = new object();
         private object _lockVhfFmDialsObject2 = new object();
         private object _lockVhfFmDialsObject3 = new object();
@@ -117,10 +117,10 @@ namespace NonVisuals
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial2;
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial3;
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial4;
-        private volatile uint _vhfFmActiveFreq1DialPos = 1;
-        private volatile uint _vhfFmActiveFreq2DialPos = 1;
-        private volatile uint _vhfFmActiveFreq3DialPos = 1;
-        private volatile uint _vhfFmActiveFreq4DialPos = 1;
+        private volatile uint _vhfFmCockpitFreq1DialPos = 1;
+        private volatile uint _vhfFmCockpitFreq2DialPos = 1;
+        private volatile uint _vhfFmCockpitFreq3DialPos = 1;
+        private volatile uint _vhfFmCockpitFreq4DialPos = 1;
         private const string VhfFmFreq1DialCommand = "VHFFM_FREQ1 ";	//3 4 5 6
         private const string VhfFmFreq2DialCommand = "VHFFM_FREQ2 ";	//0 1 2 3 4 5 6 7 8 9
         private const string VhfFmFreq3DialCommand = "VHFFM_FREQ3 ";	//0 1 2 3 4 5 6 7 8 9
@@ -144,16 +144,16 @@ namespace NonVisuals
          */
         private bool _increaseAdfBand;
         private object _lockAdfFrequencyBandObject = new object();
-        private object _lockAdfActiveFrequencyObject = new object();
+        private object _lockAdfCockpitFrequencyObject = new object();
         private object _lockAdfSignalStrengthObject = new object();
-        private DCSBIOSOutput _adfDcsbiosOutputActiveFrequencyBand;
-        private DCSBIOSOutput _adfDcsbiosOutputActiveFrequency;
+        private DCSBIOSOutput _adfDcsbiosOutputCockpitFrequencyBand;
+        private DCSBIOSOutput _adfDcsbiosOutputCockpitFrequency;
         private DCSBIOSOutput _adfDcsbiosOutputSignalStrength;
-        private volatile uint _adfActiveFrequencyRaw = 0;
-        private double _adfActiveFrequency;
+        private volatile uint _adfCockpitFrequencyRaw = 0;
+        private double _adfCockpitFrequency;
         private volatile uint _adfSignalStrengthRaw;
         private double _adfSignalStrength;
-        private volatile uint _adfActiveFrequencyBand;
+        private volatile uint _adfCockpitFrequencyBand;
         private volatile uint _adfStandbyFrequencyBand;
         private const string AdfTuneKnobCommandInc = "ADF_TUNE -1000\n";
         private const string AdfTuneKnobCommandDec = "ADF_TUNE +1000\n";
@@ -164,7 +164,9 @@ namespace NonVisuals
         private long _adfThreadNowSynching;
         private long _adfFrequencyBandWaitingForFeedback;
 
+        private readonly object _lockShowFrequenciesOnPanelObject = new object();
 
+        private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69UH1H(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -184,7 +186,7 @@ namespace NonVisuals
                     Common.DebugP("Received DCSBIOS stringData : " + stringData);
                     return;
                 }
-                if (address.Equals(_vhfCommDcsbiosOutputActiveFrequency.Address))
+                if (address.Equals(_vhfCommDcsbiosOutputCockpitFrequency.Address))
                 {
                     /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
 
@@ -201,41 +203,45 @@ namespace NonVisuals
                     //"116.975" (7 characters)
 
                     var tmpFreq = Double.Parse(stringData, NumberFormatInfoFullDisplay);
-                    if (!tmpFreq.Equals(_vhfCommActiveFrequency))
+                    if (!tmpFreq.Equals(_vhfCommCockpitFrequency))
                     {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                     
                         //Common.DebugP("Received VHF COMM frequency : " + stringData);
                     }
-                    if (tmpFreq.Equals(_vhfCommActiveFrequency))
+                    if (tmpFreq.Equals(_vhfCommCockpitFrequency))
                     {
                         //No need to process same data over and over
                         return;
                     }
-                    _vhfCommActiveFrequency = tmpFreq;
+                    _vhfCommCockpitFrequency = tmpFreq;
                     lock (_lockVhfCommDialsObject1)
                     {
-                        var tmp = _vhfCommActiveDial1Frequency;
-                        _vhfCommActiveDial1Frequency = uint.Parse(stringData.Substring(0, 3));
-                        if (tmp != _vhfCommActiveDial1Frequency)
+                        var tmp = _vhfCommCockpitDial1Frequency;
+                        _vhfCommCockpitDial1Frequency = uint.Parse(stringData.Substring(0, 3));
+                        if (tmp != _vhfCommCockpitDial1Frequency)
                         {
-                            //Common.DebugP("VHF COMM 1 Before : " + tmp + "  now: " + _vhfCommActiveDial1Frequency);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            //Common.DebugP("VHF COMM 1 Before : " + tmp + "  now: " + _vhfCommCockpitDial1Frequency);
                             Interlocked.Exchange(ref _vhfCommDial1FreqWaitingForFeedback, 0);
                         }
                     }
                     lock (_lockVhfCommDialsObject2)
                     {
-                        var tmp = _vhfCommActiveDial2Frequency;
+                        var tmp = _vhfCommCockpitDial2Frequency;
                         //var beforeRounding = stringData.Substring(4, 2);
-                        _vhfCommActiveDial2Frequency = uint.Parse(stringData.Substring(4, 2));
+                        _vhfCommCockpitDial2Frequency = uint.Parse(stringData.Substring(4, 2));
                         //975
                         //Do not round this. Rounding means that the synch process thinks the frequency is OK which it isn't
-                        if (tmp != _vhfCommActiveDial2Frequency)
+                        if (tmp != _vhfCommCockpitDial2Frequency)
                         {
-                            //Common.DebugP("VHF COMM 2 Before : " + tmp + "  now: " + _vhfCommActiveDial2Frequency);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            //Common.DebugP("VHF COMM 2 Before : " + tmp + "  now: " + _vhfCommCockpitDial2Frequency);
                             Interlocked.Exchange(ref _vhfCommDial2FreqWaitingForFeedback, 0);
                         }
                     }
                 }
-                if (address.Equals(_uhfDcsbiosOutputActiveFrequency.Address))
+                if (address.Equals(_uhfDcsbiosOutputCockpitFrequency.Address))
                 {
                     /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
 
@@ -244,48 +250,52 @@ namespace NonVisuals
                     //"225.95" (6 characters)
 
                     var tmpFreq = Double.Parse(stringData, NumberFormatInfoFullDisplay);
-                    if (!tmpFreq.Equals(_uhfActiveFrequency))
+                    if (!tmpFreq.Equals(_uhfCockpitFrequency))
                     {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         //Common.DebugP("Received UHF frequency : " + stringData);
                     }
-                    if (tmpFreq.Equals(_uhfActiveFrequency))
+                    if (tmpFreq.Equals(_uhfCockpitFrequency))
                     {
                         //No need to process same data over and over
                         return;
                     }
-                    _uhfActiveFrequency = tmpFreq;
+                    _uhfCockpitFrequency = tmpFreq;
                     lock (_lockUhfDialsObject1)
                     {
-                        var tmp = _uhfActiveDial1Frequency;
-                        _uhfActiveDial1Frequency = uint.Parse(stringData.Substring(0, 2));
-                        if (tmp != _uhfActiveDial1Frequency)
+                        var tmp = _uhfCockpitDial1Frequency;
+                        _uhfCockpitDial1Frequency = uint.Parse(stringData.Substring(0, 2));
+                        if (tmp != _uhfCockpitDial1Frequency)
                         {
-                            //Common.DebugP("UHF 1 Before : " + tmp + "  now: " + _uhfActiveDial1Frequency);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            //Common.DebugP("UHF 1 Before : " + tmp + "  now: " + _uhfCockpitDial1Frequency);
                             Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                         }
                     }
                     lock (_lockUhfDialsObject2)
                     {
-                        var tmp = _uhfActiveDial2Frequency;
-                        _uhfActiveDial2Frequency = uint.Parse(stringData.Substring(2, 1));
-                        if (tmp != _uhfActiveDial2Frequency)
+                        var tmp = _uhfCockpitDial2Frequency;
+                        _uhfCockpitDial2Frequency = uint.Parse(stringData.Substring(2, 1));
+                        if (tmp != _uhfCockpitDial2Frequency)
                         {
-                            //Common.DebugP("UHF 2 Before : " + tmp + "  now: " + _uhfActiveDial2Frequency);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            //Common.DebugP("UHF 2 Before : " + tmp + "  now: " + _uhfCockpitDial2Frequency);
                             Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
                         }
                     }
                     lock (_lockUhfDialsObject3)
                     {
-                        var tmp = _uhfActiveDial3Frequency;
-                        _uhfActiveDial3Frequency = uint.Parse(stringData.Substring(4, 2));
-                        if (tmp != _uhfActiveDial3Frequency)
+                        var tmp = _uhfCockpitDial3Frequency;
+                        _uhfCockpitDial3Frequency = uint.Parse(stringData.Substring(4, 2));
+                        if (tmp != _uhfCockpitDial3Frequency)
                         {
-                            //Common.DebugP("UHF 3 Before : " + tmp + "  now: " + _uhfActiveDial3Frequency);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            //Common.DebugP("UHF 3 Before : " + tmp + "  now: " + _uhfCockpitDial3Frequency);
                             Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
                         }
                     }
                 }
-                if (address.Equals(_vhfNavDcsbiosOutputActiveFrequency.Address))
+                if (address.Equals(_vhfNavDcsbiosOutputCockpitFrequency.Address))
                 {
 
                     /*UH-1H AN/ARN-82 VHF Navigation Set*/
@@ -293,34 +303,37 @@ namespace NonVisuals
                     //Small dial 0.00-0.95 [step of 0.05]
 
                     var tmpFreq = Double.Parse(stringData, NumberFormatInfoFullDisplay);
-                    if (!tmpFreq.Equals(_vhfNavActiveFrequency))
+                    if (!tmpFreq.Equals(_vhfNavCockpitFrequency))
                     {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         //Common.DebugP("Received VHF NAV frequency : " + stringData);
                     }
-                    if (tmpFreq.Equals(_vhfNavActiveFrequency))
+                    if (tmpFreq.Equals(_vhfNavCockpitFrequency))
                     {
                         //No need to process same data over and over
                         return;
                     }
-                    _vhfNavActiveFrequency = tmpFreq;
+                    _vhfNavCockpitFrequency = tmpFreq;
                     //107.95
                     lock (_lockVhfNavDialsObject1)
                     {
-                        var tmp = _vhfNavActiveDial1Frequency;
-                        _vhfNavActiveDial1Frequency = uint.Parse(stringData.Substring(0, 3));
-                        if (tmp != _vhfNavActiveDial1Frequency)
+                        var tmp = _vhfNavCockpitDial1Frequency;
+                        _vhfNavCockpitDial1Frequency = uint.Parse(stringData.Substring(0, 3));
+                        if (tmp != _vhfNavCockpitDial1Frequency)
                         {
-                            //Common.DebugP("VHF NAV 1 Before : " + tmp + "  now: " + _vhfNavActiveDial1Frequency);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            //Common.DebugP("VHF NAV 1 Before : " + tmp + "  now: " + _vhfNavCockpitDial1Frequency);
                             Interlocked.Exchange(ref _vhfNavDial1WaitingForFeedback, 0);
                         }
                     }
                     lock (_lockVhfNavDialsObject2)
                     {
-                        var tmp = _vhfNavActiveDial2Frequency;
-                        _vhfNavActiveDial2Frequency = uint.Parse(stringData.Substring(4, 2));
-                        if (tmp != _vhfNavActiveDial2Frequency)
+                        var tmp = _vhfNavCockpitDial2Frequency;
+                        _vhfNavCockpitDial2Frequency = uint.Parse(stringData.Substring(4, 2));
+                        if (tmp != _vhfNavCockpitDial2Frequency)
                         {
-                            //Common.DebugP("VHF NAV Before : " + tmp + "  now: " + _vhfNavActiveDial2Frequency);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            //Common.DebugP("VHF NAV Before : " + tmp + "  now: " + _vhfNavCockpitDial2Frequency);
                             Interlocked.Exchange(ref _vhfNavDial2WaitingForFeedback, 0);
                         }
                     }
@@ -337,15 +350,16 @@ namespace NonVisuals
         {
             //Common.DebugP("PZ69 UH-1H READ ENTERING");
             //INTERCOMM
-            if (address == _intercommDcsbiosOutputActivePos.Address)
+            if (address == _intercommDcsbiosOutputCockpitPos.Address)
             {
                 lock (_lockIntercommDialObject)
                 {
-                    var tmp = _intercommActiveDial1Pos;
-                    _intercommActiveDial1Pos = _intercommDcsbiosOutputActivePos.GetUIntValue(data);
-                    if (tmp != _intercommActiveDial1Pos)
+                    var tmp = _intercommCockpitDial1Pos;
+                    _intercommCockpitDial1Pos = _intercommDcsbiosOutputCockpitPos.GetUIntValue(data);
+                    if (tmp != _intercommCockpitDial1Pos)
                     {
-                        //Common.DebugP("INTERCOMM Before : " + tmp + "  now: " + _intercommActiveDial1Pos);
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        //Common.DebugP("INTERCOMM Before : " + tmp + "  now: " + _intercommCockpitDial1Pos);
                         Interlocked.Exchange(ref _intercommDialWaitingForFeedback, 0);
                     }
                 }
@@ -357,12 +371,13 @@ namespace NonVisuals
                 //Common.DebugP("VHF FM 1 Arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockVhfFmDialsObject1)
                 {
-                    //Common.DebugP("Just read VHF FM Dial 1 Position: " + _vhfFmActiveFreq1DialPos);
-                    var tmp = _vhfFmActiveFreq1DialPos;
-                    _vhfFmActiveFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.GetUIntValue(data);
-                    if (tmp != _vhfFmActiveFreq1DialPos)
+                    //Common.DebugP("Just read VHF FM Dial 1 Position: " + _vhfFmCockpitFreq1DialPos);
+                    var tmp = _vhfFmCockpitFreq1DialPos;
+                    _vhfFmCockpitFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.GetUIntValue(data);
+                    if (tmp != _vhfFmCockpitFreq1DialPos)
                     {
-                        //Common.DebugP("VHF FM 1 Before : " + tmp + "  now: " + _vhfFmActiveFreq1DialPos);
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        //Common.DebugP("VHF FM 1 Before : " + tmp + "  now: " + _vhfFmCockpitFreq1DialPos);
                         Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 0);
                     }
                 }
@@ -372,12 +387,13 @@ namespace NonVisuals
                 //Common.DebugP("VHF FM_10MHZ_SEL Arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockVhfFmDialsObject2)
                 {
-                    //Common.DebugP("Just read VHF FM Dial 2 Position: " + _vhfFmActiveFreq2DialPos);
-                    var tmp = _vhfFmActiveFreq2DialPos;
-                    _vhfFmActiveFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.GetUIntValue(data);
-                    if (tmp != _vhfFmActiveFreq2DialPos)
+                    //Common.DebugP("Just read VHF FM Dial 2 Position: " + _vhfFmCockpitFreq2DialPos);
+                    var tmp = _vhfFmCockpitFreq2DialPos;
+                    _vhfFmCockpitFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.GetUIntValue(data);
+                    if (tmp != _vhfFmCockpitFreq2DialPos)
                     {
-                        //Common.DebugP("VHF FM 2 Before : " + tmp + "  now: " + _vhfFmActiveFreq2DialPos);
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        //Common.DebugP("VHF FM 2 Before : " + tmp + "  now: " + _vhfFmCockpitFreq2DialPos);
                         Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 0);
                     }
                 }
@@ -387,12 +403,13 @@ namespace NonVisuals
                 //Common.DebugP("VHFAM_FREQ1 Arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockVhfFmDialsObject3)
                 {
-                    //Common.DebugP("Just read VHF FM Dial 3 Position: " + _vhfFmActiveFreq3DialPos);
-                    var tmp = _vhfFmActiveFreq3DialPos;
-                    _vhfFmActiveFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.GetUIntValue(data);
-                    if (tmp != _vhfFmActiveFreq3DialPos)
+                    //Common.DebugP("Just read VHF FM Dial 3 Position: " + _vhfFmCockpitFreq3DialPos);
+                    var tmp = _vhfFmCockpitFreq3DialPos;
+                    _vhfFmCockpitFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.GetUIntValue(data);
+                    if (tmp != _vhfFmCockpitFreq3DialPos)
                     {
-                        //Common.DebugP("VHF FM 3 Before : " + tmp + "  now: " + _vhfFmActiveFreq3DialPos);
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        //Common.DebugP("VHF FM 3 Before : " + tmp + "  now: " + _vhfFmCockpitFreq3DialPos);
                         Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 0);
                     }
                 }
@@ -402,36 +419,38 @@ namespace NonVisuals
                 //Common.DebugP("VHF FM 4 Arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockVhfFmDialsObject4)
                 {
-                    //Common.DebugP("Just read VHF FM Dial 4 Position: " + _vhfFmActiveFreq4DialPos);
-                    var tmp = _vhfFmActiveFreq4DialPos;
-                    _vhfFmActiveFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.GetUIntValue(data);
-                    if (tmp != _vhfFmActiveFreq4DialPos)
+                    //Common.DebugP("Just read VHF FM Dial 4 Position: " + _vhfFmCockpitFreq4DialPos);
+                    var tmp = _vhfFmCockpitFreq4DialPos;
+                    _vhfFmCockpitFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.GetUIntValue(data);
+                    if (tmp != _vhfFmCockpitFreq4DialPos)
                     {
-                        //Common.DebugP("VHF FM 4 Before : " + tmp + "  now: " + _vhfFmActiveFreq4DialPos);
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        //Common.DebugP("VHF FM 4 Before : " + tmp + "  now: " + _vhfFmCockpitFreq4DialPos);
                         Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 0);
                     }
                 }
             }
 
             //ADF
-            if (address == _adfDcsbiosOutputActiveFrequencyBand.Address)
+            if (address == _adfDcsbiosOutputCockpitFrequencyBand.Address)
             {
                 //Common.DebugP("ADF BAND Arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockAdfFrequencyBandObject)
                 {
-                    //Common.DebugP("Just read ADF BAND: " + _adfActiveFrequencyBand);
-                    var tmp = _adfActiveFrequencyBand;
-                    _adfActiveFrequencyBand = _adfDcsbiosOutputActiveFrequencyBand.GetUIntValue(data);
-                    if (tmp != _adfActiveFrequencyBand)
+                    //Common.DebugP("Just read ADF BAND: " + _adfCockpitFrequencyBand);
+                    var tmp = _adfCockpitFrequencyBand;
+                    _adfCockpitFrequencyBand = _adfDcsbiosOutputCockpitFrequencyBand.GetUIntValue(data);
+                    if (tmp != _adfCockpitFrequencyBand)
                     {
-                        //Common.DebugP("ADF BAND Before : " + tmp + "  now: " + _adfActiveFrequencyBand);
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        //Common.DebugP("ADF BAND Before : " + tmp + "  now: " + _adfCockpitFrequencyBand);
                         Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 0);
                     }
                 }
             }
-            if (address == _adfDcsbiosOutputActiveFrequency.Address)
+            if (address == _adfDcsbiosOutputCockpitFrequency.Address)
             {
-                UpdateActiveAdfFrequency(_adfDcsbiosOutputActiveFrequency.GetUIntValue(data));
+                UpdateCockpitAdfFrequency(_adfDcsbiosOutputCockpitFrequency.GetUIntValue(data));
             }
             if (address == _adfDcsbiosOutputSignalStrength.Address)
             {
@@ -442,6 +461,7 @@ namespace NonVisuals
                     _adfSignalStrengthRaw = _adfDcsbiosOutputSignalStrength.GetUIntValue(data);
                     if (tmp != _adfSignalStrengthRaw)
                     {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         const float maxValue = 65535;
                         _adfSignalStrength = ((_adfSignalStrengthRaw / maxValue) * 100);
                     }
@@ -449,11 +469,16 @@ namespace NonVisuals
             }
 
             //UHF Preset Channel
-            if (address.Equals(_uhfDcsbiosOutputActivePresetChannel.Address))
+            if (address.Equals(_uhfDcsbiosOutputCockpitPresetChannel.Address))
             {
                 lock (_lockUhfPresetChannelObject)
                 {
-                    _uhfActivePresetChannel = _uhfDcsbiosOutputActivePresetChannel.GetUIntValue(data) + 1;
+                    var tmp = _uhfCockpitPresetChannel;
+                    _uhfCockpitPresetChannel = _uhfDcsbiosOutputCockpitPresetChannel.GetUIntValue(data) + 1;
+                    if (!tmp.Equals(_uhfCockpitPresetChannel))
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
                 }
             }
 
@@ -463,74 +488,74 @@ namespace NonVisuals
             //Common.DebugP("PZ69 UH-1H READ EXITING");
         }
 
-        private void UpdateActiveAdfFrequency(uint adfActiveFrequencyRaw)
+        private void UpdateCockpitAdfFrequency(uint adfCockpitFrequencyRaw)
         {
-            lock (_lockAdfActiveFrequencyObject)
+            lock (_lockAdfCockpitFrequencyObject)
             {
-                if (adfActiveFrequencyRaw != _adfActiveFrequencyRaw)
+                if (adfCockpitFrequencyRaw != _adfCockpitFrequencyRaw)
                 {
-                    //Common.DebugP("Just read ADF RAW FREQ: " + adfActiveFrequencyRaw);
+                    //Common.DebugP("Just read ADF RAW FREQ: " + adfCockpitFrequencyRaw);
                     //Update only if data has changed. Max 65535 
                     const float maxValue = 65535;
-                    switch (_adfActiveFrequencyBand)
+                    switch (_adfCockpitFrequencyBand)
                     {
                         case 0: //190-400 kHz (~210kHz)
                             {
                                 //A = desired freq
-                                //B = freq based on adfActiveFrequencyRaw
+                                //B = freq based on adfCockpitFrequencyRaw
                                 //(A>200) A = B - ((B * -0.04408) + 18.31) //Creds Paul Marsh
-                                var b = ((adfActiveFrequencyRaw / maxValue) * 210) + 190;
-                                _adfActiveFrequency = b - ((b * -0.04408) + 18.31);
+                                var b = ((adfCockpitFrequencyRaw / maxValue) * 210) + 190;
+                                _adfCockpitFrequency = b - ((b * -0.04408) + 18.31);
                                 break;
                             }
                         case 1: //400-850 kHz (~450kHz)
                             {
-                                var b = ((adfActiveFrequencyRaw / maxValue) * 450) + 400;
+                                var b = ((adfCockpitFrequencyRaw / maxValue) * 450) + 400;
                                 if (b < 451)
                                 {
                                     //A = B + ((B * -0.44837) + 177.08)
-                                    _adfActiveFrequency = b + ((b * -0.44837) + 181.58);
+                                    _adfCockpitFrequency = b + ((b * -0.44837) + 181.58);
                                 }
                                 else
                                 {
                                     //A = B + ((B * 0.11291) - 100.61)
-                                    _adfActiveFrequency = b + ((b * 0.11291) - 96.11);
+                                    _adfCockpitFrequency = b + ((b * 0.11291) - 96.11);
                                 }
                                 break;
                             }
                         case 2: //850-1800 kHz (~950kHz)
                             {
                                 //A = B - ((B * -0.04532) + 91.54)
-                                var b = ((adfActiveFrequencyRaw / maxValue) * 950) + 850;
-                                _adfActiveFrequency = b - ((b * -0.04532) + 91.54);
+                                var b = ((adfCockpitFrequencyRaw / maxValue) * 950) + 850;
+                                _adfCockpitFrequency = b - ((b * -0.04532) + 91.54);
                                 break;
                             }
                     }
-                    //Common.DebugP("Just read ADF Active FREQ is now: " + _adfActiveFrequency.ToString("0.00", NumberFormatInfoDefault));
+                    //Common.DebugP("Just read ADF Cockpit FREQ is now: " + _adfCockpitFrequency.ToString("0.00", NumberFormatInfoDefault));
                 }
             }
         }
         /*
-        private void UpdateActiveAdfFrequency()
+        private void UpdateCockpitAdfFrequency()
         {
-            lock (_lockAdfActiveFrequencyObject)
+            lock (_lockAdfCockpitFrequencyObject)
             {
                 const float maxValue = 65535;
-                switch (_adfActiveFrequencyBand)
+                switch (_adfCockpitFrequencyBand)
                 {
                     case 0: //190-400 kHz (~210kHz)
                         {
-                            _adfActiveFrequency = ((_adfActiveFrequencyRaw / maxValue) * 210) + 190;
+                            _adfCockpitFrequency = ((_adfCockpitFrequencyRaw / maxValue) * 210) + 190;
                             break;
                         }
                     case 1: //400-850 kHz (~450kHz)
                         {
-                            _adfActiveFrequency = ((_adfActiveFrequencyRaw / maxValue) * 450) + 400;
+                            _adfCockpitFrequency = ((_adfCockpitFrequencyRaw / maxValue) * 450) + 400;
                             break;
                         }
                     case 2: //850-1800 kHz (~950kHz)
                         {
-                            _adfActiveFrequency = ((_adfActiveFrequencyRaw / maxValue) * 950) + 850;
+                            _adfCockpitFrequency = ((_adfCockpitFrequencyRaw / maxValue) * 950) + 850;
                             break;
                         }
                 }
@@ -629,10 +654,10 @@ namespace NonVisuals
             {
                 return;
             }
-            SaveActiveIntercomm();
+            SaveCockpitIntercomm();
             if (_intercommSyncThread != null)
             {
-                _intercommSyncThread.Abort();
+                _intercommSyncThread.Aborttt();
             }
             //Common.DebugP("CREATING _intercommSyncThread");
             _intercommSyncThread = new Thread(IntercommSynchThreadMethod);
@@ -668,11 +693,11 @@ namespace NonVisuals
                             lock (_lockIntercommDialObject)
                             {
 
-                                //Common.DebugP("_intercommActiveDial1Pos is " + _intercommActiveDial1Pos + " and should be " + _intercommDialPosStandby);
-                                if (_intercommDialPosStandby != _intercommActiveDial1Pos)
+                                //Common.DebugP("_intercommCockpitDial1Pos is " + _intercommCockpitDial1Pos + " and should be " + _intercommDialPosStandby);
+                                if (_intercommDialPosStandby != _intercommCockpitDial1Pos)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = IntercommDialCommand + (_intercommDialPosStandby < _intercommActiveDial1Pos ? dec : inc);
+                                    str = IntercommDialCommand + (_intercommDialPosStandby < _intercommCockpitDial1Pos ? dec : inc);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -696,7 +721,7 @@ namespace NonVisuals
                         Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
                     } while (IsTooShort(dial1OkTime));
 
-                    SwapActiveIntercomm();
+                    SwapCockpitIntercomm();
                     ShowFrequenciesOnPanel();
                 }
                 finally
@@ -718,7 +743,7 @@ namespace NonVisuals
             {
                 return;
             }
-            SaveActiveFrequencyVhfComm();
+            SaveCockpitFrequencyVhfComm();
             //Frequency selector 1 rotates both ways
             //      "116" "117" "118" .. "149"
 
@@ -778,11 +803,11 @@ namespace NonVisuals
                             lock (_lockVhfCommDialsObject1)
                             {
 
-                                //Common.DebugP("_vhfCommActiveDial1Frequency is " + _vhfCommActiveDial1Frequency + " and should be " + localVhfCommBigFrequencyStandby);
-                                if (localVhfCommBigFrequencyStandby != _vhfCommActiveDial1Frequency)
+                                //Common.DebugP("_vhfCommCockpitDial1Frequency is " + _vhfCommCockpitDial1Frequency + " and should be " + localVhfCommBigFrequencyStandby);
+                                if (localVhfCommBigFrequencyStandby != _vhfCommCockpitDial1Frequency)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = VhfCommFreq1DialCommand + GetCommandDirectionForVhfCommDial1(localVhfCommBigFrequencyStandby, _vhfCommActiveDial1Frequency);
+                                    str = VhfCommFreq1DialCommand + GetCommandDirectionForVhfCommDial1(localVhfCommBigFrequencyStandby, _vhfCommCockpitDial1Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -801,11 +826,11 @@ namespace NonVisuals
                             lock (_lockVhfCommDialsObject2)
                             {
 
-                                //Common.DebugP("_vhfCommActiveDial2Frequency is " + _vhfCommActiveDial2Frequency + " and should be " + localVhfCommSmallFrequencyStandby);
-                                if (localVhfCommSmallFrequencyStandby != _vhfCommActiveDial2Frequency)
+                                //Common.DebugP("_vhfCommCockpitDial2Frequency is " + _vhfCommCockpitDial2Frequency + " and should be " + localVhfCommSmallFrequencyStandby);
+                                if (localVhfCommSmallFrequencyStandby != _vhfCommCockpitDial2Frequency)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    str = VhfCommFreq2DialCommand + GetCommandDirectionForVhfCommDial2(localVhfCommSmallFrequencyStandby, _vhfCommActiveDial2Frequency);
+                                    str = VhfCommFreq2DialCommand + GetCommandDirectionForVhfCommDial2(localVhfCommSmallFrequencyStandby, _vhfCommCockpitDial2Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -830,20 +855,21 @@ namespace NonVisuals
                         Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
                     } while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime));
 
-                    SwapActiveStandbyFrequencyVhfComm();
+                    SwapCockpitStandbyFrequencyVhfComm();
                     ShowFrequenciesOnPanel();
                 }
-                finally
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
                 {
-                    Interlocked.Exchange(ref _vhfCommThreadNowSynching, 0);
+                    Common.LogError(564523, ex);
                 }
             }
-            catch (ThreadAbortException)
-            { }
-            catch (Exception ex)
+            finally
             {
-                Common.LogError(564523, ex);
+                Interlocked.Exchange(ref _vhfCommThreadNowSynching, 0);
             }
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
         private void SendUhfToDCSBIOS()
@@ -852,7 +878,7 @@ namespace NonVisuals
             {
                 return;
             }
-            SaveActiveFrequencyUhf();
+            SaveCockpitFrequencyUhf();
             //Frequency selector 1 rotates both ways
             //      "20" "21" "22" .. "39"
 
@@ -932,11 +958,11 @@ namespace NonVisuals
                             lock (_lockUhfDialsObject1)
                             {
 
-                                //Common.DebugP("_uhfActiveDial1Frequency is " + _uhfActiveDial1Frequency + " and should be " + dial1StandbyFrequency);
-                                if (dial1StandbyFrequency != _uhfActiveDial1Frequency)
+                                //Common.DebugP("_uhfCockpitDial1Frequency is " + _uhfCockpitDial1Frequency + " and should be " + dial1StandbyFrequency);
+                                if (dial1StandbyFrequency != _uhfCockpitDial1Frequency)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = UhfFreq1DialCommand + GetCommandDirectionForUhfDial1(dial1StandbyFrequency, _uhfActiveDial1Frequency);
+                                    str = UhfFreq1DialCommand + GetCommandDirectionForUhfDial1(dial1StandbyFrequency, _uhfCockpitDial1Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -955,11 +981,11 @@ namespace NonVisuals
                             lock (_lockUhfDialsObject2)
                             {
 
-                                //Common.DebugP("_uhfActiveDial2Frequency is " + _uhfActiveDial2Frequency + " and should be " + dial2StandbyFrequency);
-                                if (dial2StandbyFrequency != _uhfActiveDial2Frequency)
+                                //Common.DebugP("_uhfCockpitDial2Frequency is " + _uhfCockpitDial2Frequency + " and should be " + dial2StandbyFrequency);
+                                if (dial2StandbyFrequency != _uhfCockpitDial2Frequency)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    str = UhfFreq2DialCommand + GetCommandDirectionForUhfDial2(dial2StandbyFrequency, _uhfActiveDial2Frequency);
+                                    str = UhfFreq2DialCommand + GetCommandDirectionForUhfDial2(dial2StandbyFrequency, _uhfCockpitDial2Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -978,11 +1004,11 @@ namespace NonVisuals
                             lock (_lockUhfDialsObject3)
                             {
 
-                                //Common.DebugP("_uhfActiveDial3Frequency is " + _uhfActiveDial3Frequency + " and should be " + dial3StandbyFrequency);
-                                if (dial3StandbyFrequency != _uhfActiveDial3Frequency)
+                                //Common.DebugP("_uhfCockpitDial3Frequency is " + _uhfCockpitDial3Frequency + " and should be " + dial3StandbyFrequency);
+                                if (dial3StandbyFrequency != _uhfCockpitDial3Frequency)
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
-                                    str = UhfFreq3DialCommand + GetCommandDirectionForUhfDial3(dial3StandbyFrequency, _uhfActiveDial3Frequency);
+                                    str = UhfFreq3DialCommand + GetCommandDirectionForUhfDial3(dial3StandbyFrequency, _uhfCockpitDial3Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
@@ -1007,20 +1033,21 @@ namespace NonVisuals
 
                         Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
                     } while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
-                    SwapActiveStandbyFrequencyUhf();
+                    SwapCockpitStandbyFrequencyUhf();
                     ShowFrequenciesOnPanel();
                 }
-                finally
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
                 {
-                    Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
+                    Common.LogError(564523, ex);
                 }
             }
-            catch (ThreadAbortException)
-            { }
-            catch (Exception ex)
+            finally
             {
-                Common.LogError(564523, ex);
+                Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
             }
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
 
@@ -1030,7 +1057,7 @@ namespace NonVisuals
             {
                 return;
             }
-            SaveActiveFrequencyVhfNav();
+            SaveCockpitFrequencyVhfNav();
             if (_vhfNavSyncThread != null)
             {
                 _vhfNavSyncThread.Abort();
@@ -1088,11 +1115,11 @@ namespace NonVisuals
                             lock (_lockVhfNavDialsObject1)
                             {
 
-                                //Common.DebugP("_vhfNavActiveDial1Frequency is " + _vhfNavActiveDial1Frequency + " and should be " + dial1StandbyFrequency);
-                                if (dial1StandbyFrequency != _vhfNavActiveDial1Frequency)
+                                //Common.DebugP("_vhfNavCockpitDial1Frequency is " + _vhfNavCockpitDial1Frequency + " and should be " + dial1StandbyFrequency);
+                                if (dial1StandbyFrequency != _vhfNavCockpitDial1Frequency)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = VhfNavFreq1DialCommand + GetCommandDirectionForVhfNavDial1(dial1StandbyFrequency, _vhfNavActiveDial1Frequency);
+                                    str = VhfNavFreq1DialCommand + GetCommandDirectionForVhfNavDial1(dial1StandbyFrequency, _vhfNavCockpitDial1Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1111,12 +1138,12 @@ namespace NonVisuals
                             lock (_lockVhfNavDialsObject2)
                             {
 
-                                //Common.DebugP("_vhfNavActiveDial2Frequency is " + _vhfNavActiveDial2Frequency + " and should be " + dial2StandbyFrequency);
-                                if (dial2StandbyFrequency != _vhfNavActiveDial2Frequency)
+                                //Common.DebugP("_vhfNavCockpitDial2Frequency is " + _vhfNavCockpitDial2Frequency + " and should be " + dial2StandbyFrequency);
+                                if (dial2StandbyFrequency != _vhfNavCockpitDial2Frequency)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
                                     //Compatible : GetCommandDirectionForUhfDial3
-                                    str = VhfNavFreq2DialCommand + GetCommandDirectionForUhfDial3(dial2StandbyFrequency, _vhfNavActiveDial2Frequency);
+                                    str = VhfNavFreq2DialCommand + GetCommandDirectionForUhfDial3(dial2StandbyFrequency, _vhfNavCockpitDial2Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1140,20 +1167,21 @@ namespace NonVisuals
 
                         Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
                     } while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime));
-                    SwapActiveStandbyFrequencyVhfNav();
+                    SwapCockpitStandbyFrequencyVhfNav();
                     ShowFrequenciesOnPanel();
                 }
-                finally
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
                 {
-                    Interlocked.Exchange(ref _vhfNavThreadNowSynching, 0);
+                    Common.LogError(564523, ex);
                 }
             }
-            catch (ThreadAbortException)
-            { }
-            catch (Exception ex)
+            finally
             {
-                Common.LogError(564523, ex);
+                Interlocked.Exchange(ref _vhfNavThreadNowSynching, 0);
             }
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
 
@@ -1163,7 +1191,7 @@ namespace NonVisuals
             {
                 return;
             }
-            SaveActiveFrequencyVhfFm();
+            SaveCockpitFrequencyVhfFm();
             if (_vhfFmSyncThread != null)
             {
                 _vhfFmSyncThread.Abort();
@@ -1261,12 +1289,12 @@ namespace NonVisuals
                         {
                             lock (_lockVhfFmDialsObject1)
                             {
-                                if (_vhfFmActiveFreq1DialPos != desiredFreqDial1Pos)
+                                if (_vhfFmCockpitFreq1DialPos != desiredFreqDial1Pos)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                 }
-                                //Common.DebugP("_vhfFmActiveFreq1DialPos is " + _vhfFmActiveFreq1DialPos + " and should be " + desiredFreqDial1Pos);
-                                if (_vhfFmActiveFreq1DialPos < desiredFreqDial1Pos)
+                                //Common.DebugP("_vhfFmCockpitFreq1DialPos is " + _vhfFmCockpitFreq1DialPos + " and should be " + desiredFreqDial1Pos);
+                                if (_vhfFmCockpitFreq1DialPos < desiredFreqDial1Pos)
                                 {
                                     var str = VhfFmFreq1DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
@@ -1274,7 +1302,7 @@ namespace NonVisuals
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 1);
                                 }
-                                else if (_vhfFmActiveFreq1DialPos > desiredFreqDial1Pos)
+                                else if (_vhfFmCockpitFreq1DialPos > desiredFreqDial1Pos)
                                 {
                                     var str = VhfFmFreq1DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
@@ -1294,12 +1322,12 @@ namespace NonVisuals
                         {
                             lock (_lockVhfFmDialsObject2)
                             {
-                                if (_vhfFmActiveFreq2DialPos != desiredFreqDial2Pos)
+                                if (_vhfFmCockpitFreq2DialPos != desiredFreqDial2Pos)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
                                 }
-                                //Common.DebugP("_vhfFmActiveFreq2DialPos is " + _vhfFmActiveFreq2DialPos + " and should be " + desiredFreqDial2Pos);
-                                if (_vhfFmActiveFreq2DialPos < desiredFreqDial2Pos)
+                                //Common.DebugP("_vhfFmCockpitFreq2DialPos is " + _vhfFmCockpitFreq2DialPos + " and should be " + desiredFreqDial2Pos);
+                                if (_vhfFmCockpitFreq2DialPos < desiredFreqDial2Pos)
                                 {
                                     var str = VhfFmFreq2DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
@@ -1307,7 +1335,7 @@ namespace NonVisuals
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 1);
                                 }
-                                else if (_vhfFmActiveFreq2DialPos > desiredFreqDial2Pos)
+                                else if (_vhfFmCockpitFreq2DialPos > desiredFreqDial2Pos)
                                 {
                                     var str = VhfFmFreq2DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
@@ -1327,12 +1355,12 @@ namespace NonVisuals
                         {
                             lock (_lockVhfFmDialsObject3)
                             {
-                                if (_vhfFmActiveFreq3DialPos != desiredFreqDial3Pos)
+                                if (_vhfFmCockpitFreq3DialPos != desiredFreqDial3Pos)
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
                                 }
-                                //Common.DebugP("_vhfFmActiveFreq3DialPos is " + _vhfFmActiveFreq3DialPos + " and should be " + desiredFreqDial3Pos);
-                                if (_vhfFmActiveFreq3DialPos < desiredFreqDial3Pos)
+                                //Common.DebugP("_vhfFmCockpitFreq3DialPos is " + _vhfFmCockpitFreq3DialPos + " and should be " + desiredFreqDial3Pos);
+                                if (_vhfFmCockpitFreq3DialPos < desiredFreqDial3Pos)
                                 {
                                     var str = VhfFmFreq3DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
@@ -1340,7 +1368,7 @@ namespace NonVisuals
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 1);
                                 }
-                                else if (_vhfFmActiveFreq3DialPos > desiredFreqDial3Pos)
+                                else if (_vhfFmCockpitFreq3DialPos > desiredFreqDial3Pos)
                                 {
                                     var str = VhfFmFreq3DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
@@ -1360,12 +1388,12 @@ namespace NonVisuals
                         {
                             lock (_lockVhfFmDialsObject4)
                             {
-                                if (_vhfFmActiveFreq4DialPos != desiredFreqDial4Pos)
+                                if (_vhfFmCockpitFreq4DialPos != desiredFreqDial4Pos)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
                                 }
-                                //Common.DebugP("_vhfFmActiveFreq4DialPos is " + _vhfFmActiveFreq4DialPos + " and should be " + desiredFreqDial4Pos);
-                                if (_vhfFmActiveFreq4DialPos < desiredFreqDial4Pos)
+                                //Common.DebugP("_vhfFmCockpitFreq4DialPos is " + _vhfFmCockpitFreq4DialPos + " and should be " + desiredFreqDial4Pos);
+                                if (_vhfFmCockpitFreq4DialPos < desiredFreqDial4Pos)
                                 {
                                     var str = VhfFmFreq4DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
@@ -1373,7 +1401,7 @@ namespace NonVisuals
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
                                 }
-                                else if (_vhfFmActiveFreq4DialPos > desiredFreqDial4Pos)
+                                else if (_vhfFmCockpitFreq4DialPos > desiredFreqDial4Pos)
                                 {
                                     var str = VhfFmFreq4DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
@@ -1401,20 +1429,21 @@ namespace NonVisuals
                         Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
                     }
                     while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime));
+                    SwapCockpitStandbyFrequencyVhfFm();
+                    ShowFrequenciesOnPanel();
                 }
-                finally
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
                 {
-                    Interlocked.Exchange(ref _vhfFmThreadNowSynching, 0);
+                    Common.LogError(56453, ex);
                 }
-                SwapActiveStandbyFrequencyVhfFm();
-                ShowFrequenciesOnPanel();
             }
-            catch (ThreadAbortException)
-            { }
-            catch (Exception ex)
+            finally
             {
-                Common.LogError(56453, ex);
+                Interlocked.Exchange(ref _vhfFmThreadNowSynching, 0);
             }
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
 
@@ -1484,13 +1513,13 @@ namespace NonVisuals
                         {
                             lock (_lockAdfFrequencyBandObject)
                             {
-                                if (_adfActiveFrequencyBand != desiredFreqBandDialPos)
+                                if (_adfCockpitFrequencyBand != desiredFreqBandDialPos)
                                 {
                                     freqBandDialOkTime = DateTime.Now.Ticks;
                                     once = false;
                                 }
-                                //Common.DebugP("_adfActiveFrequencyBand is " + _adfActiveFrequencyBand + " and should be " + desiredFreqBandDialPos);
-                                if (_adfActiveFrequencyBand < desiredFreqBandDialPos)
+                                //Common.DebugP("_adfCockpitFrequencyBand is " + _adfCockpitFrequencyBand + " and should be " + desiredFreqBandDialPos);
+                                if (_adfCockpitFrequencyBand < desiredFreqBandDialPos)
                                 {
                                     var str = AdfFrequencyBandCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
@@ -1498,7 +1527,7 @@ namespace NonVisuals
                                     freqBandDialSendCount++;
                                     Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 1);
                                 }
-                                else if (_adfActiveFrequencyBand > desiredFreqBandDialPos)
+                                else if (_adfCockpitFrequencyBand > desiredFreqBandDialPos)
                                 {
                                     var str = AdfFrequencyBandCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
@@ -1526,23 +1555,24 @@ namespace NonVisuals
 
                         if (once)
                         {
-                            UpdateActiveAdfFrequency(_adfActiveFrequencyRaw);
+                            UpdateCockpitAdfFrequency(_adfCockpitFrequencyRaw);
                             once = false;
                         }
                     }
                     while (IsTooShort(freqBandDialOkTime));
                 }
-                finally
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
                 {
-                    Interlocked.Exchange(ref _adfThreadNowSynching, 0);
+                    Common.LogError(564523, ex);
                 }
             }
-            catch (ThreadAbortException)
-            { }
-            catch (Exception ex)
+            finally
             {
-                Common.LogError(564523, ex);
+                Interlocked.Exchange(ref _adfThreadNowSynching, 0);
             }
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
         private void SendUhfPresetChannelChangeToDCSBIOS()
@@ -1553,7 +1583,7 @@ namespace NonVisuals
                 //Pos    1 - 20
                 lock (_lockUhfPresetChannelObject)
                 {
-                    switch (_uhfActivePresetChannel)
+                    switch (_uhfCockpitPresetChannel)
                     {
                         case 1:
                             {
@@ -1575,7 +1605,7 @@ namespace NonVisuals
                 {
                     DCSBIOS.Send(UhfPresetDialCommandDec);
                 }
-
+                Interlocked.Add(ref _doUpdatePanelLCD, 1);
             }
             catch (Exception ex)
             {
@@ -1612,13 +1642,19 @@ namespace NonVisuals
 
         private void ShowFrequenciesOnPanel()
         {
-            if (!FirstReportHasBeenRead)
+            lock (_lockShowFrequenciesOnPanelObject)
             {
-                return;
-            }
-            CheckFrequenciesForValidity();
+                if (!FirstReportHasBeenRead)
+                {
+                    return;
+                }
+                if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
+                {
+                    return;
+                }
+                CheckFrequenciesForValidity();
 
-            /*
+                /*
                 1 byte (header byte 0x0) [0]
                 5 bytes upper left LCD   [1 - 5]
                 5 bytes upper right LCD  [6 - 10]
@@ -1629,249 +1665,251 @@ namespace NonVisuals
                 0xD1 - 0xD9 displays the figure 1.-9. (figure followed by dot)
                 0xFF -> blank, nothing is shown in that spot.
              */
-            var bytes = new byte[21];
-            bytes[0] = 0x0;
+                var bytes = new byte[21];
+                bytes[0] = 0x0;
 
-            switch (_currentUpperRadioMode)
-            {
-                case CurrentUH1HRadioMode.INTERCOMM:
-                    {
-                        lock (_lockIntercommDialObject)
+                switch (_currentUpperRadioMode)
+                {
+                    case CurrentUH1HRadioMode.INTERCOMM:
                         {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfActivePresetChannel), PZ69LCDPosition.UPPER_RIGHT);
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommActiveDial1Pos, PZ69LCDPosition.UPPER_LEFT);
-                        }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.VHFCOMM:
-                    {
-                        lock (_lockVhfCommDialsObject1)
-                        {
-                            lock (_lockVhfCommDialsObject2)
+                            lock (_lockIntercommDialObject)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, _vhfCommActiveFrequency, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommCockpitDial1Pos, PZ69LCDPosition.UPPER_LEFT);
                             }
+                            break;
                         }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.UHF:
-                    {
-                        lock (_lockUhfDialsObject1)
+                    case CurrentUH1HRadioMode.VHFCOMM:
                         {
-                            lock (_lockUhfDialsObject2)
+                            lock (_lockVhfCommDialsObject1)
                             {
-                                lock (_lockUhfDialsObject3)
+                                lock (_lockVhfCommDialsObject2)
                                 {
-                                    //251.75
-                                    var filler = "";
-                                    if (_uhfActiveDial3Frequency < 10)
-                                    {
-                                        filler = "0";
-                                    }
-                                    var fillerUhf = "";
-                                    if (_uhfSmallFrequencyStandby < 10)
-                                    {
-                                        fillerUhf = "0";
-                                    }
-                                    var lcdFrequencyActive = Double.Parse(_uhfActiveDial1Frequency.ToString() + _uhfActiveDial2Frequency.ToString() + "." + filler + _uhfActiveDial3Frequency.ToString(), NumberFormatInfoFullDisplay);
-                                    var lcdFrequencyStandby = Double.Parse(_uhfBigFrequencyStandby.ToString() + "." + fillerUhf + _uhfSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyActive, PZ69LCDPosition.UPPER_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfCommCockpitFrequency, PZ69LCDPosition.UPPER_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
                                 }
                             }
+                            break;
                         }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.VHFNAV:
-                    {
-                        lock (_lockVhfNavDialsObject1)
+                    case CurrentUH1HRadioMode.UHF:
                         {
-                            lock (_lockVhfNavDialsObject2)
+                            lock (_lockUhfDialsObject1)
                             {
-                                //107.75
-                                var filler = "";
-                                if (_vhfNavActiveDial2Frequency < 10)
+                                lock (_lockUhfDialsObject2)
                                 {
-                                    filler = "0";
-                                }
-                                var fillerVhfNav = "";
-                                if (_vhfNavSmallFrequencyStandby < 10)
-                                {
-                                    fillerVhfNav = "0";
-                                }
-                                var lcdFrequencyActive = Double.Parse(_vhfNavActiveDial1Frequency.ToString() + "." + filler + _vhfNavActiveDial2Frequency.ToString(), NumberFormatInfoFullDisplay);
-                                var lcdFrequencyStandby = Double.Parse(_vhfNavBigFrequencyStandby.ToString() + "." + fillerVhfNav + _vhfNavSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyActive, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
-
-                            }
-                        }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.VHFFM:
-                    {
-                        //Mhz   30-75
-                        //Khz   0 - 95
-                        lock (_lockVhfFmDialsObject1)
-                        {
-                            lock (_lockVhfFmDialsObject2)
-                            {
-                                lock (_lockVhfFmDialsObject3)
-                                {
-                                    lock (_lockVhfFmDialsObject4)
+                                    lock (_lockUhfDialsObject3)
                                     {
-                                        var activeFrequencyAsString = (_vhfFmActiveFreq1DialPos + 3).ToString() + _vhfFmActiveFreq2DialPos.ToString() + "." + _vhfFmActiveFreq3DialPos.ToString() + (_vhfFmActiveFreq4DialPos == 0 ? "0" : "5");
-                                        //Common.DebugP("VHF FM activeFrequencyAsString = " + activeFrequencyAsString);
-                                        var lcdFrequencyActive = Double.Parse(activeFrequencyAsString, NumberFormatInfoFullDisplay);
-                                        //Common.DebugP("VHF FM _lcdFrequencyActiveUpper = " + _lcdFrequencyActiveUpper.ToString("0.00", NumberFormatInfoDefault));
-                                        var fillerVhfFm = "";
-                                        if (_vhfFmSmallFrequencyStandby < 10)
+                                        //251.75
+                                        var filler = "";
+                                        if (_uhfCockpitDial3Frequency < 10)
                                         {
-                                            fillerVhfFm = "0";
+                                            filler = "0";
                                         }
-                                        var lcdFrequencyStandby = Double.Parse(_vhfFmBigFrequencyStandby + "." + fillerVhfFm + _vhfFmSmallFrequencyStandby, NumberFormatInfoFullDisplay);
-                                        SetPZ69DisplayBytes(ref bytes, lcdFrequencyActive, 2, PZ69LCDPosition.UPPER_LEFT);
-                                        SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.UPPER_RIGHT);
+                                        var fillerUhf = "";
+                                        if (_uhfSmallFrequencyStandby < 10)
+                                        {
+                                            fillerUhf = "0";
+                                        }
+                                        var lcdFrequencyCockpit = Double.Parse(_uhfCockpitDial1Frequency.ToString() + _uhfCockpitDial2Frequency.ToString() + "." + filler + _uhfCockpitDial3Frequency.ToString(), NumberFormatInfoFullDisplay);
+                                        var lcdFrequencyStandby = Double.Parse(_uhfBigFrequencyStandby.ToString() + "." + fillerUhf + _uhfSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.UPPER_LEFT);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
                                     }
                                 }
                             }
+                            break;
                         }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.ADF:
-                    {
-                        lock (_lockAdfActiveFrequencyObject)
+                    case CurrentUH1HRadioMode.VHFNAV:
                         {
-                            SetPZ69DisplayBytesDefault(ref bytes, _adfActiveFrequency, PZ69LCDPosition.UPPER_LEFT);
-                        }
-                        lock (_lockAdfSignalStrengthObject)
-                        {
-                            SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.UPPER_RIGHT);
-                        }
-                        break;
-                    }
-            }
-            switch (_currentLowerRadioMode)
-            {
-                case CurrentUH1HRadioMode.INTERCOMM:
-                    {
-                        lock (_lockIntercommDialObject)
-                        {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfActivePresetChannel), PZ69LCDPosition.LOWER_RIGHT);
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommActiveDial1Pos, PZ69LCDPosition.LOWER_LEFT);
-                        }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.VHFCOMM:
-                    {
-                        lock (_lockVhfCommDialsObject1)
-                        {
-                            lock (_lockVhfCommDialsObject2)
+                            lock (_lockVhfNavDialsObject1)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, _vhfCommActiveFrequency, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
-                            }
-                        }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.UHF:
-                    {
-                        lock (_lockUhfDialsObject1)
-                        {
-                            lock (_lockUhfDialsObject2)
-                            {
-                                lock (_lockUhfDialsObject3)
+                                lock (_lockVhfNavDialsObject2)
                                 {
-                                    //251.75
+                                    //107.75
                                     var filler = "";
-                                    if (_uhfActiveDial3Frequency < 10)
+                                    if (_vhfNavCockpitDial2Frequency < 10)
                                     {
                                         filler = "0";
                                     }
-                                    var fillerUhf = "";
-                                    if (_uhfSmallFrequencyStandby < 10)
+                                    var fillerVhfNav = "";
+                                    if (_vhfNavSmallFrequencyStandby < 10)
                                     {
-                                        fillerUhf = "0";
+                                        fillerVhfNav = "0";
                                     }
-                                    var lcdFrequencyActive = Double.Parse(_uhfActiveDial1Frequency.ToString() + _uhfActiveDial2Frequency.ToString() + "." + filler + _uhfActiveDial3Frequency.ToString(), NumberFormatInfoFullDisplay);
-                                    var lcdFrequencyStandby = Double.Parse(_uhfBigFrequencyStandby.ToString() + "." + fillerUhf + _uhfSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyActive, PZ69LCDPosition.LOWER_LEFT);
+                                    var lcdFrequencyCockpit = Double.Parse(_vhfNavCockpitDial1Frequency.ToString() + "." + filler + _vhfNavCockpitDial2Frequency.ToString(), NumberFormatInfoFullDisplay);
+                                    var lcdFrequencyStandby = Double.Parse(_vhfNavBigFrequencyStandby.ToString() + "." + fillerVhfNav + _vhfNavSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
+                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.UPPER_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+
+                                }
+                            }
+                            break;
+                        }
+                    case CurrentUH1HRadioMode.VHFFM:
+                        {
+                            //Mhz   30-75
+                            //Khz   0 - 95
+                            lock (_lockVhfFmDialsObject1)
+                            {
+                                lock (_lockVhfFmDialsObject2)
+                                {
+                                    lock (_lockVhfFmDialsObject3)
+                                    {
+                                        lock (_lockVhfFmDialsObject4)
+                                        {
+                                            var activeFrequencyAsString = (_vhfFmCockpitFreq1DialPos + 3).ToString() + _vhfFmCockpitFreq2DialPos.ToString() + "." + _vhfFmCockpitFreq3DialPos.ToString() + (_vhfFmCockpitFreq4DialPos == 0 ? "0" : "5");
+                                            //Common.DebugP("VHF FM activeFrequencyAsString = " + activeFrequencyAsString);
+                                            var lcdFrequencyCockpit = Double.Parse(activeFrequencyAsString, NumberFormatInfoFullDisplay);
+                                            //Common.DebugP("VHF FM _lcdFrequencyCockpitUpper = " + _lcdFrequencyCockpitUpper.ToString("0.00", NumberFormatInfoDefault));
+                                            var fillerVhfFm = "";
+                                            if (_vhfFmSmallFrequencyStandby < 10)
+                                            {
+                                                fillerVhfFm = "0";
+                                            }
+                                            var lcdFrequencyStandby = Double.Parse(_vhfFmBigFrequencyStandby + "." + fillerVhfFm + _vhfFmSmallFrequencyStandby, NumberFormatInfoFullDisplay);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyCockpit, 2, PZ69LCDPosition.UPPER_LEFT);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.UPPER_RIGHT);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    case CurrentUH1HRadioMode.ADF:
+                        {
+                            lock (_lockAdfCockpitFrequencyObject)
+                            {
+                                SetPZ69DisplayBytesDefault(ref bytes, _adfCockpitFrequency, PZ69LCDPosition.UPPER_LEFT);
+                            }
+                            lock (_lockAdfSignalStrengthObject)
+                            {
+                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.UPPER_RIGHT);
+                            }
+                            break;
+                        }
+                }
+                switch (_currentLowerRadioMode)
+                {
+                    case CurrentUH1HRadioMode.INTERCOMM:
+                        {
+                            lock (_lockIntercommDialObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommCockpitDial1Pos, PZ69LCDPosition.LOWER_LEFT);
+                            }
+                            break;
+                        }
+                    case CurrentUH1HRadioMode.VHFCOMM:
+                        {
+                            lock (_lockVhfCommDialsObject1)
+                            {
+                                lock (_lockVhfCommDialsObject2)
+                                {
+                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfCommCockpitFrequency, PZ69LCDPosition.LOWER_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                                }
+                            }
+                            break;
+                        }
+                    case CurrentUH1HRadioMode.UHF:
+                        {
+                            lock (_lockUhfDialsObject1)
+                            {
+                                lock (_lockUhfDialsObject2)
+                                {
+                                    lock (_lockUhfDialsObject3)
+                                    {
+                                        //251.75
+                                        var filler = "";
+                                        if (_uhfCockpitDial3Frequency < 10)
+                                        {
+                                            filler = "0";
+                                        }
+                                        var fillerUhf = "";
+                                        if (_uhfSmallFrequencyStandby < 10)
+                                        {
+                                            fillerUhf = "0";
+                                        }
+                                        var lcdFrequencyCockpit = Double.Parse(_uhfCockpitDial1Frequency.ToString() + _uhfCockpitDial2Frequency.ToString() + "." + filler + _uhfCockpitDial3Frequency.ToString(), NumberFormatInfoFullDisplay);
+                                        var lcdFrequencyStandby = Double.Parse(_uhfBigFrequencyStandby.ToString() + "." + fillerUhf + _uhfSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.LOWER_LEFT);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    case CurrentUH1HRadioMode.VHFNAV:
+                        {
+                            lock (_lockVhfNavDialsObject1)
+                            {
+                                lock (_lockVhfNavDialsObject2)
+                                {
+                                    //107.75
+                                    var filler = "";
+                                    if (_vhfNavCockpitDial2Frequency < 10)
+                                    {
+                                        filler = "0";
+                                    }
+                                    var fillerVhfNav = "";
+                                    if (_vhfNavSmallFrequencyStandby < 10)
+                                    {
+                                        fillerVhfNav = "0";
+                                    }
+                                    var lcdFrequencyCockpit = Double.Parse(_vhfNavCockpitDial1Frequency.ToString() + "." + filler + _vhfNavCockpitDial2Frequency.ToString(), NumberFormatInfoFullDisplay);
+                                    var lcdFrequencyStandby = Double.Parse(_vhfNavBigFrequencyStandby.ToString() + "." + fillerVhfNav + _vhfNavSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
+                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.LOWER_LEFT);
                                     SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
                                 }
                             }
+                            break;
                         }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.VHFNAV:
-                    {
-                        lock (_lockVhfNavDialsObject1)
+                    case CurrentUH1HRadioMode.VHFFM:
                         {
-                            lock (_lockVhfNavDialsObject2)
+                            //Mhz   30-75
+                            //Khz   0 - 95
+                            lock (_lockVhfFmDialsObject1)
                             {
-                                //107.75
-                                var filler = "";
-                                if (_vhfNavActiveDial2Frequency < 10)
+                                lock (_lockVhfFmDialsObject2)
                                 {
-                                    filler = "0";
-                                }
-                                var fillerVhfNav = "";
-                                if (_vhfNavSmallFrequencyStandby < 10)
-                                {
-                                    fillerVhfNav = "0";
-                                }
-                                var lcdFrequencyActive = Double.Parse(_vhfNavActiveDial1Frequency.ToString() + "." + filler + _vhfNavActiveDial2Frequency.ToString(), NumberFormatInfoFullDisplay);
-                                var lcdFrequencyStandby = Double.Parse(_vhfNavBigFrequencyStandby.ToString() + "." + fillerVhfNav + _vhfNavSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyActive, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
-                            }
-                        }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.VHFFM:
-                    {
-                        //Mhz   30-75
-                        //Khz   0 - 95
-                        lock (_lockVhfFmDialsObject1)
-                        {
-                            lock (_lockVhfFmDialsObject2)
-                            {
-                                lock (_lockVhfFmDialsObject3)
-                                {
-                                    lock (_lockVhfFmDialsObject4)
+                                    lock (_lockVhfFmDialsObject3)
                                     {
-                                        var activeFrequencyAsString = (_vhfFmActiveFreq1DialPos + 3).ToString() + _vhfFmActiveFreq2DialPos.ToString() + "." + _vhfFmActiveFreq3DialPos.ToString() + (_vhfFmActiveFreq4DialPos == 0 ? "0" : "5");
-                                        //Common.DebugP("VHF FM activeFrequencyAsString = " + activeFrequencyAsString);
-                                        var lcdFrequencyActive = Double.Parse(activeFrequencyAsString, NumberFormatInfoFullDisplay);
-                                        //Common.DebugP("VHF FM _lcdFrequencyActiveUpper = " + _lcdFrequencyActiveUpper.ToString("0.00", NumberFormatInfoDefault));
-                                        var fillerVhfFm = "";
-                                        if (_vhfFmSmallFrequencyStandby < 10)
+                                        lock (_lockVhfFmDialsObject4)
                                         {
-                                            fillerVhfFm = "0";
+                                            var activeFrequencyAsString = (_vhfFmCockpitFreq1DialPos + 3).ToString() + _vhfFmCockpitFreq2DialPos.ToString() + "." + _vhfFmCockpitFreq3DialPos.ToString() + (_vhfFmCockpitFreq4DialPos == 0 ? "0" : "5");
+                                            //Common.DebugP("VHF FM activeFrequencyAsString = " + activeFrequencyAsString);
+                                            var lcdFrequencyCockpit = Double.Parse(activeFrequencyAsString, NumberFormatInfoFullDisplay);
+                                            //Common.DebugP("VHF FM _lcdFrequencyCockpitUpper = " + _lcdFrequencyCockpitUpper.ToString("0.00", NumberFormatInfoDefault));
+                                            var fillerVhfFm = "";
+                                            if (_vhfFmSmallFrequencyStandby < 10)
+                                            {
+                                                fillerVhfFm = "0";
+                                            }
+                                            var lcdFrequencyStandby = Double.Parse(_vhfFmBigFrequencyStandby + "." + fillerVhfFm + _vhfFmSmallFrequencyStandby, NumberFormatInfoFullDisplay);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyCockpit, 2, PZ69LCDPosition.LOWER_LEFT);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.LOWER_RIGHT);
                                         }
-                                        var lcdFrequencyStandby = Double.Parse(_vhfFmBigFrequencyStandby + "." + fillerVhfFm + _vhfFmSmallFrequencyStandby, NumberFormatInfoFullDisplay);
-                                        SetPZ69DisplayBytes(ref bytes, lcdFrequencyActive, 2, PZ69LCDPosition.LOWER_LEFT);
-                                        SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.LOWER_RIGHT);
                                     }
                                 }
                             }
+                            break;
                         }
-                        break;
-                    }
-                case CurrentUH1HRadioMode.ADF:
-                    {
-                        lock (_lockAdfActiveFrequencyObject)
+                    case CurrentUH1HRadioMode.ADF:
                         {
-                            SetPZ69DisplayBytesDefault(ref bytes, _adfActiveFrequency, PZ69LCDPosition.LOWER_LEFT);
+                            lock (_lockAdfCockpitFrequencyObject)
+                            {
+                                SetPZ69DisplayBytesDefault(ref bytes, _adfCockpitFrequency, PZ69LCDPosition.LOWER_LEFT);
+                            }
+                            lock (_lockAdfSignalStrengthObject)
+                            {
+                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.LOWER_RIGHT);
+                            }
+                            break;
                         }
-                        lock (_lockAdfSignalStrengthObject)
-                        {
-                            SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.LOWER_RIGHT);
-                        }
-                        break;
-                    }
+                }
+                SendLCDData(bytes);
             }
-            SendLCDData(bytes);
+            Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -2427,6 +2465,7 @@ namespace NonVisuals
 
         public void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
             lock (_lockLCDUpdateObject)
             {
                 foreach (var radioPanelKnobObject in hashSet)
@@ -2627,20 +2666,20 @@ namespace NonVisuals
                 NumberFormatInfoFullDisplay.NumberGroupSeparator = "";
 
                 //VHF COMM
-                _vhfCommDcsbiosOutputActiveFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_vhfCommDcsbiosOutputActiveFrequency.Address, 7, this);
+                _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
+                DCSBIOSStringListenerHandler.AddAddress(_vhfCommDcsbiosOutputCockpitFrequency.Address, 7, this);
 
                 //UHF
-                _uhfDcsbiosOutputActivePresetChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET");
-                _uhfDcsbiosOutputActiveFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_uhfDcsbiosOutputActiveFrequency.Address, 6, this);
+                _uhfDcsbiosOutputCockpitPresetChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET");
+                _uhfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQ");
+                DCSBIOSStringListenerHandler.AddAddress(_uhfDcsbiosOutputCockpitFrequency.Address, 6, this);
 
                 //VHF NAV
-                _vhfNavDcsbiosOutputActiveFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFNAV_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_vhfNavDcsbiosOutputActiveFrequency.Address, 6, this);
+                _vhfNavDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFNAV_FREQ");
+                DCSBIOSStringListenerHandler.AddAddress(_vhfNavDcsbiosOutputCockpitFrequency.Address, 6, this);
 
                 //INTERCOMM
-                _intercommDcsbiosOutputActivePos = DCSBIOSControlLocator.GetDCSBIOSOutput("INT_MODE");
+                _intercommDcsbiosOutputCockpitPos = DCSBIOSControlLocator.GetDCSBIOSOutput("INT_MODE");
 
                 //VHF FM
                 _vhfFmDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ1");
@@ -2649,8 +2688,8 @@ namespace NonVisuals
                 _vhfFmDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFFM_FREQ4");
 
                 //ADF (0-2)
-                _adfDcsbiosOutputActiveFrequencyBand = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_BAND");
-                _adfDcsbiosOutputActiveFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_FREQ");
+                _adfDcsbiosOutputCockpitFrequencyBand = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_BAND");
+                _adfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_FREQ");
                 _adfDcsbiosOutputSignalStrength = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_SIGNAL");
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
@@ -2676,7 +2715,7 @@ namespace NonVisuals
                 SetLastException(e);
             }
         }
-        
+
         public override void ClearSettings()
         {
             //todo
@@ -2944,39 +2983,39 @@ namespace NonVisuals
         }
 
         /*
-        private void SaveActiveIntercomm()
+        private void SaveCockpitIntercomm()
         {
             lock (_lockIntercommDialObject)
             {
-                _intercommSavedActiveDialPosition = _intercommActiveDial1Pos;
+                _intercommSavedCockpitDialPosition = _intercommCockpitDial1Pos;
             }
         }
 
-        private void SwapActiveIntercomm()
+        private void SwapCockpitIntercomm()
         {
-            _intercommDialPosStandby = _intercommSavedActiveDialPosition;
+            _intercommDialPosStandby = _intercommSavedCockpitDialPosition;
         }
         */
 
-        private void SaveActiveFrequencyVhfComm()
+        private void SaveCockpitFrequencyVhfComm()
         {
             lock (_lockVhfCommDialsObject1)
             {
                 lock (_lockVhfCommDialsObject2)
                 {
-                    _vhfCommSavedActiveBigFrequency = _vhfCommActiveDial1Frequency;
-                    _vhfCommSavedActiveSmallFrequency = _vhfCommActiveDial2Frequency;
+                    _vhfCommSavedCockpitBigFrequency = _vhfCommCockpitDial1Frequency;
+                    _vhfCommSavedCockpitSmallFrequency = _vhfCommCockpitDial2Frequency;
                 }
             }
         }
 
-        private void SwapActiveStandbyFrequencyVhfComm()
+        private void SwapCockpitStandbyFrequencyVhfComm()
         {
-            _vhfCommBigFrequencyStandby = _vhfCommSavedActiveBigFrequency;
-            _vhfCommSmallFrequencyStandby = _vhfCommSavedActiveSmallFrequency;
+            _vhfCommBigFrequencyStandby = _vhfCommSavedCockpitBigFrequency;
+            _vhfCommSmallFrequencyStandby = _vhfCommSavedCockpitSmallFrequency;
         }
 
-        private void SaveActiveFrequencyUhf()
+        private void SaveCockpitFrequencyUhf()
         {
             lock (_lockUhfDialsObject1)
             {
@@ -2984,20 +3023,20 @@ namespace NonVisuals
                 {
                     lock (_lockUhfDialsObject3)
                     {
-                        _uhfSavedActiveBigFrequency = uint.Parse(_uhfActiveDial1Frequency.ToString() + _uhfActiveDial2Frequency.ToString());
-                        _uhfSavedActiveSmallFrequency = _uhfActiveDial3Frequency;
+                        _uhfSavedCockpitBigFrequency = uint.Parse(_uhfCockpitDial1Frequency.ToString() + _uhfCockpitDial2Frequency.ToString());
+                        _uhfSavedCockpitSmallFrequency = _uhfCockpitDial3Frequency;
                     }
                 }
             }
         }
 
-        private void SwapActiveStandbyFrequencyUhf()
+        private void SwapCockpitStandbyFrequencyUhf()
         {
-            _uhfBigFrequencyStandby = _uhfSavedActiveBigFrequency;
-            _uhfSmallFrequencyStandby = _uhfSavedActiveSmallFrequency;
+            _uhfBigFrequencyStandby = _uhfSavedCockpitBigFrequency;
+            _uhfSmallFrequencyStandby = _uhfSavedCockpitSmallFrequency;
         }
 
-        private void SaveActiveFrequencyVhfFm()
+        private void SaveCockpitFrequencyVhfFm()
         {
             lock (_lockVhfFmDialsObject1)
             {
@@ -3008,7 +3047,7 @@ namespace NonVisuals
                         lock (_lockVhfFmDialsObject4)
                         {
                             uint dial4 = 0;
-                            switch (_vhfFmActiveFreq4DialPos)
+                            switch (_vhfFmCockpitFreq4DialPos)
                             {
                                 case 0:
                                     {
@@ -3021,40 +3060,40 @@ namespace NonVisuals
                                         break;
                                     }
                             }
-                            _vhfFmSavedActiveBigFrequency = uint.Parse((_vhfFmActiveFreq1DialPos + 3).ToString() + _vhfFmActiveFreq2DialPos.ToString());
-                            _vhfFmSavedActiveSmallFrequency = uint.Parse(_vhfFmActiveFreq3DialPos.ToString() + dial4.ToString());
-                            Common.DebugP("_vhfFmSavedActiveBigFrequency : " + _vhfFmSavedActiveBigFrequency);
-                            Common.DebugP("_vhfFmSavedActiveSmallFrequency : " + _vhfFmSavedActiveSmallFrequency);
+                            _vhfFmSavedCockpitBigFrequency = uint.Parse((_vhfFmCockpitFreq1DialPos + 3).ToString() + _vhfFmCockpitFreq2DialPos.ToString());
+                            _vhfFmSavedCockpitSmallFrequency = uint.Parse(_vhfFmCockpitFreq3DialPos.ToString() + dial4.ToString());
+                            Common.DebugP("_vhfFmSavedCockpitBigFrequency : " + _vhfFmSavedCockpitBigFrequency);
+                            Common.DebugP("_vhfFmSavedCockpitSmallFrequency : " + _vhfFmSavedCockpitSmallFrequency);
                         }
                     }
                 }
             }
         }
 
-        private void SwapActiveStandbyFrequencyVhfFm()
+        private void SwapCockpitStandbyFrequencyVhfFm()
         {
-            _vhfFmBigFrequencyStandby = _vhfFmSavedActiveBigFrequency;
-            _vhfFmSmallFrequencyStandby = _vhfFmSavedActiveSmallFrequency;
+            _vhfFmBigFrequencyStandby = _vhfFmSavedCockpitBigFrequency;
+            _vhfFmSmallFrequencyStandby = _vhfFmSavedCockpitSmallFrequency;
             Common.DebugP("_vhfFmBigFrequencyStandby : " + _vhfFmBigFrequencyStandby);
             Common.DebugP("_vhfFmSmallFrequencyStandby : " + _vhfFmSmallFrequencyStandby);
         }
 
-        private void SaveActiveFrequencyVhfNav()
+        private void SaveCockpitFrequencyVhfNav()
         {
             lock (_lockVhfNavDialsObject1)
             {
                 lock (_lockVhfNavDialsObject2)
                 {
-                    _vhfNavSavedActiveBigFrequency = _vhfNavActiveDial1Frequency;
-                    _vhfNavSavedActiveSmallFrequency = _vhfNavActiveDial2Frequency;
+                    _vhfNavSavedCockpitBigFrequency = _vhfNavCockpitDial1Frequency;
+                    _vhfNavSavedCockpitSmallFrequency = _vhfNavCockpitDial2Frequency;
                 }
             }
         }
 
-        private void SwapActiveStandbyFrequencyVhfNav()
+        private void SwapCockpitStandbyFrequencyVhfNav()
         {
-            _vhfNavBigFrequencyStandby = _vhfNavSavedActiveBigFrequency;
-            _vhfNavSmallFrequencyStandby = _vhfNavSavedActiveSmallFrequency;
+            _vhfNavBigFrequencyStandby = _vhfNavSavedCockpitBigFrequency;
+            _vhfNavSmallFrequencyStandby = _vhfNavSavedCockpitSmallFrequency;
         }
 
         private bool IntercommSyncing()

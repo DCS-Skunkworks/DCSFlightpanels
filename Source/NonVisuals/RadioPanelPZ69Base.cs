@@ -116,6 +116,7 @@ namespace NonVisuals
 
         protected void SetPZ69DisplayBytesUnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
         {
+
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var i = 0;
             var digitsAsString = digits.ToString().PadLeft(5);
@@ -274,12 +275,12 @@ namespace NonVisuals
             {
                 if (HIDSkeletonBase.HIDWriteDevice != null)
                 {
-                    Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                    //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
                 //if (IsAttached)
                 //{
-                    //Common.DebugP("Write ending to Radio Panel " + _guid);
+                //Common.DebugP("Write ending to Radio Panel " + _guid);
                 //}
             }
             catch (Exception e)
@@ -381,7 +382,7 @@ namespace NonVisuals
         {
             panelProfileHandler.RegisterProfileData(this, ExportSettings());
         }
-        
+
         protected void DeviceAttachedHandler()
         {
             Startup();

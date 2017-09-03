@@ -149,9 +149,6 @@ namespace DCS_BIOS
         }
 
 
-        public string Formula
-        {
-            get { return _formula; }
-        }
+        public string Formula => _formula;
     }
 }

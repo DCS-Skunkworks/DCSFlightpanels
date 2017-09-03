@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DCS_BIOS;
 using HidLibrary;
+using System.Threading;
 
 namespace NonVisuals
 {
@@ -15,7 +16,7 @@ namespace NonVisuals
         //Large dial Freq selector 0-19  RAD_CHAN
         //Small dial Radio volume RAD_VOL +/- 
         //STBY/ACT, radio on/off RAD_PWR TOGGLE
-        private volatile uint _radioFreqSelectorPositionActive;
+        private volatile uint _radioFreqSelectorPositionCockpit;
         private readonly object _lockRadioFreqSelectorPositionObject = new object();
         private DCSBIOSOutput _radioDcsbiosOutputFreqSelectorPosition;
         private const string RadioFreqSelectorPositionCommandInc = "RAD_CHAN INC\n";
@@ -28,12 +29,12 @@ namespace NonVisuals
         //Large dial RSBN Nav RSBN_CHAN
         //Small dial RSBN ILS PRMG_CHAN
         //STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL
-        private volatile uint _rsbnNavChannelActive = 1;
+        private volatile uint _rsbnNavChannelCockpit = 1;
         private readonly object _lockRSBNNavChannelObject = new object();
-        private DCSBIOSOutput _rsbnNavChannelActiveOutput;
-        private volatile uint _rsbnILSChannelActive = 1;
+        private DCSBIOSOutput _rsbnNavChannelCockpitOutput;
+        private volatile uint _rsbnILSChannelCockpit = 1;
         private readonly object _lockRSBNILSChannelObject = new object();
-        private DCSBIOSOutput _rsbnILSChannelActiveOutput;
+        private DCSBIOSOutput _rsbnILSChannelCockpitOutput;
         private const string RSBNNavChannelCommandInc = "RSBN_CHAN INC\n";
         private const string RSBNNavChannelCommandDec = "RSBN_CHAN DEC\n";
         private const string RSBNIlsChannelCommandInc = "PRMG_CHAN INC\n";
@@ -44,18 +45,20 @@ namespace NonVisuals
         //Large dial ARC Sector ARC_ZONE
         //Small dial ARC Preset ARC_CHAN
         //STBY/ACT, RSBN/ARC switch  RSBN_ARC_SEL 1
-        private volatile uint _arcSectorActive = 1;
+        private volatile uint _arcSectorCockpit = 1;
         private readonly object _lockARCSectorObject = new object();
-        private DCSBIOSOutput _arcSectorActiveOutput;
-        private volatile uint _arcPresetChannelActive = 1;
+        private DCSBIOSOutput _arcSectorCockpitOutput;
+        private volatile uint _arcPresetChannelCockpit = 1;
         private readonly object _lockARCPresetChannelObject = new object();
-        private DCSBIOSOutput _arcPresetChannelActiveOutput;
+        private DCSBIOSOutput _arcPresetChannelCockpitOutput;
         private const string ARCSectorCommandInc = "ARC_ZONE INC\n";
         private const string ARCSectorCommandDec = "ARC_ZONE DEC\n";
         private const string ARCPresetChannelCommandInc = "ARC_CHAN INC\n";
         private const string ARCPresetChannelCommandDec = "ARC_CHAN DEC\n";
         private const string SelectARCCommand = "RSBN_ARC_SEL DEC\n";
 
+        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69MiG21Bis(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -87,52 +90,77 @@ namespace NonVisuals
                 //Common.DebugP("Radio freq pos arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockRadioFreqSelectorPositionObject)
                 {
-                    //Common.DebugP("Just read Radio freq. sel. pos.: " + _radioFreqSelectorPositionActive + "  " + Environment.TickCount);
-                    _radioFreqSelectorPositionActive = _radioDcsbiosOutputFreqSelectorPosition.GetUIntValue(data);
+                    var tmp = _radioFreqSelectorPositionCockpit;
+                    if (tmp != _radioFreqSelectorPositionCockpit)
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        _radioFreqSelectorPositionCockpit = _radioDcsbiosOutputFreqSelectorPosition.GetUIntValue(data);
+                        //Common.DebugP("Just read Radio freq. sel. pos.: " + _radioFreqSelectorPositionCockpit + "  " + Environment.TickCount);
+                    }
                 }
             }
 
             //RSBN Nav
-            if (address == _rsbnNavChannelActiveOutput.Address)
+            if (address == _rsbnNavChannelCockpitOutput.Address)
             {
                 //Common.DebugP("RSBN Nav channel arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockRSBNNavChannelObject)
                 {
-                    //Common.DebugP("Just read RSBN Nav channel : " + _rsbnNavChannelActive + "  " + Environment.TickCount);
-                    _rsbnNavChannelActive = _rsbnNavChannelActiveOutput.GetUIntValue(data);
+                    var tmp = _rsbnNavChannelCockpit;
+                    //Common.DebugP("Just read RSBN Nav channel : " + _rsbnNavChannelCockpit + "  " + Environment.TickCount);
+                    _rsbnNavChannelCockpit = _rsbnNavChannelCockpitOutput.GetUIntValue(data);
+                    if (tmp != _rsbnNavChannelCockpit)
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
                 }
             }
 
             //RSBN ILS
-            if (address == _rsbnILSChannelActiveOutput.Address)
+            if (address == _rsbnILSChannelCockpitOutput.Address)
             {
                 //Common.DebugP("RSBN ILS channel arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockRSBNILSChannelObject)
                 {
-                    //Common.DebugP("Just read RSBN Nav channel : " + _rsbnILSChannelActive + "  " + Environment.TickCount);
-                    _rsbnILSChannelActive = _rsbnILSChannelActiveOutput.GetUIntValue(data);
+                    var tmp = _rsbnILSChannelCockpit;
+                    //Common.DebugP("Just read RSBN Nav channel : " + _rsbnILSChannelCockpit + "  " + Environment.TickCount);
+                    _rsbnILSChannelCockpit = _rsbnILSChannelCockpitOutput.GetUIntValue(data);
+                    if (tmp != _rsbnILSChannelCockpit)
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
                 }
             }
 
             //ARC Sector
-            if (address == _arcSectorActiveOutput.Address)
+            if (address == _arcSectorCockpitOutput.Address)
             {
                 //Common.DebugP("ARC Sector arrived, waiting for lock." + Environment.TickCount);
                 lock (_lockARCSectorObject)
                 {
-                    //Common.DebugP("Just read ARC Sector : " + _arcSectorActive + "  " + Environment.TickCount);
-                    _arcSectorActive = _arcSectorActiveOutput.GetUIntValue(data);
+                    var tmp = _arcSectorCockpit;
+                    //Common.DebugP("Just read ARC Sector : " + _arcSectorCockpit + "  " + Environment.TickCount);
+                    _arcSectorCockpit = _arcSectorCockpitOutput.GetUIntValue(data);
+                    if (tmp != _arcSectorCockpit)
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
                 }
             }
 
             //ARC Preset
-            if (address == _arcPresetChannelActiveOutput.Address)
+            if (address == _arcPresetChannelCockpitOutput.Address)
             {
                 //Common.DebugP("ARC Preset Channel, waiting for lock." + Environment.TickCount);
                 lock (_lockARCPresetChannelObject)
                 {
-                    //Common.DebugP("Just read ARC Preset Channel : " + _arcPresetChannelActive + "  " + Environment.TickCount);
-                    _arcPresetChannelActive = _arcPresetChannelActiveOutput.GetUIntValue(data) + 1;
+                    var tmp = _arcPresetChannelCockpit;
+                    //Common.DebugP("Just read ARC Preset Channel : " + _arcPresetChannelCockpit + "  " + Environment.TickCount);
+                    _arcPresetChannelCockpit = _arcPresetChannelCockpitOutput.GetUIntValue(data) + 1;
+                    if (tmp != _arcPresetChannelCockpit)
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
                 }
             }
 
@@ -212,86 +240,94 @@ namespace NonVisuals
 
         private void ShowFrequenciesOnPanel()
         {
-            if (!FirstReportHasBeenRead)
+            lock (_lockShowFrequenciesOnPanelObject)
             {
-                return;
-            }
-            var bytes = new byte[21];
-            bytes[0] = 0x0;
+                if (!FirstReportHasBeenRead)
+                {
+                    return;
+                }
+                if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
+                {
+                    return;
+                }
+                var bytes = new byte[21];
+                bytes[0] = 0x0;
 
-            switch (_currentUpperRadioMode)
-            {
-                case CurrentMiG21BisRadioMode.Radio:
-                    {
-                        lock (_lockRadioFreqSelectorPositionObject)
+                switch (_currentUpperRadioMode)
+                {
+                    case CurrentMiG21BisRadioMode.Radio:
                         {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionActive, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                            lock (_lockRadioFreqSelectorPositionObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                            }
+                            break;
                         }
-                        break;
-                    }
-                case CurrentMiG21BisRadioMode.RSBN:
-                    {
-                        lock (_lockRSBNNavChannelObject)
+                    case CurrentMiG21BisRadioMode.RSBN:
                         {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelActive, PZ69LCDPosition.UPPER_LEFT);
+                            lock (_lockRSBNNavChannelObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.UPPER_LEFT);
+                            }
+                            lock (_lockRSBNILSChannelObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.UPPER_RIGHT);
+                            }
+                            break;
                         }
-                        lock (_lockRSBNILSChannelObject)
+                    case CurrentMiG21BisRadioMode.ARC:
                         {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelActive, PZ69LCDPosition.UPPER_RIGHT);
+                            lock (_lockARCSectorObject)
+                            {
+                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.UPPER_LEFT);
+                            }
+                            lock (_lockARCPresetChannelObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.UPPER_RIGHT);
+                            }
+                            break;
                         }
-                        break;
-                    }
-                case CurrentMiG21BisRadioMode.ARC:
-                    {
-                        lock (_lockARCSectorObject)
+                }
+                switch (_currentLowerRadioMode)
+                {
+                    case CurrentMiG21BisRadioMode.Radio:
                         {
-                            SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.UPPER_LEFT);
+                            lock (_lockRadioFreqSelectorPositionObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                            }
+                            break;
                         }
-                        lock (_lockARCPresetChannelObject)
+                    case CurrentMiG21BisRadioMode.RSBN:
                         {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelActive, PZ69LCDPosition.UPPER_RIGHT);
+                            lock (_lockRSBNNavChannelObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.LOWER_LEFT);
+                            }
+                            lock (_lockRSBNILSChannelObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.LOWER_RIGHT);
+                            }
+                            break;
                         }
-                        break;
-                    }
+                    case CurrentMiG21BisRadioMode.ARC:
+                        {
+                            lock (_lockARCSectorObject)
+                            {
+                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.LOWER_LEFT);
+                            }
+                            lock (_lockARCPresetChannelObject)
+                            {
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.LOWER_RIGHT);
+                            }
+                            break;
+                        }
+                }
+                SendLCDData(bytes);
             }
-            switch (_currentLowerRadioMode)
-            {
-                case CurrentMiG21BisRadioMode.Radio:
-                    {
-                        lock (_lockRadioFreqSelectorPositionObject)
-                        {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionActive, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
-                        }
-                        break;
-                    }
-                case CurrentMiG21BisRadioMode.RSBN:
-                    {
-                        lock (_lockRSBNNavChannelObject)
-                        {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelActive, PZ69LCDPosition.LOWER_LEFT);
-                        }
-                        lock (_lockRSBNILSChannelObject)
-                        {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelActive, PZ69LCDPosition.LOWER_RIGHT);
-                        }
-                        break;
-                    }
-                case CurrentMiG21BisRadioMode.ARC:
-                    {
-                        lock (_lockARCSectorObject)
-                        {
-                            SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.LOWER_LEFT);
-                        }
-                        lock (_lockARCPresetChannelObject)
-                        {
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelActive, PZ69LCDPosition.LOWER_RIGHT);
-                        }
-                        break;
-                    }
-            }
-            SendLCDData(bytes);
+            Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
@@ -495,6 +531,7 @@ namespace NonVisuals
         {
             lock (_lockLCDUpdateObject)
             {
+                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 foreach (var radioPanelKnobObject in hashSet)
                 {
                     var radioPanelKnob = (RadioPanelKnobMiG21Bis)radioPanelKnobObject;
@@ -648,12 +685,12 @@ namespace NonVisuals
                 _radioDcsbiosOutputFreqSelectorPosition = DCSBIOSControlLocator.GetDCSBIOSOutput("RAD_CHAN");
 
                 //RSBN
-                _rsbnNavChannelActiveOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RSBN_CHAN");
-                _rsbnILSChannelActiveOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PRMG_CHAN");
+                _rsbnNavChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RSBN_CHAN");
+                _rsbnILSChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PRMG_CHAN");
 
                 //ARC
-                _arcSectorActiveOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_ZONE");
-                _arcPresetChannelActiveOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_CHAN");
+                _arcSectorCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_ZONE");
+                _arcPresetChannelCockpitOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_CHAN");
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
@@ -679,7 +716,7 @@ namespace NonVisuals
                 SetLastException(e);
             }
         }
-        
+
         public override void ClearSettings()
         {
             //todo
@@ -784,7 +821,7 @@ namespace NonVisuals
 
             lock (_lockARCSectorObject)
             {
-                switch (_arcSectorActive)
+                switch (_arcSectorCockpit)
                 {
                     case 0://1  1 
                         {

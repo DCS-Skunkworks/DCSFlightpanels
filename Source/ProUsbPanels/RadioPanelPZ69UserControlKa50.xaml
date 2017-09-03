@@ -67,10 +67,10 @@
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = R-828 VHF-1 <LineBreak/>
-                    COM 2 = XXXXXX<LineBreak/>
-                    NAV 1 = XXXXXX<LineBreak/>
-                    NAV 2 = XXXXXX<LineBreak/>
-                    ADF   = XXXXXX<LineBreak/>
+                    COM 2 = R-800L1 VHF-2<LineBreak/>
+                    NAV 1 = N/A<LineBreak/>
+                    NAV 2 = N/A<LineBreak/>
+                    ADF   = ADF ARK-22 ADF<LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>
@@ -104,14 +104,14 @@
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <Label Content="R-828 VHF-1 " FontWeight="Bold"/>
             <Image Height="110" Source="/ProUsbPanels;component/Images/Ka50_R-828_radio.jpg" />
-            <Label Content="XXXXXX" FontWeight="Bold"/>
-            <Image Height="110" Source="/ProUsbPanels;component/Images/Ka50_АВСК.jpg" />
-            <Label Content="XXXXXX" FontWeight="Bold"/>
-            <Image Height="80" Source="/ProUsbPanels;component/Images/Ka50_intercom_radio_control.jpg" />
+            <Label Content="XXXXXX" FontWeight="Bold" Visibility="Hidden" />
+            <Image Height="110" Source="/ProUsbPanels;component/Images/Ka50_АВСК.jpg" Visibility="Hidden"  />
+            <Label Content="XXXXXX" FontWeight="Bold" Visibility="Hidden" />
+            <Image Height="80" Source="/ProUsbPanels;component/Images/Ka50_intercom_radio_control.jpg" Visibility="Hidden" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
             <Label Name="LabelAirframe" Content="Ka-50" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
-            <Label Content="XXXXXX" FontWeight="Bold"/>
+            <Label Content="ADF ARK-22 ADF" FontWeight="Bold"/>
             <Image Height="160" Source="/ProUsbPanels;component/Images/Ka50_ARK-22 ADF.jpg" />
             <Label FontWeight="Bold" Content="R-800L1" />
             <Image Height="300" Source="/ProUsbPanels;component/Images/Ka50_R-800L1_VHF.jpg" />

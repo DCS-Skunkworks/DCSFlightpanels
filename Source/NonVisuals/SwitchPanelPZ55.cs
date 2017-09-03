@@ -242,7 +242,7 @@ namespace NonVisuals
                     Thread.Sleep(10);
                 }
             }
-            catch (ThreadAbortException ext)
+            catch (ThreadAbortException)
             {
             }
             catch (Exception ex)

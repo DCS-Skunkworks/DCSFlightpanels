@@ -28,13 +28,13 @@ namespace DCS_BIOS
 
         public int Length
         {
-            get { return _length; }
+            get => _length;
             set { _length = value; }
         }
 
         public uint Address
         {
-            get { return _address; }
+            get => _address;
             set
             {
                 _address = value;

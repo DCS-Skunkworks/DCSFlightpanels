@@ -570,7 +570,7 @@ namespace NonVisuals
             {
                 if (HIDSkeletonBase.HIDWriteDevice != null)
                 {
-                    Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                    //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
                 //if (IsAttached)

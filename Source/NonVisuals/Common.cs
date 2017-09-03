@@ -109,7 +109,7 @@ namespace NonVisuals
             get { return _debugOn; }
             set
             {
-                //_debugOn = value;
+                _debugOn = value;
             }
         }
 

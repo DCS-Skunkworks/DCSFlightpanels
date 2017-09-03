@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DCS_BIOS;
 using HidLibrary;
+using System.Threading;
 
 namespace NonVisuals
 {
@@ -39,6 +40,8 @@ namespace NonVisuals
         private bool _aprButtonLightOn;
         private bool _revButtonLightOn;
         private byte _buttonByte;
+        
+        private long _doUpdatePanelLCD;
 
         public MultiPanelPZ70(HIDSkeleton hidSkeleton)
             : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton)
@@ -187,22 +190,42 @@ namespace NonVisuals
                         {
                             case PZ70LCDPosition.UpperALT:
                                 {
+                                    var tmp = _upperLcdAlt;
                                     _upperLcdAlt = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
+                                    if (tmp != _upperLcdAlt)
+                                    {
+                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                    }
                                     break;
                                 }
                             case PZ70LCDPosition.LowerALT:
                                 {
+                                    var tmp = _lowerLcdAlt;
                                     _lowerLcdAlt = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
+                                    if (tmp != _lowerLcdAlt)
+                                    {
+                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                    }
                                     break;
                                 }
                             case PZ70LCDPosition.UpperVS:
                                 {
+                                    var tmp = _upperLcdVs;
                                     _upperLcdVs = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
+                                    if (tmp != _upperLcdVs)
+                                    {
+                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                    }
                                     break;
                                 }
                             case PZ70LCDPosition.LowerVS:
                                 {
+                                    var tmp = _lowerLcdVs;
                                     _lowerLcdVs = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
+                                    if (tmp != _lowerLcdVs)
+                                    {
+                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                    }
                                     break;
                                 }
                         }
@@ -219,7 +242,12 @@ namespace NonVisuals
                                 {
                                     if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
                                     {
+                                        var tmp = _upperLcdAlt;
                                         _upperLcdAlt = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
+                                        if (tmp != _upperLcdAlt)
+                                        {
+                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                        }
                                     }
                                     break;
                                 }
@@ -227,7 +255,12 @@ namespace NonVisuals
                                 {
                                     if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
                                     {
+                                        var tmp = _lowerLcdAlt;
                                         _lowerLcdAlt = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
+                                        if (tmp != _lowerLcdAlt)
+                                        {
+                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                        }
                                     }
                                     break;
                                 }
@@ -235,7 +268,12 @@ namespace NonVisuals
                                 {
                                     if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
                                     {
+                                        var tmp = _upperLcdVs;
                                         _upperLcdVs = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
+                                        if (tmp != _upperLcdVs)
+                                        {
+                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                        }
                                     }
                                     break;
                                 }
@@ -243,7 +281,12 @@ namespace NonVisuals
                                 {
                                     if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
                                     {
+                                        var tmp = _lowerLcdVs;
                                         _lowerLcdVs = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
+                                        if (tmp != _lowerLcdVs)
+                                        {
+                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                        }
                                     }
                                     break;
                                 }
@@ -522,6 +565,7 @@ namespace NonVisuals
                 return;
             }
 
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
             foreach (var o in hashSet)
             {
                 var multiPanelKnob = (MultiPanelKnob)o;
@@ -820,6 +864,13 @@ namespace NonVisuals
             //[1] [2] [3] [4] [5]
             //[6] [7] [8] [9] [10]
             //[11 BUTTONS]
+
+
+            if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
+            {
+                return;
+            }
+
             var bytes = new byte[12];
             bytes[0] = 0x0;
             for (var i = 1; i < bytes.Length - 1; i++)
@@ -930,6 +981,7 @@ namespace NonVisuals
                     }
             }
             SendLEDData(bytes);
+            Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
         public void SendLEDData(byte[] array)
