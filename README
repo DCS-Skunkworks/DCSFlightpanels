@@ -1,5 +1,10 @@
 # DCSFlightpanels
 
+v 2.1.614 3 September 2017
+Ka-50 radio supported.
+Added code limiting HID traffic to radiopanels & multipanel (LCD updates).
+Other refactoring in all radiopanel codes (Mig-21, A-10, UH-1H)
+
 v 2.1.204 18 April 2015
 MiG-21bis radio (RSBN/ARC/RADIO) supported.
 A-10C VHF FM modified so that full frequency is used (5 digits) 30.000 -> 76.000.
