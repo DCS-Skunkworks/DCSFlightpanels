@@ -20,10 +20,10 @@ namespace DCS_BIOS
         UH1H,
         [Description("MiG-21bis")]
         Mig21Bis,
-        [Description("TF-51D")]
-        TF51D,
         [Description("Ka-50")]
-        Ka50
+        Ka50,
+        [Description("Mi-8MT")]
+        Mi8
     }
 
     public static class DCSBIOSControlLocator

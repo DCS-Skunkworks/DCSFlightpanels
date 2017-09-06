@@ -77,7 +77,7 @@ namespace DCS_BIOS
                 _internalBuffer[offset] = str1;
                 if (_internalBuffer.Length - 1 >= offset + 1)
                 {
-                    //For for example odd length strings. Only first endian byte should then be read.
+                    //For example odd length strings. Only first endian byte should then be read.
                     _internalBuffer[offset + 1] = str2;
                 }
             }
@@ -228,15 +228,20 @@ namespace DCS_BIOS
                                 //41 = A
                                 //42 = B
                                 var hex = Convert.ToString(data, 16);
-                                
+
                                 //Little Endian !
+                                //DBCommon.DebugP("**********hex = [" + hex + "] ****************");
                                 var secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
-                                var firstByte = new[] { Convert.ToByte(hex.Substring(2, 2), 16) };
-                                var firstChar = _iso8859_1.GetString(firstByte);
+                                var firstChar = "";
+                                if (hex.Length > 2)
+                                {
+                                    var firstByte = new[] { Convert.ToByte(hex.Substring(2, 2), 16) };
+                                    firstChar = _iso8859_1.GetString(firstByte);
+                                }                                
                                 var secondChar = _iso8859_1.GetString(secondByte);
                                 kvp.Value.Add(address, firstChar, secondChar);
-                                //Common.DebugP("**********Received (0x" + data.ToString("x") + ") ****************");
-                                //Common.DebugP("**********Received data:(0x" + data.ToString("x") + ") following from DCS : 1st : " + firstChar + "(0x" + firstByte[0].ToString("x") + "), 2nd " + secondChar + "(0x" + secondByte[0].ToString("x") + ") ****************");
+                                //DBCommon.DebugP("**********Received (0x" + data.ToString("x") + ") ****************");
+                                //DBCommon.DebugP("**********Received data:(0x" + data.ToString("x") + ") following from DCS : 1st : " + firstChar + "(0x" + firstByte[0].ToString("x") + "), 2nd " + secondChar + "(0x" + secondByte[0].ToString("x") + ") ****************");
                                 
                                 //kvp.Value.StepUp();
                             }

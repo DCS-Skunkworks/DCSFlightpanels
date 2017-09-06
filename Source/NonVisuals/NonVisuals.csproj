@@ -127,10 +127,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RadioPanelKnobKa50.cs" />
+    <Compile Include="RadioPanelKnobMi8.cs" />
     <Compile Include="RadioPanelKnobMiG21Bis.cs" />
     <Compile Include="RadioPanelKnobA10C.cs" />
     <Compile Include="RadioPanelKnobUH1H.cs" />
     <Compile Include="RadioPanelPZ69Ka50.cs" />
+    <Compile Include="RadioPanelPZ69Mi8.cs" />
     <Compile Include="RadioPanelPZ69MiG21Bis.cs" />
     <Compile Include="RadioPanelPZ69A10C.cs" />
     <Compile Include="RadioPanelPZ69Base.cs" />
