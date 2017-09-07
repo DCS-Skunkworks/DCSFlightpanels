@@ -21,7 +21,7 @@ namespace NonVisuals
         private ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         const int ChangeValue = 10;
-        private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
+        //private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
         private volatile uint _r863ManualBigFrequencyStandby = 108;
         private volatile uint _r863ManualSmallFrequencyStandby;
         private volatile uint _r863ManualSavedCockpitBigFrequency;
@@ -30,14 +30,12 @@ namespace NonVisuals
         private object _lockR863ManualDialsObject2 = new object();
         private object _lockR863ManualDialsObject3 = new object();
         private object _lockR863ManualDialsObject4 = new object();
-        private DCSBIOSOutput _r863ManualDcsbiosOutputFreqDial1;
-        private DCSBIOSOutput _r863ManualDcsbiosOutputFreqDial2;
-        private DCSBIOSOutput _r863ManualDcsbiosOutputFreqDial3;
-        private DCSBIOSOutput _r863ManualDcsbiosOutputFreqDial4;
         private volatile uint _r863ManualCockpitFreq1DialPos = 1;
         private volatile uint _r863ManualCockpitFreq2DialPos = 1;
         private volatile uint _r863ManualCockpitFreq3DialPos = 1;
         private volatile uint _r863ManualCockpitFreq4DialPos = 1;
+        private double _r863ManualCockpitFrequency = 100.000;
+        private DCSBIOSOutput _r863ManualDcsbiosOutputCockpitFrequency;
         private const string R863ManualFreq1DialCommand = "R863_FREQ1 ";
         private const string R863ManualFreq2DialCommand = "R863_FREQ2 ";
         private const string R863ManualFreq3DialCommand = "R863_FREQ3 ";
@@ -226,6 +224,73 @@ namespace NonVisuals
                         }
                     }
                 }
+                if (address.Equals(_r863ManualDcsbiosOutputCockpitFrequency.Address))
+                {
+                    // "100.000" - "399.975"
+                    // Last digit not used in panel
+
+
+                    var tmpFreq = Double.Parse(stringData, NumberFormatInfoFullDisplay);
+                    if (!tmpFreq.Equals(_r863ManualCockpitFrequency))
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
+                    if (tmpFreq.Equals(_r863ManualCockpitFrequency))
+                    {
+                        //No need to process same data over and over
+                        return;
+                    }
+                    _r863ManualCockpitFrequency = tmpFreq;
+                    lock (_lockR863ManualDialsObject1)
+                    {
+                        // "100.000" - "*39*9.975"
+                        var tmp = _r863ManualCockpitFreq1DialPos;
+                        _r863ManualCockpitFreq1DialPos = uint.Parse(stringData.Substring(0, 2));
+                        Common.DebugP("Just read R-863 dial 1 position: " + _r863ManualCockpitFreq1DialPos + "  " + Environment.TickCount);
+                        if (tmp != _r863ManualCockpitFreq1DialPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 0);
+                        }
+                    }
+                    lock (_lockR863ManualDialsObject2)
+                    {
+                        // "100.000" - "39*9*.975"
+                        var tmp = _r863ManualCockpitFreq2DialPos;
+                        _r863ManualCockpitFreq2DialPos = uint.Parse(stringData.Substring(2, 1));
+                        Common.DebugP("Just read R-863 dial 2 position: " + _r863ManualCockpitFreq2DialPos + "  " + Environment.TickCount);
+                        if (tmp != _r863ManualCockpitFreq2DialPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 0);
+                        }
+                    }
+                    lock (_lockR863ManualDialsObject3)
+                    {
+                        // "100.000" - "399.*9*75"
+                        var tmp = _r863ManualCockpitFreq3DialPos;
+                        _r863ManualCockpitFreq3DialPos = uint.Parse(stringData.Substring(4, 1));
+                        Common.DebugP("Just read R-863 dial 3 position: " + _r863ManualCockpitFreq3DialPos + "  " + Environment.TickCount);
+                        if (tmp != _r863ManualCockpitFreq3DialPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 0);
+                        }
+                    }
+                    lock (_lockR863ManualDialsObject4)
+                    {
+                        // "100.000" - "399.9*75*"
+                        //Read only the first char
+                        var tmp = _r863ManualCockpitFreq4DialPos;
+                        _r863ManualCockpitFreq4DialPos = uint.Parse(stringData.Substring(5, 1));
+                        Common.DebugP("Just read R-863 dial 4 position: " + _r863ManualCockpitFreq4DialPos + "  " + Environment.TickCount);
+                        if (tmp != _r863ManualCockpitFreq4DialPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 0);
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -248,77 +313,7 @@ namespace NonVisuals
                  * reset. Reading the dial's position with no change in value will not reset.
                  */
 
-                //R-863 Dial 1 R-863
-                if (address == _r863ManualDcsbiosOutputFreqDial1.Address)
-                {
-                    //Common.DebugP("R-863 freq dial 1 position arrived, waiting for lock." + Environment.TickCount);
-                    lock (_lockR863ManualDialsObject1)
-                    {
-                        //Common.DebugP("Just read R-863 freq dial 1 position: " + _r863ManualCockpitFreq1DialPos + "  " + +Environment.TickCount);
-                        var tmp = _r863ManualCockpitFreq1DialPos;
-                        _r863ManualCockpitFreq1DialPos = _r863ManualDcsbiosOutputFreqDial1.GetUIntValue(data);
-                        if (tmp != _r863ManualCockpitFreq1DialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-863 freq dial 1 Before : " + tmp + "  now: " + _r863ManualCockpitFreq1DialPos);
-                            Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 0);
-                        }
-                    }
-                }
 
-                //R-863 Dial 2 R-863
-                if (address == _r863ManualDcsbiosOutputFreqDial2.Address)
-                {
-                    //Common.DebugP("R-863 freq dial 2 position arrived, waiting for lock." + Environment.TickCount);
-                    lock (_lockR863ManualDialsObject2)
-                    {
-                        //Common.DebugP("Just read R-863 freq dial 2 position: " + _r863ManualCockpitFreq2DialPos + "  " + +Environment.TickCount);
-                        var tmp = _r863ManualCockpitFreq2DialPos;
-                        _r863ManualCockpitFreq2DialPos = _r863ManualDcsbiosOutputFreqDial2.GetUIntValue(data);
-                        if (tmp != _r863ManualCockpitFreq2DialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-863 freq dial 2 Before : " + tmp + "  now: " + _r863ManualCockpitFreq2DialPos);
-                            Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 0);
-                        }
-                    }
-                }
-
-                //R-863 Dial 3 R-863
-                if (address == _r863ManualDcsbiosOutputFreqDial3.Address)
-                {
-                    //Common.DebugP("R-863 freq dial 3 position arrived, waiting for lock." + Environment.TickCount);
-                    lock (_lockR863ManualDialsObject3)
-                    {
-                        //Common.DebugP("Just read R-863 freq dial 3 position: " + _r863ManualCockpitFreq3DialPos + "  " + +Environment.TickCount);
-                        var tmp = _r863ManualCockpitFreq3DialPos;
-                        _r863ManualCockpitFreq3DialPos = _r863ManualDcsbiosOutputFreqDial3.GetUIntValue(data);
-                        if (tmp != _r863ManualCockpitFreq3DialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-863 freq dial 3 Before : " + tmp + "  now: " + _r863ManualCockpitFreq3DialPos);
-                            Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 0);
-                        }
-                    }
-                }
-
-                //R-863 Dial 4 R-863
-                if (address == _r863ManualDcsbiosOutputFreqDial4.Address)
-                {
-                    //Common.DebugP("R-863 freq dial 4 position arrived, waiting for lock." + Environment.TickCount);
-                    lock (_lockR863ManualDialsObject4)
-                    {
-                        //Common.DebugP("Just read R-863 freq dial 4 position: " + _r863ManualCockpitFreq4DialPos + "  " + +Environment.TickCount);
-                        var tmp = _r863ManualCockpitFreq4DialPos;
-                        _r863ManualCockpitFreq4DialPos = _r863ManualDcsbiosOutputFreqDial4.GetUIntValue(data);
-                        if (tmp != _r863ManualCockpitFreq4DialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-863 freq dial 4 Before : " + tmp + "  now: " + _r863ManualCockpitFreq4DialPos);
-                            Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 0);
-                        }
-                    }
-                }
 
                 //R-863 Preset Channel Dial
                 if (address == _r863Preset1DcsbiosOutputPresetDial.Address)
@@ -364,7 +359,7 @@ namespace NonVisuals
                         }
                     }
                 }
-                
+
                 //SPU-7 Dial
                 if (address == _spu7DcsbiosOutputPresetDial.Address)
                 {
@@ -430,9 +425,9 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentMi8RadioMode.SPU7:
-                                {
-                                    break;
-                                }
+                                    {
+                                        break;
+                                    }
                             }
                             break;
                         }
@@ -441,31 +436,31 @@ namespace NonVisuals
                             switch (_currentLowerRadioMode)
                             {
                                 case CurrentMi8RadioMode.R863_PRESET:
-                                {
-                                    break;
-                                }
+                                    {
+                                        break;
+                                    }
                                 case CurrentMi8RadioMode.R863_MANUAL:
-                                {
-                                    SendR863ManualToDCSBIOS();
-                                    break;
-                                }
+                                    {
+                                        SendR863ManualToDCSBIOS();
+                                        break;
+                                    }
                                 case CurrentMi8RadioMode.YADRO1A:
-                                {
-                                    SendYaDRO1AToDCSBIOS();
-                                    break;
-                                }
+                                    {
+                                        SendYaDRO1AToDCSBIOS();
+                                        break;
+                                    }
                                 case CurrentMi8RadioMode.R828_PRESETS:
-                                {
-                                    break;
-                                }
+                                    {
+                                        break;
+                                    }
                                 case CurrentMi8RadioMode.ADF_ARK9:
-                                {
-                                    break;
-                                }
+                                    {
+                                        break;
+                                    }
                                 case CurrentMi8RadioMode.SPU7:
-                                {
-                                    break;
-                                }
+                                    {
+                                        break;
+                                    }
                             }
                             break;
                         }
@@ -534,6 +529,7 @@ namespace NonVisuals
 
                         var frequencyAsString = _r863ManualBigFrequencyStandby.ToString() + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(2, '0');
                         frequencyAsString = frequencyAsString.PadRight(6, '0');
+                        Common.DebugP("Standby frequencyAsString is " + frequencyAsString);
                         //Frequency selector 1      R863_FREQ1
                         //      "10" "11" "12" "13" "14" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39"
                         //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19   20   21   22
@@ -561,7 +557,7 @@ namespace NonVisuals
                         //#2 = 1   (position = value)
                         //#3 = 9   (position = value)
                         //#4 = 5
-                        desiredPositionDial1X = Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(frequencyAsString.Substring(0, 2)));
+                        desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));//Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(frequencyAsString.Substring(0, 2)));
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 1));
@@ -665,15 +661,15 @@ namespace NonVisuals
                                 }
                                 else if (desiredPositionDial4X == 2)
                                 {
-                                    desiredPositionDial4 = 0;
+                                    desiredPositionDial4 = 5;
                                 }
                                 else if (desiredPositionDial4X == 5)
                                 {
-                                    desiredPositionDial4 = 2;
+                                    desiredPositionDial4 = 5;
                                 }
                                 else if (desiredPositionDial4X == 7)
                                 {
-                                    desiredPositionDial4 = 2;
+                                    desiredPositionDial4 = 0;
                                 }
                                 //      "00" "25" "50" "75", only "00" and "50" used.
                                 //Pos     0    1    2    3
@@ -749,6 +745,10 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering Mi-8 Radio SwapCockpitStandbyFrequencyR863Manual()");
+                Common.DebugP("_r863ManualBigFrequencyStandby  " + _r863ManualBigFrequencyStandby);
+                Common.DebugP("_r863ManualSavedCockpitBigFrequency  " + _r863ManualSavedCockpitBigFrequency);
+                Common.DebugP("_r863ManualSmallFrequencyStandby  " + _r863ManualSmallFrequencyStandby);
+                Common.DebugP("_r863ManualSavedCockpitSmallFrequency  " + _r863ManualSavedCockpitSmallFrequency);
                 _r863ManualBigFrequencyStandby = _r863ManualSavedCockpitBigFrequency;
                 _r863ManualSmallFrequencyStandby = _r863ManualSavedCockpitSmallFrequency;
             }
@@ -1246,19 +1246,30 @@ namespace NonVisuals
                                     {
                                         case CurrentMi8RadioMode.R863_MANUAL:
                                             {
+                                                var changeFaster = false;
+                                                _bigFreqIncreaseChangeMonitor.Click();
+                                                if (_bigFreqIncreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    //Change faster
+                                                    changeFaster = true;
+                                                }
                                                 //100-149  220-399
                                                 if (_r863ManualBigFrequencyStandby.Equals(399))
                                                 {
                                                     //@ max value
                                                     break;
                                                 }
-                                                if (_r863ManualBigFrequencyStandby.Equals(149))
+                                                if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 220;
+                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + ChangeValue;
                                                 }
                                                 else
                                                 {
                                                     _r863ManualBigFrequencyStandby++;
+                                                }
+                                                if (_r863ManualBigFrequencyStandby > 149 && _r863ManualBigFrequencyStandby < 220)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 220;
                                                 }
                                                 break;
                                             }
@@ -1329,21 +1340,31 @@ namespace NonVisuals
                                     {
                                         case CurrentMi8RadioMode.R863_MANUAL:
                                             {
+                                                var changeFaster = false;
+                                                _bigFreqDecreaseChangeMonitor.Click();
+                                                if (_bigFreqDecreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    //Change faster
+                                                    changeFaster = true;
+                                                }
                                                 //100-149  220-399
                                                 if (_r863ManualBigFrequencyStandby.Equals(100))
                                                 {
                                                     //@ min value
                                                     break;
                                                 }
-                                                if (_r863ManualBigFrequencyStandby.Equals(220))
+                                                if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 149;
+                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - ChangeValue;
                                                 }
                                                 else
                                                 {
                                                     _r863ManualBigFrequencyStandby--;
                                                 }
-
+                                                if (_r863ManualBigFrequencyStandby < 220 && _r863ManualBigFrequencyStandby > 149)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 149;
+                                                }
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.R863_PRESET:
@@ -1519,21 +1540,31 @@ namespace NonVisuals
                                     {
                                         case CurrentMi8RadioMode.R863_MANUAL:
                                             {
+                                                var changeFaster = false;
+                                                _bigFreqIncreaseChangeMonitor.Click();
+                                                if (_bigFreqIncreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    //Change faster
+                                                    changeFaster = true;
+                                                }
                                                 //100-149  220-399
                                                 if (_r863ManualBigFrequencyStandby.Equals(399))
                                                 {
                                                     //@ max value
                                                     break;
                                                 }
-                                                if (_r863ManualBigFrequencyStandby.Equals(149))
+                                                if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 220;
+                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby + ChangeValue;
                                                 }
                                                 else
                                                 {
                                                     _r863ManualBigFrequencyStandby++;
                                                 }
-
+                                                if (_r863ManualBigFrequencyStandby > 149 && _r863ManualBigFrequencyStandby < 220)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 220;
+                                                }
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.R863_PRESET:
@@ -1603,21 +1634,31 @@ namespace NonVisuals
                                     {
                                         case CurrentMi8RadioMode.R863_MANUAL:
                                             {
+                                                var changeFaster = false;
+                                                _bigFreqDecreaseChangeMonitor.Click();
+                                                if (_bigFreqDecreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    //Change faster
+                                                    changeFaster = true;
+                                                }
                                                 //100-149  220-399
                                                 if (_r863ManualBigFrequencyStandby.Equals(100))
                                                 {
                                                     //@ min value
                                                     break;
                                                 }
-                                                if (_r863ManualBigFrequencyStandby.Equals(220))
+                                                if (changeFaster)
                                                 {
-                                                    _r863ManualBigFrequencyStandby = 149;
+                                                    _r863ManualBigFrequencyStandby = _r863ManualBigFrequencyStandby - ChangeValue;
                                                 }
                                                 else
                                                 {
                                                     _r863ManualBigFrequencyStandby--;
                                                 }
-
+                                                if (_r863ManualBigFrequencyStandby < 220 && _r863ManualBigFrequencyStandby > 149)
+                                                {
+                                                    _r863ManualBigFrequencyStandby = 149;
+                                                }
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.R863_PRESET:
@@ -1865,7 +1906,7 @@ namespace NonVisuals
                                 var frequencyAsString = "";
                                 lock (_lockR863ManualDialsObject1)
                                 {
-                                    frequencyAsString = _r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
+                                    frequencyAsString = _r863ManualCockpitFreq1DialPos.ToString();//_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
                                 }
                                 lock (_lockR863ManualDialsObject2)
                                 {
@@ -1995,7 +2036,7 @@ namespace NonVisuals
                                 var frequencyAsString = "";
                                 lock (_lockR863ManualDialsObject1)
                                 {
-                                    frequencyAsString = _r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
+                                    frequencyAsString = _r863ManualCockpitFreq1DialPos.ToString(); //_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString();
                                 }
                                 lock (_lockR863ManualDialsObject2)
                                 {
@@ -2231,10 +2272,8 @@ namespace NonVisuals
                 StartupBase("Mi-8");
 
                 //COM1
-                _r863ManualDcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ1");
-                _r863ManualDcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ2");
-                _r863ManualDcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ3");
-                _r863ManualDcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ4");
+                _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ");
+                DCSBIOSStringListenerHandler.AddAddress(_r863ManualDcsbiosOutputCockpitFrequency.Address, 7, this);
 
                 //COM2
                 _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_CNL_SEL");
@@ -2377,26 +2416,8 @@ namespace NonVisuals
                         {
                             lock (_lockR863ManualDialsObject4)
                             {
-                                uint dial4 = 0;
-                                switch (_r863ManualCockpitFreq4DialPos)
-                                {
-                                    case 0:
-                                    case 1:
-                                        {
-                                            //00 & 25
-                                            dial4 = 0;
-                                            break;
-                                        }
-                                    case 2:
-                                    case 3:
-                                        {
-                                            //50 & 75
-                                            dial4 = 5;
-                                            break;
-                                        }
-                                }
-                                _r863ManualSavedCockpitBigFrequency = uint.Parse(_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString() + _r863ManualCockpitFreq2DialPos.ToString());
-                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(_r863ManualCockpitFreq3DialPos.ToString() + dial4.ToString());
+                                _r863ManualSavedCockpitBigFrequency = uint.Parse(_r863ManualCockpitFreq1DialPos.ToString() + _r863ManualCockpitFreq2DialPos.ToString());//uint.Parse(_r863ManualFreq1DialValues[_r863ManualCockpitFreq1DialPos].ToString() + _r863ManualCockpitFreq2DialPos.ToString());
+                                _r863ManualSavedCockpitSmallFrequency = uint.Parse(_r863ManualCockpitFreq3DialPos.ToString() + _r863ManualCockpitFreq4DialPos.ToString());
                             }
                         }
                     }
@@ -2461,60 +2482,63 @@ namespace NonVisuals
             var dec = "DEC\n";
             try
             {
+                /*
+                 * Min is 10
+                 * Max is 39
+                 */
+
+
                 Common.DebugP("Entering Mi-8 Radio GetCommandDirectionForR863ManualDial1()");
-
-                var tmpPos = actualDialPosition;
-                var countUp = 0;
-                var countDown = 0;
-                while (true)
+                //count up
+                var tmpActualDialPositionUp = actualDialPosition;
+                var upCount = actualDialPosition;
+                do
                 {
-                    //0 1 2
-                    //len 3
-                    Common.DebugP("GetCommandDirectionForR863ManualDial1 #1 : tmpPos = " + tmpPos + " desiredDialPosition = " + desiredDialPosition);
-                    if (tmpPos == desiredDialPosition)
+                    Common.DebugP("tmpActualDialPositionUp " + tmpActualDialPositionUp + " desiredDialPosition " + desiredDialPosition);
+                    if (tmpActualDialPositionUp == 39)
                     {
-                        break;
+                        tmpActualDialPositionUp = 10;
                     }
-                    if (tmpPos <= _r863ManualFreq1DialValues.Length - 1)
+                    else if (tmpActualDialPositionUp == 14)
                     {
-                        tmpPos++;
-                        countUp++;
+                        tmpActualDialPositionUp = 22;
                     }
                     else
                     {
-                        tmpPos = 0;
-                        countUp++;
+                        tmpActualDialPositionUp++;
                     }
-                }
-                tmpPos = actualDialPosition;
-                while (true)
+                    upCount++;
+                } while (tmpActualDialPositionUp != desiredDialPosition);
+
+                //down up
+                var tmpActualDialPositionDown = actualDialPosition;
+                var downCount = actualDialPosition;
+                do
                 {
-                    //0 1 2
-                    //len 3
-                    Common.DebugP("GetCommandDirectionForR863ManualDial1 #2 : tmpPos = " + tmpPos + " desiredDialPosition = " + desiredDialPosition);
-                    if (tmpPos == desiredDialPosition)
+                    Common.DebugP("tmpActualDialPositionDown " + tmpActualDialPositionDown + " desiredDialPosition " + desiredDialPosition);
+                    if (tmpActualDialPositionDown == 10)
                     {
-                        break;
+                        tmpActualDialPositionDown = 39;
                     }
-                    if (tmpPos == 0)
+                    else if (tmpActualDialPositionDown == 22)
                     {
-                        tmpPos = unchecked((uint)_r863ManualFreq1DialValues.Length - 1);
-                        countDown++;
+                        tmpActualDialPositionDown = 14;
                     }
                     else
                     {
-                        tmpPos--;
-                        countDown++;
+                        tmpActualDialPositionDown--;
                     }
-                }
+                    downCount++;
+                } while (tmpActualDialPositionDown != desiredDialPosition);
 
-                Common.DebugP("GetCommandDirectionForR863ManualDial1 : countDown = " + countDown + " countUp = " + countUp);
-                if (countDown < countUp)
+
+                if (upCount < downCount)
                 {
                     Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionForR863ManualDial1()");
-                    return dec;
+                    return inc;
                 }
                 Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionForR863ManualDial1()");
+                return dec;
             }
             catch (Exception ex)
             {
@@ -2877,7 +2901,7 @@ namespace NonVisuals
             {
                 Common.DebugP("Entering Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
                 //        "00"  "25" "50" "75"
-                //          0    1    2    3  
+                //          0    2    5    7  
                 switch (position)
                 {
                     case 0:
@@ -2885,17 +2909,17 @@ namespace NonVisuals
                             Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
                             return "0";
                         }
-                    case 1:
-                        {
-                            Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
-                            return "5";
-                        }
                     case 2:
                         {
                             Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
                             return "5";
                         }
-                    case 3:
+                    case 5:
+                        {
+                            Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
+                            return "5";
+                        }
+                    case 7:
                         {
                             Common.DebugP("Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
                             return "0";
