@@ -69,6 +69,20 @@
             <ComboBox x:Name="ComboBoxInputValueAction" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0">
                 <ComboBoxItem Content="TOGGLE" />
             </ComboBox>
+            <Label Name="LabelDelay" Content="Enter delay in milliseconds:" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
+            <ComboBox x:Name="ComboBoxDelay" SelectedIndex="0" SelectedValuePath="Content"  IsReadOnly="True"  Margin="10,0,10,0">
+                <ComboBoxItem Content="0" />
+                <ComboBoxItem Content="10" />
+                <ComboBoxItem Content="50" />
+                <ComboBoxItem Content="100" />
+                <ComboBoxItem Content="200" />
+                <ComboBoxItem Content="500" />
+                <ComboBoxItem Content="1000" />
+                <ComboBoxItem Content="2000" />
+                <ComboBoxItem Content="3000" />
+                <ComboBoxItem Content="4000" />
+                <ComboBoxItem Content="5000" />
+            </ComboBox>
         </StackPanel>
     </Grid>
 </Window>

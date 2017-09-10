@@ -129,6 +129,7 @@ namespace ProUsbPanels
                 return;
             }
             ComboBoxInterfaceType.SelectedValue = _dcsBiosInput.SelectedDCSBIOSInput.Interface;
+            ComboBoxDelay.SelectedValue = _dcsBiosInput.SelectedDCSBIOSInput.Delay;
             SetVisibility(_dcsBiosInput.SelectedDCSBIOSInput.Interface);
             switch (_dcsBiosInput.SelectedDCSBIOSInput.Interface)
             {
@@ -223,6 +224,8 @@ namespace ProUsbPanels
                  * variable_step = <new_value>|-<decrease_by>|+<increase_by>
                  */
                 _dcsBiosInput.SetSelectedInputBasedOnInterfaceType(GetChosenInterfaceType());
+                _dcsBiosInput.SelectedDCSBIOSInput.Delay = int.Parse(ComboBoxDelay.SelectedValue.ToString());
+                _dcsBiosInput.Delay = int.Parse(ComboBoxDelay.SelectedValue.ToString());
                 switch (_dcsBiosInput.SelectedDCSBIOSInput.Interface)
                 {
                     case DCSBIOSInputType.ACTION:

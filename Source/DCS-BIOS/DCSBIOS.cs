@@ -130,24 +130,28 @@ namespace DCS_BIOS
                 /*
                     Master, start listening TCP socket, for every client contacting via TCP add them as clients and send raw DCS-BIOS data to them
                 */
-
+                Shutdown();
                 if (_started)
                 {
                     return;
                 }
                 _shutdown = false;
                 DBCommon.DebugP("DCSBIOS is STARTING UP");
+                _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
+                _dcsProtocolParser?.Shutdown();
                 _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
                 _dcsProtocolParser.Attach(_iDcsBiosDataListener);
 
                 _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
                 _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
-
+                
+                _udpReceiveClient?.Close();
                 _udpReceiveClient = new UdpClient();
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                 _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
                 _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIp));
 
+                _udpSendClient?.Close();
                 _udpSendClient = new UdpClient();
                 _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                 _udpSendClient.EnableBroadcast = true;
@@ -157,14 +161,7 @@ namespace DCS_BIOS
                 _dcsbiosListeningThread.Start();
                 _dcsProtocolParser.Startup();
 
-                //_tcpListeningThread = new Thread(TCPListenerThread);
-                //_tcpListeningThread.Start();
-
-
-                if (!_started)
-                {
-                    _started = true;
-                }
+                _started = true;
             }
             catch (Exception e)
             {
@@ -180,47 +177,8 @@ namespace DCS_BIOS
                     _udpSendClient.Close();
                     _udpSendClient = null;
                 }
-                /*if (_tcpListener != null)
-                {
-                    _tcpListener.Stop();
-                    _tcpListener = null;
-                }
-                if (_tcpClient != null)
-                {
-                    _tcpClient.Close();
-                    _tcpClient = null;
-                }*/
             }
         }
-        /*
-        private void TCPListenerThread()
-        {
-            try
-            {
-                _tcpListener = new TcpListener(IPAddress.Any, _tcpIpPort);
-                _tcpListener.Start();
-                Debug.Print("TCP Listener starting");
-                while (!_shutdown)
-                {
-                    Debug.Print("TCP Listener waiting for client");
-                    var tcpClient = _tcpListener.AcceptTcpClient();
-                    Debug.Print("TCP Listener contacted by client");
-                    if (_tcpClient == null)
-                    {
-                        //old client vanished? Assign new.
-                        Debug.Print("TCP Listener starting clients thread");
-                        _tcpClient = tcpClient;
-                        _tcpClientThread = new Thread(() => TCPReaderThread(_tcpClient.GetStream()));
-                        _tcpClientThread.Start();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                DBCommon.LogError(211, e, "StartServer()");
-            }
-        }
-        */
 
         private void TCPReaderThread(NetworkStream stream)
         {
@@ -265,7 +223,8 @@ namespace DCS_BIOS
                 {
                     _shutdown = true;
                     DBCommon.DebugP("DCSBIOS is SHUTTING DOWN");
-                    _dcsProtocolParser.Shutdown();
+                    _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
+                    _dcsProtocolParser?.Shutdown();
                     _dcsbiosListeningThread?.Abort();
                 }
                 catch (Exception)
@@ -285,23 +244,6 @@ namespace DCS_BIOS
                 catch (Exception)
                 {
                 }
-
-                /*
-                try
-                {
-                    _tcpListener.Stop();
-                }
-                catch (Exception)
-                {
-                }
-                try
-                {
-                    _tcpClient.Close();
-                }
-                catch (Exception)
-                {
-                }
-                */
                 _started = false;
             }
             catch (Exception ex)

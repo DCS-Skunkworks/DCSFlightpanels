@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 namespace DCS_BIOS
 {
@@ -34,6 +35,7 @@ namespace DCS_BIOS
         private uint _specifiedSetStateArgument;
         private int _specifiedVariableStepArgument;
         private DCSBIOSFixedStepInput _specifiedFixedStepArgument;
+        private int _delay;
 
         public void Consume(string controlId, DCSBIOSControlInput dcsbiosControlInput)
         {
@@ -71,25 +73,25 @@ namespace DCS_BIOS
             switch (_interface)
             {
                 case DCSBIOSInputType.FIXED_STEP:
-                {
-                    result = _controlId + " " + _specifiedFixedStepArgument + "\n";
-                    break;
-                }
+                    {
+                        result = _controlId + " " + _specifiedFixedStepArgument + "\n";
+                        break;
+                    }
                 case DCSBIOSInputType.SET_STATE:
-                {
-                    result = _controlId + " " + _specifiedSetStateArgument + "\n";
-                    break;
-                }
+                    {
+                        result = _controlId + " " + _specifiedSetStateArgument + "\n";
+                        break;
+                    }
                 case DCSBIOSInputType.ACTION:
-                {
-                    result = _controlId + " " + _specifiedActionArgument + "\n";
-                    break;
-                }
+                    {
+                        result = _controlId + " " + _specifiedActionArgument + "\n";
+                        break;
+                    }
                 case DCSBIOSInputType.VARIABLE_STEP:
-                {
-                    result = _controlId + " " + _specifiedVariableStepArgument + "\n";
-                    break;
-                }
+                    {
+                        result = _controlId + " " + _specifiedVariableStepArgument + "\n";
+                        break;
+                    }
             }
             if (string.IsNullOrWhiteSpace(result))
             {
@@ -97,7 +99,13 @@ namespace DCS_BIOS
             }
             return result;
         }
-        
+
+        public int Delay
+        {
+            get { return _delay; }
+            set { _delay = value; }
+        }
+
         public string ControlId
         {
             get { return _controlId; }
@@ -162,12 +170,14 @@ namespace DCS_BIOS
     {
         //These are loaded and saved, all the rest are fetched from DCS-BIOS
         private string _controlId;
+        //TODO Can a DCSBIOSInput have multiple _dcsbiosInputObjects????
         //The user has entered these two depending on type
         private List<DCSBIOSInputObject> _dcsbiosInputObjects = new List<DCSBIOSInputObject>();
         private DCSBIOSInputObject _selectedDCSBIOSInput;
-        
+
         private string _controlDescription;
         private string _controlType; //display button toggle etc
+        private int _delay;
         private bool _debug;
 
         public string GetDescriptionForInterface(DCSBIOSInputType dcsbiosInputType)
@@ -252,25 +262,25 @@ namespace DCS_BIOS
             try
             {
 
-            switch (_selectedDCSBIOSInput.Interface)
-            {
-                case DCSBIOSInputType.FIXED_STEP:
+                switch (_selectedDCSBIOSInput.Interface)
                 {
-                    return "DCSBIOSInput{" + _controlId + "|FIXED_STEP|" + _selectedDCSBIOSInput.SpecifiedFixedStepArgument + "}";
+                    case DCSBIOSInputType.FIXED_STEP:
+                        {
+                            return "DCSBIOSInput{" + _controlId + "|FIXED_STEP|" + _selectedDCSBIOSInput.SpecifiedFixedStepArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                        }
+                    case DCSBIOSInputType.SET_STATE:
+                        {
+                            return "DCSBIOSInput{" + _controlId + "|SET_STATE|" + _selectedDCSBIOSInput.SpecifiedSetStateArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                        }
+                    case DCSBIOSInputType.ACTION:
+                        {
+                            return "DCSBIOSInput{" + _controlId + "|ACTION|" + _selectedDCSBIOSInput.SpecifiedActionArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                        }
+                    case DCSBIOSInputType.VARIABLE_STEP:
+                        {
+                            return "DCSBIOSInput{" + _controlId + "|VARIABLE_STEP|" + _selectedDCSBIOSInput.SpecifiedVariableStepArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                        }
                 }
-                case DCSBIOSInputType.SET_STATE:
-                {
-                    return "DCSBIOSInput{" + _controlId + "|SET_STATE|" + _selectedDCSBIOSInput.SpecifiedSetStateArgument + "}";
-                }
-                case DCSBIOSInputType.ACTION:
-                {
-                    return "DCSBIOSInput{" + _controlId + "|ACTION|" + _selectedDCSBIOSInput.SpecifiedActionArgument + "}";
-                }
-                case DCSBIOSInputType.VARIABLE_STEP:
-                {
-                    return "DCSBIOSInput{" + _controlId + "|VARIABLE_STEP|" + _selectedDCSBIOSInput.SpecifiedVariableStepArgument + "}";
-                }
-            }
             }
             catch (Exception ex)
             {
@@ -282,9 +292,9 @@ namespace DCS_BIOS
 
         public void ImportString(string str)
         {
-            //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
-            //DCSBIOSInput{AAP_EGIPWR|SET_STATE|65535}
-            //DCSBIOSInput{AAP_EGIPWR|ACTION|TOGGLE}
+            //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC|0}
+            //DCSBIOSInput{AAP_EGIPWR|SET_STATE|65535|0}
+            //DCSBIOSInput{AAP_EGIPWR|ACTION|TOGGLE|0}
             var value = str;
             if (string.IsNullOrEmpty(str))
             {
@@ -304,63 +314,103 @@ namespace DCS_BIOS
             //AAP_EGIPWR|ACTION|TOGGLE
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             _controlId = entries[0];
+            if (entries.Length == 4)
+            {
+                Delay = int.Parse(entries[3]);
+            }
+            else
+            {
+                Delay = 0;
+            }
             var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);
             Consume(dcsBIOSControl);
 
             switch (entries[1])
             {
-                case "FIXED_STEP" :
-                {
-                    foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
+                case "FIXED_STEP":
                     {
-                        if (dcsbiosInputObject.Interface == DCSBIOSInputType.FIXED_STEP)
+                        foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
                         {
-                            dcsbiosInputObject.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput) Enum.Parse(typeof(DCSBIOSFixedStepInput), entries[2]);
-                            _selectedDCSBIOSInput = dcsbiosInputObject;
-                            break;
+                            if (dcsbiosInputObject.Interface == DCSBIOSInputType.FIXED_STEP)
+                            {
+                                dcsbiosInputObject.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput)Enum.Parse(typeof(DCSBIOSFixedStepInput), entries[2]);
+                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                if (entries.Length == 4)
+                                {
+                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                }
+                                else
+                                {
+                                    _selectedDCSBIOSInput.Delay = 0;
+                                }
+                                break;
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
                 case "SET_STATE":
-                {
-                    foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
                     {
-                        if (dcsbiosInputObject.Interface == DCSBIOSInputType.SET_STATE)
+                        foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
                         {
-                            dcsbiosInputObject.SpecifiedSetStateArgument = uint.Parse(entries[2]);
-                            _selectedDCSBIOSInput = dcsbiosInputObject;
-                            break;
+                            if (dcsbiosInputObject.Interface == DCSBIOSInputType.SET_STATE)
+                            {
+                                dcsbiosInputObject.SpecifiedSetStateArgument = uint.Parse(entries[2]);
+                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                if (entries.Length == 4)
+                                {
+                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                }
+                                else
+                                {
+                                    _selectedDCSBIOSInput.Delay = 0;
+                                }
+                                break;
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
                 case "ACTION":
-                {
-                    foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
                     {
-                        if (dcsbiosInputObject.Interface == DCSBIOSInputType.ACTION)
+                        foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
                         {
-                            dcsbiosInputObject.SpecifiedActionArgument = entries[2];
-                            _selectedDCSBIOSInput = dcsbiosInputObject;
-                            break;
+                            if (dcsbiosInputObject.Interface == DCSBIOSInputType.ACTION)
+                            {
+                                dcsbiosInputObject.SpecifiedActionArgument = entries[2];
+                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                if (entries.Length == 4)
+                                {
+                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                }
+                                else
+                                {
+                                    _selectedDCSBIOSInput.Delay = 0;
+                                }
+                                break;
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
                 case "VARIABLE_STEP":
-                {
-                    foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
                     {
-                        if (dcsbiosInputObject.Interface == DCSBIOSInputType.VARIABLE_STEP)
+                        foreach (var dcsbiosInputObject in _dcsbiosInputObjects)
                         {
-                            dcsbiosInputObject.SpecifiedVariableStepArgument = int.Parse(entries[2]);
-                            _selectedDCSBIOSInput = dcsbiosInputObject;
-                            break;
+                            if (dcsbiosInputObject.Interface == DCSBIOSInputType.VARIABLE_STEP)
+                            {
+                                dcsbiosInputObject.SpecifiedVariableStepArgument = int.Parse(entries[2]);
+                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                if (entries.Length == 4)
+                                {
+                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                }
+                                else
+                                {
+                                    _selectedDCSBIOSInput.Delay = 0;
+                                }
+                                break;
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
             }
         }
 
@@ -368,6 +418,12 @@ namespace DCS_BIOS
         {
             get { return _controlId; }
             set { _controlId = value; }
+        }
+
+        public int Delay
+        {
+            get { return _delay; }
+            set { _delay = value; }
         }
 
         public bool Debug
@@ -381,7 +437,7 @@ namespace DCS_BIOS
             get { return _controlDescription; }
             set { _controlDescription = value; }
         }
-                
+
         public string ControlType
         {
             get { return _controlType; }

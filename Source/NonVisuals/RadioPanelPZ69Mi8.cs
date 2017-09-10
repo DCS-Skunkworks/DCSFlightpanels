@@ -64,7 +64,7 @@ namespace NonVisuals
         //Small dial 0 - 99
         private readonly ClickSpeedDetector _yadro1aBigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _yadro1aBigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private volatile uint _yadro1aBigFrequencyStandby = 108;
+        private volatile uint _yadro1aBigFrequencyStandby = 100;
         private volatile uint _yadro1aSmallFrequencyStandby;
         private volatile uint _yadro1aSavedCockpitBigFrequency;
         private volatile uint _yadro1aSavedCockpitSmallFrequency;
@@ -76,7 +76,7 @@ namespace NonVisuals
         private volatile uint _yadro1aCockpitFreq2DialPos = 1;
         private volatile uint _yadro1aCockpitFreq3DialPos = 1;
         private volatile uint _yadro1aCockpitFreq4DialPos = 1;
-        private double _yadro1aCockpitFrequency = 2000;
+        private double _yadro1aCockpitFrequency = 100;
         private DCSBIOSOutput _yadro1aDcsbiosOutputCockpitFrequency;
         private const string YADRO1AFreq1DialCommand = "YADRO1A_FREQ1 ";
         private const string YADRO1AFreq2DialCommand = "YADRO1A_FREQ2 ";
@@ -1670,27 +1670,27 @@ namespace NonVisuals
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.YADRO1A:
+                                        {
+                                            var changeFaster = false;
+                                            _yadro1aBigFreqDecreaseChangeMonitor.Click();
+                                            if (_yadro1aBigFreqDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                var changeFaster = false;
-                                                _yadro1aBigFreqDecreaseChangeMonitor.Click();
-                                                if (_yadro1aBigFreqDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    _yadro1aBigFrequencyStandby = _yadro1aBigFrequencyStandby - ChangeValue;
-                                                }
-                                                if (_yadro1aBigFrequencyStandby <= 20)
-                                                {
-                                                    //@ max value
-                                                    _yadro1aBigFrequencyStandby = 20;
-                                                    break;
-                                                }
-                                                _yadro1aBigFrequencyStandby--;
+                                                //Change faster
+                                                changeFaster = true;
+                                            }
+                                            if (changeFaster)
+                                            {
+                                                _yadro1aBigFrequencyStandby = _yadro1aBigFrequencyStandby - ChangeValue;
+                                            }
+                                            if (_yadro1aBigFrequencyStandby <= 20)
+                                            {
+                                                //@ max value
+                                                _yadro1aBigFrequencyStandby = 20;
                                                 break;
                                             }
+                                            _yadro1aBigFrequencyStandby--;
+                                            break;
+                                    }
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
                                                 if (!SkipR828PresetDialChange())
@@ -1984,7 +1984,7 @@ namespace NonVisuals
                                 //Preset Channel Selector
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                var channelAsString = "";
+                                /*var channelAsString = "";
                                 lock (_lockADFDialObject1)
                                 {
                                     switch (_adfCockpitPresetDialPos)
@@ -2007,7 +2007,9 @@ namespace NonVisuals
                                     }
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);*/
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
                                 break;
                             }
                         case CurrentMi8RadioMode.SPU7:
@@ -2112,7 +2114,7 @@ namespace NonVisuals
                             {
                                 //Preset Channel Selector
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = "";
+                                /*var channelAsString = "";
                                 lock (_lockADFDialObject1)
                                 {
                                     switch (_adfCockpitPresetDialPos)
@@ -2135,7 +2137,9 @@ namespace NonVisuals
                                     }
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);*/
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
                                 break;
                             }
                         case CurrentMi8RadioMode.SPU7:
