@@ -5,7 +5,7 @@ Mi-8 support added
 Added delay option when configuring DCS-BIOS commands for switches (after command)
 Loads last profile
 New menu option for closing open profile
-Hanging problems solved. Process left hanging in Windoes Task Manager
+Hanging problems solved. Process left hanging in Windows Task Manager
 Project name changed from ProUsbPanels to DCSFlightpanels (DCSFlightpanels.exe)
 
 v 2.1.614 3 September 2017
