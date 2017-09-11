@@ -1,8 +1,0 @@
-﻿<Window x:Class="ProUsbPanels.About"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="About Flightpanels" Height="575" Width="904" Name="AboutWindow" Loaded="AboutWindowLoaded">
-    <Grid>
-        <TextBlock Height="125" HorizontalAlignment="Left" Margin="20,18,0,0" Name="textBlockInfo" Text="This project is based on many others programmers code, without them it would not be possible." VerticalAlignment="Top" Width="842" />
-    </Grid>
-</Window>

@@ -1,0 +1,18 @@
+﻿<Window x:Class="ProUsbPanels.PreferencesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Preferences" Height="505" Width="445" Icon="/ProUsbPanels;component/Images/huey_icon.ico" Loaded="WindowLoaded">
+    <Grid>
+        <Label Content="Default directory for preferences file" Height="28" HorizontalAlignment="Left" Margin="12,49,0,0" Name="label1" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="16,71,0,0" Name="textBoxDefaultDirectory" VerticalAlignment="Top" Width="255" />
+        <Button Content="..." Height="23" HorizontalAlignment="Right" Margin="0,71,598,0" Name="buttonChooseDirectory" VerticalAlignment="Top" Width="38" Click="ButtonChooseDirectoryClick" />
+        <CheckBox Content="Warn when multiple switches has same key specified" Height="16" HorizontalAlignment="Left" Margin="18,26,0,0" Name="checkBoxWarnDuplicates" VerticalAlignment="Top" IsChecked="False" />
+        <TextBox Height="43" HorizontalAlignment="Left" Margin="18,138,0,0" Name="textBoxInformation" VerticalAlignment="Top" Width="389" IsReadOnly="True" Text="The configuration file containing the key bindings will be located in the same directory as the preferences file." TextWrapping="Wrap" Background="#FFEBEBEB"></TextBox>
+        <Button Content="Close" Height="23" HorizontalAlignment="Left" Margin="332,431,0,0" Name="buttonClose" VerticalAlignment="Top" Width="75" Click="ButtonCloseClick" />
+        <Button Content="Save" Height="23" HorizontalAlignment="Left" Margin="251,431,0,0" Name="buttonSavePreferences" VerticalAlignment="Top" Width="75" Click="ButtonSavePreferencesClick" />
+        <TextBox Background="#FFEBEBEB" Height="27" HorizontalAlignment="Left" IsReadOnly="True" Margin="18,105,0,0" Name="textBox1" Text="The preferences file is saved and read automatically by the application." TextWrapping="Wrap" VerticalAlignment="Top" Width="389" />
+        <TextBox Background="#FFEBEBEB" Height="27" HorizontalAlignment="Left" IsReadOnly="True" Margin="18,188,0,0" Name="textBox2" Text="Default directory is My Documents (recommended)." TextWrapping="Wrap" VerticalAlignment="Top" Width="389" />
+        <TextBox Background="#FFEBEBEB" Height="77" HorizontalAlignment="Left" IsReadOnly="True" Margin="18,221,0,0" Name="textBox3" Text="If you upgrade this software the new version might not find the settings, use the saved files to restore preferences and key bindings for the flight panel.The preferences file is saved and read automatically by the application." TextWrapping="Wrap" VerticalAlignment="Top" Width="389" />
+        <Button Content="Directory" Height="23" HorizontalAlignment="Left" Margin="277,71,0,0" Name="buttonSaveDirectory" VerticalAlignment="Top" Width="75" Click="ButtonChooseDirectoryClick" />
+    </Grid>
+</Window>

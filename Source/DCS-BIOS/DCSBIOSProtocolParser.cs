@@ -72,7 +72,7 @@ namespace DCS_BIOS
             {
                 _processingThread.Abort();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
             _autoResetEvent.Set();

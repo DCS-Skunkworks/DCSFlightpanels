@@ -71,7 +71,7 @@ namespace DCS_BIOS
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Failed to create DCSBIOSOutput based on control " + controlId + " for airframe " + Airframe.GetDescription() + "." + Environment.NewLine + ioe.Message);
+                    throw new Exception("Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control " + controlId + " for airframe " + Airframe.GetDescription() + "." + Environment.NewLine + ioe.Message);
                 }
             }
         }
