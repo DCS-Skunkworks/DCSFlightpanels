@@ -1,8 +1,16 @@
 # DCSFlightpanels
 
+v x.x.xxx 11 September 2017
+Mi-8 support added
+Added delay option when configuring DCS-BIOS commands for switches (after command)
+Loads last profile
+New menu option for closing open profile
+Hanging problems solved. Process left hanging in Windoes Task Manager
+Project name changed from ProUsbPanels to DCSFlightpanels (DCSFlightpanels.exe)
+
 v 2.1.614 3 September 2017
-Ka-50 radio supported.
-Added code limiting HID traffic to radiopanels & multipanel (LCD updates).
+Ka-50 radio supported
+Added code limiting HID traffic to radiopanels & multipanel (LCD updates)
 Other refactoring in all radiopanel codes (Mig-21, A-10, UH-1H)
 
 v 2.1.204 18 April 2015
