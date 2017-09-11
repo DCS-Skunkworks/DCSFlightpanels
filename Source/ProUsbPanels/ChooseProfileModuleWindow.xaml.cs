@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using CommonClassLibraryJD;
 using DCS_BIOS;
 using NonVisuals;
@@ -24,10 +25,24 @@ namespace ProUsbPanels
             PopulateAirframeCombobox();
         }
 
+        private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DialogResult = false;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(23060, ex);
+            }
+        }
+
         private void ButtonOk_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
+                DialogResult = true;
                 SetAirframe();
                 Close();
             }
@@ -82,5 +97,7 @@ namespace ProUsbPanels
         {
             get { return _dcsAirframe; }
         }
+
+
     }
 }

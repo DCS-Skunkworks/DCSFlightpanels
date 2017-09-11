@@ -20,6 +20,7 @@
                 <MenuItem Header="Open" Name="MenuItemOpen" Click="MenuItemOpenClick"/>
                 <MenuItem Header="Save" Name="MenuItemSave" Click="MenuItemSaveClick"/>
                 <MenuItem Header="Save As.." Name="MenuItemSaveAs" Click="MenuItemSaveAsClick"/>
+                <MenuItem Header="Close Profile" Name="MenuItemCloseProfile" Click="MenuItemCloseProfile_OnClick"/>
                 <Separator />
                 <MenuItem Header="Exit" Click="MenuItemExitClick" />
             </MenuItem>

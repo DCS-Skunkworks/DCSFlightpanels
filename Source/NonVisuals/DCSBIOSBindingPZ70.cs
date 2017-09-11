@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using DCS_BIOS;
 
 namespace NonVisuals
@@ -15,6 +16,15 @@ namespace NonVisuals
         private bool _whenOnTurnedOn = true;
         private const string SeparatorChars = "\\o/";
         private string _description;
+
+        private Thread _sendDCSBIOSCommandsThread;
+        private bool _cancelSendDCSBIOSCommands;
+
+        ~DCSBIOSBindingPZ70()
+        {
+            _cancelSendDCSBIOSCommands = true;
+            _sendDCSBIOSCommandsThread?.Abort();
+        }
 
         internal void ImportSettings(string settings)
         {
@@ -65,10 +75,42 @@ namespace NonVisuals
 
         public void SendDCSBIOSCommands()
         {
-            foreach (var dcsbiosInput in _dcsbiosInputs)
+            _cancelSendDCSBIOSCommands = true;
+            _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(_dcsbiosInputs));
+            _sendDCSBIOSCommandsThread.Start();
+        }
+
+        private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs)
+        {
+            _cancelSendDCSBIOSCommands = false;
+            try
             {
-                var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
-                DCSBIOS.Send(command);
+                try
+                {
+                    foreach (var dcsbiosInput in dcsbiosInputs)
+                    {
+                        if (_cancelSendDCSBIOSCommands)
+                        {
+                            return;
+                        }
+                        var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
+                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
+                        if (_cancelSendDCSBIOSCommands)
+                        {
+                            return;
+                        }
+                        DCSBIOS.Send(command);
+                    }
+                }
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
+                {
+                    Common.LogError(34172, ex);
+                }
+            }
+            finally
+            {
             }
         }
 

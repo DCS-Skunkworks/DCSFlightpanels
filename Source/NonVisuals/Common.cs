@@ -109,6 +109,7 @@ namespace NonVisuals
             get { return _debugOn; }
             set
             {
+                DCS_BIOS.DBCommon.Debug = value;
                 _debugOn = value;
             }
         }

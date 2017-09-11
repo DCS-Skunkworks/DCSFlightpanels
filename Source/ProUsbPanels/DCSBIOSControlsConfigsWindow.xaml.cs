@@ -181,5 +181,10 @@ namespace ProUsbPanels
             get { return _description; }
             set { _description = value; }
         }
+
+        private void NewDelayButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -53,6 +53,7 @@ namespace DCS_BIOS
             _state = DCSBiosStateEnum.WAIT_FOR_SYNC;
             _syncByteCount = 0;
             DCSBIOSProtocolParserSO = this;
+            _shutdown = false;
         }
 
         public void Startup()
@@ -60,12 +61,20 @@ namespace DCS_BIOS
             DBCommon.DebugP("ProtocolParser starting up");
             _processingThread = new Thread(ProcessArrays);
             _processingThread.Start();
+            _shutdown = false;
         }
 
         public void Shutdown()
         {
             DBCommon.DebugP("ProtocolParser shutting down");
             _shutdown = true;
+            try
+            {
+                _processingThread.Abort();
+            }
+            catch (Exception e)
+            {
+            }
             _autoResetEvent.Set();
         }
 

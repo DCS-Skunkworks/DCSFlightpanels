@@ -80,10 +80,16 @@ namespace NonVisuals
         private const string OpenFileDialogFilter = "Flightpanels (.bindings)|*.bindings";
         private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
         private List<KeyValuePair<string, SaitekPanelsEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, SaitekPanelsEnum>>();
+        private bool _profileLoaded;
+
+        public ProfileHandler(string jsonDirectory)
+        {
+            _jsonDirectory = jsonDirectory;
+            DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
+        }
 
         public ProfileHandler(string jsonDirectory, string lastProfileUsed)
         {
-            _isNewProfile = true;
             _jsonDirectory = jsonDirectory;
             DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
             _lastProfileUsed = lastProfileUsed;
@@ -230,6 +236,7 @@ namespace NonVisuals
                  * EndPanel
                  * 
                  */
+                _profileLoaded = true;
                 var oldProfileStandard = true;
                 var fileLines = File.ReadAllLines(_filename);
                 foreach (var fileLine in fileLines)
@@ -338,25 +345,34 @@ namespace NonVisuals
             }
         }
 
-        public
-            void SendSettingsReadEvent()
+        public void SendSettingsReadEvent()
         {
-            Common.DebugP("ProfileHandler Sends OnAirframeSelected & OnSettingsReadFromFile event");
-            if (OnSettingsReadFromFile == null)
+            try
             {
-                Common.DebugP("ProfileHandler : no one is listening to OnSettingsReadFromFile?");
-            }
-            if (OnAirframeSelected == null)
-            {
-                Common.DebugP("ProfileHandler : no one is listening to OnAirframeSelected?");
-            }
-            if (OnSettingsReadFromFile != null)
-            {
-                if (OnAirframeSelected != null)
+                Common.DebugP("ProfileHandler Sends OnAirframeSelected & OnSettingsReadFromFile event");
+                if (OnSettingsReadFromFile == null)
                 {
-                    OnAirframeSelected(_airframe);
+                    Common.DebugP("ProfileHandler : no one is listening to OnSettingsReadFromFile?");
                 }
-                OnSettingsReadFromFile(_listPanelSettingsData);
+                if (OnAirframeSelected == null)
+                {
+                    Common.DebugP("ProfileHandler : no one is listening to OnAirframeSelected?");
+                }
+                if (OnSettingsReadFromFile != null)
+                {
+                    
+                    if (OnAirframeSelected != null)
+                    {
+                        //TODO DENNA ORSAKAR HÄNGANDE!!
+                        OnAirframeSelected(_airframe);
+                    }
+                    //TODO DENNA ORSAKAR HÄNGANDE!!
+                    OnSettingsReadFromFile(_listPanelSettingsData);
+                }
+            }
+            catch (Exception e)
+            {
+                Common.ShowErrorMessageBox(12061, e);
             }
         }
 
@@ -539,5 +555,7 @@ namespace NonVisuals
             get { return _jsonDirectory; }
             set { _jsonDirectory = value; }
         }
+
+        public bool ProfileLoaded => _profileLoaded || _isNewProfile;
     }
 }

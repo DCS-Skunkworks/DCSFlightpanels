@@ -77,10 +77,10 @@ namespace ProUsbPanels
                 _panelProfileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
                 _panelProfileHandler.Attach(this);
                 _panelProfileHandler.AttachUserMessageHandler(this);
-                /*if (!_panelProfileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
+                if (!_panelProfileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
                 {
                     CreateNewProfile();
-                }*/
+                }
                 _dcsAirframe = _panelProfileHandler.Airframe;
                 //SearchForPanels();
                 SetWindowTitle();
@@ -117,11 +117,13 @@ namespace ProUsbPanels
 
         private void CreateNewProfile()
         {
-            _panelProfileHandler.NewProfile();
             var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
-            chooseProfileModuleWindow.ShowDialog();
-            _panelProfileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
-            SendEventRegardingForwardingOfKeys();
+            if (chooseProfileModuleWindow.ShowDialog() == true)
+            {
+                _panelProfileHandler.NewProfile();
+                _panelProfileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
+                SendEventRegardingForwardingOfKeys();
+            }
             SetWindowState();
         }
 
@@ -133,30 +135,23 @@ namespace ProUsbPanels
             }
             Common.DebugP("SetApplicationMode() Airframe has changed. Current airframe is " + dcsAirframe);
 
-            LabelAirframe.Content = dcsAirframe;
+            if (dcsAirframe == DCSAirframe.NOFRAMELOADEDYET)
+            {
+                LabelAirframe.Content = "";
+            }
+            else
+            {
+                LabelAirframe.Content = dcsAirframe;
+            }
             var itemCount = TabControlPanels.Items.Count;
-            var closedItemCount = 0;
             Common.DebugP("There are " + TabControlPanels.Items.Count + " TabControlPanels.Items");
             //Do not remove, must be because of while()
             if (_fipHandler != null)
             {
                 _fipHandler.Close();
             }
-            if (TabControlPanels.Items.Count > 0)
-            {
-                do
-                {
-                    var item = (TabItem)TabControlPanels.Items.GetItemAt(0);
-                    var saitekPanelUserControl = ((ISaitekUserControl)item.Content);
-                    var saitekPanel = saitekPanelUserControl.GetSaitekPanel();
 
-                    Common.DebugP("Shutting down " + saitekPanel.GetType().Name);
-                    saitekPanel.Shutdown();
-                    _saitekUserControls.Remove((UserControl)item.Content);
-                    TabControlPanels.Items.Remove(item);
-                    closedItemCount++;
-                } while (TabControlPanels.Items.Count > 0);
-            }
+            var closedItemCount = CloseTabItems();
 
             if (dcsAirframe == DCSAirframe.NONE)
             {
@@ -168,8 +163,9 @@ namespace ProUsbPanels
                 ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
                 MenuItemCheckForDCS.Visibility = Visibility.Collapsed;
                 MenuItemDCSBIOSSettings.Visibility = Visibility.Collapsed;
+                SearchForPanels();
             }
-            else
+            else if(dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
                 Common.DebugP("Starting up DCSBIOS");
                 _dcsBios.Startup();
@@ -179,6 +175,7 @@ namespace ProUsbPanels
                 ImageDcsBiosConnected.Visibility = Visibility.Visible;
                 MenuItemCheckForDCS.Visibility = Visibility.Visible;
                 MenuItemDCSBIOSSettings.Visibility = Visibility.Visible;
+                SearchForPanels();
             }
             if (closedItemCount != itemCount)
             {
@@ -189,7 +186,45 @@ namespace ProUsbPanels
             {
                 Common.DebugP("Closed " + itemCount + " out of " + closedItemCount + " tab items");
             }
-            SearchForPanels();
+        }
+
+        public int CloseTabItems()
+        {
+            var closedItemCount = 0;
+            try
+            {
+                Common.DebugP("Entering CloseTabItems()");
+                Common.DebugP("_saitekUserControls count is " + _saitekUserControls.Count);
+                Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
+                if (TabControlPanels.Items.Count > 0)
+                {
+                    do
+                    {
+                        var item = (TabItem)TabControlPanels.Items.GetItemAt(0);
+                        TabControlPanels.Items.Remove(item);
+                        var saitekPanelUserControl = ((ISaitekUserControl)item.Content);
+                        var saitekPanel = saitekPanelUserControl.GetSaitekPanel();
+
+                        _panelProfileHandler.Detach(saitekPanel);
+                        saitekPanel.Detach(_panelProfileHandler);
+                        saitekPanel.Detach((IProfileHandlerListener)this);
+                        _dcsBios.DetachDataReceivedListener(saitekPanel);
+
+                        Common.DebugP("Shutting down " + saitekPanel.GetType().Name);
+                        saitekPanel.Shutdown();
+                        _saitekUserControls.Remove((UserControl)item.Content);
+                        Common.DebugP("_saitekUserControls count is " + _saitekUserControls.Count);
+                        Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
+                        closedItemCount++;
+                    } while (TabControlPanels.Items.Count > 0);
+                }
+                Common.DebugP("Leaving CloseTabItems()");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(471072, ex);
+            }
+            return closedItemCount;
         }
 
         public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
@@ -290,6 +325,14 @@ namespace ProUsbPanels
                                     else if (_panelProfileHandler.Airframe == DCSAirframe.Ka50)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Mi8)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
                                         _panelProfileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
@@ -714,7 +757,11 @@ namespace ProUsbPanels
 
         private void SetWindowTitle()
         {
-            if (_panelProfileHandler.IsNewProfile)
+            if (_panelProfileHandler.Airframe == DCSAirframe.NOFRAMELOADEDYET)
+            {
+                Title = "";
+            }
+            else if (_panelProfileHandler.IsNewProfile)
             {
                 Title = _windowName;// + "      " + Common.GetLocalIPAddress();
             }
@@ -763,9 +810,8 @@ namespace ProUsbPanels
             try
             {
                 Shutdown();
-
                 //Wtf is hanging?
-                Environment.Exit(0);
+                //Environment.Exit(0);
             }
             catch (Exception ex)
             {
@@ -777,11 +823,13 @@ namespace ProUsbPanels
         {
             try
             {
+                Common.DebugP("Entering Mainwindow Shutdown()");
                 _exceptionTimer.Stop();
                 _dcsStopGearTimer.Stop();
                 _statusMessagesTimer.Stop();
                 _dcsCheckDcsBiosStatusTimer.Stop();
                 _checkForDcsGameWindowTimer.Stop();
+                Common.DebugP("Mainwindow Shutdown() Timers stopped");
             }
             catch (Exception ex)
             {
@@ -799,16 +847,17 @@ namespace ProUsbPanels
             {
                 Common.ShowErrorMessageBox(2016, ex);
             }
-
+            Common.DebugP("Mainwindow Shutdown() saitekUserControls shutdown");
             try
             {
-                _hidHandler.Shutdown();
+                //TODO THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
+                //_hidHandler.Shutdown();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(32018, ex);
             }
-
+            Common.DebugP("Mainwindow Shutdown() _hidHandler shutdown");
             try
             {
                 _dcsBios.Shutdown();
@@ -817,7 +866,7 @@ namespace ProUsbPanels
             {
                 Common.ShowErrorMessageBox(2018, ex);
             }
-
+            Common.DebugP("Mainwindow Shutdown() _dcsBios shutdown");
             try
             {
                 if (_fipHandler != null)
@@ -829,12 +878,15 @@ namespace ProUsbPanels
             {
                 Common.ShowErrorMessageBox(2018, ex);
             }
+            Common.DebugP("Mainwindow Shutdown() _fipHandler shutdown");
+            Common.DebugP("Leaving Mainwindow Shutdown()");
         }
 
         private void MenuItemExitClick(object sender, RoutedEventArgs e)
         {
             try
             {
+                Shutdown();
                 Application.Current.Shutdown();
             }
             catch (Exception ex)
@@ -910,6 +962,39 @@ namespace ProUsbPanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(2022, ex);
+            }
+        }
+
+        private void CloseProfile()
+        {
+            CloseTabItems();
+            _panelProfileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
+            _panelProfileHandler.Attach(this);
+            _panelProfileHandler.AttachUserMessageHandler(this);
+            _dcsAirframe = _panelProfileHandler.Airframe;
+            SetApplicationMode(_dcsAirframe);
+            SetWindowTitle();
+            SetWindowState();
+            SendEventRegardingForwardingOfKeys();
+        }
+
+        private void MenuItemCloseProfile_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    CloseProfile();
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2021, ex);
             }
         }
 
@@ -1132,6 +1217,8 @@ namespace ProUsbPanels
 
         private void SetWindowState()
         {
+            MenuItemSaveAs.IsEnabled = _panelProfileHandler.ProfileLoaded;
+            MenuItemCloseProfile.IsEnabled = _panelProfileHandler.ProfileLoaded;
             ButtonImageSave.IsEnabled = _panelProfileHandler.IsDirty;
             MenuItemSave.IsEnabled = _panelProfileHandler.IsDirty && !_panelProfileHandler.IsNewProfile;
             ButtonImageRefresh.IsEnabled = !_panelProfileHandler.IsNewProfile && !_panelProfileHandler.IsDirty;
@@ -1431,6 +1518,6 @@ namespace ProUsbPanels
         {
             _panelProfileHandler.OpenProfileDEVELOPMENT();
         }
-        
+
     }
 }

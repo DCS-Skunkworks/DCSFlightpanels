@@ -38,8 +38,8 @@ namespace NonVisuals
             108, 109, 110, 111, 113, 114, 115, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130,131, 132, 133, 134, 135, 136, 138, 139, 140, 141, 250, 251, 252, 253, 254, 255, 256,257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 344, 365, 385
             //
         };*/
-        private ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private ClickSpeedDetector _r800l1BigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private ClickSpeedDetector _r800l1BigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         const int ChangeValue = 10;
         //private long _changesWithinLastticksSinceLastChangeLargeDial;
         private int[] _r800l1Freq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
@@ -938,8 +938,8 @@ namespace NonVisuals
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
                                                 var changeFaster = false;
-                                                _bigFreqIncreaseChangeMonitor.Click();
-                                                if (_bigFreqIncreaseChangeMonitor.ClickThresholdReached())
+                                                _r800l1BigFreqIncreaseChangeMonitor.Click();
+                                                if (_r800l1BigFreqIncreaseChangeMonitor.ClickThresholdReached())
                                                 {
                                                     //Change faster
                                                     changeFaster = true;
@@ -996,8 +996,8 @@ namespace NonVisuals
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
                                                 var changeFaster = false;
-                                                _bigFreqDecreaseChangeMonitor.Click();
-                                                if (_bigFreqDecreaseChangeMonitor.ClickThresholdReached())
+                                                _r800l1BigFreqDecreaseChangeMonitor.Click();
+                                                if (_r800l1BigFreqDecreaseChangeMonitor.ClickThresholdReached())
                                                 {
                                                     //Change faster
                                                     changeFaster = true;

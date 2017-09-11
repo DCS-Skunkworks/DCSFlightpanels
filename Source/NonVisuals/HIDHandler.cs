@@ -31,6 +31,8 @@ namespace NonVisuals
                     _hidWriteDevice.CloseDevice();
                     Common.DebugP(_panelType + " : HidWriteDevice has left the building...");
                 }
+                _hidReadDevice.Dispose();
+                _hidWriteDevice.Dispose();
             }
             catch (Exception ex)
             {
