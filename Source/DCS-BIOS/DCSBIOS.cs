@@ -232,14 +232,14 @@ namespace DCS_BIOS
                 }
                 try
                 {
-                    _udpReceiveClient.Close();
+                    _udpReceiveClient?.Close();
                 }
                 catch (Exception)
                 {
                 }
                 try
                 {
-                    _udpSendClient.Close();
+                    _udpSendClient?.Close();
                 }
                 catch (Exception)
                 {
