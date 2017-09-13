@@ -1,6 +1,6 @@
 # DCSFlightpanels
 
-v x.x.xxx 11 September 2017
+v 2.1.699 13 September 2017
 Mi-8 support added
 Added delay option when configuring DCS-BIOS commands for switches (after command)
 Loads last profile
