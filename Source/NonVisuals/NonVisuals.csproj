@@ -133,7 +133,9 @@
     <Compile Include="RadioPanelKnobA10C.cs" />
     <Compile Include="RadioPanelKnobUH1H.cs" />
     <Compile Include="RadioPanelPZ69Bf109.cs" />
+    <Compile Include="RadioPanelPZ69Fw190.cs" />
     <Compile Include="RadioPanelPZ69Ka50.cs" />
+    <Compile Include="RadioPanelKnobFw190.cs" />
     <Compile Include="RadioPanelPZ69Mi8.cs" />
     <Compile Include="RadioPanelPZ69MiG21Bis.cs" />
     <Compile Include="RadioPanelPZ69A10C.cs" />

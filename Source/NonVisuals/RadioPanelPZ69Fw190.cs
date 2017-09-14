@@ -9,11 +9,11 @@ using HidLibrary;
 
 namespace NonVisuals
 {
-    public class RadioPanelPZ69Bf109 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69Fw190 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
-        private HashSet<RadioPanelKnobBf109> _radioPanelKnobs = new HashSet<RadioPanelKnobBf109>();
-        private CurrentBf109RadioMode _currentUpperRadioMode = CurrentBf109RadioMode.FUG16ZY;
-        private CurrentBf109RadioMode _currentLowerRadioMode = CurrentBf109RadioMode.FUG16ZY;
+        private HashSet<RadioPanelKnobFw190> _radioPanelKnobs = new HashSet<RadioPanelKnobFw190>();
+        private CurrentFw190RadioMode _currentUpperRadioMode = CurrentFw190RadioMode.FUG16ZY;
+        private CurrentFw190RadioMode _currentLowerRadioMode = CurrentFw190RadioMode.FUG16ZY;
 
         /*FuG 16ZY*/
         /*38.4 and 42.4 MHz*/
@@ -24,8 +24,8 @@ namespace NonVisuals
          *  Fine Tuning
          *  I Management frequency Withing Squadron
          *  II Group Order frequency Different squadrons
-         *  Δ Air Traffic Control frequency
-         *  □ Reich Fighter Defense Frequency (Country Wide)
+         *  ? Air Traffic Control frequency
+         *  ? Reich Fighter Defense Frequency (Country Wide)
          *  Homing:
          *  FT FT
          *  Y ZF
@@ -51,8 +51,6 @@ namespace NonVisuals
         /*FuG 16ZY COM1*/
         //Large dial 0-3 [step of 1]
         //Small dial Fine tuning
-        private ClickSpeedDetector _fineTuneIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _fineTuneDecreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly object _lockFug16ZyPresetDialObject1 = new object();
         private DCSBIOSOutput _fug16ZyPresetDcsbiosOutputPresetDial;
         private volatile uint _fug16ZyPresetCockpitDialPos = 1;
@@ -62,12 +60,10 @@ namespace NonVisuals
         private readonly object _lockFug16ZyFineTuneDialObject1 = new object();
         private DCSBIOSOutput _fug16ZyFineTuneDcsbiosOutputDial;
         private volatile uint _fug16ZyFineTuneCockpitDialPos = 1;
-        private const string Fug16ZyFineTuneCommandInc = "FUG16_TUNING +300\n";
-        private const string Fug16ZyFineTuneCommandDec = "FUG16_TUNING -300\n";
-        private const string Fug16ZyFineTuneCommandIncMore = "FUG16_TUNING +3000\n";
-        private const string Fug16ZyFineTuneCommandDecMore = "FUG16_TUNING -3000\n";
+        private const string Fug16ZyFineTuneCommandInc = "FUG16_TUNING INC\n";
+        private const string Fug16ZyFineTuneCommandDec = "FUG16_TUNING DEC\n";
 
-        /*Bf 109 FuG 25a IFF COM2*/
+        /*Fw 190 FuG 25a IFF COM2*/
         //Large dial 0-1 [step of 1]
         //Small dial Volume control
         //ACT/STBY IFF Test Button
@@ -77,12 +73,12 @@ namespace NonVisuals
         private const string FUG25AIFFCommandInc = "FUG25_MODE INC\n";
         private const string FUG25AIFFCommandDec = "FUG25_MODE DEC\n";
         private int _fug25aIFFDialSkipper;
-        private const string RadioVolumeKnobCommandInc = "FUG16_VOLUME +2500\n";
-        private const string RadioVolumeKnobCommandDec = "FUG16_VOLUME -2500\n";
+        private const string RadioVolumeKnobCommandInc = "FUG16_VOLUME +1000\n";
+        private const string RadioVolumeKnobCommandDec = "FUG16_VOLUME -1000\n";
         private const string FuG25ATestCommandInc = "FUG25_TEST INC\n";
         private const string FuG25ATestCommandDec = "FUG25_TEST DEC\n";
 
-        /*Bf 109 FuG 16ZY Homing Switch NAV1*/
+        /*Fw 190 FuG 16ZY Homing Switch NAV1*/
         //Large dial N/A
         //Small dial N/A
         //ACT/STBY Homing Switch
@@ -96,7 +92,7 @@ namespace NonVisuals
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69Bf109(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69Fw190(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -120,7 +116,7 @@ namespace NonVisuals
         {
             try
             {
-                //Common.DebugP("PZ69 Bf109 READ ENTERING");
+                //Common.DebugP("PZ69 Fw190 READ ENTERING");
                 UpdateCounter(address, data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -191,11 +187,11 @@ namespace NonVisuals
                 //Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
-                //Common.DebugP("PZ69 Bf109 READ EXITING");
+                //Common.DebugP("PZ69 Fw190 READ EXITING");
             }
             catch (Exception ex)
             {
-                Common.LogError(82001, ex);
+                Common.LogError(83001, ex);
             }
         }
 
@@ -204,101 +200,101 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio PZ69KnobChanged()");
+                Common.DebugP("Entering Fw 190 Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (_lockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
                     {
-                        var radioPanelKnob = (RadioPanelKnobBf109)radioPanelKnobObject;
+                        var radioPanelKnob = (RadioPanelKnobFw190)radioPanelKnobObject;
 
                         switch (radioPanelKnob.RadioPanelPZ69Knob)
                         {
-                            case RadioPanelPZ69KnobsBf109.UPPER_FUG16ZY:
+                            case RadioPanelPZ69KnobsFw190.UPPER_FUG16ZY:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentBf109RadioMode.FUG16ZY);
+                                        SetUpperRadioMode(CurrentFw190RadioMode.FUG16ZY);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_IFF:
+                            case RadioPanelPZ69KnobsFw190.UPPER_IFF:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentBf109RadioMode.IFF);
+                                        SetUpperRadioMode(CurrentFw190RadioMode.IFF);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_HOMING:
+                            case RadioPanelPZ69KnobsFw190.UPPER_HOMING:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentBf109RadioMode.HOMING);
+                                        SetUpperRadioMode(CurrentFw190RadioMode.HOMING);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_NOUSE1:
-                            case RadioPanelPZ69KnobsBf109.UPPER_NOUSE2:
-                            case RadioPanelPZ69KnobsBf109.UPPER_NOUSE3:
-                            case RadioPanelPZ69KnobsBf109.UPPER_NOUSE4:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE1:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE2:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE3:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE4:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentBf109RadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentFw190RadioMode.NOUSE);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_FUG16ZY:
+                            case RadioPanelPZ69KnobsFw190.LOWER_FUG16ZY:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentBf109RadioMode.FUG16ZY);
+                                        SetLowerRadioMode(CurrentFw190RadioMode.FUG16ZY);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_IFF:
+                            case RadioPanelPZ69KnobsFw190.LOWER_IFF:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentBf109RadioMode.IFF);
+                                        SetLowerRadioMode(CurrentFw190RadioMode.IFF);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_HOMING:
+                            case RadioPanelPZ69KnobsFw190.LOWER_HOMING:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentBf109RadioMode.HOMING);
+                                        SetLowerRadioMode(CurrentFw190RadioMode.HOMING);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_NOUSE1:
-                            case RadioPanelPZ69KnobsBf109.LOWER_NOUSE2:
-                            case RadioPanelPZ69KnobsBf109.LOWER_NOUSE3:
-                            case RadioPanelPZ69KnobsBf109.LOWER_NOUSE4:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE1:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE2:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE3:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE4:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentBf109RadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentFw190RadioMode.NOUSE);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsBf109.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsBf109.UPPER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsBf109.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsBf109.LOWER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsBf109.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsBf109.LOWER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsBf109.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     //Ignore
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_FREQ_SWITCH:
+                            case RadioPanelPZ69KnobsFw190.UPPER_FREQ_SWITCH:
                                 {
-                                    if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
+                                    if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
@@ -309,7 +305,7 @@ namespace NonVisuals
                                             DCSBIOS.Send(FuG25ATestCommandDec);
                                         }
                                     }
-                                    if (_currentUpperRadioMode == CurrentBf109RadioMode.HOMING)
+                                    if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING)
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
@@ -328,9 +324,9 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_FREQ_SWITCH:
+                            case RadioPanelPZ69KnobsFw190.LOWER_FREQ_SWITCH:
                                 {
-                                    if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
+                                    if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
@@ -341,7 +337,7 @@ namespace NonVisuals
                                             DCSBIOS.Send(FuG25ATestCommandDec);
                                         }
                                     }
-                                    if (_currentLowerRadioMode == CurrentBf109RadioMode.HOMING)
+                                    if (_currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
@@ -367,16 +363,16 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.LogError(82006, ex);
+                Common.LogError(83006, ex);
             }
-            Common.DebugP("Leaving Bf 109 Radio PZ69KnobChanged()");
+            Common.DebugP("Leaving Fw 190 Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio AdjustFrequency()");
+                Common.DebugP("Entering Fw 190 Radio AdjustFrequency()");
 
                 if (SkipCurrentFrequencyChange())
                 {
@@ -385,16 +381,16 @@ namespace NonVisuals
 
                 foreach (var o in hashSet)
                 {
-                    var radioPanelKnobBf109 = (RadioPanelKnobBf109)o;
-                    if (radioPanelKnobBf109.IsOn)
+                    var radioPanelKnobFw190 = (RadioPanelKnobFw190)o;
+                    if (radioPanelKnobFw190.IsOn)
                     {
-                        switch (radioPanelKnobBf109.RadioPanelPZ69Knob)
+                        switch (radioPanelKnobFw190.RadioPanelPZ69Knob)
                         {
-                            case RadioPanelPZ69KnobsBf109.UPPER_LARGE_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
@@ -403,7 +399,7 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
                                                 if (!SkipIFFDialChange())
                                                 {
@@ -411,22 +407,22 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_LARGE_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
@@ -435,7 +431,7 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
                                                 if (!SkipIFFDialChange())
                                                 {
@@ -443,102 +439,78 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_SMALL_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneIncreaseChangeMonitor.Click();
-                                                if (_fineTuneIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
-                                                }
+                                                Common.DebugP("Sending Fug16ZyFineTuneCommandInc");
+                                                DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
+                                                Common.DebugP("Sending RadioVolumeKnobCommandInc");
                                                 DCSBIOS.Send(RadioVolumeKnobCommandInc);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.UPPER_SMALL_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneDecreaseChangeMonitor.Click();
-                                                if (_fineTuneDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
-                                                }
+                                                Common.DebugP("Sending Fug16ZyFineTuneCommandDec");
+                                                DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
+                                                Common.DebugP("Sending RadioVolumeKnobCommandDec");
                                                 DCSBIOS.Send(RadioVolumeKnobCommandDec);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_LARGE_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
@@ -547,7 +519,7 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
                                                 if (!SkipIFFDialChange())
                                                 {
@@ -555,22 +527,22 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_LARGE_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
@@ -579,7 +551,7 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
                                                 if (!SkipIFFDialChange())
                                                 {
@@ -587,91 +559,67 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_SMALL_FREQ_WHEEL_INC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_INC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneIncreaseChangeMonitor.Click();
-                                                if (_fineTuneIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
-                                                }
+                                                Common.DebugP("Sending Fug16ZyFineTuneCommandInc");
+                                                DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
+                                                Common.DebugP("Sending RadioVolumeKnobCommandInc");
                                                 DCSBIOS.Send(RadioVolumeKnobCommandInc);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsBf109.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentBf109RadioMode.FUG16ZY:
+                                        case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneDecreaseChangeMonitor.Click();
-                                                if (_fineTuneDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
-                                                }
+                                                Common.DebugP("Sending Fug16ZyFineTuneCommandDec");
+                                                DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.IFF:
+                                        case CurrentFw190RadioMode.IFF:
                                             {
+                                                Common.DebugP("Sending RadioVolumeKnobCommandDec");
                                                 DCSBIOS.Send(RadioVolumeKnobCommandDec);
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.HOMING:
+                                        case CurrentFw190RadioMode.HOMING:
                                             {
                                                 break;
                                             }
-                                        case CurrentBf109RadioMode.NOUSE:
+                                        case CurrentFw190RadioMode.NOUSE:
                                             {
                                                 break;
                                             }
@@ -685,9 +633,9 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.LogError(82007, ex);
+                Common.LogError(83007, ex);
             }
-            Common.DebugP("Leaving Bf 109 Radio AdjustFrequency()");
+            Common.DebugP("Leaving Fw 190 Radio AdjustFrequency()");
         }
 
         private void ShowFrequenciesOnPanel()
@@ -698,23 +646,23 @@ namespace NonVisuals
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-                        //Common.DebugP("Leaving Bf 109 Radio ShowFrequenciesOnPanel() NO KNOBS/FREQS changed");
+                        //Common.DebugP("Leaving Fw 190 Radio ShowFrequenciesOnPanel() NO KNOBS/FREQS changed");
                         return;
                     }
                     //Common.DebugP("ShowFrequenciesOnPanel " + id);
                     if (!FirstReportHasBeenRead)
                     {
-                        //Common.DebugP("Leaving Bf 109 Radio ShowFrequenciesOnPanel()");
+                        //Common.DebugP("Leaving Fw 190 Radio ShowFrequenciesOnPanel()");
                         return;
                     }
 
-                    Common.DebugP("Entering Bf 109 Radio ShowFrequenciesOnPanel()");
+                    Common.DebugP("Entering Fw 190 Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
 
                     switch (_currentUpperRadioMode)
                     {
-                        case CurrentBf109RadioMode.FUG16ZY:
+                        case CurrentFw190RadioMode.FUG16ZY:
                             {
                                 //1-4
                                 var modeDialPostionAsString = "";
@@ -732,7 +680,7 @@ namespace NonVisuals
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_RIGHT);
                                 break;
                             }
-                        case CurrentBf109RadioMode.IFF:
+                        case CurrentFw190RadioMode.IFF:
                             {
                                 //Preset Channel Selector
                                 //0-1
@@ -747,7 +695,7 @@ namespace NonVisuals
                                 break;
                             }
 
-                        case CurrentBf109RadioMode.HOMING:
+                        case CurrentFw190RadioMode.HOMING:
                             {
                                 //Switch
                                 //0-1
@@ -761,7 +709,7 @@ namespace NonVisuals
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
-                        case CurrentBf109RadioMode.NOUSE:
+                        case CurrentFw190RadioMode.NOUSE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
@@ -770,7 +718,7 @@ namespace NonVisuals
                     }
                     switch (_currentLowerRadioMode)
                     {
-                        case CurrentBf109RadioMode.FUG16ZY:
+                        case CurrentFw190RadioMode.FUG16ZY:
                             {
                                 //1-4
                                 var modeDialPostionAsString = "";
@@ -788,7 +736,7 @@ namespace NonVisuals
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.LOWER_RIGHT);
                                 break;
                             }
-                        case CurrentBf109RadioMode.IFF:
+                        case CurrentFw190RadioMode.IFF:
                             {
                                 //Preset Channel Selector
                                 //0-1
@@ -803,7 +751,7 @@ namespace NonVisuals
                                 break;
                             }
 
-                        case CurrentBf109RadioMode.HOMING:
+                        case CurrentFw190RadioMode.HOMING:
                             {
                                 //Switch
                                 //0-1
@@ -817,7 +765,7 @@ namespace NonVisuals
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
-                        case CurrentBf109RadioMode.NOUSE:
+                        case CurrentFw190RadioMode.NOUSE:
                             {
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
@@ -829,10 +777,10 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.LogError(82011, ex);
+                Common.LogError(83011, ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving Bf 109 Radio ShowFrequenciesOnPanel()");
+            Common.DebugP("Leaving Fw 190 Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -842,7 +790,7 @@ namespace NonVisuals
             {
                 try
                 {
-                    Common.DebugP("Entering Bf 109 Radio OnReport()");
+                    Common.DebugP("Entering Fw 190 Radio OnReport()");
                     //if (IsAttached == false) { return; }
 
                     if (report.Data.Length == 3)
@@ -866,8 +814,8 @@ namespace NonVisuals
                                 Common.DebugP("\nFollowing knobs has been changed:\n");
                                 foreach (var radioPanelKnob in hashSet)
                                 {
-                                    var knob = (RadioPanelKnobBf109)radioPanelKnob;
-                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobBf109)radioPanelKnob));
+                                    var knob = (RadioPanelKnobFw190)radioPanelKnob;
+                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobFw190)radioPanelKnob));
                                 }
                             }
                         }
@@ -895,9 +843,9 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.LogError(82012, ex);
+                Common.LogError(83012, ex);
             }
-            Common.DebugP("Leaving Bf 109 Radio OnReport()");
+            Common.DebugP("Leaving Fw 190 Radio OnReport()");
         }
 
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
@@ -905,7 +853,7 @@ namespace NonVisuals
             var result = new HashSet<object>();
             try
             {
-                Common.DebugP("Entering Bf 109 Radio GetHashSetOfChangedKnobs()");
+                Common.DebugP("Entering Fw 190 Radio GetHashSetOfChangedKnobs()");
                 //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
                 //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
                 for (var i = 0; i < 3; i++)
@@ -926,9 +874,9 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.LogError(82013, ex);
+                Common.LogError(83013, ex);
             }
-            Common.DebugP("Leaving Bf 109 Radio GetHashSetOfChangedKnobs()");
+            Common.DebugP("Leaving Fw 190 Radio GetHashSetOfChangedKnobs()");
             return result;
         }
 
@@ -936,7 +884,7 @@ namespace NonVisuals
         {
             try
             {
-                StartupBase("Bf 109");
+                StartupBase("Fw 190");
 
                 //COM1
                 _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE");
@@ -957,7 +905,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69Bf109.StartUp() : " + ex.Message);
+                Common.DebugP("RadioPanelPZ69Fw190.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }
@@ -966,14 +914,14 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio Shutdown()");
+                Common.DebugP("Entering Fw 190 Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving Bf 109 Radio Shutdown()");
+            Common.DebugP("Leaving Fw 190 Radio Shutdown()");
         }
 
         public override void ClearSettings()
@@ -993,68 +941,68 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobBf109.GetRadioPanelKnobs();
+            _radioPanelKnobs = RadioPanelKnobFw190.GetRadioPanelKnobs();
         }
 
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobBf109 radioPanelKnob)
+        private static bool FlagValue(byte[] currentValue, RadioPanelKnobFw190 radioPanelKnob)
         {
             return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
         }
 
-        private void SetUpperRadioMode(CurrentBf109RadioMode currentBf109RadioMode)
+        private void SetUpperRadioMode(CurrentFw190RadioMode currentFw190RadioMode)
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentBf109RadioMode);
-                _currentUpperRadioMode = currentBf109RadioMode;
+                Common.DebugP("Entering Fw 190 Radio SetUpperRadioMode()");
+                Common.DebugP("Setting upper radio mode to " + currentFw190RadioMode);
+                _currentUpperRadioMode = currentFw190RadioMode;
             }
             catch (Exception ex)
             {
-                Common.LogError(82014, ex);
+                Common.LogError(83014, ex);
             }
-            Common.DebugP("Leaving Bf 109 Radio SetUpperRadioMode()");
+            Common.DebugP("Leaving Fw 190 Radio SetUpperRadioMode()");
         }
 
-        private void SetLowerRadioMode(CurrentBf109RadioMode currentBf109RadioMode)
+        private void SetLowerRadioMode(CurrentFw190RadioMode currentFw190RadioMode)
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentBf109RadioMode);
-                _currentLowerRadioMode = currentBf109RadioMode;
+                Common.DebugP("Entering Fw 190 Radio SetLowerRadioMode()");
+                Common.DebugP("Setting lower radio mode to " + currentFw190RadioMode);
+                _currentLowerRadioMode = currentFw190RadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)
             {
-                Common.LogError(82015, ex);
+                Common.LogError(83015, ex);
             }
-            Common.DebugP("Leaving Bf 109 Radio SetLowerRadioMode()");
+            Common.DebugP("Leaving Fw 190 Radio SetLowerRadioMode()");
         }
 
         private bool SkipFuG16ZYPresetDialChange()
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio SkipFuG16ZYPresetDialChange()");
-                if (_currentUpperRadioMode == CurrentBf109RadioMode.FUG16ZY || _currentLowerRadioMode == CurrentBf109RadioMode.FUG16ZY)
+                Common.DebugP("Entering Fw 190 Radio SkipFuG16ZYPresetDialChange()");
+                if (_currentUpperRadioMode == CurrentFw190RadioMode.FUG16ZY || _currentLowerRadioMode == CurrentFw190RadioMode.FUG16ZY)
                 {
                     if (_fug16ZyPresetDialSkipper > 2)
                     {
                         _fug16ZyPresetDialSkipper = 0;
-                        Common.DebugP("Leaving Bf 109 Radio SkipFuG16ZYPresetDialChange()");
+                        Common.DebugP("Leaving Fw 190 Radio SkipFuG16ZYPresetDialChange()");
                         return false;
                     }
                     _fug16ZyPresetDialSkipper++;
-                    Common.DebugP("Leaving Bf 109 Radio SkipFuG16ZYPresetDialChange()");
+                    Common.DebugP("Leaving Fw 190 Radio SkipFuG16ZYPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Bf 109 Radio SkipFuG16ZYPresetDialChange()");
+                Common.DebugP("Leaving Fw 190 Radio SkipFuG16ZYPresetDialChange()");
             }
             catch (Exception ex)
             {
-                Common.LogError(82009, ex);
+                Common.LogError(83009, ex);
             }
             return false;
         }
@@ -1063,24 +1011,24 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio SkipIFFDialChange()");
-                if (_currentUpperRadioMode == CurrentBf109RadioMode.IFF || _currentLowerRadioMode == CurrentBf109RadioMode.IFF)
+                Common.DebugP("Entering Fw 190 Radio SkipIFFDialChange()");
+                if (_currentUpperRadioMode == CurrentFw190RadioMode.IFF || _currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                 {
                     if (_fug25aIFFDialSkipper > 2)
                     {
                         _fug25aIFFDialSkipper = 0;
-                        Common.DebugP("Leaving Bf 109 Radio SkipIFFDialChange()");
+                        Common.DebugP("Leaving Fw 190 Radio SkipIFFDialChange()");
                         return false;
                     }
                     _fug25aIFFDialSkipper++;
-                    Common.DebugP("Leaving Bf 109 Radio SkipIFFDialChange()");
+                    Common.DebugP("Leaving Fw 190 Radio SkipIFFDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Bf 109 Radio SkipIFFDialChange()");
+                Common.DebugP("Leaving Fw 190 Radio SkipIFFDialChange()");
             }
             catch (Exception ex)
             {
-                Common.LogError(82015, ex);
+                Common.LogError(83015, ex);
             }
             return false;
         }
@@ -1089,24 +1037,24 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("Entering Bf 109 Radio SkipHomingPresetDialChange()");
-                if (_currentUpperRadioMode == CurrentBf109RadioMode.HOMING || _currentLowerRadioMode == CurrentBf109RadioMode.HOMING)
+                Common.DebugP("Entering Fw 190 Radio SkipHomingPresetDialChange()");
+                if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING || _currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
                 {
                     if (_homingDialSkipper > 2)
                     {
                         _homingDialSkipper = 0;
-                        Common.DebugP("Leaving Bf 109 Radio SkipHomingPresetDialChange()");
+                        Common.DebugP("Leaving Fw 190 Radio SkipHomingPresetDialChange()");
                         return false;
                     }
                     _homingDialSkipper++;
-                    Common.DebugP("Leaving Bf 109 Radio SkipHomingPresetDialChange()");
+                    Common.DebugP("Leaving Fw 190 Radio SkipHomingPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Bf 109 Radio SkipHomingPresetDialChange()");
+                Common.DebugP("Leaving Fw 190 Radio SkipHomingPresetDialChange()");
             }
             catch (Exception ex)
             {
-                Common.LogError(82110, ex);
+                Common.LogError(83110, ex);
             }
             return false;
         }

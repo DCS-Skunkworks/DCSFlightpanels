@@ -131,11 +131,5 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobBf109(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsBf109.LOWER_FUG16ZY)); //LOWER COM1
             return result;
         }
-
-
-
-
     }
-
-
 }

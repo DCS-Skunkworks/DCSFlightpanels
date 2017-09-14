@@ -25,7 +25,9 @@ namespace DCS_BIOS
         [Description("Mi-8MT")]
         Mi8,
         [Description("Bf-109K-4")]
-        Bf109
+        Bf109,
+        [Description("FW-190D9")]
+        Fw190
     }
 
     public static class DCSBIOSControlLocator
