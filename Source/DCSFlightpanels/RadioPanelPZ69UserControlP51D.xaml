@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="DCSFlightpanels.RadioPanelPZ69UserControlFw190"
+﻿<UserControl x:Class="DCSFlightpanels.RadioPanelPZ69UserControlP51D"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlFw190_OnLoaded">
+             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlP51D_OnLoaded">
     <Grid Name="PZ69Grid" >
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
@@ -66,9 +66,9 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = FuG 16GY Presets + Fine Tuning (indication only) <LineBreak/>
-                    COM 2 = FuG 25A IFF Mode + Volume<LineBreak/>
-                    NAV 1 = FuG 16GY Homing Switch<LineBreak/>
+                    COM 1 = VHF Presets 0 - 4 (0 = Off) + Volume <LineBreak/>
+                    COM 2 = N/A<LineBreak/>
+                    NAV 1 = N/A<LineBreak/>
                     NAV 2 = N/A<LineBreak/>
                     ADF = N/A<LineBreak/>
                     XPDR = <LineBreak/>
@@ -106,7 +106,7 @@
 
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
-            <Label Name="LabelAirframe" Content="FW-190" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
+            <Label Name="LabelAirframe" Content="P-51D" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
         </StackPanel>
         <GroupBox Header="Synchronization" FontSize="14" FontWeight="Bold" Grid.Column="3" Grid.Row="1"  Grid.ColumnSpan="3" Grid.RowSpan="4" Visibility="Hidden">
             <StackPanel >
