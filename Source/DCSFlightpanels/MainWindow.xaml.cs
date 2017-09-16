@@ -9,7 +9,11 @@ using DCSFlightpanels.Properties;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Navigation;
 using NonVisuals;
+using Octokit;
+using Application = System.Windows.Application;
 using Timer = System.Timers.Timer;
 
 namespace DCSFlightpanels
@@ -86,11 +90,8 @@ namespace DCSFlightpanels
                 SetWindowTitle();
                 SetWindowState();
                 SendEventRegardingForwardingOfKeys();
-
-                var assembly = Assembly.GetExecutingAssembly();
-                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                LabelVersionInformation.Text = "v. " + fileVersionInfo.FileVersion;
-
+                
+                CheckForNewRelease();
                 //For me so that debugging is not on for anyone else.
                 if (!Environment.MachineName.Equals("TIMOFEI"))
                 {
@@ -333,6 +334,30 @@ namespace DCSFlightpanels
                                     else if (_panelProfileHandler.Airframe == DCSAirframe.Mi8)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Bf109)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Fw190)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.P51D)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
                                         _panelProfileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
@@ -728,6 +753,61 @@ namespace DCSFlightpanels
             }
             catch (Exception)
             {
+            }
+        }
+
+        private async void CheckForNewRelease()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            try
+            {
+                var client = new GitHubClient(new ProductHeaderValue("DCSFlightpanels"));
+                var task = await client.Repository.Release.GetAll("jdahlblom", "DCSFlightpanels");
+                var lastRelease = task[0].TagName;
+                var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
+                var gitHubReleaseArray = lastRelease.Replace("v.", "").Replace("v","").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                var newerAvailable = false;
+                if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
+                {
+                    newerAvailable = true;
+                }
+                else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
+                {
+                    if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
+                    {
+                        newerAvailable = true;
+                    }
+                }else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
+                {
+                    if (int.Parse(gitHubReleaseArray[1]) >= int.Parse(thisReleaseArray[1]))
+                    {
+                        if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
+                        {
+                            newerAvailable = true;
+                        }
+                    }
+                }
+                if (newerAvailable)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        LabelVersionInformation.Visibility = Visibility.Hidden;
+                        LabelDownloadNewVersion.Visibility = Visibility.Visible;
+                    });
+                }
+                else
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        LabelVersionInformation.Text = "v." + fileVersionInfo.FileVersion;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(9011, "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
+                LabelVersionInformation.Text = "v. " + fileVersionInfo.FileVersion;
             }
         }
 
@@ -1519,5 +1599,17 @@ namespace DCSFlightpanels
             _panelProfileHandler.OpenProfileDEVELOPMENT();
         }
 
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(288067, ex);
+            }
+        }
     }
 }

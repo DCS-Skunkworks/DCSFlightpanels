@@ -153,6 +153,7 @@
             </Button>
 
             <Label Margin="200,0,0,0" Name="LabelAirframe" FontWeight="Bold" Content="None"/>
+            <Label Margin="300,0,0,0" Name="LabelVersion" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold" FontSize="9"/>
         </ToolBar>
         <TabControl Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" >
 
@@ -160,6 +161,13 @@
         <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="20" Grid.Row="3" VerticalAlignment="Top" >
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                <TextBlock Name="LabelDownloadNewVersion" HorizontalAlignment="Right" Margin="0,0,10,0" Visibility="Hidden">
+                    <Hyperlink NavigateUri="https://github.com/jdahlblom/DCSFlightpanels/releases" RequestNavigate="Hyperlink_OnRequestNavigate">
+                        Download New Version!
+                    </Hyperlink>
+                </TextBlock>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
                 <TextBlock Name="LabelInformation" HorizontalAlignment="Right" Margin="0,0,10,0"/>

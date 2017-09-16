@@ -84,9 +84,11 @@
     <Reference Include="CommonClassLibraryJD">
       <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Octokit, Version=0.24.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.26.0\lib\net45\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -151,6 +153,12 @@
     <Compile Include="RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelPZ69UserControlBf109.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlBf109.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RadioPanelPZ69UserControlFw190.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlFw190.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadioPanelPZ69UserControlKa50.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlKa50.xaml</DependentUpon>
     </Compile>
@@ -159,6 +167,9 @@
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlMiG21bis.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlMiG21bis.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RadioPanelPZ69UserControlP51D.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlP51D.xaml</DependentUpon>
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlUH1H.xaml.cs">
       <SubType>Code</SubType>
@@ -244,6 +255,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="RadioPanelPZ69UserControlBf109.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlFw190.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RadioPanelPZ69UserControlKa50.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -253,6 +272,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RadioPanelPZ69UserControlMiG21bis.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlP51D.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

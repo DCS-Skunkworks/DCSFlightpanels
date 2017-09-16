@@ -23,7 +23,13 @@ namespace DCS_BIOS
         [Description("Ka-50")]
         Ka50,
         [Description("Mi-8MT")]
-        Mi8
+        Mi8,
+        [Description("Bf-109K-4")]
+        Bf109,
+        [Description("FW-190D9")]
+        Fw190,
+        [Description("P-51D")]
+        P51D
     }
 
     public static class DCSBIOSControlLocator
@@ -49,7 +55,7 @@ namespace DCS_BIOS
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Failed to find control " + controlId + " for airframe " + Airframe.GetDescription() + ". Did you switch airframe type for the profile and have existing control(s) for the previous type saved?" + Environment.NewLine + ioe.Message);
+                    throw new Exception("Check DCS-BIOS version. Failed to find control " + controlId + " for airframe " + Airframe.GetDescription() + " ( " + Airframe.GetDescription() + ".json). Did you switch airframe type for the profile and have existing control(s) for the previous type saved?" + Environment.NewLine + ioe.Message);
                 }
             }
         }
@@ -71,7 +77,7 @@ namespace DCS_BIOS
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control " + controlId + " for airframe " + Airframe.GetDescription() + "." + Environment.NewLine + ioe.Message);
+                    throw new Exception("Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control " + controlId + " for airframe " + Airframe.GetDescription() + " ( " + Airframe.GetDescription() + ".json)." + Environment.NewLine + ioe.Message);
                 }
             }
         }
