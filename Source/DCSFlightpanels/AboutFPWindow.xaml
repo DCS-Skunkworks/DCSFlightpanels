@@ -9,9 +9,9 @@
     <controls:Grid>
         <StackPanel VerticalAlignment="Top" Width="860" Height="800">
             <controls:TextBlock Height="357" HorizontalAlignment="Left" Margin="12,12,0,0" Name="TextBlockInformation" Text="" VerticalAlignment="Top" Width="819" TextWrapping="Wrap" FontSize="14" >
-                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://sourceforge.net/projects/flightpanels/">
+                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/jdahlblom/DCSFlightpanels/releases">
                     <Bold>
-                        <Run FontSize="16">Flightpanels</Run>
+                        <Run FontSize="16">DCSFlightpanels</Run>
                     </Bold>
                 </Hyperlink>
                 <Bold>
@@ -53,7 +53,7 @@
                 <LineBreak/>
                 
                 <LineBreak/>
-                Flightpanels is released under
+                DCSFlightpanels is released under
                 <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="http://opensource.org/licenses/Simple-2.0">
                     <Bold>Simple Public License 2.0.</Bold>
                 </Hyperlink>

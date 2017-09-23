@@ -26,7 +26,7 @@ namespace DCSFlightpanels
                 {
                     //app is already running! Exiting the application  
                     Current.Shutdown();
-                    MessageBox.Show("Flightpanels is already running..");
+                    MessageBox.Show("DCSFlightpanels is already running..");
                 }
                 else
                 {

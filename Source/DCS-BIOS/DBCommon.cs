@@ -7,7 +7,6 @@ namespace DCS_BIOS
 {
     public class DBCommon
     {
-        public static object _lockObject = new object();
         
         public static bool Debug = false;
         public static void DebugP(string str)
@@ -18,10 +17,30 @@ namespace DCS_BIOS
             }
         }
 
+        public static object _errorLoglockObject = new object();
+        public static object _debugLoglockObject = new object();
+        public static string ErrorLog = "";
+        public static string DebugLog = "";
+
+        public static void SetErrorLog(string filename)
+        {
+            lock (_errorLoglockObject)
+            {
+                ErrorLog = filename;
+            }
+        }
+
+        public static void SetDebugLog(string filename)
+        {
+            lock (_debugLoglockObject)
+            {
+                DebugLog = filename;
+            }
+        }
 
         public static void LogError(uint location, Exception ex, string message = null )
         {
-            lock (_lockObject)
+            lock (_errorLoglockObject)
             {
                 var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
                 if (!File.Exists(file))
@@ -48,7 +67,7 @@ namespace DCS_BIOS
 
         public static void LogError(uint location, string message)
         {
-            lock (_lockObject)
+            lock (_errorLoglockObject)
             {
                 var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
                 if (!File.Exists(file))

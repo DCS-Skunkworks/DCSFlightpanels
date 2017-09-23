@@ -33,7 +33,7 @@ namespace DCSFlightpanels
         
         private bool _doSearchForPanels = true;
         private HIDHandler _hidHandler;
-        private FIPHandler _fipHandler;
+        //private FIPHandler _fipHandler;
         private ProfileHandler _panelProfileHandler;
         private string _windowName = "DCSFlightpanels ";
         private Timer _exceptionTimer = new Timer(1000);
@@ -57,6 +57,10 @@ namespace DCSFlightpanels
             try
             {
                 LoadSettings();
+                Common.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
+                Common.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
+                DBCommon.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
+                DBCommon.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
                 _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
                 _dcsBios.Startup();
                 _hidHandler = new HIDHandler();
@@ -147,10 +151,10 @@ namespace DCSFlightpanels
             var itemCount = TabControlPanels.Items.Count;
             Common.DebugP("There are " + TabControlPanels.Items.Count + " TabControlPanels.Items");
             //Do not remove, must be because of while()
-            if (_fipHandler != null)
+            /*if (_fipHandler != null)
             {
                 _fipHandler.Close();
-            }
+            }*/
 
             var closedItemCount = CloseTabItems();
 
@@ -405,7 +409,7 @@ namespace DCSFlightpanels
                         }
                     } //for each
                 }
-                _fipHandler = new FIPHandler();
+                /*_fipHandler = new FIPHandler();
                 if (_fipHandler.Initialize())
                 {
                     if (_fipHandler.FIPPanels.Count > 0)
@@ -424,7 +428,7 @@ namespace DCSFlightpanels
                     {
                         TabControlPanels.SelectedIndex = 0;
                     }
-                }
+                }*/
             }
             catch (Exception ex)
             {
@@ -947,7 +951,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2018, ex);
             }
             Common.DebugP("Mainwindow Shutdown() _dcsBios shutdown");
-            try
+            /*try
             {
                 if (_fipHandler != null)
                 {
@@ -958,7 +962,7 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(2018, ex);
             }
-            Common.DebugP("Mainwindow Shutdown() _fipHandler shutdown");
+            Common.DebugP("Mainwindow Shutdown() _fipHandler shutdown");*/
             Common.DebugP("Leaving Mainwindow Shutdown()");
         }
 

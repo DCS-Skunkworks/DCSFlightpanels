@@ -95,22 +95,16 @@
     <Compile Include="BacklitPanelBIP.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
-    <Compile Include="DCSBIOSBindingFIP.cs" />
     <Compile Include="DCSBIOSBindingTPM.cs" />
     <Compile Include="DCSBIOSBindingPZ70.cs" />
     <Compile Include="DCSBIOSBindingPZ55.cs" />
     <Compile Include="DcsOutputAndColorBinding.cs" />
-    <Compile Include="DirectOutputClass.cs" />
-    <Compile Include="FIPHandler.cs" />
-    <Compile Include="FIPPanel.cs" />
-    <Compile Include="FIPPanelA10C.cs" />
     <Compile Include="HIDHandler.cs" />
     <Compile Include="IGlobalHandler.cs" />
     <Compile Include="IProfileHandlerListener.cs" />
     <Compile Include="IRadioPanel.cs" />
     <Compile Include="ISaitekPanelListener.cs" />
     <Compile Include="IUserMessageHandler.cs" />
-    <Compile Include="KeyBindingFIP.cs" />
     <Compile Include="KeyBindingTPM.cs" />
     <Compile Include="KnobBindingPZ70.cs" />
     <Compile Include="KeyBindingPZ55.cs" />
@@ -153,30 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="huey_icon.ico" />
-    <None Include="Resources\A10C_HSI_background_power_on.bmp" />
-    <None Include="Resources\A10C_HSI_background_power_off.bmp" />
-    <None Include="Resources\A10C_HSI_background2_no_data copy.bmp" />
-    <None Include="Resources\A-10C_VVI_background_02_no_data copy.bmp" />
-    <None Include="Resources\A-10C_VVI_background.bmp" />
-    <None Include="Resources\A10C_HSI_number_2_arrow.bmp" />
-    <None Include="Resources\A10C_HSI_number_1_arrow.bmp" />
-    <None Include="Resources\A10C_HSI_course_arrow_to_station_off_course.bmp" />
-    <None Include="Resources\A10C_HSI_course_arrow_to_station_01.bmp" />
-    <None Include="Resources\A10C_HSI_course_arrow_from_station_off_course.bmp" />
-    <None Include="Resources\A10C_HSI_course_arrow_from_station_01.bmp" />
-    <None Include="Resources\A10C_HSI_course_arrow_blank.bmp" />
-    <None Include="Resources\A10C_HSI_off_course_flag.bmp" />
-    <None Include="Resources\A10C_HSI_deviation_line_3.bmp" />
-    <None Include="Resources\A10C_HSI_range_digits_power_off_flag.bmp" />
-    <None Include="Resources\A-10C_VVI_needle02.bmp" />
-    <None Include="Resources\A10C_HSI_arrow_3_small_rnd_dots.bmp" />
-    <None Include="Resources\A10C_HSI_compass_card3.bmp" />
-    <None Include="Resources\A10C_HSI_power_off_flag2.bmp" />
-    <None Include="Resources\A10C_HSI_plane_symbol.bmp" />
-    <None Include="Resources\A10C_HSI_heading_marker.bmp" />
-    <None Include="Resources\A10C_HSI_compass_card2.bmp" />
-    <None Include="Resources\A10C_HSI_background2.bmp" />
-    <None Include="Resources\A10C_HSI_arrow.bmp" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

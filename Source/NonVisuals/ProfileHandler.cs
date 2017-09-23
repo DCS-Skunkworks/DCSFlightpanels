@@ -77,7 +77,7 @@ namespace NonVisuals
         private object _lockObject = new object();
         private const string OpenFileDialogFileName = "*.bindings";
         private const string OpenFileDialogDefaultExt = ".bindings";
-        private const string OpenFileDialogFilter = "Flightpanels (.bindings)|*.bindings";
+        private const string OpenFileDialogFilter = "DCSFlightpanels (.bindings)|*.bindings";
         private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
         private List<KeyValuePair<string, SaitekPanelsEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, SaitekPanelsEnum>>();
         private bool _profileLoaded;

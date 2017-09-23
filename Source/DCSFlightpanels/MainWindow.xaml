@@ -9,7 +9,7 @@
             <RowDefinition Height="20" />
             <RowDefinition Height="37" />
             <RowDefinition Height="1*" />
-            <RowDefinition Height="21" />
+            <RowDefinition Height="26" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -158,7 +158,7 @@
         <TabControl Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" >
 
         </TabControl>
-        <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="20" Grid.Row="3" VerticalAlignment="Top" >
+        <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="26" Grid.Row="3" VerticalAlignment="Top" >
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="0,0,10,0"/>
             </StatusBarItem>

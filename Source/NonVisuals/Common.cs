@@ -18,8 +18,6 @@ namespace NonVisuals
     {
         public static readonly List<SaitekPanelSkeleton> SaitekPanelSkeletons = new List<SaitekPanelSkeleton> { new SaitekPanelSkeleton(SaitekPanelsEnum.PZ55SwitchPanel, 0x6A3, 0xD67), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ69RadioPanel, 0x6A3, 0xD05), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ70MultiPanel, 0x6A3, 0xD06), new SaitekPanelSkeleton(SaitekPanelsEnum.BackLitPanel, 0x6A3, 0xB4E), new SaitekPanelSkeleton(SaitekPanelsEnum.TPM, 0x6A3, 0xB4D) };
 
-        public static object _errorLoglockObject = new object();
-        public static object _debugLoglockObject = new object();
         /*
         public static int EvaluateX(int data, String formula)
         {
@@ -103,6 +101,26 @@ namespace NonVisuals
         private static bool _debugOn = false;
         public static bool DebugToFile = false;
         public static APIModeEnum APIMode = 0;
+        public static object _errorLoglockObject = new object();
+        public static object _debugLoglockObject = new object();
+        public static string ErrorLog = "";
+        public static string DebugLog = "";
+
+        public static void SetErrorLog(string filename)
+        {
+            lock (_errorLoglockObject)
+            {
+                ErrorLog = filename;
+            }
+        }
+
+        public static void SetDebugLog(string filename)
+        {
+            lock (_debugLoglockObject)
+            {
+                DebugLog = filename;
+            }
+        }
 
         public static bool DebugOn
         {
@@ -118,16 +136,15 @@ namespace NonVisuals
         {
             lock (_errorLoglockObject)
             {
-                var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
-                if (!File.Exists(file))
+                if (!File.Exists(ErrorLog))
                 {
-                    File.Create(file);
+                    File.Create(ErrorLog);
                 }
                 var assembly = Assembly.GetExecutingAssembly();
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 var version = fileVersionInfo.FileVersion;
 
-                var streamWriter = File.AppendText(file);
+                var streamWriter = File.AppendText(ErrorLog);
                 try
                 {
                     streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:yy") + "  version : " + version);
@@ -145,16 +162,15 @@ namespace NonVisuals
         {
             lock (_errorLoglockObject)
             {
-                var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
-                if (!File.Exists(file))
+                if (!File.Exists(ErrorLog))
                 {
-                    File.Create(file);
+                    File.Create(ErrorLog);
                 }
                 var assembly = Assembly.GetExecutingAssembly();
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 var version = fileVersionInfo.FileVersion;
 
-                var streamWriter = File.AppendText(file);
+                var streamWriter = File.AppendText(ErrorLog);
                 try
                 {
                     streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:yy") + "  version : " + version);
@@ -551,13 +567,12 @@ namespace NonVisuals
         {
             lock (_debugLoglockObject)
             {
-                var file = Path.GetTempPath() + "\\Flightpanels_debug_log.txt";
-                if (!File.Exists(file))
+                if (!File.Exists(DebugLog))
                 {
-                    File.Create(file);
+                    File.Create(DebugLog);
                 }
 
-                var debugStreamWriter = File.AppendText(file);
+                var debugStreamWriter = File.AppendText(DebugLog);
                 try
                 {
                     debugStreamWriter.Write(Environment.NewLine + "Message = [" + message + "]" + Environment.NewLine);
