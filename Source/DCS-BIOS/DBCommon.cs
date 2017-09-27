@@ -42,7 +42,7 @@ namespace DCS_BIOS
         {
             lock (_errorLoglockObject)
             {
-                var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
+                var file = Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt";
                 if (!File.Exists(file))
                 {
                     File.Create(file);
@@ -69,7 +69,7 @@ namespace DCS_BIOS
         {
             lock (_errorLoglockObject)
             {
-                var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
+                var file = Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt";
                 if (!File.Exists(file))
                 {
                     File.Create(file);

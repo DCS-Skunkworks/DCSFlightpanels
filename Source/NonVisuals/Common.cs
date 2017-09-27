@@ -147,7 +147,7 @@ namespace NonVisuals
                 var streamWriter = File.AppendText(ErrorLog);
                 try
                 {
-                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:yy") + "  version : " + version);
+                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
                     streamWriter.Write(Environment.NewLine + location + " Custom message = [" + message + "]" + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
                 }
                 finally

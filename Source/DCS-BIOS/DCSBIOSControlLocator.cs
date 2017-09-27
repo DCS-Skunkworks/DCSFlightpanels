@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -119,6 +120,7 @@ namespace DCS_BIOS
                             try
                             {
                                 text = reader.ReadToEnd();
+                                //Debug.Print(text);
                             }
                             finally
                             {
@@ -126,11 +128,21 @@ namespace DCS_BIOS
                             }
 
                             var jsonData = DCSBIOSJsonFormatterVersion1.Format(text);
+                            //Debug.Print("\n--------------------------\n" + jsonData);
                             /*var newfile = File.CreateText(@"e:\temp\regexp_debug_output.txt.txt");
                             newfile.Write(jsonData);
                             newfile.Close();*/
                             var dcsBiosControlList = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(jsonData);
+                            /*foreach (var control in dcsBiosControlList.DCSBIOSControls)
+                            {
+                                Debug.Print(control.description);
+                            }*/
+                            //Debug.Print("\n--------------------------\n" + jsonData);
                             _dcsbiosControls.AddRange(dcsBiosControlList.DCSBIOSControls);
+                            /*foreach (var control in _dcsbiosControls)
+                            {
+                                Debug.Print(control.identifier);
+                            }*/
                         }
                         var commonDataText = File.ReadAllText(_jsonDirectory + "\\CommonData.json");
                         var commonDataControlsText = DCSBIOSJsonFormatterVersion1.Format(commonDataText);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,6 +30,10 @@ namespace DCSFlightpanels
             InitializeComponent();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetInputControls();
+            foreach (var dcsbiosControl in _dcsbiosControls)
+            {
+                Debug.Print(dcsbiosControl.identifier);
+            }
         }
 
         public DCSBiosInputWindow(DCSAirframe dcsAirframe, string description)
@@ -55,6 +60,7 @@ namespace DCSFlightpanels
             try
             {
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
+                _popupSearch.Height = 400;
                 _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
                 LabelDescription.Content = _description;
                 ShowValues1();
@@ -247,7 +253,7 @@ namespace DCSFlightpanels
                                 {
                                     dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInput.Interface;
                                 }
-                                throw new Exception("Please enter a valid value (positive whole number). Value found : [" + TextBoxInputValueSetState.Text+ "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
+                                throw new Exception("Please enter a valid value (positive whole number). Value found : [" + TextBoxInputValueSetState.Text + "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
                             }
                             if (tmp > _dcsBiosInput.SelectedDCSBIOSInput.MaxValue)
                             {
@@ -335,26 +341,33 @@ namespace DCSFlightpanels
 
         private void AdjustShownPopupData()
         {
-            _popupSearch.PlacementTarget = TextBoxSearchWord;
-            _popupSearch.Placement = PlacementMode.Bottom;
-            if (!_popupSearch.IsOpen)
+            try
             {
-                _popupSearch.IsOpen = true;
-            }
-            if (_dataGridValues != null)
-            {
-                if (string.IsNullOrEmpty(TextBoxSearchWord.Text))
+                _popupSearch.PlacementTarget = TextBoxSearchWord;
+                _popupSearch.Placement = PlacementMode.Bottom;
+                if (!_popupSearch.IsOpen)
                 {
-                    _dataGridValues.DataContext = _dcsbiosControls;
-                    _dataGridValues.ItemsSource = _dcsbiosControls;
-                    _dataGridValues.Items.Refresh();
-                    return;
+                    _popupSearch.IsOpen = true;
                 }
-                var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.identifier) && controlObject.identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
-                                                                      || (!string.IsNullOrWhiteSpace(controlObject.description) && controlObject.description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
-                _dataGridValues.DataContext = subList;
-                _dataGridValues.ItemsSource = subList;
-                _dataGridValues.Items.Refresh();
+                if (_dataGridValues != null)
+                {
+                    if (string.IsNullOrEmpty(TextBoxSearchWord.Text))
+                    {
+                        _dataGridValues.DataContext = _dcsbiosControls;
+                        _dataGridValues.ItemsSource = _dcsbiosControls;
+                        _dataGridValues.Items.Refresh();
+                        return;
+                    }
+                    var subList = _dcsbiosControls.Where(controlObject => (!string.IsNullOrWhiteSpace(controlObject.identifier) && controlObject.identifier.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper()))
+                                                                          || (!string.IsNullOrWhiteSpace(controlObject.description) && controlObject.description.ToUpper().Contains(TextBoxSearchWord.Text.ToUpper())));
+                    _dataGridValues.DataContext = subList;
+                    _dataGridValues.ItemsSource = subList;
+                    _dataGridValues.Items.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(1003, ex, "AdjustShownPopupData()");
             }
         }
 

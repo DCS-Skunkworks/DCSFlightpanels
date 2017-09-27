@@ -1426,7 +1426,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var file = Path.GetTempPath() + "\\Flightpanels_error_log.txt";
+                var file = Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt";
                 if (!File.Exists(file))
                 {
                     File.Create(file);
@@ -1443,7 +1443,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var file = Path.GetTempPath() + "\\Flightpanels_debug_log.txt";
+                var file = Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt";
                 if (!File.Exists(file))
                 {
                     File.Create(file);
