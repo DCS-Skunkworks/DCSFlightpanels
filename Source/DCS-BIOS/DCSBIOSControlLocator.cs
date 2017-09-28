@@ -13,8 +13,8 @@ namespace DCS_BIOS
     {
         [Description("NoFrameLoadedYet")]
         NOFRAMELOADEDYET,
-        [Description("None")]
-        NONE,
+        [Description("KeyEmulator")]
+        KEYEMULATOR,
         [Description("A-10C")]
         A10C,
         [Description("UH-1H")]
@@ -45,7 +45,7 @@ namespace DCS_BIOS
         {
             lock (_lockObject)
             {
-                if (_airframe == DCSAirframe.NONE)
+                if (_airframe == DCSAirframe.KEYEMULATOR)
                 {
                     return null;
                 }
@@ -65,7 +65,7 @@ namespace DCS_BIOS
         {
             lock (_lockObject)
             {
-                if (_airframe == DCSAirframe.NONE)
+                if (_airframe == DCSAirframe.KEYEMULATOR)
                 {
                     return null;
                 }
@@ -85,7 +85,7 @@ namespace DCS_BIOS
 
         public static void LoadControls()
         {
-            if (_airframe == DCSAirframe.NONE || _airframe == DCSAirframe.NOFRAMELOADEDYET)
+            if (_airframe == DCSAirframe.KEYEMULATOR || _airframe == DCSAirframe.NOFRAMELOADEDYET)
             {
                 return;
             }
@@ -202,7 +202,7 @@ namespace DCS_BIOS
 
         public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()
         {
-            if (_airframe == DCSAirframe.NONE)
+            if (_airframe == DCSAirframe.KEYEMULATOR)
             {
                 return null;
             }
@@ -212,7 +212,7 @@ namespace DCS_BIOS
 
         public static IEnumerable<DCSBIOSControl> GetInputControls()
         {
-            if (_airframe == DCSAirframe.NONE)
+            if (_airframe == DCSAirframe.KEYEMULATOR)
             {
                 return null;
             }

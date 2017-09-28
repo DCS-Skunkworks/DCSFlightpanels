@@ -70,10 +70,10 @@ namespace DCSFlightpanels
 
         private void SetApplicationMode(DCSAirframe dcsAirframe)
         {
-            ButtonKnobAltLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.NONE;
-            ButtonKnobAltLcdLower.IsEnabled = dcsAirframe != DCSAirframe.NONE;
-            ButtonKnobVsLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.NONE;
-            ButtonKnobVsLcdLower.IsEnabled = dcsAirframe != DCSAirframe.NONE;
+            ButtonKnobAltLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
+            ButtonKnobAltLcdLower.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
+            ButtonKnobVsLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
+            ButtonKnobVsLcdLower.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
         }
 
         public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)

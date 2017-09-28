@@ -15,7 +15,7 @@
             </ComboBox>
             <Label Margin="0,15,0,0">
                 <TextBlock TextWrapping="Wrap">
-            For keyboard emulation only (PZ55,  PZ70) choose "None".
+            For keyboard emulation only (Switchpanel PZ55, Multipanel PZ70, TPM) choose "KeyEmulator".
                 </TextBlock>
 
             </Label>

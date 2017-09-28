@@ -158,7 +158,7 @@ namespace DCSFlightpanels
 
             var closedItemCount = CloseTabItems();
 
-            if (dcsAirframe == DCSAirframe.NONE)
+            if (dcsAirframe == DCSAirframe.KEYEMULATOR)
             {
                 Common.DebugP("Shutting down DCSBIOS");
                 _dcsBios.Shutdown();
@@ -297,7 +297,7 @@ namespace DCSFlightpanels
                                 }
                             case SaitekPanelsEnum.PZ69RadioPanel:
                                 {
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.NONE)
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
                                     {
                                         break;
                                     }
@@ -382,7 +382,7 @@ namespace DCSFlightpanels
                                 }
                             case SaitekPanelsEnum.BackLitPanel:
                                 {
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.NONE)
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
                                     {
                                         break;
                                     }
@@ -1263,7 +1263,7 @@ namespace DCSFlightpanels
             var forwardKeys = !bool.Parse(ButtonImageDisable.Tag.ToString());
             var checkForDCS = Settings.Default.CheckForDCSBeforeSendingCommands;
 
-            if (_panelProfileHandler.Airframe == DCSAirframe.NONE)
+            if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
             {
                 //DCS exists or not does not matter, keyboard emulation only
                 checkForDCS = false;

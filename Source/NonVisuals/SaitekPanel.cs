@@ -247,7 +247,7 @@ namespace NonVisuals
 
         public void SelectedAirframe(DCSAirframe dcsAirframe)
         {
-            _keyboardEmulation = dcsAirframe == DCSAirframe.NONE;
+            _keyboardEmulation = dcsAirframe == DCSAirframe.KEYEMULATOR;
         }
 
         //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.

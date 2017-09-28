@@ -256,7 +256,15 @@ namespace NonVisuals
                 {
                     if (fileLine.StartsWith("Airframe="))
                     {
-                        _airframe = (DCSAirframe)Enum.Parse(typeof(DCSAirframe), fileLine.Replace("Airframe=", "").Trim());
+                        if (fileLine.StartsWith("Airframe=NONE"))
+                        {
+                            //Backward compat
+                            _airframe = DCSAirframe.KEYEMULATOR;
+                        }
+                        else
+                        {
+                            _airframe = (DCSAirframe) Enum.Parse(typeof(DCSAirframe), fileLine.Replace("Airframe=", "").Trim());
+                        }
                         DCSBIOSControlLocator.Airframe = _airframe;
                         DCSBIOSControlLocator.JSONDirectory = _jsonDirectory;
                     }
