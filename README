@@ -1,5 +1,13 @@
 # DCSFlightpanels
 
+v2.1.743 9 October 2017
+Radio panel (& full DCS-BIOS) support for FW-190D, Bf-109 K4 and P-51D
+FIP support removed
+Term "NONE" for key emulator mode changed to "KEYEMULATOR"
+Error & debug log name change to DCSFlightpanels___.log
+Popup window when searching for DCS-BIOS controls height increased
+
+
 v 2.1.699 13 September 2017
 Mi-8 support added
 Added delay option when configuring DCS-BIOS commands for switches (after command)
