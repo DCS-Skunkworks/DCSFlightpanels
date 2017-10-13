@@ -1,5 +1,16 @@
 # DCSFlightpanels
 
+DCSFlightpanels primary use is for using Saitek/Logitech panels in DCS-WORLD.
+Together with DCS-BIOS you can manage every control for the aircraft and use
+the Radiopanel to operate cockpit radio equipment and also show data from the
+aircraft in the Multipanel & Backlit Panel.
+Using DCSFlightpanels as a keyemulator* it can be used in almost any game
+(Elite Dangerous, Warthunder etc).
+
+*You can use multiple panels of each sort and have them separately configured.*
+
+*Radiopanel, Backlit Panel not supported in keyemulator mode
+
 v2.1.743 9 October 2017
 Radio panel (& full DCS-BIOS) support for FW-190D, Bf-109 K4 and P-51D
 FIP support removed
