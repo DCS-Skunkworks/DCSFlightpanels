@@ -23,8 +23,9 @@ namespace DCSFlightpanels
         private Image[] _imageArrayLeft = new Image[4];
         private Image[] _imageArrayRight = new Image[4];
         private IGlobalHandler _globalHandler;
+        private bool _enableDCSBIOS;
 
-        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler){
+        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS){
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
@@ -33,7 +34,7 @@ namespace DCSFlightpanels
             _switchPanelPZ55.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_switchPanelPZ55);
             _globalHandler = globalHandler;
-
+            _enableDCSBIOS = enableDCSBIOS;
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -422,7 +423,7 @@ namespace DCSFlightpanels
                     //Do not show if not visible
                     return;
                 }
-
+                
                 var textBox = GetTextBoxInFocus();
                 var contextMenu = (ContextMenu)sender;
                 if (textBox == null)
@@ -530,20 +531,38 @@ namespace DCSFlightpanels
             {
                 if (textBox != TextBoxLogPZ55)
                 {
-                    textBox.ContextMenu = (ContextMenu)Resources["TextBoxContextMenuPZ55"];
+                    var contectMenu = (ContextMenu)Resources["TextBoxContextMenuPZ55"];
+                    if (!_enableDCSBIOS)
+                    {
+                        MenuItem dcsBIOSMenuItem = null;
+                        foreach (var item in contectMenu.Items)
+                        {
+                            if (((MenuItem) item).Name == "contextMenuItemEditDCSBIOS")
+                            {
+                                dcsBIOSMenuItem = (MenuItem) item;
+                                break;
+                            }
+                        }
+                        if (dcsBIOSMenuItem != null)
+                        {
+                            contectMenu.Items.Remove(dcsBIOSMenuItem);
+                        }
+                    }
+                    textBox.ContextMenu = contectMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
-            foreach (var image in Common.FindVisualChildren<Image>(this))
+            if (_enableDCSBIOS)
             {
-                if (image.Name.StartsWith("ImagePZ55LED"))
+                foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                    image.ContextMenu.Tag = image.Name;
+                    if (image.Name.StartsWith("ImagePZ55LED"))
+                    {
+                        image.ContextMenu = (ContextMenu) Resources["PZ55LEDContextMenu"];
+                        if (image.ContextMenu != null) image.ContextMenu.Tag = image.Name;
+                    }
                 }
             }
-            //ImagePZ55LED
-            //SetWindowState();
         }
 
 

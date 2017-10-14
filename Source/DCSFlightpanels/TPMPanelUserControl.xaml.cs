@@ -20,8 +20,9 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
         private string _parentTabItemHeader;
         private IGlobalHandler _globalHandler;
         private bool _once;
+        private bool _enableDCSBIOS;
 
-        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -31,6 +32,7 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
             _tpmPanel.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_tpmPanel);
             _globalHandler = globalHandler;
+            _enableDCSBIOS = enableDCSBIOS;
         }
 
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -447,7 +449,24 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
             {
                 if (textBox != TextBoxLogTPM)
                 {
-                    textBox.ContextMenu = (ContextMenu)Resources["TextBoxContextMenuTPM"];
+                    var contectMenu = (ContextMenu)Resources["TextBoxContextMenuTPM"];
+                    if (!_enableDCSBIOS)
+                    {
+                        MenuItem dcsBIOSMenuItem = null;
+                        foreach (var item in contectMenu.Items)
+                        {
+                            if (((MenuItem)item).Name == "contextMenuItemEditDCSBIOS")
+                            {
+                                dcsBIOSMenuItem = (MenuItem)item;
+                                break;
+                            }
+                        }
+                        if (dcsBIOSMenuItem != null)
+                        {
+                            contectMenu.Items.Remove(dcsBIOSMenuItem);
+                        }
+                    }
+                    textBox.ContextMenu = contectMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }

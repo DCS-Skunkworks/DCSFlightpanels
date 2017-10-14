@@ -20,8 +20,9 @@ namespace DCSFlightpanels
         private string _parentTabItemHeader;
         private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
+        private bool _enableDCSBIOS;
 
-        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -30,6 +31,7 @@ namespace DCSFlightpanels
             _multiPanelPZ70.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_multiPanelPZ70);
             _globalHandler = globalHandler;
+            _enableDCSBIOS = enableDCSBIOS;
 
             HideAllImages();
         }
@@ -2303,22 +2305,48 @@ namespace DCSFlightpanels
             {
                 if (textBox != TextBoxLogPZ70)
                 {
-                    textBox.ContextMenu = (ContextMenu)Resources["TextBoxContextMenuPZ70"];
+                    var contectMenu = (ContextMenu)Resources["TextBoxContextMenuPZ70"];
+                    if (!_enableDCSBIOS)
+                    {
+                        MenuItem dcsBIOSMenuItem = null;
+                        foreach (var item in contectMenu.Items)
+                        {
+                            if (((MenuItem)item).Name == "contextMenuItemEditDCSBIOS")
+                            {
+                                dcsBIOSMenuItem = (MenuItem)item;
+                                break;
+                            }
+                        }
+                        if (dcsBIOSMenuItem != null)
+                        {
+                            contectMenu.Items.Remove(dcsBIOSMenuItem);
+                        }
+                    }
+                    textBox.ContextMenu = contectMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
+            if (!_enableDCSBIOS)
+            {
+                ButtonKnobAltLcdUpper.Visibility = Visibility.Hidden;
+                ButtonKnobAltLcdLower.Visibility = Visibility.Hidden;
+                ButtonKnobVsLcdUpper.Visibility = Visibility.Hidden;
+                ButtonKnobVsLcdLower.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                ButtonKnobAltLcdUpper.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
+                ButtonKnobAltLcdUpper.ContextMenu.Tag = ButtonKnobAltLcdUpper;
 
-            ButtonKnobAltLcdUpper.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
-            ButtonKnobAltLcdUpper.ContextMenu.Tag = ButtonKnobAltLcdUpper;
+                ButtonKnobAltLcdLower.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
+                ButtonKnobAltLcdLower.ContextMenu.Tag = ButtonKnobAltLcdLower;
 
-            ButtonKnobAltLcdLower.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
-            ButtonKnobAltLcdLower.ContextMenu.Tag = ButtonKnobAltLcdLower;
+                ButtonKnobVsLcdUpper.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
+                ButtonKnobVsLcdUpper.ContextMenu.Tag = ButtonKnobVsLcdUpper;
 
-            ButtonKnobVsLcdUpper.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
-            ButtonKnobVsLcdUpper.ContextMenu.Tag = ButtonKnobVsLcdUpper;
-
-            ButtonKnobVsLcdLower.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
-            ButtonKnobVsLcdLower.ContextMenu.Tag = ButtonKnobVsLcdLower;
+                ButtonKnobVsLcdLower.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
+                ButtonKnobVsLcdLower.ContextMenu.Tag = ButtonKnobVsLcdLower;
+            }
         }
 
         private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)

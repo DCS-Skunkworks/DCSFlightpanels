@@ -288,7 +288,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ55";
-                                    var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this);
+                                    var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this, _panelProfileHandler.Airframe != DCSAirframe.KEYEMULATOR);
                                     _saitekUserControls.Add(switchPanelPZ55UserControl);
                                     _panelProfileHandler.Attach(switchPanelPZ55UserControl);
                                     tabItem.Content = switchPanelPZ55UserControl;
@@ -373,7 +373,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ70";
-                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this);
+                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.Airframe != DCSAirframe.KEYEMULATOR);
                                     _saitekUserControls.Add(multiPanelUserControl);
                                     _panelProfileHandler.Attach(multiPanelUserControl);
                                     tabItem.Content = multiPanelUserControl;
@@ -399,7 +399,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "TPM";
-                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this);
+                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.Airframe != DCSAirframe.KEYEMULATOR);
                                     _saitekUserControls.Add(tpmPanelUserControl);
                                     _panelProfileHandler.Attach(tpmPanelUserControl);
                                     tabItem.Content = tpmPanelUserControl;
@@ -423,12 +423,12 @@ namespace DCSFlightpanels
                         tabItem.Content = fipPanelUserControl;
                         TabControlPanels.Items.Add(tabItem);
                     }
-                    SortTabs();
-                    if (TabControlPanels.Items.Count > 0)
-                    {
-                        TabControlPanels.SelectedIndex = 0;
-                    }
                 }*/
+                SortTabs();
+                if (TabControlPanels.Items.Count > 0)
+                {
+                    TabControlPanels.SelectedIndex = 0;
+                }
             }
             catch (Exception ex)
             {
