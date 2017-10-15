@@ -30,7 +30,11 @@ namespace DCS_BIOS
         [Description("FW-190D9")]
         Fw190,
         [Description("P-51D")]
-        P51D
+        P51D,
+        [Description("F-86F Sabre")]
+        F86F,
+        [Description("AJS-37")]
+        AJS37
     }
 
     public static class DCSBIOSControlLocator
