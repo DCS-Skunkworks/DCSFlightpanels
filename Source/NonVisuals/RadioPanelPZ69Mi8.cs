@@ -102,20 +102,34 @@ namespace NonVisuals
         private const string R828PresetVolumeKnobCommandDec = "R828_VOL -2500\n";
 
         /*Mi-8 ARK-9 ADF*/
-        //Large dial 0-9 [step of 1]
-        //Small dial volume control
+        //Large 100KHz 01 -> 12
+        //Small 10Khz 00 -> 90 (10 steps)
         private readonly object _lockADFDialObject1 = new object();
-        private DCSBIOSOutput _adfDcsbiosOutputPresetDial;
-        private volatile uint _adfCockpitPresetDialPos = 1;
-        private const string ADFPresetCommandInc = "ADF_CHANNEL INC\n";
-        private const string ADFPresetCommandDec = "ADF_CHANNEL DEC\n";
-        private int _adfPresetDialSkipper;
-        private const string ADFVolumeKnobCommandInc = "ADF_VOLUME +2500\n";
-        private const string ADFVolumeKnobCommandDec = "ADF_VOLUME -2500\n";
+        private readonly object _lockADFDialObject2 = new object();
+        private DCSBIOSOutput _adfDcsbiosOutputPresetDial1;
+        private DCSBIOSOutput _adfDcsbiosOutputPresetDial2;
+        private volatile uint _adfCockpitPresetDial1Pos = 1;
+        private volatile uint _adfCockpitPresetDial2Pos = 1;
+        private const string ADF100KhzPresetCommandInc = "ARC_MAIN_100KHZ INC\n";
+        private const string ADF100KhzPresetCommandDec = "ARC_MAIN_100KHZ DEC\n";
+        private const string ADF10KhzPresetCommandInc = "ARC_MAIN_10KHZ INC\n";
+        private const string ADF10KhzPresetCommandDec = "ARC_MAIN_10KHZ DEC\n";
+        private int _adfPresetDial1Skipper;
+        private int _adfPresetDial2Skipper;
         private const string ADFModeSwitchAntenna = "ADF_CMPS_ANT INC\n";
         private const string ADFModeSwitchCompass = "ADF_CMPS_ANT DEC\n";
         private string _adfModeSwitchLastSent = "";
 
+        /*Mi-8 ARK-9 ADF (DME)*/
+        //Large Tuning
+        //Radio Volume
+        private const string ADFTuneKnobCommandInc = "ARC9_MAIN_TUNE +500\n";
+        private const string ADFTuneKnobCommandDec = "ARC9_MAIN_TUNE -500\n";
+        private const string ADFVolumeKnobCommandInc = "ADF_VOLUME +2500\n";
+        private const string ADFVolumeKnobCommandDec = "ADF_VOLUME -2500\n";
+        private readonly object _lockADFTuneDialObject = new object();
+        private DCSBIOSOutput _adfTuneDcsbiosOutputDial;
+        private volatile uint _adfTuneCockpitDialPos = 1;
         //XPDR
         /*Mi-8 SPU-7 XPDR*/
         //Large dial 0-5 [step of 1]
@@ -345,15 +359,42 @@ namespace NonVisuals
                     }
                 }
 
-                //ADF Preset Dial
-                if (address == _adfDcsbiosOutputPresetDial.Address)
+                //ADF Preset Dial 1
+                if (address == _adfDcsbiosOutputPresetDial1.Address)
                 {
                     lock (_lockADFDialObject1)
                     {
-                        //Common.DebugP("SET _adfCockpitPresetDialPos = " + _adfCockpitPresetDialPos);
-                        var tmp = _adfCockpitPresetDialPos;
-                        _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.GetUIntValue(data);
-                        if (tmp != _adfCockpitPresetDialPos)
+                        var tmp = _adfCockpitPresetDial1Pos;
+                        _adfCockpitPresetDial1Pos = _adfDcsbiosOutputPresetDial1.GetUIntValue(data);
+                        if (tmp != _adfCockpitPresetDial1Pos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //ADF Preset Dial 2
+                if (address == _adfDcsbiosOutputPresetDial2.Address)
+                {
+                    lock (_lockADFDialObject1)
+                    {
+                        var tmp = _adfCockpitPresetDial2Pos;
+                        _adfCockpitPresetDial2Pos = _adfDcsbiosOutputPresetDial2.GetUIntValue(data);
+                        if (tmp != _adfCockpitPresetDial2Pos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+                
+                //ADF Tune
+                if (address == _adfTuneDcsbiosOutputDial.Address)
+                {
+                    lock (_lockADFTuneDialObject)
+                    {
+                        var tmp = _adfTuneCockpitDialPos;
+                        _adfTuneCockpitDialPos = _adfTuneDcsbiosOutputDial.GetUIntValue(data);
+                        if (tmp != _adfTuneCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -1118,19 +1159,19 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsMi8.UPPER_NOUSE3:
+                            case RadioPanelPZ69KnobsMi8.UPPER_ADF_TUNE:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentMi8RadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentMi8RadioMode.ADF_TUNE);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsMi8.LOWER_NOUSE3:
+                            case RadioPanelPZ69KnobsMi8.LOWER_ADF_TUNE:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentMi8RadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentMi8RadioMode.ADF_TUNE);
                                     }
                                     break;
                                 }
@@ -1313,10 +1354,15 @@ namespace NonVisuals
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDialChange())
+                                                if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandInc);
+                                                    DCSBIOS.Send(ADF100KhzPresetCommandInc);
                                                 }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
+                                            {
+                                                DCSBIOS.Send(ADFTuneKnobCommandInc);
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.SPU7:
@@ -1407,10 +1453,15 @@ namespace NonVisuals
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDialChange())
+                                                if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandDec);
+                                                    DCSBIOS.Send(ADF100KhzPresetCommandDec);
                                                 }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
+                                            {
+                                                DCSBIOS.Send(ADFTuneKnobCommandDec);
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.SPU7:
@@ -1466,6 +1517,14 @@ namespace NonVisuals
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
+                                                if (!SkipADFPresetDial2Change())
+                                                {
+                                                    DCSBIOS.Send(ADF10KhzPresetCommandInc);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
+                                            {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandInc);
                                                 break;
                                             }
@@ -1518,6 +1577,14 @@ namespace NonVisuals
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
+                                            {
+                                                if (!SkipADFPresetDial2Change())
+                                                {
+                                                    DCSBIOS.Send(ADF10KhzPresetCommandDec);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
                                             {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandDec);
                                                 break;
@@ -1607,10 +1674,15 @@ namespace NonVisuals
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDialChange())
+                                                if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandInc);
+                                                    DCSBIOS.Send(ADF100KhzPresetCommandInc);
                                                 }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
+                                            {
+                                                DCSBIOS.Send(ADFTuneKnobCommandInc);
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.SPU7:
@@ -1670,27 +1742,27 @@ namespace NonVisuals
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.YADRO1A:
-                                        {
-                                            var changeFaster = false;
-                                            _yadro1aBigFreqDecreaseChangeMonitor.Click();
-                                            if (_yadro1aBigFreqDecreaseChangeMonitor.ClickThresholdReached())
                                             {
-                                                //Change faster
-                                                changeFaster = true;
-                                            }
-                                            if (changeFaster)
-                                            {
-                                                _yadro1aBigFrequencyStandby = _yadro1aBigFrequencyStandby - ChangeValue;
-                                            }
-                                            if (_yadro1aBigFrequencyStandby <= 20)
-                                            {
-                                                //@ max value
-                                                _yadro1aBigFrequencyStandby = 20;
+                                                var changeFaster = false;
+                                                _yadro1aBigFreqDecreaseChangeMonitor.Click();
+                                                if (_yadro1aBigFreqDecreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    //Change faster
+                                                    changeFaster = true;
+                                                }
+                                                if (changeFaster)
+                                                {
+                                                    _yadro1aBigFrequencyStandby = _yadro1aBigFrequencyStandby - ChangeValue;
+                                                }
+                                                if (_yadro1aBigFrequencyStandby <= 20)
+                                                {
+                                                    //@ max value
+                                                    _yadro1aBigFrequencyStandby = 20;
+                                                    break;
+                                                }
+                                                _yadro1aBigFrequencyStandby--;
                                                 break;
                                             }
-                                            _yadro1aBigFrequencyStandby--;
-                                            break;
-                                    }
                                         case CurrentMi8RadioMode.R828_PRESETS:
                                             {
                                                 if (!SkipR828PresetDialChange())
@@ -1701,10 +1773,15 @@ namespace NonVisuals
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
-                                                if (!SkipADFPresetDialChange())
+                                                if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandDec);
+                                                    DCSBIOS.Send(ADF100KhzPresetCommandDec);
                                                 }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
+                                            {
+                                                DCSBIOS.Send(ADFTuneKnobCommandDec);
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.SPU7:
@@ -1760,6 +1837,14 @@ namespace NonVisuals
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
                                             {
+                                                if (!SkipADFPresetDial2Change())
+                                                {
+                                                    DCSBIOS.Send(ADF10KhzPresetCommandInc);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
+                                            {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandInc);
                                                 break;
                                             }
@@ -1812,6 +1897,14 @@ namespace NonVisuals
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.ADF_ARK9:
+                                            {
+                                                if (!SkipADFPresetDial2Change())
+                                                {
+                                                    DCSBIOS.Send(ADF10KhzPresetCommandDec);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentMi8RadioMode.ADF_TUNE:
                                             {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandDec);
                                                 break;
@@ -1981,37 +2074,45 @@ namespace NonVisuals
                             }
                         case CurrentMi8RadioMode.ADF_ARK9:
                             {
-                                //Preset Channel Selector
-                                //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
+                                //Dial1 XX00
+                                //Dial2 00XX
 
-                                /*var channelAsString = "";
+                                var channelAsString = "";
                                 lock (_lockADFDialObject1)
                                 {
-                                    switch (_adfCockpitPresetDialPos)
-                                    {
-                                        case 0:
-                                            {
-                                                channelAsString = "9".PadLeft(2, ' ');
-                                                break;
-                                            }
-                                        case 1:
-                                            {
-                                                channelAsString = "10".PadLeft(2, ' ');
-                                                break;
-                                            }
-                                        default:
-                                            {
-                                                channelAsString = (_adfCockpitPresetDialPos - 1).ToString().PadLeft(2, ' ');
-                                                break;
-                                            }
-                                    }
+                                    channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
+                                }
+                                lock (_lockADFDialObject2)
+                                {
+                                    channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);*/
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
                                 break;
                             }
+                        case CurrentMi8RadioMode.ADF_TUNE:
+                        {
+                            //Dial1 XX00
+                            //Dial2 00XX
+
+                            var channelAsString = "";
+                            var tuneValueAsString = "";
+                            lock (_lockADFDialObject1)
+                            {
+                                channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
+                            }
+                            lock (_lockADFDialObject2)
+                            {
+                                channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                            }
+                            lock (_lockADFTuneDialObject)
+                            {
+                                tuneValueAsString = _adfTuneCockpitDialPos.ToString();
+                            }
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(tuneValueAsString), PZ69LCDPosition.UPPER_RIGHT);
+                            break;
+                        }
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 //0-5
@@ -2112,36 +2213,45 @@ namespace NonVisuals
                             }
                         case CurrentMi8RadioMode.ADF_ARK9:
                             {
-                                //Preset Channel Selector
-                                //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                /*var channelAsString = "";
+                                //Dial1 XX00
+                                //Dial2 00XX
+
+                                var channelAsString = "";
                                 lock (_lockADFDialObject1)
                                 {
-                                    switch (_adfCockpitPresetDialPos)
-                                    {
-                                        case 0:
-                                            {
-                                                channelAsString = "9".PadLeft(2, ' ');
-                                                break;
-                                            }
-                                        case 1:
-                                            {
-                                                channelAsString = "10".PadLeft(2, ' ');
-                                                break;
-                                            }
-                                        default:
-                                            {
-                                                channelAsString = (_adfCockpitPresetDialPos - 1).ToString().PadLeft(2, ' ');
-                                                break;
-                                            }
-                                    }
+                                    channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
+                                }
+                                lock (_lockADFDialObject2)
+                                {
+                                    channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);*/
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
                                 break;
                             }
+                        case CurrentMi8RadioMode.ADF_TUNE:
+                        {
+                            //Dial1 XX00
+                            //Dial2 00XX
+
+                            var channelAsString = "";
+                            var tuneValueAsString = "";
+                            lock (_lockADFDialObject1)
+                            {
+                                channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
+                            }
+                            lock (_lockADFDialObject2)
+                            {
+                                channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                            }
+                            lock (_lockADFTuneDialObject)
+                            {
+                                tuneValueAsString = _adfTuneCockpitDialPos.ToString();
+                            }
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_LEFT);
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(tuneValueAsString), PZ69LCDPosition.LOWER_RIGHT);
+                            break;
+                        }
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 //0-5
@@ -2290,8 +2400,11 @@ namespace NonVisuals
                 _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_PRST_CHAN_SEL");
 
                 //ADF
-                //TODO
-                _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC9_MAIN_TUNE");
+                _adfDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_MAIN_100KHZ");
+                _adfDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_MAIN_10KHZ");
+
+                //DME
+                _adfTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC9_MAIN_TUNE");
 
                 //XPDR
                 _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_SEL_L");
@@ -2990,24 +3103,50 @@ namespace NonVisuals
             return false;
         }
 
-        private bool SkipADFPresetDialChange()
+        private bool SkipADFPresetDial1Change()
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipADFPresetDialChange()");
+                Common.DebugP("Entering Mi-8 Radio SkipADFPresetDial1Change()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
-                    if (_adfPresetDialSkipper > 2)
+                    if (_adfPresetDial1Skipper > 2)
                     {
-                        _adfPresetDialSkipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDialChange()");
+                        _adfPresetDial1Skipper = 0;
+                        Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial1Change()");
                         return false;
                     }
-                    _adfPresetDialSkipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDialChange()");
+                    _adfPresetDial1Skipper++;
+                    Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial1Change()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDialChange()");
+                Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial1Change()");
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(78010, ex);
+            }
+            return false;
+        }
+
+        private bool SkipADFPresetDial2Change()
+        {
+            try
+            {
+                Common.DebugP("Entering Mi-8 Radio SkipADFPresetDial2Change()");
+                if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
+                {
+                    if (_adfPresetDial2Skipper > 2)
+                    {
+                        _adfPresetDial2Skipper = 0;
+                        Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial2Change()");
+                        return false;
+                    }
+                    _adfPresetDial2Skipper++;
+                    Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial2Change()");
+                    return true;
+                }
+                Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial2Change()");
             }
             catch (Exception ex)
             {

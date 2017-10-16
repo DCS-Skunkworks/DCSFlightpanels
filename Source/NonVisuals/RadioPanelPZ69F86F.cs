@@ -600,7 +600,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
-                                                    DCSBIOS.Send(ARN6ModeCommandInc);
+                                                    DCSBIOS.Send(ARN6VolumeKnobCommandInc);
                                                 }
                                                 break;
                                             }
@@ -641,7 +641,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
-                                                    DCSBIOS.Send(ARN6ModeCommandDec);
+                                                    DCSBIOS.Send(ARN6VolumeKnobCommandDec);
                                                 }
                                                 break;
                                             }
@@ -778,7 +778,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
-                                                    DCSBIOS.Send(ARN6ModeCommandInc);
+                                                    DCSBIOS.Send(ARN6VolumeKnobCommandInc);
                                                 }
                                                 break;
                                             }
@@ -819,7 +819,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipARN6ModeDialChange())
                                                 {
-                                                    DCSBIOS.Send(ARN6ModeCommandDec);
+                                                    DCSBIOS.Send(ARN6VolumeKnobCommandDec);
                                                 }
                                                 break;
                                             }

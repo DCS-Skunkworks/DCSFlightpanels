@@ -71,7 +71,7 @@
                     COM 2 = AN/ARC-27 Volume CTRL<LineBreak/>
                     NAV 1 = AN/ARC-6 Band/Tuning<LineBreak/>
                     NAV 2 = AN/ARC-6 Mode<LineBreak/>
-                    ADF = AN/APX-6 IFF <LineBreak/> ACT/STBY (APX-6) : Toggle for dial stop
+                    ADF = AN/APX-6 IFF <LineBreak/> ACT/STBY (APX-6) : Press to toggle dial stop<LineBreak/>to enter Emergency Mode
                 </TextBlock>
             </StackPanel>
         </GroupBox>

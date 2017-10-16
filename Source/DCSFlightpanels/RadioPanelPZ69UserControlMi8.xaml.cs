@@ -242,7 +242,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsMi8.UPPER_NOUSE3:
+                        case RadioPanelPZ69KnobsMi8.UPPER_ADF_TUNE:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -312,7 +312,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsMi8.LOWER_NOUSE3:
+                        case RadioPanelPZ69KnobsMi8.LOWER_ADF_TUNE:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
