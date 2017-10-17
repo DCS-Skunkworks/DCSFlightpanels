@@ -916,13 +916,34 @@ namespace NonVisuals
                         case CurrentF86FRadioMode.ARN6_MODES:
                             {
                                 //Modes
-
-                                var modeAsString = "";
+                                uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
-                                    modeAsString = (_arn6ModeCockpitDialPos).ToString().PadLeft(2, ' ');
+                                    switch (_arn6ModeCockpitDialPos)
+                                    {
+                                        case 2:
+                                        {
+                                            mode = 1;
+                                            break;
+                                        }
+                                        case 3:
+                                        {
+                                            mode = 2;
+                                            break;
+                                        }
+                                        case 0:
+                                        {
+                                            mode = 3;
+                                            break;
+                                        }
+                                        case 1:
+                                        {
+                                            mode = 4;
+                                            break;
+                                        }
+                                    }
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeAsString), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.UPPER_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
@@ -999,13 +1020,34 @@ namespace NonVisuals
                         case CurrentF86FRadioMode.ARN6_MODES:
                             {
                                 //Modes
-
-                                var modeAsString = "";
+                                uint mode = 0;
                                 lock (_lockARN6ModeObject)
                                 {
-                                    modeAsString = (_arn6ModeCockpitDialPos).ToString().PadLeft(2, ' ');
+                                    switch (_arn6ModeCockpitDialPos)
+                                    {
+                                        case 2:
+                                        {
+                                            mode = 1;
+                                            break;
+                                        }
+                                        case 3:
+                                        {
+                                            mode = 2;
+                                            break;
+                                        }
+                                        case 0:
+                                        {
+                                            mode = 3;
+                                            break;
+                                        }
+                                        case 1:
+                                        {
+                                            mode = 4;
+                                            break;
+                                        }
+                                    }
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeAsString), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.LOWER_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }

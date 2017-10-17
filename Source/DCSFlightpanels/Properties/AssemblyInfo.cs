@@ -6,11 +6,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DCSFlightpanels")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Saitek Pro Flight Keyemulator")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DCSFlightpanels")]
-[assembly: AssemblyCopyright("Copyright ?  2015")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,5 +49,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.779.7258")]
-[assembly: AssemblyFileVersion("2.1.779.7258")]
+[assembly: AssemblyVersion("2.2.15.4973")]
+[assembly: AssemblyFileVersion("2.2.15.4973")]

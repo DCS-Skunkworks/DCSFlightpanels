@@ -101,35 +101,58 @@ namespace NonVisuals
         private const string R828PresetVolumeKnobCommandInc = "R828_VOL +2500\n";
         private const string R828PresetVolumeKnobCommandDec = "R828_VOL -2500\n";
 
-        /*Mi-8 ARK-9 ADF*/
+        /*Mi-8 ARK-9 ADF MAIN*/
         //Large 100KHz 01 -> 12
         //Small 10Khz 00 -> 90 (10 steps)
-        private readonly object _lockADFDialObject1 = new object();
-        private readonly object _lockADFDialObject2 = new object();
-        private DCSBIOSOutput _adfDcsbiosOutputPresetDial1;
-        private DCSBIOSOutput _adfDcsbiosOutputPresetDial2;
-        private volatile uint _adfCockpitPresetDial1Pos = 1;
-        private volatile uint _adfCockpitPresetDial2Pos = 1;
-        private const string ADF100KhzPresetCommandInc = "ARC_MAIN_100KHZ INC\n";
-        private const string ADF100KhzPresetCommandDec = "ARC_MAIN_100KHZ DEC\n";
-        private const string ADF10KhzPresetCommandInc = "ARC_MAIN_10KHZ INC\n";
-        private const string ADF10KhzPresetCommandDec = "ARC_MAIN_10KHZ DEC\n";
+        private readonly object _lockADFMainDialObject1 = new object();
+        private readonly object _lockADFMainDialObject2 = new object();
+        private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial1;
+        private DCSBIOSOutput _adfMainDcsbiosOutputPresetDial2;
+        private volatile uint _adfMainCockpitPresetDial1Pos = 1;
+        private volatile uint _adfMainCockpitPresetDial2Pos = 1;
+        private const string ADFMain100KhzPresetCommandInc = "ARC_MAIN_100KHZ INC\n";
+        private const string ADFMain100KhzPresetCommandDec = "ARC_MAIN_100KHZ DEC\n";
+        private const string ADFMain10KhzPresetCommandInc = "ARC_MAIN_10KHZ INC\n";
+        private const string ADFMain10KhzPresetCommandDec = "ARC_MAIN_10KHZ DEC\n";
+        /*
+         *  ADF BACKUP
+         */
+        private readonly object _lockADFBackupDialObject1 = new object();
+        private readonly object _lockADFBackupDialObject2 = new object();
+        private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial1;
+        private DCSBIOSOutput _adfBackupDcsbiosOutputPresetDial2;
+        private volatile uint _adfBackupCockpitPresetDial1Pos = 1;
+        private volatile uint _adfBackupCockpitPresetDial2Pos = 1;
+        private const string ADFBackup100KhzPresetCommandInc = "ARC_BCK_100KHZ INC\n";
+        private const string ADFBackup100KhzPresetCommandDec = "ARC_BCK_100KHZ DEC\n";
+        private const string ADFBackup10KhzPresetCommandInc = "ARC_BCK_10KHZ INC\n";
+        private const string ADFBackup10KhzPresetCommandDec = "ARC_BCK_10KHZ DEC\n";
         private int _adfPresetDial1Skipper;
         private int _adfPresetDial2Skipper;
-        private const string ADFModeSwitchAntenna = "ADF_CMPS_ANT INC\n";
-        private const string ADFModeSwitchCompass = "ADF_CMPS_ANT DEC\n";
-        private string _adfModeSwitchLastSent = "";
+        //0 = Backup ADF
+        //1 = Main ADF
+        private readonly object _lockADFBackupMainDialObject = new object();
+        private DCSBIOSOutput _adfBackupMainDcsbiosOutputPresetDial;
+        private volatile uint _adfBackupMainCockpitDial1Pos = 0;
+        private const string ADFBackupMainSwitchToggleCommand = "ARC9_MAIN_BACKUP TOGGLE\n";
 
         /*Mi-8 ARK-9 ADF (DME)*/
         //Large Tuning
         //Radio Volume
         private const string ADFTuneKnobCommandInc = "ARC9_MAIN_TUNE +500\n";
         private const string ADFTuneKnobCommandDec = "ARC9_MAIN_TUNE -500\n";
-        private const string ADFVolumeKnobCommandInc = "ADF_VOLUME +2500\n";
-        private const string ADFVolumeKnobCommandDec = "ADF_VOLUME -2500\n";
-        private readonly object _lockADFTuneDialObject = new object();
-        private DCSBIOSOutput _adfTuneDcsbiosOutputDial;
-        private volatile uint _adfTuneCockpitDialPos = 1;
+        private const string ADFVolumeKnobCommandInc = "ARC9_VOL +2500\n";
+        private const string ADFVolumeKnobCommandDec = "ARC9_VOL -2500\n";
+        /*
+         *  ACT/STBY Toggling ADF mode
+         */
+        private readonly object _lockADFModeDialObject = new object();
+        private DCSBIOSOutput _adfModeDcsbiosOutputPresetDial;
+        private volatile uint _adfModeCockpitDial1Pos = 0;
+        private const string ADFModeCommandInc = "ARC9_MODE INC\n";
+        private const string ADFModeCommandDec = "ARC9_MODE DEC\n";
+        private bool _adfModeSwitchUpwards = false;
+
         //XPDR
         /*Mi-8 SPU-7 XPDR*/
         //Large dial 0-5 [step of 1]
@@ -359,42 +382,84 @@ namespace NonVisuals
                     }
                 }
 
-                //ADF Preset Dial 1
-                if (address == _adfDcsbiosOutputPresetDial1.Address)
+                //ADF Main Preset Dial 1
+                if (address == _adfMainDcsbiosOutputPresetDial1.Address)
                 {
-                    lock (_lockADFDialObject1)
+                    lock (_lockADFMainDialObject1)
                     {
-                        var tmp = _adfCockpitPresetDial1Pos;
-                        _adfCockpitPresetDial1Pos = _adfDcsbiosOutputPresetDial1.GetUIntValue(data);
-                        if (tmp != _adfCockpitPresetDial1Pos)
+                        var tmp = _adfMainCockpitPresetDial1Pos;
+                        _adfMainCockpitPresetDial1Pos = _adfMainDcsbiosOutputPresetDial1.GetUIntValue(data);
+                        if (tmp != _adfMainCockpitPresetDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
                     }
                 }
 
-                //ADF Preset Dial 2
-                if (address == _adfDcsbiosOutputPresetDial2.Address)
+                //ADF Main Preset Dial 2
+                if (address == _adfMainDcsbiosOutputPresetDial2.Address)
                 {
-                    lock (_lockADFDialObject1)
+                    lock (_lockADFMainDialObject2)
                     {
-                        var tmp = _adfCockpitPresetDial2Pos;
-                        _adfCockpitPresetDial2Pos = _adfDcsbiosOutputPresetDial2.GetUIntValue(data);
-                        if (tmp != _adfCockpitPresetDial2Pos)
+                        var tmp = _adfMainCockpitPresetDial2Pos;
+                        _adfMainCockpitPresetDial2Pos = _adfMainDcsbiosOutputPresetDial2.GetUIntValue(data);
+                        if (tmp != _adfMainCockpitPresetDial2Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
                     }
                 }
-                
-                //ADF Tune
-                if (address == _adfTuneDcsbiosOutputDial.Address)
+
+                //ADF Backup Preset Dial 1
+                if (address == _adfBackupDcsbiosOutputPresetDial1.Address)
                 {
-                    lock (_lockADFTuneDialObject)
+                    lock (_lockADFBackupDialObject1)
                     {
-                        var tmp = _adfTuneCockpitDialPos;
-                        _adfTuneCockpitDialPos = _adfTuneDcsbiosOutputDial.GetUIntValue(data);
-                        if (tmp != _adfTuneCockpitDialPos)
+                        var tmp = _adfBackupCockpitPresetDial1Pos;
+                        _adfBackupCockpitPresetDial1Pos = _adfBackupDcsbiosOutputPresetDial1.GetUIntValue(data);
+                        if (tmp != _adfBackupCockpitPresetDial1Pos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //ADF Backup Preset Dial 2
+                if (address == _adfBackupDcsbiosOutputPresetDial2.Address)
+                {
+                    lock (_lockADFBackupDialObject2)
+                    {
+                        var tmp = _adfBackupCockpitPresetDial2Pos;
+                        _adfBackupCockpitPresetDial2Pos = _adfBackupDcsbiosOutputPresetDial2.GetUIntValue(data);
+                        if (tmp != _adfBackupCockpitPresetDial2Pos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //ADF Backup or Main
+                if (address == _adfBackupMainDcsbiosOutputPresetDial.Address)
+                {
+                    lock (_lockADFBackupMainDialObject)
+                    {
+                        var tmp = _adfBackupMainCockpitDial1Pos;
+                        _adfBackupMainCockpitDial1Pos = _adfBackupMainDcsbiosOutputPresetDial.GetUIntValue(data);
+                        if (tmp != _adfBackupMainCockpitDial1Pos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //ADF Mode
+                if (address == _adfModeDcsbiosOutputPresetDial.Address)
+                {
+                    lock (_lockADFModeDialObject)
+                    {
+                        var tmp = _adfModeCockpitDial1Pos;
+                        _adfModeCockpitDial1Pos = _adfModeDcsbiosOutputPresetDial.GetUIntValue(data);
+                        if (tmp != _adfModeCockpitDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -1202,15 +1267,33 @@ namespace NonVisuals
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
                                     {
-                                        if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
+                                        DCSBIOS.Send(ADFBackupMainSwitchToggleCommand);
+                                    }
+                                    else if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_TUNE && radioPanelKnob.IsOn)
+                                    {
+                                        lock (_lockADFModeDialObject)
                                         {
-                                            //DCSBIOS.Send(ADFModeSwitchCompass);
-                                            //_adfModeSwitchLastSent = ADFModeSwitchCompass;
-                                        }
-                                        else
-                                        {
-                                            //DCSBIOS.Send(ADFModeSwitchAntenna);
-                                            //_adfModeSwitchLastSent = ADFModeSwitchAntenna;
+                                            if (_adfModeCockpitDial1Pos == 0)
+                                            {
+                                                _adfModeSwitchUpwards = true;
+                                                DCSBIOS.Send(ADFModeCommandInc);
+                                            }
+                                            else if (_adfModeCockpitDial1Pos == 3)
+                                            {
+                                                _adfModeSwitchUpwards = false;
+                                                DCSBIOS.Send(ADFModeCommandDec);
+                                            }
+                                            else
+                                            {
+                                                if (_adfModeSwitchUpwards)
+                                                {
+                                                    DCSBIOS.Send(ADFModeCommandInc);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ADFModeCommandDec);
+                                                }
+                                            }
                                         }
                                     }
                                     else if (radioPanelKnob.IsOn)
@@ -1234,15 +1317,33 @@ namespace NonVisuals
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
                                     {
-                                        if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
+                                        DCSBIOS.Send(ADFBackupMainSwitchToggleCommand);
+                                    }
+                                    else if (_currentLowerRadioMode == CurrentMi8RadioMode.ADF_TUNE && radioPanelKnob.IsOn)
+                                    {
+                                        lock (_lockADFModeDialObject)
                                         {
-                                            DCSBIOS.Send(ADFModeSwitchCompass);
-                                            _adfModeSwitchLastSent = ADFModeSwitchCompass;
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(ADFModeSwitchAntenna);
-                                            _adfModeSwitchLastSent = ADFModeSwitchAntenna;
+                                            if (_adfModeCockpitDial1Pos == 0)
+                                            {
+                                                _adfModeSwitchUpwards = true;
+                                                DCSBIOS.Send(ADFModeCommandInc);
+                                            }
+                                            else if (_adfModeCockpitDial1Pos == 3)
+                                            {
+                                                _adfModeSwitchUpwards = false;
+                                                DCSBIOS.Send(ADFModeCommandDec);
+                                            }
+                                            else
+                                            {
+                                                if (_adfModeSwitchUpwards)
+                                                {
+                                                    DCSBIOS.Send(ADFModeCommandInc);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ADFModeCommandDec);
+                                                }
+                                            }
                                         }
                                     }
                                     else if (radioPanelKnob.IsOn)
@@ -1356,7 +1457,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADF100KhzPresetCommandInc);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandInc);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandInc);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -1455,7 +1563,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADF100KhzPresetCommandDec);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandDec);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandDec);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -1519,7 +1634,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    DCSBIOS.Send(ADF10KhzPresetCommandInc);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandInc);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandInc);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -1580,7 +1702,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    DCSBIOS.Send(ADF10KhzPresetCommandDec);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandDec);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandDec);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -1676,7 +1805,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADF100KhzPresetCommandInc);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandInc);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandInc);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -1775,7 +1911,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    DCSBIOS.Send(ADF100KhzPresetCommandDec);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandDec);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandDec);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -1839,7 +1982,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    DCSBIOS.Send(ADF10KhzPresetCommandInc);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandInc);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandInc);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -1900,7 +2050,14 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    DCSBIOS.Send(ADF10KhzPresetCommandDec);
+                                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                                    {
+                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandDec);
+                                                    }
+                                                    else
+                                                    {
+                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandDec);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -2078,41 +2235,86 @@ namespace NonVisuals
                                 //Dial2 00XX
 
                                 var channelAsString = "";
-                                lock (_lockADFDialObject1)
+                                uint backupMain = 0;
+                                lock (_lockADFBackupMainDialObject)
                                 {
-                                    channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
-                                }
-                                lock (_lockADFDialObject2)
-                                {
-                                    channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                    backupMain = _adfBackupMainCockpitDial1Pos;
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject1)
+                                        {
+                                            channelAsString = (_adfMainCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject1)
+                                        {
+                                            channelAsString = (_adfBackupCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, backupMain, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
                         case CurrentMi8RadioMode.ADF_TUNE:
-                        {
-                            //Dial1 XX00
-                            //Dial2 00XX
-
-                            var channelAsString = "";
-                            var tuneValueAsString = "";
-                            lock (_lockADFDialObject1)
                             {
-                                channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
+                                var channelAsString = "";
+                                uint adfMode = 0;
+                                lock (_lockADFBackupMainDialObject)
+                                {
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject1)
+                                        {
+                                            channelAsString = (_adfMainCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject1)
+                                        {
+                                            channelAsString = (_adfBackupCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
+                                }
+                                lock (_lockADFModeDialObject)
+                                {
+                                    adfMode = _adfModeCockpitDial1Pos;
+                                }
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.UPPER_RIGHT);
+                                break;
                             }
-                            lock (_lockADFDialObject2)
-                            {
-                                channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
-                            }
-                            lock (_lockADFTuneDialObject)
-                            {
-                                tuneValueAsString = _adfTuneCockpitDialPos.ToString();
-                            }
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(tuneValueAsString), PZ69LCDPosition.UPPER_RIGHT);
-                            break;
-                        }
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 //0-5
@@ -2217,41 +2419,86 @@ namespace NonVisuals
                                 //Dial2 00XX
 
                                 var channelAsString = "";
-                                lock (_lockADFDialObject1)
+                                uint backupMain = 0;
+                                lock (_lockADFBackupMainDialObject)
                                 {
-                                    channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
-                                }
-                                lock (_lockADFDialObject2)
-                                {
-                                    channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                    backupMain = _adfBackupMainCockpitDial1Pos;
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject1)
+                                        {
+                                            channelAsString = (_adfMainCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject1)
+                                        {
+                                            channelAsString = (_adfBackupCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, backupMain, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
                         case CurrentMi8RadioMode.ADF_TUNE:
-                        {
-                            //Dial1 XX00
-                            //Dial2 00XX
-
-                            var channelAsString = "";
-                            var tuneValueAsString = "";
-                            lock (_lockADFDialObject1)
                             {
-                                channelAsString = (_adfCockpitPresetDial1Pos + 1).ToString();
+                                var channelAsString = "";
+                                uint adfMode = 0;
+                                lock (_lockADFBackupMainDialObject)
+                                {
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject1)
+                                        {
+                                            channelAsString = (_adfMainCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject1)
+                                        {
+                                            channelAsString = (_adfBackupCockpitPresetDial1Pos + 1).ToString();
+                                        }
+                                    }
+                                    if (_adfBackupMainCockpitDial1Pos == 1)
+                                    {
+                                        lock (_lockADFMainDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfMainCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        lock (_lockADFBackupDialObject2)
+                                        {
+                                            channelAsString = channelAsString + _adfBackupCockpitPresetDial2Pos.ToString().PadRight(2, '0');
+                                        }
+                                    }
+                                }
+                                lock (_lockADFModeDialObject)
+                                {
+                                    adfMode = _adfModeCockpitDial1Pos;
+                                }
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.LOWER_RIGHT);
+                                break;
                             }
-                            lock (_lockADFDialObject2)
-                            {
-                                channelAsString = channelAsString + _adfCockpitPresetDial2Pos.ToString().PadRight(2, '0');
-                            }
-                            lock (_lockADFTuneDialObject)
-                            {
-                                tuneValueAsString = _adfTuneCockpitDialPos.ToString();
-                            }
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(tuneValueAsString), PZ69LCDPosition.LOWER_RIGHT);
-                            break;
-                        }
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 //0-5
@@ -2400,11 +2647,14 @@ namespace NonVisuals
                 _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_PRST_CHAN_SEL");
 
                 //ADF
-                _adfDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_MAIN_100KHZ");
-                _adfDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_MAIN_10KHZ");
+                _adfMainDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_MAIN_100KHZ");
+                _adfMainDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_MAIN_10KHZ");
+                _adfBackupDcsbiosOutputPresetDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_BCK_100KHZ");
+                _adfBackupDcsbiosOutputPresetDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC_BCK_10KHZ");
+                _adfBackupMainDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC9_MAIN_BACKUP");
 
                 //DME
-                _adfTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC9_MAIN_TUNE");
+                _adfModeDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARC9_MODE");
 
                 //XPDR
                 _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_SEL_L");
