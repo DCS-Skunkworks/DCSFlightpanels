@@ -193,6 +193,7 @@ namespace DCSFlightpanels
             {
                 return;
             }
+            ButtonOk.IsEnabled = _dcsbiosControl != null;
             if (_dcsBiosInput == null)
             {
                 LabelInterfaceType.Visibility = Visibility.Collapsed;
@@ -398,7 +399,7 @@ namespace DCSFlightpanels
                     //TextBoxInputTypeDescription.Text = _dcsBiosInput.GetDescriptionForInterface(GetChosenInterfaceType());
                     //TextBoxMaxValue.Text = _dcsBiosInput.GetMaxValueForInterface(GetChosenInterfaceType()).ToString();
                     ShowValues2();
-
+                    SetFormState();
                 }
                 _popupSearch.IsOpen = false;
                 SetFormState();

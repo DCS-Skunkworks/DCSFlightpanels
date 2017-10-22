@@ -104,7 +104,7 @@ namespace DCSFlightpanels
             TextBoxFormula.IsEnabled = LabelFormula.IsEnabled;
             LabelResult.IsEnabled = LabelFormula.IsEnabled;
             ButtonTestFormula.IsEnabled = LabelFormula.IsEnabled;
-
+            ButtonOk.IsEnabled = _dcsbiosControl != null;
             if (_dcsbiosControl == null && _dcsBiosOutput == null)
             {
                 TextBoxControlId.Text = "";
@@ -252,7 +252,7 @@ namespace DCSFlightpanels
                     _dcsBiosOutput = new DCSBIOSOutput();
                     _dcsBiosOutput.Consume(_dcsbiosControl);
                     ShowValues2();
-
+                    SetFormState();
                 }
                 _popupSearch.IsOpen = false;
                 SetFormState();
