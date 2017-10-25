@@ -876,6 +876,11 @@ namespace NonVisuals
 
             return result;
         }
+
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
     }
 
 }

@@ -5,10 +5,8 @@ namespace NonVisuals
 {
     public enum PZ70LCDPosition
     {
-        UpperALT,
-        LowerALT,
-        UpperVS,
-        LowerVS
+        UpperLCD,
+        LowerLCD,
     }
 
     public class DCSBIOSBindingLCDPZ70
@@ -18,7 +16,7 @@ namespace NonVisuals
          * 
          * The comparison part of the DCSBIOSOutput is ignored for DCSBIOSBindingLCDPZ70, all data will be shown
          */
-        private MultiPanelPZ70Knobs _multiPanelPZ70Knob;
+        private PZ70DialPosition _pz70DialPosition;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
         private const string SeparatorChars = "\\o/";
@@ -32,48 +30,46 @@ namespace NonVisuals
             }
             if (settings.StartsWith("MultiPanelDCSBIOSControlLCD{") && settings.Contains("DCSBiosOutput{"))
             {
-                //MultiPanelDCSBIOSControlLCD{KNOB_ALT|UpperALT}\o/DCSBiosOutput{AAP_EGIPWR|Equals|0}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                //MultiPanelDCSBIOSControlLCD{ALT}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
-                //MultiPanelDCSBIOSControlLCD{KNOB_ALT|UpperALT}
-                var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
-                //KNOB_ALT|UpperALT}
-                param0 = param0.Remove(param0.Length - 1, 1);
-                //KNOB_ALT|UpperALT
-                var knobAndLcd = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), knobAndLcd[0]);
-                _pz70LCDPosition = (PZ70LCDPosition)Enum.Parse(typeof(PZ70LCDPosition), knobAndLcd[1]);
+                //MultiPanelDCSBIOSControlLCD{ALT}
+                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", "").Replace("}", "");
+                _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
+
+                //{UpperLCDLeft}
+                var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
+                _pz70LCDPosition = (PZ70LCDPosition)Enum.Parse(typeof(PZ70LCDPosition), param1);
 
                 //DCSBiosOutput{AAP_EGIPWR|Equals|0}
                 _dcsbiosOutput = new DCSBIOSOutput();
-                _dcsbiosOutput.ImportString(parameters[1]);
+                _dcsbiosOutput.ImportString(parameters[2]);
             }
             if (settings.StartsWith("MultiPanelDCSBIOSControlLCD{") && settings.Contains("DCSBiosOutputFormula{"))
             {
-                //MultiPanelDCSBIOSFormulaLCD{KNOB_ALT|UpperALT}\o/DCSBiosOutputFormula{(AAP_EGIPWR+1)/2}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                //MultiPanelDCSBIOSFormulaLCD{ALT}\o/{UpperLCDLeft}\o/DCSBiosOutputFormula{(AAP_EGIPWR+1)/2}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
-                //MultiPanelDCSBIOSFormulaLCD{KNOB_ALT|UpperALT}
-                var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
-                //KNOB_ALT|UpperALT}
-                param0 = param0.Remove(param0.Length - 1, 1);
-                //KNOB_ALT|UpperALT
-                var knobAndLcd = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), knobAndLcd[0]);
-                _pz70LCDPosition = (PZ70LCDPosition)Enum.Parse(typeof(PZ70LCDPosition), knobAndLcd[1]);
+                //MultiPanelDCSBIOSFormulaLCD{ALT}
+                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", "").Replace("}","").Trim();
+                _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
+
+                //{UpperLCDLeft}
+                var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
+                _pz70LCDPosition = (PZ70LCDPosition)Enum.Parse(typeof(PZ70LCDPosition), param1);
 
                 //DCSBiosOutputFormula{(AAP_EGIPWR+1)/2}
                 _dcsbiosOutputFormula = new DCSBIOSOutputFormula();
-                _dcsbiosOutputFormula.ImportString(parameters[1]);
+                _dcsbiosOutputFormula.ImportString(parameters[2]);
             }
         }
 
-        public MultiPanelPZ70Knobs MultiPanelPZ70Knob
+        public PZ70DialPosition DialPosition
         {
-            get { return _multiPanelPZ70Knob; }
-            set { _multiPanelPZ70Knob = value; }
+            get { return _pz70DialPosition; }
+            set { _pz70DialPosition = value; }
         }
-
+        
         public DCSBIOSOutput DCSBIOSOutputObject
         {
             get { return _dcsbiosOutput; }
@@ -103,9 +99,10 @@ namespace NonVisuals
             }
             if (_dcsbiosOutputFormula != null)
             {
-                return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "|" + _pz70LCDPosition + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
+                //MultiPanelDCSBIOSControlLCD{ALT}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
+                return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SeparatorChars + "{" + _pz70LCDPosition + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
             }
-            return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "|" + _pz70LCDPosition + "}" + SeparatorChars + _dcsbiosOutput.ToString();
+            return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SeparatorChars + "{" + _pz70LCDPosition + "}" + SeparatorChars + _dcsbiosOutput.ToString();
         }
 
         public PZ70LCDPosition PZ70LCDPosition

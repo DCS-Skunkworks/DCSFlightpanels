@@ -772,6 +772,11 @@ namespace NonVisuals
             Common.DebugP("Leaving P-51D Radio SetLowerRadioMode()");
         }
 
-        
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
+
+
     }
 }

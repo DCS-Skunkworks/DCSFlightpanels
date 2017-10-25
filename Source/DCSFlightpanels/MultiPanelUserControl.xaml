@@ -33,11 +33,20 @@
         <Grid Name="PZ70Grid" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="26" />
-                <RowDefinition Height="240" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="240"/>
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="227*" />
@@ -83,17 +92,13 @@
 
 
                 <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="500" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
-                <Button Name="ButtonKnobAltLcdUpper" Content="ALT Upper row" Canvas.Left="136" Canvas.Top="87" Width="90" Click="ButtonKnobLcd_OnClick"/>
-                <Button Name="ButtonKnobAltLcdLower" Content="ALT Lower row" Canvas.Left="136" Canvas.Top="124" Width="90" Click="ButtonKnobLcd_OnClick"/>
-                <Button Name="ButtonKnobVsLcdUpper" Content="VS Upper row" Canvas.Left="236" Canvas.Top="87" Width="90" Click="ButtonKnobLcd_OnClick"/>
-                <Button Name="ButtonKnobVsLcdLower" Content="VS Lower row" Canvas.Left="236" Canvas.Top="124" Width="90" Click="ButtonKnobLcd_OnClick"/>
+                <Button Name="ButtonLcdUpper" Content="Upper LCD Data" Canvas.Left="165" Canvas.Top="87" Width="120" Click="ButtonLcd_OnClick"/>
+                <Button Name="ButtonLcdLower" Content="Lower LCD Data" Canvas.Left="165" Canvas.Top="124" Width="120" Click="ButtonLcd_OnClick"/>
 
-                <Image Height="76" Name="ImageAltUpperRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="180" Canvas.Top="41" />
-                <Image Height="76" Name="ImageAltLowerRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="180" Canvas.Top="117" />
-                <Image Height="76" Name="ImageVsUpperRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="280" Canvas.Top="41" />
-                <Image Height="76" Name="ImageVsLowerRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="280" Canvas.Top="117" />
+                <Image Height="76" Name="ImageLcdUpperRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="45" />
+                <Image Height="76" Name="ImageLcdLowerRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="112" />
             </Canvas>
-            <GroupBox Header="Buttons"  FontSize="10" Grid.Column="3" Grid.Row="1" Grid.RowSpan="4">
+            <GroupBox Header="Buttons"  FontSize="10" Grid.Column="3" Grid.Row="1" Grid.RowSpan="8">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="13*" />
@@ -138,14 +143,14 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="3" Grid.ColumnSpan="1" Margin="0,0,0,0">
+            <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="5" Grid.ColumnSpan="1" Margin="0,0,0,0">
                     <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
-                        <Label Content="Knob IAS/HDG/CRS not in use" FontSize="10" Height="23"  FontWeight="Bold"/>
+                        <Label Content="Knob IAS/HDG/CRS LCD data length = 3" FontSize="10" Height="23"  FontWeight="Bold"/>
                         <Label Content="Right click buttons to delete any bindings." FontSize="10" Height="23"  FontWeight="Bold"/>
                         <TextBlock TextWrapping="Wrap">Negative numbers can only be shown in the lower LCD row.</TextBlock>
                     </StackPanel>
             </GroupBox>
-            <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="4"   Grid.RowSpan="2" >
+            <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="7"   Grid.RowSpan="4" >
                 <StackPanel >
                     <Label Content="LCD Knob sensitivity"></Label>
                     <ComboBox Name="ComboBoxLcdKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxLcdKnobSensitivity_OnSelectionChanged">
@@ -155,7 +160,7 @@
                     </ComboBox>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Right part of panel"  FontSize="10"  Grid.Column="1" Grid.Row="2" Grid.RowSpan="4" Margin="0,0,0,137">
+            <GroupBox Header="Right part of panel"  FontSize="10"  Grid.Column="1" Grid.Row="2" Grid.RowSpan="13" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -163,6 +168,7 @@
                         <ColumnDefinition Width="7*" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="2">
+                        <Label Content="Dial Profile : " FontSize="20" FontWeight="Bold" />
                         <Label Content="LCD Knob DEC" FontSize="10" Height="23"   />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxLcdKnobDecrease"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                         <Label Content="Auto Throttle OFF" FontSize="10" Height="23" />
@@ -173,6 +179,7 @@
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxPitchTrimUp"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     </StackPanel>
                     <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Name="LabelDialPos" Content="ALT" FontSize="20" FontWeight="Bold" />
                         <Label Content="LCD Knob INC" FontSize="10" Height="23"   />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxLcdKnobIncrease"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                         <Label Content="Auto Throttle ARM" FontSize="10" Height="23" />
@@ -184,7 +191,7 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Log"  FontSize="10"  Grid.Column="3" Grid.Row="4" Grid.RowSpan="2" Margin="0,0.5,0,-1">
+            <GroupBox Header="Log"  FontSize="10"  Grid.Column="3" Grid.Row="10" Grid.RowSpan="4" Margin="0,0.5,0,-1">
                 <TextBox Name="TextBoxLogPZ70" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
             </GroupBox>
         </Grid>

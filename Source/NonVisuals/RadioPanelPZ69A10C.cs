@@ -4839,6 +4839,11 @@ namespace NonVisuals
         {
             return Interlocked.Read(ref _tacanThreadNowSynching) > 0;
         }
+
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
     }
 
 }

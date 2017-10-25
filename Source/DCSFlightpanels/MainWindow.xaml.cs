@@ -1282,10 +1282,7 @@ namespace DCSFlightpanels
             {
                 forwardKeys = DigitalCombatSimulatorWindowFound();
             }
-            if (OnForwardKeyPressesChanged != null)
-            {
-                OnForwardKeyPressesChanged(forwardKeys);
-            }
+            OnForwardKeyPressesChanged?.Invoke(forwardKeys);
         }
 
         private static bool DigitalCombatSimulatorWindowFound()

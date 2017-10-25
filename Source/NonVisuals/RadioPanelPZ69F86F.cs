@@ -1420,5 +1420,10 @@ namespace NonVisuals
             return false;
         }
 
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
+
     }
 }

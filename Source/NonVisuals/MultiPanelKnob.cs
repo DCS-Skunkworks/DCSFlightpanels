@@ -29,9 +29,6 @@ namespace NonVisuals
 
     public class MultiPanelKnob
     {
-        public MultiPanelKnob()
-        {
-        }
 
         public MultiPanelKnob(int group, int mask, bool isOn, MultiPanelPZ70Knobs multiPanelPZ70Knob)
         {
@@ -112,7 +109,7 @@ namespace NonVisuals
         private readonly MultiPanelPZ70Knobs _multiPanelPZ70Knobs;
         private readonly bool _on;
 
-        public MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs multiPanelPZ70Knobs, bool on)
+        public MultiPanelPZ70KnobOnOff(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knobs, bool on)
         {
             _multiPanelPZ70Knobs = multiPanelPZ70Knobs;
             _on = @on;

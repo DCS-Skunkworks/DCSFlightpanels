@@ -2121,27 +2121,9 @@ namespace NonVisuals
             return "";
         }
 
-        /*private int GetDial1PositionForNextUsedR800L1BigFrequency(bool increase, int bigFreq)
+        public override String SettingsVersion()
         {
-            for (var i = 0; i < _r800l1UsedBigFrequencyValues.Length; i++)
-            {
-                if (_r800l1UsedBigFrequencyValues[i] == freq)
-                {
-                    if (i == _r800l1UsedBigFrequencyValues.Length - 1)
-                    {
-                        //@Max
-                        if (increase)
-                        {
-                            return freq;
-                        }
-                        else
-                        {
-                            return 
-                        }
-                    }
-                }
-            }
-            _r800l1UsedBigFrequencyValues
-        }*/
+            return "0X";
+        }
     }
 }

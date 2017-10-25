@@ -3121,6 +3121,11 @@ namespace NonVisuals
             return Interlocked.Read(ref _vhfNavThreadNowSynching) > 0;
         }
 
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
+
     }
 }
 
