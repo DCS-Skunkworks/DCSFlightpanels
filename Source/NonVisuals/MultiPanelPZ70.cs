@@ -28,10 +28,11 @@ namespace NonVisuals
         private byte[] _oldMultiPanelValue = { 0, 0, 0 };
         private byte[] _newMultiPanelValue = { 0, 0, 0 };
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
-        private readonly object _lcdLockObject = new object();
 
-        private volatile int _upperLcdValue = 0;
-        private volatile int _lowerLcdValue = 0;
+        private readonly object _lcdLockObject = new object();
+        private readonly object _lcdDataVariablesLockObject = new object();
+        //private volatile int _upperLcdValue = 0;
+        //private volatile int _lowerLcdValue = 0;
 
         private bool _apButtonLightOn;
         private bool _hdgButtonLightOn;
@@ -58,17 +59,6 @@ namespace NonVisuals
         {
             try
             {
-
-
-                //Altitude
-                //_dcsbiosOutputAltitude = DCSBIOSControlLocator.GetDCSBIOSOutput("ALT_MSL_FT");
-                //_dcsbiosOutputs.Add(DCSBIOSControlLocator.GetDCSBIOSOutput("ALT_MSL_FT"));
-                //Heading
-                //_dcsbiosOutputHeading = DCSBIOSControlLocator.GetDCSBIOSOutput("HDG_DEG");
-                //_dcsbiosOutputs.Add(DCSBIOSControlLocator.GetDCSBIOSOutput("HDG_DEG"));
-
-
-
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
@@ -91,6 +81,42 @@ namespace NonVisuals
             {
                 SetLastException(e);
             }
+        }
+
+        public override void DcsBiosDataReceived(uint address, uint data)
+        {
+            UpdateCounter(address, data);
+            foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
+            {
+                if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
+                {
+                    lock (_lcdDataVariablesLockObject)
+                    {
+                        var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
+                        dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
+                        if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+                else if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.UseFormula)
+                {
+                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
+                    {
+                        lock (_lcdDataVariablesLockObject)
+                        {
+                            var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
+                            dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
+                            if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                            {
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            }
+                        }
+                    }
+                }
+            }
+            UpdateLCD();
         }
 
         public override void ImportSettings(List<string> settings)
@@ -177,77 +203,6 @@ namespace NonVisuals
         public override void SavePanelSettings(ProfileHandler panelProfileHandler)
         {
             panelProfileHandler.RegisterProfileData(this, ExportSettings());
-        }
-
-        public override void DcsBiosDataReceived(uint address, uint data)
-        {
-            UpdateCounter(address, data);
-            foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
-            {
-                if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
-                {
-                    if (!dcsbiosBindingLCDPZ70.UseFormula)
-                    {
-                        switch (dcsbiosBindingLCDPZ70.PZ70LCDPosition)
-                        {
-                            case PZ70LCDPosition.UpperLCD:
-                                {
-                                    var tmp = _upperLcdValue;
-                                    _upperLcdValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
-                                    if (tmp != _upperLcdValue)
-                                    {
-                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.LowerLCD:
-                                {
-                                    var tmp = _lowerLcdValue;
-                                    _lowerLcdValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
-                                    if (tmp != _lowerLcdValue)
-                                    {
-                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                    }
-                                    break;
-                                }
-                        }
-                        UpdateLCD(_upperLcdValue, _lowerLcdValue);
-                    }
-                    else if (dcsbiosBindingLCDPZ70.UseFormula)
-                    {
-                        switch (dcsbiosBindingLCDPZ70.PZ70LCDPosition)
-                        {
-                            case PZ70LCDPosition.UpperLCD:
-                                {
-                                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
-                                    {
-                                        var tmp = _upperLcdValue;
-                                        _upperLcdValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
-                                        if (tmp != _upperLcdValue)
-                                        {
-                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                        }
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.LowerLCD:
-                                {
-                                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
-                                    {
-                                        var tmp = _lowerLcdValue;
-                                        _lowerLcdValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
-                                        if (tmp != _lowerLcdValue)
-                                        {
-                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                        }
-                                    }
-                                    break;
-                                }
-                        }
-                        UpdateLCD(_upperLcdValue, _lowerLcdValue);
-                    }
-                }
-            }
         }
 
         public override void ClearSettings()
@@ -509,26 +464,31 @@ namespace NonVisuals
                         case MultiPanelPZ70Knobs.KNOB_ALT:
                             {
                                 _pz70DialPosition = PZ70DialPosition.ALT;
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_VS:
                             {
                                 _pz70DialPosition = PZ70DialPosition.VS;
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_IAS:
                             {
                                 _pz70DialPosition = PZ70DialPosition.IAS;
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_HDG:
                             {
                                 _pz70DialPosition = PZ70DialPosition.HDG;
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_CRS:
                             {
                                 _pz70DialPosition = PZ70DialPosition.CRS;
+                                UpdateLCD();
                                 break;
                             }
                     }
@@ -799,10 +759,11 @@ namespace NonVisuals
             {
                 _buttonByte &= (byte)~revMask;
             }
-            UpdateLCD(_upperLcdValue, _lowerLcdValue);
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+            UpdateLCD();
         }
 
-        public void UpdateLCD(int upperValue, int lowerValue)
+        public void UpdateLCD()
         {
             //345
             //15600
@@ -817,7 +778,6 @@ namespace NonVisuals
             {
                 return;
             }
-
             var bytes = new byte[12];
             bytes[0] = 0x0;
             for (var ii = 1; ii < bytes.Length - 1; ii++)
@@ -825,55 +785,93 @@ namespace NonVisuals
                 bytes[ii] = 0xFF;
             }
             bytes[11] = _buttonByte;
-
-            if (upperValue < 0)
+            /*if (showBlankScreen)
             {
-                upperValue = Math.Abs(upperValue);
-            }
-            var dataAsString = upperValue.ToString();
+                bytes[1] = 0xA;
+                bytes[2] = 0xA;
+                bytes[3] = 0xA;
+                bytes[4] = 0xA;
+                bytes[5] = 0xA;
+                bytes[6] = 0xA;
+                bytes[7] = 0xA;
+                bytes[8] = 0xA;
+                bytes[9] = 0xA;
+                bytes[10] = 0xA;
+            }*/
+            bool foundUpperValue = false;
+            bool foundLowerValue = false;
 
-            var i = dataAsString.Length;
-            var arrayPosition = 5;
-            do
+            var upperValue = 0;
+            var lowerValue = 0;
+            lock (_lcdDataVariablesLockObject)
             {
-                //    3 0 0
-                //1 5 6 0 0
-                //1 2 3 4 5    
-                bytes[arrayPosition] = (byte)dataAsString[i - 1];
-                arrayPosition--;
-                i--;
-            } while (i > 0);
-
-            //Important!
-            //Lower LCD will show a dash "-" for 0xEE.
-            //Smallest negative value that can be shown is -9999
-            //Largest positive value that can be shown is 99999
-            if (lowerValue < -9999)
-            {
-                lowerValue = -9999;
-            }
-            dataAsString = lowerValue.ToString();
-
-            i = dataAsString.Length;
-            arrayPosition = 10;
-            do
-            {
-                //    3 0 0
-                //1 5 6 0 0
-                //1 2 3 4 5    
-                var s = dataAsString[i - 1];
-                if (s == '-')
+                foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
                 {
-                    bytes[arrayPosition] = 0xEE;
+                    if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
+                    {
+                        foundUpperValue = true;
+                        upperValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                    }
+                    if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
+                    {
+                        foundLowerValue = true;
+                        lowerValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                    }
                 }
-                else
-                {
-                    bytes[arrayPosition] = (byte)s;
-                }
-                arrayPosition--;
-                i--;
-            } while (i > 0);
+            }
 
+            if (foundUpperValue)
+            {
+                if (upperValue < 0)
+                {
+                    upperValue = Math.Abs(upperValue);
+                }
+                var dataAsString = upperValue.ToString();
+
+                var i = dataAsString.Length;
+                var arrayPosition = 5;
+                do
+                {
+                    //    3 0 0
+                    //1 5 6 0 0
+                    //1 2 3 4 5    
+                    bytes[arrayPosition] = (byte)dataAsString[i - 1];
+                    arrayPosition--;
+                    i--;
+                } while (i > 0);
+            }
+            if (foundLowerValue)
+            {
+                //Important!
+                //Lower LCD will show a dash "-" for 0xEE.
+                //Smallest negative value that can be shown is -9999
+                //Largest positive value that can be shown is 99999
+                if (lowerValue < -9999)
+                {
+                    lowerValue = -9999;
+                }
+                var dataAsString = lowerValue.ToString();
+
+                var i = dataAsString.Length;
+                var arrayPosition = 10;
+                do
+                {
+                    //    3 0 0
+                    //1 5 6 0 0
+                    //1 2 3 4 5    
+                    var s = dataAsString[i - 1];
+                    if (s == '-')
+                    {
+                        bytes[arrayPosition] = 0xEE;
+                    }
+                    else
+                    {
+                        bytes[arrayPosition] = (byte)s;
+                    }
+                    arrayPosition--;
+                    i--;
+                } while (i > 0);
+            }
             lock (_lcdLockObject)
             {
                 SendLEDData(bytes);

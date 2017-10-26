@@ -144,11 +144,13 @@
                 </Grid>
             </GroupBox>
             <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="5" Grid.ColumnSpan="1" Margin="0,0,0,0">
-                    <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
-                        <Label Content="Knob IAS/HDG/CRS LCD data length = 3" FontSize="10" Height="23"  FontWeight="Bold"/>
-                        <Label Content="Right click buttons to delete any bindings." FontSize="10" Height="23"  FontWeight="Bold"/>
-                        <TextBlock TextWrapping="Wrap">Negative numbers can only be shown in the lower LCD row.</TextBlock>
-                    </StackPanel>
+                <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+                    <TextBlock TextWrapping="Wrap" FontSize="10" FontWeight="Bold">
+                        Dial = IAS/HDG/CRS : Only upper LCD row used<LineBreak/>
+                        Right click buttons to delete any bindings.<LineBreak/>
+                        Negative numbers can only be shown in the lower LCD row.
+                    </TextBlock>
+                </StackPanel>
             </GroupBox>
             <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="7"   Grid.RowSpan="4" >
                 <StackPanel >

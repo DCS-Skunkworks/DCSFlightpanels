@@ -1203,6 +1203,15 @@ namespace DCSFlightpanels
 
                 ImageLcdUpperRow.Visibility = Visibility.Collapsed;
                 ImageLcdLowerRow.Visibility = Visibility.Collapsed;
+                //Dial position IAS HDG CRS -> Only upper LCD row can be used -> Hide Lower Button
+                if((_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.IAS) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.HDG) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.CRS))
+                {
+                    ButtonLcdLower.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    ButtonLcdLower.Visibility = Visibility.Visible;
+                }
                 foreach (var dcsBiosBindingLCD in _multiPanelPZ70.LCDBindings)
                 {
                     if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD && dcsBiosBindingLCD.HasBinding)

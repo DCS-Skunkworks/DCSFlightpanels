@@ -262,9 +262,7 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutput cannot import string : " + str);
             }
-            value = value.Substring(value.IndexOf("{", StringComparison.InvariantCulture) + 1);
-            //AAP_EGIPWR|Equals|0}
-            value = value.Substring(0, value.Length - 1);
+            value = value.Replace("DCSBiosOutput{", "").Replace("}","");
             //AAP_EGIPWR|Equals|0
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             _controlId = entries[0];

@@ -134,9 +134,7 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutputFormula cannot import string : " + str);
             }
-            value = value.Substring(value.IndexOf("{", StringComparison.InvariantCulture) + 1);
-            //(AAP_EGIPWR+1)/2}
-            value = value.Substring(0, value.Length - 1);
+            value = value.Replace("DCSBiosOutputFormula{", "").Replace("}", "");
             //(AAP_EGIPWR+1)/2
             _formula = value;
 
