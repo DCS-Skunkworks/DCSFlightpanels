@@ -104,7 +104,7 @@ namespace DCSFlightpanels
             TextBoxFormula.IsEnabled = LabelFormula.IsEnabled;
             LabelResult.IsEnabled = LabelFormula.IsEnabled;
             ButtonTestFormula.IsEnabled = LabelFormula.IsEnabled;
-            ButtonOk.IsEnabled = _dcsbiosControl != null;
+            ButtonOk.IsEnabled = _dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true);
             if (_dcsbiosControl == null && _dcsBiosOutput == null)
             {
                 TextBoxControlId.Text = "";
@@ -393,6 +393,18 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(106, ex);
+            }
+        }
+
+        private void TextBoxFormula_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(110, ex);
             }
         }
     }

@@ -162,7 +162,22 @@
                     </ComboBox>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Right part of panel"  FontSize="10"  Grid.Column="1" Grid.Row="2" Grid.RowSpan="13" >
+            <GroupBox Header=""  FontSize="10"  Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="7*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label Content="Dial Profile : " FontSize="20" FontWeight="Bold" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" >
+                        <Label Name="LabelDialPos" Content="ALT" FontSize="20" FontWeight="Bold" />
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Right part of panel"  FontSize="10"  Grid.Column="1" Grid.Row="4" Grid.RowSpan="11" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -170,8 +185,7 @@
                         <ColumnDefinition Width="7*" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="2">
-                        <Label Content="Dial Profile : " FontSize="20" FontWeight="Bold" />
-                        <Label Content="LCD Knob DEC" FontSize="10" Height="23"   />
+                        <Label Content="LCD Knob (+/-) DEC" FontSize="10" Height="23"   />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxLcdKnobDecrease"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                         <Label Content="Auto Throttle OFF" FontSize="10" Height="23" />
                         <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxAutoThrottleOff" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
@@ -181,8 +195,7 @@
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxPitchTrimUp"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     </StackPanel>
                     <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
-                        <Label Name="LabelDialPos" Content="ALT" FontSize="20" FontWeight="Bold" />
-                        <Label Content="LCD Knob INC" FontSize="10" Height="23"   />
+                        <Label Content="LCD Knob (+/-) INC" FontSize="10" Height="23"   />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxLcdKnobIncrease"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                         <Label Content="Auto Throttle ARM" FontSize="10" Height="23" />
                         <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxAutoThrottleOn" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
