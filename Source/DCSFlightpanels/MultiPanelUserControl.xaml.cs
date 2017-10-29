@@ -502,12 +502,12 @@ namespace DCSFlightpanels
                 {
                     case "ButtonLcdUpper":
                         {
-                            ButtonLcdConfig(_multiPanelPZ70.PZ70_DialPosition, button, "Data to display on upper LCD Row");
+                            ButtonLcdConfig(PZ70LCDPosition.UpperLCD, button, "Data to display on upper LCD Row");
                             break;
                         }
                     case "ButtonLcdLower":
                         {
-                            ButtonLcdConfig(_multiPanelPZ70.PZ70_DialPosition, button, "Data to display on lower LCD Row");
+                            ButtonLcdConfig(PZ70LCDPosition.LowerLCD, button, "Data to display on lower LCD Row");
                             break;
                         }
                 }
@@ -518,7 +518,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private void ButtonLcdConfig(PZ70DialPosition pz70DialPosition, Button button, string description)
+        private void ButtonLcdConfig(PZ70LCDPosition pz70LCDPosition, Button button, string description)
         {
             try
             {
@@ -526,51 +526,42 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Failed to locate which button was clicked.");
                 }
-                DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow;
-                if (button.Tag is DCSBIOSOutput)
+                DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow = null;
+                foreach (var dcsbiosBindingLCDPZ70 in _multiPanelPZ70.LCDBindings)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, (DCSBIOSOutput)button.Tag);
+                    if (dcsbiosBindingLCDPZ70.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == pz70LCDPosition)
+                    {
+                        if (dcsbiosBindingLCDPZ70.UseFormula)
+                        {
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
+                            break;
+                        }
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
+                        break;
+                    }
                 }
-                else if (button.Tag is DCSBIOSOutputFormula)
-                {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, (DCSBIOSOutputFormula)button.Tag);
-                }
-                else
+                if (dcsBiosOutputFormulaWindow == null)
                 {
                     dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description);
                 }
+
                 dcsBiosOutputFormulaWindow.ShowDialog();
                 if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult.Value)
                 {
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
                         var dcsBiosOutputFormula = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                        //1 appropriate text to textbox
-                        //2 update bindings
-                        //button.Text = dcsBiosOutputFormula.ToString();
-                        button.Tag = dcsBiosOutputFormula;
-                        button.ToolTip = dcsBiosOutputFormula.ToString();
-                        UpdateDCSBIOSBindingLCD(button);
+                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button);
                     }
                     else if (dcsBiosOutputFormulaWindow.UseSingleDCSBiosControl())
                     {
                         var dcsBiosOutput = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                        //1 appropriate text to textbox
-                        //2 update bindings
-                        //button.Text = dcsBiosInput.ToString();
-                        button.Tag = dcsBiosOutput;
-                        button.ToolTip = dcsBiosOutput.ToString();
-                        UpdateDCSBIOSBindingLCD(button);
+                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button);
                     }
                     else
                     {
                         //Delete config
-                        //1 appropriate text to textbox
-                        //2 update bindings
-                        //button.Text = dcsBiosInput.ToString();
-                        button.Tag = null;
-                        button.ToolTip = "";
-                        UpdateDCSBIOSBindingLCD(button);
+                        UpdateDCSBIOSBindingLCD(false, true, null, null, button);
                     }
                 }
             }
@@ -1205,7 +1196,7 @@ namespace DCSFlightpanels
                 ImageLcdUpperRow.Visibility = Visibility.Collapsed;
                 ImageLcdLowerRow.Visibility = Visibility.Collapsed;
                 //Dial position IAS HDG CRS -> Only upper LCD row can be used -> Hide Lower Button
-                if((_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.IAS) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.HDG) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.CRS))
+                if ((_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.IAS) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.HDG) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.CRS))
                 {
                     ButtonLcdLower.Visibility = Visibility.Hidden;
                 }
@@ -2198,49 +2189,11 @@ namespace DCSFlightpanels
             }
         }
 
-        private void UpdateDCSBIOSBindingLCD(Button button)
+        private void UpdateDCSBIOSBindingLCD(bool useFormula, bool deleteConfig, DCSBIOSOutput dcsbiosOutput, DCSBIOSOutputFormula dcsbiosOutputFormula, Button button)
         {
             try
             {
-                DCSBIOSOutput dcsBiosOutput = null;
-                DCSBIOSOutputFormula dcsBiosOutputFormula = null;
-                /*if (button.Tag == null)
-                {
-                    //Remove any binding associated with this button (position), (delete)
-                    return;
-                }*/
-
-                if (button.Tag is DCSBIOSOutput)
-                {
-                    dcsBiosOutput = ((DCSBIOSOutput)button.Tag);
-
-                    if (button.Equals(ButtonLcdUpper))
-                    {
-                        ImageLcdUpperRow.Visibility = dcsBiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsBiosOutput, PZ70LCDPosition.UpperLCD);
-                    }
-                    if (button.Equals(ButtonLcdLower))
-                    {
-                        ImageLcdLowerRow.Visibility = dcsBiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsBiosOutput, PZ70LCDPosition.LowerLCD);
-                    }
-                }
-                if (button.Tag is DCSBIOSOutputFormula)
-                {
-                    dcsBiosOutputFormula = ((DCSBIOSOutputFormula)button.Tag);
-
-                    if (button.Equals(ButtonLcdUpper))
-                    {
-                        ImageLcdUpperRow.Visibility = dcsBiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsBiosOutputFormula, PZ70LCDPosition.UpperLCD);
-                    }
-                    if (button.Equals(ButtonLcdLower))
-                    {
-                        ImageLcdLowerRow.Visibility = dcsBiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsBiosOutputFormula, PZ70LCDPosition.LowerLCD);
-                    }
-                }
-                if (button.Tag == null)
+                if (deleteConfig)
                 {
                     if (button.Equals(ButtonLcdUpper))
                     {
@@ -2251,6 +2204,33 @@ namespace DCSFlightpanels
                     {
                         ImageLcdLowerRow.Visibility = Visibility.Hidden;
                         _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition.LowerLCD);
+                    }
+                }
+
+                if (!useFormula)
+                {
+                    if (button.Equals(ButtonLcdUpper))
+                    {
+                        ImageLcdUpperRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutput, PZ70LCDPosition.UpperLCD);
+                    }
+                    if (button.Equals(ButtonLcdLower))
+                    {
+                        ImageLcdLowerRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD);
+                    }
+                }
+                if (useFormula)
+                {
+                    if (button.Equals(ButtonLcdUpper))
+                    {
+                        ImageLcdUpperRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutputFormula, PZ70LCDPosition.UpperLCD);
+                    }
+                    if (button.Equals(ButtonLcdLower))
+                    {
+                        ImageLcdLowerRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutputFormula, PZ70LCDPosition.LowerLCD);
                     }
                 }
             }
@@ -2497,7 +2477,14 @@ namespace DCSFlightpanels
             {
                 var menuItem = (MenuItem)sender;
                 var button = (Button)((ContextMenu)(menuItem.Parent)).Tag;
-                DeleteLCDBinding(button);
+                if (button.Name.Contains("Upper"))
+                {
+                    DeleteLCDBinding(PZ70LCDPosition.UpperLCD, button);
+                }
+                else
+                {
+                    DeleteLCDBinding(PZ70LCDPosition.LowerLCD, button);
+                }
             }
             catch (Exception ex)
             {
@@ -2510,8 +2497,7 @@ namespace DCSFlightpanels
             try
             {
                 var contextMenu = (ContextMenu)sender;
-                var button = (Button)contextMenu.Tag;
-                if (button.Tag != null && button.Tag is DCSBIOSOutput)
+                if (_enableDCSBIOS)
                 {
                     ((MenuItem)contextMenu.Items[0]).IsEnabled = true;
                 }
@@ -2526,21 +2512,16 @@ namespace DCSFlightpanels
             }
         }
 
-        private void DeleteLCDBinding(Button button)
+        private void DeleteLCDBinding(PZ70LCDPosition pz70LCDPosition, Button button)
         {
             try
             {
                 //Check if this button contains DCS-BIOS information. If so then prompt the user for deletion
-                if (button.Tag != null && button.Tag is DCSBIOSOutput)
+                if (MessageBox.Show("Do you want to delete the specified DCS-BIOS control binding?", "Delete DCS-BIOS control binding?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                 {
-                    if (MessageBox.Show("Do you want to delete the specified DCS-BIOS control binding?", "Delete DCS-BIOS control binding?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                    {
-                        return;
-                    }
+                    return;
                 }
-                button.ToolTip = null;
-                button.Tag = null;
-                UpdateDCSBIOSBindingLCD(button);
+                UpdateDCSBIOSBindingLCD(false, true, null, null, button);
                 switch (button.Name)
                 {
                     case "ButtonLcdUpper":

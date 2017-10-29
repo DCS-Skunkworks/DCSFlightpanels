@@ -56,103 +56,143 @@ LCD Button Byte
 
         public bool FlipButton(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knob)
         {
-
-            return FlipButton(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob));
+            try
+            {
+                return FlipButton(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob));
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e, "Flipbutton()");
+                throw;
+            }
         }
 
         public bool IsOn(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knobs)
         {
-            var dialMask = GetMaskForDialPosition(pz70DialPosition);
-            var buttonMask = GetMaskForButton(multiPanelPZ70Knobs);
-            for (int i = 0; i < _buttonDialPosition.Length; i++)
+            try
             {
-                if ((_buttonDialPosition[i] & dialMask) != 0)
+                var dialMask = GetMaskForDialPosition(pz70DialPosition);
+                var buttonMask = GetMaskForButton(multiPanelPZ70Knobs);
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
                 {
-                    return (_buttonBytes[i] & buttonMask) != 0;
+                    if ((_buttonDialPosition[i] & dialMask) != 0)
+                    {
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
                 }
+                throw new Exception("Multipanel IsOn : Failed to find Mask for dial position " + pz70DialPosition + " knob " + multiPanelPZ70Knobs);
             }
-            throw new Exception("Multipanel IsOn : Failed to find Mask for dial " + pz70DialPosition + " button " + multiPanelPZ70Knobs);
+            catch (Exception e)
+            {
+                Common.LogError(e, "IsOn()");
+                throw;
+            }
         }
 
         public int GetMaskForDialPosition(PZ70DialPosition pz70DialPosition)
         {
-            switch (pz70DialPosition)
+            try
             {
-                case PZ70DialPosition.ALT:
-                    {
-                        return DialAltMask;
-                    }
-                case PZ70DialPosition.VS:
-                    {
-                        return DialVsMask;
-                    }
-                case PZ70DialPosition.IAS:
-                    {
-                        return DialIasMask;
-                    }
-                case PZ70DialPosition.HDG:
-                    {
-                        return DialHdgMask;
-                    }
-                case PZ70DialPosition.CRS:
-                    {
-                        return DialCrsMask;
-                    }
+
+                switch (pz70DialPosition)
+                {
+                    case PZ70DialPosition.ALT:
+                        {
+                            return DialAltMask;
+                        }
+                    case PZ70DialPosition.VS:
+                        {
+                            return DialVsMask;
+                        }
+                    case PZ70DialPosition.IAS:
+                        {
+                            return DialIasMask;
+                        }
+                    case PZ70DialPosition.HDG:
+                        {
+                            return DialHdgMask;
+                        }
+                    case PZ70DialPosition.CRS:
+                        {
+                            return DialCrsMask;
+                        }
+                }
+                throw new Exception("Multipanel : Failed to find Mask for dial position " + pz70DialPosition);
             }
-            throw new Exception("Multipanel : Failed to find Mask for dial position " + pz70DialPosition);
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
         }
 
         public byte GetMaskForButton(MultiPanelPZ70Knobs multiPanelPZ70Knob)
         {
-            switch (multiPanelPZ70Knob)
+            try
             {
-                case MultiPanelPZ70Knobs.AP_BUTTON:
-                    {
-                        return ApMask;
-                    }
-                case MultiPanelPZ70Knobs.HDG_BUTTON:
-                    {
-                        return HdgMask;
-                    }
-                case MultiPanelPZ70Knobs.NAV_BUTTON:
-                    {
-                        return NavMask;
-                    }
-                case MultiPanelPZ70Knobs.IAS_BUTTON:
-                    {
-                        return IasMask;
-                    }
-                case MultiPanelPZ70Knobs.ALT_BUTTON:
-                    {
-                        return AltMask;
-                    }
-                case MultiPanelPZ70Knobs.VS_BUTTON:
-                    {
-                        return VsMask;
-                    }
-                case MultiPanelPZ70Knobs.APR_BUTTON:
-                    {
-                        return AprMask;
-                    }
-                case MultiPanelPZ70Knobs.REV_BUTTON:
-                    {
-                        return RevMask;
-                    }
+                switch (multiPanelPZ70Knob)
+                {
+                    case MultiPanelPZ70Knobs.AP_BUTTON:
+                        {
+                            return ApMask;
+                        }
+                    case MultiPanelPZ70Knobs.HDG_BUTTON:
+                        {
+                            return HdgMask;
+                        }
+                    case MultiPanelPZ70Knobs.NAV_BUTTON:
+                        {
+                            return NavMask;
+                        }
+                    case MultiPanelPZ70Knobs.IAS_BUTTON:
+                        {
+                            return IasMask;
+                        }
+                    case MultiPanelPZ70Knobs.ALT_BUTTON:
+                        {
+                            return AltMask;
+                        }
+                    case MultiPanelPZ70Knobs.VS_BUTTON:
+                        {
+                            return VsMask;
+                        }
+                    case MultiPanelPZ70Knobs.APR_BUTTON:
+                        {
+                            return AprMask;
+                        }
+                    case MultiPanelPZ70Knobs.REV_BUTTON:
+                        {
+                            return RevMask;
+                        }
+                }
+                throw new Exception("Multipanel : Failed to find Mask for button " + multiPanelPZ70Knob);
             }
-            throw new Exception("Multipanel : Failed to find Mask for button " + multiPanelPZ70Knob);
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
         }
 
         public bool FlipButton(int buttonDialMask, byte buttonMask)
         {
-            for (int i = 0; i < _buttonDialPosition.Length; i++)
+            try
             {
-                if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
                 {
-                    _buttonBytes[i] ^= buttonMask;
-                    return (_buttonBytes[i] & buttonMask) != 0;
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        _buttonBytes[i] ^= buttonMask;
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
                 }
+                throw new Exception("Multipanel FlipButton : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
-            throw new Exception("Multipanel FlipButton : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
         }
 
         public bool SetButtonOnOrOff(int buttonDialMask, byte buttonMask, bool on)
@@ -166,54 +206,86 @@ LCD Button Byte
 
         public bool SetButtonOff(int buttonDialMask, byte buttonMask)
         {
-            for (int i = 0; i < _buttonDialPosition.Length; i++)
+            try
             {
-                if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
                 {
-                    _buttonBytes[i] &= buttonMask;
-                    return (_buttonBytes[i] & buttonMask) != 0;
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        _buttonBytes[i] &= buttonMask;
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
                 }
+                throw new Exception("Multipanel ButtonOff : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
-            throw new Exception("Multipanel ButtonOff : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
         }
 
         public bool SetButtonOn(int buttonDialMask, byte buttonMask)
         {
-            for (int i = 0; i < _buttonDialPosition.Length; i++)
+            try
             {
-                if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
                 {
-                    _buttonBytes[i] |= buttonMask;
-                    return (_buttonBytes[i] & buttonMask) != 0;
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        _buttonBytes[i] |= buttonMask;
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
                 }
+                throw new Exception("Multipanel ButtonOn : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
             }
-            throw new Exception("Multipanel ButtonOn : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
         }
 
         public byte GetButtonByte(PZ70DialPosition pz70DialPosition)
         {
-            var mask = GetMaskForDialPosition(pz70DialPosition);
-            for (int i = 0; i < _buttonDialPosition.Length; i++)
+            try
             {
-                //(b & mask) != 0
-                if ((_buttonDialPosition[i] & mask) != 0)
+                var mask = GetMaskForDialPosition(pz70DialPosition);
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
                 {
-                    return _buttonBytes[i];
+                    //(b & mask) != 0
+                    if ((_buttonDialPosition[i] & mask) != 0)
+                    {
+                        return _buttonBytes[i];
+                    }
                 }
+                throw new Exception("Multipanel : Failed to find button byte for " + pz70DialPosition);
             }
-            throw new Exception("Multipanel : Failed to find button byte for " + pz70DialPosition);
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
         }
 
         public byte GetButtonByte(int buttonDialMask)
         {
-            for (int i = 0; i < _buttonDialPosition.Length; i++)
+            try
             {
-                if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
                 {
-                    return _buttonBytes[i];
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        return _buttonBytes[i];
+                    }
                 }
+                throw new Exception("Multipanel GetButtonByte : Failed to find Mask for dial " + buttonDialMask);
             }
-            throw new Exception("Multipanel GetButtonByte : Failed to find Mask for dial " + buttonDialMask);
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
         }
 
         public bool SetButtonByte(PZ70DialPosition pz70DialPosition, MultiPanelKnob multiPanelPZ70Knob)
@@ -796,12 +868,6 @@ LCD Button Byte
             foreach (var o in hashSet)
             {
                 var multiPanelKnob = (MultiPanelKnob)o;
-
-                if (multiPanelKnob.IsOn)
-                {
-                    multiPanelKnob.IsOn = _lcdButtonByteListHandler.SetButtonByte(PZ70_DialPosition, multiPanelKnob);
-                }
-
                 /*
                  * IMPORTANT
                  * ---------
