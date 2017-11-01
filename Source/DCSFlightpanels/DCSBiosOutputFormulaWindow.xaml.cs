@@ -396,7 +396,8 @@ namespace DCSFlightpanels
             }
         }
 
-        private void TextBoxFormula_OnKeyUp(object sender, KeyEventArgs e)
+
+        private void TextBoxFormula_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -404,7 +405,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(110, ex);
+                Common.ShowErrorMessageBox(106, ex);
             }
         }
     }

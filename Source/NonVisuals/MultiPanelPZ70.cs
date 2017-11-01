@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using DCS_BIOS;
 using HidLibrary;
@@ -673,7 +674,7 @@ LCD Button Byte
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
@@ -696,7 +697,7 @@ LCD Button Byte
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
@@ -704,6 +705,7 @@ LCD Button Byte
                 if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
+                    Debug.Print("3 found");
                     found = true;
                     break;
                 }
@@ -711,7 +713,7 @@ LCD Button Byte
             if (!found)
             {
                 var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ70();
-                dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
+                dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);

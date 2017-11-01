@@ -2212,12 +2212,12 @@ namespace DCSFlightpanels
                     if (button.Equals(ButtonLcdUpper))
                     {
                         ImageLcdUpperRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutput, PZ70LCDPosition.UpperLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.UpperLCD);
                     }
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD);
                     }
                 }
                 if (useFormula)
@@ -2225,12 +2225,12 @@ namespace DCSFlightpanels
                     if (button.Equals(ButtonLcdUpper))
                     {
                         ImageLcdUpperRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutputFormula, PZ70LCDPosition.UpperLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.UpperLCD);
                     }
                     if (button.Equals(ButtonLcdLower))
                     {
                         ImageLcdLowerRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(dcsbiosOutputFormula, PZ70LCDPosition.LowerLCD);
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.LowerLCD);
                     }
                 }
             }

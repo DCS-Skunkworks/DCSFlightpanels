@@ -68,7 +68,7 @@
                 <StackPanel>
                     <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnUnchecked" Checked="CheckBoxUseFormula_OnChecked"/>
                     <Label Name="LabelFormula" Content="Copy DCS-BIOS control names directly as is into the formula" Margin="10,0,10,0"/>
-                    <TextBox x:Name="TextBoxFormula" Height="150" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0"  KeyUp="TextBoxFormula_OnKeyUp"/>
+                    <TextBox x:Name="TextBoxFormula" Height="150" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" TextChanged="TextBoxFormula_OnTextChanged"/>
                     <Label Name="LabelResult" Content="Result :" Margin="10,0,10,0"/>
                     <Button Name="ButtonTestFormula" Content="Test" Width="75" HorizontalAlignment="Right" Margin="0,0,10,10" Click="ButtonTestFormula_OnClick"/>
                 </StackPanel>
