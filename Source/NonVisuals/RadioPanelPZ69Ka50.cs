@@ -89,6 +89,25 @@ namespace NonVisuals
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
+        /*Ka-50 ARBIS NAV1 (Not radio but programmed as there are so few radio systems on the KA-50*/
+        //Large ARBIS Left Dial
+        //Small ARBIS Right Dial
+        //ACT/STBY Push Right ARBIS Dial IN/OUT
+        private readonly ClickSpeedDetector _arbisLeftDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
+        private readonly ClickSpeedDetector _arbisLeftDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
+        private const string ARBISLeftDialCommandIncMore = "ABRIS_BRIGHTNESS +2500\n";
+        private const string ARBISLeftDialCommandDecMore = "ABRIS_BRIGHTNESS -2500\n";
+        private const string ARBISLeftDialCommandInc = "ABRIS_BRIGHTNESS +1000\n";
+        private const string ARBISLeftDialCommandDec = "ABRIS_BRIGHTNESS -1000\n";
+        private readonly ClickSpeedDetector _arbisRightDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
+        private readonly ClickSpeedDetector _arbisRightDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
+        private const string ARBISRightDialCommandIncMore = "ABRIS_CURSOR_ROT +2500\n";
+        private const string ARBISRightDialCommandDecMore = "ABRIS_CURSOR_ROT -2500\n";
+        private const string ARBISRightDialCommandInc = "ABRIS_CURSOR_ROT +1000\n";
+        private const string ARBISRightDialCommandDec = "ABRIS_CURSOR_ROT -1000\n";
+        private const string ARBISRightDialPushToggleOnCommand = "ABRIS_CURSOR_BTN 1\n";
+        private const string ARBISRightDialPushToggleOffCommand = "ABRIS_CURSOR_BTN 0\n";
+
         public RadioPanelPZ69Ka50(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             VendorId = 0x6A3;
@@ -129,7 +148,7 @@ namespace NonVisuals
                         //Common.DebugP("Just read VHF1 Preset Dial Position: " + _vhf1CockpitPreset1DialPos + "  " + +Environment.TickCount);
                         var tmp = _vhf1CockpitPresetDialPos;
                         _vhf1CockpitPresetDialPos = _vhf1DcsbiosOutputPresetDial.GetUIntValue(data);
-                        if(tmp != _vhf1CockpitPresetDialPos)
+                        if (tmp != _vhf1CockpitPresetDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -235,7 +254,7 @@ namespace NonVisuals
         }
 
 
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsKa50 knob)
+        private void SendFrequencyToDCSBIOS(bool isOn, RadioPanelPZ69KnobsKa50 knob)
         {
             try
             {
@@ -257,7 +276,22 @@ namespace NonVisuals
                                     }
                                 case CurrentKa50RadioMode.VHF2_R800L1:
                                     {
-                                        SendR800L1ToDCSBIOS();
+                                        if (isOn)
+                                        {
+                                            SendR800L1ToDCSBIOS();
+                                        }
+                                        break;
+                                    }
+                                case CurrentKa50RadioMode.ARBIS:
+                                    {
+                                        if (isOn)
+                                        {
+                                            DCSBIOS.Send(ARBISRightDialPushToggleOnCommand);
+                                        }
+                                        else
+                                        {
+                                            DCSBIOS.Send(ARBISRightDialPushToggleOffCommand);
+                                        }
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ADF_ARK22:
@@ -277,7 +311,22 @@ namespace NonVisuals
                                     }
                                 case CurrentKa50RadioMode.VHF2_R800L1:
                                     {
-                                        SendR800L1ToDCSBIOS();
+                                        if (isOn)
+                                        {
+                                            SendR800L1ToDCSBIOS();
+                                        }
+                                        break;
+                                    }
+                                case CurrentKa50RadioMode.ARBIS:
+                                    {
+                                        if (isOn)
+                                        {
+                                            DCSBIOS.Send(ARBISRightDialPushToggleOnCommand);
+                                        }
+                                        else
+                                        {
+                                            DCSBIOS.Send(ARBISRightDialPushToggleOffCommand);
+                                        }
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ADF_ARK22:
@@ -639,7 +688,14 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsKa50.UPPER_NOUSE1:
+                            case RadioPanelPZ69KnobsKa50.UPPER_ARBIS:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetUpperRadioMode(CurrentKa50RadioMode.ARBIS);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsKa50.UPPER_NOUSE2:
                             case RadioPanelPZ69KnobsKa50.UPPER_NOUSE3:
                             case RadioPanelPZ69KnobsKa50.UPPER_NOUSE4:
@@ -650,7 +706,14 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsKa50.LOWER_NOUSE1:
+                            case RadioPanelPZ69KnobsKa50.LOWER_ARBIS:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentKa50RadioMode.ARBIS);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsKa50.LOWER_NOUSE2:
                             case RadioPanelPZ69KnobsKa50.LOWER_NOUSE3:
                             case RadioPanelPZ69KnobsKa50.LOWER_NOUSE4:
@@ -699,9 +762,9 @@ namespace NonVisuals
                                             _adfModeSwitchLastSent = ADFModeSwitchAntenna;
                                         }
                                     }
-                                    else if (radioPanelKnob.IsOn)
+                                    else
                                     {
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsKa50.UPPER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.UPPER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
@@ -731,9 +794,9 @@ namespace NonVisuals
                                             _adfModeSwitchLastSent = ADFModeSwitchAntenna;
                                         }
                                     }
-                                    else if (radioPanelKnob.IsOn)
+                                    else
                                     {
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsKa50.LOWER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.UPPER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
@@ -798,6 +861,19 @@ namespace NonVisuals
 
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisLeftDialIncreaseChangeMonitor.Click();
+                                                if (_arbisLeftDialIncreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandIncMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandInc);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 if (!SkipADFPresetDialChange())
@@ -844,6 +920,19 @@ namespace NonVisuals
 
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisLeftDialDecreaseChangeMonitor.Click();
+                                                if (_arbisLeftDialDecreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandDecMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandDec);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 if (!SkipADFPresetDialChange())
@@ -879,6 +968,19 @@ namespace NonVisuals
                                                 _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby + 5;
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisRightDialIncreaseChangeMonitor.Click();
+                                                if (_arbisRightDialIncreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandIncMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandInc);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandInc);
@@ -909,6 +1011,19 @@ namespace NonVisuals
                                                     break;
                                                 }
                                                 _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby - 5;
+                                                break;
+                                            }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisRightDialDecreaseChangeMonitor.Click();
+                                                if (_arbisRightDialDecreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandDecMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandDec);
+                                                }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ADF_ARK22:
@@ -964,6 +1079,19 @@ namespace NonVisuals
                                                     _r800l1BigFrequencyStandby = _r800l1BigFrequencyStandby - 149 + 220;
                                                 }
                                                 Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800l1BigFrequencyStandby);
+                                                break;
+                                            }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisLeftDialIncreaseChangeMonitor.Click();
+                                                if (_arbisLeftDialIncreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandIncMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandInc);
+                                                }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ADF_ARK22:
@@ -1024,6 +1152,19 @@ namespace NonVisuals
                                                 Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800l1BigFrequencyStandby);
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisLeftDialDecreaseChangeMonitor.Click();
+                                                if (_arbisLeftDialDecreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandDecMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISLeftDialCommandDec);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 if (!SkipADFPresetDialChange())
@@ -1059,6 +1200,19 @@ namespace NonVisuals
                                                 _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby + 5;
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisRightDialIncreaseChangeMonitor.Click();
+                                                if (_arbisRightDialIncreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandIncMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandInc);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandInc);
@@ -1089,6 +1243,19 @@ namespace NonVisuals
                                                     break;
                                                 }
                                                 _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby - 5;
+                                                break;
+                                            }
+                                        case CurrentKa50RadioMode.ARBIS:
+                                            {
+                                                _arbisRightDialDecreaseChangeMonitor.Click();
+                                                if (_arbisRightDialDecreaseChangeMonitor.ClickThresholdReached())
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandDecMore);
+                                                }
+                                                else
+                                                {
+                                                    DCSBIOS.Send(ARBISRightDialCommandDec);
+                                                }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ADF_ARK22:
@@ -1208,7 +1375,7 @@ namespace NonVisuals
             {
                 lock (_lockShowFrequenciesOnPanelObject)
                 {
-                    if(Interlocked.Read(ref _doUpdatePanelLCD) == 0)
+                    if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
                         //Common.DebugP("Leaving Ka-50 Radio ShowFrequenciesOnPanel() NO KNOBS/FREQS changed");
                         return;
@@ -1267,6 +1434,13 @@ namespace NonVisuals
                                 }
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                                break;
+                            }
+                        case CurrentKa50RadioMode.ARBIS:
+                            {
+                                var channelAsString = "88888";
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ADF_ARK22:
@@ -1349,6 +1523,13 @@ namespace NonVisuals
                                 }
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                                break;
+                            }
+                        case CurrentKa50RadioMode.ARBIS:
+                            {
+                                var channelAsString = "88888";
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ADF_ARK22:

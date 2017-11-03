@@ -68,7 +68,7 @@
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = R-828 VHF-1 <LineBreak/>
                     COM 2 = R-800L1 VHF-2<LineBreak/>
-                    NAV 1 = N/A<LineBreak/>
+                    <![CDATA[NAV 1 = ARBIS Left & Right Dial]]><LineBreak/>
                     NAV 2 = N/A<LineBreak/>
                     ADF   = ADF ARK-22 ADF<LineBreak/>
                 </TextBlock>
