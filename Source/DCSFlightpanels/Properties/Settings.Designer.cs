@@ -193,31 +193,7 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
-        public int BAKDialSynchSleepTime {
-            get {
-                return ((int)(this["BAKDialSynchSleepTime"]));
-            }
-            set {
-                this["BAKDialSynchSleepTime"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7000")]
-        public long BAKDialResetSyncTimeout {
-            get {
-                return ((long)(this["BAKDialResetSyncTimeout"]));
-            }
-            set {
-                this["BAKDialResetSyncTimeout"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3000")]
         public long SyncOKDelayTimeout {
             get {
                 return ((long)(this["SyncOKDelayTimeout"]));
