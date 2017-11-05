@@ -95,33 +95,10 @@ namespace DCS_BIOS
             catch (Exception ex)
             {
                 DBCommon.LogError(1033494, ex, "Evaluate() function");
-                throw;
             }
+            return 99;
         }
-
-        /*
-        //Returns true if address was found in formula
-        public int Evaluate()
-        {
-            try
-            {
-                if (_expression.Parameters.Count != _dcsbiosOutputs.Count)
-                {
-                    //Return zero because if a formula contains lets say 7 DCSBIOSControls/outputs -> (ASAAA_D3_FLAG + ALT_MSL + RDR_CHAN + etc etc ) / 2
-                    //then all these must be populated one time before the expression can be evaluated. So return 0 until all of them have been given a value
-                    return 0;
-                }
-                DBCommon.DebugP(_expression.Evaluate().ToString());
-                var a = double.Parse(_expression.Evaluate().ToString());
-                return Convert.ToInt32(a);
-            }
-            catch (Exception ex)
-            {
-                DBCommon.LogError(1033494, ex, "Evaluate() function");
-                throw;
-            }
-        }
-        */
+        
         public void ImportString(string str)
         {
             ////DCSBiosOutputFormula{(AAP_EGIPWR+1)/2}
@@ -134,9 +111,7 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutputFormula cannot import string : " + str);
             }
-            value = value.Substring(value.IndexOf("{", StringComparison.InvariantCulture) + 1);
-            //(AAP_EGIPWR+1)/2}
-            value = value.Substring(0, value.Length - 1);
+            value = value.Replace("DCSBiosOutputFormula{", "").Replace("}", "");
             //(AAP_EGIPWR+1)/2
             _formula = value;
 

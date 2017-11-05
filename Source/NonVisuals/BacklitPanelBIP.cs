@@ -633,6 +633,11 @@ namespace NonVisuals
             _ledBrightness += 10;
             SetLedStrength();
         }
+
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
     }
 
 

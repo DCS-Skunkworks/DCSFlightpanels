@@ -44,14 +44,8 @@
     <Setting Name="RadioFrequencyKnobSensitivity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="BAKDialSynchSleepTime" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">500</Value>
-    </Setting>
-    <Setting Name="BAKDialResetSyncTimeout" Type="System.Int64" Scope="User">
-      <Value Profile="(Default)">7000</Value>
-    </Setting>
     <Setting Name="SyncOKDelayTimeout" Type="System.Int64" Scope="User">
-      <Value Profile="(Default)">5000</Value>
+      <Value Profile="(Default)">3000</Value>
     </Setting>
     <Setting Name="PZ70LcdKnobSensitivity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

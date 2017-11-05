@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="DCSFlightpanels.RadioPanelPZ69UserControlKa50"
+﻿<UserControl x:Class="DCSFlightpanels.RadioPanelPZ69UserControlAJS37"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DCSFlightpanels"
              mc:Ignorable="d" 
-             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlKa50_OnLoadedRadioPanelPZ69UserControlKa50_OnLoaded">
+             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlAJS37_OnLoaded">
     <Grid Name="PZ69Grid" >
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
@@ -61,16 +62,17 @@
             <Image Height="76" Name="UpperRightSwitch" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="58" />
             <Image Height="76" Name="LowerRightSwitch" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="131" />
 
-            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClickButtonGetId_OnClick"/>
+            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = R-828 VHF-1 <LineBreak/>
-                    COM 2 = R-800L1 VHF-2<LineBreak/>
-                    <![CDATA[NAV 1 = ABRIS Left & Right Dial]]><LineBreak/>
-                    NAV 2 = N/A<LineBreak/>
-                    ADF   = ADF ARK-22 ADF<LineBreak/>
+                    COM 1 = R-863 Manual Frequencies <LineBreak/>
+                    COM 2 = R-863 Preset Channels<LineBreak/>
+                    NAV 1 = YaDRO 1A<LineBreak/>
+                    NAV 2 = R-828 Preset Channels<LineBreak/>
+                    ADF = ADF ARK-9 ADF<LineBreak/>
+                    XPDR = SPU-7<LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>
@@ -78,13 +80,13 @@
         <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="3"  Grid.ColumnSpan="3" Grid.RowSpan="2" >
             <StackPanel >
                 <Label Content="Frequency Knobs sensitivity"></Label>
-                <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChangedComboBoxFreqKnobSensitivity_OnSelectionChanged">
+                <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
                     <ComboBoxItem >0</ComboBoxItem>
                     <ComboBoxItem >-1</ComboBoxItem>
                     <ComboBoxItem >-2</ComboBoxItem>
                 </ComboBox>
                 <Label Content="ACT to STBY transfer of freq. delay (ms)"></Label>
-                <ComboBox Name="ComboBoxSyncOKDelayTimeout" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSyncOKDelayTimeout_OnSelectionChangedComboBoxSyncOKDelayTimeout_OnSelectionChanged">
+                <ComboBox Name="ComboBoxSyncOKDelayTimeout" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSyncOKDelayTimeout_OnSelectionChanged">
                     <ComboBoxItem >1000</ComboBoxItem>
                     <ComboBoxItem >1500</ComboBoxItem>
                     <ComboBoxItem >2000</ComboBoxItem>
@@ -102,19 +104,10 @@
         </GroupBox>
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
-            <Label Content="R-828 VHF-1 " FontWeight="Bold"/>
-            <Image Height="110" Source="/DCSFlightpanels;component/Images/Ka50_R-828_radio.jpg" />
-            <Label Content="XXXXXX" FontWeight="Bold" Visibility="Hidden" />
-            <Image Height="110" Source="/DCSFlightpanels;component/Images/Ka50_АВСК.jpg" Visibility="Hidden"  />
-            <Label Content="XXXXXX" FontWeight="Bold" Visibility="Hidden" />
-            <Image Height="80" Source="/DCSFlightpanels;component/Images/Ka50_intercom_radio_control.jpg" Visibility="Hidden" />
+
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
-            <Label Name="LabelAirframe" Content="Ka-50" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
-            <Label Content="ADF ARK-22 ADF" FontWeight="Bold"/>
-            <Image Height="160" Source="/DCSFlightpanels;component/Images/Ka50_ARK-22 ADF.jpg" />
-            <Label FontWeight="Bold" Content="R-800L1" />
-            <Image Height="300" Source="/DCSFlightpanels;component/Images/Ka50_R-800L1_VHF.jpg" />
+            <Label Name="LabelAirframe" Content="AJS-37 Viggen" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
         </StackPanel>
         <GroupBox Header="Synchronization" FontSize="14" FontWeight="Bold" Grid.Column="3" Grid.Row="1"  Grid.ColumnSpan="3" Grid.RowSpan="4" Visibility="Hidden">
             <StackPanel >
@@ -123,7 +116,7 @@
                         Frequency Dial Synchronization Wait-For-Updates-Timeout (ms)
                     </TextBlock>
                 </Label>
-                <ComboBox IsEnabled="True" Name="ComboBoxSynchSleepTime" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0"  SelectedIndex="5" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSynchSleepTime_OnSelectionChangedComboBoxSynchSleepTime_OnSelectionChanged">
+                <ComboBox IsEnabled="True" Name="ComboBoxSynchSleepTime" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0"  SelectedIndex="5" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSynchSleepTime_OnSelectionChanged">
                     <ComboBoxItem >10</ComboBoxItem>
                     <ComboBoxItem >20</ComboBoxItem>
                     <ComboBoxItem >30</ComboBoxItem>
@@ -145,7 +138,7 @@
                         Synchronization Reset timeout (ms)
                     </TextBlock>
                 </Label>
-                <ComboBox IsEnabled="True" Name="ComboBoxSynchResetTimeout" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0"  SelectedIndex="5" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSynchResetTimeout_OnSelectionChangedComboBoxSynchResetTimeout_OnSelectionChanged">
+                <ComboBox IsEnabled="True" Name="ComboBoxSynchResetTimeout" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0"  SelectedIndex="5" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSynchResetTimeout_OnSelectionChanged">
                     <ComboBoxItem >1000</ComboBoxItem>
                     <ComboBoxItem >1500</ComboBoxItem>
                     <ComboBoxItem >2000</ComboBoxItem>

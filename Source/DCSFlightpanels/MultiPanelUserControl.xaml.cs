@@ -13,6 +13,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
+
     public partial class MultiPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
@@ -72,10 +73,8 @@ namespace DCSFlightpanels
 
         private void SetApplicationMode(DCSAirframe dcsAirframe)
         {
-            ButtonKnobAltLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
-            ButtonKnobAltLcdLower.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
-            ButtonKnobVsLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
-            ButtonKnobVsLcdLower.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
+            ButtonLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
+            ButtonLcdLower.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
         }
 
         public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
@@ -239,6 +238,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         ImageLeftKnobAlt.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPos.Content = "ALT";
+                                        }
                                     });
                                 break;
                             }
@@ -249,6 +254,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         ImageLeftKnobVs.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPos.Content = "VS";
+                                        }
                                     });
                                 break;
                             }
@@ -259,6 +270,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         ImageLeftKnobIas.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPos.Content = "IAS";
+                                        }
                                     });
                                 break;
                             }
@@ -269,6 +286,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         ImageLeftKnobHdg.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPos.Content = "HDG";
+                                        }
                                     });
                                 break;
                             }
@@ -279,86 +302,85 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         ImageLeftKnobCrs.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPos.Content = "CRS";
+                                        }
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.AP_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonAp.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonAp.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.HDG_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonHdg.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonHdg.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.NAV_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonNav.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonNav.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.IAS_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonIas.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonIas.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.ALT_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonAlt.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonAlt.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.VS_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonVs.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonVs.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.APR_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonApr.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonApr.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.REV_BUTTON:
                             {
-                                var key = multiKnob;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonRev.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonRev.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
@@ -466,13 +488,11 @@ namespace DCSFlightpanels
             ImagePitchUp.Visibility = Visibility.Collapsed;
             ImagePitchDown.Visibility = Visibility.Collapsed;
 
-            ImageAltUpperRow.Visibility = Visibility.Collapsed;
-            ImageAltLowerRow.Visibility = Visibility.Collapsed;
-            ImageVsUpperRow.Visibility = Visibility.Collapsed;
-            ImageVsLowerRow.Visibility = Visibility.Collapsed;
+            ImageLcdUpperRow.Visibility = Visibility.Collapsed;
+            ImageLcdLowerRow.Visibility = Visibility.Collapsed;
         }
 
-        private void ButtonKnobLcd_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonLcd_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -480,24 +500,14 @@ namespace DCSFlightpanels
 
                 switch (button.Name)
                 {
-                    case "ButtonKnobAltLcdUpper":
+                    case "ButtonLcdUpper":
                         {
-                            ButtonLcdConfig(button, "Data to display on upper LCD Row when Knob = ALT");
+                            ButtonLcdConfig(PZ70LCDPosition.UpperLCD, button, "Data to display on upper LCD Row");
                             break;
                         }
-                    case "ButtonKnobAltLcdLower":
+                    case "ButtonLcdLower":
                         {
-                            ButtonLcdConfig(button, "Data to display on lower LCD Row when Knob = ALT");
-                            break;
-                        }
-                    case "ButtonKnobVsLcdUpper":
-                        {
-                            ButtonLcdConfig(button, "Data to display on upper LCD Row when Knob = VS");
-                            break;
-                        }
-                    case "ButtonKnobVsLcdLower":
-                        {
-                            ButtonLcdConfig(button, "Data to display on lower LCD Row when Knob = VS");
+                            ButtonLcdConfig(PZ70LCDPosition.LowerLCD, button, "Data to display on lower LCD Row");
                             break;
                         }
                 }
@@ -508,7 +518,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private void ButtonLcdConfig(Button button, string description)
+        private void ButtonLcdConfig(PZ70LCDPosition pz70LCDPosition, Button button, string description)
         {
             try
             {
@@ -516,51 +526,42 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Failed to locate which button was clicked.");
                 }
-                DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow;
-                if (button.Tag is DCSBIOSOutput)
+                DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow = null;
+                foreach (var dcsbiosBindingLCDPZ70 in _multiPanelPZ70.LCDBindings)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, (DCSBIOSOutput)button.Tag);
+                    if (dcsbiosBindingLCDPZ70.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == pz70LCDPosition)
+                    {
+                        if (dcsbiosBindingLCDPZ70.UseFormula)
+                        {
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
+                            break;
+                        }
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
+                        break;
+                    }
                 }
-                else if (button.Tag is DCSBIOSOutputFormula)
-                {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, (DCSBIOSOutputFormula)button.Tag);
-                }
-                else
+                if (dcsBiosOutputFormulaWindow == null)
                 {
                     dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description);
                 }
+
                 dcsBiosOutputFormulaWindow.ShowDialog();
                 if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult.Value)
                 {
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
                         var dcsBiosOutputFormula = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                        //1 appropriate text to textbox
-                        //2 update bindings
-                        //button.Text = dcsBiosOutputFormula.ToString();
-                        button.Tag = dcsBiosOutputFormula;
-                        button.ToolTip = dcsBiosOutputFormula.ToString();
-                        UpdateDCSBIOSBindingLCD(button);
+                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button);
                     }
                     else if (dcsBiosOutputFormulaWindow.UseSingleDCSBiosControl())
                     {
                         var dcsBiosOutput = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                        //1 appropriate text to textbox
-                        //2 update bindings
-                        //button.Text = dcsBiosInput.ToString();
-                        button.Tag = dcsBiosOutput;
-                        button.ToolTip = dcsBiosOutput.ToString();
-                        UpdateDCSBIOSBindingLCD(button);
+                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button);
                     }
                     else
                     {
                         //Delete config
-                        //1 appropriate text to textbox
-                        //2 update bindings
-                        //button.Text = dcsBiosInput.ToString();
-                        button.Tag = null;
-                        button.ToolTip = "";
-                        UpdateDCSBIOSBindingLCD(button);
+                        UpdateDCSBIOSBindingLCD(false, true, null, null, button);
                     }
                 }
             }
@@ -586,9 +587,18 @@ namespace DCSFlightpanels
         {
             try
             {
+                ImageLcdButtonAp.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.AP_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonHdg.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonNav.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonIas.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonAlt.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonVs.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.VS_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonApr.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.APR_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonRev.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.REV_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+
                 foreach (var keyBinding in _multiPanelPZ70.KeyBindingsHashSet)
                 {
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -604,7 +614,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -620,7 +630,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AUTO_THROTTLE)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AUTO_THROTTLE)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -649,7 +659,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -665,7 +675,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -682,7 +692,7 @@ namespace DCSFlightpanels
                         }
                     }
 
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -698,7 +708,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -714,7 +724,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AP_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AP_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -743,7 +753,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.HDG_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.HDG_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -772,7 +782,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.NAV_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.NAV_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -801,7 +811,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.IAS_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.IAS_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -830,7 +840,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.ALT_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.ALT_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -859,7 +869,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.VS_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.VS_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -888,7 +898,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.APR_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.APR_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -917,7 +927,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.REV_BUTTON)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.REV_BUTTON)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
@@ -954,44 +964,44 @@ namespace DCSFlightpanels
 
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
                 {
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         TextBoxLcdKnobDecrease.Tag = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxLcdKnobDecrease.Text = dcsBiosBinding.Description;
                         TextBoxLcdKnobDecrease.ToolTip = "DCS-BIOS";
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         TextBoxLcdKnobIncrease.Tag = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxLcdKnobIncrease.Text = dcsBiosBinding.Description;
                         TextBoxLcdKnobIncrease.ToolTip = "DCS-BIOS";
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         TextBoxFlapsUp.Tag = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxFlapsUp.Text = dcsBiosBinding.Description;
                         TextBoxFlapsUp.ToolTip = "DCS-BIOS";
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         TextBoxFlapsDown.Tag = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxFlapsDown.Text = dcsBiosBinding.Description;
                         TextBoxFlapsDown.ToolTip = "DCS-BIOS";
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         TextBoxPitchTrimUp.Tag = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxPitchTrimUp.Text = dcsBiosBinding.Description;
                         TextBoxPitchTrimUp.ToolTip = "DCS-BIOS";
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         TextBoxPitchTrimDown.Tag = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxPitchTrimDown.Text = dcsBiosBinding.Description;
                         TextBoxPitchTrimDown.ToolTip = "DCS-BIOS";
                     }
 
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AUTO_THROTTLE)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AUTO_THROTTLE)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1012,7 +1022,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AP_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.AP_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1033,7 +1043,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.HDG_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.HDG_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1054,7 +1064,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.NAV_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.NAV_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1075,7 +1085,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.IAS_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.IAS_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1096,7 +1106,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.ALT_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.ALT_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1117,7 +1127,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.VS_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.VS_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1138,7 +1148,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.APR_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.APR_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1159,7 +1169,7 @@ namespace DCSFlightpanels
                             }
                         }
                     }
-                    if (dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.REV_BUTTON)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.REV_BUTTON)
                     {
                         if (dcsBiosBinding.WhenTurnedOn)
                         {
@@ -1183,66 +1193,45 @@ namespace DCSFlightpanels
                 }
 
 
-                ImageAltUpperRow.Visibility = Visibility.Collapsed;
-                ImageAltLowerRow.Visibility = Visibility.Collapsed;
-                ImageVsUpperRow.Visibility = Visibility.Collapsed;
-                ImageVsLowerRow.Visibility = Visibility.Collapsed;
+                ImageLcdUpperRow.Visibility = Visibility.Collapsed;
+                ImageLcdLowerRow.Visibility = Visibility.Collapsed;
+                //Dial position IAS HDG CRS -> Only upper LCD row can be used -> Hide Lower Button
+                if ((_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.IAS) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.HDG) || (_multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.CRS))
+                {
+                    ButtonLcdLower.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    ButtonLcdLower.Visibility = Visibility.Visible;
+                }
                 foreach (var dcsBiosBindingLCD in _multiPanelPZ70.LCDBindings)
                 {
-                    if (dcsBiosBindingLCD.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperALT && dcsBiosBindingLCD.HasBinding)
+                    if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD && dcsBiosBindingLCD.HasBinding)
                     {
-                        ImageAltUpperRow.Visibility = Visibility.Visible;
+                        ImageLcdUpperRow.Visibility = Visibility.Visible;
                         if (dcsBiosBindingLCD.UseFormula)
                         {
-                            ButtonKnobAltLcdUpper.Tag = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject;
-                            ButtonKnobAltLcdUpper.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject.ToString();
+                            ButtonLcdUpper.Tag = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject;
+                            ButtonLcdUpper.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject.ToString();
                         }
                         else
                         {
-                            ButtonKnobAltLcdUpper.Tag = dcsBiosBindingLCD.DCSBIOSOutputObject;
-                            ButtonKnobAltLcdUpper.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputObject.ToString();
+                            ButtonLcdUpper.Tag = dcsBiosBindingLCD.DCSBIOSOutputObject;
+                            ButtonLcdUpper.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputObject.ToString();
                         }
                     }
-                    if (dcsBiosBindingLCD.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.LowerALT && dcsBiosBindingLCD.HasBinding)
+                    if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.LowerLCD && dcsBiosBindingLCD.HasBinding)
                     {
-                        ImageAltLowerRow.Visibility = Visibility.Visible;
+                        ImageLcdLowerRow.Visibility = Visibility.Visible;
                         if (dcsBiosBindingLCD.UseFormula)
                         {
-                            ButtonKnobAltLcdLower.Tag = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject;
-                            ButtonKnobAltLcdLower.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject.ToString();
+                            ButtonLcdLower.Tag = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject;
+                            ButtonLcdLower.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject.ToString();
                         }
                         else
                         {
-                            ButtonKnobAltLcdLower.Tag = dcsBiosBindingLCD.DCSBIOSOutputObject;
-                            ButtonKnobAltLcdLower.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputObject.ToString();
-                        }
-                    }
-                    if (dcsBiosBindingLCD.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperVS && dcsBiosBindingLCD.HasBinding)
-                    {
-                        ImageVsUpperRow.Visibility = Visibility.Visible;
-                        if (dcsBiosBindingLCD.UseFormula)
-                        {
-                            ButtonKnobVsLcdUpper.Tag = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject;
-                            ButtonKnobVsLcdUpper.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject.ToString();
-                        }
-                        else
-                        {
-                            ButtonKnobVsLcdUpper.Tag = dcsBiosBindingLCD.DCSBIOSOutputObject;
-                            ButtonKnobVsLcdUpper.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputObject.ToString();
-                        }
-                    }
-                    if (dcsBiosBindingLCD.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.LowerVS && dcsBiosBindingLCD.HasBinding)
-                    {
-                        ImageVsLowerRow.Visibility = Visibility.Visible;
-                        if (dcsBiosBindingLCD.UseFormula)
-                        {
-                            ButtonKnobVsLcdLower.Tag = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject;
-                            ButtonKnobVsLcdLower.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputFormulaObject.ToString();
-                        }
-                        else
-                        {
-                            ButtonKnobVsLcdLower.Tag = dcsBiosBindingLCD.DCSBIOSOutputObject;
-                            ButtonKnobVsLcdLower.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputObject.ToString();
+                            ButtonLcdLower.Tag = dcsBiosBindingLCD.DCSBIOSOutputObject;
+                            ButtonLcdLower.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputObject.ToString();
                         }
                     }
                 }
@@ -1742,7 +1731,7 @@ namespace DCSFlightpanels
                     textBox.Text = text;
                     textBox.Tag = dcsBiosInputs;
                     textBox.ToolTip = textBox.Text;
-                    UpdateDCSBIOSBinding(textBox);
+                    UpdateDCSBIOSBinding(_multiPanelPZ70.PZ70_DialPosition, textBox);
                 }
             }
             catch (Exception ex)
@@ -1986,99 +1975,99 @@ namespace DCSFlightpanels
             {
                 if (textBox.Equals(TextBoxLcdKnobDecrease))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true);
                 }
                 if (textBox.Equals(TextBoxLcdKnobIncrease))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_INC, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.LCD_WHEEL_INC, true);
                 }
                 if (textBox.Equals(TextBoxAutoThrottleOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.AUTO_THROTTLE, false);
                 }
                 if (textBox.Equals(TextBoxAutoThrottleOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.AUTO_THROTTLE, true);
                 }
                 if (textBox.Equals(TextBoxFlapsUp))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true);
                 }
                 if (textBox.Equals(TextBoxFlapsDown))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, false);
                 }
                 if (textBox.Equals(TextBoxPitchTrimUp))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true);
                 }
                 if (textBox.Equals(TextBoxPitchTrimDown))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, false);
                 }
                 if (textBox.Equals(TextBoxApButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AP_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.AP_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxApButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AP_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.AP_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxHdgButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxHdgButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxNavButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxNavButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxIasButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxIasButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxAltButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxAltButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxVsButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.VS_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.VS_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxVsButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.VS_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.VS_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxAprButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.APR_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.APR_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxAprButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.APR_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.APR_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxRevButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.REV_BUTTON, true);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.REV_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxRevButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.REV_BUTTON, false);
+                    return new MultiPanelPZ70KnobOnOff(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.REV_BUTTON, false);
                 }
             }
             catch (Exception ex)
@@ -2088,7 +2077,7 @@ namespace DCSFlightpanels
             throw new Exception("Should not reach this point");
         }
 
-        private void UpdateDCSBIOSBinding(TextBox textBox)
+        private void UpdateDCSBIOSBinding(PZ70DialPosition pz70DialPosition, TextBox textBox)
         {
             try
             {
@@ -2200,89 +2189,48 @@ namespace DCSFlightpanels
             }
         }
 
-        private void UpdateDCSBIOSBindingLCD(Button button)
+        private void UpdateDCSBIOSBindingLCD(bool useFormula, bool deleteConfig, DCSBIOSOutput dcsbiosOutput, DCSBIOSOutputFormula dcsbiosOutputFormula, Button button)
         {
             try
             {
-                DCSBIOSOutput dcsBiosOutput = null;
-                DCSBIOSOutputFormula dcsBiosOutputFormula = null;
-                /*if (button.Tag == null)
+                if (deleteConfig)
                 {
-                    //Remove any binding associated with this button (position), (delete)
-                    return;
-                }*/
-
-                if (button.Tag is DCSBIOSOutput)
-                {
-                    dcsBiosOutput = ((DCSBIOSOutput)button.Tag);
-
-                    if (button.Equals(ButtonKnobAltLcdUpper))
+                    if (button.Equals(ButtonLcdUpper))
                     {
-                        ImageAltUpperRow.Visibility = dcsBiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_ALT, dcsBiosOutput, PZ70LCDPosition.UpperALT);
+                        ImageLcdUpperRow.Visibility = Visibility.Hidden;
+                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition.UpperLCD);
                     }
-                    if (button.Equals(ButtonKnobAltLcdLower))
+                    if (button.Equals(ButtonLcdLower))
                     {
-                        ImageAltLowerRow.Visibility = dcsBiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_ALT, dcsBiosOutput, PZ70LCDPosition.LowerALT);
-                    }
-                    if (button.Equals(ButtonKnobVsLcdUpper))
-                    {
-                        ImageVsUpperRow.Visibility = dcsBiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_VS, dcsBiosOutput, PZ70LCDPosition.UpperVS);
-                    }
-                    if (button.Equals(ButtonKnobVsLcdLower))
-                    {
-                        ImageVsLowerRow.Visibility = dcsBiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_VS, dcsBiosOutput, PZ70LCDPosition.LowerVS);
+                        ImageLcdLowerRow.Visibility = Visibility.Hidden;
+                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition.LowerLCD);
                     }
                 }
-                if (button.Tag is DCSBIOSOutputFormula)
-                {
-                    dcsBiosOutputFormula = ((DCSBIOSOutputFormula)button.Tag);
 
-                    if (button.Equals(ButtonKnobAltLcdUpper))
+                if (!useFormula)
+                {
+                    if (button.Equals(ButtonLcdUpper))
                     {
-                        ImageAltUpperRow.Visibility = dcsBiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_ALT, dcsBiosOutputFormula, PZ70LCDPosition.UpperALT);
+                        ImageLcdUpperRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.UpperLCD);
                     }
-                    if (button.Equals(ButtonKnobAltLcdLower))
+                    if (button.Equals(ButtonLcdLower))
                     {
-                        ImageAltLowerRow.Visibility = dcsBiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_ALT, dcsBiosOutputFormula, PZ70LCDPosition.LowerALT);
-                    }
-                    if (button.Equals(ButtonKnobVsLcdUpper))
-                    {
-                        ImageVsUpperRow.Visibility = dcsBiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_VS, dcsBiosOutputFormula, PZ70LCDPosition.UpperVS);
-                    }
-                    if (button.Equals(ButtonKnobVsLcdLower))
-                    {
-                        ImageVsLowerRow.Visibility = dcsBiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_VS, dcsBiosOutputFormula, PZ70LCDPosition.LowerVS);
+                        ImageLcdLowerRow.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutput, PZ70LCDPosition.LowerLCD);
                     }
                 }
-                if (button.Tag == null)
+                if (useFormula)
                 {
-                    if (button.Equals(ButtonKnobAltLcdUpper))
+                    if (button.Equals(ButtonLcdUpper))
                     {
-                        ImageAltUpperRow.Visibility = Visibility.Hidden;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_ALT, PZ70LCDPosition.UpperALT);
+                        ImageLcdUpperRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.UpperLCD);
                     }
-                    if (button.Equals(ButtonKnobAltLcdLower))
+                    if (button.Equals(ButtonLcdLower))
                     {
-                        ImageAltLowerRow.Visibility = Visibility.Hidden;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_ALT, PZ70LCDPosition.LowerALT);
-                    }
-                    if (button.Equals(ButtonKnobVsLcdUpper))
-                    {
-                        ImageVsUpperRow.Visibility = Visibility.Hidden;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_VS, PZ70LCDPosition.UpperVS);
-                    }
-                    if (button.Equals(ButtonKnobVsLcdLower))
-                    {
-                        ImageVsLowerRow.Visibility = Visibility.Hidden;
-                        _multiPanelPZ70.AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs.KNOB_VS, PZ70LCDPosition.LowerVS);
+                        ImageLcdLowerRow.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
+                        _multiPanelPZ70.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ70LCDPosition.LowerLCD);
                     }
                 }
             }
@@ -2328,24 +2276,17 @@ namespace DCSFlightpanels
             }
             if (!_enableDCSBIOS)
             {
-                ButtonKnobAltLcdUpper.Visibility = Visibility.Hidden;
-                ButtonKnobAltLcdLower.Visibility = Visibility.Hidden;
-                ButtonKnobVsLcdUpper.Visibility = Visibility.Hidden;
-                ButtonKnobVsLcdLower.Visibility = Visibility.Hidden;
+                ButtonLcdUpper.Visibility = Visibility.Hidden;
+                ButtonLcdLower.Visibility = Visibility.Hidden;
             }
             else
             {
-                ButtonKnobAltLcdUpper.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
-                ButtonKnobAltLcdUpper.ContextMenu.Tag = ButtonKnobAltLcdUpper;
+                ButtonLcdUpper.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
+                ButtonLcdUpper.ContextMenu.Tag = ButtonLcdUpper;
 
-                ButtonKnobAltLcdLower.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
-                ButtonKnobAltLcdLower.ContextMenu.Tag = ButtonKnobAltLcdLower;
+                ButtonLcdLower.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
+                ButtonLcdLower.ContextMenu.Tag = ButtonLcdLower;
 
-                ButtonKnobVsLcdUpper.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
-                ButtonKnobVsLcdUpper.ContextMenu.Tag = ButtonKnobVsLcdUpper;
-
-                ButtonKnobVsLcdLower.ContextMenu = (ContextMenu) Resources["ButtonLcdContextMenu"];
-                ButtonKnobVsLcdLower.ContextMenu.Tag = ButtonKnobVsLcdLower;
             }
         }
 
@@ -2536,7 +2477,14 @@ namespace DCSFlightpanels
             {
                 var menuItem = (MenuItem)sender;
                 var button = (Button)((ContextMenu)(menuItem.Parent)).Tag;
-                DeleteLCDBinding(button);
+                if (button.Name.Contains("Upper"))
+                {
+                    DeleteLCDBinding(PZ70LCDPosition.UpperLCD, button);
+                }
+                else
+                {
+                    DeleteLCDBinding(PZ70LCDPosition.LowerLCD, button);
+                }
             }
             catch (Exception ex)
             {
@@ -2549,8 +2497,7 @@ namespace DCSFlightpanels
             try
             {
                 var contextMenu = (ContextMenu)sender;
-                var button = (Button)contextMenu.Tag;
-                if (button.Tag != null && button.Tag is DCSBIOSOutput)
+                if (_enableDCSBIOS)
                 {
                     ((MenuItem)contextMenu.Items[0]).IsEnabled = true;
                 }
@@ -2565,41 +2512,26 @@ namespace DCSFlightpanels
             }
         }
 
-        private void DeleteLCDBinding(Button button)
+        private void DeleteLCDBinding(PZ70LCDPosition pz70LCDPosition, Button button)
         {
             try
             {
                 //Check if this button contains DCS-BIOS information. If so then prompt the user for deletion
-                if (button.Tag != null && button.Tag is DCSBIOSOutput)
+                if (MessageBox.Show("Do you want to delete the specified DCS-BIOS control binding?", "Delete DCS-BIOS control binding?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                 {
-                    if (MessageBox.Show("Do you want to delete the specified DCS-BIOS control binding?", "Delete DCS-BIOS control binding?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                    {
-                        return;
-                    }
+                    return;
                 }
-                button.ToolTip = null;
-                button.Tag = null;
-                UpdateDCSBIOSBindingLCD(button);
+                UpdateDCSBIOSBindingLCD(false, true, null, null, button);
                 switch (button.Name)
                 {
-                    case "ButtonKnobAltLcdUpper":
+                    case "ButtonLcdUpper":
                         {
-                            ImageAltUpperRow.Visibility = Visibility.Collapsed;
+                            ImageLcdUpperRow.Visibility = Visibility.Collapsed;
                             break;
                         }
-                    case "ButtonKnobAltLcdLower":
+                    case "ButtonLcdLower":
                         {
-                            ImageAltLowerRow.Visibility = Visibility.Collapsed;
-                            break;
-                        }
-                    case "ButtonKnobVsLcdUpper":
-                        {
-                            ImageVsUpperRow.Visibility = Visibility.Collapsed;
-                            break;
-                        }
-                    case "ButtonKnobVsLcdLower":
-                        {
-                            ImageVsLowerRow.Visibility = Visibility.Collapsed;
+                            ImageLcdLowerRow.Visibility = Visibility.Collapsed;
                             break;
                         }
                 }
@@ -2627,5 +2559,6 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(4370, ex);
             }
         }
+
     }
 }

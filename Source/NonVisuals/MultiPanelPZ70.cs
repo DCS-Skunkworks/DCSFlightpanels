@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using DCS_BIOS;
 using HidLibrary;
@@ -7,10 +8,340 @@ using System.Threading;
 
 namespace NonVisuals
 {
+    public class PZ70LCDButtonByteList
+    {
+        /*
+LCD Button Byte
+00000000
+||||||||_ AP_BUTTON
+|||||||_ HDG_BUTTON
+||||||_ NAV_BUTTON
+|||||_ IAS_BUTTON
+||||_ ALT_BUTTON
+|||_ VS_BUTTON
+||_ APR_BUTTON
+|_ REV_BUTTON
+ */
+        private byte _apMask = 1;
+        private byte _hdgMask = 2;
+        private byte _navMask = 4;
+        private byte _iasMask = 8;
+        private byte _altMask = 16;
+        private byte _vsMask = 32;
+        private byte _aprMask = 64;
+        private byte _revMask = 128;
+        private int _dialAltMask = 256;
+        private int _dialVsMask = 512;
+        private int _dialIasMask = 1024;
+        private int _dialHdgMask = 2048;
+        private int _dialCrsMask = 4096;
+        private int _buttonIsOnMask = 8192;
+
+        //bool isSet = (b & mask) != 0
+        //Set to 1" b |= mask
+        //Set to zero
+        //b &= ~mask
+        //Toggle
+        //b ^= mask
+        private byte[] _buttonBytes = new byte[8];
+        private int[] _buttonDialPosition = new int[8];
+
+        public PZ70LCDButtonByteList()
+        {
+            _buttonDialPosition[0] |= _dialAltMask;
+            _buttonDialPosition[1] |= _dialVsMask;
+            _buttonDialPosition[2] |= _dialIasMask;
+            _buttonDialPosition[3] |= _dialHdgMask;
+            _buttonDialPosition[4] |= _dialCrsMask;
+        }
+
+        public bool FlipButton(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knob)
+        {
+            try
+            {
+                return FlipButton(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob));
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e, "Flipbutton()");
+                throw;
+            }
+        }
+
+        public bool IsOn(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knobs)
+        {
+            try
+            {
+                var dialMask = GetMaskForDialPosition(pz70DialPosition);
+                var buttonMask = GetMaskForButton(multiPanelPZ70Knobs);
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
+                {
+                    if ((_buttonDialPosition[i] & dialMask) != 0)
+                    {
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
+                }
+                throw new Exception("Multipanel IsOn : Failed to find Mask for dial position " + pz70DialPosition + " knob " + multiPanelPZ70Knobs);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e, "IsOn()");
+                throw;
+            }
+        }
+
+        public int GetMaskForDialPosition(PZ70DialPosition pz70DialPosition)
+        {
+            try
+            {
+
+                switch (pz70DialPosition)
+                {
+                    case PZ70DialPosition.ALT:
+                        {
+                            return DialAltMask;
+                        }
+                    case PZ70DialPosition.VS:
+                        {
+                            return DialVsMask;
+                        }
+                    case PZ70DialPosition.IAS:
+                        {
+                            return DialIasMask;
+                        }
+                    case PZ70DialPosition.HDG:
+                        {
+                            return DialHdgMask;
+                        }
+                    case PZ70DialPosition.CRS:
+                        {
+                            return DialCrsMask;
+                        }
+                }
+                throw new Exception("Multipanel : Failed to find Mask for dial position " + pz70DialPosition);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
+        }
+
+        public byte GetMaskForButton(MultiPanelPZ70Knobs multiPanelPZ70Knob)
+        {
+            try
+            {
+                switch (multiPanelPZ70Knob)
+                {
+                    case MultiPanelPZ70Knobs.AP_BUTTON:
+                        {
+                            return ApMask;
+                        }
+                    case MultiPanelPZ70Knobs.HDG_BUTTON:
+                        {
+                            return HdgMask;
+                        }
+                    case MultiPanelPZ70Knobs.NAV_BUTTON:
+                        {
+                            return NavMask;
+                        }
+                    case MultiPanelPZ70Knobs.IAS_BUTTON:
+                        {
+                            return IasMask;
+                        }
+                    case MultiPanelPZ70Knobs.ALT_BUTTON:
+                        {
+                            return AltMask;
+                        }
+                    case MultiPanelPZ70Knobs.VS_BUTTON:
+                        {
+                            return VsMask;
+                        }
+                    case MultiPanelPZ70Knobs.APR_BUTTON:
+                        {
+                            return AprMask;
+                        }
+                    case MultiPanelPZ70Knobs.REV_BUTTON:
+                        {
+                            return RevMask;
+                        }
+                }
+                throw new Exception("Multipanel : Failed to find Mask for button " + multiPanelPZ70Knob);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
+        }
+
+        public bool FlipButton(int buttonDialMask, byte buttonMask)
+        {
+            try
+            {
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
+                {
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        _buttonBytes[i] ^= buttonMask;
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
+                }
+                throw new Exception("Multipanel FlipButton : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
+        }
+
+        public bool SetButtonOnOrOff(int buttonDialMask, byte buttonMask, bool on)
+        {
+            if (on)
+            {
+                return SetButtonOn(buttonDialMask, buttonMask);
+            }
+            return SetButtonOff(buttonDialMask, buttonMask);
+        }
+
+        public bool SetButtonOff(int buttonDialMask, byte buttonMask)
+        {
+            try
+            {
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
+                {
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        _buttonBytes[i] &= buttonMask;
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
+                }
+                throw new Exception("Multipanel ButtonOff : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
+        }
+
+        public bool SetButtonOn(int buttonDialMask, byte buttonMask)
+        {
+            try
+            {
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
+                {
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        _buttonBytes[i] |= buttonMask;
+                        return (_buttonBytes[i] & buttonMask) != 0;
+                    }
+                }
+                throw new Exception("Multipanel ButtonOn : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
+        }
+
+        public byte GetButtonByte(PZ70DialPosition pz70DialPosition)
+        {
+            try
+            {
+                var mask = GetMaskForDialPosition(pz70DialPosition);
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
+                {
+                    //(b & mask) != 0
+                    if ((_buttonDialPosition[i] & mask) != 0)
+                    {
+                        return _buttonBytes[i];
+                    }
+                }
+                throw new Exception("Multipanel : Failed to find button byte for " + pz70DialPosition);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
+        }
+
+        public byte GetButtonByte(int buttonDialMask)
+        {
+            try
+            {
+                for (int i = 0; i < _buttonDialPosition.Length; i++)
+                {
+                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
+                    {
+                        return _buttonBytes[i];
+                    }
+                }
+                throw new Exception("Multipanel GetButtonByte : Failed to find Mask for dial " + buttonDialMask);
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e);
+                throw;
+            }
+        }
+
+        public bool SetButtonByte(PZ70DialPosition pz70DialPosition, MultiPanelKnob multiPanelPZ70Knob)
+        {
+            return SetButtonOnOrOff(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob.MultiPanelPZ70Knob), multiPanelPZ70Knob.IsOn);
+        }
+
+        public byte ApMask => _apMask;
+
+        public byte HdgMask => _hdgMask;
+
+        public byte NavMask => _navMask;
+
+        public byte IasMask => _iasMask;
+
+        public byte AltMask => _altMask;
+
+        public byte VsMask => _vsMask;
+
+        public byte AprMask => _aprMask;
+
+        public byte RevMask => _revMask;
+
+        public int DialAltMask => _dialAltMask;
+
+        public int DialVsMask => _dialVsMask;
+
+        public int DialIasMask => _dialIasMask;
+
+        public int DialHdgMask => _dialHdgMask;
+
+        public int DialCrsMask => _dialCrsMask;
+
+        public int ButtonIsOnMask => _buttonIsOnMask;
+    }
+
+
+
+
+
+
+
+    public enum PZ70DialPosition
+    {
+        ALT = 0,
+        VS = 2,
+        IAS = 4,
+        HDG = 8,
+        CRS = 16
+    }
+
     public class MultiPanelPZ70 : SaitekPanel
     {
         private int _lcdKnobSensitivity;
-        protected volatile byte KnobSensitivitySkipper;
+        private volatile byte KnobSensitivitySkipper;
         private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
         private HashSet<DCSBIOSBindingLCDPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ70>();
         private HashSet<KnobBindingPZ70> _knobBindings = new HashSet<KnobBindingPZ70>();
@@ -18,29 +349,16 @@ namespace NonVisuals
         private bool _isFirstNotification = true;
         private byte[] _oldMultiPanelValue = { 0, 0, 0 };
         private byte[] _newMultiPanelValue = { 0, 0, 0 };
-        //private HidDevice _hidReadDevice;
-        //private HidDevice _hidWriteDevice;
-        //private List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
-        //private DCSBIOSOutput _dcsbiosOutputAltitude = new DCSBIOSOutput();
-        //private DCSBIOSOutput _dcsbiosOutputHeading = new DCSBIOSOutput();
-        private MultiPanelPZ70Knobs _selectedMode = MultiPanelPZ70Knobs.KNOB_ALT;
-        //private bool _reportRead = false;
-        private object _lcdLockObject = new object();
-        private int _upperLcdAlt;
-        private int _lowerLcdAlt;
-        private int _upperLcdVs;
-        private int _lowerLcdVs;
+        private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
 
-        private bool _apButtonLightOn;
-        private bool _hdgButtonLightOn;
-        private bool _navButtonLightOn;
-        private bool _iasButtonLightOn;
-        private bool _altButtonLightOn;
-        private bool _vsButtonLightOn;
-        private bool _aprButtonLightOn;
-        private bool _revButtonLightOn;
-        private byte _buttonByte;
-        
+        private readonly object _lcdLockObject = new object();
+        private readonly object _lcdDataVariablesLockObject = new object();
+        private PZ70LCDButtonByteList _lcdButtonByteListHandler = new PZ70LCDButtonByteList();
+        //private volatile int _upperLcdValue = 0;
+        //private volatile int _lowerLcdValue = 0;
+
+
+
         private long _doUpdatePanelLCD;
 
         public MultiPanelPZ70(HIDSkeleton hidSkeleton)
@@ -56,17 +374,6 @@ namespace NonVisuals
         {
             try
             {
-
-
-                //Altitude
-                //_dcsbiosOutputAltitude = DCSBIOSControlLocator.GetDCSBIOSOutput("ALT_MSL_FT");
-                //_dcsbiosOutputs.Add(DCSBIOSControlLocator.GetDCSBIOSOutput("ALT_MSL_FT"));
-                //Heading
-                //_dcsbiosOutputHeading = DCSBIOSControlLocator.GetDCSBIOSOutput("HDG_DEG");
-                //_dcsbiosOutputs.Add(DCSBIOSControlLocator.GetDCSBIOSOutput("HDG_DEG"));
-
-
-
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
@@ -91,6 +398,42 @@ namespace NonVisuals
             }
         }
 
+        public override void DcsBiosDataReceived(uint address, uint data)
+        {
+            UpdateCounter(address, data);
+            foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
+            {
+                if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
+                {
+                    lock (_lcdDataVariablesLockObject)
+                    {
+                        var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
+                        dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
+                        if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+                else if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.UseFormula)
+                {
+                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
+                    {
+                        lock (_lcdDataVariablesLockObject)
+                        {
+                            var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
+                            dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
+                            if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                            {
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            }
+                        }
+                    }
+                }
+            }
+            UpdateLCD();
+        }
+
         public override void ImportSettings(List<string> settings)
         {
             //Clear current bindings
@@ -99,9 +442,10 @@ namespace NonVisuals
             {
                 return;
             }
+
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.Contains(SettingsVersion()))
                 {
                     if (setting.StartsWith("MultiPanelKnob{"))
                     {
@@ -163,7 +507,7 @@ namespace NonVisuals
             var result = "";
             foreach (var knobBinding in _knobBindings)
             {
-                if (knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
+                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                 {
                     result = knobBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
@@ -174,145 +518,6 @@ namespace NonVisuals
         public override void SavePanelSettings(ProfileHandler panelProfileHandler)
         {
             panelProfileHandler.RegisterProfileData(this, ExportSettings());
-        }
-        
-        public override void DcsBiosDataReceived(uint address, uint data)
-        {
-            //Common.DebugP("PZ70 READ ENTERING");
-            UpdateCounter(address, data);
-            foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
-            {
-                if (!dcsbiosBindingLCDPZ70.UseFormula && address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
-                {
-                    lock (_lcdLockObject)
-                    {
-                        switch (dcsbiosBindingLCDPZ70.PZ70LCDPosition)
-                        {
-                            case PZ70LCDPosition.UpperALT:
-                                {
-                                    var tmp = _upperLcdAlt;
-                                    _upperLcdAlt = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
-                                    if (tmp != _upperLcdAlt)
-                                    {
-                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.LowerALT:
-                                {
-                                    var tmp = _lowerLcdAlt;
-                                    _lowerLcdAlt = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
-                                    if (tmp != _lowerLcdAlt)
-                                    {
-                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.UpperVS:
-                                {
-                                    var tmp = _upperLcdVs;
-                                    _upperLcdVs = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
-                                    if (tmp != _upperLcdVs)
-                                    {
-                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.LowerVS:
-                                {
-                                    var tmp = _lowerLcdVs;
-                                    _lowerLcdVs = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
-                                    if (tmp != _lowerLcdVs)
-                                    {
-                                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                    }
-                                    break;
-                                }
-                        }
-                        UpdateLCD();
-                    }
-                }
-                if (dcsbiosBindingLCDPZ70.UseFormula)
-                {
-                    lock (_lcdLockObject)
-                    {
-                        switch (dcsbiosBindingLCDPZ70.PZ70LCDPosition)
-                        {
-                            case PZ70LCDPosition.UpperALT:
-                                {
-                                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
-                                    {
-                                        var tmp = _upperLcdAlt;
-                                        _upperLcdAlt = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
-                                        if (tmp != _upperLcdAlt)
-                                        {
-                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                        }
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.LowerALT:
-                                {
-                                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
-                                    {
-                                        var tmp = _lowerLcdAlt;
-                                        _lowerLcdAlt = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
-                                        if (tmp != _lowerLcdAlt)
-                                        {
-                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                        }
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.UpperVS:
-                                {
-                                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
-                                    {
-                                        var tmp = _upperLcdVs;
-                                        _upperLcdVs = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
-                                        if (tmp != _upperLcdVs)
-                                        {
-                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                        }
-                                    }
-                                    break;
-                                }
-                            case PZ70LCDPosition.LowerVS:
-                                {
-                                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
-                                    {
-                                        var tmp = _lowerLcdVs;
-                                        _lowerLcdVs = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
-                                        if (tmp != _lowerLcdVs)
-                                        {
-                                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                        }
-                                    }
-                                    break;
-                                }
-                        }
-                        UpdateLCD();
-                    }
-                }
-            }
-            /*switch (address)
-            {
-                case 0x040a:
-                    {
-                        //Heading
-                        //_heading = _dcsbiosOutputHeading.GetIntValue(data);
-                        //UpdateLCD();
-                        break;
-                    }
-                case 0x0408:
-                    {
-                        //Altitude
-                        //_altitude = _dcsbiosOutputAltitude.GetIntValue(data);
-                        //UpdateLCD();
-                        break;
-                    }
-            }*/
-            //Common.DebugP("PZ70 READ EXITING");
         }
 
         public override void ClearSettings()
@@ -379,7 +584,7 @@ namespace NonVisuals
             var found = false;
             foreach (var knobBinding in _knobBindings)
             {
-                if (knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
+                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     if (string.IsNullOrEmpty(keys))
                     {
@@ -397,6 +602,7 @@ namespace NonVisuals
             {
                 var knobBinding = new KnobBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                knobBinding.DialPosition = _pz70DialPosition;
                 knobBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _knobBindings.Add(knobBinding);
@@ -412,7 +618,7 @@ namespace NonVisuals
             RemoveMultiPanelKnobFromList(2, multiPanelPZ70Knob, whenTurnedOn);
             foreach (var knobBinding in _knobBindings)
             {
-                if (knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
+                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     if (sortedList.Count == 0)
                     {
@@ -431,6 +637,7 @@ namespace NonVisuals
             {
                 var knobBinding = new KnobBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                knobBinding.DialPosition = _pz70DialPosition;
                 knobBinding.OSKeyPress = new OSKeyPress(information, sortedList);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _knobBindings.Add(knobBinding);
@@ -445,7 +652,7 @@ namespace NonVisuals
             RemoveMultiPanelKnobFromList(1, multiPanelPZ70Knob, whenTurnedOn);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
@@ -458,6 +665,7 @@ namespace NonVisuals
             {
                 var dcsBiosBinding = new DCSBIOSBindingPZ70();
                 dcsBiosBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                dcsBiosBinding.DialPosition = _pz70DialPosition;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                 dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
                 dcsBiosBinding.Description = description;
@@ -466,12 +674,12 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
+                if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                     found = true;
@@ -481,7 +689,7 @@ namespace NonVisuals
             if (!found)
             {
                 var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ70();
-                dcsBiosBindingLCD.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
@@ -489,14 +697,15 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
+                if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
+                    Debug.Print("3 found");
                     found = true;
                     break;
                 }
@@ -504,7 +713,7 @@ namespace NonVisuals
             if (!found)
             {
                 var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ70();
-                dcsBiosBindingLCD.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
@@ -512,12 +721,12 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition pz70LCDPosition)
         {
             //Removes config
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
+                if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = null;
                     break;
@@ -534,7 +743,7 @@ namespace NonVisuals
                     {
                         foreach (var knobBindingPZ70 in _knobBindings)
                         {
-                            if (knobBindingPZ70.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBindingPZ70.WhenTurnedOn == whenTurnedOn)
+                            if (knobBindingPZ70.DialPosition == _pz70DialPosition && knobBindingPZ70.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBindingPZ70.WhenTurnedOn == whenTurnedOn)
                             {
                                 knobBindingPZ70.OSKeyPress = null;
                             }
@@ -546,7 +755,7 @@ namespace NonVisuals
                     {
                         foreach (var dcsBiosBinding in _dcsBiosBindings)
                         {
-                            if (dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                            if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                             {
                                 dcsBiosBinding.DCSBIOSInputs.Clear();
                             }
@@ -560,12 +769,6 @@ namespace NonVisuals
 
         private void PZ70SwitchChanged(IEnumerable<object> hashSet)
         {
-            if (!ForwardKeyPresses)
-            {
-                return;
-            }
-
-            Interlocked.Add(ref _doUpdatePanelLCD, 1);
             foreach (var o in hashSet)
             {
                 var multiPanelKnob = (MultiPanelKnob)o;
@@ -575,88 +778,98 @@ namespace NonVisuals
                     {
                         case MultiPanelPZ70Knobs.KNOB_ALT:
                             {
-                                _selectedMode = multiPanelKnob.MultiPanelPZ70Knob;
+                                _pz70DialPosition = PZ70DialPosition.ALT;
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_VS:
                             {
-                                _selectedMode = multiPanelKnob.MultiPanelPZ70Knob;
+                                _pz70DialPosition = PZ70DialPosition.VS;
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_IAS:
                             {
-                                _selectedMode = multiPanelKnob.MultiPanelPZ70Knob;
+                                _pz70DialPosition = PZ70DialPosition.IAS;
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_HDG:
                             {
-                                _selectedMode = multiPanelKnob.MultiPanelPZ70Knob;
+                                _pz70DialPosition = PZ70DialPosition.HDG;
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.KNOB_CRS:
                             {
-                                _selectedMode = multiPanelKnob.MultiPanelPZ70Knob;
+                                _pz70DialPosition = PZ70DialPosition.CRS;
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                UpdateLCD();
                                 break;
                             }
                         case MultiPanelPZ70Knobs.AP_BUTTON:
                             {
-                                _apButtonLightOn = !_apButtonLightOn;
-                                multiPanelKnob.IsOn = _apButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.AP_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                         case MultiPanelPZ70Knobs.HDG_BUTTON:
                             {
-                                _hdgButtonLightOn = !_hdgButtonLightOn;
-                                multiPanelKnob.IsOn = _hdgButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                         case MultiPanelPZ70Knobs.NAV_BUTTON:
                             {
-                                _navButtonLightOn = !_navButtonLightOn;
-                                multiPanelKnob.IsOn = _navButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                         case MultiPanelPZ70Knobs.IAS_BUTTON:
                             {
-                                _iasButtonLightOn = !_iasButtonLightOn;
-                                multiPanelKnob.IsOn = _iasButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                         case MultiPanelPZ70Knobs.ALT_BUTTON:
                             {
-                                _altButtonLightOn = !_altButtonLightOn;
-                                multiPanelKnob.IsOn = _altButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                         case MultiPanelPZ70Knobs.VS_BUTTON:
                             {
-                                _vsButtonLightOn = !_vsButtonLightOn;
-                                multiPanelKnob.IsOn = _vsButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.VS_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                         case MultiPanelPZ70Knobs.APR_BUTTON:
                             {
-                                _aprButtonLightOn = !_aprButtonLightOn;
-                                multiPanelKnob.IsOn = _aprButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.APR_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                         case MultiPanelPZ70Knobs.REV_BUTTON:
                             {
-                                _revButtonLightOn = !_revButtonLightOn;
-                                multiPanelKnob.IsOn = _revButtonLightOn;
-                                SetButtonByte();
+                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.REV_BUTTON);
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
                                 break;
                             }
                     }
                 }
-
+            }
+            UpdateLCD();
+            if (!ForwardKeyPresses)
+            {
+                return;
+            }
+            foreach (var o in hashSet)
+            {
+                var multiPanelKnob = (MultiPanelKnob)o;
                 /*
                  * IMPORTANT
                  * ---------
@@ -668,7 +881,7 @@ namespace NonVisuals
                 var found = false;
                 foreach (var knobBinding in _knobBindings)
                 {
-                    if (knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
+                    if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                     {
                         if (knobBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || knobBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
                         {
@@ -690,14 +903,13 @@ namespace NonVisuals
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
                     {
-                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == multiPanelKnob.IsOn)
+                        if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                         {
                             dcsBiosBinding.SendDCSBIOSCommands();
                             break;
                         }
                     }
                 }
-
             }
         }
 
@@ -758,102 +970,6 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void SetButtonByte()
-        {
-            /*
-            LCD Button Byte
-            00000000
-            ||||||||_ AP_BUTTON
-            |||||||_ HDG_BUTTON
-            ||||||_ NAV_BUTTON
-            |||||_ IAS_BUTTON
-            ||||_ ALT_BUTTON
-            |||_ VS_BUTTON
-            ||_ APR_BUTTON
-            |_ REV_BUTTON
-             */
-            var apMask = 1;
-            var hdgMask = 2;
-            var navMask = 4;
-            var iasMask = 8;
-            var altMask = 16;
-            var vsMask = 32;
-            var aprMask = 64;
-            var revMask = 128;
-
-            //bool isSet = (b & mask) != 0
-            //Set to 1" b |= mask
-            //Set to zero
-            //b &= ~mask
-            //Toggle
-            //b ^= mask
-
-            if (_apButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | apMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~apMask;
-            }
-            if (_hdgButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | hdgMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~hdgMask;
-            }
-            if (_navButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | navMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~navMask;
-            }
-            if (_iasButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | iasMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~iasMask;
-            }
-            if (_altButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | altMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~altMask;
-            }
-            if (_vsButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | vsMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~vsMask;
-            }
-            if (_aprButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | aprMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~aprMask;
-            }
-            if (_revButtonLightOn)
-            {
-                _buttonByte = (byte)(_buttonByte | revMask);
-            }
-            else
-            {
-                _buttonByte &= (byte)~revMask;
-            }
-            UpdateLCD();
-        }
 
         public void UpdateLCD()
         {
@@ -870,117 +986,93 @@ namespace NonVisuals
             {
                 return;
             }
-
             var bytes = new byte[12];
             bytes[0] = 0x0;
-            for (var i = 1; i < bytes.Length - 1; i++)
+            for (var ii = 1; ii < bytes.Length - 1; ii++)
             {
-                bytes[i] = 0xFF;
+                bytes[ii] = 0xFF;
             }
-            bytes[11] = _buttonByte;
-            switch (_selectedMode)
+
+            bytes[11] = _lcdButtonByteListHandler.GetButtonByte(PZ70_DialPosition);
+
+            bool foundUpperValue = false;
+            bool foundLowerValue = false;
+
+            var upperValue = 0;
+            var lowerValue = 0;
+            lock (_lcdDataVariablesLockObject)
             {
-                case MultiPanelPZ70Knobs.KNOB_ALT:
+                foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
+                {
+                    if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
                     {
-                        if (_upperLcdAlt < 0)
-                        {
-                            _upperLcdAlt = Math.Abs(_upperLcdAlt);
-                        }
-                        var dataAsString = _upperLcdAlt.ToString();
-
-                        var i = dataAsString.Length;
-                        var arrayPosition = 5;
-                        do
-                        {
-                            //    3 0 0
-                            //1 5 6 0 0
-                            //1 2 3 4 5    
-                            bytes[arrayPosition] = (byte)dataAsString[i - 1];
-                            arrayPosition--;
-                            i--;
-                        } while (i > 0);
-
-                        //Important!
-                        //Lower LCD will show a dash "-" for 0xEE.
-                        //Smallest negative value that can be shown is -9999
-                        //Largest positive value that can be shown is 99999
-                        if (_lowerLcdAlt < -9999)
-                        {
-                            _lowerLcdAlt = -9999;
-                        }
-                        dataAsString = _lowerLcdAlt.ToString();
-
-                        i = dataAsString.Length;
-                        arrayPosition = 10;
-                        do
-                        {
-                            //    3 0 0
-                            //1 5 6 0 0
-                            //1 2 3 4 5    
-                            var s = dataAsString[i - 1];
-                            if (s == '-')
-                            {
-                                bytes[arrayPosition] = 0xEE;
-                            }
-                            else
-                            {
-                                bytes[arrayPosition] = (byte)s;
-                            }
-                            arrayPosition--;
-                            i--;
-                        } while (i > 0);
-                        break;
+                        foundUpperValue = true;
+                        upperValue = dcsbiosBindingLCDPZ70.CurrentValue;
                     }
-                case MultiPanelPZ70Knobs.KNOB_VS:
+                    if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
                     {
-                        if (_upperLcdAlt < 0)
-                        {
-                            _upperLcdAlt = Math.Abs(_upperLcdAlt);
-                        }
-                        var dataAsString = _upperLcdVs.ToString();
-
-                        var i = dataAsString.Length;
-                        var arrayPosition = 5;
-                        do
-                        {
-                            //    3 0 0
-                            //1 5 6 0 0
-                            //1 2 3 4 5    
-                            bytes[arrayPosition] = (byte)dataAsString[i - 1];
-                            arrayPosition--;
-                            i--;
-                        } while (i > 0);
-
-
-                        if (_lowerLcdVs < -9999)
-                        {
-                            _lowerLcdVs = -9999;
-                        }
-                        dataAsString = _lowerLcdVs.ToString();
-
-                        i = dataAsString.Length;
-                        arrayPosition = 10;
-                        do
-                        {
-                            //    3 0 0
-                            //1 5 6 0 0
-                            //1 2 3 4 5    
-                            var s = dataAsString[i - 1];
-                            if (s == '-')
-                            {
-                                bytes[arrayPosition] = 0xEE;
-                            }
-                            else
-                            {
-                                bytes[arrayPosition] = (byte)s;
-                            }
-                            arrayPosition--;
-                            i--;
-                        } while (i > 0);
-                        break;
+                        foundLowerValue = true;
+                        lowerValue = dcsbiosBindingLCDPZ70.CurrentValue;
                     }
+                }
             }
-            SendLEDData(bytes);
+
+            if (foundUpperValue)
+            {
+                if (upperValue < 0)
+                {
+                    upperValue = Math.Abs(upperValue);
+                }
+                var dataAsString = upperValue.ToString();
+
+                var i = dataAsString.Length;
+                var arrayPosition = 5;
+                do
+                {
+                    //    3 0 0
+                    //1 5 6 0 0
+                    //1 2 3 4 5    
+                    bytes[arrayPosition] = (byte)dataAsString[i - 1];
+                    arrayPosition--;
+                    i--;
+                } while (i > 0);
+            }
+            if (foundLowerValue)
+            {
+                //Important!
+                //Lower LCD will show a dash "-" for 0xEE.
+                //Smallest negative value that can be shown is -9999
+                //Largest positive value that can be shown is 99999
+                if (lowerValue < -9999)
+                {
+                    lowerValue = -9999;
+                }
+                var dataAsString = lowerValue.ToString();
+
+                var i = dataAsString.Length;
+                var arrayPosition = 10;
+                do
+                {
+                    //    3 0 0
+                    //1 5 6 0 0
+                    //1 2 3 4 5    
+                    var s = dataAsString[i - 1];
+                    if (s == '-')
+                    {
+                        bytes[arrayPosition] = 0xEE;
+                    }
+                    else
+                    {
+                        bytes[arrayPosition] = (byte)s;
+                    }
+                    arrayPosition--;
+                    i--;
+                } while (i > 0);
+            }
+            lock (_lcdLockObject)
+            {
+                SendLEDData(bytes);
+            }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
@@ -1126,6 +1218,18 @@ namespace NonVisuals
             set { _lcdKnobSensitivity = value; }
         }
 
+        public PZ70DialPosition PZ70_DialPosition
+        {
+            get => _pz70DialPosition;
+            set => _pz70DialPosition = value;
+        }
+
+        public override String SettingsVersion()
+        {
+            return "2X";
+        }
+
+        public PZ70LCDButtonByteList LCDButtonByteListHandler => _lcdButtonByteListHandler;
     }
 
 

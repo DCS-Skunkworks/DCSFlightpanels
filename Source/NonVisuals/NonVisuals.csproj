@@ -120,14 +120,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelKnobAJS37.cs" />
     <Compile Include="RadioPanelKnobBf109.cs" />
+    <Compile Include="RadioPanelKnobF86F.cs" />
     <Compile Include="RadioPanelKnobKa50.cs" />
     <Compile Include="RadioPanelKnobMi8.cs" />
     <Compile Include="RadioPanelKnobMiG21Bis.cs" />
     <Compile Include="RadioPanelKnobA10C.cs" />
     <Compile Include="RadioPanelKnobP51D.cs" />
     <Compile Include="RadioPanelKnobUH1H.cs" />
+    <Compile Include="RadioPanelPZ69AJS37.cs" />
     <Compile Include="RadioPanelPZ69Bf109.cs" />
+    <Compile Include="RadioPanelPZ69F86F.cs" />
     <Compile Include="RadioPanelPZ69Fw190.cs" />
     <Compile Include="RadioPanelPZ69Ka50.cs" />
     <Compile Include="RadioPanelKnobFw190.cs" />

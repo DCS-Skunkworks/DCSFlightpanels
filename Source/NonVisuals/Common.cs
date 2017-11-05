@@ -132,6 +132,11 @@ namespace NonVisuals
             }
         }
 
+        public static void LogError(Exception ex, string message = null)
+        {
+            LogError(0, ex, message);
+        }
+
         public static void LogError(uint location, Exception ex, string message = null)
         {
             lock (_errorLoglockObject)

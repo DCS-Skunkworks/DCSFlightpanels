@@ -200,6 +200,7 @@ namespace NonVisuals
             _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
         }
 
+        public abstract string SettingsVersion();
         public abstract void Startup();
         public abstract void Shutdown();
         public abstract void ClearSettings();

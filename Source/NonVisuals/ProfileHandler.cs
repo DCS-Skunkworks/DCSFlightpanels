@@ -237,18 +237,10 @@ namespace NonVisuals
                  * 
                  */
                 _profileLoaded = true;
-                var oldProfileStandard = true;
                 var fileLines = File.ReadAllLines(_filename);
-                foreach (var fileLine in fileLines)
-                {
-                    if (fileLine.StartsWith("PanelType="))
-                    {
-                        oldProfileStandard = false;
-                        break;
-                    }
-                }
                 SaitekPanelsEnum currentPanelType = SaitekPanelsEnum.Unknown;
                 string currentPanelInstanceID = null;
+                string currentPanelSettingsVersion = null;
                 var insidePanel = false;
                 var sepString = "\\o/";
 
@@ -263,49 +255,60 @@ namespace NonVisuals
                         }
                         else
                         {
-                            _airframe = (DCSAirframe) Enum.Parse(typeof(DCSAirframe), fileLine.Replace("Airframe=", "").Trim());
+                            _airframe = (DCSAirframe)Enum.Parse(typeof(DCSAirframe), fileLine.Replace("Airframe=", "").Trim());
                         }
                         DCSBIOSControlLocator.Airframe = _airframe;
                         DCSBIOSControlLocator.JSONDirectory = _jsonDirectory;
                     }
                     else if (!fileLine.StartsWith("#") && fileLine.Length > 2)
                     {
-                        if (oldProfileStandard)
+                        //Process all these lines.
+                        if (fileLine.StartsWith("PanelType="))
                         {
-                            _listPanelSettingsData.Add(fileLine);
+                            currentPanelType = (SaitekPanelsEnum)Enum.Parse(typeof(SaitekPanelsEnum), fileLine.Replace("PanelType=", "").Trim());
+                        }
+                        else if (fileLine.StartsWith("PanelInstanceID="))
+                        {
+                            currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
+                            _profileFileInstanceIDs.Add(new KeyValuePair<string, SaitekPanelsEnum>(currentPanelInstanceID, currentPanelType));
+                        }
+                        else if (fileLine.StartsWith("PanelSettingsVersion="))
+                        {
+                            currentPanelSettingsVersion = fileLine.Trim();
+                        }
+                        else if (fileLine.StartsWith("BeginPanel"))
+                        {
+                            insidePanel = true;
+                        }
+                        else if (fileLine.StartsWith("EndPanel"))
+                        {
+                            insidePanel = false;
                         }
                         else
                         {
-                            //Process all these lines.
-                            if (fileLine.StartsWith("PanelType="))
+                            if (insidePanel)
                             {
-                                currentPanelType = (SaitekPanelsEnum)Enum.Parse(typeof(SaitekPanelsEnum), fileLine.Replace("PanelType=", "").Trim());
-                            }
-                            else if (fileLine.StartsWith("PanelInstanceID="))
-                            {
-                                currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
-                                _profileFileInstanceIDs.Add(new KeyValuePair<string, SaitekPanelsEnum>(currentPanelInstanceID, currentPanelType));
-                            }
-                            else if (fileLine.StartsWith("BeginPanel"))
-                            {
-                                insidePanel = true;
-                            }
-                            else if (fileLine.StartsWith("EndPanel"))
-                            {
-                                insidePanel = false;
-                            }
-                            else
-                            {
-                                if (insidePanel)
+                                var line = fileLine;
+                                if (line.StartsWith("\t"))
                                 {
-                                    if (fileLine.StartsWith("\t"))
+                                    line = line.Replace("\t", "");
+                                }
+                                if (currentPanelSettingsVersion != null)
+                                {
+                                    //0X marks that setting version isn't used (yet). Any number above 0 indicated the panel are using new versions of the settings
+                                    //and that old settings won't be loaded.
+                                    if (currentPanelSettingsVersion.EndsWith("0X"))
                                     {
-                                        _listPanelSettingsData.Add(fileLine.Substring(1) + sepString + currentPanelInstanceID);
+                                        _listPanelSettingsData.Add(line + sepString + currentPanelInstanceID);
                                     }
                                     else
                                     {
-                                        _listPanelSettingsData.Add(fileLine.Substring(1) + sepString + currentPanelInstanceID);
+                                        _listPanelSettingsData.Add(line + sepString + currentPanelInstanceID + sepString + currentPanelSettingsVersion);
                                     }
+                                }
+                                else
+                                {
+                                    _listPanelSettingsData.Add(line + sepString + currentPanelInstanceID);
                                 }
                             }
                         }
@@ -368,7 +371,7 @@ namespace NonVisuals
                 }
                 if (OnSettingsReadFromFile != null)
                 {
-                    
+
                     if (OnAirframeSelected != null)
                     {
                         //TODO DENNA ORSAKAR HÄNGANDE!!
@@ -439,6 +442,7 @@ namespace NonVisuals
                      *         
                      * PanelType=PZ55SwitchPanel
                      * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                     * PanelSettingsVersion=2X
                      * BeginPanel
                      *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
                      *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
@@ -449,6 +453,7 @@ namespace NonVisuals
                     _listPanelSettingsData.Add(Environment.NewLine);
                     _listPanelSettingsData.Add("PanelType=" + saitekPanel.TypeOfSaitekPanel);
                     _listPanelSettingsData.Add("PanelInstanceID=" + saitekPanel.InstanceId);
+                    _listPanelSettingsData.Add("PanelSettingsVersion=" + saitekPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanel");
                     foreach (var s in strings)
                     {

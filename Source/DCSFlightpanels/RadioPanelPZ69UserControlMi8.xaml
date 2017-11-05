@@ -63,20 +63,21 @@
 
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
-        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" >
+        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = R-863 Manual Frequencies <LineBreak/>
                     COM 2 = R-863 Preset Channels<LineBreak/>
                     NAV 1 = YaDRO 1A<LineBreak/>
                     NAV 2 = R-828 Preset Channels<LineBreak/>
-                    ADF = ADF ARK-9 ADF<LineBreak/>
-                    XPDR = SPU-7<LineBreak/>
+                    ADF = ADF ARK-9 Presets <LineBreak/>(0 = Backup)<LineBreak/>(1 = Main)<LineBreak/>
+                    DME = ADF ARK-9 Tuning and Volume<LineBreak/>0 = Off<LineBreak/>1 = Compass<LineBreak/>2 = Antenna<LineBreak/>3 = Loop<LineBreak/>
+                    XPDR = SPU-7, Radio and Volume<LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="3"  Grid.ColumnSpan="3" Grid.RowSpan="2" >
+        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="3" Grid.Row="1"  Grid.ColumnSpan="3" Grid.RowSpan="2" >
             <StackPanel >
                 <Label Content="Frequency Knobs sensitivity"></Label>
                 <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">

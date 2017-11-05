@@ -872,6 +872,11 @@ namespace NonVisuals
                 IsDirtyMethod();
             }
         }
+
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
     }
 
 

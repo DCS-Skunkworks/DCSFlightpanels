@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using DCS_BIOS;
@@ -2819,20 +2820,25 @@ namespace NonVisuals
             //Large dial 116 - 149 [step of 1]
             var inc = "INC\n";
             var dec = "DEC\n";
+            Debug.Print("Desired = " + desiredFreq + ", actual = " + actualFreq);
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 16)
             {
+                Debug.Print("A Returning DEC " + desiredFreq + ", actual = " + actualFreq);
                 return dec;
             }
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 16)
             {
+                Debug.Print("B Returning INC " + desiredFreq + ", actual = " + actualFreq);
                 return inc;
             }
             if (desiredFreq < actualFreq && actualFreq - desiredFreq >= 16)
             {
+                Debug.Print("C Returning INC " + desiredFreq + ", actual = " + actualFreq);
                 return inc;
             }
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 16)
             {
+                Debug.Print("D Returning DEC " + desiredFreq + ", actual = " + actualFreq);
                 return dec;
             }
             throw new Exception("Should reach this code. GetCommandDirectionForVhfCommDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -3119,6 +3125,11 @@ namespace NonVisuals
         private bool VhfNavSyncing()
         {
             return Interlocked.Read(ref _vhfNavThreadNowSynching) > 0;
+        }
+
+        public override String SettingsVersion()
+        {
+            return "0X";
         }
 
     }

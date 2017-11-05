@@ -478,6 +478,11 @@ namespace NonVisuals
             get { return _dcsBiosBindings; }
             set { _dcsBiosBindings = value; }
         }
+
+        public override String SettingsVersion()
+        {
+            return "0X";
+        }
     }
 
 
