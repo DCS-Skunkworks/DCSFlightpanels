@@ -34,7 +34,9 @@ namespace DCS_BIOS
         [Description("F-86F Sabre")]
         F86F,
         [Description("AJS-37")]
-        AJS37
+        AJS37,
+        [Description("SpitfireLFMkIX")]
+        SpitfireLFMkIX
     }
 
     public static class DCSBIOSControlLocator
