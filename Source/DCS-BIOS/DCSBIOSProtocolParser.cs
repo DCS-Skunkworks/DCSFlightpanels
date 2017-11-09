@@ -151,13 +151,17 @@ namespace DCS_BIOS
 
         private bool IsBroadcastable(uint address)
         {
-            for (var i = 0; i < _listOfAddressesToBroascast.Count; i++)
+            if (_listOfAddressesToBroascast.Any(u => u == address))
+            {
+                return true;
+            }
+            /*for (var i = 0; i < _listOfAddressesToBroascast.Count; i++)
             {
                 if (_listOfAddressesToBroascast[i] == address)
                 {
                     return true;
                 }
-            }
+            }*/
             return false;
         }
 
