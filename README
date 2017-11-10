@@ -11,7 +11,20 @@ Using DCSFlightpanels as a keyemulator* it can be used in almost any game
 
 *Radiopanel, Backlit Panel not supported in keyemulator mode
 
+v2.2.xxx x November 2017
+-----------------------------
+F-86 complete radio support
+Spitfire HF-Radio & IFF supported
+Ka-50, ABRIS dials can be controlled via radio panel
+Mi-8, ADF correction made, main and backup ADF can be toggled 
+Multipanel redone completely, each dial position enables it's own configuration, 100+ configurations!
+Multipanel, dial positions can be used
+Formula textbox height increased
+Small bugfixes
+
+
 v2.1.743 9 October 2017
+-----------------------------
 Radio panel (& full DCS-BIOS) support for FW-190D, Bf-109 K4 and P-51D
 FIP support removed
 Term "NONE" for key emulator mode changed to "KEYEMULATOR"
@@ -20,6 +33,7 @@ Popup window when searching for DCS-BIOS controls height increased
 
 
 v 2.1.699 13 September 2017
+-----------------------------
 Mi-8 support added
 Added delay option when configuring DCS-BIOS commands for switches (after command)
 Loads last profile
@@ -28,21 +42,25 @@ Hanging problems solved. Process left hanging in Windows Task Manager
 Project name changed from ProUsbPanels to DCSFlightpanels (DCSFlightpanels.exe)
 
 v 2.1.614 3 September 2017
+-----------------------------
 Ka-50 radio supported
 Added code limiting HID traffic to radiopanels & multipanel (LCD updates)
 Other refactoring in all radiopanel codes (Mig-21, A-10, UH-1H)
 
 v 2.1.204 18 April 2015
+-----------------------------
 MiG-21bis radio (RSBN/ARC/RADIO) supported.
 A-10C VHF FM modified so that full frequency is used (5 digits) 30.000 -> 76.000.
 Main window shows type of profile opened. 
 
 v2.1.158 [1.4.2015]
+-----------------------------
 TPM Panel supported
 User gets error message if USB Instance IDs are found in the profile file that cannot be found in Windows.
 New profile file format, easier to read with device Instance ID listed only once.
 
 v2.1.120 [26 March 2015]
+-----------------------------
 Bugfix, old settings not cleared when opening a new profile. Concerns all panels except Radio Panel.
 Bugfix, Pitch down, Flaps down description not visible and corresponding entry in profile erroneous.
 PZ55 Landing gear lights modification on how new values are treated.
@@ -50,11 +68,13 @@ Added option for user to have a description for DCS-BIOS tied switches, knobs, b
 Added TF-51D as new profile option for development purposes only
 
 v2.1.102 [21 March 2015]
+-----------------------------
 Duplicate error codes modified to be unique (Baldawg's problems)
 Knob sensitivity added for PZ70 Lcd knob
 Bugfix, pitch down, flaps down not working properly
 
 v2.1.93 [15 March 2015]
+-----------------------------
 Paul's UH-1H ADF freq correction math formulas added.
 User friendly error messages added when editing DCS-BIOS Input and having an invalid input value
 Several sync/swap bugs fixed (A-10C & UH-1H).
@@ -72,6 +92,7 @@ ADF    = AN/ARN-83 ADF
 XPDR   = INTERCOMM
 
 v2.1.34 [9 March 2015]
+-----------------------------
 UH-1H Radio Panel support
 Bug fixes
 Frequency swap now works (ACT/STBY)
@@ -79,6 +100,7 @@ Refactoring of key emulator code
 Multiple DCS-BIOS controls can now be tied to a single switch/key/knob
 
 v2.0 [* March 2015]
+-----------------------------
 Now supporting:
 Saitek Multi Panel PZ70
 Saitek Radio Panel PZ69
