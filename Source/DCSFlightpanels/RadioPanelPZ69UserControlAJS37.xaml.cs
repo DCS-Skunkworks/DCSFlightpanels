@@ -192,7 +192,7 @@ namespace DCSFlightpanels
                     });
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelPZ69KnobsAJS37.UPPER_R863_MANUAL:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_FR22:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -202,7 +202,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_R863_PRESET:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_FR24:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -212,7 +212,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_YADRO1A:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_TILS:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -222,7 +222,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_R828:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE0:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -232,7 +232,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_ADF_ARK9:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -242,7 +242,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE3:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE2:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -252,7 +252,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.UPPER_SPU7:
+                        case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE3:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -262,7 +262,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_R863_MANUAL:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_FR22:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -272,7 +272,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_R863_PRESET:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_FR24:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -282,7 +282,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_YADRO1A:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_TILS:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -292,7 +292,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_R828:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE0:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -302,7 +302,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_ADF_ARK9:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -312,7 +312,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE3:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE2:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -322,7 +322,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsAJS37.LOWER_SPU7:
+                        case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE3:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(

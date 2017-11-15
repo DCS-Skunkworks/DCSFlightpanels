@@ -33,7 +33,7 @@ namespace DCS_BIOS
         P51D,
         [Description("F-86F Sabre")]
         F86F,
-        [Description("AJS-37")]
+        [Description("AJS37")]
         AJS37,
         [Description("SpitfireLFMkIX")]
         SpitfireLFMkIX

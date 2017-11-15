@@ -67,12 +67,12 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = R-863 Manual Frequencies <LineBreak/>
-                    COM 2 = R-863 Preset Channels<LineBreak/>
-                    NAV 1 = YaDRO 1A<LineBreak/>
-                    NAV 2 = R-828 Preset Channels<LineBreak/>
-                    ADF = ADF ARK-9 ADF<LineBreak/>
-                    XPDR = SPU-7<LineBreak/>
+                    COM 1 = FR22<LineBreak/>
+                    COM 2 = FR24<LineBreak/>
+                    NAV 1 = TILS<LineBreak/>
+                    NAV 2 = <LineBreak/>
+                    ADF = <LineBreak/>
+                    XPDR = <LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>
