@@ -51,14 +51,20 @@ namespace NonVisuals
         //ACT/STBY Toggles the ranges
         private volatile uint _tilsChannelCockpitValue;
         private volatile uint _tilsChannelLayerSelectorCockpitValue;
+        private volatile uint _masterModeSelectorCockpitValue;
         private object _lockTILSChannelSelectorDialObject1 = new object();
         private object _lockTILSChannelLayerSelectorObject2 = new object();
+        private object _lockMasterModeSelectorObject = new object();
         private DCSBIOSOutput _tilsChannelSelectorDcsbiosOutput;
         private DCSBIOSOutput _tilsChannelLayerSelectorDcsbiosOutput;
+        private DCSBIOSOutput _masterModeSelectorDcsbiosOutput;
         private const string TILSChannelDialCommandInc = "TILS_CHANNEL_SELECT INC\n";
         private const string TILSChannelDialCommandDec = "TILS_CHANNEL_SELECT DEC\n";
         private const string TILSChannelLayerDialCommandToggle = "TILS_CHANNEL_LAYER TOGGLE\n";
+        private const string MasterModeSelectorCommandInc = "MASTER_MODE_SELECT INC\n";
+        private const string MasterModeSelectorCommandDec = "MASTER_MODE_SELECT DEC\n";
         private int _tilsChannelDialSkipper;
+        private int _masterModeSelectorDialSkipper;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
@@ -134,6 +140,20 @@ namespace NonVisuals
                         var tmp = _tilsChannelLayerSelectorCockpitValue;
                         _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.GetUIntValue(data);
                         if (tmp != _tilsChannelLayerSelectorCockpitValue)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //Master Mode Selector
+                if (address == _masterModeSelectorDcsbiosOutput.Address)
+                {
+                    lock (_lockMasterModeSelectorObject)
+                    {
+                        var tmp = _masterModeSelectorCockpitValue;
+                        _masterModeSelectorCockpitValue = _masterModeSelectorDcsbiosOutput.GetUIntValue(data);
+                        if (tmp != _masterModeSelectorCockpitValue)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -489,6 +509,10 @@ namespace NonVisuals
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
+                                                if (!SkipMasterModeSelectorChange())
+                                                {
+                                                    DCSBIOS.Send(MasterModeSelectorCommandInc);
+                                                }
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.NOUSE:
@@ -520,7 +544,10 @@ namespace NonVisuals
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-
+                                                if (!SkipMasterModeSelectorChange())
+                                                {
+                                                    DCSBIOS.Send(MasterModeSelectorCommandDec);
+                                                }
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.NOUSE:
@@ -625,6 +652,10 @@ namespace NonVisuals
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
+                                                if (!SkipMasterModeSelectorChange())
+                                                {
+                                                    DCSBIOS.Send(MasterModeSelectorCommandInc);
+                                                }
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.NOUSE:
@@ -656,7 +687,10 @@ namespace NonVisuals
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-
+                                                if (!SkipMasterModeSelectorChange())
+                                                {
+                                                    DCSBIOS.Send(MasterModeSelectorCommandDec);
+                                                }
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.NOUSE:
@@ -718,6 +752,7 @@ namespace NonVisuals
                             {
                                 uint layerSelector = 0;
                                 uint channelSelector = 0;
+                                uint masterModeSelector = 0;
                                 lock (_lockTILSChannelSelectorDialObject1)
                                 {
                                     channelSelector = _tilsChannelCockpitValue;
@@ -725,6 +760,10 @@ namespace NonVisuals
                                 lock (_lockTILSChannelLayerSelectorObject2)
                                 {
                                     layerSelector = _tilsChannelLayerSelectorCockpitValue;
+                                }
+                                lock (_lockMasterModeSelectorObject)
+                                {
+                                    masterModeSelector = _masterModeSelectorCockpitValue;
                                 }
                                 if (channelSelector == 0)
                                 {
@@ -738,7 +777,7 @@ namespace NonVisuals
                                     }
                                     SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.UPPER_RIGHT);
                                 }
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterModeSelector, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
                         case CurrentAJS37RadioMode.NOUSE:
@@ -764,6 +803,7 @@ namespace NonVisuals
                             {
                                 uint layerSelector = 0;
                                 uint channelSelector = 0;
+                                uint masterModeSelector = 0;
                                 lock (_lockTILSChannelSelectorDialObject1)
                                 {
                                     channelSelector = _tilsChannelCockpitValue;
@@ -771,6 +811,10 @@ namespace NonVisuals
                                 lock (_lockTILSChannelLayerSelectorObject2)
                                 {
                                     layerSelector = _tilsChannelLayerSelectorCockpitValue;
+                                }
+                                lock (_lockMasterModeSelectorObject)
+                                {
+                                    masterModeSelector = _masterModeSelectorCockpitValue;
                                 }
                                 if (channelSelector == 0)
                                 {
@@ -784,7 +828,7 @@ namespace NonVisuals
                                     }
                                     SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.LOWER_RIGHT);
                                 }
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterModeSelector, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
                         case CurrentAJS37RadioMode.NOUSE:
@@ -917,7 +961,8 @@ namespace NonVisuals
                 //NAV1
                 _tilsChannelSelectorDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("TILS_CHANNEL_SELECT");
                 _tilsChannelLayerSelectorDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("TILS_CHANNEL_LAYER");
-
+                _masterModeSelectorDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("MASTER_MODE_SELECT");
+                
                 //NAV2
 
 
@@ -1037,6 +1082,31 @@ namespace NonVisuals
             return false;
         }
 
+        private bool SkipMasterModeSelectorChange()
+        {
+            try
+            {
+                Common.DebugP("Entering AJS-37 Radio SkipMasterModeSelectorChange()");
+                if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS || _currentLowerRadioMode == CurrentAJS37RadioMode.TILS)
+                {
+                    if (_masterModeSelectorDialSkipper > 2)
+                    {
+                        _masterModeSelectorDialSkipper = 0;
+                        Common.DebugP("Leaving AJS-37 Radio SkipMasterModeSelectorChange()");
+                        return false;
+                    }
+                    _masterModeSelectorDialSkipper++;
+                    Common.DebugP("Leaving AJS-37 Radio SkipMasterModeSelectorChange()");
+                    return true;
+                }
+                Common.DebugP("Leaving AJS-37 Radio SkipMasterModeSelectorChange()");
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(78009, ex);
+            }
+            return false;
+        }
 
         public override String SettingsVersion()
         {
