@@ -11,14 +11,14 @@ Using DCSFlightpanels as a keyemulator* it can be used in almost any game
 
 *Radiopanel, Backlit Panel not supported in keyemulator mode
 
-v2.2.xxx x November 2017
+v2.2.63 17 November 2017
 -----------------------------
 F-86 complete radio support
 Spitfire HF-Radio & IFF supported
 Ka-50, ABRIS dials can be controlled via radio panel
 Mi-8, ADF correction made, main and backup ADF can be toggled 
 Multipanel redone completely, each dial position enables it's own configuration, 100+ configurations!
-Multipanel, dial positions can be used
+Multipanel, all dial positions can be used
 Formula textbox height increased
 Small bugfixes
 
