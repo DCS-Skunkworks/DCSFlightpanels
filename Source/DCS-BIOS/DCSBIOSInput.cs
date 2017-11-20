@@ -89,7 +89,14 @@ namespace DCS_BIOS
                     }
                 case DCSBIOSInputType.VARIABLE_STEP:
                     {
-                        result = _controlId + " " + _specifiedVariableStepArgument + "\n";
+                        if (_specifiedVariableStepArgument > 0)
+                        {
+                            result = _controlId + " +" + _specifiedVariableStepArgument + "\n";
+                        }
+                        else
+                        {
+                            result = _controlId + " " + _specifiedVariableStepArgument + "\n";
+                        }
                         break;
                     }
             }

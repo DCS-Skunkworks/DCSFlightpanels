@@ -92,6 +92,7 @@ namespace NonVisuals
         /*Mi-8 R-828 FM Radio PRESETS NAV2*/
         //Large dial 1-10 [step of 1]
         //Small dial volume control
+        //ACT/STBY AGC, automatic gain control8
         private readonly object _lockR828Preset1DialObject1 = new object();
         private DCSBIOSOutput _r828Preset1DcsbiosOutputDial;
         private volatile uint _r828PresetCockpitDialPos = 1;
@@ -100,6 +101,8 @@ namespace NonVisuals
         private int _r828PresetDialSkipper;
         private const string R828PresetVolumeKnobCommandInc = "R828_VOL +2500\n";
         private const string R828PresetVolumeKnobCommandDec = "R828_VOL -2500\n";
+        private const string R828GainControlCommandOn = "R828_TUNER INC\n";
+        private const string R828GainControlCommandOff = "R828_TUNER DEC\n";
 
         /*Mi-8 ARK-9 ADF MAIN*/
         //Large 100KHz 01 -> 12
@@ -492,7 +495,7 @@ namespace NonVisuals
         }
 
 
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMi8 knob)
+        private void SendFrequencyToDCSBIOS(bool knobIsOn, RadioPanelPZ69KnobsMi8 knob)
         {
             try
             {
@@ -524,6 +527,14 @@ namespace NonVisuals
                                     }
                                 case CurrentMi8RadioMode.R828_PRESETS:
                                     {
+                                        if (knobIsOn)
+                                        {
+                                            DCSBIOS.Send(R828GainControlCommandOn);
+                                        }
+                                        else
+                                        {
+                                            DCSBIOS.Send(R828GainControlCommandOff);
+                                        }
                                         break;
                                     }
                                 case CurrentMi8RadioMode.ADF_ARK9:
@@ -557,6 +568,14 @@ namespace NonVisuals
                                     }
                                 case CurrentMi8RadioMode.R828_PRESETS:
                                     {
+                                        if (knobIsOn)
+                                        {
+                                            DCSBIOS.Send(R828GainControlCommandOn);
+                                        }
+                                        else
+                                        {
+                                            DCSBIOS.Send(R828GainControlCommandOff);
+                                        }
                                         break;
                                     }
                                 case CurrentMi8RadioMode.ADF_ARK9:
@@ -1296,9 +1315,9 @@ namespace NonVisuals
                                             }
                                         }
                                     }
-                                    else if (radioPanelKnob.IsOn)
+                                    else
                                     {
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
@@ -1346,9 +1365,9 @@ namespace NonVisuals
                                             }
                                         }
                                     }
-                                    else if (radioPanelKnob.IsOn)
+                                    else
                                     {
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
