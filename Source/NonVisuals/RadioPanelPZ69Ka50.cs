@@ -74,6 +74,7 @@ namespace NonVisuals
         /*Ka-50 ARK-22 ADF*/
         //Large dial 0-9 [step of 1]
         //Small dial volume control
+        //ACT/STBY Switch between ADF Modes Inner Auto Outer
         private readonly object _lockADFDialObject1 = new object();
         private DCSBIOSOutput _adfDcsbiosOutputPresetDial;
         private volatile uint _adfCockpitPresetDialPos = 1;
@@ -82,12 +83,17 @@ namespace NonVisuals
         private int _adfPresetDialSkipper;
         private const string ADFVolumeKnobCommandInc = "ADF_VOLUME +2500\n";
         private const string ADFVolumeKnobCommandDec = "ADF_VOLUME -2500\n";
-        private const string ADFModeSwitchAntenna = "ADF_CMPS_ANT INC\n";
+        /*private const string ADFModeSwitchAntenna = "ADF_CMPS_ANT INC\n";
         private const string ADFModeSwitchCompass = "ADF_CMPS_ANT DEC\n";
-        private string _adfModeSwitchLastSent = "";
+        private string _adfModeSwitchLastSent = "";*/
+        private readonly object _lockADFModeDialObject = new object();
+        private DCSBIOSOutput _adfModeDcsbiosOutput;
+        private volatile uint _adfModeCockpitPos = 1;
+        private const string ADFModeInc = "ADF_NDB_MODE INC\n";
+        private const string ADFModeDec = "ADF_NDB_MODE DEC\n";
+        private bool _adfModeSwitchDirectionUp = false;
 
-        private readonly object _lockShowFrequenciesOnPanelObject = new object();
-        private long _doUpdatePanelLCD;
+
 
         /*Ka-50 ARBIS NAV1 (Not radio but programmed as there are so few radio systems on the KA-50*/
         //Large ARBIS Left Dial
@@ -103,10 +109,14 @@ namespace NonVisuals
         private readonly ClickSpeedDetector _arbisRightDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
         private const string ARBISRightDialCommandIncMore = "ABRIS_CURSOR_ROT +2500\n";
         private const string ARBISRightDialCommandDecMore = "ABRIS_CURSOR_ROT -2500\n";
-        private const string ARBISRightDialCommandInc = "ABRIS_CURSOR_ROT +1000\n";
-        private const string ARBISRightDialCommandDec = "ABRIS_CURSOR_ROT -1000\n";
+        private const string ARBISRightDialCommandInc = "ABRIS_CURSOR_ROT +5000\n";
+        private const string ARBISRightDialCommandDec = "ABRIS_CURSOR_ROT -5000\n";
         private const string ARBISRightDialPushToggleOnCommand = "ABRIS_CURSOR_BTN 1\n";
         private const string ARBISRightDialPushToggleOffCommand = "ABRIS_CURSOR_BTN 0\n";
+
+
+        private readonly object _lockShowFrequenciesOnPanelObject = new object();
+        private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69Ka50(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -236,6 +246,22 @@ namespace NonVisuals
                         var tmp = _adfCockpitPresetDialPos;
                         _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.GetUIntValue(data);
                         if (tmp != _adfCockpitPresetDialPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+
+
+                //ADF Mode
+                if (address == _adfModeDcsbiosOutput.Address)
+                {
+                    lock (_lockADFModeDialObject)
+                    {
+                        var tmp = _adfModeCockpitPos;
+                        _adfModeCockpitPos = _adfModeDcsbiosOutput.GetUIntValue(data);
+                        if (tmp != _adfModeCockpitPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -751,7 +777,28 @@ namespace NonVisuals
                                     }
                                     else if (_currentUpperRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
-                                        if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
+                                        lock (_lockADFModeDialObject)
+                                        {
+                                            if (_adfModeSwitchDirectionUp && _adfModeCockpitPos == 2)
+                                            {
+                                                _adfModeSwitchDirectionUp = false;
+                                                DCSBIOS.Send(ADFModeDec);
+                                            }
+                                            else if (!_adfModeSwitchDirectionUp && _adfModeCockpitPos == 0)
+                                            {
+                                                _adfModeSwitchDirectionUp = true;
+                                                DCSBIOS.Send(ADFModeInc);
+                                            }
+                                            else if (_adfModeSwitchDirectionUp)
+                                            {
+                                                DCSBIOS.Send(ADFModeInc);
+                                            }
+                                            else if (!_adfModeSwitchDirectionUp)
+                                            {
+                                                DCSBIOS.Send(ADFModeDec);
+                                            }
+                                        }
+                                        /*if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
                                         {
                                             DCSBIOS.Send(ADFModeSwitchCompass);
                                             _adfModeSwitchLastSent = ADFModeSwitchCompass;
@@ -760,7 +807,7 @@ namespace NonVisuals
                                         {
                                             DCSBIOS.Send(ADFModeSwitchAntenna);
                                             _adfModeSwitchLastSent = ADFModeSwitchAntenna;
-                                        }
+                                        }*/
                                     }
                                     else
                                     {
@@ -783,6 +830,28 @@ namespace NonVisuals
                                     }
                                     else if (_currentLowerRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
+                                        lock (_lockADFModeDialObject)
+                                        {
+                                            if (_adfModeSwitchDirectionUp && _adfModeCockpitPos == 2)
+                                            {
+                                                _adfModeSwitchDirectionUp = false;
+                                                DCSBIOS.Send(ADFModeDec);
+                                            }
+                                            else if (!_adfModeSwitchDirectionUp && _adfModeCockpitPos == 0)
+                                            {
+                                                _adfModeSwitchDirectionUp = true;
+                                                DCSBIOS.Send(ADFModeInc);
+                                            }
+                                            else if (_adfModeSwitchDirectionUp)
+                                            {
+                                                DCSBIOS.Send(ADFModeInc);
+                                            }
+                                            else if (!_adfModeSwitchDirectionUp)
+                                            {
+                                                DCSBIOS.Send(ADFModeDec);
+                                            }
+                                        }
+                                        /*
                                         if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
                                         {
                                             DCSBIOS.Send(ADFModeSwitchCompass);
@@ -792,7 +861,7 @@ namespace NonVisuals
                                         {
                                             DCSBIOS.Send(ADFModeSwitchAntenna);
                                             _adfModeSwitchLastSent = ADFModeSwitchAntenna;
-                                        }
+                                        }*/
                                     }
                                     else
                                     {
@@ -1470,8 +1539,13 @@ namespace NonVisuals
                                             }
                                     }
                                 }
+                                uint adfMode = 0;
+                                lock (_lockADFModeDialObject)
+                                {
+                                    adfMode = _adfModeCockpitPos;
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.NOUSE:
@@ -1558,8 +1632,13 @@ namespace NonVisuals
                                             }
                                     }
                                 }
+                                uint adfMode = 0;
+                                lock (_lockADFModeDialObject)
+                                {
+                                    adfMode = _adfModeCockpitPos;
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.NOUSE:
@@ -1694,6 +1773,7 @@ namespace NonVisuals
 
                 //ADF
                 _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_CHANNEL");
+                _adfModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_NDB_MODE");
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
