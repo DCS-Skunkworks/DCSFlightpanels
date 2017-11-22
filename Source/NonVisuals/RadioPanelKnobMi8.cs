@@ -10,7 +10,7 @@ namespace NonVisuals
         UPPER_YADRO1A = 4,          //NAV1
         UPPER_R828 = 8,             //NAV2
         UPPER_ADF_ARK9 = 16,       //ADF
-        UPPER_ADF_TUNE = 32,          //DME_
+        UPPER_ARK_UD = 32,          //DME_
         UPPER_SPU7 = 64,            //XPDR
         UPPER_SMALL_FREQ_WHEEL_INC = 128,
         UPPER_SMALL_FREQ_WHEEL_DEC = 256,
@@ -22,7 +22,7 @@ namespace NonVisuals
         LOWER_YADRO1A = 16384,      //NAV1
         LOWER_R828 = 32768,          //NAV2
         LOWER_ADF_ARK9 = 65536,    //ADF
-        LOWER_ADF_TUNE = 131072,      //DME_
+        LOWER_ARK_UD = 131072,      //DME_
         LOWER_SPU7 = 262144,        //XPDR
         LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
         LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
@@ -38,7 +38,7 @@ namespace NonVisuals
         YADRO1A = 4,
         R828_PRESETS = 8,
         ADF_ARK9 = 16,
-        ADF_TUNE = 32,
+        ARK_UD = 32,
         SPU7 = 64,
         NOUSE = 128
     }
@@ -103,7 +103,7 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsMi8.LOWER_YADRO1A)); //LOWER NAV1
             result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsMi8.LOWER_R828)); //LOWER NAV2
             result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsMi8.LOWER_ADF_ARK9)); //LOWER ADF
-            result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsMi8.LOWER_ADF_TUNE)); //LOWER DME
+            result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsMi8.LOWER_ARK_UD)); //LOWER DME
             result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsMi8.LOWER_SPU7)); //LOWER XPDR
             result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH));
             result.Add(new RadioPanelKnobMi8(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH));
@@ -114,7 +114,7 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobMi8(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsMi8.UPPER_YADRO1A)); //UPPER NAV1
             result.Add(new RadioPanelKnobMi8(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsMi8.UPPER_R828)); //UPPER NAV2
             result.Add(new RadioPanelKnobMi8(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsMi8.UPPER_ADF_ARK9)); //UPPER ADF
-            result.Add(new RadioPanelKnobMi8(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsMi8.UPPER_ADF_TUNE)); //UPPER DME
+            result.Add(new RadioPanelKnobMi8(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsMi8.UPPER_ARK_UD)); //UPPER DME
             result.Add(new RadioPanelKnobMi8(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsMi8.UPPER_SPU7)); //UPPER XPDR
             result.Add(new RadioPanelKnobMi8(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsMi8.LOWER_R863_MANUAL)); //LOWER COM1
             return result;

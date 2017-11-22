@@ -71,6 +71,7 @@
                     <![CDATA[NAV 1 = ABRIS Left & Right Dial]]><LineBreak/>
                     NAV 2 = N/A<LineBreak/>
                     ADF   = ADF ARK-22 ADF<LineBreak/>
+                    ADF   = ACT/STBY => <LineBreak/>INNER-AUTO-OUTER beacon mode
                 </TextBlock>
             </StackPanel>
         </GroupBox>

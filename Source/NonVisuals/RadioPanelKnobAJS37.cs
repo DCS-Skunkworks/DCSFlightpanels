@@ -5,25 +5,25 @@ namespace NonVisuals
 {
     public enum RadioPanelPZ69KnobsAJS37
     {
-        UPPER_R863_MANUAL = 0,      //COM1
-        UPPER_R863_PRESET = 2,      //COM2
-        UPPER_YADRO1A = 4,          //NAV1
-        UPPER_R828 = 8,             //NAV2
-        UPPER_ADF_ARK9 = 16,       //ADF
-        UPPER_NOUSE3 = 32,          //DME_
-        UPPER_SPU7 = 64,            //XPDR
+        UPPER_FR22 = 0,      //COM1
+        UPPER_FR24 = 2,      //COM2
+        UPPER_TILS = 4,          //NAV1
+        UPPER_NOUSE0 = 8,             //NAV2
+        UPPER_NOUSE1 = 16,       //ADF
+        UPPER_NOUSE2 = 32,          //DME_
+        UPPER_NOUSE3 = 64,            //XPDR
         UPPER_SMALL_FREQ_WHEEL_INC = 128,
         UPPER_SMALL_FREQ_WHEEL_DEC = 256,
         UPPER_LARGE_FREQ_WHEEL_INC = 512,
         UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
         UPPER_FREQ_SWITCH = 2056,
-        LOWER_R863_MANUAL = 4096,   //COM1
-        LOWER_R863_PRESET = 8192,   //COM2
-        LOWER_YADRO1A = 16384,      //NAV1
-        LOWER_R828 = 32768,          //NAV2
-        LOWER_ADF_ARK9 = 65536,    //ADF
-        LOWER_NOUSE3 = 131072,      //DME_
-        LOWER_SPU7 = 262144,        //XPDR
+        LOWER_FR22 = 4096,   //COM1
+        LOWER_FR24 = 8192,   //COM2
+        LOWER_TILS = 16384,      //NAV1
+        LOWER_NOUSE0 = 32768,          //NAV2
+        LOWER_NOUSE1 = 65536,    //ADF
+        LOWER_NOUSE2 = 131072,      //DME_
+        LOWER_NOUSE3 = 262144,        //XPDR
         LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
         LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
         LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
@@ -33,12 +33,9 @@ namespace NonVisuals
 
     public enum CurrentAJS37RadioMode
     {
-        R863_MANUAL = 0,
-        R863_PRESET = 2,
-        YADRO1A = 4,
-        R828_PRESETS = 8,
-        ADF_ARK9 = 16,
-        SPU7 = 32,
+        FR22 = 0,
+        FR24 = 2,
+        TILS = 4,
         NOUSE = 64
     }
 
@@ -98,24 +95,24 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobAJS37(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsAJS37.LOWER_LARGE_FREQ_WHEEL_DEC));
 
             //Group 1
-            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_R863_PRESET)); //LOWER COM2
-            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_YADRO1A)); //LOWER NAV1
-            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_R828)); //LOWER NAV2
-            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_ADF_ARK9)); //LOWER ADF
-            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_NOUSE3)); //LOWER DME
-            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_SPU7)); //LOWER XPDR
+            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_FR24)); //LOWER COM2
+            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_TILS)); //LOWER NAV1
+            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_NOUSE0)); //LOWER NAV2
+            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_NOUSE1)); //LOWER ADF
+            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_NOUSE2)); //LOWER DME
+            result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_NOUSE3)); //LOWER XPDR
             result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH));
             result.Add(new RadioPanelKnobAJS37(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH));
 
             //Group 2
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_R863_MANUAL)); //UPPER COM1
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_R863_PRESET)); //UPPER COM2
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_YADRO1A)); //UPPER NAV1
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_R828)); //UPPER NAV2
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_ADF_ARK9)); //UPPER ADF
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_NOUSE3)); //UPPER DME
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_SPU7)); //UPPER XPDR
-            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_R863_MANUAL)); //LOWER COM1
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_FR22)); //UPPER COM1
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_FR24)); //UPPER COM2
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_TILS)); //UPPER NAV1
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_NOUSE0)); //UPPER NAV2
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_NOUSE1)); //UPPER ADF
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_NOUSE2)); //UPPER DME
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsAJS37.UPPER_NOUSE3)); //UPPER XPDR
+            result.Add(new RadioPanelKnobAJS37(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsAJS37.LOWER_FR22)); //LOWER COM1
             return result;
         }
 
