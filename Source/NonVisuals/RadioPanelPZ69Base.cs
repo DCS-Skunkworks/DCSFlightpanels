@@ -200,6 +200,47 @@ namespace NonVisuals
             } while (i < bytesToBeInjected.Length && i < 5);
         }
 
+        protected void SetPZ69DisplayBytesDefault(ref byte[] bytes, string digits, PZ69LCDPosition pz69LCDPosition)
+        {
+
+            var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var i = 0;
+            do
+            {
+                if (digits[i] == '.')
+                {
+                    //skip to next position, this has already been dealt with
+                    i++;
+                }
+                
+                byte b = 0;
+                try
+                {
+                    if (digits[i] == ' ')
+                    {
+                        bytes[arrayPosition] = 0xff;
+                    }
+                    else
+                    {
+                        b = Byte.Parse(digits[i].ToString());
+                        bytes[arrayPosition] = b;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Common.LogError(38410, e, "SetPZ69DisplayBytesDefault()");
+                }
+                if (digits.Length > i + 1 && digits[i + 1] == '.')
+                {
+                    //Add decimal marker
+                    bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
+                }
+
+                arrayPosition++;
+                i++;
+            } while (i < digits.Length && i < 6);
+        }
+
         protected void SetPZ69DisplayBytesDefault(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
         {
 
