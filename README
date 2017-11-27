@@ -9,7 +9,15 @@ Elite Dangerous, Warthunder, Flaming Cliff Series, IL-2.
 
 *You can use multiple panels of each sort and have them separately configured.*
 
-*Radiopanel, Backlit Panel not supported in keyemulator mode
+*Radiopanel, Back Lit Information Panel (BIP) not supported in keyemulator mode
+
+Saitek / Logitech Panels Supported:
+---------------------------------------------
+* PZ55 Switchpanel (DCS-BIOS & Key emulator)
+* PZ70 Multipanel (DCS-BIOS & Key emulator)
+* TPM (DCS-BIOS & Key emulator)
+* PZ69 Radio Panel (DCS-BIOS)
+* BIP Back Lit Information Panel (DCS-BIOS)
 
 v2.2.63 17 November 2017
 -----------------------------
