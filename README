@@ -6,18 +6,19 @@ the Radiopanel to operate cockpit radio equipment and also show data from the
 aircraft in the Multipanel & Backlit Panel.
 Using DCSFlightpanels as a keyemulator* it can be used in almost any game like
 Elite Dangerous, Warthunder, Flaming Cliff Series, IL-2.
-
-*You can use multiple panels of each sort and have them separately configured.*
-
-*Radiopanel, Back Lit Information Panel (BIP) not supported in keyemulator mode
+You can use multiple panels of each sort and have them separately configured.
 
 Saitek / Logitech Panels Supported:
 ---------------------------------------------
-* PZ55 Switchpanel (DCS-BIOS & Key emulator)
-* PZ70 Multipanel (DCS-BIOS & Key emulator)
+* PZ55 Switchpanel (DCS-BIOS & Key emulator**)
+* PZ70 Multipanel (DCS-BIOS & Key emulator**)
 * TPM (DCS-BIOS & Key emulator)
 * PZ69 Radio Panel (DCS-BIOS)
 * BIP Back Lit Information Panel (DCS-BIOS)
+
+*Radiopanel, Back Lit Information Panel (BIP) not supported in keyemulator mode
+**LCD information can not be shown in Key emulator mode (no data from game available)
+
 
 v2.2.63 17 November 2017
 -----------------------------
