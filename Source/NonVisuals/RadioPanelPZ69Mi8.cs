@@ -92,7 +92,7 @@ namespace NonVisuals
         /*Mi-8 R-828 FM Radio PRESETS NAV2*/
         //Large dial 1-10 [step of 1]
         //Small dial volume control
-        //ACT/STBY AGC, automatic gain control8
+        //ACT/STBY AGC, automatic gain control
         private readonly object _lockR828Preset1DialObject1 = new object();
         private DCSBIOSOutput _r828Preset1DcsbiosOutputDial;
         private volatile uint _r828PresetCockpitDialPos = 1;
@@ -185,6 +185,7 @@ namespace NonVisuals
         /*Mi-8 SPU-7 XPDR*/
         //Large dial 0-5 [step of 1]
         //Small dial volume control
+        //ACT/STBY 
         private readonly object _lockSPU7DialObject1 = new object();
         private DCSBIOSOutput _spu7DcsbiosOutputPresetDial;
         private volatile uint _spu7CockpitDialPos = 0;
