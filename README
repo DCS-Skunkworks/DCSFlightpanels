@@ -16,7 +16,6 @@ Saitek / Logitech Panels Supported:
 * PZ69 Radio Panel (DCS-BIOS)
 * BIP Back Lit Information Panel (DCS-BIOS)
 
-*Radiopanel, Back Lit Information Panel (BIP) not supported in keyemulator mode
 **LCD information can not be shown in Key emulator mode (no data from game available)
 
 
