@@ -50,6 +50,7 @@ namespace NonVisuals
         /*Mi-8 VHF/UHF R-863 PRESETS COM2*/
         //Large dial 1-10 [step of 1]
         //Small dial volume control
+        //ACT/STBY Unit Switch, DIAL/MEMORY
         private readonly object _lockR863Preset1DialObject1 = new object();
         private DCSBIOSOutput _r863Preset1DcsbiosOutputPresetDial;
         private volatile uint _r863PresetCockpitDialPos = 1;
@@ -58,6 +59,10 @@ namespace NonVisuals
         private int _r863PresetDialSkipper;
         private const string R863PresetVolumeKnobCommandInc = "R863_VOL +2500\n";
         private const string R863PresetVolumeKnobCommandDec = "R863_VOL -2500\n";
+        private readonly object _lockR863UnitSwitchObject = new object();
+        private DCSBIOSOutput _r863UnitSwitchDcsbiosOutput;
+        private volatile uint _r863UnitSwitchCockpitPos = 1;
+        private const string R863UnitSwitchCommandToggle = "R863_UNIT_SWITCH TOGGLE\n";
 
         /*Mi-8 YaDRO 1A NAV1*/
         //Large dial 100-149  -> 20 - 179 [step of 1]
@@ -185,7 +190,7 @@ namespace NonVisuals
         /*Mi-8 SPU-7 XPDR*/
         //Large dial 0-5 [step of 1]
         //Small dial volume control
-        //ACT/STBY 
+        //ACT/STBY Toggle Radio/ICS Switch
         private readonly object _lockSPU7DialObject1 = new object();
         private DCSBIOSOutput _spu7DcsbiosOutputPresetDial;
         private volatile uint _spu7CockpitDialPos = 0;
@@ -194,6 +199,10 @@ namespace NonVisuals
         private const string SPU7CommandDec = "RADIO_SEL_R DEC\n";
         private const string SPU7VolumeKnobCommandInc = "LST_VOL_KNOB_L +2500\n";
         private const string SPU7VolumeKnobCommandDec = "LST_VOL_KNOB_L -2500\n";
+        private readonly object _lockSPU7ICSSwitchObject = new object();
+        private DCSBIOSOutput _spu7ICSSwitchDcsbiosOutput;
+        private volatile uint _spu7ICSSwitchCockpitDialPos = 0;
+        private const string SPU7ICSSwitchToggleCommand = "SPU7_L_ICS TOGGLE\n";
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
@@ -395,6 +404,20 @@ namespace NonVisuals
                     }
                 }
 
+                //R-863 Unit Switch
+                if (address == _r863UnitSwitchDcsbiosOutput.Address)
+                {
+                    lock (_lockR863UnitSwitchObject)
+                    {
+                        var tmp = _r863UnitSwitchCockpitPos;
+                        _r863UnitSwitchCockpitPos = _r863UnitSwitchDcsbiosOutput.GetUIntValue(data);
+                        if (tmp != _r863UnitSwitchCockpitPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
                 //YaDRO-1A
 
                 //R-828 Preset Channel Dial
@@ -480,7 +503,7 @@ namespace NonVisuals
                         }
                     }
                 }
-                
+
                 //ARK-UD  VHF Homing Preset Channels
                 if (address == _arkUDPresetDcsbiosOutputPresetDial.Address)
                 {
@@ -531,6 +554,20 @@ namespace NonVisuals
                         var tmp = _spu7CockpitDialPos;
                         _spu7CockpitDialPos = _spu7DcsbiosOutputPresetDial.GetUIntValue(data);
                         if (tmp != _spu7CockpitDialPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //SPU-7 Radio/ICS
+                if (address == _spu7ICSSwitchDcsbiosOutput.Address)
+                {
+                    lock (_lockSPU7ICSSwitchObject)
+                    {
+                        var tmp = _spu7ICSSwitchCockpitDialPos;
+                        _spu7ICSSwitchCockpitDialPos = _spu7ICSSwitchDcsbiosOutput.GetUIntValue(data);
+                        if (tmp != _spu7ICSSwitchCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -597,6 +634,10 @@ namespace NonVisuals
                                     }
                                 case CurrentMi8RadioMode.SPU7:
                                     {
+                                        if (knobIsOn)
+                                        {
+                                            DCSBIOS.Send(SPU7ICSSwitchToggleCommand);
+                                        }
                                         break;
                                     }
                             }
@@ -638,6 +679,10 @@ namespace NonVisuals
                                     }
                                 case CurrentMi8RadioMode.SPU7:
                                     {
+                                        if (knobIsOn)
+                                        {
+                                            DCSBIOS.Send(SPU7ICSSwitchToggleCommand);
+                                        }
                                         break;
                                     }
                             }
@@ -1331,11 +1376,7 @@ namespace NonVisuals
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            //DCSBIOS.Send(Vhf1TunerButtonPress);
-                                        }
-                                        else
-                                        {
-                                            //DCSBIOS.Send(Vhf1TunerButtonRelease);
+                                            DCSBIOS.Send(R863UnitSwitchCommandToggle);
                                         }
                                     }
                                     else if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
@@ -1358,11 +1399,7 @@ namespace NonVisuals
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            //DCSBIOS.Send(Vhf1TunerButtonPress);
-                                        }
-                                        else
-                                        {
-                                            //DCSBIOS.Send(Vhf1TunerButtonRelease);
+                                            DCSBIOS.Send(R863UnitSwitchCommandToggle);
                                         }
                                     }
                                     else if (_currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9 && radioPanelKnob.IsOn)
@@ -2236,12 +2273,17 @@ namespace NonVisuals
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
                                 var channelAsString = "";
+                                uint unitSwitch = 0;
                                 lock (_lockR863Preset1DialObject1)
                                 {
                                     channelAsString = (_r863PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
+                                lock (_lockR863UnitSwitchObject)
+                                {
+                                    unitSwitch = _r863UnitSwitchCockpitPos;
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, unitSwitch, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
 
@@ -2352,12 +2394,17 @@ namespace NonVisuals
                             {
                                 //0-5
                                 var channelAsString = "";
+                                uint spuICSSwitch = 0;
                                 lock (_lockSPU7DialObject1)
                                 {
                                     channelAsString = (_spu7CockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+                                lock (_lockSPU7ICSSwitchObject)
+                                {
+                                    spuICSSwitch = _spu7ICSSwitchCockpitDialPos;
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, spuICSSwitch, PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
                         case CurrentMi8RadioMode.NOUSE:
@@ -2400,15 +2447,20 @@ namespace NonVisuals
                             {
                                 //Preset Channel Selector
                                 //      " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
-                                //Pos     0    1    2    3    4    5    6    7    8    9   10  
+                                //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
                                 var channelAsString = "";
+                                uint unitSwitch = 0;
                                 lock (_lockR863Preset1DialObject1)
                                 {
                                     channelAsString = (_r863PresetCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
+                                lock (_lockR863UnitSwitchObject)
+                                {
+                                    unitSwitch = _r863UnitSwitchCockpitPos;
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, unitSwitch, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
 
@@ -2490,40 +2542,45 @@ namespace NonVisuals
                                 break;
                             }
                         case CurrentMi8RadioMode.ARK_UD:
-                        {
-                            var stringToBeShownLeft = "";
-                            uint arkPreset = 0;
-                            uint arkMode = 0;
-                            uint arkBand = 0;
-                            lock (_lockARKUDPresetDialObject)
                             {
-                                arkPreset = _arkUDPresetCockpitDial1Pos + 1;
+                                var stringToBeShownLeft = "";
+                                uint arkPreset = 0;
+                                uint arkMode = 0;
+                                uint arkBand = 0;
+                                lock (_lockARKUDPresetDialObject)
+                                {
+                                    arkPreset = _arkUDPresetCockpitDial1Pos + 1;
+                                }
+                                lock (_lockARKUDModeDialObject)
+                                {
+                                    arkMode = _arkUDModeCockpitDial1Pos;
+                                }
+                                lock (_lockARKUDVhfUhfModeDialObject)
+                                {
+                                    arkBand = _arkUDVhfUhfModeCockpitDial1Pos;
+                                }
+                                //1 4 5
+                                //12345
+                                stringToBeShownLeft = arkBand + "   " + arkMode;
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, arkPreset, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, stringToBeShownLeft, PZ69LCDPosition.LOWER_LEFT);
+                                break;
                             }
-                            lock (_lockARKUDModeDialObject)
-                            {
-                                arkMode = _arkUDModeCockpitDial1Pos;
-                            }
-                            lock (_lockARKUDVhfUhfModeDialObject)
-                            {
-                                arkBand = _arkUDVhfUhfModeCockpitDial1Pos;
-                            }
-                            //1 4 5
-                            //12345
-                            stringToBeShownLeft = arkBand + "   " + arkMode;
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, arkPreset, PZ69LCDPosition.LOWER_RIGHT);
-                            SetPZ69DisplayBytesDefault(ref bytes, stringToBeShownLeft, PZ69LCDPosition.LOWER_LEFT);
-                            break;
-                        }
                         case CurrentMi8RadioMode.SPU7:
                             {
                                 //0-5
                                 var channelAsString = "";
+                                uint spuICSSwitch = 0;
                                 lock (_lockSPU7DialObject1)
                                 {
                                     channelAsString = (_spu7CockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
+                                lock (_lockSPU7ICSSwitchObject)
+                                {
+                                    spuICSSwitch = _spu7ICSSwitchCockpitDialPos;
+                                }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, spuICSSwitch, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
                         case CurrentMi8RadioMode.NOUSE:
@@ -2653,6 +2710,7 @@ namespace NonVisuals
 
                 //COM2
                 _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_CNL_SEL");
+                _r863UnitSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_UNIT_SWITCH");
 
                 //NAV1
                 _yadro1aDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("YADRO1A_FREQ");
@@ -2672,13 +2730,11 @@ namespace NonVisuals
                 _arkUDPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARCUD_CHL");
                 _arkUDModeDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARCUD_MODE");
                 _arkUDVhfUhfModeDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARCUD_WAVE");
+                
+                //XPDR
+                _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_SEL_L");
+                _spu7ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("SPU7_L_ICS");
 
-
-
-
-
-        //XPDR
-        _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_SEL_L");
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {

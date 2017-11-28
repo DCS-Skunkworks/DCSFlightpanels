@@ -67,12 +67,12 @@
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = R-863 Manual Frequencies <LineBreak/>
-                    COM 2 = R-863 Preset Channels<LineBreak/>
+                    COM 2 = R-863 Presets, DIAL/MEMORY<LineBreak/>
                     NAV 1 = YaDRO 1A<LineBreak/>
                     NAV 2 = R-828 Preset Channels<LineBreak/>
                     ADF = ADF ARK-9 Presets <LineBreak/>(0 = Backup)<LineBreak/>(1 = Main)<LineBreak/>
                     DME = ARK-UD VHF Homing<LineBreak/>Preset Channels 1-6<LineBreak/>Mode OFF/NARROW/WIDE/PULSE/RC<LineBreak/>Wave Band MW/DW<LineBreak/>
-                    XPDR = SPU-7, Radio and Volume<LineBreak/>
+                    XPDR = SPU-7 Radio, Volume, Radio/ICS<LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>

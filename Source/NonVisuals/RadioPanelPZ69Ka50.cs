@@ -15,7 +15,7 @@ namespace NonVisuals
         private CurrentKa50RadioMode _currentUpperRadioMode = CurrentKa50RadioMode.VHF1_R828;
         private CurrentKa50RadioMode _currentLowerRadioMode = CurrentKa50RadioMode.VHF1_R828;
 
-        /*Ka-50 VHF 1 R-828*/
+        /*COM1 Ka-50 VHF 1 R-828*/
         //Large dial 1-10 [step of 1]
         //Small dial volume control
         private readonly object _lockVhf1DialObject1 = new object();
@@ -30,7 +30,7 @@ namespace NonVisuals
         private const string Vhf1TunerButtonPress = "R828_TUNER INC\n";
         private const string Vhf1TunerButtonRelease = "R828_TUNER DEC\n";
 
-        /*Ka-50 VHF 2 R-800L1*/
+        /*COM2 Ka-50 VHF 2 R-800L1*/
         //Large dial 100-149  -> 220 - 399 [step of 1]
         //Small dial 0 - 95
         /*private int[] _r800l1UsedBigFrequencyValues =
@@ -71,7 +71,7 @@ namespace NonVisuals
         private long _r800l1Dial4WaitingForFeedback;
 
 
-        /*Ka-50 ARK-22 ADF*/
+        /*ADF Ka-50 ARK-22 ADF*/
         //Large dial 0-9 [step of 1]
         //Small dial volume control
         //ACT/STBY Switch between ADF Modes Inner Auto Outer
@@ -95,7 +95,7 @@ namespace NonVisuals
 
 
 
-        /*Ka-50 ARBIS NAV1 (Not radio but programmed as there are so few radio systems on the KA-50*/
+        /*NAV1 Ka-50 ARBIS NAV1 (Not radio but programmed as there are so few radio systems on the KA-50*/
         //Large ARBIS Left Dial
         //Small ARBIS Right Dial
         //ACT/STBY Push Right ARBIS Dial IN/OUT
@@ -113,6 +113,30 @@ namespace NonVisuals
         private const string ARBISRightDialCommandDec = "ABRIS_CURSOR_ROT -5000\n";
         private const string ARBISRightDialPushToggleOnCommand = "ABRIS_CURSOR_BTN 1\n";
         private const string ARBISRightDialPushToggleOffCommand = "ABRIS_CURSOR_BTN 0\n";
+
+        /*NAV2 Ka-50 Datalink Operation*/
+        //Large dial Datalink Master Mode 0-3
+        //Small dial Datalink Self ID
+        //ACT/STBY Datalink ON/OFF
+        private readonly object _lockDatalinkMasterModeObject = new object();
+        private DCSBIOSOutput _datalinkMasterModeDcsbiosOutput;
+        private volatile uint _datalinkMasterModeCockpitPos = 1;
+        private const string DatalinkMasterModeCommandInc = "DLNK_MASTER_MODE INC\n";
+        private const string DatalinkMasterModeCommandDec = "DLNK_MASTER_MODE DEC\n";
+        private int _datalinkMasterModeDialSkipper;
+        private readonly object _lockDatalinkSelfIdObject = new object();
+        private DCSBIOSOutput _datalinkSelfIdDcsbiosOutput;
+        private volatile uint _datalinkSelfIdCockpitPos = 1;
+        private const string DatalinkSelfIdCommandInc = "DLNK_SELF_ID INC\n";
+        private const string DatalinkSelfIdCommandDec = "DLNK_SELF_ID DEC\n";
+        private int _datalinkSelfIdDialSkipper;
+        private readonly object _lockDatalinkPowerOnOffObject = new object();
+        private DCSBIOSOutput _datalinkPowerOnOffDcsbiosOutput;
+        private volatile uint _datalinkPowerOnOffCockpitPos = 1;
+        private const string DatalinkPowerOnOffCommandToggle = "PVI_POWER TOGGLE\n";
+
+
+
 
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
@@ -233,6 +257,48 @@ namespace NonVisuals
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                             //Common.DebugP("R-800L1 freq dial 4 Before : " + tmp + "  now: " + _r800l1CockpitFreq4DialPos);
                             Interlocked.Exchange(ref _r800l1Dial4WaitingForFeedback, 0);
+                        }
+                    }
+                }
+
+                //NAV2 Datalink Master Mode
+                if (address == _datalinkMasterModeDcsbiosOutput.Address)
+                {
+                    lock (_lockDatalinkMasterModeObject)
+                    {
+                        var tmp = _datalinkMasterModeCockpitPos;
+                        _datalinkMasterModeCockpitPos = _datalinkMasterModeDcsbiosOutput.GetUIntValue(data);
+                        if (tmp != _datalinkMasterModeCockpitPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //NAV2 Datalink Self ID
+                if (address == _datalinkSelfIdDcsbiosOutput.Address)
+                {
+                    lock (_lockDatalinkSelfIdObject)
+                    {
+                        var tmp = _datalinkSelfIdCockpitPos;
+                        _datalinkSelfIdCockpitPos = _datalinkSelfIdDcsbiosOutput.GetUIntValue(data);
+                        if (tmp != _datalinkSelfIdCockpitPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+
+                //NAV2 Datalink Power ON/OFF
+                if (address == _datalinkPowerOnOffDcsbiosOutput.Address)
+                {
+                    lock (_lockDatalinkPowerOnOffObject)
+                    {
+                        var tmp = _datalinkPowerOnOffCockpitPos;
+                        _datalinkPowerOnOffCockpitPos = _datalinkPowerOnOffDcsbiosOutput.GetUIntValue(data);
+                        if (tmp != _datalinkPowerOnOffCockpitPos)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
                     }
                 }
@@ -722,7 +788,14 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsKa50.UPPER_NOUSE2:
+                            case RadioPanelPZ69KnobsKa50.UPPER_DATALINK:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetUpperRadioMode(CurrentKa50RadioMode.DATALINK);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsKa50.UPPER_NOUSE3:
                             case RadioPanelPZ69KnobsKa50.UPPER_NOUSE4:
                                 {
@@ -740,7 +813,14 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsKa50.LOWER_NOUSE2:
+                            case RadioPanelPZ69KnobsKa50.LOWER_DATALINK:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentKa50RadioMode.DATALINK);
+                                    }
+                                    break;
+                                }
                             case RadioPanelPZ69KnobsKa50.LOWER_NOUSE3:
                             case RadioPanelPZ69KnobsKa50.LOWER_NOUSE4:
                                 {
@@ -809,6 +889,10 @@ namespace NonVisuals
                                             _adfModeSwitchLastSent = ADFModeSwitchAntenna;
                                         }*/
                                     }
+                                    else if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
+                                    {
+                                        DCSBIOS.Send(DatalinkPowerOnOffCommandToggle);
+                                    }
                                     else
                                     {
                                         SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.UPPER_FREQ_SWITCH);
@@ -862,6 +946,10 @@ namespace NonVisuals
                                             DCSBIOS.Send(ADFModeSwitchAntenna);
                                             _adfModeSwitchLastSent = ADFModeSwitchAntenna;
                                         }*/
+                                    }
+                                    else if (_currentLowerRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
+                                    {
+                                        DCSBIOS.Send(DatalinkPowerOnOffCommandToggle);
                                     }
                                     else
                                     {
@@ -943,6 +1031,14 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkMasterModeChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkMasterModeCommandInc);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 if (!SkipADFPresetDialChange())
@@ -1002,6 +1098,14 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkMasterModeChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkMasterModeCommandDec);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 if (!SkipADFPresetDialChange())
@@ -1050,6 +1154,14 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkSelfIdChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkSelfIdCommandInc);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandInc);
@@ -1092,6 +1204,14 @@ namespace NonVisuals
                                                 else
                                                 {
                                                     DCSBIOS.Send(ARBISRightDialCommandDec);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkSelfIdChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkSelfIdCommandDec);
                                                 }
                                                 break;
                                             }
@@ -1160,6 +1280,14 @@ namespace NonVisuals
                                                 else
                                                 {
                                                     DCSBIOS.Send(ARBISLeftDialCommandInc);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkMasterModeChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkMasterModeCommandInc);
                                                 }
                                                 break;
                                             }
@@ -1234,6 +1362,14 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkMasterModeChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkMasterModeCommandDec);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 if (!SkipADFPresetDialChange())
@@ -1282,6 +1418,14 @@ namespace NonVisuals
                                                 }
                                                 break;
                                             }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkSelfIdChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkSelfIdCommandInc);
+                                                }
+                                                break;
+                                            }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
                                                 DCSBIOS.Send(ADFVolumeKnobCommandInc);
@@ -1324,6 +1468,14 @@ namespace NonVisuals
                                                 else
                                                 {
                                                     DCSBIOS.Send(ARBISRightDialCommandDec);
+                                                }
+                                                break;
+                                            }
+                                        case CurrentKa50RadioMode.DATALINK:
+                                            {
+                                                if (!SkipDataLinkSelfIdChange())
+                                                {
+                                                    DCSBIOS.Send(DatalinkSelfIdCommandDec);
                                                 }
                                                 break;
                                             }
@@ -1438,6 +1590,58 @@ namespace NonVisuals
             return false;
         }
 
+        private bool SkipDataLinkMasterModeChange()
+        {
+            try
+            {
+                Common.DebugP("Entering Ka-50 Radio SkipDataLinkMasterModeChange()");
+                if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK || _currentLowerRadioMode == CurrentKa50RadioMode.DATALINK)
+                {
+                    if (_datalinkMasterModeDialSkipper > 2)
+                    {
+                        _datalinkMasterModeDialSkipper = 0;
+                        Common.DebugP("Leaving Ka-50 Radio SkipDataLinkMasterModeChange()");
+                        return false;
+                    }
+                    _datalinkMasterModeDialSkipper++;
+                    Common.DebugP("Leaving Ka-50 Radio SkipDataLinkMasterModeChange()");
+                    return true;
+                }
+                Common.DebugP("Leaving Ka-50 Radio SkipDataLinkMasterModeChange()");
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(77010, ex);
+            }
+            return false;
+        }
+
+        private bool SkipDataLinkSelfIdChange()
+        {
+            try
+            {
+                Common.DebugP("Entering Ka-50 Radio SkipDataLinkSelfIdChange()");
+                if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK || _currentLowerRadioMode == CurrentKa50RadioMode.DATALINK)
+                {
+                    if (_datalinkSelfIdDialSkipper > 2)
+                    {
+                        _datalinkSelfIdDialSkipper = 0;
+                        Common.DebugP("Leaving Ka-50 Radio SkipDataLinkSelfIdChange()");
+                        return false;
+                    }
+                    _datalinkSelfIdDialSkipper++;
+                    Common.DebugP("Leaving Ka-50 Radio SkipDataLinkSelfIdChange()");
+                    return true;
+                }
+                Common.DebugP("Leaving Ka-50 Radio SkipDataLinkSelfIdChange()");
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(77010, ex);
+            }
+            return false;
+        }
+
         private void ShowFrequenciesOnPanel()
         {
             try
@@ -1510,6 +1714,28 @@ namespace NonVisuals
                                 var channelAsString = "88888";
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                break;
+                            }
+                        case CurrentKa50RadioMode.DATALINK:
+                            {
+                                uint masterMode = 0;
+                                uint selfId = 0;
+                                uint power = 0;
+                                lock (_lockDatalinkMasterModeObject)
+                                {
+                                    masterMode = _datalinkMasterModeCockpitPos;
+                                }
+                                lock (_lockDatalinkSelfIdObject)
+                                {
+                                    selfId = _datalinkSelfIdCockpitPos + 1;
+                                }
+                                lock (_lockDatalinkPowerOnOffObject)
+                                {
+                                    power = _datalinkPowerOnOffCockpitPos;
+                                }
+
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.UPPER_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ADF_ARK22:
@@ -1606,6 +1832,28 @@ namespace NonVisuals
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
                                 break;
                             }
+                        case CurrentKa50RadioMode.DATALINK:
+                        {
+                            uint masterMode = 0;
+                            uint selfId = 0;
+                            uint power = 0;
+                            lock (_lockDatalinkMasterModeObject)
+                            {
+                                masterMode = _datalinkMasterModeCockpitPos;
+                            }
+                            lock (_lockDatalinkSelfIdObject)
+                            {
+                                selfId = _datalinkSelfIdCockpitPos + 1;
+                            }
+                            lock (_lockDatalinkPowerOnOffObject)
+                            {
+                                power = _datalinkPowerOnOffCockpitPos;
+                            }
+
+                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.LOWER_LEFT);
+                            break;
+                        }
                         case CurrentKa50RadioMode.ADF_ARK22:
                             {
                                 //Preset Channel Selector
@@ -1774,6 +2022,13 @@ namespace NonVisuals
                 //ADF
                 _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_CHANNEL");
                 _adfModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_NDB_MODE");
+
+                //NAV2 Datalink
+                _datalinkMasterModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DLNK_MASTER_MODE");
+                _datalinkSelfIdDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("DLNK_SELF_ID");
+                _datalinkPowerOnOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("PVI_POWER");
+
+
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {

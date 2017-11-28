@@ -8,7 +8,7 @@ namespace NonVisuals
         UPPER_VHF1_R828 = 0,   //COM1
         UPPER_VHF2_R800L1 = 2,  //COM2
         UPPER_ABRIS = 4, //NAV1
-        UPPER_NOUSE2 = 8, //NAV2
+        UPPER_DATALINK = 8, //NAV2
         UPPER_ADF_ARK22 = 16, //ADF
         UPPER_NOUSE3 = 32, //DME_
         UPPER_NOUSE4 = 64, //XPDR
@@ -20,7 +20,7 @@ namespace NonVisuals
         LOWER_VHF1_R828 = 4096,
         LOWER_VHF2_R800L1 = 8192,
         LOWER_ABRIS = 16384,
-        LOWER_NOUSE2 = 32768,
+        LOWER_DATALINK = 32768,
         LOWER_ADF_ARK22 = 65536,
         LOWER_NOUSE3 = 131072,
         LOWER_NOUSE4 = 262144,
@@ -37,7 +37,8 @@ namespace NonVisuals
         VHF2_R800L1 = 2,
         ADF_ARK22 = 4,
         ABRIS = 8,
-        NOUSE = 16
+        DATALINK = 16,
+        NOUSE = 32
     }
 
     public class RadioPanelKnobKa50
@@ -98,7 +99,7 @@ namespace NonVisuals
             //Group 1
             result.Add(new RadioPanelKnobKa50(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsKa50.LOWER_VHF2_R800L1)); //LOWER COM2
             result.Add(new RadioPanelKnobKa50(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsKa50.LOWER_ABRIS)); //LOWER NAV1
-            result.Add(new RadioPanelKnobKa50(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsKa50.LOWER_NOUSE2)); //LOWER NAV2
+            result.Add(new RadioPanelKnobKa50(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsKa50.LOWER_DATALINK)); //LOWER NAV2
             result.Add(new RadioPanelKnobKa50(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsKa50.LOWER_ADF_ARK22)); //LOWER ADF
             result.Add(new RadioPanelKnobKa50(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsKa50.LOWER_NOUSE3)); //LOWER DME
             result.Add(new RadioPanelKnobKa50(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsKa50.LOWER_NOUSE4)); //LOWER XPDR
@@ -109,7 +110,7 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsKa50.UPPER_VHF1_R828)); //UPPER COM1
             result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsKa50.UPPER_VHF2_R800L1)); //UPPER COM2
             result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsKa50.UPPER_ABRIS)); //UPPER NAV1
-            result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsKa50.UPPER_NOUSE2)); //UPPER NAV2
+            result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsKa50.UPPER_DATALINK)); //UPPER NAV2
             result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsKa50.UPPER_ADF_ARK22)); //UPPER ADF
             result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsKa50.UPPER_NOUSE3)); //UPPER DME
             result.Add(new RadioPanelKnobKa50(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsKa50.UPPER_NOUSE4)); //UPPER XPDR
