@@ -20,6 +20,19 @@ Saitek / Logitech Panels Supported:
 
 Support thread : https://forums.eagle.ru/showthread.php?t=137670
 
+
+v2.2.77 1 December 2017
+-----------------------------
+AJS37 FR22 & TILS & Master Mode Selector Implemented (COM1 & NAV1)
+Mi-8 R-828, automatic gain control added to ACT/STBY
+VARIABLE_STEP bug fixed
+Ka-50 ADF, ACT/STBY switches between INNER-AUTO-OUTER Beacon Mode
+Mi-8 ARK-UD added to DME position. Large dial -> Preset Channels, small dial -> Mode, ACT/STBY = Wave Band
+Mi-8 R863-PRESET: ACT/STBY -> R863_UNIT_SWITCH
+Mi-8 SPU-7: ACT/STBY -> SPU7_L_ICS or SPU7_R_ICS
+Ka-50 NAV2 : Datalink Master Mode Selector, Self ID Selector, Power ON/OFF
+
+
 v2.2.63 17 November 2017
 -----------------------------
 F-86 complete radio support
