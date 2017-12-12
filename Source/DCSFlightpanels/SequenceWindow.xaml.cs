@@ -43,16 +43,16 @@ namespace DCSFlightpanels
         {
             get { return _sortedList; }
         }
-        
+
         public string GetInformation
         {
             get { return textBoxInformation.Text; }
         }
-        
+
         private void SetFormState()
         {
             buttonUp.IsEnabled = dataGridSequences.SelectedItems.Count == 1 && dataGridSequences.SelectedIndex > 0;
-            buttonDown.IsEnabled = dataGridSequences.SelectedItems.Count == 1 && dataGridSequences.SelectedIndex < dataGridSequences.Items.Count-1;
+            buttonDown.IsEnabled = dataGridSequences.SelectedItems.Count == 1 && dataGridSequences.SelectedIndex < dataGridSequences.Items.Count - 1;
             buttonAdd.IsEnabled = true;
             buttonEdit.IsEnabled = dataGridSequences.SelectedItems.Count == 1;
             buttonDelete.IsEnabled = dataGridSequences.SelectedItems.Count > 0;
@@ -81,7 +81,7 @@ namespace DCSFlightpanels
                     var keyPressInfo = new KeyPressInfo();
                     keyPressInfo.LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
                     keyPressInfo.VirtualKeyCodes = OSKeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
-                    keyPressInfo.LengthOfKeyPress = (KeyPressLength) keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
+                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
                     _sortedList.Add(GetNewKeyValue(), keyPressInfo);
 
                     dataGridSequences.DataContext = _sortedList;
@@ -130,7 +130,7 @@ namespace DCSFlightpanels
                 if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
                 {
                     //Clicked OK
-                    if(!keyPressWindow.IsDirty)
+                    if (!keyPressWindow.IsDirty)
                     {
                         //User made no changes
                         return;
@@ -154,7 +154,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>) dataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, KeyPressInfo>)dataGridSequences.SelectedItem;
                 MoveItemUp(value.Key);
             }
             catch (Exception ex)

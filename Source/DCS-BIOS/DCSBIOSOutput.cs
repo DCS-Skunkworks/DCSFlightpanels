@@ -44,7 +44,7 @@ namespace DCS_BIOS
         //private Expression _expression;
         private bool _debug;
         private readonly object _lockObject = new object();
-        
+
         public static DCSBIOSOutput GetUpdateCounter()
         {
             var counter = DCSBIOSControlLocator.GetDCSBIOSOutput("_UPDATE_COUNTER");
@@ -88,7 +88,7 @@ namespace DCS_BIOS
                 return result;
             }
         }
-        
+
         private bool CheckForValueMatchAndChange(uint data)
         {
             var tmpData = data;
@@ -124,7 +124,7 @@ namespace DCS_BIOS
             }
             return resultComparison && resultChange;
         }
-        
+
         public bool CheckForValueMatch(object data)
         {
             //todo change not processed
@@ -205,7 +205,7 @@ namespace DCS_BIOS
 
         public void Consume(DCSBIOSControl dcsbiosControl)
         {
-            
+
             _controlId = dcsbiosControl.identifier;
             _controlDescription = dcsbiosControl.description;
             _controlType = dcsbiosControl.physical_variant;
@@ -262,7 +262,7 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutput cannot import string : " + str);
             }
-            value = value.Replace("DCSBiosOutput{", "").Replace("}","");
+            value = value.Replace("DCSBiosOutput{", "").Replace("}", "");
             //AAP_EGIPWR|Equals|0
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             _controlId = entries[0];

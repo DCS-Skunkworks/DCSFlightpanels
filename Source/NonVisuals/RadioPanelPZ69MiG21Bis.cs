@@ -74,8 +74,9 @@ namespace NonVisuals
 
         public override void DcsBiosDataReceived(uint address, uint data)
         {
-            //Common.DebugP("PZ69 MiG21 READ ENTERING");
+
             UpdateCounter(address, data);
+            
             /*
              * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
              * Once a dial has been deemed to be "off" position and needs to be changed
@@ -87,7 +88,7 @@ namespace NonVisuals
             //Radio
             if (address == _radioDcsbiosOutputFreqSelectorPosition.Address)
             {
-                //Common.DebugP("Radio freq pos arrived, waiting for lock." + Environment.TickCount);
+
                 lock (_lockRadioFreqSelectorPositionObject)
                 {
                     var tmp = _radioFreqSelectorPositionCockpit;
@@ -95,7 +96,7 @@ namespace NonVisuals
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         _radioFreqSelectorPositionCockpit = _radioDcsbiosOutputFreqSelectorPosition.GetUIntValue(data);
-                        //Common.DebugP("Just read Radio freq. sel. pos.: " + _radioFreqSelectorPositionCockpit + "  " + Environment.TickCount);
+
                     }
                 }
             }
@@ -103,11 +104,11 @@ namespace NonVisuals
             //RSBN Nav
             if (address == _rsbnNavChannelCockpitOutput.Address)
             {
-                //Common.DebugP("RSBN Nav channel arrived, waiting for lock." + Environment.TickCount);
+
                 lock (_lockRSBNNavChannelObject)
                 {
                     var tmp = _rsbnNavChannelCockpit;
-                    //Common.DebugP("Just read RSBN Nav channel : " + _rsbnNavChannelCockpit + "  " + Environment.TickCount);
+
                     _rsbnNavChannelCockpit = _rsbnNavChannelCockpitOutput.GetUIntValue(data);
                     if (tmp != _rsbnNavChannelCockpit)
                     {
@@ -119,11 +120,11 @@ namespace NonVisuals
             //RSBN ILS
             if (address == _rsbnILSChannelCockpitOutput.Address)
             {
-                //Common.DebugP("RSBN ILS channel arrived, waiting for lock." + Environment.TickCount);
+
                 lock (_lockRSBNILSChannelObject)
                 {
                     var tmp = _rsbnILSChannelCockpit;
-                    //Common.DebugP("Just read RSBN Nav channel : " + _rsbnILSChannelCockpit + "  " + Environment.TickCount);
+
                     _rsbnILSChannelCockpit = _rsbnILSChannelCockpitOutput.GetUIntValue(data);
                     if (tmp != _rsbnILSChannelCockpit)
                     {
@@ -135,11 +136,11 @@ namespace NonVisuals
             //ARC Sector
             if (address == _arcSectorCockpitOutput.Address)
             {
-                //Common.DebugP("ARC Sector arrived, waiting for lock." + Environment.TickCount);
+
                 lock (_lockARCSectorObject)
                 {
                     var tmp = _arcSectorCockpit;
-                    //Common.DebugP("Just read ARC Sector : " + _arcSectorCockpit + "  " + Environment.TickCount);
+
                     _arcSectorCockpit = _arcSectorCockpitOutput.GetUIntValue(data);
                     if (tmp != _arcSectorCockpit)
                     {
@@ -151,11 +152,11 @@ namespace NonVisuals
             //ARC Preset
             if (address == _arcPresetChannelCockpitOutput.Address)
             {
-                //Common.DebugP("ARC Preset Channel, waiting for lock." + Environment.TickCount);
+
                 lock (_lockARCPresetChannelObject)
                 {
                     var tmp = _arcPresetChannelCockpit;
-                    //Common.DebugP("Just read ARC Preset Channel : " + _arcPresetChannelCockpit + "  " + Environment.TickCount);
+
                     _arcPresetChannelCockpit = _arcPresetChannelCockpitOutput.GetUIntValue(data) + 1;
                     if (tmp != _arcPresetChannelCockpit)
                     {
@@ -167,7 +168,7 @@ namespace NonVisuals
             //Set once
             DataHasBeenReceivedFromDCSBIOS = true;
             ShowFrequenciesOnPanel();
-            //Common.DebugP("PZ69 MiG21 READ EXITING");
+
         }
 
         public void DCSBIOSStringReceived(uint address, string stringData)
@@ -758,7 +759,7 @@ namespace NonVisuals
                         foreach (var radioPanelKnob in hashSet)
                         {
                             var knob = (RadioPanelKnobMiG21bis)radioPanelKnob;
-                            //Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(RadioPanelPZ69SO._newRadioPanelValue, (RadioPanelKnobMiG21bis)radioPanelKnob));
+                            
                         }
                     }
                 }
@@ -781,8 +782,8 @@ namespace NonVisuals
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
         {
             var result = new HashSet<object>();
-            //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
-            //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
+
+
             for (var i = 0; i < 3; i++)
             {
                 var oldByte = oldValue[i];
@@ -794,7 +795,7 @@ namespace NonVisuals
                     {
                         radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
                         result.Add(radioPanelKnob);
-                        //Common.DebugP("Following knob has changed : " + radioPanelKnob.RadioPanelPZ69Knob + " isOn? : " + radioPanelKnob.IsOn);
+
                     }
                 }
             }

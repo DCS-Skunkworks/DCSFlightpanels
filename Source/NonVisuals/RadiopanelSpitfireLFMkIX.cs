@@ -95,7 +95,7 @@ namespace NonVisuals
         {
             try
             {
-                //Common.DebugP("PZ69 SpitfireLFMkIX READ ENTERING");
+                
                 UpdateCounter(address, data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -236,7 +236,7 @@ namespace NonVisuals
                 //Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
-                //Common.DebugP("PZ69 SpitfireLFMkIX READ EXITING");
+
             }
             catch (Exception ex)
             {
@@ -627,13 +627,13 @@ namespace NonVisuals
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-                        //Common.DebugP("Leaving Spitfire LF Mk. IX Radio ShowFrequenciesOnPanel() NO KNOBS/FREQS changed");
+
                         return;
                     }
-                    //Common.DebugP("ShowFrequenciesOnPanel " + id);
+
                     if (!FirstReportHasBeenRead)
                     {
-                        //Common.DebugP("Leaving Spitfire LF Mk. IX Radio ShowFrequenciesOnPanel()");
+
                         return;
                     }
 
@@ -875,8 +875,8 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering Spitfire LF Mk. IX Radio GetHashSetOfChangedKnobs()");
-                //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
-                //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
+
+
                 for (var i = 0; i < 3; i++)
                 {
                     var oldByte = oldValue[i];
@@ -888,7 +888,7 @@ namespace NonVisuals
                         {
                             radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
                             result.Add(radioPanelKnob);
-                            //Common.DebugP("Following knob has changed : " + radioPanelKnob.RadioPanelPZ69Knob + " isOn? : " + radioPanelKnob.IsOn);
+
                         }
                     }
                 }

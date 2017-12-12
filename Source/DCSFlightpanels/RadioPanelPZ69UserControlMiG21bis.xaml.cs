@@ -33,7 +33,7 @@ namespace DCSFlightpanels
 
             //LoadConfiguration();
         }
-        
+
         public SaitekPanel GetSaitekPanel()
         {
             return _radioPanelPZ69;
@@ -91,7 +91,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1081, ex);
             }
         }
-        
+
         public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
         {
             try
@@ -183,13 +183,13 @@ namespace DCSFlightpanels
                 foreach (var radioKnobO in knobs)
                 {
                     var radioKnob = (RadioPanelKnobMiG21Bis)radioKnobO;
-                    Dispatcher.BeginInvoke((Action) delegate
-                    {
+                    Dispatcher.BeginInvoke((Action)delegate
+                   {
                         /*if (radioKnob.IsOn)
                         {
                             SetGroupboxVisibility(radioKnob.RadioPanelPZ69Knob);
                         }*/
-                    });
+                   });
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
                         case RadioPanelPZ69KnobsMiG21Bis.UpperRadio:
@@ -468,7 +468,7 @@ namespace DCSFlightpanels
             LowerSmallerLCDKnobDec.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
-        
+
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try

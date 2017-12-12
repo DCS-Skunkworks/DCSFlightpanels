@@ -34,7 +34,7 @@ namespace DCSFlightpanels
 
             //LoadConfiguration();
         }
-        
+
         public SaitekPanel GetSaitekPanel()
         {
             return _radioPanelPZ69;
@@ -92,7 +92,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1081, ex);
             }
         }
-        
+
         public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
         {
             try
@@ -184,13 +184,13 @@ namespace DCSFlightpanels
                 foreach (var radioKnobO in knobs)
                 {
                     var radioKnob = (RadioPanelKnobA10C)radioKnobO;
-                    Dispatcher.BeginInvoke((Action) delegate
-                    {
+                    Dispatcher.BeginInvoke((Action)delegate
+                   {
                         /*if (radioKnob.IsOn)
                         {
                             SetGroupboxVisibility(radioKnob.RadioPanelPZ69Knob);
                         }*/
-                    });
+                   });
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
                         case RadioPanelPZ69KnobsA10C.UPPER_VHFAM:
@@ -485,34 +485,34 @@ namespace DCSFlightpanels
             LowerSmallerLCDKnobDec.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
-        
+
         private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
         {
-            
+
 
         }
 
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)
         {
-            
+
 
         }
 
         private void TextBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            
+
 
         }
 
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            
+
 
         }
 
         private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            
+
 
 
         }

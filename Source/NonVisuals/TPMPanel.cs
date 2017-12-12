@@ -121,17 +121,17 @@ namespace NonVisuals
         {
             panelProfileHandler.RegisterProfileData(this, ExportSettings());
         }
-        
+
         public override void DcsBiosDataReceived(uint address, uint data)
         {
-            //Common.DebugP("TPM READ ENTERING");
+
             lock (_dcsBiosDataReceivedLock)
             {
                 UpdateCounter(address, data);
             }
-            //Common.DebugP("TPM READ EXITING");
+
         }
-        
+
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
@@ -444,8 +444,8 @@ namespace NonVisuals
         {
             var result = new HashSet<object>();
 
-            //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[3], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[4], 2).PadLeft(8, '0'));
-            //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[3], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[4], 2).PadLeft(8, '0'));
+
+
             for (var i = 0; i < 5; i++)
             {
                 var oldByte = oldValue[i];

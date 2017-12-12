@@ -16,7 +16,7 @@ namespace NonVisuals
             _panelType = panelType;
             _instanceId = instanceId;
         }
-        
+
         public void Close()
         {
             try

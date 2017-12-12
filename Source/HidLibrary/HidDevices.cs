@@ -31,7 +31,7 @@ namespace HidLibrary
 
         public static IEnumerable<HidDevice> Enumerate(int vendorId, params int[] productIds)
         {
-            return EnumerateDevices().Select(x => new HidDevice(x.Path, x.Description)).Where(x => x.Attributes.VendorId == vendorId && 
+            return EnumerateDevices().Select(x => new HidDevice(x.Path, x.Description)).Where(x => x.Attributes.VendorId == vendorId &&
                                                                                   productIds.Contains(x.Attributes.ProductId));
         }
 
@@ -65,7 +65,7 @@ namespace HidLibrary
                     {
                         deviceInterfaceIndex++;
                         var devicePath = GetDevicePath(deviceInfoSet, deviceInterfaceData);
-                        var description = GetBusReportedDeviceDescription(deviceInfoSet, ref deviceInfoData) ?? 
+                        var description = GetBusReportedDeviceDescription(deviceInfoSet, ref deviceInfoData) ??
                                           GetDeviceDescription(deviceInfoSet, ref deviceInfoData);
                         devices.Add(new DeviceInfo { Path = devicePath, Description = description });
                     }
@@ -139,7 +139,7 @@ namespace HidLibrary
 
             return descriptionBuffer.ToUtf8String();
         }
-        
+
         private static string GetBusReportedDeviceDescription(IntPtr deviceInfoSet, ref NativeMethods.SpDevinfoData devinfoData)
         {
             var descriptionBuffer = new byte[1024];

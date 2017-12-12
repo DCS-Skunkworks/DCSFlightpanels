@@ -113,7 +113,7 @@ namespace NonVisuals
         {
             try
             {
-                //Common.DebugP("PZ69 F86F READ ENTERING");
+
                 UpdateCounter(address, data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -212,7 +212,7 @@ namespace NonVisuals
                 //Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
-                //Common.DebugP("PZ69 F86F READ EXITING");
+
             }
             catch (Exception ex)
             {
@@ -851,13 +851,13 @@ namespace NonVisuals
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-                        //Common.DebugP("Leaving F-86F Radio ShowFrequenciesOnPanel() NO KNOBS/FREQS changed");
+
                         return;
                     }
-                    //Common.DebugP("ShowFrequenciesOnPanel " + id);
+
                     if (!FirstReportHasBeenRead)
                     {
-                        //Common.DebugP("Leaving F-86F Radio ShowFrequenciesOnPanel()");
+
                         return;
                     }
 
@@ -922,25 +922,25 @@ namespace NonVisuals
                                     switch (_arn6ModeCockpitDialPos)
                                     {
                                         case 2:
-                                        {
-                                            mode = 1;
-                                            break;
-                                        }
+                                            {
+                                                mode = 1;
+                                                break;
+                                            }
                                         case 3:
-                                        {
-                                            mode = 2;
-                                            break;
-                                        }
+                                            {
+                                                mode = 2;
+                                                break;
+                                            }
                                         case 0:
-                                        {
-                                            mode = 3;
-                                            break;
-                                        }
+                                            {
+                                                mode = 3;
+                                                break;
+                                            }
                                         case 1:
-                                        {
-                                            mode = 4;
-                                            break;
-                                        }
+                                            {
+                                                mode = 4;
+                                                break;
+                                            }
                                     }
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.UPPER_RIGHT);
@@ -1026,25 +1026,25 @@ namespace NonVisuals
                                     switch (_arn6ModeCockpitDialPos)
                                     {
                                         case 2:
-                                        {
-                                            mode = 1;
-                                            break;
-                                        }
+                                            {
+                                                mode = 1;
+                                                break;
+                                            }
                                         case 3:
-                                        {
-                                            mode = 2;
-                                            break;
-                                        }
+                                            {
+                                                mode = 2;
+                                                break;
+                                            }
                                         case 0:
-                                        {
-                                            mode = 3;
-                                            break;
-                                        }
+                                            {
+                                                mode = 3;
+                                                break;
+                                            }
                                         case 1:
-                                        {
-                                            mode = 4;
-                                            break;
-                                        }
+                                            {
+                                                mode = 4;
+                                                break;
+                                            }
                                     }
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.LOWER_RIGHT);
@@ -1155,8 +1155,8 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering F-86F Radio GetHashSetOfChangedKnobs()");
-                //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
-                //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
+
+
                 for (var i = 0; i < 3; i++)
                 {
                     var oldByte = oldValue[i];
@@ -1168,7 +1168,7 @@ namespace NonVisuals
                         {
                             radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
                             result.Add(radioPanelKnob);
-                            //Common.DebugP("Following knob has changed : " + radioPanelKnob.RadioPanelPZ69Knob + " isOn? : " + radioPanelKnob.IsOn);
+
                         }
                     }
                 }

@@ -12,7 +12,7 @@ namespace NonVisuals
         YELLOW = 0x2,
         RED = 0x4
     }
-    
+
     public class SaitekPanelLEDPosition
     {
         private Enum _position;
@@ -41,12 +41,12 @@ namespace NonVisuals
 
     public abstract class DcsOutputAndColorBinding
     {
-        private  DCSBIOSOutput _dcsBiosOutputLED;
-        private string[] SeparatorChars = {"\\o/"};
+        private DCSBIOSOutput _dcsBiosOutputLED;
+        private string[] SeparatorChars = { "\\o/" };
 
         public abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
-        
+
         public PanelLEDColor LEDColor { get; set; }
         public SaitekPanelLEDPosition SaitekLEDPosition { get; set; }
 
@@ -93,13 +93,13 @@ namespace NonVisuals
             settings = settings.Substring(settings.IndexOf('|') + 1);
             DCSBiosOutputLED = new DCSBIOSOutput();
             DCSBiosOutputLED.ImportString(settings);
-            LEDColor = (PanelLEDColor) Enum.Parse(typeof (PanelLEDColor), color);
+            LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), color);
         }
 
         public override string ExportSettings()
         {
             var stringBuilder = new StringBuilder();
-            if ((SwitchPanelPZ55LEDPosition) SaitekLEDPosition.GetPosition() ==  SwitchPanelPZ55LEDPosition.UP)
+            if ((SwitchPanelPZ55LEDPosition)SaitekLEDPosition.GetPosition() == SwitchPanelPZ55LEDPosition.UP)
             {
                 stringBuilder.Append("SwitchPanelLedUp{" + LEDColor + "|" + DCSBiosOutputLED + "}");
             }
@@ -132,12 +132,12 @@ namespace NonVisuals
             //Position_1_4|GREEN|DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}
             var dcsBiosOutputString = settings.Substring(settings.IndexOf("DCSBiosOutput{", StringComparison.InvariantCulture));
             //DCSBiosOutput{INTEGER_TYPE|Equals|0x14be|0x4000|14|1}
-            
+
             settings = settings.Remove(settings.IndexOf("DCSBiosOutput{", StringComparison.InvariantCulture));
             //Position_1_4|GREEN|
 
-            var settingsArray = settings.Split(new []{'|'}, StringSplitOptions.RemoveEmptyEntries);
-            SaitekLEDPosition = new SaitekPanelLEDPosition((BIPLedPositionEnum) Enum.Parse(typeof (BIPLedPositionEnum), settingsArray[0]));
+            var settingsArray = settings.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            SaitekLEDPosition = new SaitekPanelLEDPosition((BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0]));
             LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingsArray[1]);
             DCSBiosOutputLED = new DCSBIOSOutput();
             DCSBiosOutputLED.ImportString(dcsBiosOutputString);
@@ -146,7 +146,7 @@ namespace NonVisuals
         public override string ExportSettings()
         {
             var stringBuilder = new StringBuilder();
-            var position = (BIPLedPositionEnum) SaitekLEDPosition.Position;
+            var position = (BIPLedPositionEnum)SaitekLEDPosition.Position;
             stringBuilder.Append("PanelBIP{" + position + "|" + LEDColor + "|" + DCSBiosOutputLED + "}");
             return stringBuilder.ToString();
         }

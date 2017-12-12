@@ -331,7 +331,7 @@ namespace NonVisuals
         private IntPtr dwExtraInfo;
     }
 
-    
+
     [StructLayout(LayoutKind.Sequential)]
     public struct KEYBDINPUT
     {
@@ -341,7 +341,7 @@ namespace NonVisuals
         public uint time;
         public IntPtr dwExtraInfo;
     }
-    
+
     /*
     [StructLayout(LayoutKind.Sequential)]
     internal struct KEYBDINPUT

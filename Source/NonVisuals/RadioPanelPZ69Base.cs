@@ -77,7 +77,7 @@ namespace NonVisuals
 
             //D = DARK
             //116 should become DD116!
-            //Common.DebugP("Arrayposition : " + arrayPosition + " is " + frequencyAsString);
+
             do
             {
                 //5 digits can be displayed
@@ -95,7 +95,7 @@ namespace NonVisuals
                     b = Byte.Parse(digitsAsString[i].ToString());
                 }
                 bytes[arrayPosition] = b;
-                //Common.DebugP("Byte [" + arrayPosition + "] has been set to " + b);
+
                 arrayPosition++;
                 i++;
             } while (i < digitsAsString.Length && i < 6);
@@ -123,7 +123,7 @@ namespace NonVisuals
 
             //D = DARK
             //116 should become DD116!
-            //Common.DebugP("Arrayposition : " + arrayPosition + " is " + frequencyAsString);
+
             do
             {
                 //5 digits can be displayed
@@ -141,7 +141,7 @@ namespace NonVisuals
                     b = Byte.Parse(digitsAsString[i].ToString());
                 }
                 bytes[arrayPosition] = b;
-                //Common.DebugP("Byte [" + arrayPosition + "] has been set to " + b);
+
                 arrayPosition++;
                 i++;
             } while (i < digitsAsString.Length && i < 6);
@@ -185,7 +185,7 @@ namespace NonVisuals
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
             var i = 0;
-            //Common.DebugP("Arrayposition : " + arrayPosition + " is " + frequencyAsString);
+
             do
             {
                 //5 digits can be displayed
@@ -194,7 +194,7 @@ namespace NonVisuals
                 //1     -> DDDD1
 
                 bytes[arrayPosition] = bytesToBeInjected[i];
-                //Common.DebugP("Byte [" + arrayPosition + "] has been set to " + b);
+
                 arrayPosition++;
                 i++;
             } while (i < bytesToBeInjected.Length && i < 5);
@@ -212,7 +212,7 @@ namespace NonVisuals
                     //skip to next position, this has already been dealt with
                     i++;
                 }
-                
+
                 byte b = 0;
                 try
                 {
@@ -248,7 +248,7 @@ namespace NonVisuals
             var i = 0;
             var digitsAsString = digits.ToString("0.0000", NumberFormatInfoFullDisplay);
             //116 should become 116.00!
-            //Common.DebugP("Arrayposition : " + arrayPosition + " is " + frequencyAsString);
+
             do
             {
                 //5 digits can be displayed
@@ -271,14 +271,14 @@ namespace NonVisuals
                 {
                     Common.LogError(38410, e, "SetPZ69DisplayBytesDefault()");
                 }
-                //Common.DebugP("Byte [" + arrayPosition + "] has been set to " + b);
+
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
                 {
-                    //Common.DebugP("We are at Byte[" + arrayPosition + "] (" + frequencyAsString[i] + ") and next comes the decimal marker");
+
                     //Add decimal marker
-                    //Common.DebugP("Byte is before addition " + bytes[arrayPosition]);
+
                     bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
-                    //Common.DebugP("Byte is after addition " + bytes[arrayPosition]);
+
                 }
 
                 arrayPosition++;
@@ -316,12 +316,12 @@ namespace NonVisuals
             {
                 if (HIDSkeletonBase.HIDWriteDevice != null)
                 {
-                    //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
                 //if (IsAttached)
                 //{
-                //Common.DebugP("Write ending to Radio Panel " + _guid);
+
                 //}
             }
             catch (Exception e)
@@ -443,7 +443,7 @@ namespace NonVisuals
 
         protected bool IsTimedOut(ref long syncVariable, long timeoutValue, string name)
         {
-            //Common.DebugP(name + " : timeoutValue =" + timeoutValue + "  syncVariable =" + syncVariable + "  DateTime.Now.Ticks = " + DateTime.Now.Ticks + " || " + (DateTime.Now.Ticks - syncVariable));
+
             if (DateTime.Now.Ticks - syncVariable > timeoutValue)
             {
                 syncVariable = DateTime.Now.Ticks;
@@ -454,7 +454,7 @@ namespace NonVisuals
 
         protected bool IsTooShort(long dialOkTime)
         {
-            //Common.DebugP("  DateTime.Now.Ticks = " + DateTime.Now.Ticks + " || " + "  dialOkTime = " + dialOkTime + " || " + (DateTime.Now.Ticks - dialOkTime) + "   >   " + _syncOKDelayTimeout);
+
             if (DateTime.Now.Ticks - dialOkTime > _syncOKDelayTimeout)
             {
                 return false; //good!

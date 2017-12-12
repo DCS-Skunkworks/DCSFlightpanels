@@ -30,7 +30,7 @@ namespace DCSFlightpanels
     {
         public delegate void ForwardKeyPressesChangedEventHandler(bool forwardKeyPress);
         public event ForwardKeyPressesChangedEventHandler OnForwardKeyPressesChanged;
-        
+
         private bool _doSearchForPanels = true;
         private HIDHandler _hidHandler;
         //private FIPHandler _fipHandler;
@@ -94,7 +94,7 @@ namespace DCSFlightpanels
                 SetWindowTitle();
                 SetWindowState();
                 SendEventRegardingForwardingOfKeys();
-                
+
                 CheckForNewRelease();
                 //For me so that debugging is not on for anyone else.
                 if (!Environment.MachineName.Equals("TIMOFEI"))
@@ -170,7 +170,7 @@ namespace DCSFlightpanels
                 MenuItemDCSBIOSSettings.Visibility = Visibility.Collapsed;
                 SearchForPanels();
             }
-            else if(dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
+            else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
                 Common.DebugP("Starting up DCSBIOS");
                 _dcsBios.Startup();
@@ -268,7 +268,7 @@ namespace DCSFlightpanels
         {
             return _panelProfileHandler.Airframe;
         }
-        
+
         private void SearchForPanels()
         {
             try
@@ -793,8 +793,8 @@ namespace DCSFlightpanels
                 var client = new GitHubClient(new ProductHeaderValue("DCSFlightpanels"));
                 var task = await client.Repository.Release.GetAll("jdahlblom", "DCSFlightpanels");
                 var lastRelease = task[0].TagName;
-                var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] {'.'}, StringSplitOptions.RemoveEmptyEntries);
-                var gitHubReleaseArray = lastRelease.Replace("v.", "").Replace("v","").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                var gitHubReleaseArray = lastRelease.Replace("v.", "").Replace("v", "").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                 var newerAvailable = false;
                 if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
                 {
@@ -806,7 +806,8 @@ namespace DCSFlightpanels
                     {
                         newerAvailable = true;
                     }
-                }else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
+                }
+                else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
                 {
                     if (int.Parse(gitHubReleaseArray[1]) >= int.Parse(thisReleaseArray[1]))
                     {
@@ -1190,7 +1191,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2026, ex);
             }
         }
-        
+
 
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
         {
@@ -1383,7 +1384,7 @@ namespace DCSFlightpanels
         {
             Common.DebugOn = false;
         }
-        
+
 
         private void ShowStatusBarMessage(string str)
         {

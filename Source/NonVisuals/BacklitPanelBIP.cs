@@ -221,7 +221,7 @@ namespace NonVisuals
             OnSettingsChanged();
             IsDirty = true;
         }
-        
+
         internal void CheckDcsDataForColorChangeHook(uint address, uint data)
         {
             foreach (var cavb in _listColorOutputBinding)
@@ -230,9 +230,7 @@ namespace NonVisuals
                 {
                     if (cavb.DCSBiosOutputLED.CheckForValueMatchAndChange(data))
                     {
-                        //Common.DebugP("*************************************************** " + data);
-                        //Common.DebugP(Environment.NewLine + cavb.SaitekLEDPosition.GetPosition() + " LED is set " + cavb.LEDColor + " for " + address + "(" + cavb.DCSBiosOutputLED.ControlDescription + "), value is " + cavb.DCSBiosOutputLED.SpecifiedValueInt + Environment.NewLine);
-                        SetLED((BIPLedPositionEnum) cavb.SaitekLEDPosition.GetPosition(), cavb.LEDColor);
+                        SetLED((BIPLedPositionEnum)cavb.SaitekLEDPosition.GetPosition(), cavb.LEDColor);
                     }
                 }
             }
@@ -349,7 +347,7 @@ namespace NonVisuals
         {
             foreach (var dcsOutputAndColorBindingBIP in _listColorOutputBinding)
             {
-                if (position.Equals((BIPLedPositionEnum) dcsOutputAndColorBindingBIP.SaitekLEDPosition.Position))
+                if (position.Equals((BIPLedPositionEnum)dcsOutputAndColorBindingBIP.SaitekLEDPosition.Position))
                 {
                     return true;
                 }
@@ -388,13 +386,11 @@ namespace NonVisuals
         {
             panelProfileHandler.RegisterProfileData(this, ExportSettings());
         }
-        
+
         public override void DcsBiosDataReceived(uint address, uint data)
         {
-            //Common.DebugP("BIP READ ENTERING");
             UpdateCounter(address, data);
             CheckDcsDataForColorChangeHook(address, data);
-            //Common.DebugP("BIP READ EXITING");
         }
 
         public override void ClearSettings()
@@ -412,7 +408,7 @@ namespace NonVisuals
         public int GetIndex(BIPLedPositionEnum bipLedPositionEnum)
         {
             //Position_1_1
-            return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(2, 1));;
+            return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(2, 1)); ;
         }
 
         public int GetRow(BIPLedPositionEnum bipLedPositionEnum)
@@ -570,17 +566,11 @@ namespace NonVisuals
             {
                 if (HIDSkeletonBase.HIDWriteDevice != null)
                 {
-                    //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
-                //if (IsAttached)
-                //{
-                    //Common.DebugP("Write ending to B.I.P.");
-                //}
             }
             catch (Exception e)
             {
-                //Common.DebugP("SendLEDData() :\n" + e.Message + e.StackTrace);
                 SetLastException(e);
             }
         }

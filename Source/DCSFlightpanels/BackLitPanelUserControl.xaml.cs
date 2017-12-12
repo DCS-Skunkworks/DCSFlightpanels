@@ -15,7 +15,7 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class BackLitPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
-        
+
         private BacklitPanelBIP _backlitPanelBIP;
         private TabItem _parentTabItem;
         private string _parentTabItemHeader;
@@ -24,7 +24,7 @@ namespace DCSFlightpanels
         private BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/black.png"));
         private BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/red.png"));
         private BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/green.png"));
-        private BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/yellow1.png")); 
+        private BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
         private bool _loaded;
         private IGlobalHandler _globalHandler;
@@ -36,7 +36,7 @@ namespace DCSFlightpanels
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
 
-            _backlitPanelBIP.Attach((ISaitekPanelListener) this);
+            _backlitPanelBIP.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);
             _globalHandler = globalHandler;
         }
@@ -49,7 +49,7 @@ namespace DCSFlightpanels
             SetAllBlack();
             ShowGraphicConfiguration();
         }
-        
+
         public SaitekPanel GetSaitekPanel()
         {
             return _backlitPanelBIP;
@@ -107,7 +107,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1086, ex);
             }
         }
-        
+
         public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
         {
             try
@@ -135,7 +135,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2033, ex);
             }
         }
-        
+
         public void PanelDataAvailable(string stringData)
         {
             try
@@ -294,7 +294,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2066, ex);
             }
         }
-        
+
 
         private void SetAllBlack()
         {
@@ -341,146 +341,146 @@ namespace DCSFlightpanels
                 switch (row)
                 {
                     case 1:
-                    {
-                        switch (index)
                         {
-                            case 1 :
+                            switch (index)
                             {
-                                result = BIPLedPositionEnum.Position_1_1;
-                                break;
+                                case 1:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_1;
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_2;
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_3;
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_4;
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_5;
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_6;
+                                        break;
+                                    }
+                                case 7:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_7;
+                                        break;
+                                    }
+                                case 8:
+                                    {
+                                        result = BIPLedPositionEnum.Position_1_8;
+                                        break;
+                                    }
                             }
-                            case 2:
-                            {
-                                result = BIPLedPositionEnum.Position_1_2;
-                                break;
-                            }
-                            case 3:
-                            {
-                                result = BIPLedPositionEnum.Position_1_3;
-                                break;
-                            }
-                            case 4:
-                            {
-                                result = BIPLedPositionEnum.Position_1_4;
-                                break;
-                            }
-                            case 5:
-                            {
-                                result = BIPLedPositionEnum.Position_1_5;
-                                break;
-                            }
-                            case 6:
-                            {
-                                result = BIPLedPositionEnum.Position_1_6;
-                                break;
-                            }
-                            case 7:
-                            {
-                                result = BIPLedPositionEnum.Position_1_7;
-                                break;
-                            }
-                            case 8:
-                            {
-                                result = BIPLedPositionEnum.Position_1_8;
-                                break;
-                            }
+                            break;
                         }
-                        break;
-                    }
                     case 2:
-                    {
-                        switch (index)
                         {
-                            case 1:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_1;
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_2;
-                                    break;
-                                }
-                            case 3:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_3;
-                                    break;
-                                }
-                            case 4:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_4;
-                                    break;
-                                }
-                            case 5:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_5;
-                                    break;
-                                }
-                            case 6:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_6;
-                                    break;
-                                }
-                            case 7:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_7;
-                                    break;
-                                }
-                            case 8:
-                                {
-                                    result = BIPLedPositionEnum.Position_2_8;
-                                    break;
-                                }
+                            switch (index)
+                            {
+                                case 1:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_1;
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_2;
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_3;
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_4;
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_5;
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_6;
+                                        break;
+                                    }
+                                case 7:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_7;
+                                        break;
+                                    }
+                                case 8:
+                                    {
+                                        result = BIPLedPositionEnum.Position_2_8;
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        break;
-                    }
                     case 3:
-                    {
-                        switch (index)
                         {
-                            case 1:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_1;
-                                    break;
-                                }
-                            case 2:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_2;
-                                    break;
-                                }
-                            case 3:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_3;
-                                    break;
-                                }
-                            case 4:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_4;
-                                    break;
-                                }
-                            case 5:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_5;
-                                    break;
-                                }
-                            case 6:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_6;
-                                    break;
-                                }
-                            case 7:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_7;
-                                    break;
-                                }
-                            case 8:
-                                {
-                                    result = BIPLedPositionEnum.Position_3_8;
-                                    break;
-                                }
+                            switch (index)
+                            {
+                                case 1:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_1;
+                                        break;
+                                    }
+                                case 2:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_2;
+                                        break;
+                                    }
+                                case 3:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_3;
+                                        break;
+                                    }
+                                case 4:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_4;
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_5;
+                                        break;
+                                    }
+                                case 6:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_6;
+                                        break;
+                                    }
+                                case 7:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_7;
+                                        break;
+                                    }
+                                case 8:
+                                    {
+                                        result = BIPLedPositionEnum.Position_3_8;
+                                        break;
+                                    }
+                            }
+                            break;
                         }
-                        break;
-                    }
                 }
             }
             catch (Exception ex)
@@ -496,7 +496,7 @@ namespace DCSFlightpanels
             {
                 if (image.Name.StartsWith("ImagePosition"))
                 {
-                    image.ContextMenu = (ContextMenu) Resources["BIPLEDContextMenu"];
+                    image.ContextMenu = (ContextMenu)Resources["BIPLEDContextMenu"];
                     image.ContextMenu.Tag = image.Name;
                 }
             }
@@ -507,7 +507,7 @@ namespace DCSFlightpanels
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var newColor = PanelLEDColor.DARK;
-                var image = (Image) sender;
+                var image = (Image)sender;
                 var currentColor = (PanelLEDColor)(Enum.Parse(typeof(PanelLEDColor), ((string)image.Tag)));
                 if (currentColor == PanelLEDColor.DARK)
                 {
@@ -619,25 +619,25 @@ namespace DCSFlightpanels
                 switch (_lastToggleColor)
                 {
                     case PanelLEDColor.DARK:
-                    {
-                        _lastToggleColor = PanelLEDColor.GREEN;
-                        break;
-                    }
+                        {
+                            _lastToggleColor = PanelLEDColor.GREEN;
+                            break;
+                        }
                     case PanelLEDColor.GREEN:
-                    {
-                        _lastToggleColor = PanelLEDColor.YELLOW;
-                        break;
-                    }
+                        {
+                            _lastToggleColor = PanelLEDColor.YELLOW;
+                            break;
+                        }
                     case PanelLEDColor.YELLOW:
-                    {
-                        _lastToggleColor = PanelLEDColor.RED;
-                        break;
-                    }
+                        {
+                            _lastToggleColor = PanelLEDColor.RED;
+                            break;
+                        }
                     case PanelLEDColor.RED:
-                    {
-                        _lastToggleColor = PanelLEDColor.DARK;
-                        break;
-                    }
+                        {
+                            _lastToggleColor = PanelLEDColor.DARK;
+                            break;
+                        }
                 }
                 foreach (var image in _colorImages)
                 {

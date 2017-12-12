@@ -156,13 +156,13 @@ namespace NonVisuals
 
         public override void DcsBiosDataReceived(uint address, uint data)
         {
-            //Common.DebugP("PZ55 READ ENTERING");
+
             lock (_dcsBiosDataReceivedLock)
             {
                 UpdateCounter(address, data);
                 CheckDcsDataForColorChangeHook(address, data);
             }
-            //Common.DebugP("PZ55 READ EXITING");
+
         }
 
         public override void ClearSettings()
@@ -204,7 +204,7 @@ namespace NonVisuals
                 var delayUp = random.Next(1500, 10000);
                 var delayRight = random.Next(1500, 10000);
                 var delayLeft = random.Next(1500, 10000);
-                var millisecsStart = DateTime.Now.Ticks/10000;
+                var millisecsStart = DateTime.Now.Ticks / 10000;
 
                 // Corrected the 'Manual LEDS' operation.
                 // Now when the gear knob selection is changed, just like a real aircraft
@@ -216,7 +216,7 @@ namespace NonVisuals
 
                 while (true)
                 {
-                    var millisecsNow = DateTime.Now.Ticks/10000;
+                    var millisecsNow = DateTime.Now.Ticks / 10000;
                     Debug.Print("millisecsNow - millisecsStart > delayUp " + (millisecsNow - millisecsStart) + " " + delayUp);
                     Debug.Print("millisecsNow - millisecsStart > delayRight " + (millisecsNow - millisecsStart) + " " + delayRight);
                     Debug.Print("millisecsNow - millisecsStart > delayLeft " + (millisecsNow - millisecsStart) + " " + delayLeft);
@@ -335,23 +335,23 @@ namespace NonVisuals
                             var color2 = GetSwitchPanelPZ55LEDColor(position, color);
                             if (position == SwitchPanelPZ55LEDPosition.UP && color2 != _ledUpperColor)
                             {
-                                //Common.DebugP("010" + cavb.SaitekLEDPosition.GetPosition() + " LED is set " + cavb.LEDColor + " for " + address + "(" + cavb.DCSBiosOutputLED.ControlDescription + "), value is " + cavb.DCSBiosOutputLED.SpecifiedValueInt);
+
                                 SetLandingGearLED(cavb);
                             }
                             else if (position == SwitchPanelPZ55LEDPosition.LEFT && color2 != _ledLeftColor)
                             {
-                                //Common.DebugP("100" + cavb.SaitekLEDPosition.GetPosition() + " LED is set " + cavb.LEDColor + " for " + address + "(" + cavb.DCSBiosOutputLED.ControlDescription + "), value is " + cavb.DCSBiosOutputLED.SpecifiedValueInt);
+
                                 SetLandingGearLED(cavb);
                             }
                             else if (position == SwitchPanelPZ55LEDPosition.RIGHT && color2 != _ledRightColor)
                             {
-                                //Common.DebugP("001" + cavb.SaitekLEDPosition.GetPosition() + " LED is set " + cavb.LEDColor + " for " + address + "(" + cavb.DCSBiosOutputLED.ControlDescription + "), value is " + cavb.DCSBiosOutputLED.SpecifiedValueInt);
+
                                 SetLandingGearLED(cavb);
                             }
                         }
                         if (cavb.DCSBiosOutputLED.CheckForValueMatchAndChange(data))
                         {
-                            //Common.DebugP("222" + cavb.SaitekLEDPosition.GetPosition() + " LED is set " + cavb.LEDColor + " for " + address + "(" + cavb.DCSBiosOutputLED.ControlDescription + "), value is " + cavb.DCSBiosOutputLED.SpecifiedValueInt);
+
                             SetLandingGearLED(cavb);
                         }
                     }
@@ -819,8 +819,8 @@ namespace NonVisuals
             var result = new HashSet<object>();
 
 
-            //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
-            //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
+
+
             for (var i = 0; i < 3; i++)
             {
                 var oldByte = oldValue[i];

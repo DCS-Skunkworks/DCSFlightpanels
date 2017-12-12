@@ -82,7 +82,7 @@ namespace NonVisuals
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("100000", 2), false, MultiPanelPZ70Knobs.LCD_WHEEL_INC));
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("1000000", 2), true, MultiPanelPZ70Knobs.LCD_WHEEL_DEC));
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("10000000", 2), false, MultiPanelPZ70Knobs.AP_BUTTON));
-            
+
             //Group 1
             result.Add(new MultiPanelKnob(1, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.HDG_BUTTON));
             result.Add(new MultiPanelKnob(1, Convert.ToInt32("10", 2), true, MultiPanelPZ70Knobs.NAV_BUTTON));

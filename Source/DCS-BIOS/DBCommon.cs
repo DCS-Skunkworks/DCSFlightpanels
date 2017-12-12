@@ -7,7 +7,7 @@ namespace DCS_BIOS
 {
     public class DBCommon
     {
-        
+
         public static bool Debug = false;
         public static void DebugP(string str)
         {
@@ -38,7 +38,7 @@ namespace DCS_BIOS
             }
         }
 
-        public static void LogError(uint location, Exception ex, string message = null )
+        public static void LogError(uint location, Exception ex, string message = null)
         {
             lock (_errorLoglockObject)
             {

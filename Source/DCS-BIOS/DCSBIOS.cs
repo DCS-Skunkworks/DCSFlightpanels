@@ -144,7 +144,7 @@ namespace DCS_BIOS
 
                 _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
                 _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
-                
+
                 _udpReceiveClient?.Close();
                 _udpReceiveClient = new UdpClient();
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);

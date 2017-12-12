@@ -33,7 +33,7 @@ namespace NonVisuals
 
         public delegate void SettingsHasChangedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
         public event SettingsHasChangedEventHandler OnSettingsChangedA;
-        
+
         public delegate void SettingsHasBeenAppliedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
         public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
 
@@ -398,7 +398,7 @@ namespace NonVisuals
             get { return _closed; }
             set { _closed = value; }
         }
-        
+
         protected static bool FlagHasChanged(byte oldValue, byte newValue, int bitMask)
         {
             /*  --------------------------------------- 

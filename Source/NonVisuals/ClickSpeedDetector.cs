@@ -62,7 +62,6 @@ namespace NonVisuals
         public bool ClickThresholdReached()
         {
             var count = ClicksWithinDefaultPeriod();
-            //Common.DebugP("Clicks within period is now " + count);
             return count >= _clickCountThreshold;
         }
 

@@ -25,9 +25,9 @@ namespace NonVisuals
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
                 //MultiPanelKey{ALT}
-                var param0 = parameters[0].Replace("MultiPanelKnob{", "").Replace("}","");
-                _pz70DialPosition = (PZ70DialPosition) Enum.Parse(typeof(PZ70DialPosition), param0);
-                
+                var param0 = parameters[0].Replace("MultiPanelKnob{", "").Replace("}", "");
+                _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
+
                 //{1KNOB_ENGINE_LEFT}
                 var param1 = parameters[1].Replace("{", "").Replace("}", "");
                 //1KNOB_ENGINE_LEFT

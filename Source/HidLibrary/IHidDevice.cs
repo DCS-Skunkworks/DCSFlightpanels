@@ -34,16 +34,16 @@ namespace HidLibrary
         bool IsConnected { get; }
         string Description { get; }
         HidDeviceCapabilities Capabilities { get; }
-        HidDeviceAttributes Attributes { get;  }
+        HidDeviceAttributes Attributes { get; }
         string DevicePath { get; }
-//string InstanceId { get; }
+        //string InstanceId { get; }
 
         bool MonitorDeviceEvents { get; set; }
 
         void OpenDevice();
 
         void OpenDevice(DeviceMode readMode, DeviceMode writeMode, ShareMode shareMode);
-        
+
         void CloseDevice();
 
         HidDeviceData Read();
@@ -72,7 +72,7 @@ namespace HidLibrary
         bool ReadManufacturer(out byte[] data);
 
         bool ReadSerialNumber(out byte[] data);
-        
+
         void Write(byte[] data, WriteCallback callback);
 
         bool Write(byte[] data);

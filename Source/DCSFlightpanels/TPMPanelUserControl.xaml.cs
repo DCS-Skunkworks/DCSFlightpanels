@@ -12,7 +12,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
         private readonly TPMPanel _tpmPanel;
@@ -78,7 +78,7 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
         {
             try
             {
-               //zip zilch nada
+                //zip zilch nada
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
                 Common.ShowErrorMessageBox(1068, ex);
             }
         }
-    
+
         public void PanelDataAvailable(string stringData)
         {
             try
@@ -434,8 +434,8 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                    textBox.Text = "";
-                    textBox.Tag = null;
+                textBox.Text = "";
+                textBox.Tag = null;
             }
             if (clearAlsoProfile)
             {
@@ -471,7 +471,7 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
                 }
             }
         }
-    
+
         private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             try
@@ -817,13 +817,11 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
 
                 if (keyCode > 0)
                 {
-                    //Common.DebugP("Pressed key is " + keyCode);
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
                 }
                 var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
-                    //Common.DebugP("Pressed modifiers -->  " + virtualKeyCode);
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
                 var result = "";
@@ -1083,7 +1081,7 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
                 {
                     textBox.Tag = new SortedList<int, KeyPressInfo>();
                 }
-                
+
                 if (textBox.Equals(TextBoxG1Off))
                 {
                     _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G1, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
@@ -1902,7 +1900,7 @@ public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandler
                 Common.ShowErrorMessageBox(3013, ex);
             }
         }
-    
+
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try

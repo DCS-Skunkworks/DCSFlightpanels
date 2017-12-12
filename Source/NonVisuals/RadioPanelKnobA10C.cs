@@ -94,7 +94,7 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("100000", 2), false, RadioPanelPZ69KnobsA10C.LOWER_SMALL_FREQ_WHEEL_DEC));
             result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_INC));
             result.Add(new RadioPanelKnobA10C(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsA10C.LOWER_LARGE_FREQ_WHEEL_DEC));
-            
+
             //Group 1
             result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsA10C.LOWER_UHF));
             result.Add(new RadioPanelKnobA10C(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsA10C.LOWER_VHFFM));

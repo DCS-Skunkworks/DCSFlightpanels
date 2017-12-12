@@ -44,7 +44,7 @@ namespace NonVisuals
                         {
                             result.Append(" + ");
                         }
-                        result.Append(Enum.GetName(typeof (VirtualKeyCode), virtualKeyCode));
+                        result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                     }
                 }
                 return result.ToString();
@@ -60,7 +60,7 @@ namespace NonVisuals
         private long _abortCurrentSequence;
         private long _threadHasFinished = 1;
 
-        public OSKeyPress(){}
+        public OSKeyPress() { }
 
         public OSKeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string information = null)
         {
@@ -149,12 +149,6 @@ namespace NonVisuals
             }
         }
 
-        /*private void PrintInterlockedVars(int id)
-        {
-            Common.DebugP(id + " _abortCurrentSequence = " + Convert.ToString(Interlocked.Read(ref _abortCurrentSequence)));
-            Common.DebugP(id + " _threadHasFinished = " + Convert.ToString(Interlocked.Read(ref _threadHasFinished)));
-        }*/
-
         private void ExecuteThreaded(SortedList<int, KeyPressInfo> sortedList)
         {
             try
@@ -162,7 +156,6 @@ namespace NonVisuals
 
                 try
                 {
-                    //Common.DebugP("ExecuteThreaded has been started in a new thread!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     if (sortedList == null)
                     {
                         return;
@@ -206,8 +199,6 @@ namespace NonVisuals
             finally
             {
                 SignalThreadHasFinished();
-                //PrintInterlockedVars(4);
-                //Common.DebugP("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Threaded key press thread exiting! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }
 
@@ -219,7 +210,7 @@ namespace NonVisuals
                 //keybd_event
                 http://msdn.microsoft.com/en-us/library/windows/desktop/ms646304%28v=vs.85%29.aspx
             */
-            while (breakLengthConsumed < (int) breakLength)
+            while (breakLengthConsumed < (int)breakLength)
             {
                 Thread.Sleep(50);
                 breakLengthConsumed += 50;
@@ -264,7 +255,7 @@ namespace NonVisuals
             while (keyPressLengthTimeConsumed < (int)keyPressLength)
             {
                 Thread.Sleep(50);
-                keyPressLengthTimeConsumed +=50;
+                keyPressLengthTimeConsumed += 50;
                 if (AbortThread())
                 {
                     //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
@@ -312,12 +303,12 @@ namespace NonVisuals
                     {
                         result.Append(" + ");
                     }
-                    result.Append(Enum.GetName(typeof (VirtualKeyCode), virtualKeyCode));
+                    result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
             }
             return result.ToString();
         }
-        
+
         public string GetNonFunctioningVirtualKeyCodesAsString()
         {
             var result = new StringBuilder();
@@ -338,10 +329,11 @@ namespace NonVisuals
                 }
             }
             //Insert 1. or 2. indicating API used
-            if(Common.APIMode == APIModeEnum.keybd_event)
+            if (Common.APIMode == APIModeEnum.keybd_event)
             {
                 result.Insert(0, "1. ");
-            }else
+            }
+            else
             {
                 result.Insert(0, "2. ");
             }
@@ -350,7 +342,7 @@ namespace NonVisuals
 
         public string GetSimpleVirtualKeyCodesAsString()
         {
-            if(IsMultiSequenced())
+            if (IsMultiSequenced())
             {
                 throw new Exception("GetSimpleVirtualKeyCodesAsString() called for multisequenced key press. Use IsMultiSequenced() to check whether simple or multisequenced.");
             }
@@ -365,7 +357,7 @@ namespace NonVisuals
                     {
                         result.Append(" + ");
                     }
-                    result.Append(Enum.GetName(typeof (VirtualKeyCode), virtualKeyCode));
+                    result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
             }
 
@@ -378,13 +370,13 @@ namespace NonVisuals
             {
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
-            if(str.Contains("["))
+            if (str.Contains("["))
             {
                 ImportStringMultiKeySequence(str);
             }
             else
             {
-                ImportStringSingleKeySequence(str);   
+                ImportStringSingleKeySequence(str);
             }
         }
 
@@ -408,12 +400,12 @@ namespace NonVisuals
                 //1000,VK_D + RETURN + ... + ...
                 keyPressInfo.LengthOfKeyPress =
                     (KeyPressLength)
-                    Enum.Parse(typeof (KeyPressLength),
+                    Enum.Parse(typeof(KeyPressLength),
                                dataString.Substring(0, dataString.IndexOf(",", StringComparison.Ordinal)));
                 dataString = dataString.Substring(dataString.IndexOf(",", StringComparison.Ordinal) + 1);
                 //VK_D + RETURN + ... + ...
                 keyPressInfo.VirtualKeyCodes = SplitStringKeyCodes(dataString);
-                _sortedList.Add(GetNewKeyValue(),keyPressInfo);
+                _sortedList.Add(GetNewKeyValue(), keyPressInfo);
             }
             catch (Exception ex)
             {
@@ -438,7 +430,7 @@ namespace NonVisuals
                 //INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]}
                 dataString = dataString.Remove(dataString.Length - 1, 1);
                 //INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
-                if(dataString.Contains("INFORMATION=^"))
+                if (dataString.Contains("INFORMATION=^"))
                 {
                     //INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
                     var temp = dataString.Remove(0, 13);
@@ -446,7 +438,7 @@ namespace NonVisuals
                     _information = temp.Substring(0, temp.IndexOf("^", StringComparison.InvariantCultureIgnoreCase));
                     dataString = temp.Remove(0, _information.Length + 1);
                 }
-                var array = dataString.Split(new[] {"]["}, StringSplitOptions.RemoveEmptyEntries);
+                var array = dataString.Split(new[] { "][" }, StringSplitOptions.RemoveEmptyEntries);
                 //[FiftyMilliSec,VK_A,FiftyMilliSec]
                 //[FiftyMilliSec,VK_B,FiftyMilliSec]
                 //[FiftyMilliSec,VK_C,FiftyMilliSec]
@@ -463,8 +455,8 @@ namespace NonVisuals
                     entry = entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1);
                     var keys = entry.Substring(0, entry.IndexOf(",", StringComparison.Ordinal));
                     keyPressInfo.VirtualKeyCodes = SplitStringKeyCodes(keys);
-                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1));;
-                    _sortedList.Add(GetNewKeyValue(),keyPressInfo);
+                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1)); ;
+                    _sortedList.Add(GetNewKeyValue(), keyPressInfo);
                 }
             }
             catch (Exception ex)
@@ -476,7 +468,7 @@ namespace NonVisuals
 
         public KeyPressLength LengthOfKeyPress()
         {
-            if(IsMultiSequenced())
+            if (IsMultiSequenced())
             {
                 throw new Exception("Key press is multisequenced. Cannot query single key press length as it may contain many such values. (OSKeyPress.LengthOfKeyPress())");
             }
@@ -488,10 +480,10 @@ namespace NonVisuals
             var result = new HashSet<VirtualKeyCode>();
             try
             {
-                var split = str.Split(new[] {"+"}, StringSplitOptions.RemoveEmptyEntries);
+                var split = str.Split(new[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var s in split)
                 {
-                    var virtualKeyCode = (VirtualKeyCode) Enum.Parse(typeof (VirtualKeyCode), s.Trim());
+                    var virtualKeyCode = (VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), s.Trim());
                     result.Add(virtualKeyCode);
                 }
             }
@@ -544,10 +536,10 @@ namespace NonVisuals
         {
             return _sortedList.Count > 1;
         }
-        
+
         private int GetNewKeyValue()
         {
-            if(_sortedList.Count == 0)
+            if (_sortedList.Count == 0)
             {
                 return 0;
             }
@@ -636,7 +628,6 @@ namespace NonVisuals
                     inputs[i].type = WindowsAPI.INPUT_KEYBOARD;
                     inputs[i].InputUnion.ki.time = 0;
                     inputs[i].InputUnion.ki.dwFlags = WindowsAPI.KEYEVENTF_SCANCODE;
-                    //Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCodeHolder.VirtualKeyCode) + " is NOT MODIFIER");
 
                     inputs[i].InputUnion.ki.wVk = 0;
                     Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
@@ -645,9 +636,9 @@ namespace NonVisuals
                     i++;
                 }
             }
-            
+
             WindowsAPI.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(WindowsAPI.INPUT)));
-            
+
             /*if (keyPressLength == KeyPressLength.Indefinite)
             {
                 return;
@@ -673,6 +664,6 @@ namespace NonVisuals
         }
     }
 
-    
+
 }
 

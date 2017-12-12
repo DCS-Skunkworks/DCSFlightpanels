@@ -106,13 +106,13 @@ namespace DCSFlightpanels
 
 
             ComboBoxComparisonCriteria.IsEnabled = _dcsbiosControl != null && _dcsbiosControl.outputs.Count == 1 && _dcsbiosControl.outputs[0].OutputDataType == DCSBiosOutputType.INTEGER_TYPE;
-            
+
             LabelCriteria.Visibility = _showCriteria ? Visibility.Visible : Visibility.Collapsed;
             ComboBoxComparisonCriteria.Visibility = _showCriteria ? Visibility.Visible : Visibility.Collapsed;
             LabelTriggerValue.Visibility = _showCriteria ? Visibility.Visible : Visibility.Collapsed;
             TextBoxTriggerValue.Visibility = _showCriteria ? Visibility.Visible : Visibility.Collapsed;
 
-            
+
             if (ComboBoxComparisonCriteria.IsEnabled && _dcsBiosOutput != null)
             {
                 ComboBoxComparisonCriteria.SelectedValue = _dcsBiosOutput.DCSBiosOutputComparison.GetDescription();
@@ -190,7 +190,7 @@ namespace DCSFlightpanels
             _dcsbiosControl = null;
             _dcsBiosOutput = null;
         }
-        
+
         private void ButtonOkClick(object sender, RoutedEventArgs e)
         {
             try

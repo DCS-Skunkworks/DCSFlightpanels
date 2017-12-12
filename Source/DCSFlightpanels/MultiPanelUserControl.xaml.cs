@@ -1371,13 +1371,11 @@ namespace DCSFlightpanels
 
                 if (keyCode > 0)
                 {
-                    //Common.DebugP("Pressed key is " + keyCode);
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
                 }
                 var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
-                    //Common.DebugP("Pressed modifiers -->  " + virtualKeyCode);
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
                 var result = "";

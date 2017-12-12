@@ -163,8 +163,8 @@ namespace NonVisuals
         {
             try
             {
-                //Common.DebugP("PZ69 Ka50 READ ENTERING");
                 UpdateCounter(address, data);
+                
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -176,10 +176,8 @@ namespace NonVisuals
                 //VHF1 Preset Channel Dial
                 if (address == _vhf1DcsbiosOutputPresetDial.Address)
                 {
-                    //Common.DebugP("VHF1 Preset Dial, waiting for lock." + Environment.TickCount);
                     lock (_lockVhf1DialObject1)
                     {
-                        //Common.DebugP("Just read VHF1 Preset Dial Position: " + _vhf1CockpitPreset1DialPos + "  " + +Environment.TickCount);
                         var tmp = _vhf1CockpitPresetDialPos;
                         _vhf1CockpitPresetDialPos = _vhf1DcsbiosOutputPresetDial.GetUIntValue(data);
                         if (tmp != _vhf1CockpitPresetDialPos)
@@ -192,16 +190,13 @@ namespace NonVisuals
                 //VHF2 Dial 1 R-800L1
                 if (address == _r800l1DcsbiosOutputFreqDial1.Address)
                 {
-                    //Common.DebugP("R-800L1 freq dial 1 position arrived, waiting for lock." + Environment.TickCount);
                     lock (_lockR800L1DialsObject1)
                     {
-                        //Common.DebugP("Just read R-800L1 freq dial 1 position: " + _r800l1CockpitFreq1DialPos + "  " + +Environment.TickCount);
                         var tmp = _r800l1CockpitFreq1DialPos;
                         _r800l1CockpitFreq1DialPos = _r800l1DcsbiosOutputFreqDial1.GetUIntValue(data);
                         if (tmp != _r800l1CockpitFreq1DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-800L1 freq dial 1 Before : " + tmp + "  now: " + _r800l1CockpitFreq1DialPos);
                             Interlocked.Exchange(ref _r800l1Dial1WaitingForFeedback, 0);
                         }
                     }
@@ -210,16 +205,13 @@ namespace NonVisuals
                 //VHF2 Dial 2 R-800L1
                 if (address == _r800l1DcsbiosOutputFreqDial2.Address)
                 {
-                    //Common.DebugP("R-800L1 freq dial 2 position arrived, waiting for lock." + Environment.TickCount);
                     lock (_lockR800L1DialsObject2)
                     {
-                        //Common.DebugP("Just read R-800L1 freq dial 2 position: " + _r800l1CockpitFreq2DialPos + "  " + +Environment.TickCount);
                         var tmp = _r800l1CockpitFreq2DialPos;
                         _r800l1CockpitFreq2DialPos = _r800l1DcsbiosOutputFreqDial2.GetUIntValue(data);
                         if (tmp != _r800l1CockpitFreq2DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-800L1 freq dial 2 Before : " + tmp + "  now: " + _r800l1CockpitFreq2DialPos);
                             Interlocked.Exchange(ref _r800l1Dial2WaitingForFeedback, 0);
                         }
                     }
@@ -228,16 +220,13 @@ namespace NonVisuals
                 //VHF2 Dial 3 R-800L1
                 if (address == _r800l1DcsbiosOutputFreqDial3.Address)
                 {
-                    //Common.DebugP("R-800L1 freq dial 3 position arrived, waiting for lock." + Environment.TickCount);
                     lock (_lockR800L1DialsObject3)
                     {
-                        //Common.DebugP("Just read R-800L1 freq dial 3 position: " + _r800l1CockpitFreq3DialPos + "  " + +Environment.TickCount);
                         var tmp = _r800l1CockpitFreq3DialPos;
                         _r800l1CockpitFreq3DialPos = _r800l1DcsbiosOutputFreqDial3.GetUIntValue(data);
                         if (tmp != _r800l1CockpitFreq3DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-800L1 freq dial 3 Before : " + tmp + "  now: " + _r800l1CockpitFreq3DialPos);
                             Interlocked.Exchange(ref _r800l1Dial3WaitingForFeedback, 0);
                         }
                     }
@@ -246,16 +235,13 @@ namespace NonVisuals
                 //VHF2 Dial 4 R-800L1
                 if (address == _r800l1DcsbiosOutputFreqDial4.Address)
                 {
-                    //Common.DebugP("R-800L1 freq dial 4 position arrived, waiting for lock." + Environment.TickCount);
                     lock (_lockR800L1DialsObject4)
                     {
-                        //Common.DebugP("Just read R-800L1 freq dial 4 position: " + _r800l1CockpitFreq4DialPos + "  " + +Environment.TickCount);
                         var tmp = _r800l1CockpitFreq4DialPos;
                         _r800l1CockpitFreq4DialPos = _r800l1DcsbiosOutputFreqDial4.GetUIntValue(data);
                         if (tmp != _r800l1CockpitFreq4DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            //Common.DebugP("R-800L1 freq dial 4 Before : " + tmp + "  now: " + _r800l1CockpitFreq4DialPos);
                             Interlocked.Exchange(ref _r800l1Dial4WaitingForFeedback, 0);
                         }
                     }
@@ -308,7 +294,6 @@ namespace NonVisuals
                 {
                     lock (_lockADFDialObject1)
                     {
-                        //Common.DebugP("SET _adfCockpitPresetDialPos = " + _adfCockpitPresetDialPos);
                         var tmp = _adfCockpitPresetDialPos;
                         _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.GetUIntValue(data);
                         if (tmp != _adfCockpitPresetDialPos)
@@ -337,7 +322,6 @@ namespace NonVisuals
                 //Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
-                //Common.DebugP("PZ69 Ka50 READ EXITING");
             }
             catch (Exception ex)
             {
@@ -1650,13 +1634,10 @@ namespace NonVisuals
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-                        //Common.DebugP("Leaving Ka-50 Radio ShowFrequenciesOnPanel() NO KNOBS/FREQS changed");
                         return;
                     }
-                    //Common.DebugP("ShowFrequenciesOnPanel " + id);
                     if (!FirstReportHasBeenRead)
                     {
-                        //Common.DebugP("Leaving Ka-50 Radio ShowFrequenciesOnPanel()");
                         return;
                     }
 
@@ -1833,27 +1814,27 @@ namespace NonVisuals
                                 break;
                             }
                         case CurrentKa50RadioMode.DATALINK:
-                        {
-                            uint masterMode = 0;
-                            uint selfId = 0;
-                            uint power = 0;
-                            lock (_lockDatalinkMasterModeObject)
                             {
-                                masterMode = _datalinkMasterModeCockpitPos;
-                            }
-                            lock (_lockDatalinkSelfIdObject)
-                            {
-                                selfId = _datalinkSelfIdCockpitPos + 1;
-                            }
-                            lock (_lockDatalinkPowerOnOffObject)
-                            {
-                                power = _datalinkPowerOnOffCockpitPos;
-                            }
+                                uint masterMode = 0;
+                                uint selfId = 0;
+                                uint power = 0;
+                                lock (_lockDatalinkMasterModeObject)
+                                {
+                                    masterMode = _datalinkMasterModeCockpitPos;
+                                }
+                                lock (_lockDatalinkSelfIdObject)
+                                {
+                                    selfId = _datalinkSelfIdCockpitPos + 1;
+                                }
+                                lock (_lockDatalinkPowerOnOffObject)
+                                {
+                                    power = _datalinkPowerOnOffCockpitPos;
+                                }
 
-                            SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.LOWER_RIGHT);
-                            SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.LOWER_LEFT);
-                            break;
-                        }
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.LOWER_LEFT);
+                                break;
+                            }
                         case CurrentKa50RadioMode.ADF_ARK22:
                             {
                                 //Preset Channel Selector
@@ -1978,8 +1959,6 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering Ka-50 Radio GetHashSetOfChangedKnobs()");
-                //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
-                //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
                 for (var i = 0; i < 3; i++)
                 {
                     var oldByte = oldValue[i];
@@ -1991,7 +1970,6 @@ namespace NonVisuals
                         {
                             radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
                             result.Add(radioPanelKnob);
-                            //Common.DebugP("Following knob has changed : " + radioPanelKnob.RadioPanelPZ69Knob + " isOn? : " + radioPanelKnob.IsOn);
                         }
                     }
                 }

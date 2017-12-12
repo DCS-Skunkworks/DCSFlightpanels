@@ -8,7 +8,7 @@ namespace NonVisuals
     abstract class PerformanceTimer
     {
         private string _id;
-        private List<KeyValuePair<bool,long>> _clickTimesList;
+        private List<KeyValuePair<bool, long>> _clickTimesList;
         private long _start = DateTime.Now.Ticks;
 
         public PerformanceTimer(string id)
@@ -50,7 +50,7 @@ namespace NonVisuals
             try
             {
                 var list = GetResultList();
-                
+
                 var stringBuilder = new StringBuilder();
                 for (var i = 0; i < list.Count; i++)
                 {
@@ -82,11 +82,11 @@ namespace NonVisuals
                         diff = kvp.Value - previousKvp.Value;
                         if (kvp.Key)
                         {
-                            result.Add("Start : " + (kvp.Value - _start)/10000 + " ms");//", diff from previous " + diff/10000 + " ms.");
+                            result.Add("Start : " + (kvp.Value - _start) / 10000 + " ms");//", diff from previous " + diff/10000 + " ms.");
                         }
                         else
                         {
-                            result.Add("End : " + (kvp.Value - _start) /10000 + " ms, diff from previous " + diff/10000 + " ms.");
+                            result.Add("End : " + (kvp.Value - _start) / 10000 + " ms, diff from previous " + diff / 10000 + " ms.");
                         }
                     }
                 }

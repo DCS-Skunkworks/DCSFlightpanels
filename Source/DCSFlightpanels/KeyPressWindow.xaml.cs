@@ -33,7 +33,7 @@ namespace DCSFlightpanels
             SetFormState();
             TextBoxKeyPress.Focus();
         }
-        
+
         private void ButtonOkClick(object sender, RoutedEventArgs e)
         {
             try

@@ -32,7 +32,7 @@ namespace DCS_BIOS
                 {
                     if (_formula.Contains(dcsbiosControl.identifier))
                     {
-                     //   Console.WriteLine("Variable " + dcsbiosControl.identifier + " set to 0");
+                        //   Console.WriteLine("Variable " + dcsbiosControl.identifier + " set to 0");
                         _variables.Add(dcsbiosControl.identifier, 0);
                         var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(dcsbiosControl.identifier);
                         _dcsbiosOutputs.Add(dcsbiosOutput);
@@ -98,7 +98,7 @@ namespace DCS_BIOS
             }
             return 99;
         }
-        
+
         public void ImportString(string str)
         {
             ////DCSBiosOutputFormula{(AAP_EGIPWR+1)/2}

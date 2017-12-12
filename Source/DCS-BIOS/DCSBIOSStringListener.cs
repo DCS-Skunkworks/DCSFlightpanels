@@ -51,7 +51,7 @@ namespace DCS_BIOS
         {
             if (address >= _address && address <= _address + _length)
             {
-                //Common.DebugP("Match! : Address");
+
                 return true;
             }
             return false;
@@ -63,7 +63,7 @@ namespace DCS_BIOS
             if (address >= _address && address < _address + _length)
             {
                 _receivedAddresses.Remove(address);
-                //Common.DebugP("Address is : 0x" + _address.ToString("x") + "  address is 0x" + address.ToString("x"));
+
                 uint offset;
                 if (_address == address)
                 {
@@ -73,7 +73,7 @@ namespace DCS_BIOS
                 {
                     offset = address - _address;
                 }
-                //Common.DebugP("DCSBIOSString offset is " + offset);
+
                 _internalBuffer[offset] = str1;
                 if (_internalBuffer.Length - 1 >= offset + 1)
                 {
@@ -81,7 +81,7 @@ namespace DCS_BIOS
                     _internalBuffer[offset + 1] = str2;
                 }
             }
-            //Common.DebugP("DCSBIOSString " + _address.ToString("x") + ", value is now : " + String.Join("", _internalBuffer));
+
         }
 
         public bool IsComplete
@@ -129,7 +129,7 @@ namespace DCS_BIOS
         private List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new List<KeyValuePair<uint, DCSBIOSString>>();
         private object _lockObject = new object();
         private Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
-        
+
 
         //For those that wants to listen to Strings received from DCS-BIOS
         public void Attach(IDCSBIOSStringListener iDCSBIOSStringListener)
@@ -145,7 +145,7 @@ namespace DCS_BIOS
 
         public DCSBIOSStringListener()
         {
-            //Common.DebugP(Environment.NewLine + Environment.NewLine + "CREATING NEW DCSBIOSStringListener" + Environment.NewLine + Environment.NewLine);
+
             DCSBIOS.AttachDataReceivedListenerSO(this);
             //var bla = new DCSBIOSString(0x11c0, 24);
             //_dcsBiosStrings.Add(new KeyValuePair<uint, DCSBIOSString>(0x11c0, bla));
@@ -191,7 +191,7 @@ namespace DCS_BIOS
 
         private void UpdateStrings(uint address, uint data)
         {
-            //Common.DebugP("**********Received address 0x" + address.ToString("x") + " ****************");
+
             lock (_lockObject)
             {
                 if (address == 0x55)
@@ -237,12 +237,12 @@ namespace DCS_BIOS
                                 {
                                     var firstByte = new[] { Convert.ToByte(hex.Substring(2, 2), 16) };
                                     firstChar = _iso8859_1.GetString(firstByte);
-                                }                                
+                                }
                                 var secondChar = _iso8859_1.GetString(secondByte);
                                 kvp.Value.Add(address, firstChar, secondChar);
                                 //DBCommon.DebugP("**********Received (0x" + data.ToString("x") + ") ****************");
                                 //DBCommon.DebugP("**********Received data:(0x" + data.ToString("x") + ") following from DCS : 1st : " + firstChar + "(0x" + firstByte[0].ToString("x") + "), 2nd " + secondChar + "(0x" + secondByte[0].ToString("x") + ") ****************");
-                                
+
                                 //kvp.Value.StepUp();
                             }
                             catch (Exception ex)
@@ -260,6 +260,6 @@ namespace DCS_BIOS
         {
             UpdateStrings(address, data);
         }
-        
+
     }
 }

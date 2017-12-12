@@ -25,7 +25,8 @@ namespace DCSFlightpanels
         private IGlobalHandler _globalHandler;
         private bool _enableDCSBIOS;
 
-        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS){
+        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
+        {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
@@ -78,10 +79,10 @@ namespace DCSFlightpanels
                     }
                     else
                         if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && dcsAirframe != DCSAirframe.KEYEMULATOR)
-                        {
-                            image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                            image.ContextMenu.Tag = image.Name;
-                        }
+                    {
+                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
+                        image.ContextMenu.Tag = image.Name;
+                    }
                 }
             }
             catch (Exception ex)
@@ -423,7 +424,7 @@ namespace DCSFlightpanels
                     //Do not show if not visible
                     return;
                 }
-                
+
                 var textBox = GetTextBoxInFocus();
                 var contextMenu = (ContextMenu)sender;
                 if (textBox == null)
@@ -516,8 +517,8 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                    textBox.Text = "";
-                    textBox.Tag = null;
+                textBox.Text = "";
+                textBox.Tag = null;
             }
             if (clearAlsoProfile)
             {
@@ -537,9 +538,9 @@ namespace DCSFlightpanels
                         MenuItem dcsBIOSMenuItem = null;
                         foreach (var item in contectMenu.Items)
                         {
-                            if (((MenuItem) item).Name == "contextMenuItemEditDCSBIOS")
+                            if (((MenuItem)item).Name == "contextMenuItemEditDCSBIOS")
                             {
-                                dcsBIOSMenuItem = (MenuItem) item;
+                                dcsBIOSMenuItem = (MenuItem)item;
                                 break;
                             }
                         }
@@ -558,7 +559,7 @@ namespace DCSFlightpanels
                 {
                     if (image.Name.StartsWith("ImagePZ55LED"))
                     {
-                        image.ContextMenu = (ContextMenu) Resources["PZ55LEDContextMenu"];
+                        image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         if (image.ContextMenu != null) image.ContextMenu.Tag = image.Name;
                     }
                 }
@@ -1032,13 +1033,11 @@ namespace DCSFlightpanels
 
                 if (keyCode > 0)
                 {
-                    //Common.DebugP("Pressed key is " + keyCode);
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
                 }
                 var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
-                    //Common.DebugP("Pressed modifiers -->  " + virtualKeyCode);
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
                 var result = "";

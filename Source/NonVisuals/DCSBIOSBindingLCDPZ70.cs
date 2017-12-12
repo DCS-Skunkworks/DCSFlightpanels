@@ -56,7 +56,7 @@ namespace NonVisuals
 
                 //[0]
                 //MultiPanelDCSBIOSFormulaLCD{ALT}
-                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", "").Replace("}","").Trim();
+                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControlLCD{", "").Replace("}", "").Trim();
                 _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
 
                 //[1]

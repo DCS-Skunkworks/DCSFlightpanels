@@ -16,7 +16,7 @@ namespace DCSFlightpanels
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         private void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)

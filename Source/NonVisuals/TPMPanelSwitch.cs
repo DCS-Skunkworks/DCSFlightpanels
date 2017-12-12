@@ -40,7 +40,7 @@ namespace NonVisuals
 
         public string ExportString()
         {
-            return "TPMPanelSwitch{" + Enum.GetName(typeof (TPMPanelSwitches), TPMSwitch) + "}";
+            return "TPMPanelSwitch{" + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}";
         }
 
         public void ImportString(string str)
@@ -58,7 +58,7 @@ namespace NonVisuals
             //G1}
             dataString = dataString.Remove(dataString.Length - 1, 1);
             //G1
-            TPMSwitch = (TPMPanelSwitches) Enum.Parse(typeof (TPMPanelSwitches), dataString.Trim());
+            TPMSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), dataString.Trim());
         }
 
         public static HashSet<TPMPanelSwitch> GetTPMPanelSwitches()

@@ -233,6 +233,7 @@ namespace NonVisuals
                     Common.DebugP("Received DCSBIOS stringData : " + stringData);
                     return;
                 }
+                
                 if (address.Equals(_yadro1aDcsbiosOutputCockpitFrequency.Address))
                 {
                     // "02000.0" - "17999.9"
@@ -378,8 +379,9 @@ namespace NonVisuals
         {
             try
             {
-                //Common.DebugP("PZ69 Mi8 READ ENTERING");
+
                 UpdateCounter(address, data);
+                
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -577,7 +579,7 @@ namespace NonVisuals
                 //Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
-                //Common.DebugP("PZ69 Mi8 READ EXITING");
+
             }
             catch (Exception ex)
             {
@@ -2222,13 +2224,13 @@ namespace NonVisuals
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-                        //Common.DebugP("Leaving Mi-8 Radio ShowFrequenciesOnPanel() NO KNOBS/FREQS changed");
+
                         return;
                     }
-                    //Common.DebugP("ShowFrequenciesOnPanel " + id);
+
                     if (!FirstReportHasBeenRead)
                     {
-                        //Common.DebugP("Leaving Mi-8 Radio ShowFrequenciesOnPanel()");
+
                         return;
                     }
 
@@ -2672,8 +2674,8 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering Mi-8 Radio GetHashSetOfChangedKnobs()");
-                //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
-                //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
+
+
                 for (var i = 0; i < 3; i++)
                 {
                     var oldByte = oldValue[i];
@@ -2685,7 +2687,7 @@ namespace NonVisuals
                         {
                             radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
                             result.Add(radioPanelKnob);
-                            //Common.DebugP("Following knob has changed : " + radioPanelKnob.RadioPanelPZ69Knob + " isOn? : " + radioPanelKnob.IsOn);
+
                         }
                     }
                 }
@@ -2730,7 +2732,7 @@ namespace NonVisuals
                 _arkUDPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARCUD_CHL");
                 _arkUDModeDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARCUD_MODE");
                 _arkUDVhfUhfModeDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ARCUD_WAVE");
-                
+
                 //XPDR
                 _spu7DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_SEL_L");
                 _spu7ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("SPU7_L_ICS");

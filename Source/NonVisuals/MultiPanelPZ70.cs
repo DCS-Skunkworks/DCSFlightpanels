@@ -1085,10 +1085,6 @@ LCD Button Byte
                     Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
-                //if (IsAttached)
-                //{
-                //Common.DebugP("Write ending to PZ70");
-                //}w
             }
             catch (Exception e)
             {
@@ -1100,10 +1096,6 @@ LCD Button Byte
         private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
         {
             var result = new HashSet<object>();
-
-
-            //Common.DebugP("Old: " + Convert.ToString(oldValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(oldValue[2], 2).PadLeft(8, '0'));
-            //Common.DebugP("New: " + Convert.ToString(newValue[0], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[1], 2).PadLeft(8, '0') + " " + Convert.ToString(newValue[2], 2).PadLeft(8, '0'));
             for (var i = 0; i < 3; i++)
             {
                 var oldByte = oldValue[i];
@@ -1142,7 +1134,6 @@ LCD Button Byte
                         {
                             result.Add(multiPanelKnob);
                         }
-                        //Common.DebugP("Following knob has changed : " + multiPanelKnob.MultiPanelPZ70Knob);
                     }
                 }
             }
