@@ -201,6 +201,10 @@ namespace DCS_BIOS
                         //_iDcsBiosDataListener.DcsBiosDataReceived(_address, _data);
                         if (OnDcsDataAddressValue != null && IsBroadcastable(_address))
                         {
+                            /*if (_address == 25332)
+                            {
+                                Debug.Print("SENDING FROM DCS-BIOS address & value --> " + _address + "  " + _data);
+                            }*/
                             OnDcsDataAddressValue(_address, _data);
                         }
                         _address += 2;

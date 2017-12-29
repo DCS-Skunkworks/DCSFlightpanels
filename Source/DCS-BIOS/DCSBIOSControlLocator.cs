@@ -36,7 +36,13 @@ namespace DCS_BIOS
         [Description("AJS37")]
         AJS37,
         [Description("SpitfireLFMkIX")]
-        SpitfireLFMkIX
+        SpitfireLFMkIX,
+        [Description("SA342L")]
+        SA342L,
+        [Description("SA342M")]
+        SA342M,
+        [Description("SA342Mistral")]
+        SA342Mistral
     }
 
     public static class DCSBIOSControlLocator
