@@ -212,7 +212,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSA342.UPPER_NAV1:
+                        case RadioPanelPZ69KnobsSA342.UPPER_UHF:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -282,7 +282,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSA342.LOWER_NAV1:
+                        case RadioPanelPZ69KnobsSA342.LOWER_UHF:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(

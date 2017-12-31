@@ -69,9 +69,10 @@
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = VHF AM<LineBreak/>
                     COM 2 = VHF FM Presets<LineBreak/>
-                    NAV 1 = <LineBreak/>
+                    NAV 1 = UHF<LineBreak/>
                     NAV 2 = <LineBreak/>
-                    ADF = <LineBreak/>
+                    ADF = ADF1/ADF2<LineBreak/>
+                    DME = <LineBreak/>
                     XPDR = <LineBreak/>
                 </TextBlock>
             </StackPanel>

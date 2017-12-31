@@ -7,7 +7,7 @@ namespace NonVisuals {
     {
         UPPER_VHFAM = 0,
         UPPER_VHFFM = 2,
-        UPPER_NAV1 = 4,
+        UPPER_UHF = 4,
         UPPER_NAV2 = 8,
         UPPER_ADF = 16,
         UPPER_DME = 32,
@@ -19,7 +19,7 @@ namespace NonVisuals {
         UPPER_FREQ_SWITCH = 2056,
         LOWER_VHFAM = 4096,
         LOWER_VHFFM = 8192,
-        LOWER_NAV1 = 16384,
+        LOWER_UHF = 16384,
         LOWER_NAV2 = 32768,
         LOWER_ADF = 65536,
         LOWER_DME = 131072,
@@ -31,10 +31,13 @@ namespace NonVisuals {
         LOWER_FREQ_SWITCH = 4194304
     }
 
-    public enum CurrentSA345RadioMode
+    public enum CurrentSA342RadioMode
     {
         VHFFM = 2,
-        VHFAM = 4
+        VHFAM = 4,
+        UHF = 8,
+        ADF = 16,
+        NOUSE
     }
 
     public class RadioPanelKnobSA342
@@ -94,7 +97,7 @@ namespace NonVisuals {
 
             //Group 1
             result.Add(new RadioPanelKnobSA342(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsSA342.LOWER_VHFFM));
-            result.Add(new RadioPanelKnobSA342(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsSA342.LOWER_NAV1));
+            result.Add(new RadioPanelKnobSA342(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsSA342.LOWER_UHF));
             result.Add(new RadioPanelKnobSA342(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsSA342.LOWER_NAV2));
             result.Add(new RadioPanelKnobSA342(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsSA342.LOWER_ADF));
             result.Add(new RadioPanelKnobSA342(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsSA342.LOWER_DME));
@@ -105,7 +108,7 @@ namespace NonVisuals {
             //Group 2
             result.Add(new RadioPanelKnobSA342(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsSA342.UPPER_VHFAM)); //UPPER COM 1
             result.Add(new RadioPanelKnobSA342(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsSA342.UPPER_VHFFM)); //UPPER COM 2
-            result.Add(new RadioPanelKnobSA342(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsSA342.UPPER_VHFFM)); //UPPER NAV 1
+            result.Add(new RadioPanelKnobSA342(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsSA342.UPPER_UHF)); //UPPER NAV 1
             result.Add(new RadioPanelKnobSA342(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsSA342.UPPER_NAV2)); //UPPER NAV 2
             result.Add(new RadioPanelKnobSA342(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsSA342.UPPER_ADF)); //UPPER ADF
             result.Add(new RadioPanelKnobSA342(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsSA342.UPPER_DME)); //UPPER DME
