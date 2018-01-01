@@ -31,8 +31,8 @@ namespace NonVisuals
         }
 
         /*COM1 SA342 VHF AM Radio*/
-        //Large dial 
-        //Small dial 
+        //Large dial 118-143
+        //Small dial 0-975
         private int[] _dialPositionsWholeNumbers = new int[] { 0, 6553, 13107, 19660, 26214, 32767, 39321, 45874, 52428, 58981 };
         private int[] _dialPositionsDecial100s = new int[] { 0, 16383, 32767, 49151 };
         private double _vhfAmBigFrequencyStandby = 118;
@@ -424,19 +424,19 @@ namespace NonVisuals
                                     var frequencyWholeNumbers = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit10sFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit1sFrequencyValue);
                                     if (int.Parse(frequencyWholeNumbers) != desiredPositionDialWholeNumbers)
                                     {
-                                        Debug.Print("cockpit frequencyWholeNumbers = " + int.Parse(frequencyWholeNumbers));
-                                        Debug.Print("desiredPositionDialWholeNumbers = " + desiredPositionDialWholeNumbers);
+                                        //Debug.Print("cockpit frequencyWholeNumbers = " + int.Parse(frequencyWholeNumbers));
+                                        //Debug.Print("desiredPositionDialWholeNumbers = " + desiredPositionDialWholeNumbers);
                                         //Debug.Print("_vhfAmCockpit10sFrequencyValue RAW = " + _vhfAmCockpit10sFrequencyValue);
                                         //Debug.Print("_vhfAmCockpit1sFrequencyValue RAW = " + _vhfAmCockpit1sFrequencyValue);
                                         var command = "";
                                         if (int.Parse(frequencyWholeNumbers) < desiredPositionDialWholeNumbers)
                                         {
-                                            Debug.Print("frequencyWholeNumbers sending INC");
+                                            //Debug.Print("frequencyWholeNumbers sending INC");
                                             command = VhfAmLeftDialDialCommandInc;
                                         }
                                         if (int.Parse(frequencyWholeNumbers) > desiredPositionDialWholeNumbers)
                                         {
-                                            Debug.Print("frequencyWholeNumbers sending DEC");
+                                            //Debug.Print("frequencyWholeNumbers sending DEC");
                                             command = VhfAmLeftDialDialCommandDec;
                                         }
                                         DCSBIOS.Send(command);
@@ -468,12 +468,12 @@ namespace NonVisuals
                                         Debug.Print("cockpit _vhfAmCockpitDecimal100sFrequencyValue RAW = " + _vhfAmCockpitDecimal100sFrequencyValue);*/
                                         if (SwitchVhfAmDecimalDirectionUp(int.Parse(cockpitFrequencyDecimals), desiredPositionDialDecimals))
                                         {
-                                            Debug.Print("Sending INC");
+                                            //Debug.Print("Sending INC");
                                             DCSBIOS.Send(VhfAmRightDialDialCommandInc);
                                         }
                                         else
                                         {
-                                            Debug.Print("Sending DEC");
+                                            //Debug.Print("Sending DEC");
                                             DCSBIOS.Send(VhfAmRightDialDialCommandDec);
                                         }
                                         dial2Time = DateTime.Now.Ticks;
@@ -529,7 +529,7 @@ namespace NonVisuals
                 {
                     case '0':
                         {
-                            Debug.Print("Sending 0 ");
+                            //Debug.Print("Sending 0 ");
                             DCSBIOS.Send(UhfButton0CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton0CommandOff);
@@ -537,7 +537,7 @@ namespace NonVisuals
                         }
                     case '1':
                         {
-                            Debug.Print("Sending 1 ");
+                            //Debug.Print("Sending 1 ");
                             DCSBIOS.Send(UhfButton1CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton1CommandOff);
@@ -545,7 +545,7 @@ namespace NonVisuals
                         }
                     case '2':
                         {
-                            Debug.Print("Sending 2 ");
+                            //Debug.Print("Sending 2 ");
                             DCSBIOS.Send(UhfButton2CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton2CommandOff);
@@ -553,7 +553,7 @@ namespace NonVisuals
                         }
                     case '3':
                         {
-                            Debug.Print("Sending 3 ");
+                            //Debug.Print("Sending 3 ");
                             DCSBIOS.Send(UhfButton3CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton3CommandOff);
@@ -561,7 +561,7 @@ namespace NonVisuals
                         }
                     case '4':
                         {
-                            Debug.Print("Sending 4 ");
+                            //Debug.Print("Sending 4 ");
                             DCSBIOS.Send(UhfButton4CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton4CommandOff);
@@ -569,7 +569,7 @@ namespace NonVisuals
                         }
                     case '5':
                         {
-                            Debug.Print("Sending 5 ");
+                            //Debug.Print("Sending 5 ");
                             DCSBIOS.Send(UhfButton5CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton5CommandOff);
@@ -577,7 +577,7 @@ namespace NonVisuals
                         }
                     case '6':
                         {
-                            Debug.Print("Sending 6 ");
+                            //Debug.Print("Sending 6 ");
                             DCSBIOS.Send(UhfButton6CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton6CommandOff);
@@ -585,7 +585,7 @@ namespace NonVisuals
                         }
                     case '7':
                         {
-                            Debug.Print("Sending 7 ");
+                            //Debug.Print("Sending 7 ");
                             DCSBIOS.Send(UhfButton7CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton7CommandOff);
@@ -593,7 +593,7 @@ namespace NonVisuals
                         }
                     case '8':
                         {
-                            Debug.Print("Sending 8 ");
+                            //Debug.Print("Sending 8 ");
                             DCSBIOS.Send(UhfButton8CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton8CommandOff);
@@ -601,7 +601,7 @@ namespace NonVisuals
                         }
                     case '9':
                         {
-                            Debug.Print("Sending 9 ");
+                            //Debug.Print("Sending 9 ");
                             DCSBIOS.Send(UhfButton9CommandOn);
                             Thread.Sleep(sleepLength);
                             DCSBIOS.Send(UhfButton9CommandOff);
@@ -611,13 +611,13 @@ namespace NonVisuals
             }
             if (frequencyAsString.Length == 6)
             {
-                Debug.Print("Sending 0 ");
+                //Debug.Print("Sending 0 ");
                 DCSBIOS.Send(UhfButton0CommandOn);
                 Thread.Sleep(sleepLength);
                 DCSBIOS.Send(UhfButton0CommandOff);
             }
 
-            Debug.Print("Sending VALIDATE ");
+            //Debug.Print("Sending VALIDATE ");
             DCSBIOS.Send(UhfButtonValidateCommandOn);
             Thread.Sleep(sleepLength);
             DCSBIOS.Send(UhfButtonValidateCommandOff);
@@ -678,6 +678,8 @@ namespace NonVisuals
                                 frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
                             }
                             SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
+                            //Debug.Print("_vhfAmBigFrequencyStandby " + _vhfAmBigFrequencyStandby);
+                            //Debug.Print("_vhfAmSmallFrequencyStandby " + _vhfAmSmallFrequencyStandby);
                             SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
                             break;
                         }
@@ -834,22 +836,16 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmLeftDialChange())
                                             {
-                                                if (_vhfAmBigFrequencyStandby.Equals(143.00))
-                                                {
-                                                    //@ max value
-                                                    break;
-                                                }
                                                 _vhfAmBigFrequencyStandby++;
+                                                if (_vhfAmBigFrequencyStandby > 143.00)
+                                                {
+                                                    _vhfAmBigFrequencyStandby = 118;
+                                                }
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            /*if (_vhfFmBigFrequencyStandby.Equals(76))
-                                            {
-                                                //@ max value
-                                                break;
-                                            }*/
                                             DCSBIOS.Send(FmRadioPresetCommandInc);
                                             break;
                                         }
@@ -873,7 +869,7 @@ namespace NonVisuals
                                                     _uhfBigFrequencyStandby++;
                                                 }
                                             }
-                                            if (_uhfBigFrequencyStandby.Equals(399.00) || _uhfBigFrequencyStandby > 399)
+                                            if (_uhfBigFrequencyStandby > 399)
                                             {
                                                 _uhfBigFrequencyStandby = 225;
                                             }
@@ -899,22 +895,16 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmLeftDialChange())
                                             {
-                                                if (_vhfAmBigFrequencyStandby.Equals(118.00))
-                                                {
-                                                    //@ min value
-                                                    break;
-                                                }
                                                 _vhfAmBigFrequencyStandby--;
+                                                if (_vhfAmBigFrequencyStandby < 118.00)
+                                                {
+                                                    _vhfAmBigFrequencyStandby = 143;
+                                                }
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            /*if (_vhfFmBigFrequencyStandby.Equals(30))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }*/
                                             DCSBIOS.Send(FmRadioPresetCommandDec);
                                             break;
                                         }
@@ -938,7 +928,7 @@ namespace NonVisuals
                                                     _uhfBigFrequencyStandby--;
                                                 }
                                             }
-                                            if (_uhfBigFrequencyStandby.Equals(0) || _uhfBigFrequencyStandby < 0)
+                                            if (_uhfBigFrequencyStandby < 225)
                                             {
                                                 _uhfBigFrequencyStandby = 399;
                                             }
@@ -964,13 +954,12 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                if (_vhfAmSmallFrequencyStandby >= 0.95)
+                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.025;
+                                                if (_vhfAmSmallFrequencyStandby > 0.975)
                                                 {
                                                     //At max value
                                                     _vhfAmSmallFrequencyStandby = 0;
-                                                    break;
                                                 }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.01;
                                             }
                                             break;
                                         }
@@ -1023,13 +1012,12 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                if (_vhfAmSmallFrequencyStandby <= 0.00)
+                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.025;
+                                                if (_vhfAmSmallFrequencyStandby < 0.00)
                                                 {
                                                     //At min value
                                                     _vhfAmSmallFrequencyStandby = 0.975;
-                                                    break;
                                                 }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.025;
                                             }
                                             break;
                                         }
@@ -1082,12 +1070,11 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmLeftDialChange())
                                             {
-                                                if (_vhfAmBigFrequencyStandby.Equals(143.00))
+                                                _vhfAmBigFrequencyStandby++;
+                                                if (_vhfAmBigFrequencyStandby > 143.00)
                                                 {
-                                                    //@ max value
-                                                    break;
+                                                    _vhfAmBigFrequencyStandby = 118;
                                                 }
-                                                _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby + 1;
                                             }
                                             break;
                                         }
@@ -1121,7 +1108,7 @@ namespace NonVisuals
                                                     _uhfBigFrequencyStandby++;
                                                 }
                                             }
-                                            if (_uhfBigFrequencyStandby.Equals(399.00) || _uhfBigFrequencyStandby > 399)
+                                            if (_uhfBigFrequencyStandby > 399)
                                             {
                                                 _uhfBigFrequencyStandby = 225;
                                             }
@@ -1147,22 +1134,16 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmLeftDialChange())
                                             {
-                                                if (_vhfAmBigFrequencyStandby.Equals(118.00))
+                                                _vhfAmBigFrequencyStandby--;
+                                                if (_vhfAmBigFrequencyStandby < 118.00)
                                                 {
-                                                    //@ min value
-                                                    break;
+                                                    _vhfAmBigFrequencyStandby = 143;
                                                 }
-                                                _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby - 1;
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            /*if (_vhfFmBigFrequencyStandby.Equals(30))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }*/
                                             DCSBIOS.Send(FmRadioPresetCommandDec);
                                             break;
                                         }
@@ -1186,7 +1167,7 @@ namespace NonVisuals
                                                     _uhfBigFrequencyStandby--;
                                                 }
                                             }
-                                            if (_uhfBigFrequencyStandby.Equals(0) || _uhfBigFrequencyStandby < 0)
+                                            if (_uhfBigFrequencyStandby < 225)
                                             {
                                                 _uhfBigFrequencyStandby = 399;
                                             }
@@ -1212,13 +1193,12 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                if (_vhfAmSmallFrequencyStandby >= 0.975)
+                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.025;
+                                                if (_vhfAmSmallFrequencyStandby > 0.975)
                                                 {
                                                     //At max value
                                                     _vhfAmSmallFrequencyStandby = 0;
-                                                    break;
                                                 }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.025;
                                             }
                                             break;
                                         }
@@ -1272,13 +1252,12 @@ namespace NonVisuals
                                         {
                                             if (!SkipVhfAmRightDialChange())
                                             {
-                                                if (_vhfAmSmallFrequencyStandby <= 0.00)
+                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.025;
+                                                if (_vhfAmSmallFrequencyStandby < 0.00)
                                                 {
                                                     //At min value
                                                     _vhfAmSmallFrequencyStandby = 0.975;
-                                                    break;
                                                 }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.025;
                                             }
                                             break;
                                         }
@@ -1338,9 +1317,9 @@ namespace NonVisuals
             {
                 _vhfAmBigFrequencyStandby = 118;
             }
-            if (_vhfAmBigFrequencyStandby > 148)
+            if (_vhfAmBigFrequencyStandby > 143)
             {
-                _vhfAmBigFrequencyStandby = 148;
+                _vhfAmBigFrequencyStandby = 143;
             }
         }
 
