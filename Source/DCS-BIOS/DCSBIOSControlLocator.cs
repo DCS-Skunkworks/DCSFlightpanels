@@ -68,8 +68,45 @@ namespace DCS_BIOS
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Check DCS-BIOS version. Failed to find control " + controlId + " for airframe " + Airframe.GetDescription() + " ( " + Airframe.GetDescription() + ".json). Did you switch airframe type for the profile and have existing control(s) for the previous type saved?" + Environment.NewLine + ioe.Message);
+                    throw new Exception("Check DCS-BIOS version. Failed to find control " + controlId + " for airframe " + Airframe.GetDescription() + " (" + Airframe.GetDescription() + ".json). Did you switch airframe type for the profile and have existing control(s) for the previous type saved?" + Environment.NewLine + ioe.Message);
                 }
+            }
+        }
+
+        static void PrintDuplicateControlIdentifiers()
+        {
+            var result = new List<string>();
+            var dupes = new List<string>();
+            foreach (var dcsbiosControl in _dcsbiosControls)
+            {
+                var found = false;
+                foreach (var str in result)
+                {
+                    if (str == dcsbiosControl.identifier)
+                    {
+                        found = true;
+                    }
+                }
+                if (!found) { 
+                    result.Add(dcsbiosControl.identifier);
+                }
+                if (found)
+                {
+                    dupes.Add(dcsbiosControl.identifier);
+                }
+
+            }
+            if (dupes.Count > 0)
+            {
+                var message = "Below is a list of duplicate identifiers found in the " + Airframe.GetDescription() + ".json profile (DCS-BIOS)\n";
+                message = message + "The identifier must be unique, please correct the profile " + Airframe.GetDescription() + ".lua in the DCS-BIOS lib folder\n";
+                message = message + "---------------------------------------------\n";
+                foreach (var dupe in dupes)
+                {
+                    message = message + dupe + "\n";
+                }
+                message = message + "---------------------------------------------\n";
+                DBCommon.LogError(2000, message);
             }
         }
 
@@ -170,7 +207,7 @@ namespace DCS_BIOS
                     }
                     finally
                     {
-                        //nada
+                        PrintDuplicateControlIdentifiers();
                     }
                 }
             }
