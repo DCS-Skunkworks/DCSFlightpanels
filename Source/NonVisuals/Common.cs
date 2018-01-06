@@ -71,13 +71,12 @@ namespace NonVisuals
             return "";
         }
 
-        public static int Evaluate(string expression)
+        public static double Evaluate(string expression)
         {
             try
             {
                 var engine = new CalculationEngine();
-                var a = engine.Calculate(expression);
-                return Convert.ToInt32(a);
+                return engine.Calculate(expression);
             }
             catch (Exception ex)
             {

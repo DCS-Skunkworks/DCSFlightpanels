@@ -147,6 +147,9 @@
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ISaitekUserControl.cs" />
+    <Compile Include="JaceSandboxWindow.xaml.cs">
+      <DependentUpon>JaceSandboxWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MultiPanelUserControl.xaml.cs">
       <DependentUpon>MultiPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -244,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="InformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JaceSandboxWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -95,6 +95,7 @@
     <Compile Include="BacklitPanelBIP.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
+    <Compile Include="DCSBIOSBindingBase.cs" />
     <Compile Include="DCSBIOSBindingTPM.cs" />
     <Compile Include="DCSBIOSBindingPZ70.cs" />
     <Compile Include="DCSBIOSBindingPZ55.cs" />

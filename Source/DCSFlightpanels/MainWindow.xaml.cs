@@ -1645,5 +1645,18 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(288067, ex);
             }
         }
+
+        private void MenuItemFormulaSandbox_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var formulaSanboxWindow = new JaceSandboxWindow();
+                formulaSanboxWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2027, ex);
+            }
+        }
     }
 }
