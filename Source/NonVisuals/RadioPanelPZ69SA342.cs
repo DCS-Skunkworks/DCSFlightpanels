@@ -392,8 +392,7 @@ namespace NonVisuals
                      * COM1 VHF AM
                      * 
                      */
-
-                    string str;
+                     
                     Interlocked.Exchange(ref _vhfAmThreadNowSynching, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;

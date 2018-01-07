@@ -1650,7 +1650,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var formulaSanboxWindow = new JaceSandboxWindow();
+                var formulaSanboxWindow = new JaceSandboxWindow(_dcsBios);
                 formulaSanboxWindow.ShowDialog();
             }
             catch (Exception ex)
