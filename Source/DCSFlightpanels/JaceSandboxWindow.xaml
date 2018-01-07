@@ -88,8 +88,8 @@
                 <GroupBox Name="GroupBoxFormula" Header="Formula" >
                     <StackPanel>
                         <TextBlock Margin="10,10,10,10">
-                            <Hyperlink NavigateUri="https://github.com/pieterderycke/Jace/wiki" RequestNavigate="Hyperlink_OnRequestNavigate">
-                                Click here for information about Jace functions.
+                            <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/system.math(v=vs.110).aspx" RequestNavigate="Hyperlink_OnRequestNavigate">
+                                Click here for a list of Math functions.
                             </Hyperlink>
                         </TextBlock>
                         <TextBox x:Name="TextBoxFormula" Height="100" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" TextChanged="TextBoxFormula_OnTextChanged"/>

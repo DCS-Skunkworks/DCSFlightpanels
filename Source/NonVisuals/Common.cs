@@ -70,7 +70,7 @@ namespace NonVisuals
             }
             return "";
         }
-
+        /*
         public static double Evaluate(string expression)
         {
             try
@@ -83,7 +83,7 @@ namespace NonVisuals
                 LogError(1933494, ex, "Evaluate() function");
                 throw;
             }
-        }
+        }*/
 
         public static string GetDescriptionField(this Enum value)
         {

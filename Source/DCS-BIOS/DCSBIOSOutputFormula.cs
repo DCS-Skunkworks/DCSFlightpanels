@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Jace;
 
-
 namespace DCS_BIOS
 {
     public class DCSBIOSOutputFormula
@@ -10,7 +9,7 @@ namespace DCS_BIOS
         private string _formula;
         private List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
         Dictionary<string, double> _variables = new Dictionary<string, double>();
-        CalculationEngine _engine = new CalculationEngine();
+        readonly JaceExtended _jaceExtended = new JaceExtended();
 
         public DCSBIOSOutputFormula()
         {
@@ -89,7 +88,7 @@ namespace DCS_BIOS
                 {
                     Console.WriteLine("variable : " + variable.Key + " = " + variable.Value);
                 }*/
-                var a = _engine.Calculate(_formula, _variables);
+                var a = _jaceExtended.CalculationEngine.Calculate(_formula, _variables);
                 return Convert.ToInt32(a);
             }
             catch (Exception ex)

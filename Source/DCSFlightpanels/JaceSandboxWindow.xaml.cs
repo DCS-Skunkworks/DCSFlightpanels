@@ -46,6 +46,7 @@ namespace DCSFlightpanels
         private DCSBIOSControl _dcsbiosControl3;
         private DCSBIOSControl _dcsbiosControl4;
         private DCSBIOSControl _dcsbiosControl5;
+        private JaceExtended _jaceExtended = new JaceExtended();
 
         public JaceSandboxWindow(DCSBIOS dcsbios)
         {
@@ -107,7 +108,7 @@ namespace DCSFlightpanels
                                             formula = formula.Replace(output.ControlId, GetValueForDCSBIOSOutput(output));
                                         }
                                     }
-                                    var result = Common.Evaluate(formula);
+                                    var result = _jaceExtended.Evaluate(formula);
 
                                     Dispatcher.BeginInvoke(
                                         (Action)delegate
@@ -330,7 +331,7 @@ namespace DCSFlightpanels
                     }
                 }
                 LabelErrors.Content = "";
-                LabelResult.Content = "Result : " + Common.Evaluate(formula);
+                LabelResult.Content = "Result : " + _jaceExtended.Evaluate(formula);
                 SetFormState();
             }
             catch (Exception ex)
