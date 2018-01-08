@@ -45,7 +45,7 @@
                     <MenuItem Name ="MenuItemProcessPriorityHigh" Header="High" Click="MenuItemProcessPriorityClick" />
                     <MenuItem Name ="MenuItemProcessPriorityRealtime" Header="Realtime" Click="MenuItemProcessPriorityClick" />
                 </MenuItem>
-                
+                <MenuItem Name ="MenuItemFormulaSandbox" Header="Formula sandbox" Click="MenuItemFormulaSandbox_OnClick" />
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Click="MenuItemAboutClick" />

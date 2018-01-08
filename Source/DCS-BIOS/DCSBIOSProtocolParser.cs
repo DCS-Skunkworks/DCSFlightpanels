@@ -30,7 +30,7 @@ namespace DCS_BIOS
 
         public void Detach(IDcsBiosDataListener iDcsBiosDataListener)
         {
-            OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
+            OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
         }
 
         private DCSBiosStateEnum _state;
@@ -201,7 +201,11 @@ namespace DCS_BIOS
                         //_iDcsBiosDataListener.DcsBiosDataReceived(_address, _data);
                         if (OnDcsDataAddressValue != null && IsBroadcastable(_address))
                         {
-                            OnDcsDataAddressValue(_address, _data);
+                            /*if (_address == 25332)
+                            {
+                                Debug.Print("SENDING FROM DCS-BIOS address & value --> " + _address + "  " + _data);
+                            }*/
+                            OnDcsDataAddressValue?.Invoke(_address, _data);
                         }
                         _address += 2;
                         if (_count == 0)

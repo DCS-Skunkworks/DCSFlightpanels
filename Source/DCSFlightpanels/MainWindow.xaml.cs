@@ -391,6 +391,14 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.SA342L || _panelProfileHandler.Airframe == DCSAirframe.SA342M || _panelProfileHandler.Airframe == DCSAirframe.SA342Mistral)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
                                     break;
                                 }
                             case SaitekPanelsEnum.PZ70MultiPanel:
@@ -1635,6 +1643,19 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(288067, ex);
+            }
+        }
+
+        private void MenuItemFormulaSandbox_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var formulaSanboxWindow = new JaceSandboxWindow(_dcsBios);
+                formulaSanboxWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2027, ex);
             }
         }
     }

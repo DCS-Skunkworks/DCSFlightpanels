@@ -2120,7 +2120,7 @@ namespace DCSFlightpanels
                 {
                     _multiPanelPZ70.AddOrUpdateDCSBIOSBinding(MultiPanelPZ70Knobs.AP_BUTTON, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxAprButtonOff))
+                if (textBox.Equals(TextBoxApButtonOff))
                 {
                     _multiPanelPZ70.AddOrUpdateDCSBIOSBinding(MultiPanelPZ70Knobs.AP_BUTTON, dcsBiosInputs, textBox.Text, false);
                 }

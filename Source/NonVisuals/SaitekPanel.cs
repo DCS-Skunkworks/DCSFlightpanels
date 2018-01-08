@@ -12,11 +12,10 @@ namespace NonVisuals
         PZ69RadioPanel = 4,
         PZ70MultiPanel = 8,
         BackLitPanel = 16,
-        TPM = 32,
-        FIP = 64
+        TPM = 32
     }
 
-    abstract public class SaitekPanel : IProfileHandlerListener, IDcsBiosDataListener
+    public abstract class SaitekPanel : IProfileHandlerListener, IDcsBiosDataListener
     {
         //These events can be raised by the descendants of this class.
         public delegate void SwitchesHasBeenChangedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet);
@@ -176,10 +175,10 @@ namespace NonVisuals
         private int _vendorId;
         private int _productId;
         private Exception _lastException;
-        private object _exceptionLockObject = new object();
+        private readonly object _exceptionLockObject = new object();
         private SaitekPanelsEnum _typeOfSaitekPanel;
         private bool _isDirty;
-        private bool _isAttached;
+        //private bool _isAttached;
         private bool _forwardKeyPresses;
         private static object _lockObject = new object();
         private static List<SaitekPanel> _saitekPanels = new List<SaitekPanel>();
@@ -279,11 +278,6 @@ namespace NonVisuals
         {
             get
             {
-                if (_typeOfSaitekPanel == SaitekPanelsEnum.FIP)
-                {
-                    //FIP have no instance id because the Saitek API doesn't support it
-                    return null;
-                }
                 return HIDSkeletonBase.InstanceId;
             }
             set { HIDSkeletonBase.InstanceId = value; }

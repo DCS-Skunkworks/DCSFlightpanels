@@ -24,6 +24,7 @@ namespace DCSFlightpanels
         private IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
+        private readonly JaceExtended _jaceExtended = new JaceExtended();
 
         public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description)
         {
@@ -309,7 +310,7 @@ namespace DCSFlightpanels
             try
             {
                 TextBlockFormulaErrors.Text = "";
-                LabelResult.Content = "Result : " + Common.Evaluate(TextBoxFormula.Text);
+                LabelResult.Content = "Result : " + _jaceExtended.Evaluate(TextBoxFormula.Text);
                 SetFormState();
             }
             catch (Exception ex)

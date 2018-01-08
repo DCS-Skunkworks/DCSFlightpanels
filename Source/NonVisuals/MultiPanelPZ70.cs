@@ -341,19 +341,19 @@ LCD Button Byte
     public class MultiPanelPZ70 : SaitekPanel
     {
         private int _lcdKnobSensitivity;
-        private volatile byte KnobSensitivitySkipper;
+        private volatile byte _knobSensitivitySkipper;
         private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
         private HashSet<DCSBIOSBindingLCDPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ70>();
         private HashSet<KnobBindingPZ70> _knobBindings = new HashSet<KnobBindingPZ70>();
         private HashSet<MultiPanelKnob> _multiPanelKnobs = new HashSet<MultiPanelKnob>();
         private bool _isFirstNotification = true;
-        private byte[] _oldMultiPanelValue = { 0, 0, 0 };
-        private byte[] _newMultiPanelValue = { 0, 0, 0 };
+        private readonly byte[] _oldMultiPanelValue = { 0, 0, 0 };
+        private readonly byte[] _newMultiPanelValue = { 0, 0, 0 };
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
 
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
-        private PZ70LCDButtonByteList _lcdButtonByteListHandler = new PZ70LCDButtonByteList();
+        private readonly PZ70LCDButtonByteList _lcdButtonByteListHandler = new PZ70LCDButtonByteList();
         //private volatile int _upperLcdValue = 0;
         //private volatile int _lowerLcdValue = 0;
 
@@ -361,8 +361,7 @@ LCD Button Byte
 
         private long _doUpdatePanelLCD;
 
-        public MultiPanelPZ70(HIDSkeleton hidSkeleton)
-            : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton)
+        public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD06;
@@ -370,7 +369,7 @@ LCD Button Byte
             Startup();
         }
 
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {
@@ -925,23 +924,23 @@ LCD Button Byte
                 case -1:
                     {
                         //Skip every 2 manipulations
-                        KnobSensitivitySkipper++;
-                        if (KnobSensitivitySkipper <= 2)
+                        _knobSensitivitySkipper++;
+                        if (_knobSensitivitySkipper <= 2)
                         {
                             return true;
                         }
-                        KnobSensitivitySkipper = 0;
+                        _knobSensitivitySkipper = 0;
                         break;
                     }
                 case -2:
                     {
                         //Skip every 4 manipulations
-                        KnobSensitivitySkipper++;
-                        if (KnobSensitivitySkipper <= 4)
+                        _knobSensitivitySkipper++;
+                        if (_knobSensitivitySkipper <= 4)
                         {
                             return true;
                         }
-                        KnobSensitivitySkipper = 0;
+                        _knobSensitivitySkipper = 0;
                         break;
                     }
             }

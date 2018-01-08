@@ -76,6 +76,9 @@
     <Reference Include="Jace">
       <HintPath>..\packages\Jace.0.8.7\lib\net40\Jace.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -95,6 +98,7 @@
     <Compile Include="BacklitPanelBIP.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
+    <Compile Include="DCSBIOSBindingBase.cs" />
     <Compile Include="DCSBIOSBindingTPM.cs" />
     <Compile Include="DCSBIOSBindingPZ70.cs" />
     <Compile Include="DCSBIOSBindingPZ55.cs" />
@@ -120,6 +124,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelKnobSA342.cs" />
     <Compile Include="RadioPanelKnobAJS37.cs" />
     <Compile Include="RadioPanelKnobBf109.cs" />
     <Compile Include="RadioPanelKnobF86F.cs" />
@@ -130,6 +135,7 @@
     <Compile Include="RadioPanelKnobP51D.cs" />
     <Compile Include="RadiopanelKnobSpitfireLFMkIX.cs" />
     <Compile Include="RadioPanelKnobUH1H.cs" />
+    <Compile Include="RadioPanelPZ69SA342.cs" />
     <Compile Include="RadioPanelPZ69AJS37.cs" />
     <Compile Include="RadioPanelPZ69Bf109.cs" />
     <Compile Include="RadioPanelPZ69F86F.cs" />
