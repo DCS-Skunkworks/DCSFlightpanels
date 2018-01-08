@@ -99,8 +99,12 @@
     <Reference Include="CommonClassLibraryJD">
       <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Jace, Version=0.8.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Jace.0.8.7\lib\net40\Jace.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Octokit, Version=0.28.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.28.0\lib\net45\Octokit.dll</HintPath>
@@ -147,6 +151,9 @@
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ISaitekUserControl.cs" />
+    <Compile Include="JaceHelpWindow.xaml.cs">
+      <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JaceSandboxWindow.xaml.cs">
       <DependentUpon>JaceSandboxWindow.xaml</DependentUpon>
     </Compile>
@@ -247,6 +254,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="InformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JaceHelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

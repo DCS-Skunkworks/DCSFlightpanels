@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using DCS_BIOS;
 using NonVisuals;
+using Jace;
 
 namespace DCSFlightpanels
 {
@@ -47,6 +48,7 @@ namespace DCSFlightpanels
         private DCSBIOSControl _dcsbiosControl4;
         private DCSBIOSControl _dcsbiosControl5;
         private JaceExtended _jaceExtended = new JaceExtended();
+        private Dictionary<string, double> _variables = new Dictionary<string, double>();
 
         public JaceSandboxWindow(DCSBIOS dcsbios)
         {
@@ -69,46 +71,67 @@ namespace DCSFlightpanels
                     {
                         _autoResetEvent.WaitOne();
                         string formula = null;
-                        var outputsList = new List<DCSBIOSOutput>();
+                        Dispatcher.Invoke(() =>
+                        {
+                            formula = TextBoxFormula.Text;
+                        });
+
+                        var variables = new Dictionary<string, double>();
+
+                        //var outputsList = new List<DCSBIOSOutput>();
                         if (_dcsbiosOutput1 != null)
                         {
-                            outputsList.Add(_dcsbiosOutput1);
+                            variables.Add(_dcsbiosOutput1.ControlId, 0);
+                            //outputsList.Add(_dcsbiosOutput1);
                         }
                         if (_dcsbiosOutput2 != null)
                         {
-                            outputsList.Add(_dcsbiosOutput2);
+                            variables.Add(_dcsbiosOutput2.ControlId, 0);
+                            //outputsList.Add(_dcsbiosOutput2);
                         }
                         if (_dcsbiosOutput3 != null)
                         {
-                            outputsList.Add(_dcsbiosOutput3);
+                            variables.Add(_dcsbiosOutput3.ControlId, 0);
+                            //outputsList.Add(_dcsbiosOutput3);
                         }
                         if (_dcsbiosOutput4 != null)
                         {
-                            outputsList.Add(_dcsbiosOutput4);
+                            variables.Add(_dcsbiosOutput4.ControlId, 0);
+                            //outputsList.Add(_dcsbiosOutput4);
                         }
                         if (_dcsbiosOutput5 != null)
                         {
-                            outputsList.Add(_dcsbiosOutput5);
+                            variables.Add(_dcsbiosOutput5.ControlId, 0);
+                            //outputsList.Add(_dcsbiosOutput5);
                         }
-                        var orderedEnumerable = outputsList.OrderBy(x => x.ControlId.Length);
+                        //var orderedEnumerable = outputsList.OrderBy(x => x.ControlId.Length);
                         while (_isLooping)
                         {
                             if (_dataChanged)
                             {
                                 try
                                 {
-                                    Dispatcher.Invoke(() =>
+                                    if (_dcsbiosOutput1 != null)
                                     {
-                                        formula = TextBoxFormula.Text;
-                                    });
-                                    foreach (var output in orderedEnumerable)
-                                    {
-                                        if (formula.Contains(output.ControlId))
-                                        {
-                                            formula = formula.Replace(output.ControlId, GetValueForDCSBIOSOutput(output));
-                                        }
+                                        variables[_dcsbiosOutput1.ControlId] = GetVariableValues(_dcsbiosOutput1.ControlId);
                                     }
-                                    var result = _jaceExtended.Evaluate(formula);
+                                    if (_dcsbiosOutput2 != null)
+                                    {
+                                        variables[_dcsbiosOutput2.ControlId] = GetVariableValues(_dcsbiosOutput2.ControlId);
+                                    }
+                                    if (_dcsbiosOutput3 != null)
+                                    {
+                                        variables[_dcsbiosOutput3.ControlId] = GetVariableValues(_dcsbiosOutput3.ControlId);
+                                    }
+                                    if (_dcsbiosOutput4 != null)
+                                    {
+                                        variables[_dcsbiosOutput4.ControlId] = GetVariableValues(_dcsbiosOutput4.ControlId);
+                                    }
+                                    if (_dcsbiosOutput5 != null)
+                                    {
+                                        variables[_dcsbiosOutput5.ControlId] = GetVariableValues(_dcsbiosOutput5.ControlId);
+                                    }
+                                    var result = _jaceExtended.CalculationEngine.Calculate(formula, variables);
 
                                     Dispatcher.BeginInvoke(
                                         (Action)delegate
@@ -138,7 +161,33 @@ namespace DCSFlightpanels
             {
             }
         }
+        private double GetVariableValues(string controlId)
+        {
+            if (Equals(controlId, _dcsbiosOutput1.ControlId))
+            {
+                return _value1;
+            }
+            if (Equals(controlId, _dcsbiosOutput2.ControlId))
+            {
+                return _value2;
+            }
+            if (Equals(controlId, _dcsbiosOutput3.ControlId))
+            {
+                return _value3;
+            }
+            if (Equals(controlId, _dcsbiosOutput4.ControlId))
+            {
+                return _value4;
+            }
+            if (Equals(controlId, _dcsbiosOutput5.ControlId))
+            {
+                return _value5;
+            }
 
+            throw new Exception("Failed to pair DCSBIOSOutput " + controlId);
+        }
+
+        /*
         private string GetValueForDCSBIOSOutput(DCSBIOSOutput dcsbiosOutput)
         {
             if (Equals(dcsbiosOutput, _dcsbiosOutput1))
@@ -163,7 +212,7 @@ namespace DCSFlightpanels
             }
 
             throw new Exception("Failed to pair DCSBIOSOutput " + dcsbiosOutput.ControlId);
-        }
+        }*/
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -223,7 +272,7 @@ namespace DCSFlightpanels
 
         private void ShowValues()
         {
-           
+
         }
 
         public void DcsBiosDataReceived(uint address, uint data)
@@ -301,7 +350,7 @@ namespace DCSFlightpanels
             {
                 string formula = null;
                 formula = TextBoxFormula.Text;
-                var outputsList = new List<DCSBIOSOutput>();
+                /*var outputsList = new List<DCSBIOSOutput>();
                 if (_dcsbiosOutput1 != null)
                 {
                     outputsList.Add(_dcsbiosOutput1);
@@ -329,9 +378,59 @@ namespace DCSFlightpanels
                     {
                         formula = formula.Replace(output.ControlId, GetValueForDCSBIOSOutput(output));
                     }
+                }*/
+                var variables = new Dictionary<string, double>();
+
+                //var outputsList = new List<DCSBIOSOutput>();
+                if (_dcsbiosOutput1 != null)
+                {
+                    variables.Add(_dcsbiosOutput1.ControlId, 0);
+                    //outputsList.Add(_dcsbiosOutput1);
                 }
+                if (_dcsbiosOutput2 != null)
+                {
+                    variables.Add(_dcsbiosOutput2.ControlId, 0);
+                    //outputsList.Add(_dcsbiosOutput2);
+                }
+                if (_dcsbiosOutput3 != null)
+                {
+                    variables.Add(_dcsbiosOutput3.ControlId, 0);
+                    //outputsList.Add(_dcsbiosOutput3);
+                }
+                if (_dcsbiosOutput4 != null)
+                {
+                    variables.Add(_dcsbiosOutput4.ControlId, 0);
+                    //outputsList.Add(_dcsbiosOutput4);
+                }
+                if (_dcsbiosOutput5 != null)
+                {
+                    variables.Add(_dcsbiosOutput5.ControlId, 0);
+                    //outputsList.Add(_dcsbiosOutput5);
+                }
+                if (_dcsbiosOutput1 != null)
+                {
+                    variables[_dcsbiosOutput1.ControlId] = GetVariableValues(_dcsbiosOutput1.ControlId);
+                }
+                if (_dcsbiosOutput2 != null)
+                {
+                    variables[_dcsbiosOutput2.ControlId] = GetVariableValues(_dcsbiosOutput2.ControlId);
+                }
+                if (_dcsbiosOutput3 != null)
+                {
+                    variables[_dcsbiosOutput3.ControlId] = GetVariableValues(_dcsbiosOutput3.ControlId);
+                }
+                if (_dcsbiosOutput4 != null)
+                {
+                    variables[_dcsbiosOutput4.ControlId] = GetVariableValues(_dcsbiosOutput4.ControlId);
+                }
+                if (_dcsbiosOutput5 != null)
+                {
+                    variables[_dcsbiosOutput5.ControlId] = GetVariableValues(_dcsbiosOutput5.ControlId);
+                }
+                var result = _jaceExtended.CalculationEngine.Calculate(formula, variables);
+
                 LabelErrors.Content = "";
-                LabelResult.Content = "Result : " + _jaceExtended.Evaluate(formula);
+                LabelResult.Content = "Result : " + result;
                 SetFormState();
             }
             catch (Exception ex)
@@ -394,7 +493,15 @@ namespace DCSFlightpanels
 
         private void ButtonFormulaHelp_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var helpWindow = new JaceHelpWindow();
+                helpWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void TextBoxSearch1_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -429,7 +536,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1001, ex);
             }
         }
-        
+
         private void AdjustShownPopupData(TextBox textBox)
         {
             _popupSearch.PlacementTarget = textBox;

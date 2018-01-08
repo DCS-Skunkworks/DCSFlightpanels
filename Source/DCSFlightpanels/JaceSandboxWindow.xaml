@@ -32,9 +32,6 @@
     </Window.Resources>
     <Grid>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="91*" />
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
