@@ -39,7 +39,7 @@
                     Course needle to degrees<LineBreak/>
                     truncate(HSI_CRS_KNOB*360/65536)<LineBreak/><LineBreak/>
                 
-                    Basic math functions<LineBreak/>
+                    Basic math function examples<LineBreak/>
                     floor(4,341134)<LineBreak/>
                     ceiling(4,341134)<LineBreak/>
                     truncate(4,341134)<LineBreak/>
