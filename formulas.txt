@@ -1,0 +1,14 @@
+Listed here are example formulas that can be used to show cockpit data in the Multi Panel.
+
+A-10C
+--------------------------------------------------------------------
+Heading
+truncate(HSI_HDG*360/65536)
+                
+Heading bug
+truncate(HSI_HDG_KNOB*360/65536)
+
+Course needle to degrees
+truncate(HSI_CRS_KNOB*360/65536)
+
+--------------------------------------------------------------------
