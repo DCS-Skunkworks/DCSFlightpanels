@@ -69,10 +69,6 @@ namespace DCSFlightpanels
                 {
                     _autoResetEvent.WaitOne();
                     string formula = null;
-                    Dispatcher.Invoke(() =>
-                    {
-                        formula = TextBoxFormula.Text;
-                    });
 
                     var variables = new Dictionary<string, double>();
 
@@ -102,6 +98,15 @@ namespace DCSFlightpanels
                         {
                             try
                             {
+                                Dispatcher.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LabelErrors.Content = "";
+                                    });
+                                Dispatcher.Invoke(() =>
+                                {
+                                    formula = TextBoxFormula.Text;
+                                });
                                 if (_dcsbiosOutput1 != null)
                                 {
                                     variables[_dcsbiosOutput1.ControlId] = GetVariableValues(_dcsbiosOutput1.ControlId);

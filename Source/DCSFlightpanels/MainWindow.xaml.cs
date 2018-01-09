@@ -799,46 +799,48 @@ namespace DCSFlightpanels
             try
             {
                 var client = new GitHubClient(new ProductHeaderValue("DCSFlightpanels"));
-                var task = await client.Repository.Release.GetAll("jdahlblom", "DCSFlightpanels");
-                var lastRelease = task[0].TagName;
-                var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                var gitHubReleaseArray = lastRelease.Replace("v.", "").Replace("v", "").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                var newerAvailable = false;
-                if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
+                var lastRelease = await client.Repository.Release.GetLatest("jdahlblom", "DCSFlightpanels");
+                if (!lastRelease.Prerelease)
                 {
-                    newerAvailable = true;
-                }
-                else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
-                {
-                    if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
+                    var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    var gitHubReleaseArray = lastRelease.TagName.Replace("v.", "").Replace("v", "").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    var newerAvailable = false;
+                    if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
                     {
                         newerAvailable = true;
                     }
-                }
-                else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
-                {
-                    if (int.Parse(gitHubReleaseArray[1]) >= int.Parse(thisReleaseArray[1]))
+                    else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
                     {
                         if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
                         {
                             newerAvailable = true;
                         }
                     }
-                }
-                if (newerAvailable)
-                {
-                    Dispatcher.Invoke(() =>
+                    else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
                     {
-                        LabelVersionInformation.Visibility = Visibility.Hidden;
-                        LabelDownloadNewVersion.Visibility = Visibility.Visible;
-                    });
-                }
-                else
-                {
-                    Dispatcher.Invoke(() =>
+                        if (int.Parse(gitHubReleaseArray[1]) >= int.Parse(thisReleaseArray[1]))
+                        {
+                            if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
+                            {
+                                newerAvailable = true;
+                            }
+                        }
+                    }
+                    if (newerAvailable)
                     {
-                        LabelVersionInformation.Text = "v." + fileVersionInfo.FileVersion;
-                    });
+                        Dispatcher.Invoke(() =>
+                        {
+                            LabelVersionInformation.Visibility = Visibility.Hidden;
+                            LabelDownloadNewVersion.Visibility = Visibility.Visible;
+                        });
+                    }
+                    else
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            LabelVersionInformation.Text = "v." + fileVersionInfo.FileVersion;
+                        });
+                    }
                 }
             }
             catch (Exception ex)
