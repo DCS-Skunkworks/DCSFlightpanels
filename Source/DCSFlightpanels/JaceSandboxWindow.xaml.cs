@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using DCS_BIOS;
 using NonVisuals;
@@ -35,19 +36,18 @@ namespace DCSFlightpanels
         private bool _formLoaded;
         private bool _isLooping;
         private bool _exitThread;
-        private Thread _thread;
         private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         private readonly string _typeToSearch = "Type to search control";
-        private DCSBIOS _dcsbios;
+        private readonly DCSBIOS _dcsbios;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private IEnumerable<DCSBIOSControl> _dcsbiosControls;
+        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private DCSBIOSControl _dcsbiosControl1;
         private DCSBIOSControl _dcsbiosControl2;
         private DCSBIOSControl _dcsbiosControl3;
         private DCSBIOSControl _dcsbiosControl4;
         private DCSBIOSControl _dcsbiosControl5;
-        private JaceExtended _jaceExtended = new JaceExtended();
+        private readonly JaceExtended _jaceExtended = new JaceExtended();
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
 
         public JaceSandboxWindow(DCSBIOS dcsbios)
@@ -56,8 +56,8 @@ namespace DCSFlightpanels
             _dcsbios.AttachDataReceivedListener(this);
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _thread = new Thread(ThreadLoop);
-            _thread.Start();
+            var thread = new Thread(ThreadLoop);
+            thread.Start();
             InitializeComponent();
         }
 
@@ -65,102 +65,90 @@ namespace DCSFlightpanels
         {
             try
             {
-                try
+                while (!_exitThread)
                 {
-                    while (!_exitThread)
+                    _autoResetEvent.WaitOne();
+                    string formula = null;
+                    Dispatcher.Invoke(() =>
                     {
-                        _autoResetEvent.WaitOne();
-                        string formula = null;
-                        Dispatcher.Invoke(() =>
-                        {
-                            formula = TextBoxFormula.Text;
-                        });
+                        formula = TextBoxFormula.Text;
+                    });
 
-                        var variables = new Dictionary<string, double>();
+                    var variables = new Dictionary<string, double>();
 
-                        //var outputsList = new List<DCSBIOSOutput>();
-                        if (_dcsbiosOutput1 != null)
+                    if (_dcsbiosOutput1 != null)
+                    {
+                        variables.Add(_dcsbiosOutput1.ControlId, 0);
+                    }
+                    if (_dcsbiosOutput2 != null)
+                    {
+                        variables.Add(_dcsbiosOutput2.ControlId, 0);
+                    }
+                    if (_dcsbiosOutput3 != null)
+                    {
+                        variables.Add(_dcsbiosOutput3.ControlId, 0);
+                    }
+                    if (_dcsbiosOutput4 != null)
+                    {
+                        variables.Add(_dcsbiosOutput4.ControlId, 0);
+                    }
+                    if (_dcsbiosOutput5 != null)
+                    {
+                        variables.Add(_dcsbiosOutput5.ControlId, 0);
+                    }
+                    while (_isLooping)
+                    {
+                        if (_dataChanged)
                         {
-                            variables.Add(_dcsbiosOutput1.ControlId, 0);
-                            //outputsList.Add(_dcsbiosOutput1);
-                        }
-                        if (_dcsbiosOutput2 != null)
-                        {
-                            variables.Add(_dcsbiosOutput2.ControlId, 0);
-                            //outputsList.Add(_dcsbiosOutput2);
-                        }
-                        if (_dcsbiosOutput3 != null)
-                        {
-                            variables.Add(_dcsbiosOutput3.ControlId, 0);
-                            //outputsList.Add(_dcsbiosOutput3);
-                        }
-                        if (_dcsbiosOutput4 != null)
-                        {
-                            variables.Add(_dcsbiosOutput4.ControlId, 0);
-                            //outputsList.Add(_dcsbiosOutput4);
-                        }
-                        if (_dcsbiosOutput5 != null)
-                        {
-                            variables.Add(_dcsbiosOutput5.ControlId, 0);
-                            //outputsList.Add(_dcsbiosOutput5);
-                        }
-                        //var orderedEnumerable = outputsList.OrderBy(x => x.ControlId.Length);
-                        while (_isLooping)
-                        {
-                            if (_dataChanged)
+                            try
                             {
-                                try
+                                if (_dcsbiosOutput1 != null)
                                 {
-                                    if (_dcsbiosOutput1 != null)
-                                    {
-                                        variables[_dcsbiosOutput1.ControlId] = GetVariableValues(_dcsbiosOutput1.ControlId);
-                                    }
-                                    if (_dcsbiosOutput2 != null)
-                                    {
-                                        variables[_dcsbiosOutput2.ControlId] = GetVariableValues(_dcsbiosOutput2.ControlId);
-                                    }
-                                    if (_dcsbiosOutput3 != null)
-                                    {
-                                        variables[_dcsbiosOutput3.ControlId] = GetVariableValues(_dcsbiosOutput3.ControlId);
-                                    }
-                                    if (_dcsbiosOutput4 != null)
-                                    {
-                                        variables[_dcsbiosOutput4.ControlId] = GetVariableValues(_dcsbiosOutput4.ControlId);
-                                    }
-                                    if (_dcsbiosOutput5 != null)
-                                    {
-                                        variables[_dcsbiosOutput5.ControlId] = GetVariableValues(_dcsbiosOutput5.ControlId);
-                                    }
-                                    var result = _jaceExtended.CalculationEngine.Calculate(formula, variables);
+                                    variables[_dcsbiosOutput1.ControlId] = GetVariableValues(_dcsbiosOutput1.ControlId);
+                                }
+                                if (_dcsbiosOutput2 != null)
+                                {
+                                    variables[_dcsbiosOutput2.ControlId] = GetVariableValues(_dcsbiosOutput2.ControlId);
+                                }
+                                if (_dcsbiosOutput3 != null)
+                                {
+                                    variables[_dcsbiosOutput3.ControlId] = GetVariableValues(_dcsbiosOutput3.ControlId);
+                                }
+                                if (_dcsbiosOutput4 != null)
+                                {
+                                    variables[_dcsbiosOutput4.ControlId] = GetVariableValues(_dcsbiosOutput4.ControlId);
+                                }
+                                if (_dcsbiosOutput5 != null)
+                                {
+                                    variables[_dcsbiosOutput5.ControlId] = GetVariableValues(_dcsbiosOutput5.ControlId);
+                                }
+                                var result = _jaceExtended.CalculationEngine.Calculate(formula, variables);
 
-                                    Dispatcher.BeginInvoke(
-                                        (Action)delegate
-                                        {
-                                            LabelResult.Content = "Result : " + result;
-                                        });
-                                }
-                                catch (Exception e)
-                                {
-                                    Dispatcher.BeginInvoke(
-                                        (Action)delegate
-                                        {
-                                            LabelErrors.Content = e.Message;
-                                        });
-                                }
+                                Dispatcher.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LabelResult.Content = "Result : " + result;
+                                    });
                             }
-                            Thread.Sleep(10);
+                            catch (Exception e)
+                            {
+                                Dispatcher.BeginInvoke(
+                                    (Action)delegate
+                                    {
+                                        LabelErrors.Content = e.Message;
+                                    });
+                            }
                         }
+                        Thread.Sleep(10);
                     }
                 }
-                catch (Exception ex)
-                {
-                    LabelErrors.Content = "Failed to start thread " + ex.Message;
-                }
             }
-            finally
+            catch (Exception ex)
             {
+                LabelErrors.Content = "Failed to start thread " + ex.Message;
             }
         }
+
         private double GetVariableValues(string controlId)
         {
             if (Equals(controlId, _dcsbiosOutput1.ControlId))
@@ -186,33 +174,6 @@ namespace DCSFlightpanels
 
             throw new Exception("Failed to pair DCSBIOSOutput " + controlId);
         }
-
-        /*
-        private string GetValueForDCSBIOSOutput(DCSBIOSOutput dcsbiosOutput)
-        {
-            if (Equals(dcsbiosOutput, _dcsbiosOutput1))
-            {
-                return _value1.ToString();
-            }
-            if (Equals(dcsbiosOutput, _dcsbiosOutput2))
-            {
-                return _value2.ToString();
-            }
-            if (Equals(dcsbiosOutput, _dcsbiosOutput3))
-            {
-                return _value3.ToString();
-            }
-            if (Equals(dcsbiosOutput, _dcsbiosOutput4))
-            {
-                return _value4.ToString();
-            }
-            if (Equals(dcsbiosOutput, _dcsbiosOutput5))
-            {
-                return _value5.ToString();
-            }
-
-            throw new Exception("Failed to pair DCSBIOSOutput " + dcsbiosOutput.ControlId);
-        }*/
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -258,7 +219,6 @@ namespace DCSFlightpanels
                         TextBoxId5.Text = _dcsbiosControl5.identifier;
                         TextBoxSearch5.Text = _typeToSearch;
                     }
-                    ShowValues();
                     SetFormState();
                 }
                 _popupSearch.IsOpen = false;
@@ -268,11 +228,6 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(1006, ex);
             }
-        }
-
-        private void ShowValues()
-        {
-
         }
 
         public void DcsBiosDataReceived(uint address, uint data)
@@ -348,64 +303,28 @@ namespace DCSFlightpanels
         {
             try
             {
-                string formula = null;
-                formula = TextBoxFormula.Text;
-                /*var outputsList = new List<DCSBIOSOutput>();
-                if (_dcsbiosOutput1 != null)
-                {
-                    outputsList.Add(_dcsbiosOutput1);
-                }
-                if (_dcsbiosOutput2 != null)
-                {
-                    outputsList.Add(_dcsbiosOutput2);
-                }
-                if (_dcsbiosOutput3 != null)
-                {
-                    outputsList.Add(_dcsbiosOutput3);
-                }
-                if (_dcsbiosOutput4 != null)
-                {
-                    outputsList.Add(_dcsbiosOutput4);
-                }
-                if (_dcsbiosOutput5 != null)
-                {
-                    outputsList.Add(_dcsbiosOutput5);
-                }
-                var orderedEnumerable = outputsList.OrderBy(x => x.ControlId.Length);
-                foreach (var output in orderedEnumerable)
-                {
-                    if (formula.Contains(output.ControlId))
-                    {
-                        formula = formula.Replace(output.ControlId, GetValueForDCSBIOSOutput(output));
-                    }
-                }*/
+                string formula = TextBoxFormula.Text;
                 var variables = new Dictionary<string, double>();
 
-                //var outputsList = new List<DCSBIOSOutput>();
                 if (_dcsbiosOutput1 != null)
                 {
                     variables.Add(_dcsbiosOutput1.ControlId, 0);
-                    //outputsList.Add(_dcsbiosOutput1);
                 }
                 if (_dcsbiosOutput2 != null)
                 {
                     variables.Add(_dcsbiosOutput2.ControlId, 0);
-                    //outputsList.Add(_dcsbiosOutput2);
                 }
                 if (_dcsbiosOutput3 != null)
                 {
                     variables.Add(_dcsbiosOutput3.ControlId, 0);
-                    //outputsList.Add(_dcsbiosOutput3);
                 }
                 if (_dcsbiosOutput4 != null)
                 {
                     variables.Add(_dcsbiosOutput4.ControlId, 0);
-                    //outputsList.Add(_dcsbiosOutput4);
                 }
                 if (_dcsbiosOutput5 != null)
                 {
                     variables.Add(_dcsbiosOutput5.ControlId, 0);
-                    //outputsList.Add(_dcsbiosOutput5);
                 }
                 if (_dcsbiosOutput1 != null)
                 {
@@ -472,24 +391,6 @@ namespace DCSFlightpanels
             TextBoxSearch5.IsEnabled = !_isLooping;
         }
 
-        private void ButtonClose_OnClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-                e.Handled = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
 
         private void ButtonFormulaHelp_OnClick(object sender, RoutedEventArgs e)
         {
@@ -502,22 +403,6 @@ namespace DCSFlightpanels
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void TextBoxSearch1_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
-        private void TextBoxSearch2_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
-        private void TextBoxSearch3_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
-        private void TextBoxSearch4_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
-        private void TextBoxSearch5_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
         }
 
         private void JaceSandboxWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -563,11 +448,11 @@ namespace DCSFlightpanels
             }
         }
 
-        private void TextBoxSearch1_OnKeyUp(object sender, KeyEventArgs e)
+        private void TextBoxSearch_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
-                AdjustShownPopupData(TextBoxSearch1);
+                AdjustShownPopupData((TextBox)sender);
                 SetFormState();
             }
             catch (Exception ex)
@@ -575,59 +460,6 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1005, ex);
             }
         }
-
-        private void TextBoxSearch2_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                AdjustShownPopupData(TextBoxSearch2);
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1005, ex);
-            }
-        }
-
-        private void TextBoxSearch3_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                AdjustShownPopupData(TextBoxSearch3);
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1005, ex);
-            }
-        }
-
-        private void TextBoxSearch4_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                AdjustShownPopupData(TextBoxSearch4);
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1005, ex);
-            }
-        }
-
-        private void TextBoxSearch5_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                AdjustShownPopupData(TextBoxSearch5);
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1005, ex);
-            }
-        }
-
 
         private void ButtonClear1_OnClick(object sender, RoutedEventArgs e)
         {
@@ -635,6 +467,7 @@ namespace DCSFlightpanels
             {
                 TextBoxId1.Text = "";
                 TextBoxSearch1.Text = _typeToSearch;
+                TextBoxSearch1.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput1 = null;
                 _dcsbiosControl1 = null;
             }
@@ -650,6 +483,7 @@ namespace DCSFlightpanels
             {
                 TextBoxId2.Text = "";
                 TextBoxSearch2.Text = _typeToSearch;
+                TextBoxSearch2.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput2 = null;
                 _dcsbiosControl2 = null;
             }
@@ -665,6 +499,7 @@ namespace DCSFlightpanels
             {
                 TextBoxId3.Text = "";
                 TextBoxSearch3.Text = _typeToSearch;
+                TextBoxSearch3.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput3 = null;
                 _dcsbiosControl3 = null;
             }
@@ -680,6 +515,7 @@ namespace DCSFlightpanels
             {
                 TextBoxId4.Text = "";
                 TextBoxSearch4.Text = _typeToSearch;
+                TextBoxSearch4.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput4 = null;
                 _dcsbiosControl4 = null;
             }
@@ -695,6 +531,7 @@ namespace DCSFlightpanels
             {
                 TextBoxId5.Text = "";
                 TextBoxSearch5.Text = _typeToSearch;
+                TextBoxSearch5.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput5 = null;
                 _dcsbiosControl5 = null;
             }
@@ -739,51 +576,37 @@ namespace DCSFlightpanels
             _autoResetEvent.Set();
         }
 
-        private void TextBoxSearch1_OnGotFocus(object sender, RoutedEventArgs e)
+        private void TextBoxSearch_OnGotFocus(object sender, RoutedEventArgs e)
         {
-            TextBoxSearch1.Text = "";
+            var textbox = (TextBox)sender;
+            textbox.Text = "";
+            textbox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
-        private void TextBoxSearch2_OnGotFocus(object sender, RoutedEventArgs e)
+        private void TextBoxSearch_OnLostFocus(object sender, RoutedEventArgs e)
         {
-            TextBoxSearch2.Text = "";
+            var textbox = (TextBox)sender;
+            textbox.Text = _typeToSearch;
+            textbox.Foreground = new SolidColorBrush(Colors.Gainsboro);
         }
 
-        private void TextBoxSearch3_OnGotFocus(object sender, RoutedEventArgs e)
+        private void ButtonClose_OnClick(object sender, RoutedEventArgs e)
         {
-            TextBoxSearch3.Text = "";
+            Close();
         }
 
-        private void TextBoxSearch4_OnGotFocus(object sender, RoutedEventArgs e)
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            TextBoxSearch4.Text = "";
+            try
+            {
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
-        private void TextBoxSearch5_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            TextBoxSearch5.Text = "";
-        }
     }
 }
-//Dispatcher.BeginInvoker((Action)(ShowGraphicConfiguration));
-//Dispatcher.BeginInvoker((Action)(() => MessageBox.Show(userMessage, "Information")));
-/*
-    Dispatcher.BeginInvoker(
-        (Action)delegate
-        {
-            ImageLeftKnobAlt.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-            if (key.IsOn)
-            {
-                ClearAll(false);
-                ShowGraphicConfiguration();
-                LabelDialPos.Content = "ALT";
-            }
-        });*/
-
-/*bool result = perso.Dispatcher.Invoke( // Dispatcher pour utiliser le multithearding
-() =>
-{
-perso.Chuter();
-return perso.WorlFarmeCollision();
-}
-, DispatcherPriority.Normal);*/
