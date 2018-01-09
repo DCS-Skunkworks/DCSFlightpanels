@@ -21,6 +21,12 @@ Saitek / Logitech Panels Supported:
 Support thread : https://forums.eagle.ru/showthread.php?t=137670
 
 
+v2.2.102 8 January 2018
+-----------------------------
+Gazelle SA342 now fully supported
+Formula sandbox added. Monitor DCS-BIOS values in real-time and make the formula that works for you.
+
+
 v2.2.77 1 December 2017
 -----------------------------
 AJS37 FR22 & TILS & Master Mode Selector Implemented (COM1 & NAV1)
