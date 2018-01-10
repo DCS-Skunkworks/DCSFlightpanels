@@ -12,7 +12,8 @@ namespace NonVisuals
         PZ69RadioPanel = 4,
         PZ70MultiPanel = 8,
         BackLitPanel = 16,
-        TPM = 32
+        TPM = 32,
+        HESP = 64
     }
 
     public abstract class SaitekPanel : IProfileHandlerListener, IDcsBiosDataListener
