@@ -217,21 +217,16 @@
                             <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBox25On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                             <Label Content="26. On" FontSize="10" Height="23"  />
                             <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBox26On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
-                            <Label Content="27. On" FontSize="10" Height="23"  />
-                            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBox27On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                         </StackPanel>
                         <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" >
                             <Label Content="25. Off" FontSize="10" Height="23"  />
                             <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBox25Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                             <Label Content="26. Off" FontSize="10" Height="23"  />
                             <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBox26Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
-                            <Label Content="27. Off" FontSize="10" Height="23"  />
-                            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBox27Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
-
                         </StackPanel>
                     </Grid>
                     <GroupBox Header="Log"  FontSize="10"  >
-                        <TextBox Name="TextBoxLogHESP" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" Height="50" />
+                        <TextBox Name="TextBoxLogHESP" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" Height="90" />
                     </GroupBox>
                 </StackPanel>
             </GroupBox>

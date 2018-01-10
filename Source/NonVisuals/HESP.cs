@@ -13,7 +13,7 @@ namespace NonVisuals
     {
 
         /*
-         * For a specific toggle/switch/lever/knob the PZ55 can have :
+         * For a specific button the HESP can have :
          * - single key binding
          * - seqenced key binding
          * - DCS-BIOS control
@@ -88,21 +88,11 @@ namespace NonVisuals
                         keyBinding.ImportSettings(setting);
                         _keyBindings.Add(keyBinding);
                     }
-                    else if (setting.StartsWith("SwitchPanelLed"))
-                    {
-                        var colorOutput = new DcsOutputAndColorBindingPZ55();
-                        colorOutput.ImportSettings(setting);
-                        _listColorOutputBinding.Add(colorOutput);
-                    }
-                    else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("HESPDCSBIOSControl{"))
                     {
                         var dcsBIOSBindingHESP = new DCSBIOSBindingHESP();
                         dcsBIOSBindingHESP.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingHESP);
-                    }
-                    else if (setting.StartsWith("ManualLandingGearLEDs{"))
-                    {
-                        _manualLandingGearLeds = setting.Contains("True");
                     }
                 }
             }

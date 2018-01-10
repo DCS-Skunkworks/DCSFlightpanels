@@ -5,37 +5,38 @@ namespace NonVisuals
 {
     public enum HESPKeys
     {
-        BUTTON1 = 0,
-        BUTTON2 = 2,
-        BUTTON3 = 4,
-        BUTTON4 = 8,
-        BUTTON5 = 16,
-        BUTTON6 = 32,
-        BUTTON7 = 64,
-        BUTTON8 = 128,
-        BUTTON9 = 256,
-        BUTTON10 = 512,
-        BUTTON11 = 1024,
-        BUTTON12 = 2048,
-        BUTTON13 = 4096,
-        BUTTON14 = 8192,
-        BUTTON15 = 16384,
-        BUTTON17 = 32768,
-        BUTTON18 = 65536,
-        BUTTON19 = 131072,
-        BUTTON20 = 262144,
-        BUTTON21 = 524288,
-        BUTTON22 = 524288,
-        BUTTON23 = 524288,
-        BUTTON24 = 524288,
-        BUTTON25 = 524288,
+        BUTTON1,
+        BUTTON2,
+        BUTTON3,
+        BUTTON4,
+        BUTTON5,
+        BUTTON6,
+        BUTTON7,
+        BUTTON8,
+        BUTTON9,
+        BUTTON10,
+        BUTTON11,
+        BUTTON12,
+        BUTTON13,
+        BUTTON14,
+        BUTTON15,
+        BUTTON16,
+        BUTTON17,
+        BUTTON18,
+        BUTTON19,
+        BUTTON20,
+        BUTTON21,
+        BUTTON22,
+        BUTTON23,
+        BUTTON24,
+        BUTTON25,
+        BUTTON26
     }
 
     public class HESPKey
     {
         public HESPKey()
-        {
-        }
+        {}
 
         public HESPKey(int group, int mask, bool isOn, HESPKeys hespKey)
         {
@@ -68,11 +69,8 @@ namespace NonVisuals
             {
                 throw new ArgumentException("Import string format exception. (HESPKey) >" + str + "<");
             }
-            //HESPKey{SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
+            //HESPKey{BUTTON1}
+            var dataString = str.Replace("HESPKey{", "").Replace("}","");
             Key = (HESPKeys)Enum.Parse(typeof(HESPKeys), dataString.Trim());
         }
 
@@ -106,45 +104,6 @@ namespace NonVisuals
             result.Add(new HESPKey(2, Convert.ToInt32("1000", 2), false, HESPKeys.BUTTON1));
             return result;
         }
-
-
-
-
-
-
-
-
-
-
-
-        /*
-         * public String ExportString()
-        {
-            return "HESPKey{" + Group + "," + Mask + "," + Enum.GetName(typeof(HESPKeys), HESPKey) + "}";
-        }
-
-        public void ImportString(String str)
-        {
-            if (String.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (HESPKey)");
-            }
-            if (!str.StartsWith("HESPKey{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (HESPKey) >" + str + "<");
-            }
-            //HESPKey{1,255,SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //1,255,SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //1,255,SWITCHKEY_MASTER_ALT
-            Group = int.Parse(dataString.Substring(0, 1));
-            dataString = dataString.Substring(2);
-            //255,SWITCHKEY_MASTER_ALT
-            Mask = int.Parse(dataString.Substring(0,dataString.IndexOf(",", StringComparison.Ordinal)));
-            HESPKey = (HESPKeys)Enum.Parse(typeof(HESPKeys), dataString.Substring(dataString.IndexOf(",", StringComparison.Ordinal) +1 ));
-        }
-         */
     }
 
     public class HESPKeyOnOff

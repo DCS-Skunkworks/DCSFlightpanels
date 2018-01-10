@@ -129,7 +129,7 @@ namespace DCSFlightpanels
         public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
         }
-        
+
 
         public void PanelDataAvailable(string stringData)
         {
@@ -463,7 +463,7 @@ namespace DCSFlightpanels
                 }
             }
         }
-        
+
         private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             try
@@ -754,7 +754,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (MessageBox.Show("Clear all settings for the Switch Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                if (MessageBox.Show("Clear all settings for the HESP?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     ClearAll(true);
                 }
@@ -959,179 +959,270 @@ namespace DCSFlightpanels
             {
                 foreach (var hespKeyObject in switches)
                 {
-                    var hespKey = (HESPKey)hespKeyObject;/*
+                    var hespKey = (HESPKey)hespKeyObject;
                     switch (hespKey.Key)
                     {
-                        case HESPKeys.SWITCHKEY_AVIONICS_MASTER:
+                        case HESPKeys.BUTTON1:
                             {
                                 var key = hespKey;
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageAvMasterOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageButton1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
-                        case HESPKeys.SWITCHKEY_CLOSE_COWL:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
-                                        //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
-                                        ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_DE_ICE:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageDeIceOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_FUEL_PUMP:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageFuelPumpOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.LEVER_GEAR_DOWN:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageGearUp.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.LEVER_GEAR_UP:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageGearUp.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_LIGHTS_BEACON:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageBeaconOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_LIGHTS_LANDING:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageLandingOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_LIGHTS_NAV:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageNavOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_LIGHTS_PANEL:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImagePanelOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_LIGHTS_STROBE:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageStrobeOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_LIGHTS_TAXI:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageTaxiOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_MASTER_ALT:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageMasterAltOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_MASTER_BAT:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImageMasterBatOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                        case HESPKeys.SWITCHKEY_PITOT_HEAT:
-                            {
-                                var key = hespKey;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        ImagePitotHeatOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    });
-                                break;
-                            }
-                    }
-                    if (hespKey.HESPKey == HESPKeys.KNOB_ENGINE_BOTH || hespKey.HESPKey == HESPKeys.KNOB_ENGINE_LEFT ||
-                        hespKey.HESPKey == HESPKeys.KNOB_ENGINE_RIGHT || hespKey.HESPKey == HESPKeys.KNOB_ENGINE_OFF ||
-                        hespKey.HESPKey == HESPKeys.KNOB_ENGINE_START)
-                    {
-                        var key = hespKey;
-                        Dispatcher.BeginInvoke(
-                            (Action)delegate
-                            {
-                                if (key.IsOn)
+                        case HESPKeys.BUTTON2:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
                                 {
-                                    ImageKnobAll.Visibility = key.IsOn && key.HESPKey == HESPKeys.KNOB_ENGINE_BOTH ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageKnobL.Visibility = key.IsOn && key.HESPKey == HESPKeys.KNOB_ENGINE_LEFT ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageKnobR.Visibility = key.IsOn && key.HESPKey == HESPKeys.KNOB_ENGINE_RIGHT ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageKnobStart.Visibility = key.IsOn && key.HESPKey == HESPKeys.KNOB_ENGINE_START ? Visibility.Visible : Visibility.Collapsed;
-                                }
-                            });
-                    }*/
+                                    ImageButton2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON3:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton3.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON4:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton4.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON5:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton5.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON6:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton6.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON7:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton7.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON8:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton8.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON9:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton9.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON10:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton10.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON11:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton11.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON12:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton12.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON13:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton13.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON14:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton14.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON15:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton15.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON16:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton16.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON17:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton17.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON18:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton18.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON19:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton19.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON20:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton20.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON21:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton21.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON22:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton22.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON23:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton23.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON24:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton24.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON25:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton25.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                        case HESPKeys.BUTTON26:
+                        {
+                            var key = hespKey;
+                            Dispatcher.BeginInvoke(
+                                (Action)delegate
+                                {
+                                    ImageButton26.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                });
+                            break;
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -1148,140 +1239,216 @@ namespace DCSFlightpanels
                 {
                     textBox.Tag = new SortedList<int, KeyPressInfo>();
                 }
-                /*
+                
+                if (textBox.Equals(TextBox1On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON1, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox1Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON1, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
 
-                if (textBox.Equals(TextBoxKnobOff))
+                if (textBox.Equals(TextBox2On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.KNOB_ENGINE_OFF, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON2, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxKnobR))
+                if (textBox.Equals(TextBox2Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.KNOB_ENGINE_RIGHT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON2, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxKnobL))
+                if (textBox.Equals(TextBox3On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.KNOB_ENGINE_LEFT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON3, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxKnobAll))
+                if (textBox.Equals(TextBox3Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.KNOB_ENGINE_BOTH, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON3, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxKnobStart))
+                if (textBox.Equals(TextBox4On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.KNOB_ENGINE_START, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON4, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxCowlClose))
+                if (textBox.Equals(TextBox4Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_CLOSE_COWL, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON4, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxCowlOpen))
+                if (textBox.Equals(TextBox5On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_CLOSE_COWL, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON5, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxPanelOff))
+                if (textBox.Equals(TextBox5Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_PANEL, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON5, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxPanelOn))
+                if (textBox.Equals(TextBox6On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_PANEL, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON6, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxBeaconOff))
+                if (textBox.Equals(TextBox6Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_BEACON, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON6, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxBeaconOn))
+                if (textBox.Equals(TextBox7On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_BEACON, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON7, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxNavOff))
+                if (textBox.Equals(TextBox7Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_NAV, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON7, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxNavOn))
+                if (textBox.Equals(TextBox8On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_NAV, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON8, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxStrobeOff))
+                if (textBox.Equals(TextBox8Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_STROBE, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON8, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxStrobeOn))
+                if (textBox.Equals(TextBox9On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_STROBE, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON9, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxTaxiOff))
+                if (textBox.Equals(TextBox9Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_TAXI, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON9, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxTaxiOn))
+                if (textBox.Equals(TextBox10On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_TAXI, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON10, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxLandingOff))
+                if (textBox.Equals(TextBox10Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_LANDING, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON10, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxLandingOn))
+                if (textBox.Equals(TextBox11On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_LIGHTS_LANDING, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON11, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxMasterBatOff))
+                if (textBox.Equals(TextBox11Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_MASTER_BAT, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON11, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxMasterBatOn))
+                if (textBox.Equals(TextBox12On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_MASTER_BAT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON12, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxMasterAltOff))
+                if (textBox.Equals(TextBox12Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_MASTER_ALT, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON12, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxMasterAltOn))
+                if (textBox.Equals(TextBox13On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_MASTER_ALT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON13, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOff))
+                if (textBox.Equals(TextBox13Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_AVIONICS_MASTER, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON13, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOn))
+                if (textBox.Equals(TextBox14On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_AVIONICS_MASTER, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON14, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOff))
+                if (textBox.Equals(TextBox14Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_FUEL_PUMP, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON14, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOn))
+                if (textBox.Equals(TextBox15On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_FUEL_PUMP, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON15, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxDeIceOff))
+                if (textBox.Equals(TextBox15Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_DE_ICE, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON15, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxDeIceOn))
+                if (textBox.Equals(TextBox16On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_DE_ICE, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON16, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOff))
+                if (textBox.Equals(TextBox16Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_PITOT_HEAT, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON16, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOn))
+                if (textBox.Equals(TextBox17On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.SWITCHKEY_PITOT_HEAT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON17, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
                 }
-                if (textBox.Equals(TextBoxGearUp))
+                if (textBox.Equals(TextBox17Off))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.LEVER_GEAR_UP, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON17, (SortedList<int, KeyPressInfo>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxGearDown))
+                if (textBox.Equals(TextBox18On))
                 {
-                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.LEVER_GEAR_DOWN, (SortedList<int, KeyPressInfo>)textBox.Tag);
-                }*/
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON18, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox18Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON18, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox19On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON19, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox19Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON19, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox20On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON20, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox20Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON20, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox21On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON21, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox21Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON21, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox22On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON22, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox22Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON22, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox23On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON23, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox23Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON23, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox24On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON24, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox24Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON24, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox25On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON25, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox25Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON25, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
+                if (textBox.Equals(TextBox26On))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON26, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                }
+                if (textBox.Equals(TextBox26Off))
+                {
+                    _hesp.AddOrUpdateSequencedKeyBinding(textBox.Text, HESPKeys.BUTTON26, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                }
             }
             catch (Exception ex)
             {
@@ -1293,7 +1460,7 @@ namespace DCSFlightpanels
         private void UpdateKeyBindingProfileSimpleKeyStrokes(TextBox textBox)
         {
             try
-            {/*
+            {
                 KeyPressLength keyPressLength;
                 if (textBox.Tag == null)
                 {
@@ -1303,138 +1470,215 @@ namespace DCSFlightpanels
                 {
                     keyPressLength = ((KeyPressLength)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxKnobOff))
+                
+                if (textBox.Equals(TextBox1On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.KNOB_ENGINE_OFF, TextBoxKnobOff.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON1, TextBox1On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxKnobR))
+                if (textBox.Equals(TextBox1Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.KNOB_ENGINE_RIGHT, TextBoxKnobR.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON1, TextBox1Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxKnobL))
+                if (textBox.Equals(TextBox2On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.KNOB_ENGINE_LEFT, TextBoxKnobL.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON2, TextBox2On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxKnobAll))
+                if (textBox.Equals(TextBox2Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.KNOB_ENGINE_BOTH, TextBoxKnobAll.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON2, TextBox2Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxKnobStart))
+                if (textBox.Equals(TextBox3On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.KNOB_ENGINE_START, TextBoxKnobStart.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON3, TextBox3On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxCowlClose))
+                if (textBox.Equals(TextBox3Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_CLOSE_COWL, TextBoxCowlClose.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON3, TextBox3Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxCowlOpen))
+                if (textBox.Equals(TextBox4On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_CLOSE_COWL, TextBoxCowlOpen.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON4, TextBox4On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxPanelOff))
+                if (textBox.Equals(TextBox4Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_PANEL, TextBoxPanelOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON4, TextBox4Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxPanelOn))
+                if (textBox.Equals(TextBox5On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_PANEL, TextBoxPanelOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON5, TextBox5On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxBeaconOff))
+                if (textBox.Equals(TextBox5Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_BEACON, TextBoxBeaconOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON5, TextBox5Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxBeaconOn))
+                if (textBox.Equals(TextBox6On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_BEACON, TextBoxBeaconOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON6, TextBox6On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxNavOff))
+                if (textBox.Equals(TextBox6Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_NAV, TextBoxNavOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON6, TextBox6Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxNavOn))
+                if (textBox.Equals(TextBox7On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_NAV, TextBoxNavOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON7, TextBox7On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxStrobeOff))
+                if (textBox.Equals(TextBox7Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_STROBE, TextBoxStrobeOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON7, TextBox7Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxStrobeOn))
+                if (textBox.Equals(TextBox8On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_STROBE, TextBoxStrobeOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON8, TextBox8On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxTaxiOff))
+                if (textBox.Equals(TextBox8Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_TAXI, TextBoxTaxiOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON8, TextBox8Off.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxTaxiOn))
+                if (textBox.Equals(TextBox9On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_TAXI, TextBoxTaxiOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON9, TextBox9On.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxLandingOff))
+                if (textBox.Equals(TextBox9Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_LANDING, TextBoxLandingOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON9, TextBox9Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxLandingOn))
+                if (textBox.Equals(TextBox10On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_LIGHTS_LANDING, TextBoxLandingOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON10, TextBox10On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxMasterBatOff))
+                if (textBox.Equals(TextBox10Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_MASTER_BAT, TextBoxMasterBatOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON10, TextBox10Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxMasterBatOn))
+                if (textBox.Equals(TextBox11On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_MASTER_BAT, TextBoxMasterBatOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON11, TextBox11On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxMasterAltOff))
+                if (textBox.Equals(TextBox11Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_MASTER_ALT, TextBoxMasterAltOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON11, TextBox11Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxMasterAltOn))
+                if (textBox.Equals(TextBox12On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_MASTER_ALT, TextBoxMasterAltOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON12, TextBox12On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOff))
+                if (textBox.Equals(TextBox12Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_AVIONICS_MASTER, TextBoxAvionicsMasterOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON12, TextBox12Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOn))
+                if (textBox.Equals(TextBox13On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_AVIONICS_MASTER, TextBoxAvionicsMasterOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON13, TextBox13On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOff))
+                if (textBox.Equals(TextBox13Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_FUEL_PUMP, TextBoxFuelPumpOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON13, TextBox13Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOn))
+                if (textBox.Equals(TextBox14On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_FUEL_PUMP, TextBoxFuelPumpOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON14, TextBox14On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxDeIceOff))
+                if (textBox.Equals(TextBox14Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_DE_ICE, TextBoxDeIceOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON14, TextBox14Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxDeIceOn))
+                if (textBox.Equals(TextBox15On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_DE_ICE, TextBoxDeIceOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON15, TextBox15On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOff))
+                if (textBox.Equals(TextBox15Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_PITOT_HEAT, TextBoxPitotHeatOff.Text, keyPressLength, false);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON15, TextBox15Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOn))
+                if (textBox.Equals(TextBox16On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.SWITCHKEY_PITOT_HEAT, TextBoxPitotHeatOn.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON16, TextBox16On.Text, keyPressLength, false);
                 }
-                if (textBox.Equals(TextBoxGearUp))
+                if (textBox.Equals(TextBox16Off))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.LEVER_GEAR_UP, TextBoxGearUp.Text, keyPressLength);
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON16, TextBox16Off.Text, keyPressLength);
                 }
-                if (textBox.Equals(TextBoxGearDown))
+                if (textBox.Equals(TextBox17On))
                 {
-                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.LEVER_GEAR_DOWN, TextBoxGearDown.Text, keyPressLength);
-                }*/
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON17, TextBox17On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox17Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON17, TextBox17Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox18On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON18, TextBox18On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox18Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON18, TextBox18Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox19On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON19, TextBox19On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox19Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON19, TextBox19Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox20On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON20, TextBox20On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox20Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON20, TextBox20Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox21On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON21, TextBox21On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox21Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON21, TextBox21Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox22On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON22, TextBox22On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox22Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON22, TextBox22Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox23On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON23, TextBox23On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox23Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON23, TextBox23Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox24On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON24, TextBox24On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox24Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON24, TextBox24Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox25On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON25, TextBox25On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox25Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON25, TextBox25Off.Text, keyPressLength);
+                }
+                if (textBox.Equals(TextBox26On))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON26, TextBox26On.Text, keyPressLength, false);
+                }
+                if (textBox.Equals(TextBox26Off))
+                {
+                    _hesp.AddOrUpdateSingleKeyBinding(HESPKeys.BUTTON26, TextBox26Off.Text, keyPressLength);
+                }
             }
             catch (Exception ex)
             {
@@ -1445,7 +1689,7 @@ namespace DCSFlightpanels
         private void UpdateDCSBIOSBinding(TextBox textBox)
         {
             try
-            {/*
+            {
                 List<DCSBIOSInput> dcsBiosInputs = null;
                 if (textBox.Tag == null)
                 {
@@ -1455,138 +1699,214 @@ namespace DCSFlightpanels
                 {
                     dcsBiosInputs = ((List<DCSBIOSInput>)textBox.Tag);
                 }
-                if (textBox.Equals(TextBoxKnobOff))
+                if (textBox.Equals(TextBox1Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.KNOB_ENGINE_OFF, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON1, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxKnobR))
+                if (textBox.Equals(TextBox1On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.KNOB_ENGINE_RIGHT, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON1, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxKnobL))
+                if (textBox.Equals(TextBox2Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.KNOB_ENGINE_LEFT, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON3, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxKnobAll))
+                if (textBox.Equals(TextBox2On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.KNOB_ENGINE_BOTH, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON2, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxKnobStart))
+                if (textBox.Equals(TextBox3Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.KNOB_ENGINE_START, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON3, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxCowlClose))
+                if (textBox.Equals(TextBox3On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_CLOSE_COWL, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON3, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxCowlOpen))
+                if (textBox.Equals(TextBox4Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_CLOSE_COWL, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON4, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxPanelOff))
+                if (textBox.Equals(TextBox4On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_PANEL, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON4, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxPanelOn))
+                if (textBox.Equals(TextBox5Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_PANEL, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON5, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxBeaconOff))
+                if (textBox.Equals(TextBox5On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_BEACON, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON5, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxBeaconOn))
+                if (textBox.Equals(TextBox6Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_BEACON, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON6, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxNavOff))
+                if (textBox.Equals(TextBox6On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_NAV, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON6, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxNavOn))
+                if (textBox.Equals(TextBox7Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_NAV, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON7, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxStrobeOff))
+                if (textBox.Equals(TextBox7On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_STROBE, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON7, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxStrobeOn))
+                if (textBox.Equals(TextBox8Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_STROBE, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON8, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxTaxiOff))
+                if (textBox.Equals(TextBox8On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_TAXI, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON8, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxTaxiOn))
+                if (textBox.Equals(TextBox9Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_TAXI, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON9, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxLandingOff))
+                if (textBox.Equals(TextBox9On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_LANDING, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON9, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxLandingOn))
+                if (textBox.Equals(TextBox10Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_LIGHTS_LANDING, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON10, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxMasterBatOff))
+                if (textBox.Equals(TextBox10On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_MASTER_BAT, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON10, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxMasterBatOn))
+                if (textBox.Equals(TextBox11Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_MASTER_BAT, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON11, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxMasterAltOff))
+                if (textBox.Equals(TextBox11On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_MASTER_ALT, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON11, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxMasterAltOn))
+                if (textBox.Equals(TextBox12Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_MASTER_ALT, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON12, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOff))
+                if (textBox.Equals(TextBox12On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_AVIONICS_MASTER, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON12, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOn))
+                if (textBox.Equals(TextBox13Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_AVIONICS_MASTER, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON13, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOff))
+                if (textBox.Equals(TextBox13On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_FUEL_PUMP, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON13, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOn))
+                if (textBox.Equals(TextBox14Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_FUEL_PUMP, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON14, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxDeIceOff))
+                if (textBox.Equals(TextBox14On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_DE_ICE, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON14, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxDeIceOn))
+                if (textBox.Equals(TextBox15Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_DE_ICE, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON15, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOff))
+                if (textBox.Equals(TextBox15On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_PITOT_HEAT, dcsBiosInputs, textBox.Text, false);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON15, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOn))
+                if (textBox.Equals(TextBox16Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.SWITCHKEY_PITOT_HEAT, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON16, dcsBiosInputs, textBox.Text, false);
                 }
-                if (textBox.Equals(TextBoxGearUp))
+                if (textBox.Equals(TextBox16On))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.LEVER_GEAR_UP, dcsBiosInputs, textBox.Text);
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON16, dcsBiosInputs, textBox.Text);
                 }
-                if (textBox.Equals(TextBoxGearDown))
+                if (textBox.Equals(TextBox17Off))
                 {
-                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.LEVER_GEAR_DOWN, dcsBiosInputs, textBox.Text);
-                }*/
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON17, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox17On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON17, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox18Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON18, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox18On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON18, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox19Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON19, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox19On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON19, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox20Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON20, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox20On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON20, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox21Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON21, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox21On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON21, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox22Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON22, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox22On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON22, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox23Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON23, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox23On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON23, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox24Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON24, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox24On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON24, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox25Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON25, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox25On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON25, dcsBiosInputs, textBox.Text);
+                }
+                if (textBox.Equals(TextBox26Off))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON26, dcsBiosInputs, textBox.Text, false);
+                }
+                if (textBox.Equals(TextBox26On))
+                {
+                    _hesp.AddOrUpdateDCSBIOSBinding(HESPKeys.BUTTON26, dcsBiosInputs, textBox.Text);
+                }
             }
             catch (Exception ex)
             {
@@ -1597,139 +1917,218 @@ namespace DCSFlightpanels
         private HESPKeyOnOff GetHESPKey(TextBox textBox)
         {
             try
-            {/*
-                if (textBox.Equals(TextBoxKnobOff))
+            {
+                if (textBox.Equals(TextBox1Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.KNOB_ENGINE_OFF, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON1, false);
                 }
-                if (textBox.Equals(TextBoxKnobR))
+                if (textBox.Equals(TextBox1On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.KNOB_ENGINE_RIGHT, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON1, true);
                 }
-                if (textBox.Equals(TextBoxKnobL))
+                if (textBox.Equals(TextBox2Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.KNOB_ENGINE_LEFT, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON2, false);
                 }
-                if (textBox.Equals(TextBoxKnobAll))
+                if (textBox.Equals(TextBox2On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.KNOB_ENGINE_BOTH, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON2, true);
                 }
-                if (textBox.Equals(TextBoxKnobStart))
+                if (textBox.Equals(TextBox3Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.KNOB_ENGINE_START, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON3, false);
                 }
-                if (textBox.Equals(TextBoxCowlClose))
+                if (textBox.Equals(TextBox3On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_CLOSE_COWL, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON3, true);
                 }
-                if (textBox.Equals(TextBoxCowlOpen))
+                if (textBox.Equals(TextBox4Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_CLOSE_COWL, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON4, false);
                 }
-                if (textBox.Equals(TextBoxPanelOff))
+                if (textBox.Equals(TextBox4On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_PANEL, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON4, true);
                 }
-                if (textBox.Equals(TextBoxPanelOn))
+                if (textBox.Equals(TextBox5Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_PANEL, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON5, false);
                 }
-                if (textBox.Equals(TextBoxBeaconOff))
+                if (textBox.Equals(TextBox5On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_BEACON, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON5, true);
                 }
-                if (textBox.Equals(TextBoxBeaconOn))
+                if (textBox.Equals(TextBox6Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_BEACON, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON6, false);
                 }
-                if (textBox.Equals(TextBoxNavOff))
+                if (textBox.Equals(TextBox6On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_NAV, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON6, true);
                 }
-                if (textBox.Equals(TextBoxNavOn))
+                if (textBox.Equals(TextBox7Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_NAV, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON7, false);
                 }
-                if (textBox.Equals(TextBoxStrobeOff))
+                if (textBox.Equals(TextBox7On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_STROBE, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON7, true);
                 }
-                if (textBox.Equals(TextBoxStrobeOn))
+                if (textBox.Equals(TextBox8Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_STROBE, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON8, false);
                 }
-                if (textBox.Equals(TextBoxTaxiOff))
+                if (textBox.Equals(TextBox8On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_TAXI, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON8, true);
                 }
-                if (textBox.Equals(TextBoxTaxiOn))
+                if (textBox.Equals(TextBox9Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_TAXI, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON9, false);
                 }
-                if (textBox.Equals(TextBoxLandingOff))
+                if (textBox.Equals(TextBox9On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_LANDING, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON9, true);
                 }
-                if (textBox.Equals(TextBoxLandingOn))
+                if (textBox.Equals(TextBox10Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_LIGHTS_LANDING, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON10, false);
                 }
-                if (textBox.Equals(TextBoxMasterBatOff))
+                if (textBox.Equals(TextBox10On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_MASTER_BAT, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON10, true);
                 }
-                if (textBox.Equals(TextBoxMasterBatOn))
+                if (textBox.Equals(TextBox11Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_MASTER_BAT, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON11, false);
                 }
-                if (textBox.Equals(TextBoxMasterAltOff))
+                if (textBox.Equals(TextBox11On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_MASTER_ALT, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON11, true);
                 }
-                if (textBox.Equals(TextBoxMasterAltOn))
+                if (textBox.Equals(TextBox12Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_MASTER_ALT, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON12, false);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOff))
+                if (textBox.Equals(TextBox12On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_AVIONICS_MASTER, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON12, true);
                 }
-                if (textBox.Equals(TextBoxAvionicsMasterOn))
+                if (textBox.Equals(TextBox13Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_AVIONICS_MASTER, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON13, false);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOff))
+                if (textBox.Equals(TextBox13On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_FUEL_PUMP, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON13, true);
                 }
-                if (textBox.Equals(TextBoxFuelPumpOn))
+                if (textBox.Equals(TextBox14Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_FUEL_PUMP, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON14, false);
                 }
-                if (textBox.Equals(TextBoxDeIceOff))
+                if (textBox.Equals(TextBox14On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_DE_ICE, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON14, true);
                 }
-                if (textBox.Equals(TextBoxDeIceOn))
+                if (textBox.Equals(TextBox15Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_DE_ICE, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON15, false);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOff))
+                if (textBox.Equals(TextBox15On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_PITOT_HEAT, false);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON15, true);
                 }
-                if (textBox.Equals(TextBoxPitotHeatOn))
+                if (textBox.Equals(TextBox16Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.SWITCHKEY_PITOT_HEAT, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON16, false);
                 }
-                if (textBox.Equals(TextBoxGearUp))
+                if (textBox.Equals(TextBox16On))
                 {
-                    return new HESPKeyOnOff(HESPKeys.LEVER_GEAR_UP, true);
+                    return new HESPKeyOnOff(HESPKeys.BUTTON16, true);
                 }
-                if (textBox.Equals(TextBoxGearDown))
+                if (textBox.Equals(TextBox17Off))
                 {
-                    return new HESPKeyOnOff(HESPKeys.LEVER_GEAR_DOWN, true);
-                }*/
+                    return new HESPKeyOnOff(HESPKeys.BUTTON17, false);
+                }
+                if (textBox.Equals(TextBox17On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON17, true);
+                }
+                if (textBox.Equals(TextBox18Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON18, false);
+                }
+                if (textBox.Equals(TextBox18On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON18, true);
+                }
+                if (textBox.Equals(TextBox19Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON19, false);
+                }
+                if (textBox.Equals(TextBox19On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON19, true);
+                }
+
+                if (textBox.Equals(TextBox20Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON20, false);
+                }
+                if (textBox.Equals(TextBox20On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON20, true);
+                }
+
+                if (textBox.Equals(TextBox21Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON21, false);
+                }
+                if (textBox.Equals(TextBox21On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON21, true);
+                }
+
+                if (textBox.Equals(TextBox22Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON22, false);
+                }
+                if (textBox.Equals(TextBox22On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON22, true);
+                }
+                if (textBox.Equals(TextBox23Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON23, false);
+                }
+                if (textBox.Equals(TextBox23On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON23, true);
+                }
+                if (textBox.Equals(TextBox24Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON24, false);
+                }
+                if (textBox.Equals(TextBox24On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON24, true);
+                }
+                if (textBox.Equals(TextBox25Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON25, false);
+                }
+                if (textBox.Equals(TextBox25On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON25, true);
+                }
+                if (textBox.Equals(TextBox26Off))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON26, false);
+                }
+                if (textBox.Equals(TextBox26On))
+                {
+                    return new HESPKeyOnOff(HESPKeys.BUTTON26, true);
+                }
             }
             catch (Exception ex)
             {
@@ -1741,502 +2140,249 @@ namespace DCSFlightpanels
         private void ShowGraphicConfiguration()
         {
             try
-            {/*
+            {
+                TextBox textBoxOn = null;
+                TextBox textBoxOff = null;
                 foreach (var keyBinding in _hesp.KeyBindingsHashSet)
                 {
-                    if (keyBinding.HESPKey == HESPKeys.KNOB_ENGINE_OFF)
+
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON1 && keyBinding.WhenTurnedOn)
                     {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
+                        textBoxOn = TextBox1On;
                     }
-                    if (keyBinding.HESPKey == HESPKeys.KNOB_ENGINE_RIGHT)
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON1 && !keyBinding.WhenTurnedOn)
                     {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobR.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobR.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobR.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobR.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
+                        textBoxOff = TextBox1Off;
                     }
-                    if (keyBinding.HESPKey == HESPKeys.KNOB_ENGINE_LEFT)
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON2 && keyBinding.WhenTurnedOn)
                     {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobL.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobL.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobL.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobL.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
+                        textBoxOn = TextBox2On;
                     }
-                    if (keyBinding.HESPKey == HESPKeys.KNOB_ENGINE_BOTH)
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON2 && !keyBinding.WhenTurnedOn)
                     {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobAll.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobAll.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobAll.Text = keyBinding.OSKeyPress.Information;
-                                TextBoxKnobAll.Tag = keyBinding.OSKeyPress.GetSequence;
-                            }
-                        }
+                        textBoxOff = TextBox2Off;
                     }
-                    if (keyBinding.HESPKey == HESPKeys.KNOB_ENGINE_START)
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON3 && keyBinding.WhenTurnedOn)
                     {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobStart.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobStart.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobStart.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobStart.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
+                        textBoxOn = TextBox3On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON3 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox3Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON4 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox4On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON4 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox4Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON5 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox5On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON5 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox5Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON6 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox6On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON6 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox6Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON7 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox7On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON7 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox7Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON8 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox8On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON8 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox8Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON9 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox9On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON9 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox9Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON10 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox10On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON10 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox10Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON11 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox11On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON11 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox11Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON12 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox12On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON12 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox12Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON13 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox13On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON13 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox13Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON14 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox14On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON14 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox14Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON15 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox15On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON15 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox15Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON16 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox16On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON16 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox16Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON17 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox17On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON17 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox17Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON18 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox18On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON18 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox18Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON19 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox19On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON19 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox19Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON20 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox20On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON20 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox2Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON21 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox21On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON21 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox21Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON22 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox22On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON22 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox22Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON23 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox23On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON23 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox23Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON24 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox24On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON24 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox24Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON25 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox25On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON25 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox25Off;
+                    }
+                    if (keyBinding.HESPKey == HESPKeys.BUTTON26 && keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox26On;
+                    }
+                    else if (keyBinding.HESPKey == HESPKeys.BUTTON26 && !keyBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox26Off;
                     }
 
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_CLOSE_COWL)
+                    if (textBoxOn != null && keyBinding.WhenTurnedOn)
                     {
-                        if (keyBinding.WhenTurnedOn)
+                        if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxCowlOpen.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxCowlOpen.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxCowlOpen.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxCowlOpen.Text = keyBinding.OSKeyPress.Information;
-                            }
+                            textBoxOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
+                            textBoxOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
-                        else
+                        else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxCowlClose.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxCowlClose.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxCowlClose.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxCowlClose.Text = keyBinding.OSKeyPress.Information;
-                            }
+                            textBoxOn.Tag = keyBinding.OSKeyPress.GetSequence;
+                            textBoxOn.Text = keyBinding.OSKeyPress.Information;
                         }
                     }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_PANEL)
+                    else if (textBoxOff != null && !keyBinding.WhenTurnedOn)
                     {
-                        if (keyBinding.WhenTurnedOn)
+                        if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPanelOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPanelOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPanelOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPanelOn.Text = keyBinding.OSKeyPress.Information;
-                            }
+                            textBoxOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
+                            textBoxOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
-                        else
+                        else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPanelOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPanelOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPanelOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPanelOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_BEACON)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxBeaconOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxBeaconOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxBeaconOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxBeaconOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxBeaconOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxBeaconOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxBeaconOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxBeaconOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_NAV)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxNavOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxNavOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxNavOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxNavOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxNavOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxNavOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxNavOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxNavOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_STROBE)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxStrobeOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxStrobeOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxStrobeOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxStrobeOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxStrobeOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxStrobeOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxStrobeOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxStrobeOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_TAXI)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxTaxiOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxTaxiOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxTaxiOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxTaxiOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxTaxiOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxTaxiOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxTaxiOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxTaxiOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_LANDING)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxLandingOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxLandingOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxLandingOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxLandingOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxLandingOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxLandingOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxLandingOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxLandingOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_MASTER_BAT)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterBatOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterBatOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterBatOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterBatOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterBatOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterBatOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterBatOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterBatOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_MASTER_ALT)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterAltOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterAltOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterAltOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterAltOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterAltOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterAltOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterAltOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterAltOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_AVIONICS_MASTER)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxAvionicsMasterOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxAvionicsMasterOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxAvionicsMasterOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxAvionicsMasterOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxAvionicsMasterOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxAvionicsMasterOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxAvionicsMasterOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxAvionicsMasterOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_FUEL_PUMP)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxFuelPumpOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxFuelPumpOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxFuelPumpOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxFuelPumpOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxFuelPumpOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxFuelPumpOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxFuelPumpOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxFuelPumpOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_DE_ICE)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxDeIceOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxDeIceOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxDeIceOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxDeIceOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxDeIceOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxDeIceOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxDeIceOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxDeIceOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.SWITCHKEY_PITOT_HEAT)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPitotHeatOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPitotHeatOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPitotHeatOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPitotHeatOn.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPitotHeatOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPitotHeatOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPitotHeatOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPitotHeatOff.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.LEVER_GEAR_UP)
-                    {
-                        //When gear is down is it OFF -> NOT BEING USED
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxGearUp.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxGearUp.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxGearUp.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxGearUp.Text = keyBinding.OSKeyPress.Information;
-                            }
-                        }
-                    }
-                    if (keyBinding.HESPKey == HESPKeys.LEVER_GEAR_DOWN)
-                    {
-                        //When gear is down is it ON -> BEING USED
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxGearDown.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxGearDown.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxGearDown.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxGearDown.Text = keyBinding.OSKeyPress.Information;
-                            }
+                            textBoxOff.Tag = keyBinding.OSKeyPress.GetSequence;
+                            textBoxOff.Text = keyBinding.OSKeyPress.Information;
                         }
                     }
                 }
+
 
 
 
@@ -2244,359 +2390,240 @@ namespace DCSFlightpanels
 
                 foreach (var dcsBiosBinding in _hesp.DCSBiosBindings)
                 {
-                    if (dcsBiosBinding.HESPKey == HESPKeys.KNOB_ENGINE_OFF && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON1 && dcsBiosBinding.WhenTurnedOn)
                     {
-                        TextBoxKnobOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                        TextBoxKnobOff.Text = dcsBiosBinding.Description;
-                        TextBoxKnobOff.ToolTip = "DCS-BIOS";
+                        textBoxOn = TextBox1On;
                     }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.KNOB_ENGINE_RIGHT && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON1 && !dcsBiosBinding.WhenTurnedOn)
                     {
-                        TextBoxKnobR.Tag = dcsBiosBinding.DCSBIOSInputs;
-                        TextBoxKnobR.Text = dcsBiosBinding.Description;
-                        TextBoxKnobR.ToolTip = "DCS-BIOS";
+                        textBoxOff = TextBox1Off;
                     }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.KNOB_ENGINE_LEFT && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON2 && dcsBiosBinding.WhenTurnedOn)
                     {
-                        TextBoxKnobL.Tag = dcsBiosBinding.DCSBIOSInputs;
-                        TextBoxKnobL.Text = dcsBiosBinding.Description;
-                        TextBoxKnobL.ToolTip = "DCS-BIOS";
+                        textBoxOn = TextBox2On;
                     }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.KNOB_ENGINE_BOTH && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON2 && !dcsBiosBinding.WhenTurnedOn)
                     {
-                        TextBoxKnobAll.Tag = dcsBiosBinding.DCSBIOSInputs;
-                        TextBoxKnobAll.Text = dcsBiosBinding.Description;
-                        TextBoxKnobAll.ToolTip = "DCS-BIOS";
+                        textBoxOff = TextBox2Off;
                     }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.KNOB_ENGINE_START && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON3 && dcsBiosBinding.WhenTurnedOn)
                     {
-                        TextBoxKnobStart.Tag = dcsBiosBinding.DCSBIOSInputs;
-                        TextBoxKnobStart.Text = dcsBiosBinding.Description;
-                        TextBoxKnobStart.ToolTip = "DCS-BIOS";
+                        textBoxOn = TextBox3On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON3 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox3Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON4 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox4On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON4 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox4Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON5 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox5On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON5 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox5Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON6 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox6On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON6 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox6Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON7 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox7On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON7 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox7Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON8 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox8On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON8 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox8Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON9 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox9On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON9 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox9Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON10 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox10On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON10 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox10Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON11 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox11On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON11 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox11Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON12 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox12On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON12 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox12Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON13 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox13On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON13 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox13Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON14 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox14On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON14 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox14Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON15 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox15On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON15 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox15Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON16 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox16On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON16 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox16Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON17 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox17On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON17 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox17Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON18 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox18On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON18 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox18Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON19 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox19On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON19 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox19Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON20 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox20On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON20 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox20Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON21 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox21On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON21 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox21Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON22 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox22On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON22 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox22Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON23 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox23On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON23 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox23Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON24 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox24On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON24 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox24Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON25 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox25On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON25 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox25Off;
+                    }
+                    if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON26 && dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOn = TextBox26On;
+                    }
+                    else if (dcsBiosBinding.HESPKey == HESPKeys.BUTTON26 && !dcsBiosBinding.WhenTurnedOn)
+                    {
+                        textBoxOff = TextBox26Off;
                     }
 
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_CLOSE_COWL)
+
+                    if (textBoxOn != null && dcsBiosBinding.WhenTurnedOn)
                     {
-                        if (dcsBiosBinding.WhenTurnedOn)
+                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                         {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxCowlOpen.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxCowlOpen.Text = dcsBiosBinding.Description;
-                                TextBoxCowlOpen.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxCowlClose.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxCowlClose.Text = dcsBiosBinding.Description;
-                                TextBoxCowlClose.ToolTip = "DCS-BIOS";
-                            }
+                            textBoxOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                            textBoxOn.Text = dcsBiosBinding.Description;
+                            textBoxOn.ToolTip = "DCS-BIOS";
                         }
                     }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_PANEL)
+                    else if(textBoxOff != null)
                     {
-                        if (dcsBiosBinding.WhenTurnedOn)
+                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                         {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxPanelOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxPanelOn.Text = dcsBiosBinding.Description;
-                                TextBoxPanelOn.ToolTip = "DCS-BIOS";
-                            }
+                            textBoxOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                            textBoxOff.Text = dcsBiosBinding.Description;
+                            textBoxOff.ToolTip = "DCS-BIOS";
                         }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxPanelOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxPanelOff.Text = dcsBiosBinding.Description;
-                                TextBoxPanelOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_BEACON)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxBeaconOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxBeaconOn.Text = dcsBiosBinding.Description;
-                                TextBoxBeaconOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxBeaconOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxBeaconOff.Text = dcsBiosBinding.Description;
-                                TextBoxBeaconOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_NAV)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxNavOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxNavOn.Text = dcsBiosBinding.Description;
-                                TextBoxNavOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxNavOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxNavOff.Text = dcsBiosBinding.Description;
-                                TextBoxNavOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_STROBE)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxStrobeOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxStrobeOn.Text = dcsBiosBinding.Description;
-                                TextBoxStrobeOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxStrobeOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxStrobeOff.Text = dcsBiosBinding.Description;
-                                TextBoxStrobeOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_TAXI)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxTaxiOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxTaxiOn.Text = dcsBiosBinding.Description;
-                                TextBoxTaxiOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxTaxiOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxTaxiOff.Text = dcsBiosBinding.Description;
-                                TextBoxTaxiOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_LIGHTS_LANDING)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxLandingOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxLandingOn.Text = dcsBiosBinding.Description;
-                                TextBoxLandingOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxLandingOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxLandingOff.Text = dcsBiosBinding.Description;
-                                TextBoxLandingOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_MASTER_BAT)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxMasterBatOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxMasterBatOn.Text = dcsBiosBinding.Description;
-                                TextBoxMasterBatOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxMasterBatOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxMasterBatOff.Text = dcsBiosBinding.Description;
-                                TextBoxMasterBatOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_MASTER_ALT)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxMasterAltOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxMasterAltOn.Text = dcsBiosBinding.Description;
-                                TextBoxMasterAltOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxMasterAltOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxMasterAltOff.Text = dcsBiosBinding.Description;
-                                TextBoxMasterAltOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_AVIONICS_MASTER)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxAvionicsMasterOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxAvionicsMasterOn.Text = dcsBiosBinding.Description;
-                                TextBoxAvionicsMasterOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxAvionicsMasterOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxAvionicsMasterOff.Text = dcsBiosBinding.Description;
-                                TextBoxAvionicsMasterOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_FUEL_PUMP)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxFuelPumpOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxFuelPumpOn.Text = dcsBiosBinding.Description;
-                                TextBoxFuelPumpOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxFuelPumpOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxFuelPumpOff.Text = dcsBiosBinding.Description;
-                                TextBoxFuelPumpOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_DE_ICE)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxDeIceOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxDeIceOn.Text = dcsBiosBinding.Description;
-                                TextBoxDeIceOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxDeIceOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxDeIceOff.Text = dcsBiosBinding.Description;
-                                TextBoxDeIceOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.SWITCHKEY_PITOT_HEAT)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxPitotHeatOn.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxPitotHeatOn.Text = dcsBiosBinding.Description;
-                                TextBoxPitotHeatOn.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                TextBoxPitotHeatOff.Tag = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxPitotHeatOff.Text = dcsBiosBinding.Description;
-                                TextBoxPitotHeatOff.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.LEVER_GEAR_UP && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                    {
-                        //When gear is down is it OFF -> NOT BEING USED
-                        TextBoxGearUp.Tag = dcsBiosBinding.DCSBIOSInputs;
-                        TextBoxGearUp.Text = dcsBiosBinding.Description;
-                        TextBoxGearUp.ToolTip = "DCS-BIOS";
-                    }
-                    if (dcsBiosBinding.HESPKey == HESPKeys.LEVER_GEAR_DOWN && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                    {
-                        //When gear is down is it ON -> BEING USED
-                        TextBoxGearDown.Tag = dcsBiosBinding.DCSBIOSInputs;
-                        TextBoxGearDown.Text = dcsBiosBinding.Description;
-                        TextBoxGearDown.ToolTip = "DCS-BIOS";
                     }
                 }
-
-                checkBoxManualLEDs.IsChecked = _hesp.ManualLandingGearLeds;
-                SetConfigExistsImageVisibility();*/
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(3013, ex);
             }
-        }
-
-        private void SetConfigExistsImageVisibility()
-        {/*
-            foreach (HESPLEDPosition value in Enum.GetValues(typeof(HESPLEDPosition)))
-            {
-                var hasConfiguration = _hesp.LedIsConfigured(value);
-                switch (value)
-                {
-                    case HESPLEDPosition.UP:
-                        {
-                            ImageConfigFoundUpper.Visibility = hasConfiguration ? Visibility.Visible : Visibility.Hidden;
-                            break;
-                        }
-                    case HESPLEDPosition.LEFT:
-                        {
-                            ImageConfigFoundLeft.Visibility = hasConfiguration ? Visibility.Visible : Visibility.Hidden;
-                            break;
-                        }
-                    case HESPLEDPosition.RIGHT:
-                        {
-                            ImageConfigFoundRight.Visibility = hasConfiguration ? Visibility.Visible : Visibility.Hidden;
-                            break;
-                        }
-                }
-            }*/
         }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
@@ -2614,14 +2641,5 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(3015, ex);
             }
         }
-        /*
-        private void ButtonSwitchPanelInfo_OnClick(object sender, RoutedEventArgs e)
-        {
-
-            var bytes = Encoding.UTF8.GetBytes(Properties.Resources.HESPNotes);
-            var informationWindow = new InformationWindow(bytes);
-            informationWindow.ShowDialog();
-        }
-        */
     }
 }
