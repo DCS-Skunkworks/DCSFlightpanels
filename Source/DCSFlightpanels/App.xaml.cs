@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Windows;
-using NonVisuals;
+using DCSFlightpanels.Properties;
 
 namespace DCSFlightpanels
 {
@@ -10,32 +12,104 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class App : Application
     {
-        private static Mutex _mutex = null;
-
         protected override void OnStartup(StartupEventArgs e)
         {
             try
             {
+                //DCSFlightpanels.exe OpenProfile="C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings"
+
+                //1 Check for start arguments.
+                //2 If argument and profile exists close running instance, start this with profile chosen
+                var closeCurrentInstance = false;
+                try
+                {
+                    if (e.Args.Length > 0)
+                    {
+                        var array = e.Args[0].Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (array[0].Equals("OpenProfile") && File.Exists(array[1]))
+                        {
+                            Settings.Default.LastProfileFileUsed = array[1].Replace("\"", "");
+                            closeCurrentInstance = true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Invalid startup arguments." + Environment.NewLine + array[0] + Environment.NewLine + array[1]);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error processing startup arguments." + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                }
+
 
                 const string appName = "DCSFlightpanels.exe";
-                bool createdNew;
-
-                _mutex = new Mutex(true, appName, out createdNew);
-
-                if (!createdNew)
+                if (!closeCurrentInstance)
                 {
-                    //app is already running! Exiting the application  
-                    Current.Shutdown();
-                    MessageBox.Show("DCSFlightpanels is already running..");
+                    var mutex = new Mutex(true, appName, out var createdNew);
+                    mutex.Close();
+                    if (!createdNew)
+                    {
+                        //app is already running! Exiting the application  
+                        Current.Shutdown();
+                        MessageBox.Show("DCSFlightpanels is already running..");
+                    }
+                    else
+                    {
+                        base.OnStartup(e);
+                    }
                 }
                 else
                 {
-                    base.OnStartup(e);
+                    var mutex = new Mutex(true, appName, out var createdNew);
+                    try
+                    {
+                        var tryAgain = true;
+                        while (tryAgain)
+                        {
+                            if (createdNew)
+                            {
+                                // Run the application
+                                tryAgain = false;
+                                base.OnStartup(e);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    createdNew = mutex.WaitOne(0, false);
+                                }
+                                catch (AbandonedMutexException)
+                                {
+                                    createdNew = true;
+                                }
+                            }
+
+                            if (!createdNew)
+                            {
+                                foreach (var process in Process.GetProcesses())
+                                {
+                                    if (process.ProcessName.Equals(Process.GetCurrentProcess().ProcessName) && process.Id != Process.GetCurrentProcess().Id)
+                                    {
+                                        Debug.Print(process.ProcessName);
+                                        process.Kill();
+                                        break;
+                                    }
+                                }
+                                // Wait for process to close
+                                Thread.Sleep(2000);
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        mutex.Close();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(45454545, ex);
+                MessageBox.Show("Error starting DCSFlightpanels." + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
     }

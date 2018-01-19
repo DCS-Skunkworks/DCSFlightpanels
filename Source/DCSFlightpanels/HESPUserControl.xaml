@@ -38,13 +38,13 @@
             <ColumnDefinition Width="80*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-            <Image Height="640" Name="ImageHESPPanel" Stretch="None" Source="/DCSFlightpanels;component/Images/hesp.png"  MouseDown="MouseDownFocusLogTextBox" />
+            <Image Height="640" Name="ImageHESPPanel" Margin="25,5,0,0" Stretch="None" Source="/DCSFlightpanels;component/Images/hesp.png"  MouseDown="MouseDownFocusLogTextBox" />
             <Image Height="5" Width="5" x:Name="ImageButton1" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="87" Canvas.Top="78" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageButton2" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="147" Canvas.Top="78" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageButton3" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="212" Canvas.Top="78" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageButton4" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="277" Canvas.Top="78" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageButton5" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="341" Canvas.Top="78" Visibility="Visible"/>
-            <Image Height="5" Width="5" x:Name="ImageButton6" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="83" Canvas.Top="176" Visibility="Visible"/>
+            <Image Height="5" Width="5" x:Name="ImageButton6" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="87" Canvas.Top="176" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageButton7" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="147" Canvas.Top="176" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageButton8" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="212" Canvas.Top="176" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageButton9" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="277" Canvas.Top="176" Visibility="Visible"/>
