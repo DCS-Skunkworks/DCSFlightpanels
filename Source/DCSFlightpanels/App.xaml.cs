@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using DCSFlightpanels.Properties;
@@ -12,6 +16,9 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class App : Application
     {
+        private static Mutex _mutex;
+        private bool _hasHandle;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             try
@@ -21,9 +28,10 @@ namespace DCSFlightpanels
                 //1 Check for start arguments.
                 //2 If argument and profile exists close running instance, start this with profile chosen
                 var closeCurrentInstance = false;
+
                 try
                 {
-                    if (e.Args.Length > 0)
+                    if (e.Args.Length > 0 && e.Args[0].Contains("OpenProfile") && e.Args[0].Contains("="))
                     {
                         var array = e.Args[0].Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
                         if (array[0].Equals("OpenProfile") && File.Exists(array[1]))
@@ -42,75 +50,67 @@ namespace DCSFlightpanels
                     MessageBox.Show("Error processing startup arguments." + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
                 }
 
+                // get application GUID as defined in AssemblyInfo.cs
+                var appGuid = "{23DB8D4F-D76E-4DF4-B04F-4F4EB0A8E992}";
 
-                const string appName = "DCSFlightpanels.exe";
-                if (!closeCurrentInstance)
+                // unique id for global mutex - Global prefix means it is global to the machine
+                string mutexId = "Global\\" + appGuid;
+
+                // Need a place to store a return value in Mutex() constructor call
+                var allowEveryoneRule = new MutexAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), MutexRights.FullControl, AccessControlType.Allow);
+                var securitySettings = new MutexSecurity();
+                securitySettings.AddAccessRule(allowEveryoneRule);
+
+                _mutex = new Mutex(false, mutexId,  out var createdNew, securitySettings);
+
+                _hasHandle = false;
+                try
                 {
-                    var mutex = new Mutex(true, appName, out var createdNew);
-                    mutex.Close();
-                    if (!createdNew)
-                    {
-                        //app is already running! Exiting the application  
-                        Current.Shutdown();
-                        MessageBox.Show("DCSFlightpanels is already running..");
-                    }
-                    else
-                    {
-                        base.OnStartup(e);
-                    }
+                    _hasHandle = _mutex.WaitOne(2000, false);
                 }
-                else
+                catch (AbandonedMutexException)
                 {
-                    var mutex = new Mutex(true, appName, out var createdNew);
-                    try
+                    // Log the fact that the mutex was abandoned in another process,
+                    // it will still get acquired
+                    //_hasHandle = true;
+                }
+                
+                if (!closeCurrentInstance && !_hasHandle)
+                {
+                    MessageBox.Show("DCSFlightpanels is already running..");
+                    Current.Shutdown(0);
+                    Environment.Exit(0);
+                }
+                if (closeCurrentInstance && !_hasHandle)
+                {
+                    foreach (var process in Process.GetProcesses())
                     {
-                        var tryAgain = true;
-                        while (tryAgain)
+                        if (process.ProcessName.Equals(Process.GetCurrentProcess().ProcessName) && process.Id != Process.GetCurrentProcess().Id)
                         {
-                            if (createdNew)
-                            {
-                                // Run the application
-                                tryAgain = false;
-                                base.OnStartup(e);
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    createdNew = mutex.WaitOne(0, false);
-                                }
-                                catch (AbandonedMutexException)
-                                {
-                                    createdNew = true;
-                                }
-                            }
-
-                            if (!createdNew)
-                            {
-                                foreach (var process in Process.GetProcesses())
-                                {
-                                    if (process.ProcessName.Equals(Process.GetCurrentProcess().ProcessName) && process.Id != Process.GetCurrentProcess().Id)
-                                    {
-                                        Debug.Print(process.ProcessName);
-                                        process.Kill();
-                                        break;
-                                    }
-                                }
-                                // Wait for process to close
-                                Thread.Sleep(2000);
-                            }
+                            process.Kill();
+                            break;
                         }
                     }
-                    finally
-                    {
-                        mutex.Close();
-                    }
+                    // Wait for process to close
+                    Thread.Sleep(2000);
                 }
+                base.OnStartup(e);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error starting DCSFlightpanels." + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                Current.Shutdown(0);
+                Environment.Exit(0);
             }
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            if (_hasHandle)
+            {
+                _mutex?.ReleaseMutex();
+            }
+            base.OnExit(e);
         }
     }
 }
