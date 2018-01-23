@@ -10,11 +10,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Navigation;
 using NonVisuals;
 using Octokit;
 using Application = System.Windows.Application;
+using Cursors = System.Windows.Input.Cursors;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
 using Timer = System.Timers.Timer;
+using ToolTip = System.Windows.Controls.ToolTip;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace DCSFlightpanels
 {
@@ -56,6 +62,10 @@ namespace DCSFlightpanels
         {
             try
             {
+                if (Settings.Default.RunMinimized)
+                {
+                    this.WindowState = WindowState.Minimized;
+                }
                 LoadSettings();
                 Common.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
                 Common.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");

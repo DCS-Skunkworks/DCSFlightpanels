@@ -24,6 +24,7 @@ namespace DCSFlightpanels
             try
             {
                 //DCSFlightpanels.exe OpenProfile="C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings"
+                //DCSFlightpanels.exe OpenProfile='C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings'
 
                 //1 Check for start arguments.
                 //2 If argument and profile exists close running instance, start this with profile chosen
@@ -34,9 +35,10 @@ namespace DCSFlightpanels
                     if (e.Args.Length > 0 && e.Args[0].Contains("OpenProfile") && e.Args[0].Contains("="))
                     {
                         var array = e.Args[0].Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (array[0].Equals("OpenProfile") && File.Exists(array[1]))
+                        if (array[0].Equals("OpenProfile") && File.Exists(array[1].Replace("\"", "").Replace("'", "")))
                         {
-                            Settings.Default.LastProfileFileUsed = array[1].Replace("\"", "");
+                            Settings.Default.LastProfileFileUsed = array[1].Replace("\"", "").Replace("'","");
+                            Settings.Default.RunMinimized = true;
                             closeCurrentInstance = true;
                         }
                         else
