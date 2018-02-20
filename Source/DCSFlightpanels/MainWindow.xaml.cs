@@ -313,7 +313,15 @@ namespace DCSFlightpanels
                                     }
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ69";
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR_SRS)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);

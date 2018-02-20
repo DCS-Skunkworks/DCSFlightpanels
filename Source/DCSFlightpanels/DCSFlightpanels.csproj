@@ -175,6 +175,9 @@
     <Compile Include="LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelPZ69UserControlSRS.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
     </Compile>
@@ -295,6 +298,10 @@
     <Page Include="MultiPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlSRS.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RadioPanelPZ69UserControlA10C.xaml">
       <SubType>Designer</SubType>

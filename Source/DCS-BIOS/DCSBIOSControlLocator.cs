@@ -15,6 +15,8 @@ namespace DCS_BIOS
         NOFRAMELOADEDYET,
         [Description("KeyEmulator")]
         KEYEMULATOR,
+        [Description("KeyEmulator_SRS")]
+        KEYEMULATOR_SRS,
         [Description("A-10C")]
         A10C,
         [Description("UH-1H")]
