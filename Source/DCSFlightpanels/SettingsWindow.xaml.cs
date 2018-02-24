@@ -9,7 +9,6 @@ using System.Windows.Input;
 using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCS_BIOS;
-using Newtonsoft.Json.Linq;
 using MessageBox = System.Windows.MessageBox;
 
 namespace DCSFlightpanels

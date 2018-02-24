@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using DCS_BIOS;
@@ -9,13 +11,26 @@ using HidLibrary;
 
 namespace NonVisuals
 {
-    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
+    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel
     {
         private HashSet<RadioPanelKnobSRS> _radioPanelKnobs = new HashSet<RadioPanelKnobSRS>();
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;
 
 
+        private UdpClient _udpReceiveClient;
+        private UdpClient _udpSendClient;
+        private Thread _srsListeningThread;
+        private string _srsReceiveFromIPUdp = "239.255.50.10";
+        private string _srsSendToIPUdp = "127.0.0.1";
+        private int _srsReceivePortUdp = 5010;
+        private int _srsSendPortUdp = 7778;
+        private IPEndPoint _ipEndPointReceiverUdp;
+        private IPEndPoint _ipEndPointSenderUdp;
+        private string _receivedDataUdp = null;
+
+        private bool _shutdown;
+        private bool _started;
         /*Radio1 COM1*/
         /*Radio2 COM2*/
         /*Radio3 NAV1*/
@@ -77,7 +92,145 @@ namespace NonVisuals
             CreateRadioKnobs();
             Startup();
         }
-        
+
+        public sealed override void Startup()
+        {
+            try
+            {
+                StartupBase("SRS");
+                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
+                {
+                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.DebugP("RadioPanelPZ69SRS.StartUp() : " + ex.Message);
+                SetLastException(ex);
+            }
+        }
+
+        public void StartupRP()
+        {
+            try
+            {
+                ShutdownRP();
+                if (_started)
+                {
+                    return;
+                }
+                _shutdown = false;
+                DBCommon.DebugP("SRS Radio Panel RP is STARTING UP");
+
+                _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
+                _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
+
+                _udpReceiveClient?.Close();
+                _udpReceiveClient = new UdpClient();
+                _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
+                _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
+
+                _udpSendClient?.Close();
+                _udpSendClient = new UdpClient();
+                _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpSendClient.EnableBroadcast = true;
+
+                _srsListeningThread?.Abort();
+                _srsListeningThread = new Thread(ReceiveDataUdp);
+                _srsListeningThread.Start();
+
+                _started = true;
+            }
+            catch (Exception e)
+            {
+                SetLastException(e);
+                DBCommon.LogError(9211, e, "RadioPanelPZ69SRS.StartupRP()");
+                if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
+                {
+                    _udpReceiveClient.Close();
+                    _udpReceiveClient = null;
+                }
+                if (_udpSendClient != null && _udpSendClient.Client.Connected)
+                {
+                    _udpSendClient.Close();
+                    _udpSendClient = null;
+                }
+            }
+        }
+
+        public override void Shutdown()
+        {
+            try
+            {
+                Common.DebugP("Entering SRS Radio Shutdown()");
+                ShutdownBase();
+                ShutdownRP();
+            }
+            catch (Exception e)
+            {
+                SetLastException(e);
+            }
+            Common.DebugP("Leaving SRS Radio Shutdown()");
+        }
+
+        private void ShutdownRP()
+        {
+            try
+            {
+                try
+                {
+                    _shutdown = true;
+                    DBCommon.DebugP("SRS Radio Panel RP is SHUTTING DOWN");
+                    _srsListeningThread?.Abort();
+                }
+                catch (Exception)
+                {
+                }
+                try
+                {
+                    _udpReceiveClient?.Close();
+                }
+                catch (Exception)
+                {
+                }
+                try
+                {
+                    _udpSendClient?.Close();
+                }
+                catch (Exception)
+                {
+                }
+                _started = false;
+            }
+            catch (Exception ex)
+            {
+                SetLastException(ex);
+                DBCommon.LogError(9212, ex, "RadioPanelPZ69SRS.ShutdownRP()");
+            }
+        }
+
+
+        public void ReceiveDataUdp()
+        {
+            try
+            {
+                DBCommon.DebugP("SRS Radio Panel entering threaded receive data loop");
+                while (!_shutdown)
+                {
+                    var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
+                    
+                }
+                DBCommon.DebugP("SRS Radio Panel exiting threaded receive data loop");
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception e)
+            {
+                SetLastException(e);
+                DBCommon.LogError(94413, e, "RadioPanelPZ69SRS.ReceiveDataUdp()");
+            }
+        }
+
         public void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             try
@@ -736,38 +889,6 @@ namespace NonVisuals
             return result;
         }
 
-        public override sealed void Startup()
-        {
-            try
-            {
-                StartupBase("SRS");
-                
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP("RadioPanelPZ69SRS.StartUp() : " + ex.Message);
-                SetLastException(ex);
-            }
-        }
-
-        public override void Shutdown()
-        {
-            try
-            {
-                Common.DebugP("Entering SRS Radio Shutdown()");
-                ShutdownBase();
-            }
-            catch (Exception e)
-            {
-                SetLastException(e);
-            }
-            Common.DebugP("Leaving SRS Radio Shutdown()");
-        }
-
         public override void ClearSettings()
         {
             //todo
@@ -880,5 +1001,28 @@ namespace NonVisuals
             }
         }
 
+        public string ReceiveFromIpUdp
+        {
+            get => _srsReceiveFromIPUdp;
+            set => _srsReceiveFromIPUdp = value;
+        }
+
+        public string SendToIpUdp
+        {
+            get => _srsSendToIPUdp;
+            set => _srsSendToIPUdp = value;
+        }
+
+        public int ReceivePortUdp
+        {
+            get => _srsReceivePortUdp;
+            set => _srsReceivePortUdp = value;
+        }
+
+        public int SendPortUdp
+        {
+            get => _srsSendPortUdp;
+            set => _srsSendPortUdp = value;
+        }
     }
 }
