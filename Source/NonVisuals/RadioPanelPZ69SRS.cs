@@ -14,11 +14,17 @@ namespace NonVisuals
         private HashSet<RadioPanelKnobSRS> _radioPanelKnobs = new HashSet<RadioPanelKnobSRS>();
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;
-        
 
-        /*FuG 16ZY COM1*/
-        //Large dial 0-3 [step of 1]
-        //Small dial Fine tuning
+
+        /*Radio1 COM1*/
+        /*Radio2 COM2*/
+        /*Radio3 NAV1*/
+        /*Radio4 NAV2*/
+        /*Radio5 ADF*/
+        /*Radio6 DME*/
+        /*Radio7 XPDR*/
+        //Large dial
+        //Small dial
         private ClickSpeedDetector _fineTuneIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private ClickSpeedDetector _fineTuneDecreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly object _lockFug16ZyPresetDialObject1 = new object();
@@ -71,103 +77,7 @@ namespace NonVisuals
             CreateRadioKnobs();
             Startup();
         }
-
-
-        public void DCSBIOSStringReceived(uint address, string stringData)
-        {
-            try
-            {
-            }
-            catch (Exception e)
-            {
-                Common.LogError(78030, e, "DCSBIOSStringReceived()");
-            }
-        }
-
-        public override void DcsBiosDataReceived(uint address, uint data)
-        {
-            try
-            {
-
-                UpdateCounter(address, data);
-                /*
-                 * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
-                 * Once a dial has been deemed to be "off" position and needs to be changed
-                 * a change command is sent to DCS-BIOS.
-                 * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
-                 * reset. Reading the dial's position with no change in value will not reset.
-                 */
-
-
-
-                //FuG 16ZY Preset Channel Dial
-                if (address == _fug16ZyPresetDcsbiosOutputPresetDial.Address)
-                {
-                    lock (_lockFug16ZyPresetDialObject1)
-                    {
-                        var tmp = _fug16ZyPresetCockpitDialPos;
-                        _fug16ZyPresetCockpitDialPos = _fug16ZyPresetDcsbiosOutputPresetDial.GetUIntValue(data);
-                        if (tmp != _fug16ZyPresetCockpitDialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        }
-                    }
-                }
-
-                //FuG 16ZY Fine Tune Dial
-                if (address == _fug16ZyFineTuneDcsbiosOutputDial.Address)
-                {
-                    lock (_lockFug16ZyFineTuneDialObject1)
-                    {
-                        var tmp = _fug16ZyFineTuneCockpitDialPos;
-                        _fug16ZyFineTuneCockpitDialPos = _fug16ZyFineTuneDcsbiosOutputDial.GetUIntValue(data);
-                        if (tmp != _fug16ZyFineTuneCockpitDialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        }
-                    }
-                }
-
-                //FuG 25A IFF Channel Dial
-                if (address == _fug25aIFFDcsbiosOutputDial.Address)
-                {
-                    lock (_lockFUG25AIFFDialObject1)
-                    {
-                        var tmp = _fug25aIFFCockpitDialPos;
-                        _fug25aIFFCockpitDialPos = _fug25aIFFDcsbiosOutputDial.GetUIntValue(data);
-                        if (tmp != _fug25aIFFCockpitDialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        }
-                    }
-                }
-
-                //FuG 16ZY Homing Switch
-                if (address == _homingDcsbiosOutputPresetDial.Address)
-                {
-                    lock (_lockHomingDialObject1)
-                    {
-                        var tmp = _homingCockpitDialPos;
-                        _homingCockpitDialPos = _homingDcsbiosOutputPresetDial.GetUIntValue(data);
-                        if (tmp != _homingCockpitDialPos)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        }
-                    }
-                }
-
-                //Set once
-                DataHasBeenReceivedFromDCSBIOS = true;
-                ShowFrequenciesOnPanel();
-
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(82001, ex);
-            }
-        }
-
-
+        
         public void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             try
@@ -182,73 +92,115 @@ namespace NonVisuals
 
                         switch (radioPanelKnob.RadioPanelPZ69Knob)
                         {
-                            case RadioPanelPZ69KnobsSRS.UPPER_FUG16ZY:
+                            case RadioPanelPZ69KnobsSRS.UPPER_COM1:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentSRSRadioMode.FUG16ZY);
+                                        SetUpperRadioMode(CurrentSRSRadioMode.COM1);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsSRS.UPPER_IFF:
+                            case RadioPanelPZ69KnobsSRS.UPPER_COM2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentSRSRadioMode.IFF);
+                                        SetUpperRadioMode(CurrentSRSRadioMode.COM2);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsSRS.UPPER_HOMING:
+                            case RadioPanelPZ69KnobsSRS.UPPER_NAV1:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentSRSRadioMode.HOMING);
+                                        SetUpperRadioMode(CurrentSRSRadioMode.NAV1);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsSRS.UPPER_NOUSE1:
-                            case RadioPanelPZ69KnobsSRS.UPPER_NOUSE2:
-                            case RadioPanelPZ69KnobsSRS.UPPER_NOUSE3:
-                            case RadioPanelPZ69KnobsSRS.UPPER_NOUSE4:
+                            case RadioPanelPZ69KnobsSRS.UPPER_NAV2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentSRSRadioMode.NOUSE);
+                                        SetUpperRadioMode(CurrentSRSRadioMode.NAV2);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsSRS.LOWER_FUG16ZY:
+                            case RadioPanelPZ69KnobsSRS.UPPER_ADF:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentSRSRadioMode.FUG16ZY);
+                                        SetUpperRadioMode(CurrentSRSRadioMode.ADF);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsSRS.LOWER_IFF:
+                            case RadioPanelPZ69KnobsSRS.UPPER_DME:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentSRSRadioMode.IFF);
+                                        SetUpperRadioMode(CurrentSRSRadioMode.DME);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsSRS.LOWER_HOMING:
+                            case RadioPanelPZ69KnobsSRS.UPPER_XPDR:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentSRSRadioMode.HOMING);
+                                        SetUpperRadioMode(CurrentSRSRadioMode.XPDR);
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsSRS.LOWER_NOUSE1:
-                            case RadioPanelPZ69KnobsSRS.LOWER_NOUSE2:
-                            case RadioPanelPZ69KnobsSRS.LOWER_NOUSE3:
-                            case RadioPanelPZ69KnobsSRS.LOWER_NOUSE4:
+                            case RadioPanelPZ69KnobsSRS.LOWER_COM1:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetLowerRadioMode(CurrentSRSRadioMode.NOUSE);
+                                        SetLowerRadioMode(CurrentSRSRadioMode.COM1);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsSRS.LOWER_COM2:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentSRSRadioMode.COM2);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsSRS.LOWER_NAV1:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentSRSRadioMode.NAV1);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsSRS.LOWER_NAV2:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentSRSRadioMode.NAV2);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsSRS.LOWER_ADF:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentSRSRadioMode.ADF);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsSRS.LOWER_DME:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentSRSRadioMode.DME);
+                                    }
+                                    break;
+                                }
+                            case RadioPanelPZ69KnobsSRS.LOWER_XPDR:
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        SetLowerRadioMode(CurrentSRSRadioMode.XPDR);
                                     }
                                     break;
                                 }
@@ -266,66 +218,10 @@ namespace NonVisuals
                                 }
                             case RadioPanelPZ69KnobsSRS.UPPER_FREQ_SWITCH:
                                 {
-                                    if (_currentLowerRadioMode == CurrentSRSRadioMode.IFF)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandInc);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandDec);
-                                        }
-                                    }
-                                    if (_currentUpperRadioMode == CurrentSRSRadioMode.HOMING)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            lock (_lockHomingDialObject1)
-                                            {
-                                                if (_homingCockpitDialPos == 1)
-                                                {
-                                                    DCSBIOS.Send(HomingCommandDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(HomingCommandInc);
-                                                }
-                                            }
-                                        }
-                                    }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.LOWER_FREQ_SWITCH:
                                 {
-                                    if (_currentLowerRadioMode == CurrentSRSRadioMode.IFF)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandInc);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandDec);
-                                        }
-                                    }
-                                    if (_currentLowerRadioMode == CurrentSRSRadioMode.HOMING)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            lock (_lockHomingDialObject1)
-                                            {
-                                                if (_homingCockpitDialPos == 1)
-                                                {
-                                                    DCSBIOS.Send(HomingCommandDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(HomingCommandInc);
-                                                }
-                                            }
-                                        }
-                                    }
                                     break;
                                 }
                         }
@@ -362,28 +258,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandInc);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                if (!SkipIFFDialChange())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandInc);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -394,28 +293,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandDec);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                if (!SkipIFFDialChange())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandDec);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -426,36 +328,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneIncreaseChangeMonitor.Click();
-                                                if (_fineTuneIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandInc);
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -466,36 +363,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneDecreaseChangeMonitor.Click();
-                                                if (_fineTuneDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandDec);
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -506,28 +398,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandInc);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                if (!SkipIFFDialChange())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandInc);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -538,28 +433,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Presets
-                                                if (!SkipFuG16ZYPresetDialChange())
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandDec);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                if (!SkipIFFDialChange())
-                                                {
-                                                    DCSBIOS.Send(FUG25AIFFCommandDec);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -570,36 +468,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneIncreaseChangeMonitor.Click();
-                                                if (_fineTuneIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandInc);
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -610,36 +503,31 @@ namespace NonVisuals
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
-                                        case CurrentSRSRadioMode.FUG16ZY:
-                                            {
-                                                //Fine tuning
-                                                var changeFaster = false;
-                                                _fineTuneDecreaseChangeMonitor.Click();
-                                                if (_fineTuneDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    //Change faster
-                                                    changeFaster = true;
-                                                }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
-                                                }
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.IFF:
-                                            {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandDec);
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.HOMING:
+                                        case CurrentSRSRadioMode.COM1:
                                             {
                                                 break;
                                             }
-                                        case CurrentSRSRadioMode.NOUSE:
+                                        case CurrentSRSRadioMode.COM2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV1:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.NAV2:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.ADF:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.DME:
+                                            {
+                                                break;
+                                            }
+                                        case CurrentSRSRadioMode.XPDR:
                                             {
                                                 break;
                                             }
@@ -682,7 +570,7 @@ namespace NonVisuals
 
                     switch (_currentUpperRadioMode)
                     {
-                        case CurrentSRSRadioMode.FUG16ZY:
+                        case CurrentSRSRadioMode.COM1:
                             {
                                 //1-4
                                 var modeDialPostionAsString = "";
@@ -700,45 +588,19 @@ namespace NonVisuals
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_RIGHT);
                                 break;
                             }
-                        case CurrentSRSRadioMode.IFF:
+                        case CurrentSRSRadioMode.COM2:
+                        case CurrentSRSRadioMode.NAV1:
+                        case CurrentSRSRadioMode.NAV2:
+                        case CurrentSRSRadioMode.ADF:
+                        case CurrentSRSRadioMode.DME:
+                        case CurrentSRSRadioMode.XPDR:
                             {
-                                //Preset Channel Selector
-                                //0-1
-
-                                var positionAsString = "";
-                                lock (_lockFUG25AIFFDialObject1)
-                                {
-                                    positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
-                                }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                break;
-                            }
-
-                        case CurrentSRSRadioMode.HOMING:
-                            {
-                                //Switch
-                                //0-1
-
-                                var positionAsString = "";
-                                lock (_lockHomingDialObject1)
-                                {
-                                    positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
-                                }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                break;
-                            }
-                        case CurrentSRSRadioMode.NOUSE:
-                            {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
                                 break;
                             }
                     }
                     switch (_currentLowerRadioMode)
                     {
-                        case CurrentSRSRadioMode.FUG16ZY:
+                        case CurrentSRSRadioMode.COM1:
                             {
                                 //1-4
                                 var modeDialPostionAsString = "";
@@ -756,39 +618,13 @@ namespace NonVisuals
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.LOWER_RIGHT);
                                 break;
                             }
-                        case CurrentSRSRadioMode.IFF:
+                        case CurrentSRSRadioMode.COM2:
+                        case CurrentSRSRadioMode.NAV1:
+                        case CurrentSRSRadioMode.NAV2:
+                        case CurrentSRSRadioMode.ADF:
+                        case CurrentSRSRadioMode.DME:
+                        case CurrentSRSRadioMode.XPDR:
                             {
-                                //Preset Channel Selector
-                                //0-1
-
-                                var positionAsString = "";
-                                lock (_lockFUG25AIFFDialObject1)
-                                {
-                                    positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
-                                }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                break;
-                            }
-
-                        case CurrentSRSRadioMode.HOMING:
-                            {
-                                //Switch
-                                //0-1
-
-                                var positionAsString = "";
-                                lock (_lockHomingDialObject1)
-                                {
-                                    positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
-                                }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                break;
-                            }
-                        case CurrentSRSRadioMode.NOUSE:
-                            {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
                                 break;
                             }
                     }
@@ -905,23 +741,11 @@ namespace NonVisuals
             try
             {
                 StartupBase("SRS");
-
-                //COM1
-                _fug16ZyPresetDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RADIO_MODE");
-                _fug16ZyFineTuneDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FUG16_TUNING");
-
-                //COM2
-                _fug25aIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FUG25_MODE");
-
-                //NAV1
-                _homingDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("FT_ZF_SWITCH");
-
-
+                
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
-                //IsAttached = true;
             }
             catch (Exception ex)
             {
@@ -1000,7 +824,7 @@ namespace NonVisuals
             }
             Common.DebugP("Leaving SRS Radio SetLowerRadioMode()");
         }
-
+        /*
         private bool SkipFuG16ZYPresetDialChange()
         {
             try
@@ -1026,62 +850,34 @@ namespace NonVisuals
             }
             return false;
         }
-
-        private bool SkipIFFDialChange()
-        {
-            try
-            {
-                Common.DebugP("Entering SRS Radio SkipIFFDialChange()");
-                if (_currentUpperRadioMode == CurrentSRSRadioMode.IFF || _currentLowerRadioMode == CurrentSRSRadioMode.IFF)
-                {
-                    if (_fug25aIFFDialSkipper > 2)
-                    {
-                        _fug25aIFFDialSkipper = 0;
-                        Common.DebugP("Leaving SRS Radio SkipIFFDialChange()");
-                        return false;
-                    }
-                    _fug25aIFFDialSkipper++;
-                    Common.DebugP("Leaving SRS Radio SkipIFFDialChange()");
-                    return true;
-                }
-                Common.DebugP("Leaving SRS Radio SkipIFFDialChange()");
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(82015, ex);
-            }
-            return false;
-        }
-
-        private bool SkipHomingPresetDialChange()
-        {
-            try
-            {
-                Common.DebugP("Entering SRS Radio SkipHomingPresetDialChange()");
-                if (_currentUpperRadioMode == CurrentSRSRadioMode.HOMING || _currentLowerRadioMode == CurrentSRSRadioMode.HOMING)
-                {
-                    if (_homingDialSkipper > 2)
-                    {
-                        _homingDialSkipper = 0;
-                        Common.DebugP("Leaving SRS Radio SkipHomingPresetDialChange()");
-                        return false;
-                    }
-                    _homingDialSkipper++;
-                    Common.DebugP("Leaving SRS Radio SkipHomingPresetDialChange()");
-                    return true;
-                }
-                Common.DebugP("Leaving SRS Radio SkipHomingPresetDialChange()");
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(82110, ex);
-            }
-            return false;
-        }
+        */
 
         public override String SettingsVersion()
         {
             return "0X";
+        }
+
+
+        public void DCSBIOSStringReceived(uint address, string stringData)
+        {
+            try
+            {
+            }
+            catch (Exception e)
+            {
+                Common.LogError(78030, e, "DCSBIOSStringReceived()");
+            }
+        }
+
+        public override void DcsBiosDataReceived(uint address, uint data)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(82001, ex);
+            }
         }
 
     }

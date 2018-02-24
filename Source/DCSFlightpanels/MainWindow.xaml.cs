@@ -9,8 +9,6 @@ using DCSFlightpanels.Properties;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Navigation;
 using NonVisuals;
 using Octokit;
@@ -177,7 +175,6 @@ namespace DCSFlightpanels
                 _checkForDcsGameWindowTimer.Stop();
                 ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
                 MenuItemCheckForDCS.Visibility = Visibility.Collapsed;
-                MenuItemDCSBIOSSettings.Visibility = Visibility.Collapsed;
                 SearchForPanels();
             }
             else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
@@ -189,7 +186,6 @@ namespace DCSFlightpanels
                 _checkForDcsGameWindowTimer.Start();
                 ImageDcsBiosConnected.Visibility = Visibility.Visible;
                 MenuItemCheckForDCS.Visibility = Visibility.Visible;
-                MenuItemDCSBIOSSettings.Visibility = Visibility.Visible;
                 SearchForPanels();
             }
             if (closedItemCount != itemCount)
@@ -613,18 +609,14 @@ namespace DCSFlightpanels
 
             Common.DebugOn = Settings.Default.DebugOn;
             Common.DebugToFile = Settings.Default.DebugToFile;
-            MenuItemDoDebugging.IsChecked = Common.DebugOn;
-            MenuItemDebugToFile.IsChecked = Common.DebugToFile;
 
 
             if (Settings.Default.APIMode == 0)
             {
-                MenuItemAPIKeyBdEvent.IsChecked = true;
                 Common.APIMode = APIModeEnum.keybd_event;
             }
             else
             {
-                MenuItemAPISendInput.IsChecked = true;
                 Common.APIMode = APIModeEnum.SendInput;
             }
         }
@@ -1149,78 +1141,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2023, ex);
             }
         }
-
-        private void MenuItemAPIKeyBdEventClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemAPIKeyBdEvent.IsChecked = !MenuItemAPIKeyBdEvent.IsChecked;
-                MenuItemAPISendInput.IsChecked = !MenuItemAPIKeyBdEvent.IsChecked;
-                if (MenuItemAPIKeyBdEvent.IsChecked)
-                {
-                    Settings.Default.APIMode = 0;
-                    Common.APIMode = APIModeEnum.keybd_event;
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2024, ex);
-            }
-        }
-
-        private void MenuItemAPISendInputClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemAPISendInput.IsChecked = !MenuItemAPISendInput.IsChecked;
-                MenuItemAPIKeyBdEvent.IsChecked = !MenuItemAPISendInput.IsChecked;
-                if (MenuItemAPISendInput.IsChecked)
-                {
-                    Settings.Default.APIMode = 1;
-                    Common.APIMode = APIModeEnum.SendInput;
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2025, ex);
-            }
-        }
-
-        private void MenuItemDCSBIOSSettingsClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var dcsBiosWindow = new DcsBiosWindow(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosPortFrom, Settings.Default.DCSBiosIPTo, Settings.Default.DCSBiosPortTo, DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
-
-                if (dcsBiosWindow.ShowDialog() == true)
-                {
-                    Settings.Default.DCSBiosIPFrom = dcsBiosWindow.IPAddressFrom;
-                    Settings.Default.DCSBiosPortFrom = dcsBiosWindow.PortFrom;
-                    Settings.Default.DCSBiosIPTo = dcsBiosWindow.IPAddressTo;
-                    Settings.Default.DCSBiosPortTo = dcsBiosWindow.PortTo;
-                    Settings.Default.DCSBiosJSONLocation = dcsBiosWindow.DCSBiosJSONLocation;
-                    Settings.Default.Save();
-
-                    //Refresh, make sure they are using the latest settings
-                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
-                    _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
-                    _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
-                    _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
-                    _dcsBios.Shutdown();
-                    _dcsBios.Startup();
-                    _panelProfileHandler.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2026, ex);
-            }
-        }
-
-
+        
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1505,149 +1426,19 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(206411, ex);
             }
         }
-
-        private void MenuItemProcessPriorityClick(object sender, RoutedEventArgs e)
-        {
-
-            try
-            {
-                var menuItem = (MenuItem)sender;
-                if (menuItem.Name.Contains("BelowNormal"))
-                {
-                    //0
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.BelowNormal;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = true;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-                }
-                else if (menuItem.Name.Contains("ItemNormal"))
-                {
-                    //1
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.Normal;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = true;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-                }
-                else if (menuItem.Name.Contains("AboveNormal"))
-                {
-                    //2
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.AboveNormal;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = true;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-                }
-                else if (menuItem.Name.Contains("High"))
-                {
-                    //3
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.High;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = true;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-
-                }
-                else if (menuItem.Name.Contains("Realtime"))
-                {
-                    //4
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.RealTime;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2065, ex);
-            }
-        }
-
+        
         private void LoadProcessPriority()
         {
             try
             {
                 Process.GetCurrentProcess().PriorityClass = Settings.Default.ProcessPriority;
-                switch (Settings.Default.ProcessPriority)
-                {
-                    case ProcessPriorityClass.BelowNormal:
-                        {
-                            MenuItemProcessPriorityBelowNormal.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.Normal:
-                        {
-                            MenuItemProcessPriorityNormal.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.AboveNormal:
-                        {
-                            MenuItemProcessPriorityAboveNormal.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.High:
-                        {
-                            MenuItemProcessPriorityHigh.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.RealTime:
-                        {
-                            MenuItemProcessPriorityRealtime.IsChecked = true;
-                            break;
-                        }
-                }
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(2066, ex);
             }
         }
-
-        private void MenuItemDoDebugging_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemDoDebugging.IsChecked = !MenuItemDoDebugging.IsChecked;
-                Common.DebugOn = MenuItemDoDebugging.IsChecked;
-                Settings.Default.DebugOn = Common.DebugOn;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(28877066, ex);
-            }
-        }
-
-        private void MenuItemDebugToFile_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemDebugToFile.IsChecked = !MenuItemDebugToFile.IsChecked;
-                Common.DebugToFile = MenuItemDebugToFile.IsChecked;
-                Settings.Default.DebugToFile = Common.DebugToFile;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(28877067, ex);
-            }
-        }
-
+        
         private void ImageDcsBiosConnected_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             _panelProfileHandler.OpenProfileDEVELOPMENT();
@@ -1676,6 +1467,38 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(2027, ex);
+            }
+        }
+
+        private void MenuItemSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(_dcsAirframe);
+            if (settingsWindow.ShowDialog() == true)
+            {
+                if (settingsWindow.GeneralChanged)
+                {
+                    LoadProcessPriority();
+                    Common.DebugOn = Settings.Default.DebugOn;
+                    Common.DebugToFile = Settings.Default.DebugToFile;
+                }
+
+                if (settingsWindow.DCSBIOSChanged)
+                {
+                    //Refresh, make sure they are using the latest settings
+                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
+                    _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
+                    _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
+                    _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
+                    _dcsBios.Shutdown();
+                    _dcsBios.Startup();
+                    _panelProfileHandler.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                }
+
+                if (settingsWindow.SRSChanged)
+                {
+
+                }
             }
         }
     }

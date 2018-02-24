@@ -218,6 +218,9 @@
     <Compile Include="SequenceWindow.xaml.cs">
       <DependentUpon>SequenceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
@@ -352,6 +355,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SequenceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

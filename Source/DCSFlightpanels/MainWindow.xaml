@@ -26,26 +26,10 @@
             </MenuItem>
             <MenuItem Header="Options">
                 <MenuItem Name ="MenuItemCheckForDCS" Header="Check for Digital Combat Simulator" Click="MenuItemCheckForDCSClick" IsChecked="True"/>
-                <MenuItem Name ="MenuItemAPI" Header="API Mode">
-                    <MenuItem Name ="MenuItemAPIKeyBdEvent" Header="1. keybd__event()" Click="MenuItemAPIKeyBdEventClick" />
-                    <MenuItem Name ="MenuItemAPISendInput" Header="2. SendInput()" Click="MenuItemAPISendInputClick" />
-                </MenuItem>
-                <MenuItem Name ="MenuItemDCSBIOSSettings" Header="DCS BIOS Settings" Click="MenuItemDCSBIOSSettingsClick" />
                 <MenuItem Name ="MenuItemErrorLog" Header="Open error log" Click="MenuItemErrorLog_OnClick" />
                 <MenuItem Name ="MenuItemDebugLog" Header="Open debug log" Click="MenuItemDebugLog_OnClick" />
-                <MenuItem Name ="MenuItemDebugging" Header="Debugging">
-                    <MenuItem Name ="MenuItemDoDebugging" Header="Debug turned on" Click="MenuItemDoDebugging_OnClick" />
-                    <MenuItem Name ="MenuItemDebugToFile" Header="Debug to file" Click="MenuItemDebugToFile_OnClick" />
-                    </MenuItem>
-                <MenuItem Name ="MenuItemProcessPriority" Header="Process priority">
-                    <!-- <MenuItem Name ="MenuItemProcessPriorityLow" Header="Low" Click="MenuItemProcessPriorityClick" /> -->
-                    <MenuItem Name ="MenuItemProcessPriorityBelowNormal" Header="Below Normal" Click="MenuItemProcessPriorityClick" />
-                    <MenuItem Name ="MenuItemProcessPriorityNormal" Header="Normal" Click="MenuItemProcessPriorityClick"/>
-                    <MenuItem Name ="MenuItemProcessPriorityAboveNormal" Header="Above Normal" Click="MenuItemProcessPriorityClick" />
-                    <MenuItem Name ="MenuItemProcessPriorityHigh" Header="High" Click="MenuItemProcessPriorityClick" />
-                    <MenuItem Name ="MenuItemProcessPriorityRealtime" Header="Realtime" Click="MenuItemProcessPriorityClick" />
-                </MenuItem>
                 <MenuItem Name ="MenuItemFormulaSandbox" Header="Formula sandbox" Click="MenuItemFormulaSandbox_OnClick" />
+                <MenuItem Name ="MenuItemSettings" Header="Settings" Click="MenuItemSettings_OnClick" />
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Click="MenuItemAboutClick" />

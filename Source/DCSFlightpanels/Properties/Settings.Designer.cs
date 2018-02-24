@@ -262,5 +262,53 @@ namespace DCSFlightpanels.Properties {
                 this["RunMinimized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SRSIpFrom {
+            get {
+                return ((string)(this["SRSIpFrom"]));
+            }
+            set {
+                this["SRSIpFrom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SRSIpTo {
+            get {
+                return ((string)(this["SRSIpTo"]));
+            }
+            set {
+                this["SRSIpTo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SRSPortFrom {
+            get {
+                return ((string)(this["SRSPortFrom"]));
+            }
+            set {
+                this["SRSPortFrom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SRSPortTo {
+            get {
+                return ((string)(this["SRSPortTo"]));
+            }
+            set {
+                this["SRSPortTo"] = value;
+            }
+        }
     }
 }
