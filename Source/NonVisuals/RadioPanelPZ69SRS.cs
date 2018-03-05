@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using DCS_BIOS;
 using HidLibrary;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace NonVisuals
 {
@@ -21,16 +21,20 @@ namespace NonVisuals
         private UdpClient _udpReceiveClient;
         private UdpClient _udpSendClient;
         private Thread _srsListeningThread;
-        private string _srsReceiveFromIPUdp = "239.255.50.10";
+        private string _srsReceiveFromIPUdp = "127.0.0.1";
         private string _srsSendToIPUdp = "127.0.0.1";
-        private int _srsReceivePortUdp = 5010;
-        private int _srsSendPortUdp = 7778;
+        private int _srsReceivePortUdp = 7082;
+        private int _srsSendPortUdp = 9086;
         private IPEndPoint _ipEndPointReceiverUdp;
         private IPEndPoint _ipEndPointSenderUdp;
         private string _receivedDataUdp = null;
-
+        private readonly object _sendSRSDataLockObject = new object();
         private bool _shutdown;
         private bool _started;
+        private List<double> _listMainFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
+        private List<double> _listGuardFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
+        private readonly object _freqListLockObject = new object();
+
         /*Radio1 COM1*/
         /*Radio2 COM2*/
         /*Radio3 NAV1*/
@@ -40,57 +44,30 @@ namespace NonVisuals
         /*Radio7 XPDR*/
         //Large dial
         //Small dial
-        private ClickSpeedDetector _fineTuneIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _fineTuneDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly object _lockFug16ZyPresetDialObject1 = new object();
-        private DCSBIOSOutput _fug16ZyPresetDcsbiosOutputPresetDial;
-        private volatile uint _fug16ZyPresetCockpitDialPos = 1;
-        private const string Fug16ZyPresetCommandInc = "RADIO_MODE INC\n";
-        private const string Fug16ZyPresetCommandDec = "RADIO_MODE DEC\n";
-        private int _fug16ZyPresetDialSkipper;
-        private readonly object _lockFug16ZyFineTuneDialObject1 = new object();
-        private DCSBIOSOutput _fug16ZyFineTuneDcsbiosOutputDial;
-        private volatile uint _fug16ZyFineTuneCockpitDialPos = 1;
-        private const string Fug16ZyFineTuneCommandInc = "FUG16_TUNING +300\n";
-        private const string Fug16ZyFineTuneCommandDec = "FUG16_TUNING -300\n";
-        private const string Fug16ZyFineTuneCommandIncMore = "FUG16_TUNING +3000\n";
-        private const string Fug16ZyFineTuneCommandDecMore = "FUG16_TUNING -3000\n";
 
-        /*SRS FuG 25a IFF COM2*/
-        //Large dial 0-1 [step of 1]
-        //Small dial Volume control
-        //ACT/STBY IFF Test Button
-        private readonly object _lockFUG25AIFFDialObject1 = new object();
-        private DCSBIOSOutput _fug25aIFFDcsbiosOutputDial;
-        private volatile uint _fug25aIFFCockpitDialPos = 1;
-        private const string FUG25AIFFCommandInc = "FUG25_MODE INC\n";
-        private const string FUG25AIFFCommandDec = "FUG25_MODE DEC\n";
-        private int _fug25aIFFDialSkipper;
-        private const string RadioVolumeKnobCommandInc = "FUG16_VOLUME +2500\n";
-        private const string RadioVolumeKnobCommandDec = "FUG16_VOLUME -2500\n";
-        private const string FuG25ATestCommandInc = "FUG25_TEST INC\n";
-        private const string FuG25ATestCommandDec = "FUG25_TEST DEC\n";
-
-        /*SRS FuG 16ZY Homing Switch NAV1*/
-        //Large dial N/A
-        //Small dial N/A
-        //ACT/STBY Homing Switch
-        private readonly object _lockHomingDialObject1 = new object();
-        private DCSBIOSOutput _homingDcsbiosOutputPresetDial;
-        private volatile uint _homingCockpitDialPos = 1;
-        private const string HomingCommandInc = "FT_ZF_SWITCH INC\n";
-        private const string HomingCommandDec = "FT_ZF_SWITCH DEC\n";
-        private int _homingDialSkipper;
+        private int _largeDialSkipper;
+        private int _smallDialSkipper;
+        private ClickSpeedDetector _largeDialIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private ClickSpeedDetector _largeDialDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private ClickSpeedDetector _firstSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(30);
+        private ClickSpeedDetector _firstSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(30);
+        private ClickSpeedDetector _secondSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(36);
+        private ClickSpeedDetector _secondSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(36);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69SRS(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69SRS(string ipAddressFrom, int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
+            _srsReceiveFromIPUdp = ipAddressFrom;
+            _srsSendToIPUdp = ipAddressTo;
+            _srsReceivePortUdp = portFrom;
+            _srsSendPortUdp = portTo;
             VendorId = 0x6A3;
             ProductId = 0xD05;
             CreateRadioKnobs();
             Startup();
+            StartupRP();
         }
 
         public sealed override void Startup()
@@ -110,7 +87,7 @@ namespace NonVisuals
             }
         }
 
-        public void StartupRP()
+        private void StartupRP()
         {
             try
             {
@@ -120,7 +97,7 @@ namespace NonVisuals
                     return;
                 }
                 _shutdown = false;
-                DBCommon.DebugP("SRS Radio Panel RP is STARTING UP");
+                Common.DebugP("SRS Radio Panel RP is STARTING UP");
 
                 _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
                 _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
@@ -128,8 +105,9 @@ namespace NonVisuals
                 _udpReceiveClient?.Close();
                 _udpReceiveClient = new UdpClient();
                 _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpReceiveClient.ExclusiveAddressUse = false;
                 _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
-                _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
+                //_udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
 
                 _udpSendClient?.Close();
                 _udpSendClient = new UdpClient();
@@ -145,7 +123,7 @@ namespace NonVisuals
             catch (Exception e)
             {
                 SetLastException(e);
-                DBCommon.LogError(9211, e, "RadioPanelPZ69SRS.StartupRP()");
+                Common.LogError(9211101, e, "RadioPanelPZ69SRS.StartupRP()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -181,7 +159,7 @@ namespace NonVisuals
                 try
                 {
                     _shutdown = true;
-                    DBCommon.DebugP("SRS Radio Panel RP is SHUTTING DOWN");
+                    Common.DebugP("SRS Radio Panel RP is SHUTTING DOWN");
                     _srsListeningThread?.Abort();
                 }
                 catch (Exception)
@@ -206,32 +184,95 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 SetLastException(ex);
-                DBCommon.LogError(9212, ex, "RadioPanelPZ69SRS.ShutdownRP()");
+                Common.LogError(9212, ex, "RadioPanelPZ69SRS.ShutdownRP()");
             }
         }
 
 
-        public void ReceiveDataUdp()
+        private void ReceiveDataUdp()
         {
             try
             {
-                DBCommon.DebugP("SRS Radio Panel entering threaded receive data loop");
+                Common.DebugP("SRS Radio Panel entering threaded receive data loop");
                 while (!_shutdown)
                 {
                     var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
-                    
+                    try
+                    {
+                        var message = Encoding.UTF8.GetString(byteData, 0, byteData.Length);
+
+                        /*var combinedState = new CombinedRadioState()
+                        {
+                            RadioInfo = new SRSPlayerRadioInfo(),
+                            RadioSendingState = new RadioSendingState(),
+                            RadioReceivingState = new RadioReceivingState[11]
+                        };*/
+
+                        var srsCombinedRadioState = JsonConvert.DeserializeObject<SRSCombinedRadioState>(message);
+                        var srsPlayerRadioInfo = srsCombinedRadioState.RadioInfo;
+                        lock (_freqListLockObject)
+                        {
+                            if (srsPlayerRadioInfo != null)
+                            {
+                                var update = false;
+                                for (var i = 0; i < 7; i++)
+                                {
+                                    if (Math.Abs(_listMainFrequencies[i] - srsPlayerRadioInfo.radios[i + 1].freq) > 0)
+                                    {
+                                        _listMainFrequencies[i] = srsPlayerRadioInfo.radios[i].freq;
+                                        update = true;
+                                    }
+                                    if (Math.Abs(_listGuardFrequencies[i] - srsPlayerRadioInfo.radios[i + 1].secFreq) > 0)
+                                    {
+                                        _listGuardFrequencies[i] = srsPlayerRadioInfo.radios[i].secFreq;
+                                        update = true;
+                                    }
+                                }
+                                if (update)
+                                {
+                                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Common.LogError(242352375, e, "RadioPanelPZ69SRS.ReceiveDataUdp()");
+                    }
                 }
-                DBCommon.DebugP("SRS Radio Panel exiting threaded receive data loop");
             }
             catch (ThreadAbortException) { }
             catch (Exception e)
             {
                 SetLastException(e);
-                DBCommon.LogError(94413, e, "RadioPanelPZ69SRS.ReceiveDataUdp()");
+                Common.LogError(94413, e, "RadioPanelPZ69SRS.ReceiveDataUdp()");
             }
+            Common.DebugP("SRS Radio Panel exiting threaded receive data loop");
         }
 
-        public void PZ69KnobChanged(IEnumerable<object> hashSet)
+        private int SendDataFunction(string stringData)
+        {
+            var result = 0;
+            lock (_sendSRSDataLockObject)
+            {
+                try
+                {
+                    var unicodeBytes = Encoding.Unicode.GetBytes(stringData);
+                    var asciiBytes = new List<byte>(stringData.Length);
+                    asciiBytes.AddRange(Encoding.Convert(Encoding.Unicode, Encoding.ASCII, unicodeBytes));
+                    result = _udpSendClient.Send(asciiBytes.ToArray(), asciiBytes.ToArray().Length, _ipEndPointSenderUdp);
+                }
+                catch (Exception e)
+                {
+                    DBCommon.DebugP("Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
+                    SetLastException(e);
+                    DBCommon.LogError(9216101, e, "RadioPanelPZ69SRS.SendDataFunction()");
+                }
+            }
+            return result;
+        }
+
+        private void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             try
             {
@@ -409,281 +450,141 @@ namespace NonVisuals
                         {
                             case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    switch (_currentUpperRadioMode)
+                                    _largeDialIncreaseChangeMonitor.Click();
+                                    if (!SkipLargeDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = 1.0;
+                                        if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = 10.0;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    switch (_currentUpperRadioMode)
+                                    _largeDialDecreaseChangeMonitor.Click();
+                                    if (!SkipLargeDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = -1.0;
+                                        if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = -10.0;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.UPPER_SMALL_FREQ_WHEEL_INC:
                                 {
-                                    switch (_currentUpperRadioMode)
+                                    _firstSmallDialIncreaseChangeMonitor.Click();
+                                    _secondSmallDialIncreaseChangeMonitor.Click();
+                                    if (!SkipSmallDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = 0.001;
+                                        if (_firstSmallDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = 0.01;
+                                        }
+                                        if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = 0.1;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.UPPER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    switch (_currentUpperRadioMode)
+                                    _firstSmallDialDecreaseChangeMonitor.Click();
+                                    _secondSmallDialDecreaseChangeMonitor.Click();
+                                    if (!SkipSmallDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = -0.001;
+                                        if (_firstSmallDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = -0.01;
+                                        }
+                                        if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = -0.1;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    switch (_currentLowerRadioMode)
+                                    _largeDialIncreaseChangeMonitor.Click();
+                                    if (!SkipLargeDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = 1.0;
+                                        if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = 10.0;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    switch (_currentLowerRadioMode)
+                                    _largeDialDecreaseChangeMonitor.Click();
+                                    if (!SkipLargeDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = -1.0;
+                                        if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = -10.0;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_INC:
                                 {
-                                    switch (_currentLowerRadioMode)
+                                    _firstSmallDialIncreaseChangeMonitor.Click();
+                                    _secondSmallDialIncreaseChangeMonitor.Click();
+                                    if (!SkipSmallDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = 0.001;
+                                        if (_firstSmallDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = 0.01;
+                                        }
+                                        if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = 0.1;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
                             case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_DEC:
                                 {
-                                    switch (_currentLowerRadioMode)
+                                    _firstSmallDialDecreaseChangeMonitor.Click();
+                                    _secondSmallDialDecreaseChangeMonitor.Click();
+                                    if (!SkipSmallDialDialChange())
                                     {
-                                        case CurrentSRSRadioMode.COM1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.COM2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV1:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.NAV2:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.ADF:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.DME:
-                                            {
-                                                break;
-                                            }
-                                        case CurrentSRSRadioMode.XPDR:
-                                            {
-                                                break;
-                                            }
+                                        var changeValue = -0.001;
+                                        if (_firstSmallDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = -0.01;
+                                        }
+                                        if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        {
+                                            changeValue = -0.1;
+                                        }
+                                        var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
+                                        SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -699,6 +600,52 @@ namespace NonVisuals
             Common.DebugP("Leaving SRS Radio AdjustFrequency()");
         }
 
+        private string GetFreqChangeSendCommand(CurrentSRSRadioMode currentSRSRadioMode, double value)
+        {
+            var radioId = 0;
+            switch (currentSRSRadioMode)
+            {
+                case CurrentSRSRadioMode.COM1:
+                    {
+                        radioId = 1;
+                        break;
+                    }
+                case CurrentSRSRadioMode.COM2:
+                    {
+                        radioId = 2;
+                        break;
+                    }
+                case CurrentSRSRadioMode.NAV1:
+                    {
+                        radioId = 3;
+                        break;
+                    }
+                case CurrentSRSRadioMode.NAV2:
+                    {
+                        radioId = 4;
+                        break;
+                    }
+                case CurrentSRSRadioMode.ADF:
+                    {
+                        radioId = 5;
+                        break;
+                    }
+                case CurrentSRSRadioMode.DME:
+                    {
+                        radioId = 6;
+                        break;
+                    }
+                case CurrentSRSRadioMode.XPDR:
+                    {
+                        radioId = 7;
+                        break;
+                    }
+            }
+            var result = "{ \"Command\": 0,\"RadioId\":" + radioId + ",\"Frequency\": " + value.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture) + " }\n";
+            Common.DebugP(result);
+            return result;
+        }
+
         private void ShowFrequenciesOnPanel()
         {
             try
@@ -707,79 +654,147 @@ namespace NonVisuals
                 {
                     if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
                     {
-
                         return;
                     }
 
                     if (!FirstReportHasBeenRead)
                     {
-
                         return;
                     }
 
                     Common.DebugP("Entering SRS Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
-
-                    switch (_currentUpperRadioMode)
+                    double mainUpperFrequency = 0;
+                    double guardUpperFrequency = 0;
+                    double mainLowerFrequency = 0;
+                    double guardLowerFrequency = 0;
+                    lock (_freqListLockObject)
                     {
-                        case CurrentSRSRadioMode.COM1:
-                            {
-                                //1-4
-                                var modeDialPostionAsString = "";
-                                var fineTunePositionAsString = "";
-                                lock (_lockFug16ZyPresetDialObject1)
+                        switch (_currentUpperRadioMode)
+                        {
+                            case CurrentSRSRadioMode.COM1:
                                 {
-                                    modeDialPostionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
+                                    mainUpperFrequency = _listMainFrequencies[0];
+                                    guardUpperFrequency = _listGuardFrequencies[0];
+                                    break;
                                 }
-                                lock (_lockFug16ZyFineTuneDialObject1)
+                            case CurrentSRSRadioMode.COM2:
                                 {
+                                    mainUpperFrequency = _listMainFrequencies[1];
+                                    guardUpperFrequency = _listGuardFrequencies[1];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.NAV1:
+                                {
+                                    mainUpperFrequency = _listMainFrequencies[2];
+                                    guardUpperFrequency = _listGuardFrequencies[2];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.NAV2:
+                                {
+                                    mainUpperFrequency = _listMainFrequencies[3];
+                                    guardUpperFrequency = _listGuardFrequencies[3];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.ADF:
+                                {
+                                    mainUpperFrequency = _listMainFrequencies[4];
+                                    guardUpperFrequency = _listGuardFrequencies[4];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.DME:
+                                {
+                                    mainUpperFrequency = _listMainFrequencies[5];
+                                    guardUpperFrequency = _listGuardFrequencies[5];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.XPDR:
+                                {
+                                    mainUpperFrequency = _listMainFrequencies[6];
+                                    guardUpperFrequency = _listGuardFrequencies[6];
+                                    break;
+                                }
+                        }
 
-                                    fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
+                        switch (_currentLowerRadioMode)
+                        {
+                            case CurrentSRSRadioMode.COM1:
+                                {
+                                    mainLowerFrequency = _listMainFrequencies[0];
+                                    guardLowerFrequency = _listGuardFrequencies[0];
+                                    break;
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                break;
-                            }
-                        case CurrentSRSRadioMode.COM2:
-                        case CurrentSRSRadioMode.NAV1:
-                        case CurrentSRSRadioMode.NAV2:
-                        case CurrentSRSRadioMode.ADF:
-                        case CurrentSRSRadioMode.DME:
-                        case CurrentSRSRadioMode.XPDR:
-                            {
-                                break;
-                            }
+                            case CurrentSRSRadioMode.COM2:
+                                {
+                                    mainLowerFrequency = _listMainFrequencies[1];
+                                    guardLowerFrequency = _listGuardFrequencies[1];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.NAV1:
+                                {
+                                    mainLowerFrequency = _listMainFrequencies[2];
+                                    guardLowerFrequency = _listGuardFrequencies[2];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.NAV2:
+                                {
+                                    mainLowerFrequency = _listMainFrequencies[3];
+                                    guardLowerFrequency = _listGuardFrequencies[3];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.ADF:
+                                {
+                                    mainLowerFrequency = _listMainFrequencies[4];
+                                    guardLowerFrequency = _listGuardFrequencies[4];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.DME:
+                                {
+                                    mainLowerFrequency = _listMainFrequencies[5];
+                                    guardLowerFrequency = _listGuardFrequencies[5];
+                                    break;
+                                }
+                            case CurrentSRSRadioMode.XPDR:
+                                {
+                                    mainLowerFrequency = _listMainFrequencies[6];
+                                    guardLowerFrequency = _listGuardFrequencies[6];
+                                    break;
+                                }
+                        }
                     }
-                    switch (_currentLowerRadioMode)
-                    {
-                        case CurrentSRSRadioMode.COM1:
-                            {
-                                //1-4
-                                var modeDialPostionAsString = "";
-                                var fineTunePositionAsString = "";
-                                lock (_lockFug16ZyPresetDialObject1)
-                                {
-                                    modeDialPostionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
-                                }
-                                lock (_lockFug16ZyFineTuneDialObject1)
-                                {
 
-                                    fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
-                                }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                break;
-                            }
-                        case CurrentSRSRadioMode.COM2:
-                        case CurrentSRSRadioMode.NAV1:
-                        case CurrentSRSRadioMode.NAV2:
-                        case CurrentSRSRadioMode.ADF:
-                        case CurrentSRSRadioMode.DME:
-                        case CurrentSRSRadioMode.XPDR:
-                            {
-                                break;
-                            }
+                    if (mainUpperFrequency > 0)
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, mainUpperFrequency, PZ69LCDPosition.UPPER_LEFT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                    }
+                    if (guardUpperFrequency > 0)
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, guardUpperFrequency, PZ69LCDPosition.UPPER_RIGHT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                    }
+                    if (mainLowerFrequency > 0)
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, mainLowerFrequency, PZ69LCDPosition.LOWER_LEFT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                    }
+                    if (guardLowerFrequency > 0)
+                    {
+                        SetPZ69DisplayBytesDefault(ref bytes, guardLowerFrequency, PZ69LCDPosition.LOWER_RIGHT);
+                    }
+                    else
+                    {
+                        SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
                     }
                     SendLCDData(bytes);
                 }
@@ -945,25 +960,21 @@ namespace NonVisuals
             }
             Common.DebugP("Leaving SRS Radio SetLowerRadioMode()");
         }
-        /*
-        private bool SkipFuG16ZYPresetDialChange()
+
+        private bool SkipSmallDialDialChange()
         {
             try
             {
-                Common.DebugP("Entering SRS Radio SkipFuG16ZYPresetDialChange()");
-                if (_currentUpperRadioMode == CurrentSRSRadioMode.FUG16ZY || _currentLowerRadioMode == CurrentSRSRadioMode.FUG16ZY)
+                Common.DebugP("Entering SRS Radio SkipSmallDialDialChange()");
+                if (_smallDialSkipper > 2)
                 {
-                    if (_fug16ZyPresetDialSkipper > 2)
-                    {
-                        _fug16ZyPresetDialSkipper = 0;
-                        Common.DebugP("Leaving SRS Radio SkipFuG16ZYPresetDialChange()");
-                        return false;
-                    }
-                    _fug16ZyPresetDialSkipper++;
-                    Common.DebugP("Leaving SRS Radio SkipFuG16ZYPresetDialChange()");
-                    return true;
+                    _smallDialSkipper = 0;
+                    Common.DebugP("Leaving SRS Radio SkipSmallDialDialChange()");
+                    return false;
                 }
-                Common.DebugP("Leaving SRS Radio SkipFuG16ZYPresetDialChange()");
+                _smallDialSkipper++;
+                Common.DebugP("Leaving SRS Radio SkipSmallDialDialChange()");
+                return true;
             }
             catch (Exception ex)
             {
@@ -971,7 +982,29 @@ namespace NonVisuals
             }
             return false;
         }
-        */
+
+        private bool SkipLargeDialDialChange()
+        {
+            try
+            {
+                Common.DebugP("Entering SRS Radio SkipLargeDialDialChange()");
+                if (_largeDialSkipper > 2)
+                {
+                    _largeDialSkipper = 0;
+                    Common.DebugP("Leaving SRS Radio SkipLargeDialDialChange()");
+                    return false;
+                }
+                _largeDialSkipper++;
+                Common.DebugP("Leaving SRS Radio SkipLargeDialDialChange()");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(82009, ex);
+            }
+            return false;
+        }
+
 
         public override String SettingsVersion()
         {

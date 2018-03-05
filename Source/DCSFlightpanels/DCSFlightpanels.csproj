@@ -166,9 +166,6 @@
     <Compile Include="DCSBiosOutputTriggerWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputTriggerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DcsBiosWindow.xaml.cs">
-      <DependentUpon>DcsBiosWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="KeyPressWindow.xaml.cs">
       <DependentUpon>KeyPressWindow.xaml</DependentUpon>
     </Compile>
@@ -255,10 +252,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DCSBiosOutputTriggerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DcsBiosWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

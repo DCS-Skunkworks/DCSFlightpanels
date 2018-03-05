@@ -546,6 +546,16 @@ namespace NonVisuals
             }
         }
 
+        public bool IsKeyEmulationProfile
+        {
+            get { return _airframe == DCSAirframe.KEYEMULATOR || _airframe == DCSAirframe.KEYEMULATOR_SRS; }
+        }
+
+        public bool IsDCSBIOSProfile
+        {
+            get { return _airframe != DCSAirframe.KEYEMULATOR && _airframe != DCSAirframe.KEYEMULATOR_SRS; }
+        }
+
         public string LastProfileUsed
         {
             get { return _lastProfileUsed; }

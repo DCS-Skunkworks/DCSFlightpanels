@@ -265,7 +265,7 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
         public string SRSIpFrom {
             get {
                 return ((string)(this["SRSIpFrom"]));
@@ -277,7 +277,7 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
         public string SRSIpTo {
             get {
                 return ((string)(this["SRSIpTo"]));
@@ -289,10 +289,10 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SRSPortFrom {
+        [global::System.Configuration.DefaultSettingValueAttribute("7082")]
+        public int SRSPortFrom {
             get {
-                return ((string)(this["SRSPortFrom"]));
+                return ((int)(this["SRSPortFrom"]));
             }
             set {
                 this["SRSPortFrom"] = value;
@@ -301,13 +301,25 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SRSPortTo {
+        [global::System.Configuration.DefaultSettingValueAttribute("9086")]
+        public int SRSPortTo {
             get {
-                return ((string)(this["SRSPortTo"]));
+                return ((int)(this["SRSPortTo"]));
             }
             set {
                 this["SRSPortTo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2018-01-01")]
+        public global::System.DateTime LastGitHubCheck {
+            get {
+                return ((global::System.DateTime)(this["LastGitHubCheck"]));
+            }
+            set {
+                this["LastGitHubCheck"] = value;
             }
         }
     }

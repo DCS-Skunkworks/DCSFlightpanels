@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using DCS_BIOS;
 using Jace;
 
 namespace NonVisuals
@@ -104,6 +105,32 @@ namespace NonVisuals
         public static object _debugLoglockObject = new object();
         public static string ErrorLog = "";
         public static string DebugLog = "";
+
+
+        public static bool IsKeyEmulationProfile(DCSAirframe dcsAirframe)
+        {
+            return dcsAirframe == DCSAirframe.KEYEMULATOR || dcsAirframe == DCSAirframe.KEYEMULATOR_SRS;
+        }
+
+        public static bool IsDCSBIOSProfile(DCSAirframe dcsAirframe)
+        {
+            return dcsAirframe != DCSAirframe.KEYEMULATOR && dcsAirframe != DCSAirframe.KEYEMULATOR_SRS;
+        }
+
+        public static void DebugP(string str)
+        {
+            if (DebugOn)
+            {
+                if (DebugToFile)
+                {
+                    LogToDebugFile(str);
+                }
+                else
+                {
+                    Console.WriteLine(str);
+                }
+            }
+        }
 
         public static void SetErrorLog(string filename)
         {
@@ -548,21 +575,6 @@ namespace NonVisuals
                     {
                         yield return childOfChild;
                     }
-                }
-            }
-        }
-
-        public static void DebugP(string str)
-        {
-            if (DebugOn)
-            {
-                if (DebugToFile)
-                {
-                    LogToDebugFile(str);
-                }
-                else
-                {
-                    Console.WriteLine(str);
                 }
             }
         }

@@ -156,6 +156,8 @@
     <Compile Include="RadioPanelPZ69UH1H.cs" />
     <Compile Include="RadiopanelSpitfireLFMkIX.cs" />
     <Compile Include="SaitekPanel.cs" />
+    <Compile Include="SRSPlayerRadioInfo.cs" />
+    <Compile Include="SRSRadioInformation.cs" />
     <Compile Include="TPMPanelSwitch.cs" />
     <Compile Include="SwitchPanelKey.cs" />
     <Compile Include="TPMPanel.cs" />

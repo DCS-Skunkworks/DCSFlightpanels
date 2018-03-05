@@ -73,12 +73,12 @@ namespace DCSFlightpanels
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED") && dcsAirframe == DCSAirframe.KEYEMULATOR)
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsKeyEmulationProfile(dcsAirframe))
                     {
                         image.ContextMenu = null;
                     }
                     else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && dcsAirframe != DCSAirframe.KEYEMULATOR)
+                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsDCSBIOSProfile(dcsAirframe))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         image.ContextMenu.Tag = image.Name;

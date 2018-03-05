@@ -148,8 +148,8 @@ namespace DCSFlightpanels
             {
                 TextBoxSRSIPFrom.Text = Settings.Default.SRSIpFrom;
                 TextBoxSRSIPTo.Text = Settings.Default.SRSIpTo;
-                TextBoxSRSPortFrom.Text = Settings.Default.SRSPortFrom;
-                TextBoxSRSPortTo.Text = Settings.Default.SRSPortTo;
+                TextBoxSRSPortFrom.Text = Settings.Default.SRSPortFrom.ToString();
+                TextBoxSRSPortTo.Text = Settings.Default.SRSPortTo.ToString();
             }
         }
 
@@ -249,9 +249,9 @@ namespace DCSFlightpanels
                 if (_srsChanged)
                 {
                     Settings.Default.SRSIpFrom = IpAddressFromSRS;
-                    Settings.Default.SRSPortFrom = PortFromSRS;
+                    Settings.Default.SRSPortFrom = int.Parse(PortFromSRS);
                     Settings.Default.SRSIpTo = IpAddressToSRS;
-                    Settings.Default.SRSPortTo = PortToSRS;
+                    Settings.Default.SRSPortTo = int.Parse(PortToSRS);
                     Settings.Default.Save();
                 }
                 DialogResult = true;
