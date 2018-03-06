@@ -32,8 +32,8 @@
                 <RadioButton Name="RadioButtonKeyBd" >keybd_event()</RadioButton>
                 <RadioButton Name="RadioButtonSendInput">SendInput()</RadioButton>
             </StackPanel>
-            <CheckBox Content="Debug to file" Name="CheckBoxDebugToFile"/>
-            <CheckBox Content="Debug turned on" Name="CheckBoxDoDebug"/>
+            <CheckBox Content="Debug to file" Name="CheckBoxDebugToFile" Unchecked="CheckBoxDebug_OnUnchecked"/>
+            <CheckBox Content="Debug turned on" Name="CheckBoxDoDebug" Unchecked="CheckBoxDebug_OnUnchecked"/>
             <StackPanel>
                 <Label FontWeight="Bold">Process priority</Label>
                 <RadioButton Name="RadioButtonBelowNormal">Below Normal</RadioButton>

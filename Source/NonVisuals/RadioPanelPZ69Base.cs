@@ -269,7 +269,7 @@ namespace NonVisuals
                 }
                 catch (Exception e)
                 {
-                    Common.LogError(38410, e, "SetPZ69DisplayBytesDefault()");
+                    Common.LogError(38410, e, "SetPZ69DisplayBytesDefault() digitsAsString.Length = " + digitsAsString.Length);
                 }
 
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')

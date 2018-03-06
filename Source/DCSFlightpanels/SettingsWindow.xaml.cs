@@ -492,5 +492,11 @@ namespace DCSFlightpanels
             _generalChanged = true;
             ButtonOk.IsEnabled = true;
         }
+
+        private void CheckBoxDebug_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            _generalChanged = true;
+            ButtonOk.IsEnabled = true;
+        }
     }
 }
