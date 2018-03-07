@@ -12,26 +12,12 @@ using Newtonsoft.Json;
 
 namespace NonVisuals
 {
-    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel
+    public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel, ISRSDataListener
     {
         private HashSet<RadioPanelKnobSRS> _radioPanelKnobs = new HashSet<RadioPanelKnobSRS>();
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;
-
-
-        private UdpClient _udpReceiveClient;
-        private UdpClient _udpSendClient;
-        private Thread _srsListeningThread;
-        private string _srsReceiveFromIPUdp = "127.0.0.1";
-        private string _srsSendToIPUdp = "127.0.0.1";
-        private int _srsReceivePortUdp = 7082;
-        private int _srsSendPortUdp = 9086;
-        //private IPEndPoint _ipEndPointReceiverUdp;
-        private IPEndPoint _ipEndPointSenderUdp;
-        private string _receivedDataUdp = null;
-        private readonly object _sendSRSDataLockObject = new object();
-        private bool _shutdown;
-        private bool _started;
+        
         //private List<double> _listMainFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
         //private List<double> _listGuardFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
         private readonly object _freqListLockObject = new object();
@@ -63,17 +49,14 @@ namespace NonVisuals
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69SRS(string ipAddressFrom, int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69SRS(int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
-            _srsReceiveFromIPUdp = ipAddressFrom;
-            _srsSendToIPUdp = ipAddressTo;
-            _srsReceivePortUdp = portFrom;
-            _srsSendPortUdp = portTo;
+            SRSListenerFactory.SetParams(portFrom, ipAddressTo, portTo);
+            SRSListenerFactory.GetSRSListener().Attach(this);
             VendorId = 0x6A3;
             ProductId = 0xD05;
             CreateRadioKnobs();
             Startup();
-            StartupRP();
         }
 
         public sealed override void Startup()
@@ -93,63 +76,15 @@ namespace NonVisuals
             }
         }
 
-        private void StartupRP()
-        {
-            try
-            {
-                ShutdownRP();
-                if (_started)
-                {
-                    return;
-                }
-                _shutdown = false;
-                Common.DebugP("SRS Radio Panel RP is STARTING UP");
-
-                var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
-                _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
-
-                _udpReceiveClient?.Close();
-                _udpReceiveClient = new UdpClient();
-                _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                _udpReceiveClient.ExclusiveAddressUse = false;
-                _udpReceiveClient.Client.Bind(ipEndPointReceiverUdp);
-                //_udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
-
-                _udpSendClient?.Close();
-                _udpSendClient = new UdpClient();
-                _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                _udpSendClient.EnableBroadcast = true;
-
-                _srsListeningThread?.Abort();
-                _srsListeningThread = new Thread(ReceiveDataUdp);
-                _srsListeningThread.Start();
-
-                _started = true;
-            }
-            catch (Exception e)
-            {
-                SetLastException(e);
-                Common.LogError(9211101, e, "RadioPanelPZ69SRS.StartupRP()");
-                if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
-                {
-                    _udpReceiveClient.Close();
-                    _udpReceiveClient = null;
-                }
-                if (_udpSendClient != null && _udpSendClient.Client.Connected)
-                {
-                    _udpSendClient.Close();
-                    _udpSendClient = null;
-                }
-            }
-        }
 
         public override void Shutdown()
         {
             try
             {
+                SRSListenerFactory.GetSRSListener().Detach(this);
                 Common.DebugP("Entering SRS Radio Shutdown()");
                 ShutdownBase();
-                ShutdownRP();
+                SRSListenerFactory.Shutdown();
             }
             catch (Exception e)
             {
@@ -158,205 +93,21 @@ namespace NonVisuals
             Common.DebugP("Leaving SRS Radio Shutdown()");
         }
 
-        private void ShutdownRP()
+        public void SRSDataReceived()
         {
             try
             {
-                try
-                {
-                    _shutdown = true;
-                    Common.DebugP("SRS Radio Panel RP is SHUTTING DOWN");
-                    _srsListeningThread?.Abort();
-                }
-                catch (Exception)
-                {
-                }
-                try
-                {
-                    _udpReceiveClient?.Close();
-                }
-                catch (Exception)
-                {
-                }
-                try
-                {
-                    _udpSendClient?.Close();
-                }
-                catch (Exception)
-                {
-                }
-                _started = false;
-            }
-            catch (Exception ex)
-            {
-                SetLastException(ex);
-                Common.LogError(9212, ex, "RadioPanelPZ69SRS.ShutdownRP()");
-            }
-        }
-
-
-        private void ReceiveDataUdp()
-        {
-            try
-            {
-                Common.DebugP("SRS Radio Panel entering threaded receive data loop");
-                while (!_shutdown)
-                {
-                    var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
-                    var byteData = _udpReceiveClient.Receive(ref ipEndPointReceiverUdp);
-                    try
-                    {
-                        var message = Encoding.UTF8.GetString(byteData, 0, byteData.Length);
-                        //Console.WriteLine(HIDSkeletonBase.InstanceId + " Message received on UDP");
-                        var srsCombinedRadioState = JsonConvert.DeserializeObject<SRSCombinedRadioState>(message);
-                        var srsPlayerRadioInfo = srsCombinedRadioState.RadioInfo;
-                        if (srsPlayerRadioInfo != null)
-                        {
-                            switch (_currentUpperRadioMode)
-                            {
-                                case CurrentSRSRadioMode.COM1:
-                                    {
-                                        _upperMainFreq = srsPlayerRadioInfo.radios[1].freq;
-                                        _upperGuardFreq = srsPlayerRadioInfo.radios[1].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.COM2:
-                                    {
-                                        _upperMainFreq = srsPlayerRadioInfo.radios[2].freq;
-                                        _upperGuardFreq = srsPlayerRadioInfo.radios[2].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.NAV1:
-                                    {
-                                        _upperMainFreq = srsPlayerRadioInfo.radios[3].freq;
-                                        _upperGuardFreq = srsPlayerRadioInfo.radios[3].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.NAV2:
-                                    {
-                                        _upperMainFreq = srsPlayerRadioInfo.radios[4].freq;
-                                        _upperGuardFreq = srsPlayerRadioInfo.radios[4].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.ADF:
-                                    {
-                                        _upperMainFreq = srsPlayerRadioInfo.radios[5].freq;
-                                        _upperGuardFreq = srsPlayerRadioInfo.radios[5].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.DME:
-                                    {
-                                        _upperMainFreq = srsPlayerRadioInfo.radios[6].freq;
-                                        _upperGuardFreq = srsPlayerRadioInfo.radios[6].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.XPDR:
-                                    {
-                                        _upperMainFreq = srsPlayerRadioInfo.radios[7].freq;
-                                        _upperGuardFreq = srsPlayerRadioInfo.radios[7].secFreq;
-                                        break;
-                                    }
-                            }
-
-                            switch (_currentLowerRadioMode)
-                            {
-                                case CurrentSRSRadioMode.COM1:
-                                    {
-                                        _lowerMainFreq = srsPlayerRadioInfo.radios[1].freq;
-                                        _lowerGuardFreq = srsPlayerRadioInfo.radios[1].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.COM2:
-                                    {
-                                        _lowerMainFreq = srsPlayerRadioInfo.radios[2].freq;
-                                        _lowerGuardFreq = srsPlayerRadioInfo.radios[2].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.NAV1:
-                                    {
-                                        _lowerMainFreq = srsPlayerRadioInfo.radios[3].freq;
-                                        _lowerGuardFreq = srsPlayerRadioInfo.radios[3].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.NAV2:
-                                    {
-                                        _lowerMainFreq = srsPlayerRadioInfo.radios[4].freq;
-                                        _lowerGuardFreq = srsPlayerRadioInfo.radios[4].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.ADF:
-                                    {
-                                        _lowerMainFreq = srsPlayerRadioInfo.radios[5].freq;
-                                        _lowerGuardFreq = srsPlayerRadioInfo.radios[5].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.DME:
-                                    {
-                                        _lowerMainFreq = srsPlayerRadioInfo.radios[6].freq;
-                                        _lowerGuardFreq = srsPlayerRadioInfo.radios[6].secFreq;
-                                        break;
-                                    }
-                                case CurrentSRSRadioMode.XPDR:
-                                    {
-                                        _lowerMainFreq = srsPlayerRadioInfo.radios[7].freq;
-                                        _lowerGuardFreq = srsPlayerRadioInfo.radios[7].secFreq;
-                                        break;
-                                    }
-                            }
-                            /*for (var i = 0; i < 7; i++)
-                            {
-                                if (_listMainFrequencies[i] - srsPlayerRadioInfo.radios[i + 1].freq != 0)
-                                {
-                                lock (_freqListLockObject)
-                                {
-                                    _listMainFrequencies[i] = srsPlayerRadioInfo.radios[i + 1].freq;
-                                    }
-                                    if (_listGuardFrequencies[i] - srsPlayerRadioInfo.radios[i + 1].secFreq != 0)
-                                    {
-                                    _listGuardFrequencies[i] = srsPlayerRadioInfo.radios[i + 1].secFreq;
-                                }
-
-                                }
-                            }*/
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            ShowFrequenciesOnPanel();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Common.LogError(242352375, e, "RadioPanelPZ69SRS.ReceiveDataUdp()");
-                    }
-                }
-            }
-            catch (ThreadAbortException) { }
-            catch (Exception e)
-            {
-                SetLastException(e);
-                Common.LogError(94413, e, "RadioPanelPZ69SRS.ReceiveDataUdp()");
-            }
-            Common.DebugP("SRS Radio Panel exiting threaded receive data loop");
-        }
-
-        private int SendDataFunction(string stringData)
-        {
-            var result = 0;
-            /*lock (_sendSRSDataLockObject)
-            {*/
-            try
-            {
-                var unicodeBytes = Encoding.Unicode.GetBytes(stringData);
-                var asciiBytes = new List<byte>(stringData.Length);
-                asciiBytes.AddRange(Encoding.Convert(Encoding.Unicode, Encoding.ASCII, unicodeBytes));
-                result = _udpSendClient.Send(asciiBytes.ToArray(), asciiBytes.ToArray().Length, _ipEndPointSenderUdp);
+                _upperMainFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentUpperRadioMode);
+                _upperGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentUpperRadioMode, true);
+                _lowerMainFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentLowerRadioMode);
+                _lowerGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentLowerRadioMode, true);
+                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                ShowFrequenciesOnPanel();
             }
             catch (Exception e)
             {
-                DBCommon.DebugP("Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
-                SetLastException(e);
-                DBCommon.LogError(9216101, e, "RadioPanelPZ69SRS.SendDataFunction()");
+                Common.LogError(8159006, e);
             }
-            //}
-            return result;
         }
 
         private void PZ69KnobChanged(IEnumerable<object> hashSet)
@@ -501,7 +252,7 @@ namespace NonVisuals
                                     if (radioPanelKnob.IsOn)
                                     {
                                         var message = GetToggleGuardFreqCommand(_currentUpperRadioMode);
-                                        SendDataFunction(message);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(message);
                                     }
                                     break;
                                 }
@@ -510,7 +261,7 @@ namespace NonVisuals
                                     if (radioPanelKnob.IsOn)
                                     {
                                         var message = GetToggleGuardFreqCommand(_currentLowerRadioMode);
-                                        SendDataFunction(message);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(message);
                                     }
                                     break;
                                 }
@@ -555,7 +306,7 @@ namespace NonVisuals
                                             changeValue = 5.0;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -570,7 +321,7 @@ namespace NonVisuals
                                             changeValue = -5.0;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -590,7 +341,7 @@ namespace NonVisuals
                                             changeValue = 0.1;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -610,7 +361,7 @@ namespace NonVisuals
                                             changeValue = -0.1;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -625,7 +376,7 @@ namespace NonVisuals
                                             changeValue = 10.0;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -640,7 +391,7 @@ namespace NonVisuals
                                             changeValue = -10.0;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -660,7 +411,7 @@ namespace NonVisuals
                                             changeValue = 0.1;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -680,7 +431,7 @@ namespace NonVisuals
                                             changeValue = -0.1;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                        SendDataFunction(command);
+                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
                                     }
                                     break;
                                 }
@@ -1078,30 +829,6 @@ namespace NonVisuals
             {
                 Common.LogError(82001, ex);
             }
-        }
-
-        public string ReceiveFromIpUdp
-        {
-            get => _srsReceiveFromIPUdp;
-            set => _srsReceiveFromIPUdp = value;
-        }
-
-        public string SendToIpUdp
-        {
-            get => _srsSendToIPUdp;
-            set => _srsSendToIPUdp = value;
-        }
-
-        public int ReceivePortUdp
-        {
-            get => _srsReceivePortUdp;
-            set => _srsReceivePortUdp = value;
-        }
-
-        public int SendPortUdp
-        {
-            get => _srsSendPortUdp;
-            set => _srsSendPortUdp = value;
         }
     }
 }

@@ -188,6 +188,11 @@ namespace DCSFlightpanels
             else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
                 Common.DebugP("Starting up DCSBIOS");
+                if (_dcsBios == null)
+                {
+                    _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+                }
+
                 _dcsBios.Startup();
                 _dcsStopGearTimer.Start();
                 _dcsCheckDcsBiosStatusTimer.Start();
@@ -227,7 +232,7 @@ namespace DCSFlightpanels
                         _panelProfileHandler.Detach(saitekPanel);
                         saitekPanel.Detach(_panelProfileHandler);
                         saitekPanel.Detach((IProfileHandlerListener)this);
-                        _dcsBios.DetachDataReceivedListener(saitekPanel);
+                        _dcsBios?.DetachDataReceivedListener(saitekPanel);
 
                         Common.DebugP("Shutting down " + saitekPanel.GetType().Name);
                         saitekPanel.Shutdown();
@@ -798,12 +803,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                /*if (!_dcsBios.Running())
-                {
-                    ShowStatusBarMessage("Restarting DcsBios object.");
-                    _dcsBios.Shutdown();
-                    _dcsBios.Startup();
-                }*/
             }
             catch (Exception)
             {
