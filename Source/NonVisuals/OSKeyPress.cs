@@ -229,6 +229,7 @@ namespace NonVisuals
                     if (Common.IsExtendedKey(virtualKeyCode))
                     {
                         WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)WindowsAPI.KEYEVENTF_EXTENDEDKEY | 0, 0);
+                        //keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
                     }
                     else
                     {
@@ -613,7 +614,6 @@ namespace NonVisuals
                     inputs[i].InputUnion.ki.wScan = (ushort)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0);
                     inputs[i].InputUnion.ki.dwExtraInfo = WindowsAPI.GetMessageExtraInfo();
                 }
-                i++;
             }
             //[x][x] [] []
             // 0  1  2  3
@@ -633,7 +633,6 @@ namespace NonVisuals
                     Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
                     inputs[i].InputUnion.ki.wScan = (ushort)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0);
                     inputs[i].InputUnion.ki.dwExtraInfo = WindowsAPI.GetMessageExtraInfo();
-                    i++;
                 }
             }
 

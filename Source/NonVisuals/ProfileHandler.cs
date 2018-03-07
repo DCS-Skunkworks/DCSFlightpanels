@@ -485,10 +485,17 @@ namespace NonVisuals
                 }
                 _lastProfileUsed = Filename;
 
-                var header = "#This file can be manually edited using any ASCII editor.\n#File created on " + DateTime.Today + " " + DateTime.Now;
-
+                var headerStringBuilder = new StringBuilder();
+                headerStringBuilder.Append("#This file can be manually edited using any ASCII editor.\n#File created on " + DateTime.Today + " " + DateTime.Now);
+                headerStringBuilder.AppendLine("#");
+                headerStringBuilder.AppendLine("#");
+                headerStringBuilder.AppendLine("#IMPORTANT INFO REGARDING the keyboard key AltGr (RAlt as named in DCS) or RMENU as named DCSFP");
+                headerStringBuilder.AppendLine("#When you press AltGr DCSFP will register RMENU + LCONTROL. This is a bug which \"just is\". You need to modify that in the profile");
+                headerStringBuilder.AppendLine("#by deleting the + LCONTROL part.");
+                headerStringBuilder.AppendLine("#So for example AltGr + HOME pressed on the keyboard becomes RMENU + LCONTROL + HOME");
+                headerStringBuilder.AppendLine("#Open text editor and delete the LCONTROL ==> RMENU + HOME");
                 var stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine(header);
+                stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
                 stringBuilder.AppendLine("Airframe=" + _airframe);
                 foreach (var s in _listPanelSettingsData)
