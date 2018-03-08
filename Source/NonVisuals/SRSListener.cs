@@ -11,6 +11,12 @@ using Newtonsoft.Json;
 
 namespace NonVisuals
 {
+    public enum SRSRadioMode
+    {
+        Freq,
+        Channel
+    }
+
     public interface ISRSDataListener
     {
         void SRSDataReceived();
@@ -201,7 +207,74 @@ namespace NonVisuals
             }
         }
 
-        public double GetFrequency(CurrentSRSRadioMode currentSRSRadioMode, bool guard = false)
+        public SRSRadioMode GetRadioMode(CurrentSRSRadioMode currentSRSRadioMode)
+        {
+            lock (_readSRSDataLockObject)
+            {
+                switch (currentSRSRadioMode)
+                {
+                    case CurrentSRSRadioMode.COM1:
+                        {
+                            if (_srsPlayerRadioInfo.radios[1].channel == -1)
+                            {
+                                return SRSRadioMode.Freq;
+                            }
+                            return SRSRadioMode.Channel;
+                        }
+                    case CurrentSRSRadioMode.COM2:
+                        {
+                            if (_srsPlayerRadioInfo.radios[2].channel == -1)
+                            {
+                                return SRSRadioMode.Freq;
+                            }
+                            return SRSRadioMode.Channel;
+                        }
+                    case CurrentSRSRadioMode.NAV1:
+                        {
+                            if (_srsPlayerRadioInfo.radios[3].channel == -1)
+                            {
+                                return SRSRadioMode.Freq;
+                            }
+                            return SRSRadioMode.Channel;
+                        }
+                    case CurrentSRSRadioMode.NAV2:
+                        {
+                            if (_srsPlayerRadioInfo.radios[4].channel == -1)
+                            {
+                                return SRSRadioMode.Freq;
+                            }
+                            return SRSRadioMode.Channel;
+                        }
+                    case CurrentSRSRadioMode.ADF:
+                        {
+                            if (_srsPlayerRadioInfo.radios[5].channel == -1)
+                            {
+                                return SRSRadioMode.Freq;
+                            }
+                            return SRSRadioMode.Channel;
+                        }
+                    case CurrentSRSRadioMode.DME:
+                        {
+                            if (_srsPlayerRadioInfo.radios[6].channel == -1)
+                            {
+                                return SRSRadioMode.Freq;
+                            }
+                            return SRSRadioMode.Channel;
+                        }
+                    case CurrentSRSRadioMode.XPDR:
+                        {
+                            if (_srsPlayerRadioInfo.radios[7].channel == -1)
+                            {
+                                return SRSRadioMode.Freq;
+                            }
+                            return SRSRadioMode.Channel;
+                        }
+                }
+            }
+            return SRSRadioMode.Freq;
+        }
+
+        public double GetFrequencyOrChannel(CurrentSRSRadioMode currentSRSRadioMode, bool guard = false)
         {
             lock (_readSRSDataLockObject)
             {
@@ -211,63 +284,84 @@ namespace NonVisuals
                         {
                             if (!guard)
                             {
-                                return _srsPlayerRadioInfo.radios[1].freq;
+                                if (_srsPlayerRadioInfo.radios[1].channel == -1)
+                                {
+                                    return _srsPlayerRadioInfo.radios[1].freq;
+                                }
+                                return _srsPlayerRadioInfo.radios[1].channel;
                             }
-
                             return _srsPlayerRadioInfo.radios[1].secFreq;
                         }
                     case CurrentSRSRadioMode.COM2:
                         {
                             if (!guard)
                             {
-                                return _srsPlayerRadioInfo.radios[2].freq;
+                                if (_srsPlayerRadioInfo.radios[2].channel == -1)
+                                {
+                                    return _srsPlayerRadioInfo.radios[2].freq;
+                                }
+                                return _srsPlayerRadioInfo.radios[2].channel;
                             }
-
                             return _srsPlayerRadioInfo.radios[2].secFreq;
                         }
                     case CurrentSRSRadioMode.NAV1:
                         {
                             if (!guard)
                             {
-                                return _srsPlayerRadioInfo.radios[3].freq;
+                                if (_srsPlayerRadioInfo.radios[3].channel == -1)
+                                {
+                                    return _srsPlayerRadioInfo.radios[3].freq;
+                                }
+                                return _srsPlayerRadioInfo.radios[3].channel;
                             }
-
                             return _srsPlayerRadioInfo.radios[3].secFreq;
                         }
                     case CurrentSRSRadioMode.NAV2:
                         {
                             if (!guard)
                             {
-                                return _srsPlayerRadioInfo.radios[4].freq;
+                                if (_srsPlayerRadioInfo.radios[4].channel == -1)
+                                {
+                                    return _srsPlayerRadioInfo.radios[4].freq;
+                                }
+                                return _srsPlayerRadioInfo.radios[4].channel;
                             }
-
                             return _srsPlayerRadioInfo.radios[4].secFreq;
                         }
                     case CurrentSRSRadioMode.ADF:
                         {
                             if (!guard)
                             {
-                                return _srsPlayerRadioInfo.radios[5].freq;
+                                if (_srsPlayerRadioInfo.radios[5].channel == -1)
+                                {
+                                    return _srsPlayerRadioInfo.radios[5].freq;
+                                }
+                                return _srsPlayerRadioInfo.radios[5].channel;
                             }
-
                             return _srsPlayerRadioInfo.radios[5].secFreq;
                         }
                     case CurrentSRSRadioMode.DME:
                         {
                             if (!guard)
                             {
-                                return _srsPlayerRadioInfo.radios[6].freq;
+                                if (_srsPlayerRadioInfo.radios[6].channel == -1)
+                                {
+                                    return _srsPlayerRadioInfo.radios[6].freq;
+                                }
+                                return _srsPlayerRadioInfo.radios[6].channel;
                             }
-
                             return _srsPlayerRadioInfo.radios[6].secFreq;
                         }
                     case CurrentSRSRadioMode.XPDR:
                         {
                             if (!guard)
                             {
-                                return _srsPlayerRadioInfo.radios[7].freq;
+                                if (_srsPlayerRadioInfo.radios[7].channel == -1)
+                                {
+                                    return _srsPlayerRadioInfo.radios[7].freq;
+                                }
+                                return _srsPlayerRadioInfo.radios[7].channel;
                             }
-
                             return _srsPlayerRadioInfo.radios[7].secFreq;
                         }
                 }

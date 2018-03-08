@@ -36,7 +36,8 @@ namespace NonVisuals
         private double _lowerMainFreq = 0;
         private double _upperGuardFreq = 0;
         private double _lowerGuardFreq = 0;
-
+        private long _upperFreqSwitchPressed = 0;
+        private long _lowerFreqSwitchPressed = 0;
         private int _largeDialSkipper;
         private int _smallDialSkipper;
         private ClickSpeedDetector _largeDialIncreaseChangeMonitor = new ClickSpeedDetector(20);
@@ -97,10 +98,10 @@ namespace NonVisuals
         {
             try
             {
-                _upperMainFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentUpperRadioMode);
-                _upperGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentUpperRadioMode, true);
-                _lowerMainFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentLowerRadioMode);
-                _lowerGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequency(_currentLowerRadioMode, true);
+                _upperMainFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentUpperRadioMode);
+                _upperGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentUpperRadioMode, true);
+                _lowerMainFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode);
+                _lowerGuardFreq = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(_currentLowerRadioMode, true);
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 ShowFrequenciesOnPanel();
             }
@@ -251,8 +252,17 @@ namespace NonVisuals
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        var message = GetToggleGuardFreqCommand(_currentUpperRadioMode);
-                                        SRSListenerFactory.GetSRSListener().SendDataFunction(message);
+                                        _upperFreqSwitchPressed = DateTime.Now.Ticks;
+                                    }
+
+                                    if (!radioPanelKnob.IsOn)
+                                    {
+                                        var timeSpan = new TimeSpan(DateTime.Now.Ticks - _upperFreqSwitchPressed);
+                                        if (timeSpan.Seconds <= 2)
+                                        {
+                                            var message = GetToggleGuardFreqCommand(_currentUpperRadioMode);
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(message);
+                                        }
                                     }
                                     break;
                                 }
@@ -260,8 +270,17 @@ namespace NonVisuals
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        var message = GetToggleGuardFreqCommand(_currentLowerRadioMode);
-                                        SRSListenerFactory.GetSRSListener().SendDataFunction(message);
+                                        _upperFreqSwitchPressed = DateTime.Now.Ticks;
+                                    }
+
+                                    if (!radioPanelKnob.IsOn)
+                                    {
+                                        var timeSpan = new TimeSpan(DateTime.Now.Ticks - _upperFreqSwitchPressed);
+                                        if (timeSpan.Seconds <= 2)
+                                        {
+                                            var message = GetToggleGuardFreqCommand(_currentLowerRadioMode);
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(message);
+                                        }
                                     }
                                     break;
                                 }
@@ -300,13 +319,21 @@ namespace NonVisuals
                                     _largeDialIncreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        var changeValue = 1.0;
-                                        if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            changeValue = 5.0;
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentUpperRadioMode, true));
                                         }
-                                        var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        else
+                                        {
+                                            var changeValue = 1.0;
+                                            if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
+                                            {
+                                                changeValue = 5.0;
+                                            }
+
+                                            var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        }
                                     }
                                     break;
                                 }
@@ -315,13 +342,21 @@ namespace NonVisuals
                                     _largeDialDecreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        var changeValue = -1.0;
-                                        if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            changeValue = -5.0;
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentUpperRadioMode, false));
                                         }
-                                        var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        else
+                                        {
+                                            var changeValue = -1.0;
+                                            if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
+                                            {
+                                                changeValue = -5.0;
+                                            }
+
+                                            var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        }
                                     }
                                     break;
                                 }
@@ -370,13 +405,21 @@ namespace NonVisuals
                                     _largeDialIncreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        var changeValue = 1.0;
-                                        if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
+                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            changeValue = 10.0;
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentLowerRadioMode, true));
                                         }
-                                        var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        else
+                                        {
+                                            var changeValue = 1.0;
+                                            if (_largeDialIncreaseChangeMonitor.ClickThresholdReached())
+                                            {
+                                                changeValue = 10.0;
+                                            }
+
+                                            var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        }
                                     }
                                     break;
                                 }
@@ -385,13 +428,21 @@ namespace NonVisuals
                                     _largeDialDecreaseChangeMonitor.Click();
                                     if (!SkipLargeDialDialChange())
                                     {
-                                        var changeValue = -1.0;
-                                        if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
+                                        if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            changeValue = -10.0;
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentLowerRadioMode, false));
                                         }
-                                        var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                        SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        else
+                                        {
+                                            var changeValue = -1.0;
+                                            if (_largeDialDecreaseChangeMonitor.ClickThresholdReached())
+                                            {
+                                                changeValue = -10.0;
+                                            }
+
+                                            var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
+                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                        }
                                     }
                                     break;
                                 }
@@ -487,7 +538,67 @@ namespace NonVisuals
                         break;
                     }
             }
-            var result = "{ \"Command\": 2,\"RadioId\":" + radioId + "\"}\n";
+            var result = "{\"Command\": 2,\"RadioId\":" + radioId + "}\n";
+            //{ "Command": 2,"RadioId":2} 
+            Common.DebugP(result);
+            return result;
+        }
+
+        private string GetChannelCommand(CurrentSRSRadioMode currentSRSRadioMode, bool increase)
+        {
+            var radioId = 0;
+            switch (currentSRSRadioMode)
+            {
+                case CurrentSRSRadioMode.COM1:
+                {
+                    radioId = 1;
+                    break;
+                }
+                case CurrentSRSRadioMode.COM2:
+                {
+                    radioId = 2;
+                    break;
+                }
+                case CurrentSRSRadioMode.NAV1:
+                {
+                    radioId = 3;
+                    break;
+                }
+                case CurrentSRSRadioMode.NAV2:
+                {
+                    radioId = 4;
+                    break;
+                }
+                case CurrentSRSRadioMode.ADF:
+                {
+                    radioId = 5;
+                    break;
+                }
+                case CurrentSRSRadioMode.DME:
+                {
+                    radioId = 6;
+                    break;
+                }
+                case CurrentSRSRadioMode.XPDR:
+                {
+                    radioId = 7;
+                    break;
+                }
+            }
+            /*{ "Command": 3,"RadioId":1}
+            --channel up(if channels have been configured)
+
+            { "Command": 4,"RadioId":1}
+            --channel down(if channels have been configured)*/
+            var result = "";
+            if (increase)
+            {
+                result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";
+            }
+            else
+            {
+                result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
+            }
             Common.DebugP(result);
             return result;
         }
