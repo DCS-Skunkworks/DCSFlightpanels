@@ -660,11 +660,6 @@ namespace NonVisuals
                         return;
                     }
 
-                    if (!FirstReportHasBeenRead)
-                    {
-                        return;
-                    }
-
                     Common.DebugP("Entering SRS Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
@@ -672,8 +667,14 @@ namespace NonVisuals
                     {
                         if (_upperMainFreq > 0)
                         {
-
-                            SetPZ69DisplayBytesDefault(ref bytes, (_upperMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.UPPER_RIGHT);
+                            if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
+                            {
+                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_upperMainFreq), PZ69LCDPosition.UPPER_RIGHT);
+                            }
+                            else
+                            {
+                                SetPZ69DisplayBytesDefault(ref bytes, (_upperMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.UPPER_RIGHT);
+                            }
                         }
                         else
                         {
@@ -689,7 +690,14 @@ namespace NonVisuals
                         }
                         if (_lowerMainFreq > 0)
                         {
-                            SetPZ69DisplayBytesDefault(ref bytes, (_lowerMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.LOWER_RIGHT);
+                            if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
+                            {
+                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_lowerMainFreq), PZ69LCDPosition.LOWER_RIGHT);
+                            }
+                            else
+                            {
+                                SetPZ69DisplayBytesDefault(ref bytes, (_lowerMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.LOWER_RIGHT);
+                            }
                         }
                         else
                         {

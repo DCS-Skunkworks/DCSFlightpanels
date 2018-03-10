@@ -73,6 +73,7 @@
                     ADF    = Radio 5 <LineBreak/>
                     DME    = Radio 6 <LineBreak/>
                     XPDR   = Radio 7 <LineBreak/>
+                    ACT/STBY = Toggle Guard Frequency
                 </TextBlock>
             </StackPanel>
         </GroupBox>
