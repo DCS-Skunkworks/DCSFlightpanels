@@ -958,7 +958,8 @@ namespace DCSFlightpanels
             {
                 Shutdown();
                 //Wtf is hanging?
-                //Environment.Exit(0);
+                Application.Current.Shutdown();
+                Environment.Exit(0);
             }
             catch (Exception ex)
             {

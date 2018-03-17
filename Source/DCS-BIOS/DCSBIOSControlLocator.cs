@@ -81,7 +81,7 @@ namespace DCS_BIOS
             var dupes = new List<string>();
             foreach (var dcsbiosControl in dcsbiosControls)
             {
-                Debug.Print(dcsbiosControl.identifier);
+                //Debug.Print(dcsbiosControl.identifier);
                 var found = false;
                 foreach (var str in result)
                 {
