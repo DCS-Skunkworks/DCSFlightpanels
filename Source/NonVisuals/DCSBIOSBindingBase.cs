@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 
 namespace NonVisuals

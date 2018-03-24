@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 using Newtonsoft;
@@ -270,12 +271,12 @@ namespace NonVisuals
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        _upperFreqSwitchPressed = DateTime.Now.Ticks;
+                                        _lowerFreqSwitchPressed = DateTime.Now.Ticks;
                                     }
 
                                     if (!radioPanelKnob.IsOn)
                                     {
-                                        var timeSpan = new TimeSpan(DateTime.Now.Ticks - _upperFreqSwitchPressed);
+                                        var timeSpan = new TimeSpan(DateTime.Now.Ticks - _lowerFreqSwitchPressed);
                                         if (timeSpan.Seconds <= 2)
                                         {
                                             var message = GetToggleGuardFreqCommand(_currentLowerRadioMode);

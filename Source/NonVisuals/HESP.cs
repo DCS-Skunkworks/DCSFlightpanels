@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 
@@ -29,8 +30,6 @@ namespace NonVisuals
         //private HidDevice _hidWriteDevice;
         private List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new List<DcsOutputAndColorBindingPZ55>();
         private object _dcsBiosDataReceivedLock = new object();
-        private bool _manualLandingGearLeds;
-        private Thread _manualLandingGearThread;
 
         public HESP(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.HESP, hidSkeleton)
         {
@@ -463,17 +462,7 @@ namespace NonVisuals
             get { return _dcsBiosBindings; }
             set { _dcsBiosBindings = value; }
         }
-
-        public bool ManualLandingGearLeds
-        {
-            get { return _manualLandingGearLeds; }
-            set
-            {
-                _manualLandingGearLeds = value;
-                IsDirtyMethod();
-            }
-        }
-
+        
         public override String SettingsVersion()
         {
             return "0X";

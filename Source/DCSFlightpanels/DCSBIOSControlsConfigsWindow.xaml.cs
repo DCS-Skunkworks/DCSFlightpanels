@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
 

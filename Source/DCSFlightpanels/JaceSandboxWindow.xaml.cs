@@ -10,6 +10,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
 using Jace;

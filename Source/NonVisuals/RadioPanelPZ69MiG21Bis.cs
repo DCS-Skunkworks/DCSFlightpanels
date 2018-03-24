@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DCS_BIOS;
 using HidLibrary;
 using System.Threading;
+using ClassLibraryCommon;
 
 namespace NonVisuals
 {

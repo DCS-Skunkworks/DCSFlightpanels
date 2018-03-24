@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using ClassLibraryCommon;
 
 namespace DCS_BIOS
 {
@@ -291,7 +292,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                DBCommon.LogError(78311, ex, "Error in DCSBIOSInput.ToString(), ControlId = " + _controlId);
+                Common.LogError(78311, ex, "Error in DCSBIOSInput.ToString(), ControlId = " + _controlId);
                 throw;
             }
             return "SHOULD NEVER ARRIVE HERE";

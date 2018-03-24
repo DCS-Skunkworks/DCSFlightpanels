@@ -5,6 +5,7 @@ using System.Text;
 using DCS_BIOS;
 using HidLibrary;
 using System.Threading;
+using ClassLibraryCommon;
 
 namespace NonVisuals
 {

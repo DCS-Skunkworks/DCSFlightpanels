@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using ClassLibraryCommon;
 using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCS_BIOS;

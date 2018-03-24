@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 

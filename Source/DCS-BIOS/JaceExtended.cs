@@ -1,4 +1,5 @@
 ﻿using System;
+using ClassLibraryCommon;
 using Jace;
 using Jace.Execution;
 
@@ -21,7 +22,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                DBCommon.LogError(1933494, ex, "JaceExtended.Evaluate() function");
+                Common.LogError(1933494, ex, "JaceExtended.Evaluate() function");
                 throw;
             }
         }

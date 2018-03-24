@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
+using ClassLibraryCommon;
 using NonVisuals;
 using Octokit;
 using Application = System.Windows.Application;
@@ -68,9 +69,6 @@ namespace DCSFlightpanels
                 LoadSettings();
                 Common.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
                 Common.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
-                DBCommon.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
-                DBCommon.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
-                
                 
                 _hidHandler = new HIDHandler();
                 if (_doSearchForPanels)

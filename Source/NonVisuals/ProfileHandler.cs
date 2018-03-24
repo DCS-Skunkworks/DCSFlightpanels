@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 using MessageBox = System.Windows.MessageBox;

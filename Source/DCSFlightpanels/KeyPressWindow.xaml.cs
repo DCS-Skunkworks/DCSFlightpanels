@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClassLibraryCommon;
 using NonVisuals;
 
 namespace DCSFlightpanels
@@ -80,7 +81,7 @@ namespace DCSFlightpanels
                 var hashSetOfKeysPressed = new HashSet<string>();
                 hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyPressed));
 
-                var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));

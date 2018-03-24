@@ -1,51 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
+using ClassLibraryCommon;
 using CommonClassLibraryJD;
+using Newtonsoft.Json;
 
 namespace DCS_BIOS
 {
-    public enum DCSAirframe
-    {
-        [Description("NoFrameLoadedYet")]
-        NOFRAMELOADEDYET,
-        [Description("KeyEmulator")]
-        KEYEMULATOR,
-        [Description("KeyEmulator_SRS")]
-        KEYEMULATOR_SRS,
-        [Description("A-10C")]
-        A10C,
-        [Description("UH-1H")]
-        UH1H,
-        [Description("MiG-21bis")]
-        Mig21Bis,
-        [Description("Ka-50")]
-        Ka50,
-        [Description("Mi-8MT")]
-        Mi8,
-        [Description("Bf-109K-4")]
-        Bf109,
-        [Description("FW-190D9")]
-        Fw190,
-        [Description("P-51D")]
-        P51D,
-        [Description("F-86F Sabre")]
-        F86F,
-        [Description("AJS37")]
-        AJS37,
-        [Description("SpitfireLFMkIX")]
-        SpitfireLFMkIX,
-        [Description("SA342L")]
-        SA342L,
-        [Description("SA342M")]
-        SA342M,
-        [Description("SA342Mistral")]
-        SA342Mistral
-    }
 
     public static class DCSBIOSControlLocator
     {
@@ -110,7 +72,7 @@ namespace DCS_BIOS
                     message = message + dupe + "\n";
                 }
                 message = message + "---------------------------------------------\n";
-                DBCommon.LogError(2000, message);
+                Common.LogError(2000, message);
             }
         }
 
@@ -154,7 +116,7 @@ namespace DCS_BIOS
                     //Always read CommonData.json
                     var directoryInfo = new DirectoryInfo(_jsonDirectory);
                     IEnumerable<FileInfo> files;
-                    DBCommon.DebugP("Searching for " + _airframe.GetDescription() + ".json in directory " + _jsonDirectory);
+                    Common.DebugP("Searching for " + _airframe.GetDescription() + ".json in directory " + _jsonDirectory);
                     try
                     {
                         files = directoryInfo.EnumerateFiles(_airframe.GetDescription() + ".json", SearchOption.TopDirectoryOnly);
@@ -165,7 +127,7 @@ namespace DCS_BIOS
                     }
                     foreach (var file in files)
                     {
-                        DBCommon.DebugP("Opening " + file.DirectoryName + "\\" + file.Name);
+                        Common.DebugP("Opening " + file.DirectoryName + "\\" + file.Name);
                         var reader = file.OpenText();
                         string text;
                         try

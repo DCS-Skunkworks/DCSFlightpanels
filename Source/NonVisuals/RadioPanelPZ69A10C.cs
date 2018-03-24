@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 
@@ -420,7 +421,8 @@ namespace NonVisuals
         {
             try
             {
-                
+
+                Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + stringData + "<-");
                 if (string.IsNullOrWhiteSpace(stringData))
                 {
                     Common.DebugP("Received DCSBIOS stringData : " + stringData);

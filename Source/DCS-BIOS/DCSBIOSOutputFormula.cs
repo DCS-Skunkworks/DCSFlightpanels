@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClassLibraryCommon;
 using Jace;
 
 namespace DCS_BIOS
@@ -47,7 +48,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                DBCommon.LogError(1955594, ex, "ExtractDCSBIOSOutputsInFormula() function");
+                Common.LogError(1955594, ex, "ExtractDCSBIOSOutputsInFormula() function");
                 throw;
             }
         }
@@ -74,7 +75,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                DBCommon.LogError(1933494, ex, "CheckForMatch() function");
+                Common.LogError(1933494, ex, "CheckForMatch() function");
                 throw;
             }
         }
@@ -93,7 +94,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                DBCommon.LogError(1033494, ex, "Evaluate() function");
+                Common.LogError(1033494, ex, "Evaluate() function");
             }
             return 99;
         }

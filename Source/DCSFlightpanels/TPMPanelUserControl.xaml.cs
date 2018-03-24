@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
 
@@ -819,7 +820,7 @@ namespace DCSFlightpanels
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
                 }
-                var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
@@ -888,7 +889,7 @@ namespace DCSFlightpanels
                 var hashSetOfKeysPressed = new HashSet<string>();
                 hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyPressed));
 
-                var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));

@@ -1,20 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClassLibraryCommon;
 using DCS_BIOS;
 
 namespace NonVisuals
 {
-
-    public enum SaitekPanelsEnum
-    {
-        Unknown = 0,
-        PZ55SwitchPanel = 2,
-        PZ69RadioPanel = 4,
-        PZ70MultiPanel = 8,
-        BackLitPanel = 16,
-        TPM = 32,
-        HESP = 64
-    }
 
     public abstract class SaitekPanel : IProfileHandlerListener, IDcsBiosDataListener
     {
@@ -297,7 +287,7 @@ namespace NonVisuals
                 {
                     return;
                 }
-                DBCommon.LogError(666, ex, "Via SaitekPanel.SetLastException()");
+                Common.LogError(666, ex, "Via SaitekPanel.SetLastException()");
                 lock (_exceptionLockObject)
                 {
                     _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
