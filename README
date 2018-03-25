@@ -8,20 +8,25 @@ Using DCSFlightpanels as a key emulator it can be used in almost any game like
 Elite Dangerous, War Thunder, Flaming Cliff Series, IL-2.
 You can use multiple panels of each sort and have them configured separately.
 
+DCSFlightpanels supports Simple Radio Standalone (PZ69 Radio Panel).
+
 Saitek / Logitech Panels Supported:
 ---------------------------------------------
-* PZ55 Switch Panel (DCS-BIOS & Key emulator**)
-* PZ70 Multi Panel (DCS-BIOS & Key emulator**)
-* TPM (DCS-BIOS & Key emulator)
-* PZ69 Radio Panel (DCS-BIOS)
+* PZ55 Switch Panel (DCS-BIOS & KeyEmulator**)
+* PZ70 Multi Panel (DCS-BIOS & KeyEmulator**)
+* TPM (DCS-BIOS & KeyEmulator)
+* PZ69 Radio Panel (DCS-BIOS & KeyEmulator_SRS***)
 * BIP Back Lit Information Panel (DCS-BIOS)
 
-**LCD information can not be shown in key emulator mode (no data from game available)
+**LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
+***Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
 
 Support thread : https://forums.eagle.ru/showthread.php?t=137670
 Demo video key emulation : https://www.youtube.com/watch?v=_TurR-WTgkY
 Demo video A-10C : https://www.youtube.com/watch?v=adaLWO-nTwU
 Demo video UH-1H : https://www.youtube.com/watch?v=jQxLX7UHMR8
+
+Simple Radio Standalone : https://github.com/ciribob/DCS-SimpleRadioStandalone
 
 v2.2.102 8 January 2018
 -----------------------------
