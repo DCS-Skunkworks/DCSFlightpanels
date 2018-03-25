@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Working with formulas" Height="300" Width="600">
+        Title="Working with formulas" Height="800" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -47,12 +47,12 @@
                     abs(-12)<LineBreak/>
                     <LineBreak/>
                     ifless(a b c d)<LineBreak/>
-                    If a > b then return c else d<LineBreak/>
-                    ifless(1 2 4 5)<LineBreak/>
+                    If a &lt; b then return c else d<LineBreak/>
+                    ifless(1 2 4 5) = 4<LineBreak/>
                     <LineBreak/>
                     ifmore(a b c d)<LineBreak/>
-                    If a > b then returns c else d<LineBreak/>
-                    ifmore(1 2 4 5)<LineBreak/>
+                    If a &gt; b then returns c else d<LineBreak/>
+                    ifmore(1 2 4 5) = 5<LineBreak/>
             </TextBlock>
         </ScrollViewer>
         <DockPanel  Grid.Row="1">
