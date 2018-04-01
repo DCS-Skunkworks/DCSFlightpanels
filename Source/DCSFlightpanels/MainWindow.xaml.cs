@@ -314,12 +314,16 @@ namespace DCSFlightpanels
                                 }
                             case SaitekPanelsEnum.PZ69RadioPanel:
                                 {
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
-                                    {
-                                        break;
-                                    }
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ69";
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
                                     if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR_SRS)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
@@ -1514,7 +1518,8 @@ namespace DCSFlightpanels
 
                 if (settingsWindow.SRSChanged)
                 {
-                    MessageBox.Show("Not yet programmed...");
+                    SRSListenerFactory.SetParams(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo);
+                    SRSListenerFactory.ReStart();
                 }
             }
         }

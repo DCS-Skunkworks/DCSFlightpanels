@@ -29,27 +29,28 @@ namespace NonVisuals
         //private string _srsReceiveFromIPUdp = "127.0.0.1";
         private static string _srsSendToIPUdp = "127.0.0.1";
         private static int _srsReceivePortUdp = 7082;
-        private static int _srsSendPortUdp = 9086;
+        private static int _srsSendPortUdp = 9040;
 
         public static void SetParams(int portFrom, string ipAddressTo, int portTo)
         {
-            //_srsReceiveFromIPUdp = ipAddressFrom;
-            var restart = _srsReceivePortUdp != portFrom || _srsSendPortUdp != portTo || _srsSendToIPUdp != ipAddressTo;
-
             _srsSendToIPUdp = ipAddressTo;
             _srsReceivePortUdp = portFrom;
             _srsSendPortUdp = portTo;
-            if (restart)
-            {
-                _srsListener?.ShutdownRP();
-                var srsListener = GetSRSListener();
-            }
         }
 
         public static void Shutdown()
         {
             _srsListener?.ShutdownRP();
             _srsListener = null;
+        }
+
+        public static void ReStart()
+        {
+            Shutdown();
+            if (_srsListener == null)
+            {
+                _srsListener = new SRSListener(_srsReceivePortUdp, _srsSendToIPUdp, _srsSendPortUdp);
+            }
         }
 
         public static SRSListener GetSRSListener()

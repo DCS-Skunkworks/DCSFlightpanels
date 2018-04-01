@@ -113,6 +113,7 @@
     <Compile Include="ISaitekPanelListener.cs" />
     <Compile Include="IUserMessageHandler.cs" />
     <Compile Include="KeyBindingHESP.cs" />
+    <Compile Include="KeyBindingPZ69.cs" />
     <Compile Include="KeyBindingTPM.cs" />
     <Compile Include="KnobBindingPZ70.cs" />
     <Compile Include="KeyBindingPZ55.cs" />
@@ -128,6 +129,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelPZ69KnobEmulator.cs" />
     <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelKnobSA342.cs" />
     <Compile Include="RadioPanelKnobAJS37.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="SRSListener.cs" />
     <Compile Include="SRSPlayerRadioInfo.cs" />
     <Compile Include="SRSRadioInformation.cs" />
+    <Compile Include="RadioPanelPZ69Emulator.cs" />
     <Compile Include="TPMPanelSwitch.cs" />
     <Compile Include="SwitchPanelKey.cs" />
     <Compile Include="TPMPanel.cs" />

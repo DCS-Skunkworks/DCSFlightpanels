@@ -322,5 +322,17 @@ namespace DCSFlightpanels.Properties {
                 this["LastGitHubCheck"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RadioFrequencyKnobSensitivityEmulator {
+            get {
+                return ((int)(this["RadioFrequencyKnobSensitivityEmulator"]));
+            }
+            set {
+                this["RadioFrequencyKnobSensitivityEmulator"] = value;
+            }
+        }
     }
 }
