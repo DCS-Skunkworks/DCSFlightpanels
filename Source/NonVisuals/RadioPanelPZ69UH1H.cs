@@ -1677,8 +1677,8 @@ namespace NonVisuals
                         {
                             lock (_lockIntercommDialObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommCockpitDial1Pos, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommCockpitDial1Pos, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -1688,8 +1688,8 @@ namespace NonVisuals
                             {
                                 lock (_lockVhfCommDialsObject2)
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfCommCockpitFrequency, PZ69LCDPosition.UPPER_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfCommCockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
                             break;
@@ -1715,8 +1715,8 @@ namespace NonVisuals
                                         }
                                         var lcdFrequencyCockpit = Double.Parse(_uhfCockpitDial1Frequency.ToString() + _uhfCockpitDial2Frequency.ToString() + "." + filler + _uhfCockpitDial3Frequency.ToString(), NumberFormatInfoFullDisplay);
                                         var lcdFrequencyStandby = Double.Parse(_uhfBigFrequencyStandby.ToString() + "." + fillerUhf + _uhfSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.UPPER_LEFT);
-                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                     }
                                 }
                             }
@@ -1741,8 +1741,8 @@ namespace NonVisuals
                                     }
                                     var lcdFrequencyCockpit = Double.Parse(_vhfNavCockpitDial1Frequency.ToString() + "." + filler + _vhfNavCockpitDial2Frequency.ToString(), NumberFormatInfoFullDisplay);
                                     var lcdFrequencyStandby = Double.Parse(_vhfNavBigFrequencyStandby.ToString() + "." + fillerVhfNav + _vhfNavSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.UPPER_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
 
                                 }
                             }
@@ -1770,8 +1770,8 @@ namespace NonVisuals
                                                 fillerVhfFm = "0";
                                             }
                                             var lcdFrequencyStandby = Double.Parse(_vhfFmBigFrequencyStandby + "." + fillerVhfFm + _vhfFmSmallFrequencyStandby, NumberFormatInfoFullDisplay);
-                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyCockpit, 2, PZ69LCDPosition.UPPER_LEFT);
-                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.UPPER_RIGHT);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyCockpit, 2, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                         }
                                     }
                                 }
@@ -1782,11 +1782,11 @@ namespace NonVisuals
                         {
                             lock (_lockAdfCockpitFrequencyObject)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, _adfCockpitFrequency, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _adfCockpitFrequency, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             lock (_lockAdfSignalStrengthObject)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             break;
                         }
@@ -1797,8 +1797,8 @@ namespace NonVisuals
                         {
                             lock (_lockIntercommDialObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommCockpitDial1Pos, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(_uhfCockpitPresetChannel), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _intercommCockpitDial1Pos, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             break;
                         }
@@ -1808,8 +1808,8 @@ namespace NonVisuals
                             {
                                 lock (_lockVhfCommDialsObject2)
                                 {
-                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfCommCockpitFrequency, PZ69LCDPosition.LOWER_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, _vhfCommCockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfCommBigFrequencyStandby + "." + GetVhfCommSmallFreqString(), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
                             break;
@@ -1835,8 +1835,8 @@ namespace NonVisuals
                                         }
                                         var lcdFrequencyCockpit = Double.Parse(_uhfCockpitDial1Frequency.ToString() + _uhfCockpitDial2Frequency.ToString() + "." + filler + _uhfCockpitDial3Frequency.ToString(), NumberFormatInfoFullDisplay);
                                         var lcdFrequencyStandby = Double.Parse(_uhfBigFrequencyStandby.ToString() + "." + fillerUhf + _uhfSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.LOWER_LEFT);
-                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                        SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                     }
                                 }
                             }
@@ -1861,8 +1861,8 @@ namespace NonVisuals
                                     }
                                     var lcdFrequencyCockpit = Double.Parse(_vhfNavCockpitDial1Frequency.ToString() + "." + filler + _vhfNavCockpitDial2Frequency.ToString(), NumberFormatInfoFullDisplay);
                                     var lcdFrequencyStandby = Double.Parse(_vhfNavBigFrequencyStandby.ToString() + "." + fillerVhfNav + _vhfNavSmallFrequencyStandby.ToString(), NumberFormatInfoFullDisplay);
-                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.LOWER_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyCockpit, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, lcdFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
                             break;
@@ -1889,8 +1889,8 @@ namespace NonVisuals
                                                 fillerVhfFm = "0";
                                             }
                                             var lcdFrequencyStandby = Double.Parse(_vhfFmBigFrequencyStandby + "." + fillerVhfFm + _vhfFmSmallFrequencyStandby, NumberFormatInfoFullDisplay);
-                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyCockpit, 2, PZ69LCDPosition.LOWER_LEFT);
-                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.LOWER_RIGHT);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyCockpit, 2, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                            SetPZ69DisplayBytes(ref bytes, lcdFrequencyStandby, 2, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                         }
                                     }
                                 }
@@ -1901,11 +1901,11 @@ namespace NonVisuals
                         {
                             lock (_lockAdfCockpitFrequencyObject)
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, _adfCockpitFrequency, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, _adfCockpitFrequency, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             lock (_lockAdfSignalStrengthObject)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesInteger(ref bytes, Convert.ToInt32(Math.Truncate(_adfSignalStrength)), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             break;
                         }

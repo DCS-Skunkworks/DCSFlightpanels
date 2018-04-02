@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
-using ClassLibraryCommon;
 
 namespace ClassLibraryCommon
 {
@@ -18,45 +17,31 @@ namespace ClassLibraryCommon
     {
         public static readonly List<SaitekPanelSkeleton> SaitekPanelSkeletons = new List<SaitekPanelSkeleton> { new SaitekPanelSkeleton(SaitekPanelsEnum.PZ55SwitchPanel, 0x6A3, 0xD67), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ69RadioPanel, 0x6A3, 0xD05), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ70MultiPanel, 0x6A3, 0xD06), new SaitekPanelSkeleton(SaitekPanelsEnum.BackLitPanel, 0x6A3, 0xB4E), new SaitekPanelSkeleton(SaitekPanelsEnum.TPM, 0x6A3, 0xB4D) };
 
-        /*
-        public static int EvaluateX(int data, String formula)
+        private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
+        private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
+
+        public static NumberFormatInfo GetPZ69FullDisplayNumberFormat()
         {
-            return EvaluateX(data.ToString(), formula);
-        }
-        
-        public static int EvaluateX(String data, String formula)
-        {
-            try
+            if (_pz69NumberFormatInfoFullDisplay == null)
             {
-                var expression = new NCalc.Expression(formula);
-                expression.Parameters["x"] = int.Parse(data);
-                var result = expression.Evaluate();
-                return Convert.ToInt32(Math.Abs((double)result));
+                _pz69NumberFormatInfoFullDisplay = new NumberFormatInfo();
+                _pz69NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
+                _pz69NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
+                _pz69NumberFormatInfoFullDisplay.NumberGroupSeparator = "";
             }
-            catch (Exception ex)
-            {
-                LogError(1933494, ex, "Evaluate() function");
-                throw;
-            }
+            return _pz69NumberFormatInfoFullDisplay;
         }
 
-        public static int Evaluate(String expression)
+        public static NumberFormatInfo GetPZ69EmptyDisplayNumberFormat()
         {
-            try
+            if (_pz69NumberFormatInfoEmpty == null)
             {
-                var nCalcExpression = new NCalc.Expression(expression);
-                var result = nCalcExpression.Evaluate();
-                var a = double.Parse(result.ToString());
-                var b = Math.Abs(a);
-                return Convert.ToInt32(b);
+                _pz69NumberFormatInfoEmpty = new NumberFormatInfo();
+                _pz69NumberFormatInfoEmpty.NumberDecimalSeparator = ".";
+                _pz69NumberFormatInfoEmpty.NumberGroupSeparator = "";
             }
-            catch (Exception ex)
-            {
-                LogError(1933494, ex, "Evaluate() function");
-                throw;
-            }
+            return _pz69NumberFormatInfoEmpty;
         }
-        */
 
         public static string GetLocalIPAddress()
         {
@@ -70,20 +55,6 @@ namespace ClassLibraryCommon
             }
             return "";
         }
-        /*
-        public static double Evaluate(string expression)
-        {
-            try
-            {
-                var engine = new CalculationEngine();
-                return engine.Calculate(expression);
-            }
-            catch (Exception ex)
-            {
-                LogError(1933494, ex, "Evaluate() function");
-                throw;
-            }
-        }*/
 
         public static string GetDescriptionField(this Enum value)
         {
@@ -103,6 +74,7 @@ namespace ClassLibraryCommon
         public static object _debugLoglockObject = new object();
         public static string ErrorLog = "";
         public static string DebugLog = "";
+
 
 
         public static bool IsKeyEmulationProfile(DCSAirframe dcsAirframe)

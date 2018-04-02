@@ -21,6 +21,7 @@ namespace DCSFlightpanels
         private string _parentTabItemHeader;
         private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
+        private List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
 
         public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -259,44 +260,6 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2044, ex);
             }
         }
-
-        private void MenuContextEditDCSBIOSControlTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-                DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
-                if (textBox.Tag is List<DCSBIOSInput>)
-                {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), (List<DCSBIOSInput>)textBox.Tag, textBox.Text);
-                }
-                else
-                {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
-                }
-                dcsBIOSControlsConfigsWindow.ShowDialog();
-                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true && dcsBIOSControlsConfigsWindow.DCSBIOSInputs.Count > 0)
-                {
-                    var dcsBiosInputs = dcsBIOSControlsConfigsWindow.DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsBIOSControlsConfigsWindow.Description;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    textBox.Text = text;
-                    textBox.Tag = dcsBiosInputs;
-                    textBox.ToolTip = textBox.Text;
-                    //UpdateDCSBIOSBinding(textBox);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(442044, ex);
-            }
-        }
-
 
         private void UpdateKeyBindingProfileSequencedKeyStrokesPZ69(TextBox textBox)
         {
@@ -546,131 +509,131 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(3012, ex);
             }
         }
-        /*
-        private void UpdateDCSBIOSBinding(TextBox textBox)
+
+        private void UpdateDisplayValues(TextBox textBox)
         {
             try
             {
-                List<DCSBIOSInput> dcsBiosInputs = null;
-                if (textBox.Tag == null)
+                if (textBox.Equals(TextBoxUpperCom1ActiveNumbers))
                 {
-                    return;
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperCOM1, textBox.Text, RadioPanelPZ69Display.UpperActive);
                 }
-                if (textBox.Tag is List<DCSBIOSInput>)
+                if (textBox.Equals(TextBoxUpperCom1StandbyNumbers))
                 {
-                    dcsBiosInputs = ((List<DCSBIOSInput>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperCOM1, textBox.Text, RadioPanelPZ69Display.UpperStandby);
                 }
-                if (textBox.Equals(TextBoxUpperCom1))
+                if (textBox.Equals(TextBoxUpperCom2ActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperCOM1, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperCOM2, textBox.Text, RadioPanelPZ69Display.UpperActive);
                 }
-                if (textBox.Equals(TextBoxUpperCom2))
+                if (textBox.Equals(TextBoxUpperCom2StandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperCOM2, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperCOM2, textBox.Text, RadioPanelPZ69Display.UpperStandby);
                 }
-                if (textBox.Equals(TextBoxUpperNav1))
+                if (textBox.Equals(TextBoxUpperNav1ActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperNAV1, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperNAV1, textBox.Text, RadioPanelPZ69Display.UpperActive);
                 }
-                if (textBox.Equals(TextBoxUpperNav2))
+                if (textBox.Equals(TextBoxUpperNav1StandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperNAV2, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperNAV1, textBox.Text, RadioPanelPZ69Display.UpperStandby);
                 }
-                if (textBox.Equals(TextBoxUpperADF))
+                if (textBox.Equals(TextBoxUpperNav2ActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperADF, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperNAV2, textBox.Text, RadioPanelPZ69Display.UpperActive);
                 }
-                if (textBox.Equals(TextBoxUpperDME))
+                if (textBox.Equals(TextBoxUpperNav2StandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperDME, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperNAV2, textBox.Text, RadioPanelPZ69Display.UpperStandby);
                 }
-                if (textBox.Equals(TextBoxUpperXPDR))
+                if (textBox.Equals(TextBoxUpperADFActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperXPDR, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperADF, textBox.Text, RadioPanelPZ69Display.UpperActive);
                 }
-                if (textBox.Equals(TextBoxUpperLargePlus))
+                if (textBox.Equals(TextBoxUpperADFStandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperADF, textBox.Text, RadioPanelPZ69Display.UpperStandby);
                 }
-                if (textBox.Equals(TextBoxUpperLargeMinus))
+                if (textBox.Equals(TextBoxUpperDMEActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperDME, textBox.Text, RadioPanelPZ69Display.UpperActive);
                 }
-                if (textBox.Equals(TextBoxUpperSmallPlus))
+                if (textBox.Equals(TextBoxUpperDMEStandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperDME, textBox.Text, RadioPanelPZ69Display.UpperStandby);
                 }
-                if (textBox.Equals(TextBoxUpperSmallMinus))
+                if (textBox.Equals(TextBoxUpperXPDRActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperXPDR, textBox.Text, RadioPanelPZ69Display.UpperActive);
                 }
-                if (textBox.Equals(TextBoxUpperActStbyOn))
+                if (textBox.Equals(TextBoxUpperXPDRStandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.UpperXPDR, textBox.Text, RadioPanelPZ69Display.UpperStandby);
                 }
-                if (textBox.Equals(TextBoxUpperActStbyOff))
+
+                if (textBox.Equals(TextBoxLowerCom1ActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, dcsBiosInputs, textBox.Text, false);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerCOM1, textBox.Text, RadioPanelPZ69Display.LowerActive);
                 }
-                if (textBox.Equals(TextBoxLowerCom1))
+                if (textBox.Equals(TextBoxLowerCom1StandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerCOM1, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerCOM1, textBox.Text, RadioPanelPZ69Display.LowerStandby);
                 }
-                if (textBox.Equals(TextBoxLowerCom2))
+                if (textBox.Equals(TextBoxLowerCom2ActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerCOM2, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerCOM2, textBox.Text, RadioPanelPZ69Display.LowerActive);
                 }
-                if (textBox.Equals(TextBoxLowerNav1))
+                if (textBox.Equals(TextBoxLowerCom2StandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerNAV1, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerCOM2, textBox.Text, RadioPanelPZ69Display.LowerStandby);
                 }
-                if (textBox.Equals(TextBoxLowerNav2))
+                if (textBox.Equals(TextBoxLowerNav1ActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerNAV2, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerNAV1, textBox.Text, RadioPanelPZ69Display.LowerActive);
                 }
-                if (textBox.Equals(TextBoxLowerADF))
+                if (textBox.Equals(TextBoxLowerNav1StandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerADF, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerNAV1, textBox.Text, RadioPanelPZ69Display.LowerStandby);
                 }
-                if (textBox.Equals(TextBoxLowerDME))
+                if (textBox.Equals(TextBoxLowerNav2ActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerDME, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerNAV2, textBox.Text, RadioPanelPZ69Display.LowerActive);
                 }
-                if (textBox.Equals(TextBoxLowerXPDR))
+                if (textBox.Equals(TextBoxLowerNav2StandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerXPDR, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerNAV2, textBox.Text, RadioPanelPZ69Display.LowerStandby);
                 }
-                if (textBox.Equals(TextBoxLowerLargePlus))
+                if (textBox.Equals(TextBoxLowerADFActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerADF, textBox.Text, RadioPanelPZ69Display.LowerActive);
                 }
-                if (textBox.Equals(TextBoxLowerLargeMinus))
+                if (textBox.Equals(TextBoxLowerADFStandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerADF, textBox.Text, RadioPanelPZ69Display.LowerStandby);
                 }
-                if (textBox.Equals(TextBoxLowerSmallPlus))
+                if (textBox.Equals(TextBoxLowerDMEActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerDME, textBox.Text, RadioPanelPZ69Display.LowerActive);
                 }
-                if (textBox.Equals(TextBoxLowerSmallMinus))
+                if (textBox.Equals(TextBoxLowerDMEStandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerDME, textBox.Text, RadioPanelPZ69Display.LowerStandby);
                 }
-                if (textBox.Equals(TextBoxLowerActStbyOn))
+                if (textBox.Equals(TextBoxLowerXPDRActiveNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, dcsBiosInputs, textBox.Text);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerXPDR, textBox.Text, RadioPanelPZ69Display.LowerActive);
                 }
-                if (textBox.Equals(TextBoxLowerActStbyOff))
+                if (textBox.Equals(TextBoxLowerXPDRStandbyNumbers))
                 {
-                    _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, dcsBiosInputs, textBox.Text, false);
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator.LowerXPDR, textBox.Text, RadioPanelPZ69Display.LowerStandby);
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(345012, ex);
+                Common.ShowErrorMessageBox(3012, ex);
             }
         }
-        */
+
         private void TextBoxContextMenuIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             try
@@ -786,7 +749,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ69)
+                if (textBox != TextBoxLogPZ69 && !textBox.Name.EndsWith("Numbers"))
                 {
                     var contectMenu = (ContextMenu)Resources["TextBoxContextMenuPZ69"];
                     textBox.ContextMenu = contectMenu;
@@ -794,7 +757,7 @@ namespace DCSFlightpanels
                 }
             }
         }
-        
+
         private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             try
@@ -1172,7 +1135,200 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(3006, ex);
             }
         }
+        /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         */
+        private void TextBoxPreviewKeyDownNumbers(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                var textBox = ((TextBox)sender);
 
+                if (textBox.Text.Contains("."))
+                {
+                    textBox.MaxLength = 6;
+                }
+                else
+                {
+                    textBox.MaxLength = 5;
+                }
+                if (!_allowedKeys.Contains(e.Key))
+                {
+                    //Only figures and persion allowed
+                    e.Handled = true;
+                    return;
+                }
+                if (textBox.Text.Contains(".") && e.Key == Key.OemPeriod)
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3006, ex);
+            }
+        }
+
+        private void TextBoxTextChangedNumbers(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
+                var textBox = (TextBox)sender;
+                if (textBox.Tag is SortedList<int, KeyPressInfo>)
+                {
+                    textBox.FontStyle = FontStyles.Oblique;
+                }
+                else
+                {
+                    textBox.FontStyle = FontStyles.Normal;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3007, ex);
+            }
+        }
+
+
+        private void TextBoxNumbers_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                var textBox = (TextBox)sender;
+                UpdateDisplayValues(textBox);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(31007, ex);
+            }
+        }
+
+        private void TextBoxMouseDoubleClickNumbers(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var textBox = (TextBox)sender;
+                var radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperCOM1;
+                var radioDisplay = RadioPanelPZ69Display.UpperActive;
+
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    if (textBox.Name.Contains("Upper"))
+                    {
+                        if (textBox.Name.Contains("Com1"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperCOM1;
+                        }
+                        if (textBox.Name.Contains("Com2"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperCOM2;
+                        }
+                        if (textBox.Name.Contains("Nav1"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperNAV1;
+                        }
+                        if (textBox.Name.Contains("Nav2"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperNAV2;
+                        }
+                        if (textBox.Name.Contains("ADF"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperADF;
+                        }
+                        if (textBox.Name.Contains("DME"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperDME;
+                        }
+                        if (textBox.Name.Contains("XPDR"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperXPDR;
+                        }
+
+                        if (textBox.Name.Contains("Active"))
+                        {
+                            radioDisplay = RadioPanelPZ69Display.UpperActive;
+                        }
+
+                        if (textBox.Name.Contains("Standby"))
+                        {
+                            radioDisplay = RadioPanelPZ69Display.UpperStandby;
+                        }
+                    }
+                    if (textBox.Name.Contains("Lower"))
+                    {
+                        if (textBox.Name.Contains("Com1"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerCOM1;
+                        }
+                        if (textBox.Name.Contains("Com2"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerCOM2;
+                        }
+                        if (textBox.Name.Contains("Nav1"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerNAV1;
+                        }
+                        if (textBox.Name.Contains("Nav2"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerNAV2;
+                        }
+                        if (textBox.Name.Contains("ADF"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerADF;
+                        }
+                        if (textBox.Name.Contains("DME"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerDME;
+                        }
+                        if (textBox.Name.Contains("XPDR"))
+                        {
+                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerXPDR;
+                        }
+
+                        if (textBox.Name.Contains("Active"))
+                        {
+                            radioDisplay = RadioPanelPZ69Display.LowerActive;
+                        }
+
+                        if (textBox.Name.Contains("Standby"))
+                        {
+                            radioDisplay = RadioPanelPZ69Display.LowerStandby;
+                        }
+                    }
+
+                    _radioPanelPZ69.AddOrUpdateDisplayValue(radioPanelKnob, "-1", radioDisplay);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3001, ex);
+            }
+        }
+
+
+        private void TextBoxShortcutKeyDownNumbers(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                return;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3008, ex);
+            }
+        }
+        /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         * ------------------------------------------------------------------------------------------------------------------------------------------------------------
+         */
 
         private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -1289,6 +1445,164 @@ namespace DCSFlightpanels
         {
             try
             {
+                foreach (var displayValue in _radioPanelPZ69.DisplayValueHashSet)
+                {
+                    if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM1)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                        {
+                            TextBoxUpperCom1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                        {
+                            TextBoxUpperCom1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                        {
+                            TextBoxUpperCom2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                        {
+                            TextBoxUpperCom2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                        {
+                            TextBoxUpperNav1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                        {
+                            TextBoxUpperNav1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                        {
+                            TextBoxUpperNav2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                        {
+                            TextBoxUpperNav2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                        {
+                            TextBoxUpperADFActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                        {
+                            TextBoxUpperADFStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                        {
+                            TextBoxUpperDMEActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                        {
+                            TextBoxUpperDMEStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                        {
+                            TextBoxUpperXPDRActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                        {
+                            TextBoxUpperXPDRStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM1)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                        {
+                            TextBoxLowerCom1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                        {
+                            TextBoxLowerCom1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM2)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                        {
+                            TextBoxLowerCom2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                        {
+                            TextBoxLowerCom2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV1)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                        {
+                            TextBoxLowerNav1ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                        {
+                            TextBoxLowerNav1StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV2)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                        {
+                            TextBoxLowerNav2ActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                        {
+                            TextBoxLowerNav2StandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerADF)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                        {
+                            TextBoxLowerADFActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                        {
+                            TextBoxLowerADFStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerDME)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                        {
+                            TextBoxLowerDMEActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                        {
+                            TextBoxLowerDMEStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                    else if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerXPDR)
+                    {
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                        {
+                            TextBoxLowerXPDRActiveNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                        if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                        {
+                            TextBoxLowerXPDRStandbyNumbers.Text = displayValue.Value.ToString(Common.GetPZ69FullDisplayNumberFormat());
+                        }
+                    }
+                }
+
                 foreach (var keyBinding in _radioPanelPZ69.KeyBindingsHashSet)
                 {
                     if (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM1)
@@ -1647,7 +1961,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(3013, ex);
             }
         }
-        
+
         private void SetGraphicsState(HashSet<object> knobs)
         {
             try

@@ -10,7 +10,7 @@ using HidLibrary;
 namespace NonVisuals
 {
 
-    public class RadioPanelPZ69Emulator : SaitekPanel
+    public class RadioPanelPZ69Emulator : RadioPanelPZ69Base
     {
 
         /*
@@ -21,17 +21,21 @@ namespace NonVisuals
          */
         //private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
         private HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
+        private HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private HashSet<RadioPanelPZ69KnobEmulator> _radioPanelKnobs = new HashSet<RadioPanelPZ69KnobEmulator>();
         private bool _isFirstNotification = true;
         private byte[] _oldRadioPanelValue = { 0, 0, 0 };
         private byte[] _newRadioPanelValue = { 0, 0, 0 };
         private object _dcsBiosDataReceivedLock = new object();
 
-        private int _frequencyKnobSensitivity;
-
-        protected volatile byte FrequencySensitivitySkipper;
-
-        public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton)
+        private List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator>(){RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR};
+        private List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new List<RadioPanelPZ69KnobsEmulator>() { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
+        private double _upperActive = -1;
+        private double _upperStandby = -1;
+        private double _lowerActive = -1;
+        private double _lowerStandby = -1;
+        
+        public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -39,7 +43,7 @@ namespace NonVisuals
             Startup();
         }
 
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {
@@ -85,12 +89,12 @@ namespace NonVisuals
                         keyBinding.ImportSettings(setting);
                         _keyBindings.Add(keyBinding);
                     }
-/*                    else if (setting.StartsWith("RadioPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("PZ69DisplayValue{"))
                     {
-                        var dcsBIOSBindingPZ55 = new DCSBIOSBindingPZ69();
-                        dcsBIOSBindingPZ55.ImportSettings(setting);
-                        _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
-                    }*/
+                        var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
+                        radioPanelPZ69DisplayValue.ImportSettings(setting);
+                        _displayValues.Add(radioPanelPZ69DisplayValue);
+                    }
                 }
             }
             OnSettingsApplied();
@@ -111,13 +115,14 @@ namespace NonVisuals
                     result.Add(keyBinding.ExportSettings());
                 }
             }
-/*            foreach (var dcsBiosBinding in _dcsBiosBindings)
+            foreach (var displayValue in _displayValues)
             {
-                if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                var tmp = displayValue.ExportSettings();
+                if (!string.IsNullOrEmpty(tmp))
                 {
-                    result.Add(dcsBiosBinding.ExportSettings());
+                    result.Add(tmp);
                 }
-            }*/
+            }
             return result;
         }
 
@@ -139,13 +144,17 @@ namespace NonVisuals
         public override void ClearSettings()
         {
             _keyBindings.Clear();
-            //_dcsBiosBindings.Clear();
+            _displayValues.Clear();
         }
 
         public HashSet<KeyBindingPZ69> KeyBindingsHashSet
         {
             get { return _keyBindings; }
-            set { _keyBindings = value; }
+        }
+
+        public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet
+        {
+            get { return _displayValues; }
         }
 
         private void PZ69SwitchChanged(RadioPanelPZ69KnobEmulator radioPanelKey)
@@ -165,38 +174,110 @@ namespace NonVisuals
 
         private void PZ69SwitchChanged(IEnumerable<object> hashSet)
         {
-            if (!ForwardKeyPresses)
+            if (ForwardKeyPresses)
             {
-                return;
+                foreach (var radioPanelKeyObject in hashSet)
+                {
+                    //Looks which switches has been switched and sees whether any key emulation has been tied to them.
+                    var radioPanelKey = (RadioPanelPZ69KnobEmulator)radioPanelKeyObject;
+
+                    foreach (var keyBinding in _keyBindings)
+                    {
+                        if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
+                        {
+                            keyBinding.OSKeyPress.Execute();
+                            break;
+                        }
+                    }
+                }
             }
+
             foreach (var radioPanelKeyObject in hashSet)
             {
                 //Looks which switches has been switched and sees whether any key emulation has been tied to them.
                 var radioPanelKey = (RadioPanelPZ69KnobEmulator)radioPanelKeyObject;
-                var found = false;
-
-                foreach (var keyBinding in _keyBindings)
+                if (radioPanelKey.IsOn)
                 {
-                    if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
+                    if (_panelPZ69DialModesUpper.Contains(radioPanelKey.RadioPanelPZ69Knob))
                     {
-                        keyBinding.OSKeyPress.Execute();
-                        found = true;
-                        break;
+                        _upperActive = -1;
+                        _upperStandby = -1;
                     }
-                }
-                /*if (!found)
-                {
-                    foreach (var dcsBiosBinding in _dcsBiosBindings)
+
+                    if (_panelPZ69DialModesLower.Contains(radioPanelKey.RadioPanelPZ69Knob))
                     {
-                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && dcsBiosBinding.WhenTurnedOn == radioPanelKey.IsOn)
+                        _lowerActive = -1;
+                        _lowerStandby = -1;
+                    }
+
+                    foreach (var displayValue in _displayValues)
+                    {
+                        if (displayValue.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands();
-                            break;
+                            if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                            {
+                                _upperActive =  double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                            }
+                            else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
+                            {
+                                _upperStandby = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                            }
+                            else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
+                            {
+                                _lowerActive = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                            }
+                            else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
+                            {
+                                _lowerStandby = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                            }
                         }
                     }
-                }*/
+
+                    ShowFrequenciesOnPanel();
+                }
             }
         }
+
+        private void ShowFrequenciesOnPanel()
+        {
+            var bytes = new byte[21];
+            bytes[0] = 0x0;
+            if (_upperActive < 0)
+            {
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+            }
+            else
+            {
+                SetPZ69DisplayBytesDefault(ref bytes, _upperActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+            }
+            if (_upperStandby < 0)
+            {
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+            }
+            else
+            {
+                SetPZ69DisplayBytesDefault(ref bytes, _upperStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
+            }
+            if (_lowerActive < 0)
+            {
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+            }
+            else
+            {
+                SetPZ69DisplayBytesDefault(ref bytes, _lowerActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+            }
+            if (_lowerStandby < 0)
+            {
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+            }
+            else
+            {
+                SetPZ69DisplayBytesDefault(ref bytes, _lowerStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
+            }
+
+            SendLCDData(bytes);
+        }
+
 
         public string GetKeyPressForLoggingPurposes(RadioPanelPZ69KnobEmulator radioPanelKey)
         {
@@ -209,6 +290,39 @@ namespace NonVisuals
                 }
             }
             return result;
+        }
+
+        public void AddOrUpdateDisplayValue(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string valueAsString, RadioPanelPZ69Display radioPanelDisplay)
+        {
+            if (string.IsNullOrEmpty(valueAsString))
+            {
+                ClearDisplayValue(radioPanelPZ69Knob, radioPanelDisplay);
+                return;
+            }
+            var value = double.Parse(valueAsString, Common.GetPZ69FullDisplayNumberFormat());
+            if (value < 0)
+            {
+                ClearDisplayValue(radioPanelPZ69Knob, radioPanelDisplay);
+                return;
+            }
+            var found = false;
+            foreach (var displayValue in _displayValues)
+            {
+                if (displayValue.RadioPanelPZ69Knob == radioPanelPZ69Knob && displayValue.RadioPanelDisplay == radioPanelDisplay)
+                {
+                    displayValue.Value = valueAsString;
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                var displayValue = new RadioPanelPZ69DisplayValue();
+                displayValue.RadioPanelPZ69Knob = radioPanelPZ69Knob;
+                displayValue.RadioPanelDisplay = radioPanelDisplay;
+                displayValue.Value = valueAsString;
+                _displayValues.Add(displayValue);
+            }
+            IsDirtyMethod();
         }
 
         public void AddOrUpdateSingleKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn = true)
@@ -258,15 +372,19 @@ namespace NonVisuals
                     keyBinding.OSKeyPress = null;
                 }
             }
-            /*foreach (var dcsBiosBinding in _dcsBiosBindings)
+            IsDirtyMethod();
+        }
+
+        public void ClearDisplayValue(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, RadioPanelPZ69Display radioPanelPZ69Display)
+        {
+            //This must accept lists
+            foreach (var displayValue in _displayValues)
             {
-                if (dcsBiosBinding.RadioPanelPZ69Knob == radioPanelPZ69KnobOnOff.RadioPanelPZ69Key && dcsBiosBinding.WhenTurnedOn == radioPanelPZ69KnobOnOff.On)
+                if (displayValue.RadioPanelPZ69Knob == radioPanelPZ69Knob && displayValue.RadioPanelDisplay == radioPanelPZ69Display)
                 {
-                    dcsBiosBinding.DCSBIOSInputs.Clear();
+                    displayValue.Value = null;
                 }
-            }*/
-            Common.DebugP("RadioPanelPZ69Emulator _keyBindings : " + _keyBindings.Count);
-            //Common.DebugP("RadioPanelPZ69Emulator _dcsBiosBindings : " + _dcsBiosBindings.Count);
+            }
             IsDirtyMethod();
         }
 
@@ -302,38 +420,6 @@ namespace NonVisuals
             }
             IsDirtyMethod();
         }
-        /*
-        public void AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
-        {
-            //!!!!!!!
-            //If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
-
-            //This must accept lists
-            var found = false;
-            RemoveRadioPanelKeyFromList(1, radioPanelPZ69Knob, whenTurnedOn);
-            foreach (var dcsBiosBinding in _dcsBiosBindings)
-            {
-                if (dcsBiosBinding.RadioPanelPZ69Knob == radioPanelPZ69Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
-                {
-                    dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                    dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
-                    dcsBiosBinding.Description = description;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-            {
-                var dcsBiosBinding = new DCSBIOSBindingPZ69();
-                dcsBiosBinding.RadioPanelPZ69Knob = radioPanelPZ69Knob;
-                dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
-                dcsBiosBinding.Description = description;
-                _dcsBiosBindings.Add(dcsBiosBinding);
-            }
-            IsDirtyMethod();
-        }
-        */
         private void RemoveRadioPanelKeyFromList(int list, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn = true)
         {
             switch (list)
@@ -352,14 +438,6 @@ namespace NonVisuals
                     }
                 case 2:
                     {
-                        /*foreach (var dcsBiosBinding in _dcsBiosBindings)
-                        {
-                            if (dcsBiosBinding.RadioPanelPZ69Knob == radioPanelPZ69Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
-                            {
-                                dcsBiosBinding.DCSBIOSInputs.Clear();
-                            }
-                            break;
-                        }*/
                         break;
                     }
             }
@@ -428,17 +506,7 @@ namespace NonVisuals
             }
         }
 
-        private void DeviceAttachedHandler()
-        {
-            Startup();
-            OnDeviceAttached();
-        }
-
-        private void DeviceRemovedHandler()
-        {
-            Shutdown();
-            OnDeviceDetached();
-        }
+        
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
@@ -495,48 +563,8 @@ namespace NonVisuals
             return "0X";
         }
 
-        public int FrequencyKnobSensitivity
-        {
-            get { return _frequencyKnobSensitivity; }
-            set { _frequencyKnobSensitivity = value; }
+       
         }
-
-
-        protected bool SkipCurrentFrequencyChange()
-        {
-            switch (FrequencyKnobSensitivity)
-            {
-                case 0:
-                    {
-                        //Do nothing all manipulation is let through
-                        break;
-                    }
-                case -1:
-                    {
-                        //Skip every 2 manipulations
-                        FrequencySensitivitySkipper++;
-                        if (FrequencySensitivitySkipper <= 2)
-                        {
-                            return true;
-                        }
-                        FrequencySensitivitySkipper = 0;
-                        break;
-                    }
-                case -2:
-                    {
-                        //Skip every 4 manipulations
-                        FrequencySensitivitySkipper++;
-                        if (FrequencySensitivitySkipper <= 4)
-                        {
-                            return true;
-                        }
-                        FrequencySensitivitySkipper = 0;
-                        break;
-                    }
-            }
-            return false;
-        }
-    }
 
 
 }

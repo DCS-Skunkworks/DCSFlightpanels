@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
@@ -8,10 +9,10 @@ namespace NonVisuals
 {
     public enum PZ69LCDPosition
     {
-        UPPER_LEFT = 1,
-        UPPER_RIGHT = 6,
-        LOWER_LEFT = 11,
-        LOWER_RIGHT = 16
+        UPPER_ACTIVE_LEFT = 1,
+        UPPER_STBY_RIGHT = 6,
+        LOWER_ACTIVE_LEFT = 11,
+        LOWER_STBY_RIGHT = 16
     }
 
     public abstract class RadioPanelPZ69Base : SaitekPanel
@@ -245,7 +246,13 @@ namespace NonVisuals
         protected void SetPZ69DisplayBytesDefault(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
         {
 
+
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
+
+            //Debug.WriteLine("LCD position is " + pz69LCDPosition);
+            //Debug.WriteLine("Array position = " + arrayPosition);
+            //Debug.WriteLine("Max array position = " + (maxArrayPosition));
             var i = 0;
             var digitsAsString = digits.ToString("0.0000", NumberFormatInfoFullDisplay);
             //116 should become 116.00!
@@ -265,8 +272,10 @@ namespace NonVisuals
                 byte b = 0;
                 try
                 {
-                    b = Byte.Parse(digitsAsString[i].ToString());
+                    var tmp = digitsAsString[i].ToString();
+                    b = Byte.Parse(tmp);
                     bytes[arrayPosition] = b;
+                    //Debug.WriteLine("Current string char is " + tmp + " from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
                 }
                 catch (Exception e)
                 {
@@ -275,35 +284,33 @@ namespace NonVisuals
 
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
                 {
-
                     //Add decimal marker
-
                     bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
-
+                    //Debug.WriteLine("Writing decimal marker to array position " + arrayPosition);
                 }
 
                 arrayPosition++;
                 i++;
-            } while (i < digitsAsString.Length && i < 6);
+            } while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
         }
 
         private int GetArrayPosition(PZ69LCDPosition pz69LCDPosition)
         {
             switch (pz69LCDPosition)
             {
-                case PZ69LCDPosition.UPPER_LEFT:
+                case PZ69LCDPosition.UPPER_ACTIVE_LEFT:
                     {
                         return 1;
                     }
-                case PZ69LCDPosition.UPPER_RIGHT:
+                case PZ69LCDPosition.UPPER_STBY_RIGHT:
                     {
                         return 6;
                     }
-                case PZ69LCDPosition.LOWER_LEFT:
+                case PZ69LCDPosition.LOWER_ACTIVE_LEFT:
                     {
                         return 11;
                     }
-                case PZ69LCDPosition.LOWER_RIGHT:
+                case PZ69LCDPosition.LOWER_STBY_RIGHT:
                     {
                         return 16;
                     }

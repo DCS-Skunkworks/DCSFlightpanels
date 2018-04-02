@@ -677,10 +677,10 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             //Debug.Print("_vhfAmBigFrequencyStandby " + _vhfAmBigFrequencyStandby);
                             //Debug.Print("_vhfAmSmallFrequencyStandby " + _vhfAmSmallFrequencyStandby);
-                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.VHFFM:
@@ -693,8 +693,8 @@ namespace NonVisuals
                             {
                                 preset = _fmRadioPresetCockpitDialPos + 1;
                             }
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.UHF:
@@ -703,8 +703,8 @@ namespace NonVisuals
                             //Large dial 225-399
                             //Small dial 000-975 where only 2 digits can be used
                             var frequencyAsString = (_uhfBigFrequencyStandby + "." + _uhfSmallFrequencyStandby.ToString().PadLeft(2, '0')).PadRight(6, '0');
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.ADF:
@@ -714,14 +714,14 @@ namespace NonVisuals
                             {
                                 tmpValue = _adfCockpitSelectedUnitValue + 1;
                             }
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.NOUSE:
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                 }
@@ -763,8 +763,8 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.VHFFM:
@@ -777,8 +777,8 @@ namespace NonVisuals
                             {
                                 preset = _fmRadioPresetCockpitDialPos + 1;
                             }
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.UHF:
@@ -787,8 +787,8 @@ namespace NonVisuals
                             //Large dial 225-399
                             //Small dial 000-975 where only 2 digits can be used
                             var frequencyAsString = (_uhfBigFrequencyStandby + "." + _uhfSmallFrequencyStandby.ToString().PadLeft(2, '0')).PadRight(6, '0');
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.ADF:
@@ -798,14 +798,14 @@ namespace NonVisuals
                             {
                                 tmpValue = _adfCockpitSelectedUnitValue + 1;
                             }
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.NOUSE:
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                 }

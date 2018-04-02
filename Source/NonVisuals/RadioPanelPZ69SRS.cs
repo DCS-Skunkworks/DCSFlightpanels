@@ -670,47 +670,47 @@ namespace NonVisuals
                         {
                             if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_upperMainFreq), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_upperMainFreq), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             else
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, (_upperMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, (_upperMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                         }
                         else
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                         }
                         if (_upperGuardFreq > 0)
                         {
-                            SetPZ69DisplayBytesDefault(ref bytes, (_upperGuardFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.UPPER_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, (_upperGuardFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                         }
                         else
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                         }
                         if (_lowerMainFreq > 0)
                         {
                             if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                             {
-                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_lowerMainFreq), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesInteger(ref bytes, (int)Math.Floor(_lowerMainFreq), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else
                             {
-                                SetPZ69DisplayBytesDefault(ref bytes, (_lowerMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, (_lowerMainFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                         }
                         else
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                         }
                         if (_lowerGuardFreq > 0)
                         {
-                            SetPZ69DisplayBytesDefault(ref bytes, (_lowerGuardFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.LOWER_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, (_lowerGuardFreq / 1000000).ToString("0.000", CultureInfo.InvariantCulture), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                         }
                         else
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                         }
                         SendLCDData(bytes);
                     }

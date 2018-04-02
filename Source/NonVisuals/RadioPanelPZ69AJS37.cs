@@ -741,8 +741,8 @@ namespace NonVisuals
                     {
                         case CurrentAJS37RadioMode.FR22:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentAJS37RadioMode.FR24:
@@ -768,7 +768,7 @@ namespace NonVisuals
                                 }
                                 if (channelSelector == 0)
                                 {
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, 0, PZ69LCDPosition.UPPER_RIGHT);
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, 0, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                                 else
                                 {
@@ -776,15 +776,15 @@ namespace NonVisuals
                                     {
                                         channelSelector = channelSelector + 10;
                                     }
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.UPPER_RIGHT);
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterModeSelector, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterModeSelector, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentAJS37RadioMode.NOUSE:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                     }
@@ -792,8 +792,8 @@ namespace NonVisuals
                     {
                         case CurrentAJS37RadioMode.FR22:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentAJS37RadioMode.FR24:
@@ -819,7 +819,7 @@ namespace NonVisuals
                                 }
                                 if (channelSelector == 0)
                                 {
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, 0, PZ69LCDPosition.LOWER_RIGHT);
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, 0, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                                 else
                                 {
@@ -827,15 +827,15 @@ namespace NonVisuals
                                     {
                                         channelSelector = channelSelector + 10;
                                     }
-                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.LOWER_RIGHT);
+                                    SetPZ69DisplayBytesUnsignedInteger(ref bytes, channelSelector, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterModeSelector, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterModeSelector, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentAJS37RadioMode.NOUSE:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                     }

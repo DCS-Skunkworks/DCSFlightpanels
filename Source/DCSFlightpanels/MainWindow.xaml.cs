@@ -39,7 +39,6 @@ namespace DCSFlightpanels
 
         private bool _doSearchForPanels = true;
         private HIDHandler _hidHandler;
-        //private FIPHandler _fipHandler;
         private ProfileHandler _panelProfileHandler;
         private string _windowName = "DCSFlightpanels ";
         private Timer _exceptionTimer = new Timer(1000);
@@ -164,12 +163,7 @@ namespace DCSFlightpanels
             }
             var itemCount = TabControlPanels.Items.Count;
             Common.DebugP("There are " + TabControlPanels.Items.Count + " TabControlPanels.Items");
-            //Do not remove, must be because of while()
-            /*if (_fipHandler != null)
-            {
-                _fipHandler.Close();
-            }*/
-
+            
             var closedItemCount = CloseTabItems();
 
             if (Common.IsKeyEmulationProfile(dcsAirframe))
@@ -470,21 +464,7 @@ namespace DCSFlightpanels
                         }
                     } //for each
                 }
-                /*_fipHandler = new FIPHandler();
-                if (_fipHandler.Initialize())
-                {
-                    if (_fipHandler.FIPPanels.Count > 0)
-                    {
-                        //Only one FIP tab regardless of one or many FIPs because they are all configured the same.
-                        var tabItem = new TabItem();
-                        tabItem.Header = "FIP";
-                        var fipPanelUserControl = new FIPPanelUserControl(_fipHandler, tabItem, this);
-                        _saitekUserControls.Add(fipPanelUserControl);
-                        _panelProfileHandler.Attach(fipPanelUserControl);
-                        tabItem.Content = fipPanelUserControl;
-                        TabControlPanels.Items.Add(tabItem);
-                    }
-                }*/
+                
                 SortTabs();
                 if (TabControlPanels.Items.Count > 0)
                 {

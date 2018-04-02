@@ -87,7 +87,7 @@
         </Canvas>
 
 
-        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="6">
+        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -127,7 +127,87 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="6">
+        <GroupBox Header="Upper Radio Display Values"  FontSize="10" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Active" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxUpperCom1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Active" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxUpperCom2ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Active" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxUpperNav1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Active" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperNav2ActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Active" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperADFActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Active" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperDMEActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Active" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperXPDRActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Standby" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxUpperCom1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Standby" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxUpperCom2StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Standby" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxUpperNav1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Standby" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperNav2StandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Standby" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperADFStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Standby" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperDMEStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Standby" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxUpperXPDRStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Lower Radio Display Values"  FontSize="10" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Active" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxLowerCom1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Active" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxLowerCom2ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Active" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxLowerNav1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Active" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerNav2ActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Active" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerADFActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Active" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerDMEActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Active" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerXPDRActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Standby" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxLowerCom1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Standby" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxLowerCom2StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Standby" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" Name="TextBoxLowerNav1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Standby" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerNav2StandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Standby" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerADFStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Standby" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerDMEStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Standby" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" Name="TextBoxLowerXPDRStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDownNumbers" MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
