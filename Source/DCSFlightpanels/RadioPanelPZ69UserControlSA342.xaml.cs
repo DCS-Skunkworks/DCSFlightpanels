@@ -243,7 +243,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSA342.UPPER_DME:
+                        case RadioPanelPZ69KnobsSA342.UPPER_NADIR:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -313,7 +313,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSA342.LOWER_DME:
+                        case RadioPanelPZ69KnobsSA342.LOWER_NADIR:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
