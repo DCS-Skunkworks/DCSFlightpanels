@@ -197,6 +197,7 @@ namespace NonVisuals
                         _r800l1CockpitFreq1DialPos = _r800l1DcsbiosOutputFreqDial1.GetUIntValue(data);
                         if (tmp != _r800l1CockpitFreq1DialPos)
                         {
+                            //Debug.WriteLine("_r800l1CockpitFreq1DialPos was " + tmp + ", is now " + _r800l1CockpitFreq1DialPos);
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                             Interlocked.Exchange(ref _r800l1Dial1WaitingForFeedback, 0);
                         }
@@ -938,7 +939,7 @@ namespace NonVisuals
                                     }
                                     else
                                     {
-                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.UPPER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.LOWER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
@@ -1669,7 +1670,14 @@ namespace NonVisuals
                                 var frequencyAsString = "";
                                 lock (_lockR800L1DialsObject1)
                                 {
-                                    frequencyAsString = _r800l1Freq1DialValues[_r800l1CockpitFreq1DialPos].ToString();
+                                    try
+                                    {
+                                        frequencyAsString = _r800l1Freq1DialValues[_r800l1CockpitFreq1DialPos].ToString();
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        throw new Exception("Failed to get dial position from array _r800l1Freq1DialValues based on index " + _r800l1CockpitFreq1DialPos + ". Max array pos is " + _r800l1Freq1DialValues.Length + "\n" + e.Message + "\n" + e.StackTrace);
+                                    }
                                 }
                                 lock (_lockR800L1DialsObject2)
                                 {

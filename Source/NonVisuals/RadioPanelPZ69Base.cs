@@ -74,6 +74,7 @@ namespace NonVisuals
         protected void SetPZ69DisplayBytesInteger(ref byte[] bytes, int digits, PZ69LCDPosition pz69LCDPosition)
         {
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 5;
             var i = 0;
             var digitsAsString = digits.ToString().PadLeft(5);
 
@@ -100,7 +101,7 @@ namespace NonVisuals
 
                 arrayPosition++;
                 i++;
-            } while (i < digitsAsString.Length && i < 6);
+            } while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
         }
 
         protected void SetPZ69DisplayBlank(ref byte[] bytes, PZ69LCDPosition pz69LCDPosition)
@@ -120,9 +121,15 @@ namespace NonVisuals
         {
 
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
             var i = 0;
             var digitsAsString = digits.ToString().PadLeft(5);
 
+
+            //Debug.WriteLine("LCD position is " + pz69LCDPosition);
+            //Debug.WriteLine("Array position = " + arrayPosition);
+            //Debug.WriteLine("Max array position = " + (maxArrayPosition));
+            //Debug.WriteLine("digitsAsString = >" + digitsAsString + "< length=" + digitsAsString.Length);
             //D = DARK
             //116 should become DD116!
 
@@ -137,22 +144,25 @@ namespace NonVisuals
                 if (digitsAsString[i].ToString().Equals(" "))
                 {
                     b = 0xFF;
+                    //Debug.WriteLine("Current string char is " + b + " from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
                 }
                 else
                 {
                     b = Byte.Parse(digitsAsString[i].ToString());
+                    //Debug.WriteLine("Current string char is >" + digitsAsString[i] + "< from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
                 }
                 bytes[arrayPosition] = b;
 
                 arrayPosition++;
                 i++;
-            } while (i < digitsAsString.Length && i < 6);
+            } while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
         }
 
         protected void SetPZ69DisplayBytes(ref byte[] bytes, double digits, int decimals, PZ69LCDPosition pz69LCDPosition)
         {
 
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
             var i = 0;
             var formatString = "0.".PadRight(decimals + 2, '0');
             var digitsAsString = digits.ToString(formatString, NumberFormatInfoEmpty).PadLeft(6);
@@ -180,7 +190,7 @@ namespace NonVisuals
                 }
                 arrayPosition++;
                 i++;
-            } while (i < digitsAsString.Length && i < 6);
+            } while (i < digitsAsString.Length && arrayPosition < maxArrayPosition + 1);
         }
 
         protected void SetPZ69DisplayBytesCustom1(ref byte[] bytes, byte[] bytesToBeInjected, PZ69LCDPosition pz69LCDPosition)
@@ -206,6 +216,7 @@ namespace NonVisuals
         {
 
             var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
             var i = 0;
             do
             {
@@ -240,7 +251,7 @@ namespace NonVisuals
 
                 arrayPosition++;
                 i++;
-            } while (i < digits.Length && i < 6);
+            } while (i < digits.Length && arrayPosition < maxArrayPosition + 1);
         }
 
         protected void SetPZ69DisplayBytesDefault(ref byte[] bytes, double digits, PZ69LCDPosition pz69LCDPosition)
