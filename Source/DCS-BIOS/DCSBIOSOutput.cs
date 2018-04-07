@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using ClassLibraryCommon;
 
 
 namespace DCS_BIOS
@@ -62,7 +63,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                DBCommon.LogError(124874, ex, "Evaluate() function");
+                Common.LogError(124874, ex, "Evaluate() function");
                 throw;
             }
         }
@@ -182,7 +183,7 @@ namespace DCS_BIOS
         {
             if (_debug)
             {
-                DBCommon.DebugP(ToDebugString() + "    >>        Data is : " + data);
+                Common.DebugP(ToDebugString() + "    >>        Data is : " + data);
             }
             lock (_lockObject)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClassLibraryCommon;
 using DCS_BIOS;
 
 namespace NonVisuals

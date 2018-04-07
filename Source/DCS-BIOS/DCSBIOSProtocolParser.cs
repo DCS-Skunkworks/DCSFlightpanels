@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using ClassLibraryCommon;
 
 namespace DCS_BIOS
 {
@@ -58,7 +59,7 @@ namespace DCS_BIOS
 
         public void Startup()
         {
-            DBCommon.DebugP("ProtocolParser starting up");
+            Common.DebugP("ProtocolParser starting up");
             _processingThread = new Thread(ProcessArrays);
             _processingThread.Start();
             _shutdown = false;
@@ -66,7 +67,7 @@ namespace DCS_BIOS
 
         public void Shutdown()
         {
-            DBCommon.DebugP("ProtocolParser shutting down");
+            Common.DebugP("ProtocolParser shutting down");
             _shutdown = true;
             try
             {
@@ -83,7 +84,7 @@ namespace DCS_BIOS
             try
             {
                 var interval = 0;
-                DBCommon.DebugP("ProtocolParser starting processing loop");
+                Common.DebugP("ProtocolParser starting processing loop");
                 while (!_shutdown)
                 {
                     try
@@ -111,16 +112,16 @@ namespace DCS_BIOS
                     }
                     catch (Exception e)
                     {
-                        DBCommon.LogError(9243, e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
+                        Common.LogError(9243, e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
                     }
                     _autoResetEvent.WaitOne();
                 }
-                DBCommon.DebugP("ProtocolParser exiting processing loop");
+                Common.DebugP("ProtocolParser exiting processing loop");
             }
             catch (ThreadAbortException) { }
             catch (Exception e)
             {
-                DBCommon.LogError(9244, e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
+                Common.LogError(9244, e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
             }
         }
 
@@ -232,7 +233,7 @@ namespace DCS_BIOS
             }
             catch (Exception e)
             {
-                DBCommon.LogError(924094, e, "DCSBIOSProtocolParser.ProcessByte()");
+                Common.LogError(924094, e, "DCSBIOSProtocolParser.ProcessByte()");
             }
         }
     }

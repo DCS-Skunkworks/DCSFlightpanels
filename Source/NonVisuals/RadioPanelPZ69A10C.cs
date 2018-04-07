@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 
@@ -420,7 +421,8 @@ namespace NonVisuals
         {
             try
             {
-                
+
+                Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + stringData + "<-");
                 if (string.IsNullOrWhiteSpace(stringData))
                 {
                     Common.DebugP("Received DCSBIOS stringData : " + stringData);
@@ -1813,8 +1815,8 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(4, _vhfAmCockpitFreq4DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.UHF:
@@ -1864,8 +1866,8 @@ namespace NonVisuals
 
                                 frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.VHFFM:
@@ -1903,8 +1905,8 @@ namespace NonVisuals
                             {
                                 dial4 = GetVhfFmDialFrequencyForPosition(4, _vhfFmCockpitFreq4DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.ILS:
@@ -1921,8 +1923,8 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.TACAN:
@@ -1951,8 +1953,8 @@ namespace NonVisuals
                                 frequencyAsString = frequencyAsString + _tacanCockpitFreq3DialPos.ToString();
                             }
 
-                            SetPZ69DisplayBytes(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, Double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, Double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                 }
@@ -1978,8 +1980,8 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(4, _vhfAmCockpitFreq4DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.UHF:
@@ -2010,8 +2012,8 @@ namespace NonVisuals
 
                                 frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.VHFFM:
@@ -2049,8 +2051,8 @@ namespace NonVisuals
                             {
                                 dial4 = GetVhfFmDialFrequencyForPosition(4, _vhfFmCockpitFreq4DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.ILS:
@@ -2065,8 +2067,8 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.TACAN:
@@ -2085,8 +2087,8 @@ namespace NonVisuals
                                 frequencyAsString = frequencyAsString + _tacanCockpitFreq3DialPos.ToString();
                             }
 
-                            SetPZ69DisplayBytes(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, Double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, Double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                 }

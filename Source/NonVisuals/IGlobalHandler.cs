@@ -1,4 +1,5 @@
-﻿using DCS_BIOS;
+﻿using ClassLibraryCommon;
+using DCS_BIOS;
 
 namespace NonVisuals
 {

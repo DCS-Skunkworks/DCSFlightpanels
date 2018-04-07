@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
 using DCSFlightpanels.Properties;
@@ -73,8 +74,8 @@ namespace DCSFlightpanels
 
         private void SetApplicationMode(DCSAirframe dcsAirframe)
         {
-            ButtonLcdUpper.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
-            ButtonLcdLower.IsEnabled = dcsAirframe != DCSAirframe.KEYEMULATOR;
+            ButtonLcdUpper.IsEnabled = Common.IsDCSBIOSProfile(dcsAirframe);
+            ButtonLcdLower.IsEnabled = Common.IsDCSBIOSProfile(dcsAirframe);
         }
 
         public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
@@ -1262,7 +1263,7 @@ namespace DCSFlightpanels
                 var hashSetOfKeysPressed = new HashSet<string>();
                 hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyPressed));
 
-                var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
@@ -1373,7 +1374,7 @@ namespace DCSFlightpanels
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
                 }
-                var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));

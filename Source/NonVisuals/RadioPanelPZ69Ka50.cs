@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 
@@ -196,6 +197,7 @@ namespace NonVisuals
                         _r800l1CockpitFreq1DialPos = _r800l1DcsbiosOutputFreqDial1.GetUIntValue(data);
                         if (tmp != _r800l1CockpitFreq1DialPos)
                         {
+                            //Debug.WriteLine("_r800l1CockpitFreq1DialPos was " + tmp + ", is now " + _r800l1CockpitFreq1DialPos);
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                             Interlocked.Exchange(ref _r800l1Dial1WaitingForFeedback, 0);
                         }
@@ -937,7 +939,7 @@ namespace NonVisuals
                                     }
                                     else
                                     {
-                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.UPPER_FREQ_SWITCH);
+                                        SendFrequencyToDCSBIOS(radioPanelKnob.IsOn, RadioPanelPZ69KnobsKa50.LOWER_FREQ_SWITCH);
                                     }
                                     break;
                                 }
@@ -1659,8 +1661,8 @@ namespace NonVisuals
                                 {
                                     channelAsString = (_vhf1CockpitPresetDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.VHF2_R800L1:
@@ -1668,7 +1670,14 @@ namespace NonVisuals
                                 var frequencyAsString = "";
                                 lock (_lockR800L1DialsObject1)
                                 {
-                                    frequencyAsString = _r800l1Freq1DialValues[_r800l1CockpitFreq1DialPos].ToString();
+                                    try
+                                    {
+                                        frequencyAsString = _r800l1Freq1DialValues[_r800l1CockpitFreq1DialPos].ToString();
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        throw new Exception("Failed to get dial position from array _r800l1Freq1DialValues based on index " + _r800l1CockpitFreq1DialPos + ". Max array pos is " + _r800l1Freq1DialValues.Length + "\n" + e.Message + "\n" + e.StackTrace);
+                                    }
                                 }
                                 lock (_lockR800L1DialsObject2)
                                 {
@@ -1686,15 +1695,15 @@ namespace NonVisuals
 
                                     frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800l1CockpitFreq4DialPos);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ABRIS:
                             {
                                 var channelAsString = "88888";
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.DATALINK:
@@ -1715,8 +1724,8 @@ namespace NonVisuals
                                     power = _datalinkPowerOnOffCockpitPos;
                                 }
 
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ADF_ARK22:
@@ -1751,14 +1760,14 @@ namespace NonVisuals
                                 {
                                     adfMode = _adfModeCockpitPos;
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.NOUSE:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                     }
@@ -1775,8 +1784,8 @@ namespace NonVisuals
                                 {
                                     channelAsString = (_vhf1CockpitPresetDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.VHF2_R800L1:
@@ -1802,15 +1811,15 @@ namespace NonVisuals
 
                                     frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800l1CockpitFreq4DialPos);
                                 }
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ABRIS:
                             {
                                 var channelAsString = "88888";
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.DATALINK:
@@ -1831,8 +1840,8 @@ namespace NonVisuals
                                     power = _datalinkPowerOnOffCockpitPos;
                                 }
 
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, masterMode, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, (power + "   " + selfId), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ADF_ARK22:
@@ -1866,14 +1875,14 @@ namespace NonVisuals
                                 {
                                     adfMode = _adfModeCockpitPos;
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, adfMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentKa50RadioMode.NOUSE:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                     }

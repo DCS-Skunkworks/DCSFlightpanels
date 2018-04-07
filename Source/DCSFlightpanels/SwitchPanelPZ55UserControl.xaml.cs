@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
 
@@ -73,12 +74,12 @@ namespace DCSFlightpanels
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED") && dcsAirframe == DCSAirframe.KEYEMULATOR)
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsKeyEmulationProfile(dcsAirframe))
                     {
                         image.ContextMenu = null;
                     }
                     else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && dcsAirframe != DCSAirframe.KEYEMULATOR)
+                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsDCSBIOSProfile(dcsAirframe))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         image.ContextMenu.Tag = image.Name;
@@ -1035,7 +1036,7 @@ namespace DCSFlightpanels
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
                 }
-                var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
@@ -1104,7 +1105,7 @@ namespace DCSFlightpanels
                 var hashSetOfKeysPressed = new HashSet<string>();
                 hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyPressed));
 
-                var modifiers = Common.GetPressedVirtualKeyCodesThatAreModifiers();
+                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
                 foreach (var virtualKeyCode in modifiers)
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));

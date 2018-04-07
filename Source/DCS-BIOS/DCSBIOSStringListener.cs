@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ClassLibraryCommon;
 
 namespace DCS_BIOS
 {
@@ -230,7 +231,7 @@ namespace DCS_BIOS
                                 var hex = Convert.ToString(data, 16);
 
                                 //Little Endian !
-                                //DBCommon.DebugP("**********hex = [" + hex + "] ****************");
+                                //Common.DebugP("**********hex = [" + hex + "] ****************");
                                 var secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
                                 var firstChar = "";
                                 if (hex.Length > 2)
@@ -240,14 +241,14 @@ namespace DCS_BIOS
                                 }
                                 var secondChar = _iso8859_1.GetString(secondByte);
                                 kvp.Value.Add(address, firstChar, secondChar);
-                                //DBCommon.DebugP("**********Received (0x" + data.ToString("x") + ") ****************");
-                                //DBCommon.DebugP("**********Received data:(0x" + data.ToString("x") + ") following from DCS : 1st : " + firstChar + "(0x" + firstByte[0].ToString("x") + "), 2nd " + secondChar + "(0x" + secondByte[0].ToString("x") + ") ****************");
+                                //Common.DebugP("**********Received (0x" + data.ToString("x") + ") ****************");
+                                //Common.DebugP("**********Received data:(0x" + data.ToString("x") + ") following from DCS : 1st : " + firstChar + "(0x" + firstByte[0].ToString("x") + "), 2nd " + secondChar + "(0x" + secondByte[0].ToString("x") + ") ****************");
 
                                 //kvp.Value.StepUp();
                             }
                             catch (Exception ex)
                             {
-                                DBCommon.DebugP("**********Received (0x" + data.ToString("x") + ") Exception = " + ex.Message + Environment.NewLine + ex.StackTrace);
+                                Common.DebugP("**********Received (0x" + data.ToString("x") + ") Exception = " + ex.Message + Environment.NewLine + ex.StackTrace);
                                 throw;
                             }
                         }

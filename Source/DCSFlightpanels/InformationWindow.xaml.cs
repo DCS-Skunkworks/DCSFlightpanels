@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Documents;
+using ClassLibraryCommon;
 using NonVisuals;
 
 namespace DCSFlightpanels

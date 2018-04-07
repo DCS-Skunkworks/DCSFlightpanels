@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 
@@ -676,8 +677,8 @@ namespace NonVisuals
 
                                     fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentFw190RadioMode.IFF:
@@ -690,8 +691,8 @@ namespace NonVisuals
                                 {
                                     positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
 
@@ -705,14 +706,14 @@ namespace NonVisuals
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentFw190RadioMode.NOUSE:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                     }
@@ -732,8 +733,8 @@ namespace NonVisuals
 
                                     fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentFw190RadioMode.IFF:
@@ -746,8 +747,8 @@ namespace NonVisuals
                                 {
                                     positionAsString = (_fug25aIFFCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
 
@@ -761,14 +762,14 @@ namespace NonVisuals
                                 {
                                     positionAsString = (_homingCockpitDialPos + 1).ToString().PadLeft(2, ' ');
                                 }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_RIGHT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(positionAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
                         case CurrentFw190RadioMode.NOUSE:
                             {
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                     }

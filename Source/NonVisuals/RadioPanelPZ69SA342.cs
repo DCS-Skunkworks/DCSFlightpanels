@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 
@@ -126,6 +127,22 @@ namespace NonVisuals
         private int _adf100sDialSkipper;
         private int _adf10sDialSkipper;
         private int _adf1sDialSkipper;
+
+
+        //DME NADIR
+        //Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
+        //Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
+        //Large
+        private const string NADIRModeCommandInc = "NADIR_PARAMETER INC\n";
+        private const string NADIRModeCommandDec = "NADIR_PARAMETER DEC\n";
+        //Small
+        private const string NADIRDopplerCommandInc = "NADIR_DOPPLER_MODE INC\n";
+        private const string NADIRDopplerCommandDec = "NADIR_DOPPLER_MODE DEC\n";
+        private volatile uint _nadirModeCockpitValue = 0;
+        private volatile uint _nadirDopplerModeCockpitValue = 0;
+        private DCSBIOSOutput _nadirModeDcsbiosOutput;
+        private DCSBIOSOutput _nadirDopplerModeDcsbiosOutput;
+        private readonly object _lockNADIRUnitObject = new object();
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
 
@@ -267,6 +284,34 @@ namespace NonVisuals
                 }
             }
 
+            //NADIR Mode
+            if (address == _nadirModeDcsbiosOutput.Address)
+            {
+                lock (_lockNADIRUnitObject)
+                {
+                    var tmp = _nadirModeCockpitValue;
+                    _nadirModeCockpitValue = _nadirModeDcsbiosOutput.GetUIntValue(data);
+                    if (tmp != _nadirModeCockpitValue)
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
+                }
+            }
+
+            //NADIR Doppler Mode
+            if (address == _nadirDopplerModeDcsbiosOutput.Address)
+            {
+                lock (_lockNADIRUnitObject)
+                {
+                    var tmp = _nadirDopplerModeCockpitValue;
+                    _nadirDopplerModeCockpitValue = _nadirDopplerModeDcsbiosOutput.GetUIntValue(data);
+                    if (tmp != _nadirDopplerModeCockpitValue)
+                    {
+                        Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    }
+                }
+            }
+
             //Set once
             DataHasBeenReceivedFromDCSBIOS = true;
             ShowFrequenciesOnPanel();
@@ -392,7 +437,7 @@ namespace NonVisuals
                      * COM1 VHF AM
                      * 
                      */
-                     
+
                     Interlocked.Exchange(ref _vhfAmThreadNowSynching, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
@@ -676,10 +721,10 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             //Debug.Print("_vhfAmBigFrequencyStandby " + _vhfAmBigFrequencyStandby);
                             //Debug.Print("_vhfAmSmallFrequencyStandby " + _vhfAmSmallFrequencyStandby);
-                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.VHFFM:
@@ -692,8 +737,8 @@ namespace NonVisuals
                             {
                                 preset = _fmRadioPresetCockpitDialPos + 1;
                             }
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.UHF:
@@ -702,8 +747,8 @@ namespace NonVisuals
                             //Large dial 225-399
                             //Small dial 000-975 where only 2 digits can be used
                             var frequencyAsString = (_uhfBigFrequencyStandby + "." + _uhfSmallFrequencyStandby.ToString().PadLeft(2, '0')).PadRight(6, '0');
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.ADF:
@@ -713,14 +758,27 @@ namespace NonVisuals
                             {
                                 tmpValue = _adfCockpitSelectedUnitValue + 1;
                             }
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            break;
+                        }
+                    case CurrentSA342RadioMode.NADIR:
+                        {
+                            uint tmpValueMode = 0;
+                            uint tmpValueDopper = 0;
+                            lock (_lockNADIRUnitObject)
+                            {
+                                tmpValueMode = _nadirModeCockpitValue + 1;
+                                tmpValueDopper = _nadirDopplerModeCockpitValue + 1;
+                            }
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueMode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueDopper, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.NOUSE:
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                 }
@@ -762,8 +820,8 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.VHFFM:
@@ -776,8 +834,8 @@ namespace NonVisuals
                             {
                                 preset = _fmRadioPresetCockpitDialPos + 1;
                             }
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)preset, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.UHF:
@@ -786,8 +844,8 @@ namespace NonVisuals
                             //Large dial 225-399
                             //Small dial 000-975 where only 2 digits can be used
                             var frequencyAsString = (_uhfBigFrequencyStandby + "." + _uhfSmallFrequencyStandby.ToString().PadLeft(2, '0')).PadRight(6, '0');
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.ADF:
@@ -797,14 +855,27 @@ namespace NonVisuals
                             {
                                 tmpValue = _adfCockpitSelectedUnitValue + 1;
                             }
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValue, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            break;
+                        }
+                    case CurrentSA342RadioMode.NADIR:
+                        {
+                            uint tmpValueMode = 0;
+                            uint tmpValueDopper = 0;
+                            lock (_lockNADIRUnitObject)
+                            {
+                                tmpValueMode = _nadirModeCockpitValue + 1;
+                                tmpValueDopper = _nadirDopplerModeCockpitValue + 1;
+                            }
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueMode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)tmpValueDopper, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentSA342RadioMode.NOUSE:
                         {
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_LEFT);
-                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                 }
@@ -883,6 +954,12 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRModeCommandInc);
+                                            break;
+
+                                        }
                                 }
                                 break;
                             }
@@ -942,6 +1019,12 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRModeCommandDec);
+                                            break;
+
+                                        }
                                 }
                                 break;
                             }
@@ -1000,6 +1083,12 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRDopplerCommandInc);
+                                            break;
+
+                                        }
                                 }
                                 break;
                             }
@@ -1057,6 +1146,12 @@ namespace NonVisuals
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
+                                        }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRDopplerCommandDec);
+                                            break;
+
                                         }
                                 }
                                 break;
@@ -1122,6 +1217,12 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRModeCommandInc);
+                                            break;
+
+                                        }
                                 }
                                 break;
                             }
@@ -1180,6 +1281,12 @@ namespace NonVisuals
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
+                                        }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRModeCommandDec);
+                                            break;
+
                                         }
                                 }
                                 break;
@@ -1240,6 +1347,12 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRDopplerCommandInc);
+                                            break;
+
+                                        }
                                 }
                                 break;
                             }
@@ -1298,6 +1411,12 @@ namespace NonVisuals
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
+                                        }
+                                    case CurrentSA342RadioMode.NADIR:
+                                        {
+                                            DCSBIOS.Send(NADIRDopplerCommandDec);
+                                            break;
+
                                         }
                                 }
                                 break;
@@ -1366,8 +1485,15 @@ namespace NonVisuals
                                 }
                                 break;
                             }
+                        case RadioPanelPZ69KnobsSA342.UPPER_NADIR:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    _currentUpperRadioMode = CurrentSA342RadioMode.NADIR;
+                                }
+                                break;
+                            }
                         case RadioPanelPZ69KnobsSA342.UPPER_NAV2:
-                        case RadioPanelPZ69KnobsSA342.UPPER_DME:
                         case RadioPanelPZ69KnobsSA342.UPPER_XPDR:
                             {
                                 if (radioPanelKnob.IsOn)
@@ -1408,8 +1534,15 @@ namespace NonVisuals
                                 }
                                 break;
                             }
+                        case RadioPanelPZ69KnobsSA342.LOWER_NADIR:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    _currentLowerRadioMode = CurrentSA342RadioMode.NADIR;
+                                }
+                                break;
+                            }
                         case RadioPanelPZ69KnobsSA342.LOWER_NAV2:
-                        case RadioPanelPZ69KnobsSA342.LOWER_DME:
                         case RadioPanelPZ69KnobsSA342.LOWER_XPDR:
                             {
                                 if (radioPanelKnob.IsOn)
@@ -1491,6 +1624,10 @@ namespace NonVisuals
 
                 //ADF
                 _adfSwitchUnitDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF1_ADF2_SELECT");
+
+                //DME
+                _nadirModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("NADIR_PARAMETER");
+                _nadirDopplerModeDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("NADIR_DOPPLER_MODE");
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {

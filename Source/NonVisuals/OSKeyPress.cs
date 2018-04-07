@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using ClassLibraryCommon;
 
 namespace NonVisuals
 {
@@ -171,7 +172,7 @@ namespace NonVisuals
                         Common.DebugP("-----------------------------------");
                         foreach (var virtualKeyCode in array)
                         {
-                            Common.DebugP(virtualKeyCode + " " + Common.IsModifierKey(virtualKeyCode));
+                            Common.DebugP(virtualKeyCode + " " + CommonVK.IsModifierKey(virtualKeyCode));
                         }
                         Common.DebugP("-----------------------------------");
                         if (Common.APIMode == APIModeEnum.keybd_event)
@@ -223,12 +224,13 @@ namespace NonVisuals
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (Common.IsModifierKey(virtualKeyCode))
+                if (CommonVK.IsModifierKey(virtualKeyCode))
                 {
-                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + Common.IsExtendedKey(virtualKeyCode));
-                    if (Common.IsExtendedKey(virtualKeyCode))
+                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
+                    if (CommonVK.IsExtendedKey(virtualKeyCode))
                     {
                         WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)WindowsAPI.KEYEVENTF_EXTENDEDKEY | 0, 0);
+                        //keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
                     }
                     else
                     {
@@ -241,7 +243,7 @@ namespace NonVisuals
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (!Common.IsModifierKey(virtualKeyCode))
+                if (!CommonVK.IsModifierKey(virtualKeyCode))
                 {
                     WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
                 }
@@ -266,7 +268,7 @@ namespace NonVisuals
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (!Common.IsModifierKey(virtualKeyCode))
+                if (!CommonVK.IsModifierKey(virtualKeyCode))
                 {
                     WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)WindowsAPI.KEYEVENTF_KEYUP, 0);
                 }
@@ -276,10 +278,10 @@ namespace NonVisuals
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (Common.IsModifierKey(virtualKeyCode))
+                if (CommonVK.IsModifierKey(virtualKeyCode))
                 {
-                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + Common.IsExtendedKey(virtualKeyCode));
-                    if (Common.IsExtendedKey(virtualKeyCode))
+                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
+                    if (CommonVK.IsExtendedKey(virtualKeyCode))
                     {
                         WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)(WindowsAPI.KEYEVENTF_EXTENDEDKEY | WindowsAPI.KEYEVENTF_KEYUP), 0);
                     }
@@ -588,7 +590,7 @@ namespace NonVisuals
             var modifierCount = 0;
             foreach (var virtualKeyCode in virtualKeyCodes)
             {
-                if (Common.IsModifierKey(virtualKeyCode))
+                if (CommonVK.IsModifierKey(virtualKeyCode))
                 {
                     modifierCount++;
                 }
@@ -597,14 +599,14 @@ namespace NonVisuals
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (Common.IsModifierKey(virtualKeyCode))
+                if (CommonVK.IsModifierKey(virtualKeyCode))
                 {
                     Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
                     inputs[i].type = WindowsAPI.INPUT_KEYBOARD;
                     inputs[i].InputUnion.ki.time = 0;
                     inputs[i].InputUnion.ki.dwFlags = WindowsAPI.KEYEVENTF_SCANCODE;
-                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + Common.IsExtendedKey(virtualKeyCode));
-                    if (Common.IsExtendedKey(virtualKeyCode))
+                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
+                    if (CommonVK.IsExtendedKey(virtualKeyCode))
                     {
                         inputs[i].InputUnion.ki.dwFlags |= WindowsAPI.KEYEVENTF_EXTENDEDKEY;
                     }
@@ -613,7 +615,6 @@ namespace NonVisuals
                     inputs[i].InputUnion.ki.wScan = (ushort)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0);
                     inputs[i].InputUnion.ki.dwExtraInfo = WindowsAPI.GetMessageExtraInfo();
                 }
-                i++;
             }
             //[x][x] [] []
             // 0  1  2  3
@@ -622,7 +623,7 @@ namespace NonVisuals
             for (var i = modifierCount; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (!Common.IsModifierKey(virtualKeyCode))
+                if (!CommonVK.IsModifierKey(virtualKeyCode))
                 {
                     Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
                     inputs[i].type = WindowsAPI.INPUT_KEYBOARD;
@@ -633,7 +634,6 @@ namespace NonVisuals
                     Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
                     inputs[i].InputUnion.ki.wScan = (ushort)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0);
                     inputs[i].InputUnion.ki.dwExtraInfo = WindowsAPI.GetMessageExtraInfo();
-                    i++;
                 }
             }
 

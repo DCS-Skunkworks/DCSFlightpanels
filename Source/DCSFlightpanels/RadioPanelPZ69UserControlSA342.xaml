@@ -72,7 +72,7 @@
                     NAV 1 = UHF<LineBreak/>
                     NAV 2 = <LineBreak/>
                     ADF = ADF1/ADF2<LineBreak/>
-                    DME = <LineBreak/>
+                    DME = NADIR DIALS<LineBreak/>
                     XPDR = <LineBreak/>
                 </TextBlock>
             </StackPanel>

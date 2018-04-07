@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ClassLibraryCommon;
 using NonVisuals;
 
 namespace DCSFlightpanels

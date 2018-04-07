@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using ClassLibraryCommon;
 
 namespace DCS_BIOS
 {
@@ -96,7 +97,7 @@ namespace DCS_BIOS
         {
             try
             {
-                DBCommon.DebugP("DCSBIOS entering threaded receive data loop");
+                Common.DebugP("DCSBIOS entering threaded receive data loop");
                 while (!_shutdown)
                 {
                     var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
@@ -105,13 +106,13 @@ namespace DCS_BIOS
                         _dcsProtocolParser.AddArray(byteData);
                     }
                 }
-                DBCommon.DebugP("DCSBIOS exiting threaded receive data loop");
+                Common.DebugP("DCSBIOS exiting threaded receive data loop");
             }
             catch (ThreadAbortException) { }
             catch (Exception e)
             {
                 SetLastException(e);
-                DBCommon.LogError(9213, e, "DCSBIOS.ReceiveData()");
+                Common.LogError(9213, e, "DCSBIOS.ReceiveData()");
             }
         }
 
@@ -136,7 +137,7 @@ namespace DCS_BIOS
                     return;
                 }
                 _shutdown = false;
-                DBCommon.DebugP("DCSBIOS is STARTING UP");
+                Common.DebugP("DCSBIOS is STARTING UP");
                 _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
                 _dcsProtocolParser?.Shutdown();
                 _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
@@ -166,7 +167,7 @@ namespace DCS_BIOS
             catch (Exception e)
             {
                 SetLastException(e);
-                DBCommon.LogError(9211, e, "DCSBIOS.Startup()");
+                Common.LogError(9211, e, "DCSBIOS.Startup()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -203,12 +204,12 @@ namespace DCS_BIOS
                     }
                     catch (Exception e)
                     {
-                        DBCommon.LogError(9231, e, "Encoding.Default.GetString(readArray)");
+                        Common.LogError(9231, e, "Encoding.Default.GetString(readArray)");
                     }
                 }
                 catch (Exception e)
                 {
-                    DBCommon.LogError(93211, e, "ServerReadThreadProc()");
+                    Common.LogError(93211, e, "ServerReadThreadProc()");
                 }
             }
             Debug.Print("TCP Listener ServerReadThreadProc returning");
@@ -222,7 +223,7 @@ namespace DCS_BIOS
                 try
                 {
                     _shutdown = true;
-                    DBCommon.DebugP("DCSBIOS is SHUTTING DOWN");
+                    Common.DebugP("DCSBIOS is SHUTTING DOWN");
                     _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
                     _dcsProtocolParser?.Shutdown();
                     _dcsbiosListeningThread?.Abort();
@@ -249,7 +250,7 @@ namespace DCS_BIOS
             catch (Exception ex)
             {
                 SetLastException(ex);
-                DBCommon.LogError(9212, ex, "DCSBIOS.Shutdown()");
+                Common.LogError(9212, ex, "DCSBIOS.Shutdown()");
             }
         }
 
@@ -315,9 +316,9 @@ namespace DCS_BIOS
                 }
                 catch (Exception e)
                 {
-                    DBCommon.DebugP("Error sending data to DCS-BIOS. " + e.Message + Environment.NewLine + e.StackTrace);
+                    Common.DebugP("Error sending data to DCS-BIOS. " + e.Message + Environment.NewLine + e.StackTrace);
                     SetLastException(e);
-                    DBCommon.LogError(9216, e, "DCSBIOS.SendDataFunction()");
+                    Common.LogError(9216, e, "DCSBIOS.SendDataFunction()");
                 }
             }
             return result;
@@ -345,12 +346,9 @@ namespace DCS_BIOS
                 {
                     return;
                 }
-                DBCommon.LogError(666, ex, "Via DCSBIOS.SetLastException()");
+                Common.LogError(666, ex, "Via DCSBIOS.SetLastException()");
                 var message = ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace;
-                if (DBCommon.Debug)
-                {
-                    DBCommon.DebugP(message);
-                }
+                Common.DebugP(message);
                 lock (_lockExceptionObject)
                 {
                     _lastException = new Exception(message);

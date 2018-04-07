@@ -74,9 +74,6 @@ namespace NonVisuals
 
     public class SwitchPanelKey
     {
-        public SwitchPanelKey()
-        {
-        }
 
         public SwitchPanelKey(int group, int mask, bool isOn, SwitchPanelPZ55Keys switchPanelPZ55Key)
         {
@@ -93,7 +90,7 @@ namespace NonVisuals
         public bool IsOn { get; set; }
 
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key { get; set; }
-
+        /*
         public string ExportString()
         {
             return "SwitchPanelKey{" + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}";
@@ -116,7 +113,7 @@ namespace NonVisuals
             //SWITCHKEY_MASTER_ALT
             SwitchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), dataString.Trim());
         }
-
+        */
         public static HashSet<SwitchPanelKey> GetPanelSwitchKeys()
         {
             var result = new HashSet<SwitchPanelKey>();

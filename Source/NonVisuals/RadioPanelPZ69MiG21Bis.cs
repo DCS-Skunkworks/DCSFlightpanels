@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DCS_BIOS;
 using HidLibrary;
 using System.Threading;
+using ClassLibraryCommon;
 
 namespace NonVisuals
 {
@@ -260,8 +261,8 @@ namespace NonVisuals
                         {
                             lock (_lockRadioFreqSelectorPositionObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.UPPER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             break;
                         }
@@ -269,11 +270,11 @@ namespace NonVisuals
                         {
                             lock (_lockRSBNNavChannelObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             lock (_lockRSBNILSChannelObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             break;
                         }
@@ -281,11 +282,11 @@ namespace NonVisuals
                         {
                             lock (_lockARCSectorObject)
                             {
-                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.UPPER_LEFT);
+                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             }
                             lock (_lockARCPresetChannelObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.UPPER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
                             break;
                         }
@@ -296,8 +297,8 @@ namespace NonVisuals
                         {
                             lock (_lockRadioFreqSelectorPositionObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.LOWER_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _radioFreqSelectorPositionCockpit, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             break;
                         }
@@ -305,11 +306,11 @@ namespace NonVisuals
                         {
                             lock (_lockRSBNNavChannelObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnNavChannelCockpit, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             lock (_lockRSBNILSChannelObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _rsbnILSChannelCockpit, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             break;
                         }
@@ -317,11 +318,11 @@ namespace NonVisuals
                         {
                             lock (_lockARCSectorObject)
                             {
-                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.LOWER_LEFT);
+                                SetPZ69DisplayBytesCustom1(ref bytes, GetARCSectorBytesForDisplay(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             }
                             lock (_lockARCPresetChannelObject)
                             {
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.LOWER_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _arcPresetChannelCockpit, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             break;
                         }

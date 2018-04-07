@@ -11,10 +11,16 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
+using ClassLibraryCommon;
 using NonVisuals;
 using Octokit;
 using Application = System.Windows.Application;
+using Cursors = System.Windows.Input.Cursors;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
 using Timer = System.Timers.Timer;
+using ToolTip = System.Windows.Controls.ToolTip;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace DCSFlightpanels
 {
@@ -33,7 +39,6 @@ namespace DCSFlightpanels
 
         private bool _doSearchForPanels = true;
         private HIDHandler _hidHandler;
-        //private FIPHandler _fipHandler;
         private ProfileHandler _panelProfileHandler;
         private string _windowName = "DCSFlightpanels ";
         private Timer _exceptionTimer = new Timer(1000);
@@ -56,13 +61,14 @@ namespace DCSFlightpanels
         {
             try
             {
+                if (Settings.Default.RunMinimized)
+                {
+                    this.WindowState = WindowState.Minimized;
+                }
                 LoadSettings();
                 Common.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
                 Common.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
-                DBCommon.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
-                DBCommon.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
-                _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
-                _dcsBios.Startup();
+                
                 _hidHandler = new HIDHandler();
                 if (_doSearchForPanels)
                 {
@@ -78,10 +84,6 @@ namespace DCSFlightpanels
                 _dcsCheckDcsBiosStatusTimer.Start();
                 _checkForDcsGameWindowTimer.Start();
 
-                if (!_dcsBios.HasLastException())
-                {
-                    RotateGear(2000);
-                }
                 _panelProfileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
                 _panelProfileHandler.Attach(this);
                 _panelProfileHandler.AttachUserMessageHandler(this);
@@ -90,6 +92,17 @@ namespace DCSFlightpanels
                     CreateNewProfile();
                 }
                 _dcsAirframe = _panelProfileHandler.Airframe;
+
+                if (!Common.IsKeyEmulationProfile(_dcsAirframe))
+                {
+                    _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+                    _dcsBios.Startup();
+                    if (!_dcsBios.HasLastException())
+                    {
+                        RotateGear(2000);
+                    }
+                }
+
                 //SearchForPanels();
                 SetWindowTitle();
                 SetWindowState();
@@ -150,36 +163,34 @@ namespace DCSFlightpanels
             }
             var itemCount = TabControlPanels.Items.Count;
             Common.DebugP("There are " + TabControlPanels.Items.Count + " TabControlPanels.Items");
-            //Do not remove, must be because of while()
-            /*if (_fipHandler != null)
-            {
-                _fipHandler.Close();
-            }*/
-
+            
             var closedItemCount = CloseTabItems();
 
-            if (dcsAirframe == DCSAirframe.KEYEMULATOR)
+            if (Common.IsKeyEmulationProfile(dcsAirframe))
             {
                 Common.DebugP("Shutting down DCSBIOS");
-                _dcsBios.Shutdown();
+                _dcsBios?.Shutdown();
                 _dcsStopGearTimer.Stop();
                 _dcsCheckDcsBiosStatusTimer.Stop();
                 _checkForDcsGameWindowTimer.Stop();
                 ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
                 MenuItemCheckForDCS.Visibility = Visibility.Collapsed;
-                MenuItemDCSBIOSSettings.Visibility = Visibility.Collapsed;
                 SearchForPanels();
             }
             else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
                 Common.DebugP("Starting up DCSBIOS");
+                if (_dcsBios == null)
+                {
+                    _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+                }
+
                 _dcsBios.Startup();
                 _dcsStopGearTimer.Start();
                 _dcsCheckDcsBiosStatusTimer.Start();
                 _checkForDcsGameWindowTimer.Start();
                 ImageDcsBiosConnected.Visibility = Visibility.Visible;
                 MenuItemCheckForDCS.Visibility = Visibility.Visible;
-                MenuItemDCSBIOSSettings.Visibility = Visibility.Visible;
                 SearchForPanels();
             }
             if (closedItemCount != itemCount)
@@ -213,7 +224,7 @@ namespace DCSFlightpanels
                         _panelProfileHandler.Detach(saitekPanel);
                         saitekPanel.Detach(_panelProfileHandler);
                         saitekPanel.Detach((IProfileHandlerListener)this);
-                        _dcsBios.DetachDataReceivedListener(saitekPanel);
+                        _dcsBios?.DetachDataReceivedListener(saitekPanel);
 
                         Common.DebugP("Shutting down " + saitekPanel.GetType().Name);
                         saitekPanel.Shutdown();
@@ -252,7 +263,7 @@ namespace DCSFlightpanels
             _panelProfileHandler.Attach(saitekPanel);
             saitekPanel.Attach(_panelProfileHandler);
             saitekPanel.Attach((IProfileHandlerListener)this);
-            _dcsBios.AttachDataReceivedListener(saitekPanel);
+            _dcsBios?.AttachDataReceivedListener(saitekPanel);
         }
 
         public void Detach(SaitekPanel saitekPanel)
@@ -261,7 +272,7 @@ namespace DCSFlightpanels
             _panelProfileHandler.Detach(saitekPanel);
             saitekPanel.Detach(_panelProfileHandler);
             saitekPanel.Detach((IProfileHandlerListener)this);
-            _dcsBios.DetachDataReceivedListener(saitekPanel);
+            _dcsBios?.DetachDataReceivedListener(saitekPanel);
         }
 
         public DCSAirframe GetAirframe()
@@ -288,7 +299,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ55";
-                                    var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this, _panelProfileHandler.Airframe != DCSAirframe.KEYEMULATOR);
+                                    var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this, _panelProfileHandler.IsDCSBIOSProfile);
                                     _saitekUserControls.Add(switchPanelPZ55UserControl);
                                     _panelProfileHandler.Attach(switchPanelPZ55UserControl);
                                     tabItem.Content = switchPanelPZ55UserControl;
@@ -297,13 +308,25 @@ namespace DCSFlightpanels
                                 }
                             case SaitekPanelsEnum.PZ69RadioPanel:
                                 {
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
-                                    {
-                                        break;
-                                    }
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ69";
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR_SRS)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
@@ -405,7 +428,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ70";
-                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.Airframe != DCSAirframe.KEYEMULATOR);
+                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.IsDCSBIOSProfile);
                                     _saitekUserControls.Add(multiPanelUserControl);
                                     _panelProfileHandler.Attach(multiPanelUserControl);
                                     tabItem.Content = multiPanelUserControl;
@@ -414,7 +437,7 @@ namespace DCSFlightpanels
                                 }
                             case SaitekPanelsEnum.BackLitPanel:
                                 {
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
+                                    if (_panelProfileHandler.IsKeyEmulationProfile )
                                     {
                                         break;
                                     }
@@ -431,7 +454,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "TPM";
-                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.Airframe != DCSAirframe.KEYEMULATOR);
+                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.IsDCSBIOSProfile);
                                     _saitekUserControls.Add(tpmPanelUserControl);
                                     _panelProfileHandler.Attach(tpmPanelUserControl);
                                     tabItem.Content = tpmPanelUserControl;
@@ -441,21 +464,7 @@ namespace DCSFlightpanels
                         }
                     } //for each
                 }
-                /*_fipHandler = new FIPHandler();
-                if (_fipHandler.Initialize())
-                {
-                    if (_fipHandler.FIPPanels.Count > 0)
-                    {
-                        //Only one FIP tab regardless of one or many FIPs because they are all configured the same.
-                        var tabItem = new TabItem();
-                        tabItem.Header = "FIP";
-                        var fipPanelUserControl = new FIPPanelUserControl(_fipHandler, tabItem, this);
-                        _saitekUserControls.Add(fipPanelUserControl);
-                        _panelProfileHandler.Attach(fipPanelUserControl);
-                        tabItem.Content = fipPanelUserControl;
-                        TabControlPanels.Items.Add(tabItem);
-                    }
-                }*/
+                
                 SortTabs();
                 if (TabControlPanels.Items.Count > 0)
                 {
@@ -595,18 +604,14 @@ namespace DCSFlightpanels
 
             Common.DebugOn = Settings.Default.DebugOn;
             Common.DebugToFile = Settings.Default.DebugToFile;
-            MenuItemDoDebugging.IsChecked = Common.DebugOn;
-            MenuItemDebugToFile.IsChecked = Common.DebugToFile;
 
 
             if (Settings.Default.APIMode == 0)
             {
-                MenuItemAPIKeyBdEvent.IsChecked = true;
                 Common.APIMode = APIModeEnum.keybd_event;
             }
             else
             {
-                MenuItemAPISendInput.IsChecked = true;
                 Common.APIMode = APIModeEnum.SendInput;
             }
         }
@@ -780,66 +785,70 @@ namespace DCSFlightpanels
         {
             try
             {
-                /*if (!_dcsBios.Running())
-                {
-                    ShowStatusBarMessage("Restarting DcsBios object.");
-                    _dcsBios.Shutdown();
-                    _dcsBios.Startup();
-                }*/
             }
             catch (Exception)
             {
             }
         }
 
+
         private async void CheckForNewRelease()
         {
+            #if !DEBUG
             var assembly = Assembly.GetExecutingAssembly();
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             try
             {
-                var client = new GitHubClient(new ProductHeaderValue("DCSFlightpanels"));
-                var lastRelease = await client.Repository.Release.GetLatest("jdahlblom", "DCSFlightpanels");
-                if (!lastRelease.Prerelease)
+                var dateTime = Settings.Default.LastGitHubCheck;
+
+                var timeSpan = DateTime.Now - dateTime;
+                if (timeSpan.Days > 15)
                 {
-                    var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    var gitHubReleaseArray = lastRelease.TagName.Replace("v.", "").Replace("v", "").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    var newerAvailable = false;
-                    if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
+                    Settings.Default.LastGitHubCheck = DateTime.Now;
+                    Settings.Default.Save();
+                    var client = new GitHubClient(new ProductHeaderValue("DCSFlightpanels"));
+                    var lastRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "DCSFlightpanels");
+                    if (!lastRelease.Prerelease)
                     {
-                        newerAvailable = true;
-                    }
-                    else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
-                    {
-                        if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
+                        var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                        var gitHubReleaseArray = lastRelease.TagName.Replace("v.", "").Replace("v", "").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                        var newerAvailable = false;
+                        if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
                         {
                             newerAvailable = true;
                         }
-                    }
-                    else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
-                    {
-                        if (int.Parse(gitHubReleaseArray[1]) >= int.Parse(thisReleaseArray[1]))
+                        else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
                         {
                             if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
                             {
                                 newerAvailable = true;
                             }
                         }
-                    }
-                    if (newerAvailable)
-                    {
-                        Dispatcher.Invoke(() =>
+                        else if (int.Parse(gitHubReleaseArray[0]) >= int.Parse(thisReleaseArray[0]))
                         {
-                            LabelVersionInformation.Visibility = Visibility.Hidden;
-                            LabelDownloadNewVersion.Visibility = Visibility.Visible;
-                        });
-                    }
-                    else
-                    {
-                        Dispatcher.Invoke(() =>
+                            if (int.Parse(gitHubReleaseArray[1]) >= int.Parse(thisReleaseArray[1]))
+                            {
+                                if (int.Parse(gitHubReleaseArray[1]) > int.Parse(thisReleaseArray[1]))
+                                {
+                                    newerAvailable = true;
+                                }
+                            }
+                        }
+                        if (newerAvailable)
                         {
-                            LabelVersionInformation.Text = "v." + fileVersionInfo.FileVersion;
-                        });
+                            Dispatcher.Invoke(() =>
+                            {
+                                LabelVersionInformation.Visibility = Visibility.Hidden;
+                                LabelDownloadNewVersion.Visibility = Visibility.Visible;
+                            });
+                        }
+                        else
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                LabelVersionInformation.Text = "v." + fileVersionInfo.FileVersion;
+                            });
+                        }
                     }
                 }
             }
@@ -848,6 +857,7 @@ namespace DCSFlightpanels
                 Common.LogError(9011, "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
                 LabelVersionInformation.Text = "v. " + fileVersionInfo.FileVersion;
             }
+            #endif
         }
 
         private void TimerCheckExceptions(object sender, ElapsedEventArgs e)
@@ -930,7 +940,8 @@ namespace DCSFlightpanels
             {
                 Shutdown();
                 //Wtf is hanging?
-                //Environment.Exit(0);
+                Application.Current.Shutdown();
+                Environment.Exit(0);
             }
             catch (Exception ex)
             {
@@ -979,7 +990,7 @@ namespace DCSFlightpanels
             Common.DebugP("Mainwindow Shutdown() _hidHandler shutdown");
             try
             {
-                _dcsBios.Shutdown();
+                _dcsBios?.Shutdown();
             }
             catch (Exception ex)
             {
@@ -1132,77 +1143,6 @@ namespace DCSFlightpanels
             }
         }
 
-        private void MenuItemAPIKeyBdEventClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemAPIKeyBdEvent.IsChecked = !MenuItemAPIKeyBdEvent.IsChecked;
-                MenuItemAPISendInput.IsChecked = !MenuItemAPIKeyBdEvent.IsChecked;
-                if (MenuItemAPIKeyBdEvent.IsChecked)
-                {
-                    Settings.Default.APIMode = 0;
-                    Common.APIMode = APIModeEnum.keybd_event;
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2024, ex);
-            }
-        }
-
-        private void MenuItemAPISendInputClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemAPISendInput.IsChecked = !MenuItemAPISendInput.IsChecked;
-                MenuItemAPIKeyBdEvent.IsChecked = !MenuItemAPISendInput.IsChecked;
-                if (MenuItemAPISendInput.IsChecked)
-                {
-                    Settings.Default.APIMode = 1;
-                    Common.APIMode = APIModeEnum.SendInput;
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2025, ex);
-            }
-        }
-
-        private void MenuItemDCSBIOSSettingsClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var dcsBiosWindow = new DcsBiosWindow(Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosPortFrom, Settings.Default.DCSBiosIPTo, Settings.Default.DCSBiosPortTo, DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
-
-                if (dcsBiosWindow.ShowDialog() == true)
-                {
-                    Settings.Default.DCSBiosIPFrom = dcsBiosWindow.IPAddressFrom;
-                    Settings.Default.DCSBiosPortFrom = dcsBiosWindow.PortFrom;
-                    Settings.Default.DCSBiosIPTo = dcsBiosWindow.IPAddressTo;
-                    Settings.Default.DCSBiosPortTo = dcsBiosWindow.PortTo;
-                    Settings.Default.DCSBiosJSONLocation = dcsBiosWindow.DCSBiosJSONLocation;
-                    Settings.Default.Save();
-
-                    //Refresh, make sure they are using the latest settings
-                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                    _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
-                    _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
-                    _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
-                    _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
-                    _dcsBios.Shutdown();
-                    _dcsBios.Startup();
-                    _panelProfileHandler.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2026, ex);
-            }
-        }
-
-
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1298,7 +1238,7 @@ namespace DCSFlightpanels
             var forwardKeys = !bool.Parse(ButtonImageDisable.Tag.ToString());
             var checkForDCS = Settings.Default.CheckForDCSBeforeSendingCommands;
 
-            if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
+            if (_panelProfileHandler.IsKeyEmulationProfile)
             {
                 //DCS exists or not does not matter, keyboard emulation only
                 checkForDCS = false;
@@ -1488,145 +1428,15 @@ namespace DCSFlightpanels
             }
         }
 
-        private void MenuItemProcessPriorityClick(object sender, RoutedEventArgs e)
-        {
-
-            try
-            {
-                var menuItem = (MenuItem)sender;
-                if (menuItem.Name.Contains("BelowNormal"))
-                {
-                    //0
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.BelowNormal;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = true;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-                }
-                else if (menuItem.Name.Contains("ItemNormal"))
-                {
-                    //1
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.Normal;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = true;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-                }
-                else if (menuItem.Name.Contains("AboveNormal"))
-                {
-                    //2
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.AboveNormal;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = true;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-                }
-                else if (menuItem.Name.Contains("High"))
-                {
-                    //3
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.High;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = true;
-                    MenuItemProcessPriorityRealtime.IsChecked = false;
-
-                }
-                else if (menuItem.Name.Contains("Realtime"))
-                {
-                    //4
-                    Settings.Default.ProcessPriority = ProcessPriorityClass.RealTime;
-                    Settings.Default.Save();
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-                    MenuItemProcessPriorityBelowNormal.IsChecked = false;
-                    MenuItemProcessPriorityNormal.IsChecked = false;
-                    MenuItemProcessPriorityAboveNormal.IsChecked = false;
-                    MenuItemProcessPriorityHigh.IsChecked = false;
-                    MenuItemProcessPriorityRealtime.IsChecked = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2065, ex);
-            }
-        }
-
         private void LoadProcessPriority()
         {
             try
             {
                 Process.GetCurrentProcess().PriorityClass = Settings.Default.ProcessPriority;
-                switch (Settings.Default.ProcessPriority)
-                {
-                    case ProcessPriorityClass.BelowNormal:
-                        {
-                            MenuItemProcessPriorityBelowNormal.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.Normal:
-                        {
-                            MenuItemProcessPriorityNormal.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.AboveNormal:
-                        {
-                            MenuItemProcessPriorityAboveNormal.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.High:
-                        {
-                            MenuItemProcessPriorityHigh.IsChecked = true;
-                            break;
-                        }
-                    case ProcessPriorityClass.RealTime:
-                        {
-                            MenuItemProcessPriorityRealtime.IsChecked = true;
-                            break;
-                        }
-                }
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(2066, ex);
-            }
-        }
-
-        private void MenuItemDoDebugging_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemDoDebugging.IsChecked = !MenuItemDoDebugging.IsChecked;
-                Common.DebugOn = MenuItemDoDebugging.IsChecked;
-                Settings.Default.DebugOn = Common.DebugOn;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(28877066, ex);
-            }
-        }
-
-        private void MenuItemDebugToFile_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                MenuItemDebugToFile.IsChecked = !MenuItemDebugToFile.IsChecked;
-                Common.DebugToFile = MenuItemDebugToFile.IsChecked;
-                Settings.Default.DebugToFile = Common.DebugToFile;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(28877067, ex);
             }
         }
 
@@ -1658,6 +1468,39 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(2027, ex);
+            }
+        }
+
+        private void MenuItemSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(_dcsAirframe);
+            if (settingsWindow.ShowDialog() == true)
+            {
+                if (settingsWindow.GeneralChanged)
+                {
+                    LoadProcessPriority();
+                    Common.DebugOn = Settings.Default.DebugOn;
+                    Common.DebugToFile = Settings.Default.DebugToFile;
+                }
+
+                if (settingsWindow.DCSBIOSChanged && Common.IsDCSBIOSProfile(_dcsAirframe))
+                {
+                    //Refresh, make sure they are using the latest settings
+                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
+                    _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
+                    _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
+                    _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
+                    _dcsBios.Shutdown();
+                    _dcsBios.Startup();
+                    _panelProfileHandler.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                }
+
+                if (settingsWindow.SRSChanged)
+                {
+                    SRSListenerFactory.SetParams(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo);
+                    SRSListenerFactory.ReStart();
+                }
             }
         }
     }

@@ -111,6 +111,12 @@
   <ItemGroup>
     <Content Include="icon_image.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj">
+      <Project>{66514ca6-6e8e-407c-8cfe-e108a95febc2}</Project>
+      <Name>ClassLibraryCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

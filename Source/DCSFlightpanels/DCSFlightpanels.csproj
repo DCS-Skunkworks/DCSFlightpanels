@@ -147,6 +147,9 @@
     <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HESPUserControl.xaml.cs">
+      <DependentUpon>HESPUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
@@ -163,14 +166,17 @@
     <Compile Include="DCSBiosOutputTriggerWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputTriggerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DcsBiosWindow.xaml.cs">
-      <DependentUpon>DcsBiosWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="KeyPressWindow.xaml.cs">
       <DependentUpon>KeyPressWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RadioPanelPZ69UserControlEmulator.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RadioPanelPZ69UserControlSRS.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
@@ -212,6 +218,9 @@
     <Compile Include="SequenceWindow.xaml.cs">
       <DependentUpon>SequenceWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
@@ -249,7 +258,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DcsBiosWindow.xaml">
+    <Page Include="HESPUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -288,6 +297,14 @@
     <Page Include="MultiPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlEmulator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlSRS.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RadioPanelPZ69UserControlA10C.xaml">
       <SubType>Designer</SubType>
@@ -338,6 +355,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SequenceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -453,6 +474,10 @@
     <Resource Include="Images\yellow1.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj">
+      <Project>{66514ca6-6e8e-407c-8cfe-e108a95febc2}</Project>
+      <Name>ClassLibraryCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj">
       <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
       <Name>DCS-BIOS</Name>
@@ -558,6 +583,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\hesp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
