@@ -921,17 +921,6 @@ namespace NonVisuals
                                                 DCSBIOS.Send(ADFModeDec);
                                             }
                                         }
-                                        /*
-                                        if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
-                                        {
-                                            DCSBIOS.Send(ADFModeSwitchCompass);
-                                            _adfModeSwitchLastSent = ADFModeSwitchCompass;
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(ADFModeSwitchAntenna);
-                                            _adfModeSwitchLastSent = ADFModeSwitchAntenna;
-                                        }*/
                                     }
                                     else if (_currentLowerRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
                                     {
