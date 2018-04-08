@@ -15,7 +15,7 @@ Saitek / Logitech Panels Supported:
 * PZ55 Switch Panel (DCS-BIOS & KeyEmulator**)
 * PZ70 Multi Panel (DCS-BIOS & KeyEmulator**)
 * TPM (DCS-BIOS & KeyEmulator)
-* PZ69 Radio Panel (DCS-BIOS & KeyEmulator_SRS***)
+* PZ69 Radio Panel (DCS-BIOS & KeyEmulator** & KeyEmulator_SRS***)
 * BIP Back Lit Information Panel (DCS-BIOS)
 
 **LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
