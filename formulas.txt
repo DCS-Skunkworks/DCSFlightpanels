@@ -12,3 +12,17 @@ Course needle to degrees
 truncate(HSI_CRS_KNOB*360/65536)
 
 --------------------------------------------------------------------
+
+Mi-8
+--------------------------------------------------------------------
+Left Variometer
+Ifless( VARIOMETER_L 56032 ( Ifless( VARIOMETER_L 46858 ( Ifless( VARIOMETER_L 40304 ( Ifless( VARIOMETER_L 35717 ( Ifless( VARIOMETER_L 34406 ( Ifless( VARIOMETER_L 32768 ( Ifless( VARIOMETER_L 31129 ( Ifless( VARIOMETER_L 29818 ( Ifless( VARIOMETER_L 25231 ( Ifless( VARIOMETER_L 18677 ( Ifless( VARIOMETER_L 9503 ( (VARIOMETER_L*0,00105)+-30) ((0,00109*(VARIOMETER_L-9503))+-20))) ((0,00076*(VARIOMETER_L-18677))+-10))) ((0,00065*(VARIOMETER_L-25231))+-5))) ((0,00076*(VARIOMETER_L-29818))+-2))) ((0,00061*(VARIOMETER_L-31129))+-1))) ((0,00061*(VARIOMETER_L-32768))+0))) ((0,00076*(VARIOMETER_L-34406))+1))) ((0,00065*(VARIOMETER_L-35717))+2))) ((0,00076*(VARIOMETER_L-40304))+5))) ((0,00109*(VARIOMETER_L-46858))+10))) ((0,00105*(VARIOMETER_L-56032))+20))
+
+Some gauges' scales are not linear. The above formula handles that. To generate formulas
+like these you can use Capt Zeen's formula generator:
+http://www.captzeen.com/helios/create_formula.asp
+
+You will find the gauge values in the "mainpanel_init.lua":
+Variometer_L.input		= {-30,  -20,   -10,   -5,    -2,    -1,    0, 1,    2,    5,    10,   20,   30}
+Variometer_L.output		= {-1.0, -0.71, -0.43, -0.23, -0.09, -0.05, 0, 0.05, 0.09, 0.23, 0.43, 0.71, 1.0}
+--------------------------------------------------------------------
