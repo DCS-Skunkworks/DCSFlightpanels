@@ -438,9 +438,9 @@ namespace NonVisuals
             }
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
         protected void DeviceAttachedHandler()

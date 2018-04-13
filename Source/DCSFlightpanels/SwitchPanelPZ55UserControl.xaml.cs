@@ -68,18 +68,18 @@ namespace DCSFlightpanels
             return GetType().Name;
         }
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsKeyEmulationProfile(dcsAirframe))
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsKeyEmulationProfile(e.Airframe))
                     {
                         image.ContextMenu = null;
                     }
                     else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsDCSBIOSProfile(dcsAirframe))
+                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsDCSBIOSProfile(e.Airframe))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         image.ContextMenu.Tag = image.Name;
@@ -92,7 +92,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
             {
@@ -104,13 +104,13 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.PZ55SwitchPanel && uniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
-                    NotifySwitchChanges(hashSet);
+                    NotifySwitchChanges(e.Switches);
                 }
             }
             catch (Exception ex)
@@ -119,7 +119,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
             {
@@ -144,13 +144,13 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
             {
-                if (_switchPanelPZ55.InstanceId.Equals(uniqueId))
+                if (_switchPanelPZ55.InstanceId.Equals(e.UniqueId))
                 {
-                    var position = (SwitchPanelPZ55LEDPosition)saitekPanelLEDPosition.Position;
+                    var position = (SwitchPanelPZ55LEDPosition)e.LEDPosition.Position;
                     var imageArray = _imageArrayUpper;
 
                     switch (position)
@@ -174,7 +174,7 @@ namespace DCSFlightpanels
                             }
                     }
 
-                    switch (panelLEDColor)
+                    switch (e.LEDColor)
                     {
                         case PanelLEDColor.DARK:
                             {
@@ -234,7 +234,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(string stringData)
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
         {
             try
             {
@@ -246,11 +246,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.PZ55SwitchPanel && uniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -261,11 +261,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(object sender, PanelEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.PZ55SwitchPanel && uniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -276,11 +276,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
             {
-                if (uniqueId.Equals(_switchPanelPZ55.InstanceId) && saitekPanelsEnum == SaitekPanelsEnum.PZ55SwitchPanel)
+                if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel)
                 {
                     Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = ""));
@@ -292,7 +292,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {

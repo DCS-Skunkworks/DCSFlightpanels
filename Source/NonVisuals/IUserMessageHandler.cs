@@ -2,6 +2,6 @@
 {
     public interface IUserMessageHandler
     {
-        void UserMessage(string message);
+        void UserMessage(object sender, UserMessageEventArgs e);
     }
 }

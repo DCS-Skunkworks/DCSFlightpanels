@@ -124,7 +124,7 @@ namespace DCS_BIOS
 
     public class DCSBIOSStringListener : IDcsBiosDataListener
     {
-        public delegate void DCSBIOSStringReceived(uint address, string stringData);
+        public delegate void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e);
         public event DCSBIOSStringReceived OnDCSBIOSStringReceived;
 
         private List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new List<KeyValuePair<uint, DCSBIOSString>>();
@@ -135,13 +135,13 @@ namespace DCS_BIOS
         //For those that wants to listen to Strings received from DCS-BIOS
         public void Attach(IDCSBIOSStringListener iDCSBIOSStringListener)
         {
-            OnDCSBIOSStringReceived += new DCSBIOSStringReceived(iDCSBIOSStringListener.DCSBIOSStringReceived);
+            OnDCSBIOSStringReceived += iDCSBIOSStringListener.DCSBIOSStringReceived;
         }
 
         //For those that wants to listen to this panel
         public void Detach(IDCSBIOSStringListener iDCSBIOSStringListener)
         {
-            OnDCSBIOSStringReceived -= new DCSBIOSStringReceived(iDCSBIOSStringListener.DCSBIOSStringReceived);
+            OnDCSBIOSStringReceived -= iDCSBIOSStringListener.DCSBIOSStringReceived;
         }
 
         public DCSBIOSStringListener()
@@ -211,7 +211,7 @@ namespace DCS_BIOS
                             //kvp.Value.Address == start address for the string
                             if (kvp.Value.IsComplete)
                             {
-                                OnDCSBIOSStringReceived(kvp.Value.Address, kvp.Value.StringValue);
+                                OnDCSBIOSStringReceived(this, new DCSBIOSStringDataEventArgs(){Address = kvp.Value.Address, StringData = kvp.Value.StringValue});
                             }
                         }
                     }
@@ -257,9 +257,9 @@ namespace DCS_BIOS
             }
         }
 
-        public void DcsBiosDataReceived(uint address, uint data)
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            UpdateStrings(address, data);
+            UpdateStrings(e.Address, e.Data);
         }
 
     }

@@ -126,17 +126,17 @@ namespace NonVisuals
             return result;
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
 
             lock (_dcsBiosDataReceivedLock)
             {
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
             }
 
         }

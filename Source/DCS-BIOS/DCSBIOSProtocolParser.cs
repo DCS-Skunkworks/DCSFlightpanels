@@ -19,9 +19,9 @@ namespace DCS_BIOS
         DATA_HIGH = 6,
     }
 
-    internal class DCSBIOSProtocolParser
+    internal class DCSBIOSProtocolParser : IDisposable
     {
-        public delegate void DcsDataAddressValueEventHandler(uint address, uint data);
+        public delegate void DcsDataAddressValueEventHandler(object sender, DCSBIOSDataEventArgs e);
         public event DcsDataAddressValueEventHandler OnDcsDataAddressValue;
 
         public void Attach(IDcsBiosDataListener iDcsBiosDataListener)
@@ -55,6 +55,28 @@ namespace DCS_BIOS
             _syncByteCount = 0;
             DCSBIOSProtocolParserSO = this;
             _shutdown = false;
+        }
+
+        ~DCSBIOSProtocolParser()
+        {
+            // Finalizer calls Dispose(false)  
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                _autoResetEvent?.Dispose();
+            }
+            // free native resources
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public void Startup()
@@ -206,7 +228,7 @@ namespace DCS_BIOS
                             {
                                 Debug.Print("SENDING FROM DCS-BIOS address & value --> " + _address + "  " + _data);
                             }*/
-                            OnDcsDataAddressValue?.Invoke(_address, _data);
+                            OnDcsDataAddressValue?.Invoke(this, new DCSBIOSDataEventArgs() { Address = _address, Data = _data });
                         }
                         _address += 2;
                         if (_count == 0)

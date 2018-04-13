@@ -75,7 +75,7 @@ namespace DCSFlightpanels
             return GetType().Name;
         }
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
             {
@@ -99,13 +99,13 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.TPM && uniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
-                    NotifySwitchChanges(hashSet);
+                    NotifySwitchChanges(e.Switches);
                 }
             }
             catch (Exception ex)
@@ -114,7 +114,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(string stringData)
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
         {
             try
             {
@@ -151,11 +151,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.TPM && uniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -166,7 +166,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
             {
@@ -178,11 +178,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(object sender, PanelEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.TPM && uniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -193,11 +193,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
             {
-                if (uniqueId.Equals(_tpmPanel.InstanceId) && saitekPanelsEnum == SaitekPanelsEnum.TPM)
+                if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.TPM)
                 {
                     Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher.BeginInvoke((Action)(() => TextBoxLogTPM.Text = ""));
@@ -209,7 +209,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {

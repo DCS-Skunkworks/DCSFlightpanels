@@ -224,24 +224,24 @@ namespace NonVisuals
             }
         }
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
 
-                if (string.IsNullOrWhiteSpace(stringData))
+                if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    Common.DebugP("Received DCSBIOS stringData : " + stringData);
+                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
                 
-                if (address.Equals(_yadro1aDcsbiosOutputCockpitFrequency.Address))
+                if (e.Address.Equals(_yadro1aDcsbiosOutputCockpitFrequency.Address))
                 {
                     // "02000.0" - "17999.9"
                     // Last digit not used in panel
 
 
-                    var tmpFreq = Double.Parse(stringData, NumberFormatInfoFullDisplay);
+                    var tmpFreq = Double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_yadro1aCockpitFrequency))
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -256,7 +256,7 @@ namespace NonVisuals
                     {
                         // "02000.0" - "*17*999.9"
                         var tmp = _yadro1aCockpitFreq1DialPos;
-                        _yadro1aCockpitFreq1DialPos = uint.Parse(stringData.Substring(0, 2));
+                        _yadro1aCockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
                         Common.DebugP("Just read YaDRO-1A dial 1 position: " + _yadro1aCockpitFreq1DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1aCockpitFreq1DialPos)
                         {
@@ -268,7 +268,7 @@ namespace NonVisuals
                     {
                         // "02000.0" - "17*9*99.9"  
                         var tmp = _yadro1aCockpitFreq2DialPos;
-                        _yadro1aCockpitFreq2DialPos = uint.Parse(stringData.Substring(2, 1));
+                        _yadro1aCockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
                         Common.DebugP("Just read YaDRO-1A dial 2 position: " + _yadro1aCockpitFreq2DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1aCockpitFreq2DialPos)
                         {
@@ -280,7 +280,7 @@ namespace NonVisuals
                     {
                         // "02000.0" - "179*9*9.9"  
                         var tmp = _yadro1aCockpitFreq3DialPos;
-                        _yadro1aCockpitFreq3DialPos = uint.Parse(stringData.Substring(3, 1));
+                        _yadro1aCockpitFreq3DialPos = uint.Parse(e.StringData.Substring(3, 1));
                         Common.DebugP("Just read YaDRO-1A dial 3 position: " + _yadro1aCockpitFreq3DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1aCockpitFreq3DialPos)
                         {
@@ -292,7 +292,7 @@ namespace NonVisuals
                     {
                         // "02000.0" - "1799*9*.9"  
                         var tmp = _yadro1aCockpitFreq4DialPos;
-                        _yadro1aCockpitFreq4DialPos = uint.Parse(stringData.Substring(4, 1));
+                        _yadro1aCockpitFreq4DialPos = uint.Parse(e.StringData.Substring(4, 1));
                         Common.DebugP("Just read YaDRO-1A dial 4 position: " + _yadro1aCockpitFreq4DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1aCockpitFreq4DialPos)
                         {
@@ -301,13 +301,13 @@ namespace NonVisuals
                         }
                     }
                 }
-                if (address.Equals(_r863ManualDcsbiosOutputCockpitFrequency.Address))
+                if (e.Address.Equals(_r863ManualDcsbiosOutputCockpitFrequency.Address))
                 {
                     // "100.000" - "399.975"
                     // Last digit not used in panel
 
 
-                    var tmpFreq = Double.Parse(stringData, NumberFormatInfoFullDisplay);
+                    var tmpFreq = Double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_r863ManualCockpitFrequency))
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -322,7 +322,7 @@ namespace NonVisuals
                     {
                         // "100.000" - "*39*9.975"
                         var tmp = _r863ManualCockpitFreq1DialPos;
-                        _r863ManualCockpitFreq1DialPos = uint.Parse(stringData.Substring(0, 2));
+                        _r863ManualCockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
                         Common.DebugP("Just read R-863 dial 1 position: " + _r863ManualCockpitFreq1DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq1DialPos)
                         {
@@ -334,7 +334,7 @@ namespace NonVisuals
                     {
                         // "100.000" - "39*9*.975"
                         var tmp = _r863ManualCockpitFreq2DialPos;
-                        _r863ManualCockpitFreq2DialPos = uint.Parse(stringData.Substring(2, 1));
+                        _r863ManualCockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
                         Common.DebugP("Just read R-863 dial 2 position: " + _r863ManualCockpitFreq2DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq2DialPos)
                         {
@@ -346,7 +346,7 @@ namespace NonVisuals
                     {
                         // "100.000" - "399.*9*75"
                         var tmp = _r863ManualCockpitFreq3DialPos;
-                        _r863ManualCockpitFreq3DialPos = uint.Parse(stringData.Substring(4, 1));
+                        _r863ManualCockpitFreq3DialPos = uint.Parse(e.StringData.Substring(4, 1));
                         Common.DebugP("Just read R-863 dial 3 position: " + _r863ManualCockpitFreq3DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq3DialPos)
                         {
@@ -359,7 +359,7 @@ namespace NonVisuals
                         // "100.000" - "399.9*75*"
                         //Read only the first char
                         var tmp = _r863ManualCockpitFreq4DialPos;
-                        _r863ManualCockpitFreq4DialPos = uint.Parse(stringData.Substring(5, 1));
+                        _r863ManualCockpitFreq4DialPos = uint.Parse(e.StringData.Substring(5, 1));
                         Common.DebugP("Just read R-863 dial 4 position: " + _r863ManualCockpitFreq4DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq4DialPos)
                         {
@@ -369,19 +369,19 @@ namespace NonVisuals
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(78030, e, "DCSBIOSStringReceived()");
+                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
             }
             ShowFrequenciesOnPanel();
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
 
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
                 
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -394,12 +394,12 @@ namespace NonVisuals
 
 
                 //R-863 Preset Channel Dial
-                if (address == _r863Preset1DcsbiosOutputPresetDial.Address)
+                if (e.Address == _r863Preset1DcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockR863Preset1DialObject1)
                     {
                         var tmp = _r863PresetCockpitDialPos;
-                        _r863PresetCockpitDialPos = _r863Preset1DcsbiosOutputPresetDial.GetUIntValue(data);
+                        _r863PresetCockpitDialPos = _r863Preset1DcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _r863PresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -408,12 +408,12 @@ namespace NonVisuals
                 }
 
                 //R-863 Unit Switch
-                if (address == _r863UnitSwitchDcsbiosOutput.Address)
+                if (e.Address == _r863UnitSwitchDcsbiosOutput.Address)
                 {
                     lock (_lockR863UnitSwitchObject)
                     {
                         var tmp = _r863UnitSwitchCockpitPos;
-                        _r863UnitSwitchCockpitPos = _r863UnitSwitchDcsbiosOutput.GetUIntValue(data);
+                        _r863UnitSwitchCockpitPos = _r863UnitSwitchDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _r863UnitSwitchCockpitPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -424,12 +424,12 @@ namespace NonVisuals
                 //YaDRO-1A
 
                 //R-828 Preset Channel Dial
-                if (address == _r828Preset1DcsbiosOutputDial.Address)
+                if (e.Address == _r828Preset1DcsbiosOutputDial.Address)
                 {
                     lock (_lockR828Preset1DialObject1)
                     {
                         var tmp = _r828PresetCockpitDialPos;
-                        _r828PresetCockpitDialPos = _r828Preset1DcsbiosOutputDial.GetUIntValue(data);
+                        _r828PresetCockpitDialPos = _r828Preset1DcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _r828PresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -438,12 +438,12 @@ namespace NonVisuals
                 }
 
                 //ADF Main Preset Dial 1
-                if (address == _adfMainDcsbiosOutputPresetDial1.Address)
+                if (e.Address == _adfMainDcsbiosOutputPresetDial1.Address)
                 {
                     lock (_lockADFMainDialObject1)
                     {
                         var tmp = _adfMainCockpitPresetDial1Pos;
-                        _adfMainCockpitPresetDial1Pos = _adfMainDcsbiosOutputPresetDial1.GetUIntValue(data);
+                        _adfMainCockpitPresetDial1Pos = _adfMainDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
                         if (tmp != _adfMainCockpitPresetDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -452,12 +452,12 @@ namespace NonVisuals
                 }
 
                 //ADF Main Preset Dial 2
-                if (address == _adfMainDcsbiosOutputPresetDial2.Address)
+                if (e.Address == _adfMainDcsbiosOutputPresetDial2.Address)
                 {
                     lock (_lockADFMainDialObject2)
                     {
                         var tmp = _adfMainCockpitPresetDial2Pos;
-                        _adfMainCockpitPresetDial2Pos = _adfMainDcsbiosOutputPresetDial2.GetUIntValue(data);
+                        _adfMainCockpitPresetDial2Pos = _adfMainDcsbiosOutputPresetDial2.GetUIntValue(e.Data);
                         if (tmp != _adfMainCockpitPresetDial2Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -466,12 +466,12 @@ namespace NonVisuals
                 }
 
                 //ADF Backup Preset Dial 1
-                if (address == _adfBackupDcsbiosOutputPresetDial1.Address)
+                if (e.Address == _adfBackupDcsbiosOutputPresetDial1.Address)
                 {
                     lock (_lockADFBackupDialObject1)
                     {
                         var tmp = _adfBackupCockpitPresetDial1Pos;
-                        _adfBackupCockpitPresetDial1Pos = _adfBackupDcsbiosOutputPresetDial1.GetUIntValue(data);
+                        _adfBackupCockpitPresetDial1Pos = _adfBackupDcsbiosOutputPresetDial1.GetUIntValue(e.Data);
                         if (tmp != _adfBackupCockpitPresetDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -480,12 +480,12 @@ namespace NonVisuals
                 }
 
                 //ADF Backup Preset Dial 2
-                if (address == _adfBackupDcsbiosOutputPresetDial2.Address)
+                if (e.Address == _adfBackupDcsbiosOutputPresetDial2.Address)
                 {
                     lock (_lockADFBackupDialObject2)
                     {
                         var tmp = _adfBackupCockpitPresetDial2Pos;
-                        _adfBackupCockpitPresetDial2Pos = _adfBackupDcsbiosOutputPresetDial2.GetUIntValue(data);
+                        _adfBackupCockpitPresetDial2Pos = _adfBackupDcsbiosOutputPresetDial2.GetUIntValue(e.Data);
                         if (tmp != _adfBackupCockpitPresetDial2Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -494,12 +494,12 @@ namespace NonVisuals
                 }
 
                 //ADF Backup or Main
-                if (address == _adfBackupMainDcsbiosOutputPresetDial.Address)
+                if (e.Address == _adfBackupMainDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockADFBackupMainDialObject)
                     {
                         var tmp = _adfBackupMainCockpitDial1Pos;
-                        _adfBackupMainCockpitDial1Pos = _adfBackupMainDcsbiosOutputPresetDial.GetUIntValue(data);
+                        _adfBackupMainCockpitDial1Pos = _adfBackupMainDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _adfBackupMainCockpitDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -508,12 +508,12 @@ namespace NonVisuals
                 }
 
                 //ARK-UD  VHF Homing Preset Channels
-                if (address == _arkUDPresetDcsbiosOutputPresetDial.Address)
+                if (e.Address == _arkUDPresetDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockARKUDPresetDialObject)
                     {
                         var tmp = _arkUDPresetCockpitDial1Pos;
-                        _arkUDPresetCockpitDial1Pos = _arkUDPresetDcsbiosOutputPresetDial.GetUIntValue(data);
+                        _arkUDPresetCockpitDial1Pos = _arkUDPresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _arkUDPresetCockpitDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -522,12 +522,12 @@ namespace NonVisuals
                 }
 
                 //ARK-UD  Mode 
-                if (address == _arkUDModeDcsbiosOutputDial.Address)
+                if (e.Address == _arkUDModeDcsbiosOutputDial.Address)
                 {
                     lock (_lockARKUDModeDialObject)
                     {
                         var tmp = _arkUDModeCockpitDial1Pos;
-                        _arkUDModeCockpitDial1Pos = _arkUDModeDcsbiosOutputDial.GetUIntValue(data);
+                        _arkUDModeCockpitDial1Pos = _arkUDModeDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _arkUDModeCockpitDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -536,12 +536,12 @@ namespace NonVisuals
                 }
 
                 //ARK-UD  VHF/UHF
-                if (address == _arkUDVhfUhfModeDcsbiosOutputDial.Address)
+                if (e.Address == _arkUDVhfUhfModeDcsbiosOutputDial.Address)
                 {
                     lock (_lockARKUDVhfUhfModeDialObject)
                     {
                         var tmp = _arkUDVhfUhfModeCockpitDial1Pos;
-                        _arkUDVhfUhfModeCockpitDial1Pos = _arkUDVhfUhfModeDcsbiosOutputDial.GetUIntValue(data);
+                        _arkUDVhfUhfModeCockpitDial1Pos = _arkUDVhfUhfModeDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _arkUDVhfUhfModeCockpitDial1Pos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -550,12 +550,12 @@ namespace NonVisuals
                 }
 
                 //SPU-7 Dial
-                if (address == _spu7DcsbiosOutputPresetDial.Address)
+                if (e.Address == _spu7DcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockSPU7DialObject1)
                     {
                         var tmp = _spu7CockpitDialPos;
-                        _spu7CockpitDialPos = _spu7DcsbiosOutputPresetDial.GetUIntValue(data);
+                        _spu7CockpitDialPos = _spu7DcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _spu7CockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -564,12 +564,12 @@ namespace NonVisuals
                 }
 
                 //SPU-7 Radio/ICS
-                if (address == _spu7ICSSwitchDcsbiosOutput.Address)
+                if (e.Address == _spu7ICSSwitchDcsbiosOutput.Address)
                 {
                     lock (_lockSPU7ICSSwitchObject)
                     {
                         var tmp = _spu7ICSSwitchCockpitDialPos;
-                        _spu7ICSSwitchCockpitDialPos = _spu7ICSSwitchDcsbiosOutput.GetUIntValue(data);
+                        _spu7ICSSwitchCockpitDialPos = _spu7ICSSwitchDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _spu7ICSSwitchCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);

@@ -41,12 +41,12 @@ namespace NonVisuals
             Startup();
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
                 
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -56,13 +56,13 @@ namespace NonVisuals
                  */
 
                 //VHF On Off
-                if (address == _vhf1DcsbiosOutputPresetButton0.Address)
+                if (e.Address == _vhf1DcsbiosOutputPresetButton0.Address)
                 {
                     lock (_lockVhf1DialObject1)
                     {
 
                         var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton0.GetUIntValue(data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton0.GetUIntValue(e.Data) == 1)
                         {
                             //Radio is off
                             _vhf1CockpitPresetActiveButton = 0;
@@ -75,12 +75,12 @@ namespace NonVisuals
                 }
 
                 //VHF A
-                if (address == _vhf1DcsbiosOutputPresetButton1.Address)
+                if (e.Address == _vhf1DcsbiosOutputPresetButton1.Address)
                 {
                     lock (_lockVhf1DialObject1)
                     {
                         var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton1.GetUIntValue(data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton1.GetUIntValue(e.Data) == 1)
                         {
                             //Radio is on A
                             _vhf1CockpitPresetActiveButton = 1;
@@ -93,12 +93,12 @@ namespace NonVisuals
                 }
 
                 //VHF B
-                if (address == _vhf1DcsbiosOutputPresetButton2.Address)
+                if (e.Address == _vhf1DcsbiosOutputPresetButton2.Address)
                 {
                     lock (_lockVhf1DialObject1)
                     {
                         var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton2.GetUIntValue(data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton2.GetUIntValue(e.Data) == 1)
                         {
                             //Radio is on A
                             _vhf1CockpitPresetActiveButton = 2;
@@ -111,12 +111,12 @@ namespace NonVisuals
                 }
 
                 //VHF C
-                if (address == _vhf1DcsbiosOutputPresetButton3.Address)
+                if (e.Address == _vhf1DcsbiosOutputPresetButton3.Address)
                 {
                     lock (_lockVhf1DialObject1)
                     {
                         var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton3.GetUIntValue(data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton3.GetUIntValue(e.Data) == 1)
                         {
                             //Radio is on A
                             _vhf1CockpitPresetActiveButton = 3;
@@ -129,12 +129,12 @@ namespace NonVisuals
                 }
 
                 //VHF D
-                if (address == _vhf1DcsbiosOutputPresetButton4.Address)
+                if (e.Address == _vhf1DcsbiosOutputPresetButton4.Address)
                 {
                     lock (_lockVhf1DialObject1)
                     {
                         var tmp = _vhf1CockpitPresetActiveButton;
-                        if (_vhf1DcsbiosOutputPresetButton4.GetUIntValue(data) == 1)
+                        if (_vhf1DcsbiosOutputPresetButton4.GetUIntValue(e.Data) == 1)
                         {
                             //Radio is on A
                             _vhf1CockpitPresetActiveButton = 4;
@@ -763,7 +763,7 @@ namespace NonVisuals
                 Common.DebugP("Entering P-51D Radio SetLowerRadioMode()");
                 Common.DebugP("Setting lower radio mode to " + currentP51DRadioMode);
                 _currentLowerRadioMode = currentP51DRadioMode;
-                //If NOUSE then send next round of data to the panel in order to clear the LCD.
+                //If NOUSE then send next round of e.Data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)

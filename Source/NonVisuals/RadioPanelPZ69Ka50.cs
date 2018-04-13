@@ -160,11 +160,11 @@ namespace NonVisuals
         }
 
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
                 
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -175,12 +175,12 @@ namespace NonVisuals
                  */
 
                 //VHF1 Preset Channel Dial
-                if (address == _vhf1DcsbiosOutputPresetDial.Address)
+                if (e.Address == _vhf1DcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockVhf1DialObject1)
                     {
                         var tmp = _vhf1CockpitPresetDialPos;
-                        _vhf1CockpitPresetDialPos = _vhf1DcsbiosOutputPresetDial.GetUIntValue(data);
+                        _vhf1CockpitPresetDialPos = _vhf1DcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _vhf1CockpitPresetDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -189,12 +189,12 @@ namespace NonVisuals
                 }
 
                 //VHF2 Dial 1 R-800L1
-                if (address == _r800l1DcsbiosOutputFreqDial1.Address)
+                if (e.Address == _r800l1DcsbiosOutputFreqDial1.Address)
                 {
                     lock (_lockR800L1DialsObject1)
                     {
                         var tmp = _r800l1CockpitFreq1DialPos;
-                        _r800l1CockpitFreq1DialPos = _r800l1DcsbiosOutputFreqDial1.GetUIntValue(data);
+                        _r800l1CockpitFreq1DialPos = _r800l1DcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                         if (tmp != _r800l1CockpitFreq1DialPos)
                         {
                             //Debug.WriteLine("_r800l1CockpitFreq1DialPos was " + tmp + ", is now " + _r800l1CockpitFreq1DialPos);
@@ -205,12 +205,12 @@ namespace NonVisuals
                 }
 
                 //VHF2 Dial 2 R-800L1
-                if (address == _r800l1DcsbiosOutputFreqDial2.Address)
+                if (e.Address == _r800l1DcsbiosOutputFreqDial2.Address)
                 {
                     lock (_lockR800L1DialsObject2)
                     {
                         var tmp = _r800l1CockpitFreq2DialPos;
-                        _r800l1CockpitFreq2DialPos = _r800l1DcsbiosOutputFreqDial2.GetUIntValue(data);
+                        _r800l1CockpitFreq2DialPos = _r800l1DcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                         if (tmp != _r800l1CockpitFreq2DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -220,12 +220,12 @@ namespace NonVisuals
                 }
 
                 //VHF2 Dial 3 R-800L1
-                if (address == _r800l1DcsbiosOutputFreqDial3.Address)
+                if (e.Address == _r800l1DcsbiosOutputFreqDial3.Address)
                 {
                     lock (_lockR800L1DialsObject3)
                     {
                         var tmp = _r800l1CockpitFreq3DialPos;
-                        _r800l1CockpitFreq3DialPos = _r800l1DcsbiosOutputFreqDial3.GetUIntValue(data);
+                        _r800l1CockpitFreq3DialPos = _r800l1DcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                         if (tmp != _r800l1CockpitFreq3DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -235,12 +235,12 @@ namespace NonVisuals
                 }
 
                 //VHF2 Dial 4 R-800L1
-                if (address == _r800l1DcsbiosOutputFreqDial4.Address)
+                if (e.Address == _r800l1DcsbiosOutputFreqDial4.Address)
                 {
                     lock (_lockR800L1DialsObject4)
                     {
                         var tmp = _r800l1CockpitFreq4DialPos;
-                        _r800l1CockpitFreq4DialPos = _r800l1DcsbiosOutputFreqDial4.GetUIntValue(data);
+                        _r800l1CockpitFreq4DialPos = _r800l1DcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                         if (tmp != _r800l1CockpitFreq4DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -250,12 +250,12 @@ namespace NonVisuals
                 }
 
                 //NAV2 Datalink Master Mode
-                if (address == _datalinkMasterModeDcsbiosOutput.Address)
+                if (e.Address == _datalinkMasterModeDcsbiosOutput.Address)
                 {
                     lock (_lockDatalinkMasterModeObject)
                     {
                         var tmp = _datalinkMasterModeCockpitPos;
-                        _datalinkMasterModeCockpitPos = _datalinkMasterModeDcsbiosOutput.GetUIntValue(data);
+                        _datalinkMasterModeCockpitPos = _datalinkMasterModeDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _datalinkMasterModeCockpitPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -264,12 +264,12 @@ namespace NonVisuals
                 }
 
                 //NAV2 Datalink Self ID
-                if (address == _datalinkSelfIdDcsbiosOutput.Address)
+                if (e.Address == _datalinkSelfIdDcsbiosOutput.Address)
                 {
                     lock (_lockDatalinkSelfIdObject)
                     {
                         var tmp = _datalinkSelfIdCockpitPos;
-                        _datalinkSelfIdCockpitPos = _datalinkSelfIdDcsbiosOutput.GetUIntValue(data);
+                        _datalinkSelfIdCockpitPos = _datalinkSelfIdDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _datalinkSelfIdCockpitPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -278,12 +278,12 @@ namespace NonVisuals
                 }
 
                 //NAV2 Datalink Power ON/OFF
-                if (address == _datalinkPowerOnOffDcsbiosOutput.Address)
+                if (e.Address == _datalinkPowerOnOffDcsbiosOutput.Address)
                 {
                     lock (_lockDatalinkPowerOnOffObject)
                     {
                         var tmp = _datalinkPowerOnOffCockpitPos;
-                        _datalinkPowerOnOffCockpitPos = _datalinkPowerOnOffDcsbiosOutput.GetUIntValue(data);
+                        _datalinkPowerOnOffCockpitPos = _datalinkPowerOnOffDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _datalinkPowerOnOffCockpitPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -292,12 +292,12 @@ namespace NonVisuals
                 }
 
                 //ADF Preset Dial
-                if (address == _adfDcsbiosOutputPresetDial.Address)
+                if (e.Address == _adfDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockADFDialObject1)
                     {
                         var tmp = _adfCockpitPresetDialPos;
-                        _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.GetUIntValue(data);
+                        _adfCockpitPresetDialPos = _adfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _adfCockpitPresetDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -308,12 +308,12 @@ namespace NonVisuals
 
 
                 //ADF Mode
-                if (address == _adfModeDcsbiosOutput.Address)
+                if (e.Address == _adfModeDcsbiosOutput.Address)
                 {
                     lock (_lockADFModeDialObject)
                     {
                         var tmp = _adfModeCockpitPos;
-                        _adfModeCockpitPos = _adfModeDcsbiosOutput.GetUIntValue(data);
+                        _adfModeCockpitPos = _adfModeDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _adfModeCockpitPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);

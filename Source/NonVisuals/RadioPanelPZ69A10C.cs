@@ -191,9 +191,9 @@ namespace NonVisuals
             }
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            UpdateCounter(address, data);
+            UpdateCounter(e.Address, e.Data);
 
             
             /*
@@ -205,12 +205,12 @@ namespace NonVisuals
              */
 
             //VHF AM
-            if (address == _vhfAmDcsbiosOutputFreqDial1.Address)
+            if (e.Address == _vhfAmDcsbiosOutputFreqDial1.Address)
             {
                 lock (_lockVhfAmDialsObject1)
                 {
                     var tmp = _vhfAmCockpitFreq1DialPos;
-                    _vhfAmCockpitFreq1DialPos = _vhfAmDcsbiosOutputFreqDial1.GetUIntValue(data);
+                    _vhfAmCockpitFreq1DialPos = _vhfAmDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq1DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -218,12 +218,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _vhfAmDcsbiosOutputFreqDial2.Address)
+            if (e.Address == _vhfAmDcsbiosOutputFreqDial2.Address)
             {
                 lock (_lockVhfAmDialsObject2)
                 {
                     var tmp = _vhfAmCockpitFreq2DialPos;
-                    _vhfAmCockpitFreq2DialPos = _vhfAmDcsbiosOutputFreqDial2.GetUIntValue(data);
+                    _vhfAmCockpitFreq2DialPos = _vhfAmDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq2DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -231,12 +231,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _vhfAmDcsbiosOutputFreqDial3.Address)
+            if (e.Address == _vhfAmDcsbiosOutputFreqDial3.Address)
             {
                 lock (_lockVhfAmDialsObject3)
                 {
                     var tmp = _vhfAmCockpitFreq3DialPos;
-                    _vhfAmCockpitFreq3DialPos = _vhfAmDcsbiosOutputFreqDial3.GetUIntValue(data);
+                    _vhfAmCockpitFreq3DialPos = _vhfAmDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq3DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -244,12 +244,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _vhfAmDcsbiosOutputFreqDial4.Address)
+            if (e.Address == _vhfAmDcsbiosOutputFreqDial4.Address)
             {
                 lock (_lockVhfAmDialsObject4)
                 {
                     var tmp = _vhfAmCockpitFreq4DialPos;
-                    _vhfAmCockpitFreq4DialPos = _vhfAmDcsbiosOutputFreqDial4.GetUIntValue(data);
+                    _vhfAmCockpitFreq4DialPos = _vhfAmDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                     if (tmp != _vhfAmCockpitFreq4DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -259,12 +259,12 @@ namespace NonVisuals
             }
 
             //UHF
-            if (address == _uhfDcsbiosOutputFreqDial1.Address)
+            if (e.Address == _uhfDcsbiosOutputFreqDial1.Address)
             {
                 lock (_lockUhfDialsObject1)
                 {
                     var tmp = _uhfCockpitFreq1DialPos;
-                    _uhfCockpitFreq1DialPos = _uhfDcsbiosOutputFreqDial1.GetUIntValue(data);
+                    _uhfCockpitFreq1DialPos = _uhfDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq1DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -273,12 +273,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _uhfDcsbiosOutputFreqDial2.Address)
+            if (e.Address == _uhfDcsbiosOutputFreqDial2.Address)
             {
                 lock (_lockUhfDialsObject2)
                 {
                     var tmp = _uhfCockpitFreq2DialPos;
-                    _uhfCockpitFreq2DialPos = _uhfDcsbiosOutputFreqDial2.GetUIntValue(data);
+                    _uhfCockpitFreq2DialPos = _uhfDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq2DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -286,12 +286,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _uhfDcsbiosOutputFreqDial3.Address)
+            if (e.Address == _uhfDcsbiosOutputFreqDial3.Address)
             {
                 lock (_lockUhfDialsObject3)
                 {
                     var tmp = _uhfCockpitFreq3DialPos;
-                    _uhfCockpitFreq3DialPos = _uhfDcsbiosOutputFreqDial3.GetUIntValue(data);
+                    _uhfCockpitFreq3DialPos = _uhfDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq3DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -299,12 +299,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _uhfDcsbiosOutputFreqDial4.Address)
+            if (e.Address == _uhfDcsbiosOutputFreqDial4.Address)
             {
                 lock (_lockUhfDialsObject4)
                 {
                     var tmp = _uhfCockpitFreq4DialPos;
-                    _uhfCockpitFreq4DialPos = _uhfDcsbiosOutputFreqDial4.GetUIntValue(data);
+                    _uhfCockpitFreq4DialPos = _uhfDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq4DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -312,12 +312,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _uhfDcsbiosOutputFreqDial5.Address)
+            if (e.Address == _uhfDcsbiosOutputFreqDial5.Address)
             {
                 lock (_lockUhfDialsObject5)
                 {
                     var tmp = _uhfCockpitFreq5DialPos;
-                    _uhfCockpitFreq5DialPos = _uhfDcsbiosOutputFreqDial5.GetUIntValue(data);
+                    _uhfCockpitFreq5DialPos = _uhfDcsbiosOutputFreqDial5.GetUIntValue(e.Data);
                     if (tmp != _uhfCockpitFreq5DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -328,12 +328,12 @@ namespace NonVisuals
 
 
             //VHF FM
-            if (address == _vhfFmDcsbiosOutputFreqDial1.Address)
+            if (e.Address == _vhfFmDcsbiosOutputFreqDial1.Address)
             {
                 lock (_lockVhfFmDialsObject1)
                 {
                     var tmp = _vhfFmCockpitFreq1DialPos;
-                    _vhfFmCockpitFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.GetUIntValue(data);
+                    _vhfFmCockpitFreq1DialPos = _vhfFmDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq1DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -341,12 +341,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _vhfFmDcsbiosOutputFreqDial2.Address)
+            if (e.Address == _vhfFmDcsbiosOutputFreqDial2.Address)
             {
                 lock (_lockVhfFmDialsObject2)
                 {
                     var tmp = _vhfFmCockpitFreq2DialPos;
-                    _vhfFmCockpitFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.GetUIntValue(data);
+                    _vhfFmCockpitFreq2DialPos = _vhfFmDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq2DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -354,12 +354,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _vhfFmDcsbiosOutputFreqDial3.Address)
+            if (e.Address == _vhfFmDcsbiosOutputFreqDial3.Address)
             {
                 lock (_lockVhfFmDialsObject3)
                 {
                     var tmp = _vhfFmCockpitFreq3DialPos;
-                    _vhfFmCockpitFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.GetUIntValue(data);
+                    _vhfFmCockpitFreq3DialPos = _vhfFmDcsbiosOutputFreqDial3.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq3DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -367,12 +367,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _vhfFmDcsbiosOutputFreqDial4.Address)
+            if (e.Address == _vhfFmDcsbiosOutputFreqDial4.Address)
             {
                 lock (_lockVhfFmDialsObject4)
                 {
                     var tmp = _vhfFmCockpitFreq4DialPos;
-                    _vhfFmCockpitFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.GetUIntValue(data);
+                    _vhfFmCockpitFreq4DialPos = _vhfFmDcsbiosOutputFreqDial4.GetUIntValue(e.Data);
                     if (tmp != _vhfFmCockpitFreq4DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -382,12 +382,12 @@ namespace NonVisuals
             }
 
             //ILS
-            if (address == _ilsDcsbiosOutputFreqDial1.Address)
+            if (e.Address == _ilsDcsbiosOutputFreqDial1.Address)
             {
                 lock (_lockIlsDialsObject1)
                 {
                     var tmp = _ilsCockpitFreq1DialPos;
-                    _ilsCockpitFreq1DialPos = _ilsDcsbiosOutputFreqDial1.GetUIntValue(data);
+                    _ilsCockpitFreq1DialPos = _ilsDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
                     if (tmp != _ilsCockpitFreq1DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -395,12 +395,12 @@ namespace NonVisuals
                     }
                 }
             }
-            if (address == _ilsDcsbiosOutputFreqDial2.Address)
+            if (e.Address == _ilsDcsbiosOutputFreqDial2.Address)
             {
                 lock (_lockIlsDialsObject2)
                 {
                     var tmp = _ilsCockpitFreq2DialPos;
-                    _ilsCockpitFreq2DialPos = _ilsDcsbiosOutputFreqDial2.GetUIntValue(data);
+                    _ilsCockpitFreq2DialPos = _ilsDcsbiosOutputFreqDial2.GetUIntValue(e.Data);
                     if (tmp != _ilsCockpitFreq2DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -417,24 +417,24 @@ namespace NonVisuals
 
         }
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
 
-                Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + stringData + "<-");
-                if (string.IsNullOrWhiteSpace(stringData))
+                Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + e.StringData + "<-");
+                if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    Common.DebugP("Received DCSBIOS stringData : " + stringData);
+                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
-                if (address.Equals(_tacanDcsbiosOutputFreqChannel.Address))
+                if (e.Address.Equals(_tacanDcsbiosOutputFreqChannel.Address))
                 {
                     //" 00X" --> "129X"
                     lock (_lockTacanDialsObject1)
                     {
                         var tmp = _tacanCockpitFreq1DialPos;
-                        _tacanCockpitFreq1DialPos = uint.Parse(stringData.Substring(0, 2));
+                        _tacanCockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
                         if (tmp != _tacanCockpitFreq1DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -444,7 +444,7 @@ namespace NonVisuals
                     lock (_lockTacanDialsObject2)
                     {
                         var tmp = _tacanCockpitFreq2DialPos;
-                        _tacanCockpitFreq2DialPos = uint.Parse(stringData.Substring(2, 1));
+                        _tacanCockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
                         if (tmp != _tacanCockpitFreq2DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -454,7 +454,7 @@ namespace NonVisuals
                     lock (_lockTacanDialsObject3)
                     {
                         var tmp = _tacanCockpitFreq3DialPos;
-                        var tmpXY = stringData.Substring(3, 1);
+                        var tmpXY = e.StringData.Substring(3, 1);
                         _tacanCockpitFreq3DialPos = tmpXY.Equals("X") ? (uint)0 : (uint)1;
                         if (tmp != _tacanCockpitFreq3DialPos)
                         {
@@ -464,9 +464,9 @@ namespace NonVisuals
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(349998, e, "DCSBIOSStringReceived()");
+                Common.LogError(349998, ex, "DCSBIOSStringReceived()");
             }
         }
 

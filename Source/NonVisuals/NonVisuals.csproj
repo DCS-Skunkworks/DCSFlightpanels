@@ -168,7 +168,7 @@
     <Compile Include="TPMPanel.cs" />
     <Compile Include="SwitchPanelPZ55.cs" />
     <Compile Include="VirtualKeyCode.cs" />
-    <Compile Include="WindowsAPI.cs" />
+    <Compile Include="NativeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="huey_icon.ico" />

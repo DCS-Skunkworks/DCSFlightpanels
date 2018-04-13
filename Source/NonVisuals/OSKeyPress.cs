@@ -178,12 +178,12 @@ namespace NonVisuals
                         if (Common.APIMode == APIModeEnum.keybd_event)
                         {
                             KeyBdEventAPI(keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
-                            Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
+                            //Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
                         }
                         else
                         {
                             SendKeys(keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
-                            Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
+                            //Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
                         }
                         if (AbortThread())
                         {
@@ -229,12 +229,12 @@ namespace NonVisuals
                     Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
                     if (CommonVK.IsExtendedKey(virtualKeyCode))
                     {
-                        WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)WindowsAPI.KEYEVENTF_EXTENDEDKEY | 0, 0);
+                        NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_EXTENDEDKEY | 0, 0);
                         //keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
                     }
                     else
                     {
-                        WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
+                        NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
                     }
                 }
             }
@@ -245,7 +245,7 @@ namespace NonVisuals
                 var virtualKeyCode = virtualKeyCodes[i];
                 if (!CommonVK.IsModifierKey(virtualKeyCode))
                 {
-                    WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
+                    NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
                 }
             }
 
@@ -270,7 +270,7 @@ namespace NonVisuals
                 var virtualKeyCode = virtualKeyCodes[i];
                 if (!CommonVK.IsModifierKey(virtualKeyCode))
                 {
-                    WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)WindowsAPI.KEYEVENTF_KEYUP, 0);
+                    NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_KEYUP, 0);
                 }
             }
 
@@ -283,11 +283,11 @@ namespace NonVisuals
                     Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
                     if (CommonVK.IsExtendedKey(virtualKeyCode))
                     {
-                        WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)(WindowsAPI.KEYEVENTF_EXTENDEDKEY | WindowsAPI.KEYEVENTF_KEYUP), 0);
+                        NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)(NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP), 0);
                     }
                     else
                     {
-                        WindowsAPI.keybd_event((byte)virtualKeyCode, (byte)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0), (int)WindowsAPI.KEYEVENTF_KEYUP, 0);
+                        NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_KEYUP, 0);
                     }
                 }
             }
@@ -585,7 +585,7 @@ namespace NonVisuals
                     return;
                 }
             }
-            var inputs = new WindowsAPI.INPUT[virtualKeyCodes.Count()];
+            var inputs = new NativeMethods.INPUT[virtualKeyCodes.Count()];
 
             var modifierCount = 0;
             foreach (var virtualKeyCode in virtualKeyCodes)
@@ -602,18 +602,18 @@ namespace NonVisuals
                 if (CommonVK.IsModifierKey(virtualKeyCode))
                 {
                     Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
-                    inputs[i].type = WindowsAPI.INPUT_KEYBOARD;
+                    inputs[i].type = NativeMethods.INPUT_KEYBOARD;
                     inputs[i].InputUnion.ki.time = 0;
-                    inputs[i].InputUnion.ki.dwFlags = WindowsAPI.KEYEVENTF_SCANCODE;
+                    inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
                     Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
                     if (CommonVK.IsExtendedKey(virtualKeyCode))
                     {
-                        inputs[i].InputUnion.ki.dwFlags |= WindowsAPI.KEYEVENTF_EXTENDEDKEY;
+                        inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_EXTENDEDKEY;
                     }
                     inputs[i].InputUnion.ki.wVk = 0;
-                    Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
-                    inputs[i].InputUnion.ki.wScan = (ushort)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0);
-                    inputs[i].InputUnion.ki.dwExtraInfo = WindowsAPI.GetMessageExtraInfo();
+                    Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
+                    inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
+                    inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
                 }
             }
             //[x][x] [] []
@@ -626,18 +626,18 @@ namespace NonVisuals
                 if (!CommonVK.IsModifierKey(virtualKeyCode))
                 {
                     Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
-                    inputs[i].type = WindowsAPI.INPUT_KEYBOARD;
+                    inputs[i].type = NativeMethods.INPUT_KEYBOARD;
                     inputs[i].InputUnion.ki.time = 0;
-                    inputs[i].InputUnion.ki.dwFlags = WindowsAPI.KEYEVENTF_SCANCODE;
+                    inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
 
                     inputs[i].InputUnion.ki.wVk = 0;
-                    Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
-                    inputs[i].InputUnion.ki.wScan = (ushort)WindowsAPI.MapVirtualKey((uint)virtualKeyCode, 0);
-                    inputs[i].InputUnion.ki.dwExtraInfo = WindowsAPI.GetMessageExtraInfo();
+                    Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
+                    inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
+                    inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
                 }
             }
 
-            WindowsAPI.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(WindowsAPI.INPUT)));
+            NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
 
             /*if (keyPressLength == KeyPressLength.Indefinite)
             {
@@ -656,11 +656,11 @@ namespace NonVisuals
             }
             for (var i = 0; i < inputs.Count(); i++)
             {
-                inputs[i].InputUnion.ki.dwFlags |= WindowsAPI.KEYEVENTF_KEYUP;
+                inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_KEYUP;
             }
             Array.Reverse(inputs);
             //Release same keys
-            WindowsAPI.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(WindowsAPI.INPUT)));
+            NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
         }
     }
 

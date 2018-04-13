@@ -95,7 +95,7 @@ namespace NonVisuals
             Common.DebugP("Leaving SRS Radio Shutdown()");
         }
 
-        public void SRSDataReceived()
+        public void SRSDataReceived(object sender)
         {
             try
             {
@@ -929,18 +929,18 @@ namespace NonVisuals
         }
 
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(78030, e, "DCSBIOSStringReceived()");
+                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
             }
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {

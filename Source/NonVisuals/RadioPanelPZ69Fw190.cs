@@ -102,23 +102,23 @@ namespace NonVisuals
         }
 
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(78030, e, "DCSBIOSStringReceived()");
+                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
             }
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
 
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -130,12 +130,12 @@ namespace NonVisuals
 
 
                 //FuG 16ZY Preset Channel Dial
-                if (address == _fug16ZyPresetDcsbiosOutputPresetDial.Address)
+                if (e.Address == _fug16ZyPresetDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockFug16ZyPresetDialObject1)
                     {
                         var tmp = _fug16ZyPresetCockpitDialPos;
-                        _fug16ZyPresetCockpitDialPos = _fug16ZyPresetDcsbiosOutputPresetDial.GetUIntValue(data);
+                        _fug16ZyPresetCockpitDialPos = _fug16ZyPresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _fug16ZyPresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -144,12 +144,12 @@ namespace NonVisuals
                 }
 
                 //FuG 16ZY Fine Tune Dial
-                if (address == _fug16ZyFineTuneDcsbiosOutputDial.Address)
+                if (e.Address == _fug16ZyFineTuneDcsbiosOutputDial.Address)
                 {
                     lock (_lockFug16ZyFineTuneDialObject1)
                     {
                         var tmp = _fug16ZyFineTuneCockpitDialPos;
-                        _fug16ZyFineTuneCockpitDialPos = _fug16ZyFineTuneDcsbiosOutputDial.GetUIntValue(data);
+                        _fug16ZyFineTuneCockpitDialPos = _fug16ZyFineTuneDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _fug16ZyFineTuneCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -158,12 +158,12 @@ namespace NonVisuals
                 }
 
                 //FuG 25A IFF Channel Dial
-                if (address == _fug25aIFFDcsbiosOutputDial.Address)
+                if (e.Address == _fug25aIFFDcsbiosOutputDial.Address)
                 {
                     lock (_lockFUG25AIFFDialObject1)
                     {
                         var tmp = _fug25aIFFCockpitDialPos;
-                        _fug25aIFFCockpitDialPos = _fug25aIFFDcsbiosOutputDial.GetUIntValue(data);
+                        _fug25aIFFCockpitDialPos = _fug25aIFFDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _fug25aIFFCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -172,12 +172,12 @@ namespace NonVisuals
                 }
 
                 //FuG 16ZY Homing Switch
-                if (address == _homingDcsbiosOutputPresetDial.Address)
+                if (e.Address == _homingDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockHomingDialObject1)
                     {
                         var tmp = _homingCockpitDialPos;
-                        _homingCockpitDialPos = _homingDcsbiosOutputPresetDial.GetUIntValue(data);
+                        _homingCockpitDialPos = _homingDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _homingCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);

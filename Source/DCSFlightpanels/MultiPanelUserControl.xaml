@@ -143,7 +143,7 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="5" Grid.ColumnSpan="1" Margin="0,0,0,0">
+            <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="1" Margin="0,0,0,0">
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
                     <TextBlock TextWrapping="Wrap" FontSize="10" FontWeight="Bold">
                         Dial = IAS/HDG/CRS : Only upper LCD row used<LineBreak/>
@@ -152,7 +152,7 @@
                     </TextBlock>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="7"   Grid.RowSpan="4" >
+            <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="6"   Grid.RowSpan="3" >
                 <StackPanel >
                     <Label Content="LCD Knob sensitivity"></Label>
                     <ComboBox Name="ComboBoxLcdKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxLcdKnobSensitivity_OnSelectionChanged">
@@ -177,7 +177,7 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Right part of panel"  FontSize="10"  Grid.Column="1" Grid.Row="4" Grid.RowSpan="11" >
+            <GroupBox Header="Right part of panel"  FontSize="10"  Grid.Column="1" Grid.Row="4" Grid.RowSpan="10" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -193,6 +193,8 @@
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxFlapsUp"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                         <Label Content="Pitch Trim Up" FontSize="10" Height="23"  />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxPitchTrimUp"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+
+                        
                     </StackPanel>
                     <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
                         <Label Content="LCD Knob (+/-) INC" FontSize="10" Height="23"   />
@@ -203,7 +205,10 @@
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxFlapsDown"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                         <Label Content="Pitch Trim Down" FontSize="10" Height="23"  />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxPitchTrimDown"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+
+                        
                     </StackPanel>
+
                 </Grid>
             </GroupBox>
             <GroupBox Header="Log"  FontSize="10"  Grid.Column="3" Grid.Row="10" Grid.RowSpan="4" Margin="0,0.5,0,-1">

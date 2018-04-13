@@ -45,7 +45,7 @@ namespace DCSFlightpanels
             return GetType().Name;
         }
 
-        public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
@@ -69,11 +69,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                SetGraphicsState(hashSet);
+                SetGraphicsState(e.Switches);
             }
             catch (Exception ex)
             {
@@ -81,7 +81,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(string stringData)
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {
@@ -165,7 +165,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(object sender, PanelEventArgs e)
         {
             try
             {

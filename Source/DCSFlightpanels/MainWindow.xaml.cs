@@ -34,7 +34,7 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class MainWindow : ISaitekPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler
     {
-        public delegate void ForwardKeyPressesChangedEventHandler(bool forwardKeyPress);
+        public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardKeyPressEventArgs e);
         public event ForwardKeyPressesChangedEventHandler OnForwardKeyPressesChanged;
 
         private bool _doSearchForPanels = true;
@@ -121,11 +121,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void UserMessage(string userMessage)
+        public void UserMessage(object sender, UserMessageEventArgs e)
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(() => MessageBox.Show(userMessage, "Information")));
+                Dispatcher.BeginInvoke((Action)(() => MessageBox.Show(e.UserMessage, "Information")));
             }
             catch (Exception ex)
             {
@@ -243,11 +243,11 @@ namespace DCSFlightpanels
             return closedItemCount;
         }
 
-        public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
             {
-                var str = "DCS-BIOS UPDATES MISSED = " + saitekPanelsEnum + "  " + count;
+                var str = "DCS-BIOS UPDATES MISSED = " + e.SaitekPanelEnum + "  " + e.Count;
                 ShowStatusBarMessage(str);
                 Common.LogError(471072, str);
             }
@@ -259,7 +259,7 @@ namespace DCSFlightpanels
 
         public void Attach(SaitekPanel saitekPanel)
         {
-            OnForwardKeyPressesChanged += new ForwardKeyPressesChangedEventHandler(saitekPanel.SetForwardKeyPresses);
+            OnForwardKeyPressesChanged += saitekPanel.SetForwardKeyPresses;
             _panelProfileHandler.Attach(saitekPanel);
             saitekPanel.Attach(_panelProfileHandler);
             saitekPanel.Attach((IProfileHandlerListener)this);
@@ -268,7 +268,7 @@ namespace DCSFlightpanels
 
         public void Detach(SaitekPanel saitekPanel)
         {
-            OnForwardKeyPressesChanged -= new ForwardKeyPressesChangedEventHandler(saitekPanel.SetForwardKeyPresses);
+            OnForwardKeyPressesChanged -= saitekPanel.SetForwardKeyPresses;
             _panelProfileHandler.Detach(saitekPanel);
             saitekPanel.Detach(_panelProfileHandler);
             saitekPanel.Detach((IProfileHandlerListener)this);
@@ -633,7 +633,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
@@ -646,7 +646,7 @@ namespace DCSFlightpanels
         }
 
 
-        public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
             {
@@ -658,7 +658,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
             {
@@ -670,7 +670,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {
@@ -683,13 +683,13 @@ namespace DCSFlightpanels
         }
 
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
-                if (_dcsAirframe != dcsAirframe)
+                if (_dcsAirframe != e.Airframe)
                 {
-                    _dcsAirframe = dcsAirframe;
+                    _dcsAirframe = e.Airframe;
                     SetApplicationMode(_dcsAirframe);
                     SendEventRegardingForwardingOfKeys();
                 }
@@ -700,7 +700,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
@@ -717,7 +717,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
             {
@@ -729,7 +729,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(string stringData)
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
         {
             try
             {
@@ -741,7 +741,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
@@ -753,7 +753,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(object sender, PanelEventArgs e)
         {
             try
             {
@@ -1249,15 +1249,15 @@ namespace DCSFlightpanels
             {
                 forwardKeys = DigitalCombatSimulatorWindowFound();
             }
-            OnForwardKeyPressesChanged?.Invoke(forwardKeys);
+            OnForwardKeyPressesChanged?.Invoke(this, new ForwardKeyPressEventArgs(){Forward = forwardKeys});
         }
 
         private static bool DigitalCombatSimulatorWindowFound()
         {
-            var hwnd = WindowsAPI.FindWindow("DCS");
+            var hwnd = NativeMethods.FindWindow("DCS");
             if (hwnd == IntPtr.Zero)
             {
-                hwnd = WindowsAPI.FindWindow("Digital Combat Simulator");
+                hwnd = NativeMethods.FindWindow("Digital Combat Simulator");
             }
             if (hwnd != IntPtr.Zero)
             {
@@ -1308,7 +1308,7 @@ namespace DCSFlightpanels
             return;
         }
 
-        public void DcsBiosDataReceived(uint address, uint data)
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
@@ -1439,12 +1439,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2066, ex);
             }
         }
-
-        private void ImageDcsBiosConnected_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            _panelProfileHandler.OpenProfileDEVELOPMENT();
-        }
-
+        
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
@@ -1505,3 +1500,4 @@ namespace DCSFlightpanels
         }
     }
 }
+

@@ -78,37 +78,32 @@ namespace NonVisuals
             Startup();
         }
 
-        ~RadioPanelPZ69AJS37()
-        {
-
-        }
-
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
 
-                if (string.IsNullOrWhiteSpace(stringData))
+                if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    Common.DebugP("Received DCSBIOS stringData : " + stringData);
+                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
 
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(78030, e, "DCSBIOSStringReceived()");
+                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
             }
             ShowFrequenciesOnPanel();
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
 
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -120,12 +115,12 @@ namespace NonVisuals
 
 
                 //TILS Channel Selector
-                if (address == _tilsChannelSelectorDcsbiosOutput.Address)
+                if (e.Address == _tilsChannelSelectorDcsbiosOutput.Address)
                 {
                     lock (_lockTILSChannelSelectorDialObject1)
                     {
                         var tmp = _tilsChannelCockpitValue;
-                        _tilsChannelCockpitValue = _tilsChannelSelectorDcsbiosOutput.GetUIntValue(data);
+                        _tilsChannelCockpitValue = _tilsChannelSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _tilsChannelCockpitValue)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -134,12 +129,12 @@ namespace NonVisuals
                 }
 
                 //TILS Channel Mode
-                if (address == _tilsChannelLayerSelectorDcsbiosOutput.Address)
+                if (e.Address == _tilsChannelLayerSelectorDcsbiosOutput.Address)
                 {
                     lock (_lockTILSChannelLayerSelectorObject2)
                     {
                         var tmp = _tilsChannelLayerSelectorCockpitValue;
-                        _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.GetUIntValue(data);
+                        _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _tilsChannelLayerSelectorCockpitValue)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -148,12 +143,12 @@ namespace NonVisuals
                 }
 
                 //Master Mode Selector
-                if (address == _masterModeSelectorDcsbiosOutput.Address)
+                if (e.Address == _masterModeSelectorDcsbiosOutput.Address)
                 {
                     lock (_lockMasterModeSelectorObject)
                     {
                         var tmp = _masterModeSelectorCockpitValue;
-                        _masterModeSelectorCockpitValue = _masterModeSelectorDcsbiosOutput.GetUIntValue(data);
+                        _masterModeSelectorCockpitValue = _masterModeSelectorDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _masterModeSelectorCockpitValue)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -1047,7 +1042,7 @@ namespace NonVisuals
                 Common.DebugP("Entering AJS-37 Radio SetLowerRadioMode()");
                 Common.DebugP("Setting lower radio mode to " + currentAJS37RadioMode);
                 _currentLowerRadioMode = currentAJS37RadioMode;
-                //If NOUSE then send next round of data to the panel in order to clear the LCD.
+                //If NOUSE then send next round of e.Data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
             }
             catch (Exception ex)

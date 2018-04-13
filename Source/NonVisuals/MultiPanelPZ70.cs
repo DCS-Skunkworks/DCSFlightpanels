@@ -359,13 +359,30 @@ LCD Button Byte
         //private volatile int _lowerLcdValue = 0;
 
 
+        //0 - 40000
+        private int _altLCDKeyEmulatorValue = 0;
+        //-6000 - 6000
+        private int _vsLCDKeyEmulatorValue = 0;
+        //0-600
+        private int _iasLCDKeyEmulatorValue = 0;
+        //0-360
+        private int _hdgLCDKeyEmulatorValue = 0;
+        //0-360
+        private int _crsLCDKeyEmulatorValue = 0;
+
+        private ClickSpeedDetector _altLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private ClickSpeedDetector _vsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private ClickSpeedDetector _iasLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private ClickSpeedDetector _hdgLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private ClickSpeedDetector _crsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
 
         private long _doUpdatePanelLCD;
 
-        public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton)
+        public MultiPanelPZ70(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD06;
+            KeyboardEmulationOnly = !enableDCSBIOS;
             CreateMultiKnobs();
             Startup();
         }
@@ -398,17 +415,17 @@ LCD Button Byte
             }
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            UpdateCounter(address, data);
+            UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
             {
-                if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
+                if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && e.Address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
                 {
                     lock (_lcdDataVariablesLockObject)
                     {
                         var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
-                        dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(data);
+                        dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(e.Data);
                         if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -417,7 +434,7 @@ LCD Button Byte
                 }
                 else if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.UseFormula)
                 {
-                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(address, data))
+                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
                     {
                         lock (_lcdDataVariablesLockObject)
                         {
@@ -515,9 +532,9 @@ LCD Button Byte
             return result;
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
         public override void ClearSettings()
@@ -867,6 +884,7 @@ LCD Button Byte
             {
                 return;
             }
+
             foreach (var o in hashSet)
             {
                 var multiPanelKnob = (MultiPanelKnob)o;
@@ -878,6 +896,13 @@ LCD Button Byte
                  * Instead the buttons global bool value must be used!
                  * 
                  */
+                if (KeyboardEmulationOnly && multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                    LCDDialChangesHandle(multiPanelKnob);
+                    UpdateLCD();
+                }
+
                 var found = false;
                 foreach (var knobBinding in _knobBindings)
                 {
@@ -913,7 +938,235 @@ LCD Button Byte
             }
         }
 
-        protected bool SkipCurrentLcdKnobChange()
+        private void LCDDialChangesHandle(MultiPanelKnob multiPanelKnob)
+        {
+            if (SkipCurrentLcdKnobChangeLCD(true))
+            {
+                return;
+            }
+
+            bool increase = multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC;
+            switch (_pz70DialPosition)
+            {
+                case PZ70DialPosition.ALT:
+                    {
+                        _altLCDKeyEmulatorValueChangeMonitor.Click();
+                        if (_altLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
+                        {
+                            if (increase)
+                            {
+                                ChangeAltLCDValue(500);
+                            }
+                            else
+                            {
+                                ChangeAltLCDValue(-500);
+                            }
+                        }
+                        else
+                        {
+                            if (increase)
+                            {
+                                ChangeAltLCDValue(100);
+                            }
+                            else
+                            {
+                                ChangeAltLCDValue(-100);
+                            }
+                        }
+                        break;
+                    }
+                case PZ70DialPosition.VS:
+                    {
+                        _vsLCDKeyEmulatorValueChangeMonitor.Click();
+                        if (_vsLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
+                        {
+                            if (increase)
+                            {
+                                ChangeVsLCDValue(100);
+                            }
+                            else
+                            {
+                                ChangeVsLCDValue(-100);
+                            }
+                        }
+                        else
+                        {
+                            if (increase)
+                            {
+                                ChangeVsLCDValue(10);
+                            }
+                            else
+                            {
+                                ChangeVsLCDValue(-10);
+                            }
+                        }
+                        break;
+                    }
+                case PZ70DialPosition.IAS:
+                    {
+                        _iasLCDKeyEmulatorValueChangeMonitor.Click();
+                        if (_iasLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
+                        {
+                            if (increase)
+                            {
+                                ChangeIasLCDValue(50);
+                            }
+                            else
+                            {
+                                ChangeIasLCDValue(-50);
+                            }
+                        }
+                        else
+                        {
+                            if (increase)
+                            {
+                                ChangeIasLCDValue(5);
+                            }
+                            else
+                            {
+                                ChangeIasLCDValue(-5);
+                            }
+                        }
+                        break;
+                    }
+                case PZ70DialPosition.HDG:
+                    {
+                        _hdgLCDKeyEmulatorValueChangeMonitor.Click();
+                        if (_hdgLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
+                        {
+                            if (increase)
+                            {
+                                ChangeHdgLCDValue(5);
+                            }
+                            else
+                            {
+                                ChangeHdgLCDValue(-5);
+                            }
+                        }
+                        else
+                        {
+                            if (increase)
+                            {
+                                ChangeHdgLCDValue(1);
+                            }
+                            else
+                            {
+                                ChangeHdgLCDValue(-1);
+                            }
+                        }
+                        break;
+                    }
+                case PZ70DialPosition.CRS:
+                    {
+                        _crsLCDKeyEmulatorValueChangeMonitor.Click();
+                        if (_crsLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
+                        {
+                            if (increase)
+                            {
+                                ChangeCrsLCDValue(5);
+                            }
+                            else
+                            {
+                                ChangeCrsLCDValue(-5);
+                            }
+                        }
+                        else
+                        {
+                            if (increase)
+                            {
+                                ChangeCrsLCDValue(1);
+                            }
+                            else
+                            {
+                                ChangeCrsLCDValue(-1);
+                            }
+                        }
+                        break;
+                    }
+            }
+        }
+
+        private void ChangeAltLCDValue(int value)
+        {
+            if (_altLCDKeyEmulatorValue + value > 40000)
+            {
+                _altLCDKeyEmulatorValue = 40000;
+            }
+            else if (_altLCDKeyEmulatorValue + value < 0)
+            {
+                _altLCDKeyEmulatorValue = 0;
+            }
+            else
+            {
+                _altLCDKeyEmulatorValue = _altLCDKeyEmulatorValue + value;
+            }
+        }
+
+        private void ChangeVsLCDValue(int value)
+        {
+            if (_vsLCDKeyEmulatorValue + value > 6000)
+            {
+                _vsLCDKeyEmulatorValue = 6000;
+            }
+            else if (_vsLCDKeyEmulatorValue + value < -6000)
+            {
+                _vsLCDKeyEmulatorValue = -6000;
+            }
+            else
+            {
+                _vsLCDKeyEmulatorValue = _vsLCDKeyEmulatorValue + value;
+            }
+        }
+
+        private void ChangeIasLCDValue(int value)
+        {
+            if (_iasLCDKeyEmulatorValue + value > 600)
+            {
+                _iasLCDKeyEmulatorValue = 600;
+            }
+            else if (_iasLCDKeyEmulatorValue + value < 0)
+            {
+                _iasLCDKeyEmulatorValue = 0;
+            }
+            else
+            {
+                _iasLCDKeyEmulatorValue = _iasLCDKeyEmulatorValue + value;
+            }
+        }
+
+        private void ChangeHdgLCDValue(int value)
+        {
+            if (_hdgLCDKeyEmulatorValue + value > 360)
+            {
+                _hdgLCDKeyEmulatorValue = 0;
+            }
+            else if (_hdgLCDKeyEmulatorValue + value < 0)
+            {
+                _hdgLCDKeyEmulatorValue = 360;
+            }
+            else
+            {
+                _hdgLCDKeyEmulatorValue = _hdgLCDKeyEmulatorValue + value;
+            }
+        }
+
+        private void ChangeCrsLCDValue(int value)
+        {
+            if (_crsLCDKeyEmulatorValue + value > 360)
+            {
+                _crsLCDKeyEmulatorValue = 0;
+            }
+            else if (_crsLCDKeyEmulatorValue + value < 0)
+            {
+                _crsLCDKeyEmulatorValue = 360;
+            }
+            else
+            {
+                _crsLCDKeyEmulatorValue = _crsLCDKeyEmulatorValue + value;
+            }
+        }
+
+        protected bool SkipCurrentLcdKnobChange(bool change = true)
         {
             switch (_lcdKnobSensitivity)
             {
@@ -925,7 +1178,11 @@ LCD Button Byte
                 case -1:
                     {
                         //Skip every 2 manipulations
-                        _knobSensitivitySkipper++;
+                        if (change)
+                        {
+                            _knobSensitivitySkipper++;
+                        }
+
                         if (_knobSensitivitySkipper <= 2)
                         {
                             return true;
@@ -936,7 +1193,10 @@ LCD Button Byte
                 case -2:
                     {
                         //Skip every 4 manipulations
-                        _knobSensitivitySkipper++;
+                        if (change)
+                        {
+                            _knobSensitivitySkipper++;
+                        }
                         if (_knobSensitivitySkipper <= 4)
                         {
                             return true;
@@ -945,6 +1205,22 @@ LCD Button Byte
                         break;
                     }
             }
+            return false;
+        }
+
+        protected bool SkipCurrentLcdKnobChangeLCD(bool change = true)
+        {
+            //Skip every 3 manipulations
+            if (change)
+            {
+                _knobSensitivitySkipper++;
+            }
+
+            if (_knobSensitivitySkipper <= 3)
+            {
+                return true;
+            }
+            _knobSensitivitySkipper = 0;
             return false;
         }
 
@@ -1002,17 +1278,61 @@ LCD Button Byte
             var lowerValue = 0;
             lock (_lcdDataVariablesLockObject)
             {
-                foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
+                if (KeyboardEmulationOnly)
                 {
-                    if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
+                    switch (_pz70DialPosition)
                     {
-                        foundUpperValue = true;
-                        upperValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                        case PZ70DialPosition.ALT:
+                            {
+                                upperValue = _altLCDKeyEmulatorValue;
+                                lowerValue = _vsLCDKeyEmulatorValue;
+                                foundUpperValue = true;
+                                foundLowerValue = true;
+                                break;
+                            }
+                        case PZ70DialPosition.VS:
+                            {
+                                upperValue = _altLCDKeyEmulatorValue;
+                                lowerValue = _vsLCDKeyEmulatorValue;
+                                foundUpperValue = true;
+                                foundLowerValue = true;
+                                break;
+                            }
+                        case PZ70DialPosition.IAS:
+                            {
+                                upperValue = _iasLCDKeyEmulatorValue;
+                                foundUpperValue = true;
+                                break;
+                            }
+                        case PZ70DialPosition.HDG:
+                            {
+                                upperValue = _hdgLCDKeyEmulatorValue;
+                                foundUpperValue = true;
+                                break;
+                            }
+                        case PZ70DialPosition.CRS:
+                            {
+                                upperValue = _crsLCDKeyEmulatorValue;
+                                foundUpperValue = true;
+                                break;
+                            }
                     }
-                    if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
+                }
+                else
+                {
+                    foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
                     {
-                        foundLowerValue = true;
-                        lowerValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                        if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
+                        {
+                            foundUpperValue = true;
+                            upperValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                        }
+
+                        if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
+                        {
+                            foundLowerValue = true;
+                            lowerValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                        }
                     }
                 }
             }
