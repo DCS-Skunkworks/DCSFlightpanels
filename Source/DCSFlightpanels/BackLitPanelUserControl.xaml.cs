@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,8 +30,9 @@ namespace DCSFlightpanels
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
         private bool _loaded;
         private IGlobalHandler _globalHandler;
+        private bool _enableDCSBIOS;
 
-        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
+        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -40,6 +42,7 @@ namespace DCSFlightpanels
             _backlitPanelBIP.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);
             _globalHandler = globalHandler;
+            _enableDCSBIOS = enableDCSBIOS;
         }
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -49,6 +52,10 @@ namespace DCSFlightpanels
             SetContextMenuClickHandlers();
             SetAllBlack();
             ShowGraphicConfiguration();
+        }
+
+        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        {
         }
 
         public SaitekPanel GetSaitekPanel()
@@ -493,6 +500,10 @@ namespace DCSFlightpanels
 
         private void SetContextMenuClickHandlers()
         {
+            if (!_enableDCSBIOS)
+            {
+                return;
+            }
             foreach (var image in Common.FindVisualChildren<Image>(this))
             {
                 if (image.Name.StartsWith("ImagePosition"))
@@ -685,6 +696,22 @@ namespace DCSFlightpanels
                 {
                     Clipboard.SetText(_backlitPanelBIP.InstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2080, ex);
+            }
+        }
+
+        private void ButtonGetHash_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_backlitPanelBIP != null)
+                {
+                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.InstanceId));
+                    MessageBox.Show("The MD5 hash for the panel has been copied to the Clipboard.\nUse this value when you connect switches to B.I.P. lights.");
                 }
             }
             catch (Exception ex)

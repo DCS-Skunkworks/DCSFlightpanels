@@ -138,17 +138,20 @@
     <Compile Include="ChooseProfileModuleWindow.xaml.cs">
       <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BIPLinkConfigsWindow.xaml.cs">
+      <DependentUpon>BIPLinkConfigsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DCSBIOSControlsConfigsWindow.xaml.cs">
       <DependentUpon>DCSBIOSControlsConfigsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BipLightWindow.xaml.cs">
+      <DependentUpon>BipLightWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DCSBiosInputWindow.xaml.cs">
       <DependentUpon>DCSBiosInputWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="HESPUserControl.xaml.cs">
-      <DependentUpon>HESPUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
@@ -227,6 +230,7 @@
     <Compile Include="TextBlockDialogWindow.xaml.cs">
       <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TextBoxTagHolderClass.cs" />
     <Compile Include="TPMPanelUserControl.xaml.cs">
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -242,9 +246,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="BIPLinkConfigsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DCSBIOSControlsConfigsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BipLightWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DCSBiosInputWindow.xaml">
       <SubType>Designer</SubType>
@@ -255,10 +267,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DCSBiosOutputTriggerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HESPUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -583,9 +591,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\hesp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

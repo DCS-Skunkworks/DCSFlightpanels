@@ -142,6 +142,7 @@ namespace NonVisuals
             VendorId = 0x6A3;
             ProductId = 0xB4E;
             _ledBrightness = ledBrightness;
+            BipFactory.RegisterBip(this);
             Startup();
         }
         //sätta färg efter om Config finns

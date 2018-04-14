@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +27,8 @@ namespace DCSFlightpanels
         private Image[] _imageArrayRight = new Image[4];
         private IGlobalHandler _globalHandler;
         private bool _enableDCSBIOS;
+        private bool _textBoxTagsSet;
+        private bool _controlLoaded;
 
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
         {
@@ -55,7 +59,22 @@ namespace DCSFlightpanels
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            var now = DateTime.Now.Ticks;
+            Debug.WriteLine("Start SwitchPanelPZ55UserControl_OnLoaded");
+            SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
+            Debug.WriteLine("End SwitchPanelPZ55UserControl_OnLoaded" + new TimeSpan(DateTime.Now.Ticks - now).Milliseconds);
+            _controlLoaded = true;
+            ShowGraphicConfiguration();
+        }
+
+        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        {
+            var now = DateTime.Now.Ticks;
+            Debug.WriteLine("Start BipPanelRegisterEvent");
+            RemoveContextMenuClickHandlers();
+            SetContextMenuClickHandlers();
+            Debug.WriteLine("End BipPanelRegisterEvent" + new TimeSpan(DateTime.Now.Ticks - now).Milliseconds);
         }
 
         public SaitekPanel GetSaitekPanel()
@@ -82,7 +101,10 @@ namespace DCSFlightpanels
                         if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsDCSBIOSProfile(e.Airframe))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                        image.ContextMenu.Tag = image.Name;
+                        if (image.ContextMenu != null)
+                        {
+                            image.ContextMenu.Tag = image.Name;
+                        }
                     }
                 }
             }
@@ -238,7 +260,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -326,9 +347,9 @@ namespace DCSFlightpanels
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 SequenceWindow sequenceWindow;
-                if (textBox.Tag is SortedList<int, KeyPressInfo>)
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsKeySequence())
                 {
-                    sequenceWindow = new SequenceWindow(textBox.Text, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    sequenceWindow = new SequenceWindow(textBox.Text, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 else
                 {
@@ -348,25 +369,28 @@ namespace DCSFlightpanels
                     textBox.ToolTip = null;
                     if (sequenceList.Count > 1)
                     {
-                        textBox.Tag = sequenceList;
-                        textBox.Text = string.IsNullOrEmpty(sequenceWindow.GetInformation) ? "Key press sequence" : sequenceWindow.GetInformation;
-                        if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
+                        ((TextBoxTagHolderClass)textBox.Tag).KeyPress = osKeyPress;
+                        //textBox.Text = string.IsNullOrEmpty(sequenceWindow.GetInformation) ? "Key press sequence" : sequenceWindow.GetInformation;
+                        /*if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
                         {
                             var toolTip = new ToolTip { Content = sequenceWindow.GetInformation };
                             textBox.ToolTip = toolTip;
-                        }
+                        }*/
                         UpdateKeyBindingProfileSequencedKeyStrokesPZ55(textBox);
                     }
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        textBox.Tag = sequenceList.Values[0].LengthOfKeyPress;
-                        textBox.Text = sequenceList.Values[0].VirtualKeyCodesAsString;
+                        ((TextBoxTagHolderClass)textBox.Tag).ClearAll();
+                        var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
+                        ((TextBoxTagHolderClass)textBox.Tag).KeyPress = osKeyPress;
+                        /*textBox.Text = sequenceList.Values[0].VirtualKeyCodesAsString;
                         if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
                         {
                             var toolTip = new ToolTip { Content = sequenceWindow.GetInformation };
                             textBox.ToolTip = toolTip;
-                        }
+                        }*/
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
                 }
@@ -387,9 +411,9 @@ namespace DCSFlightpanels
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
-                if (textBox.Tag is List<DCSBIOSInput>)
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), (List<DCSBIOSInput>)textBox.Tag, textBox.Text);
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TextBoxTagHolderClass)textBox.Tag).DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
@@ -403,7 +427,7 @@ namespace DCSFlightpanels
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    textBox.Tag = dcsBiosInputs;
+                    ((TextBoxTagHolderClass)textBox.Tag).DCSBIOSInputs = dcsBiosInputs;
                     textBox.ToolTip = textBox.Text;
                     UpdateDCSBIOSBinding(textBox);
                 }
@@ -414,6 +438,42 @@ namespace DCSFlightpanels
             }
         }
 
+        private void MenuContextEditBipTextBoxClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+                DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
+                {
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TextBoxTagHolderClass)textBox.Tag).DCSBIOSInputs, textBox.Text);
+                }
+                else
+                {
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                }
+                dcsBIOSControlsConfigsWindow.ShowDialog();
+                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true && dcsBIOSControlsConfigsWindow.DCSBIOSInputs.Count > 0)
+                {
+                    var dcsBiosInputs = dcsBIOSControlsConfigsWindow.DCSBIOSInputs;
+                    var text = string.IsNullOrWhiteSpace(dcsBIOSControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsBIOSControlsConfigsWindow.Description;
+                    //1 appropriate text to textbox
+                    //2 update bindings
+                    textBox.Text = text;
+                    ((TextBoxTagHolderClass)textBox.Tag).DCSBIOSInputs = dcsBiosInputs;
+                    textBox.ToolTip = textBox.Text;
+                    UpdateDCSBIOSBinding(textBox);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(442044, ex);
+            }
+        }
 
 
         private void TextBoxContextMenuIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -433,11 +493,11 @@ namespace DCSFlightpanels
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                if (textBox.Tag == null || textBox.Tag is SortedList<int, KeyPressInfo> || textBox.Tag is List<DCSBIOSInput>)
+                if (!((TextBoxTagHolderClass)textBox.Tag).ContainsSingleKey())
                 {
                     return;
                 }
-                var keyPressLength = (KeyPressLength)textBox.Tag;
+                var keyPressLength = ((TextBoxTagHolderClass)textBox.Tag).KeyPress.GetLengthOfKeyPress();
 
                 foreach (MenuItem item in contextMenu.Items)
                 {
@@ -518,8 +578,9 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
+                var tagHolderClass = (TextBoxTagHolderClass)textBox.Tag;
                 textBox.Text = "";
-                textBox.Tag = null;
+                tagHolderClass.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -527,13 +588,55 @@ namespace DCSFlightpanels
             }
         }
 
+        private void SetTextBoxTagObjects()
+        {
+            if (_textBoxTagsSet || !Common.FindVisualChildren<TextBox>(this).Any())
+            {
+                return;
+            }
+            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            {
+                //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
+                textBox.Tag = new TextBoxTagHolderClass();
+            }
+            _textBoxTagsSet = true;
+        }
+
+        private void RemoveContextMenuClickHandlers()
+        {
+            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            {
+                if (!Equals(textBox, TextBoxLogPZ55))
+                {
+                    textBox.ContextMenu = null;
+                    textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
+                }
+            }
+        }
+
         private void SetContextMenuClickHandlers()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ55)
+                if (!Equals(textBox, TextBoxLogPZ55))
                 {
                     var contectMenu = (ContextMenu)Resources["TextBoxContextMenuPZ55"];
+                    if (!BipFactory.HasBips())
+                    {
+                        MenuItem bipMenuItem = null;
+                        foreach (var item in contectMenu.Items)
+                        {
+                            if (((MenuItem)item).Name == "contextMenuItemEditBIP")
+                            {
+                                bipMenuItem = (MenuItem)item;
+                                break;
+                            }
+                        }
+                        if (bipMenuItem != null)
+                        {
+                            contectMenu.Items.Remove(bipMenuItem);
+                        }
+                    }
                     if (!_enableDCSBIOS)
                     {
                         MenuItem dcsBIOSMenuItem = null;
@@ -631,17 +734,15 @@ namespace DCSFlightpanels
                 var contextMenu = textBox.ContextMenu;
 
                 // 1) If textbox.tag is List<DCSBIOSInput>, show Edit DCS-BIOS Control
-                // 2) If textbox.tag is keyvaluepair, show Edit sequence
-                // 3) If textbox.tag is null & text is empty && module!=NONE, show Edit sequence & DCS-BIOS Control
-
-                // 4) If textbox has text and tag is not keyvaluepair/DCSBIOSInput, show press times
-                // 5) If textbox is not empty, no tag show key press times
-                // 6) If textbox is not empty, key press tag show key press times
+                // 2) If textbox.tag is key sequence, show Edit sequence
+                // 3) If textbox.tag is BIP lights, show Edit BIP lights
+                // 4) If empty && module!=NONE, show Edit sequence & DCS-BIOS Control
+                // 5) If textbox has simple key stroke text, show press times
 
                 //1
-                if (textBox.Tag != null && textBox.Tag is List<DCSBIOSInput>)
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
                 {
-                    // 1) If textbox.tag is List<DCSBIOSInput>, show Edit DCS-BIOS Control    
+                    // 1) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
                         if (!item.Name.Contains("EditDCSBIOS"))
@@ -654,9 +755,9 @@ namespace DCSFlightpanels
                         }
                     }
                 }
-                else if (textBox.Tag != null && textBox.Tag is SortedList<int, KeyPressInfo>)
+                else if (((TextBoxTagHolderClass)textBox.Tag).ContainsKeySequence())
                 {
-                    // 2) If textbox.tag is keyvaluepair, show Edit sequence
+                    // 2) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
                         if (!item.Name.Contains("EditSequence"))
@@ -669,9 +770,25 @@ namespace DCSFlightpanels
                         }
                     }
                 }
-                else if (textBox.Tag == null && string.IsNullOrWhiteSpace(textBox.Text))
+                else if (((TextBoxTagHolderClass)textBox.Tag).ContainsBIPLight())
                 {
-                    // 3) If textbox.tag is null & text is empty, show Edit sequence & DCS-BIOS Control
+                    // 3) 
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        if (!item.Name.Contains("EditBIP"))
+                        {
+                            item.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            item.Visibility = Visibility.Visible;
+                            AddBIPHashMenuItems(item);
+                        }
+                    }
+                }
+                else if (((TextBoxTagHolderClass)textBox.Tag).IsEmpty())
+                {
+                    // 4) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
                         if (item.Name.Contains("EditSequence"))
@@ -682,18 +799,23 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
+                        else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                            AddBIPHashMenuItems(item);
+                        }
                         else
                         {
                             item.Visibility = Visibility.Collapsed;
                         }
                     }
                 }
-                else if (!string.IsNullOrWhiteSpace(textBox.Text) && (textBox.Tag == null || (!(textBox.Tag is List<DCSBIOSInput>) && !(textBox.Tag is SortedList<int, KeyPressInfo>))))
+                else if (((TextBoxTagHolderClass)textBox.Tag).ContainsSingleKey())
                 {
-                    // 4) If textbox has text and tag is not keyvaluepair/List<DCSBIOSInput>, show press times
+                    // 5) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS"))
+                        if (item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS") || item.Name.Contains("EditBIP"))
                         {
                             item.Visibility = Visibility.Collapsed;
                         }
@@ -703,52 +825,6 @@ namespace DCSFlightpanels
                         }
                     }
                 }
-                else if (!string.IsNullOrWhiteSpace(textBox.Text) && (textBox.Tag == null))
-                {
-                    // 5) If textbox is not empty, no tag show key press times
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditDCSBIOS") || item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-
-                // 6) If textbox is not empty, key press tag show key press times
-                if ((string.IsNullOrEmpty(textBox.Text) && textBox.Tag != null) && textBox.Tag is KeyPressInfo)
-                {
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditDCSBIOS") || item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                /*else
-                {
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!item.Name.Contains("Sequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }*/
-
             }
             catch (Exception ex)
             {
@@ -756,11 +832,55 @@ namespace DCSFlightpanels
             }
         }
 
+        private void AddBIPHashMenuItems(ItemsControl menuItem)
+        {
+            menuItem.Items.Clear();
+            var bips = BipFactory.GetBips();
+            var i = 0;
+            foreach (var backlitPanelBIP in bips)
+            {
+                var tmpMenuItem = new MenuItem();
+                //tmpMenuItem.Name = hash;
+                tmpMenuItem.Header = i;
+                tmpMenuItem.Tag = backlitPanelBIP.Hash;
+                tmpMenuItem.MouseEnter += BipMenu_OnMouseEnter;
+                tmpMenuItem.MouseLeave += BipMenu_OnMouseLeave;
+                menuItem.Items.Add(tmpMenuItem);
+                i++;
+            }
+        }
+
+        private void BipMenu_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                var menuItem = (MenuItem) sender;
+                BipFactory.LightUpGreen((string)menuItem.Tag);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(204774, ex);
+            }
+        }
+
+        private void BipMenu_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                var menuItem = (MenuItem)sender;
+                BipFactory.SetDark((string)menuItem.Tag);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(204775, ex);
+            }
+        }
+
         private TextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ55 && textBox.IsFocused && textBox.Background == Brushes.Yellow)
+                if (textBox != TextBoxLogPZ55 && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
                     return textBox;
                 }
@@ -779,69 +899,61 @@ namespace DCSFlightpanels
                 }
 
                 var contextMenuItem = (MenuItem)sender;
-                /*if(contextMenuItem.Name == "contextMenuItemZero")
-                {
-                    textBox.Tag = KeyPressLength.Zero;
-                }*/
-                /*if (contextMenuItem.Name == "contextMenuItemIndefinite")
-                {
-                    textBox.Tag = KeyPressLength.Indefinite;
-                }*/
                 if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
                 {
-                    textBox.Tag = KeyPressLength.FiftyMilliSec;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemHalfSecond")
                 {
-                    textBox.Tag = KeyPressLength.HalfSecond;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecond")
                 {
-                    textBox.Tag = KeyPressLength.Second;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecondAndHalf")
                 {
-                    textBox.Tag = KeyPressLength.SecondAndHalf;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwoSeconds")
                 {
-                    textBox.Tag = KeyPressLength.TwoSeconds;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThreeSeconds")
                 {
-                    textBox.Tag = KeyPressLength.ThreeSeconds;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFourSeconds")
                 {
-                    textBox.Tag = KeyPressLength.FourSeconds;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFiveSecs")
                 {
-                    textBox.Tag = KeyPressLength.FiveSecs;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTenSecs")
                 {
-                    textBox.Tag = KeyPressLength.TenSecs;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFifteenSecs")
                 {
-                    textBox.Tag = KeyPressLength.FifteenSecs;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwentySecs")
                 {
-                    textBox.Tag = KeyPressLength.TwentySecs;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtySecs")
                 {
-                    textBox.Tag = KeyPressLength.ThirtySecs;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFortySecs")
                 {
-                    textBox.Tag = KeyPressLength.FortySecs;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSixtySecs")
                 {
-                    textBox.Tag = KeyPressLength.SixtySecs;
+                    ((TextBoxTagHolderClass)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
                 }
 
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
@@ -931,7 +1043,7 @@ namespace DCSFlightpanels
                 {
 
                     //Check if this textbox contains DCS-BIOS information. If so then prompt the user for deletion
-                    if (textBox.Tag != null && textBox.Tag is List<DCSBIOSInput>)
+                    if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
                     {
                         if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS configuration?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
@@ -940,23 +1052,23 @@ namespace DCSFlightpanels
                         textBox.ToolTip = null;
                         textBox.Text = "";
                         _switchPanelPZ55.ClearAllBindings(GetPZ55Key(textBox));
-                        textBox.Tag = null;
+                        ((TextBoxTagHolderClass)textBox.Tag).ClearAll();
                     }
-                    else if (textBox.Tag != null && textBox.Tag is SortedList<int, KeyPressInfo>)
+                    else if (((TextBoxTagHolderClass)textBox.Tag).ContainsKeySequence())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        textBox.Tag = null;
+                        ((TextBoxTagHolderClass)textBox.Tag).ClearAll();
                         textBox.ToolTip = null;
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
                     else
                     {
-                        textBox.Tag = null;
+                        ((TextBoxTagHolderClass)textBox.Tag).ClearAll();
                         textBox.ToolTip = null;
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
@@ -1018,16 +1130,16 @@ namespace DCSFlightpanels
                 var textBox = ((TextBox)sender);
 
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Tag != null && (textBox.Tag is SortedList<int, KeyPressInfo> || textBox.Tag is List<DCSBIOSInput>))
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsKeySequence() || ((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
                 {
                     return;
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
 
-                if (textBox.Tag == null)
+                /*if (((TextBoxTagHolderClass)textBox.Tag) == null)
                 {
-                    textBox.Tag = KeyPressLength.FiftyMilliSec;
-                }
+                    ((TextBoxTagHolderClass)textBox.Tag) = xxKeyPressLength.FiftyMilliSec;
+                }*/
 
                 var keyCode = KeyInterop.VirtualKeyFromKey(e.Key);
                 e.Handled = true;
@@ -1069,7 +1181,7 @@ namespace DCSFlightpanels
             {
                 //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
                 var textBox = (TextBox)sender;
-                if (textBox.Tag is SortedList<int, KeyPressInfo>)
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
                 }
@@ -1091,14 +1203,14 @@ namespace DCSFlightpanels
             {
                 var textBox = ((TextBox)sender);
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Tag != null && (textBox.Tag is SortedList<int, KeyPressInfo> || textBox.Tag is List<DCSBIOSInput>))
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsKeySequence() || ((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
                 {
                     return;
                 }
-                if (textBox.Tag == null)
+                /*if (((TextBoxTagHolderClass)textBox.Tag) == null)
                 {
-                    textBox.Tag = KeyPressLength.FiftyMilliSec;
-                }
+                    ((TextBoxTagHolderClass)textBox.Tag) = xxKeyPressLength.FiftyMilliSec;
+                }*/
                 var keyPressed = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(e.Key);
                 e.Handled = true;
 
@@ -1123,6 +1235,7 @@ namespace DCSFlightpanels
                     }
                 }
                 textBox.Text = result;
+
                 UpdateKeyBindingProfileSequencedKeyStrokesPZ55(textBox);
             }
             catch (Exception ex)
@@ -1198,9 +1311,9 @@ namespace DCSFlightpanels
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
-                                        //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
-                                        ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
+                                //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
+                                ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
@@ -1364,143 +1477,144 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (textBox.Tag == null)
+                /*
+                if (((TextBoxTagHolderClass)textBox.Tag) == null)
                 {
-                    textBox.Tag = new SortedList<int, KeyPressInfo>();
+                    ((TextBoxTagHolderClass)textBox.Tag) = xxnew SortedList<int, KeyPressInfo>();
                 }
-
+                */
 
                 if (textBox.Equals(TextBoxKnobOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxKnobR))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxKnobL))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxKnobAll))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxKnobStart))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_START, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.KNOB_ENGINE_START, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxCowlClose))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxCowlOpen))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxPanelOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxPanelOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxBeaconOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxBeaconOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxNavOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxNavOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxStrobeOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxStrobeOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxTaxiOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxTaxiOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLandingOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxLandingOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxMasterBatOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxMasterBatOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxMasterAltOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxMasterAltOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxAvionicsMasterOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxAvionicsMasterOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxFuelPumpOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxFuelPumpOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxDeIceOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxDeIceOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxPitotHeatOff))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxPitotHeatOn))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxGearUp))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.LEVER_GEAR_UP, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.LEVER_GEAR_UP, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxGearDown))
                 {
-                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.LEVER_GEAR_DOWN, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _switchPanelPZ55.AddOrUpdateSequencedKeyBinding(textBox.Text, SwitchPanelPZ55Keys.LEVER_GEAR_DOWN, ((TextBoxTagHolderClass)textBox.Tag).GetKeySequence());
                 }
             }
             catch (Exception ex)
@@ -1515,13 +1629,13 @@ namespace DCSFlightpanels
             try
             {
                 KeyPressLength keyPressLength;
-                if (textBox.Tag == null)
+                if (!((TextBoxTagHolderClass)textBox.Tag).ContainsOSKeyPress())
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
                 else
                 {
-                    keyPressLength = ((KeyPressLength)textBox.Tag);
+                    keyPressLength = ((KeyPressLength)((TextBoxTagHolderClass)textBox.Tag).KeyPress.GetLengthOfKeyPress());
                 }
                 if (textBox.Equals(TextBoxKnobOff))
                 {
@@ -1667,13 +1781,13 @@ namespace DCSFlightpanels
             try
             {
                 List<DCSBIOSInput> dcsBiosInputs = null;
-                if (textBox.Tag == null)
+                /*if (((TextBoxTagHolderClass)textBox.Tag) == null)
                 {
                     return;
-                }
-                if (textBox.Tag is List<DCSBIOSInput>)
+                }*/
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
                 {
-                    dcsBiosInputs = ((List<DCSBIOSInput>)textBox.Tag);
+                    dcsBiosInputs = ((TextBoxTagHolderClass)textBox.Tag).DCSBIOSInputs;
                 }
                 if (textBox.Equals(TextBoxKnobOff))
                 {
@@ -1962,21 +2076,20 @@ namespace DCSFlightpanels
         {
             try
             {
+                if (!_controlLoaded || !_textBoxTagsSet)
+                {
+                    return;
+                }
                 foreach (var keyBinding in _switchPanelPZ55.KeyBindingsHashSet)
                 {
                     if (keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF)
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxKnobOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxKnobOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxKnobOff.Text = ((TextBoxTagHolderClass)TextBoxKnobOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -1984,15 +2097,10 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxKnobR.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobR.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobR.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobR.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxKnobR.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxKnobR.Text = ((TextBoxTagHolderClass)TextBoxKnobR.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2000,15 +2108,10 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxKnobL.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobL.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobL.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobL.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxKnobL.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxKnobL.Text = ((TextBoxTagHolderClass)TextBoxKnobL.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2016,15 +2119,10 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxKnobAll.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobAll.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobAll.Text = keyBinding.OSKeyPress.Information;
-                                TextBoxKnobAll.Tag = keyBinding.OSKeyPress.GetSequence;
+                                ((TextBoxTagHolderClass)TextBoxKnobAll.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxKnobAll.Text = ((TextBoxTagHolderClass)TextBoxKnobAll.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2032,15 +2130,10 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxKnobStart.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxKnobStart.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxKnobStart.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxKnobStart.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxKnobStart.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxKnobStart.Text = ((TextBoxTagHolderClass)TextBoxKnobStart.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2049,28 +2142,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxCowlOpen.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxCowlOpen.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxCowlOpen.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxCowlOpen.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxCowlOpen.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxCowlOpen.Text = ((TextBoxTagHolderClass)TextBoxCowlOpen.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxCowlClose.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxCowlClose.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxCowlClose.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxCowlClose.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxCowlClose.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxCowlClose.Text = ((TextBoxTagHolderClass)TextBoxCowlClose.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2078,28 +2161,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxPanelOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPanelOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPanelOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPanelOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxPanelOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxPanelOn.Text = ((TextBoxTagHolderClass)TextBoxPanelOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxPanelOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPanelOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPanelOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPanelOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxPanelOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxPanelOff.Text = ((TextBoxTagHolderClass)TextBoxPanelOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2107,28 +2180,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxBeaconOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxBeaconOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxBeaconOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxBeaconOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxBeaconOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxBeaconOn.Text = ((TextBoxTagHolderClass)TextBoxBeaconOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxBeaconOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxBeaconOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxBeaconOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxBeaconOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxBeaconOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxBeaconOff.Text = ((TextBoxTagHolderClass)TextBoxBeaconOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2136,28 +2199,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxNavOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxNavOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxNavOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxNavOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxNavOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxNavOn.Text = ((TextBoxTagHolderClass)TextBoxNavOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxNavOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxNavOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxNavOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxNavOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxNavOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxNavOff.Text = ((TextBoxTagHolderClass)TextBoxNavOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2165,28 +2218,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxStrobeOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxStrobeOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxStrobeOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxStrobeOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxStrobeOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxStrobeOn.Text = ((TextBoxTagHolderClass)TextBoxStrobeOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxStrobeOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxStrobeOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxStrobeOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxStrobeOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxStrobeOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxStrobeOff.Text = ((TextBoxTagHolderClass)TextBoxStrobeOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2194,28 +2237,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxTaxiOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxTaxiOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxTaxiOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxTaxiOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxTaxiOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxTaxiOn.Text = ((TextBoxTagHolderClass)TextBoxTaxiOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxTaxiOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxTaxiOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxTaxiOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxTaxiOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxTaxiOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxTaxiOff.Text = ((TextBoxTagHolderClass)TextBoxTaxiOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2223,28 +2256,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxLandingOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxLandingOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxLandingOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxLandingOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxLandingOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxLandingOn.Text = ((TextBoxTagHolderClass)TextBoxLandingOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxLandingOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxLandingOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxLandingOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxLandingOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxLandingOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxLandingOff.Text = ((TextBoxTagHolderClass)TextBoxLandingOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2252,28 +2275,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxMasterBatOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterBatOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterBatOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterBatOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxMasterBatOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxMasterBatOn.Text = ((TextBoxTagHolderClass)TextBoxMasterBatOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxMasterBatOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterBatOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterBatOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterBatOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxMasterBatOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxMasterBatOff.Text = ((TextBoxTagHolderClass)TextBoxMasterBatOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2281,28 +2294,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxMasterAltOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterAltOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterAltOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterAltOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxMasterAltOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxMasterAltOn.Text = ((TextBoxTagHolderClass)TextBoxMasterAltOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxMasterAltOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxMasterAltOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxMasterAltOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxMasterAltOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxMasterAltOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxMasterAltOff.Text = ((TextBoxTagHolderClass)TextBoxMasterAltOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2310,28 +2313,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxAvionicsMasterOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxAvionicsMasterOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxAvionicsMasterOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxAvionicsMasterOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxAvionicsMasterOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxAvionicsMasterOn.Text = ((TextBoxTagHolderClass)TextBoxAvionicsMasterOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxAvionicsMasterOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxAvionicsMasterOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxAvionicsMasterOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxAvionicsMasterOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxAvionicsMasterOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxAvionicsMasterOff.Text = ((TextBoxTagHolderClass)TextBoxAvionicsMasterOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2339,28 +2332,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxFuelPumpOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxFuelPumpOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxFuelPumpOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxFuelPumpOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxFuelPumpOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxFuelPumpOn.Text = ((TextBoxTagHolderClass)TextBoxFuelPumpOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxFuelPumpOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxFuelPumpOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxFuelPumpOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxFuelPumpOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxFuelPumpOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxFuelPumpOff.Text = ((TextBoxTagHolderClass)TextBoxFuelPumpOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2368,28 +2351,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxDeIceOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxDeIceOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxDeIceOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxDeIceOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxDeIceOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxDeIceOn.Text = ((TextBoxTagHolderClass)TextBoxDeIceOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxDeIceOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxDeIceOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxDeIceOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxDeIceOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxDeIceOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxDeIceOff.Text = ((TextBoxTagHolderClass)TextBoxDeIceOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2397,28 +2370,18 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxPitotHeatOn.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPitotHeatOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPitotHeatOn.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPitotHeatOn.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxPitotHeatOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxPitotHeatOn.Text = ((TextBoxTagHolderClass)TextBoxPitotHeatOn.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                         else
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxPitotHeatOff.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxPitotHeatOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxPitotHeatOff.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxPitotHeatOff.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxPitotHeatOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxPitotHeatOff.Text = ((TextBoxTagHolderClass)TextBoxPitotHeatOff.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2427,15 +2390,10 @@ namespace DCSFlightpanels
                         //When gear is down is it OFF -> NOT BEING USED
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxGearUp.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxGearUp.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxGearUp.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxGearUp.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxGearUp.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxGearUp.Text = ((TextBoxTagHolderClass)TextBoxGearUp.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2444,15 +2402,10 @@ namespace DCSFlightpanels
                         //When gear is down is it ON -> BEING USED
                         if (keyBinding.WhenTurnedOn)
                         {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
+                            if (keyBinding.OSKeyPress != null)
                             {
-                                TextBoxGearDown.Tag = keyBinding.OSKeyPress.LengthOfKeyPress();
-                                TextBoxGearDown.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
-                            }
-                            else if (keyBinding.OSKeyPress != null && keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                TextBoxGearDown.Tag = keyBinding.OSKeyPress.GetSequence;
-                                TextBoxGearDown.Text = keyBinding.OSKeyPress.Information;
+                                ((TextBoxTagHolderClass)TextBoxGearDown.Tag).KeyPress = keyBinding.OSKeyPress;
+                                TextBoxGearDown.Text = ((TextBoxTagHolderClass)TextBoxGearDown.Tag).GetTextBoxKeyPressInfo();
                             }
                         }
                     }
@@ -2466,31 +2419,31 @@ namespace DCSFlightpanels
                 {
                     if (dcsBiosBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        TextBoxKnobOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                        ((TextBoxTagHolderClass)TextBoxKnobOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxKnobOff.Text = dcsBiosBinding.Description;
                         TextBoxKnobOff.ToolTip = "DCS-BIOS";
                     }
                     if (dcsBiosBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        TextBoxKnobR.Tag = dcsBiosBinding.DCSBIOSInputs;
+                        ((TextBoxTagHolderClass)TextBoxKnobR.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxKnobR.Text = dcsBiosBinding.Description;
                         TextBoxKnobR.ToolTip = "DCS-BIOS";
                     }
                     if (dcsBiosBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        TextBoxKnobL.Tag = dcsBiosBinding.DCSBIOSInputs;
+                        ((TextBoxTagHolderClass)TextBoxKnobL.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxKnobL.Text = dcsBiosBinding.Description;
                         TextBoxKnobL.ToolTip = "DCS-BIOS";
                     }
                     if (dcsBiosBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        TextBoxKnobAll.Tag = dcsBiosBinding.DCSBIOSInputs;
+                        ((TextBoxTagHolderClass)TextBoxKnobAll.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxKnobAll.Text = dcsBiosBinding.Description;
                         TextBoxKnobAll.ToolTip = "DCS-BIOS";
                     }
                     if (dcsBiosBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        TextBoxKnobStart.Tag = dcsBiosBinding.DCSBIOSInputs;
+                        ((TextBoxTagHolderClass)TextBoxKnobStart.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxKnobStart.Text = dcsBiosBinding.Description;
                         TextBoxKnobStart.ToolTip = "DCS-BIOS";
                     }
@@ -2501,7 +2454,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxCowlOpen.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxCowlOpen.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxCowlOpen.Text = dcsBiosBinding.Description;
                                 TextBoxCowlOpen.ToolTip = "DCS-BIOS";
                             }
@@ -2510,7 +2463,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxCowlClose.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxCowlClose.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxCowlClose.Text = dcsBiosBinding.Description;
                                 TextBoxCowlClose.ToolTip = "DCS-BIOS";
                             }
@@ -2522,7 +2475,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxPanelOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxPanelOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxPanelOn.Text = dcsBiosBinding.Description;
                                 TextBoxPanelOn.ToolTip = "DCS-BIOS";
                             }
@@ -2531,7 +2484,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxPanelOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxPanelOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxPanelOff.Text = dcsBiosBinding.Description;
                                 TextBoxPanelOff.ToolTip = "DCS-BIOS";
                             }
@@ -2543,7 +2496,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxBeaconOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxBeaconOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxBeaconOn.Text = dcsBiosBinding.Description;
                                 TextBoxBeaconOn.ToolTip = "DCS-BIOS";
                             }
@@ -2552,7 +2505,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxBeaconOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxBeaconOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxBeaconOff.Text = dcsBiosBinding.Description;
                                 TextBoxBeaconOff.ToolTip = "DCS-BIOS";
                             }
@@ -2564,7 +2517,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxNavOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxNavOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxNavOn.Text = dcsBiosBinding.Description;
                                 TextBoxNavOn.ToolTip = "DCS-BIOS";
                             }
@@ -2573,7 +2526,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxNavOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxNavOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxNavOff.Text = dcsBiosBinding.Description;
                                 TextBoxNavOff.ToolTip = "DCS-BIOS";
                             }
@@ -2585,7 +2538,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxStrobeOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxStrobeOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxStrobeOn.Text = dcsBiosBinding.Description;
                                 TextBoxStrobeOn.ToolTip = "DCS-BIOS";
                             }
@@ -2594,7 +2547,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxStrobeOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxStrobeOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxStrobeOff.Text = dcsBiosBinding.Description;
                                 TextBoxStrobeOff.ToolTip = "DCS-BIOS";
                             }
@@ -2606,7 +2559,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxTaxiOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxTaxiOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxTaxiOn.Text = dcsBiosBinding.Description;
                                 TextBoxTaxiOn.ToolTip = "DCS-BIOS";
                             }
@@ -2615,7 +2568,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxTaxiOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxTaxiOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxTaxiOff.Text = dcsBiosBinding.Description;
                                 TextBoxTaxiOff.ToolTip = "DCS-BIOS";
                             }
@@ -2627,7 +2580,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxLandingOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxLandingOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxLandingOn.Text = dcsBiosBinding.Description;
                                 TextBoxLandingOn.ToolTip = "DCS-BIOS";
                             }
@@ -2636,7 +2589,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxLandingOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxLandingOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxLandingOff.Text = dcsBiosBinding.Description;
                                 TextBoxLandingOff.ToolTip = "DCS-BIOS";
                             }
@@ -2648,7 +2601,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxMasterBatOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxMasterBatOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxMasterBatOn.Text = dcsBiosBinding.Description;
                                 TextBoxMasterBatOn.ToolTip = "DCS-BIOS";
                             }
@@ -2657,7 +2610,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxMasterBatOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxMasterBatOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxMasterBatOff.Text = dcsBiosBinding.Description;
                                 TextBoxMasterBatOff.ToolTip = "DCS-BIOS";
                             }
@@ -2669,7 +2622,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxMasterAltOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxMasterAltOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxMasterAltOn.Text = dcsBiosBinding.Description;
                                 TextBoxMasterAltOn.ToolTip = "DCS-BIOS";
                             }
@@ -2678,7 +2631,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxMasterAltOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxMasterAltOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxMasterAltOff.Text = dcsBiosBinding.Description;
                                 TextBoxMasterAltOff.ToolTip = "DCS-BIOS";
                             }
@@ -2690,7 +2643,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxAvionicsMasterOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxAvionicsMasterOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxAvionicsMasterOn.Text = dcsBiosBinding.Description;
                                 TextBoxAvionicsMasterOn.ToolTip = "DCS-BIOS";
                             }
@@ -2699,7 +2652,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxAvionicsMasterOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxAvionicsMasterOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxAvionicsMasterOff.Text = dcsBiosBinding.Description;
                                 TextBoxAvionicsMasterOff.ToolTip = "DCS-BIOS";
                             }
@@ -2711,7 +2664,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxFuelPumpOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxFuelPumpOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxFuelPumpOn.Text = dcsBiosBinding.Description;
                                 TextBoxFuelPumpOn.ToolTip = "DCS-BIOS";
                             }
@@ -2720,7 +2673,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxFuelPumpOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxFuelPumpOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxFuelPumpOff.Text = dcsBiosBinding.Description;
                                 TextBoxFuelPumpOff.ToolTip = "DCS-BIOS";
                             }
@@ -2732,7 +2685,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxDeIceOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxDeIceOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxDeIceOn.Text = dcsBiosBinding.Description;
                                 TextBoxDeIceOn.ToolTip = "DCS-BIOS";
                             }
@@ -2741,7 +2694,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxDeIceOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxDeIceOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxDeIceOff.Text = dcsBiosBinding.Description;
                                 TextBoxDeIceOff.ToolTip = "DCS-BIOS";
                             }
@@ -2753,7 +2706,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxPitotHeatOn.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxPitotHeatOn.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxPitotHeatOn.Text = dcsBiosBinding.Description;
                                 TextBoxPitotHeatOn.ToolTip = "DCS-BIOS";
                             }
@@ -2762,7 +2715,7 @@ namespace DCSFlightpanels
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                             {
-                                TextBoxPitotHeatOff.Tag = dcsBiosBinding.DCSBIOSInputs;
+                                ((TextBoxTagHolderClass)TextBoxPitotHeatOff.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                                 TextBoxPitotHeatOff.Text = dcsBiosBinding.Description;
                                 TextBoxPitotHeatOff.ToolTip = "DCS-BIOS";
                             }
@@ -2771,14 +2724,14 @@ namespace DCSFlightpanels
                     if (dcsBiosBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         //When gear is down is it OFF -> NOT BEING USED
-                        TextBoxGearUp.Tag = dcsBiosBinding.DCSBIOSInputs;
+                        ((TextBoxTagHolderClass)TextBoxGearUp.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxGearUp.Text = dcsBiosBinding.Description;
                         TextBoxGearUp.ToolTip = "DCS-BIOS";
                     }
                     if (dcsBiosBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && dcsBiosBinding.WhenTurnedOn && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         //When gear is down is it ON -> BEING USED
-                        TextBoxGearDown.Tag = dcsBiosBinding.DCSBIOSInputs;
+                        ((TextBoxTagHolderClass)TextBoxGearDown.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
                         TextBoxGearDown.Text = dcsBiosBinding.Description;
                         TextBoxGearDown.ToolTip = "DCS-BIOS";
                     }
@@ -2857,5 +2810,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(30545, ex);
             }
         }
+
+        
     }
 }

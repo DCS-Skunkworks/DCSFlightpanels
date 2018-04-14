@@ -437,10 +437,12 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
+        public OSKeyPress AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
         {
             //This must accept lists
             var found = false;
+            OSKeyPress osKeyPress = null;
+
             RemoveSwitchPanelKeyFromList(2, switchPanelPZ55Key, whenTurnedOn);
             foreach (var keyBinding in _keyBindings)
             {
@@ -452,7 +454,8 @@ namespace NonVisuals
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                        osKeyPress = new OSKeyPress(information, sortedList);
+                        keyBinding.OSKeyPress = osKeyPress;
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -463,11 +466,13 @@ namespace NonVisuals
             {
                 var keyBinding = new KeyBindingPZ55();
                 keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                osKeyPress = new OSKeyPress(information, sortedList);
+                keyBinding.OSKeyPress = osKeyPress;
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
             IsDirtyMethod();
+            return osKeyPress;
         }
 
         public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)

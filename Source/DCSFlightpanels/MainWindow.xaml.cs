@@ -120,6 +120,10 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1017, ex);
             }
         }
+        
+        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        {
+        }
 
         public void UserMessage(object sender, UserMessageEventArgs e)
         {
@@ -437,13 +441,9 @@ namespace DCSFlightpanels
                                 }
                             case SaitekPanelsEnum.BackLitPanel:
                                 {
-                                    if (_panelProfileHandler.IsKeyEmulationProfile )
-                                    {
-                                        break;
-                                    }
                                     var tabItem = new TabItem();
                                     tabItem.Header = "B.I.P.";
-                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
+                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton, _panelProfileHandler.IsDCSBIOSProfile);
                                     _saitekUserControls.Add(backLitPanelUserControl);
                                     _panelProfileHandler.Attach(backLitPanelUserControl);
                                     tabItem.Content = backLitPanelUserControl;

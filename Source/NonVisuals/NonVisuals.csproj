@@ -96,23 +96,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BacklitPanelBIP.cs" />
+    <Compile Include="BIPFactory.cs" />
+    <Compile Include="BIPLinkPZ55.cs" />
+    <Compile Include="BIPLinkPZ69.cs" />
+    <Compile Include="BIPLinkPZ70.cs" />
+    <Compile Include="BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
-    <Compile Include="DCSBIOSBindingHESP.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
     <Compile Include="DCSBIOSBindingBase.cs" />
     <Compile Include="DCSBIOSBindingTPM.cs" />
     <Compile Include="DCSBIOSBindingPZ70.cs" />
     <Compile Include="DCSBIOSBindingPZ55.cs" />
     <Compile Include="DcsOutputAndColorBinding.cs" />
-    <Compile Include="HESP.cs" />
-    <Compile Include="HESPKey.cs" />
     <Compile Include="HIDHandler.cs" />
     <Compile Include="IGlobalHandler.cs" />
     <Compile Include="IProfileHandlerListener.cs" />
     <Compile Include="IRadioPanel.cs" />
     <Compile Include="ISaitekPanelListener.cs" />
     <Compile Include="IUserMessageHandler.cs" />
-    <Compile Include="KeyBindingHESP.cs" />
     <Compile Include="KeyBindingPZ69.cs" />
     <Compile Include="KeyBindingTPM.cs" />
     <Compile Include="KnobBindingPZ70.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="MultiPanelKnob.cs" />
     <Compile Include="MultiPanelPZ70.cs" />
     <Compile Include="OSKeyPress.cs" />
+    <Compile Include="PanelSwitchBIPLightBinding.cs" />
     <Compile Include="PerformanceTimer.cs" />
     <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

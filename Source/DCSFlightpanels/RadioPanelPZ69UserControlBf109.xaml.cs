@@ -35,6 +35,10 @@ namespace DCSFlightpanels
             //LoadConfiguration();
         }
 
+        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        {
+        }
+
         public SaitekPanel GetSaitekPanel()
         {
             return _radioPanelPZ69;

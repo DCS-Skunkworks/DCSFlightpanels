@@ -46,6 +46,7 @@ namespace NonVisuals
             OnLedLightChangedA += iSaitekPanelListener.LedLightChanged;
             OnSettingsClearedA += iSaitekPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed += iSaitekPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA += iSaitekPanelListener.PanelSettingsChanged;
         }
 
         //For those that wants to listen to this panel
@@ -58,6 +59,7 @@ namespace NonVisuals
             OnLedLightChangedA -= iSaitekPanelListener.LedLightChanged;
             OnSettingsClearedA -= iSaitekPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed -= iSaitekPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA -= iSaitekPanelListener.PanelSettingsChanged;
         }
 
         //For those that wants to listen to this panel when it's settings change
@@ -182,12 +184,14 @@ namespace NonVisuals
         private uint _count;
         private bool _synchedOnce;
         private Guid _guid = Guid.NewGuid();
+        private string _hash;
 
         protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton)
         {
             _typeOfSaitekPanel = typeOfSaitekPanel;
             HIDSkeletonBase = hidSkeleton;
             _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+            _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
         }
 
         public abstract string SettingsVersion();
@@ -203,6 +207,7 @@ namespace NonVisuals
         //public abstract void GetDcsBiosData(byte[] bytes);
         protected HIDSkeleton HIDSkeletonBase;
         private bool _closed;
+
 
         protected void UpdateCounter(uint address, uint data)
         {
@@ -272,6 +277,14 @@ namespace NonVisuals
                 return HIDSkeletonBase.InstanceId;
             }
             set { HIDSkeletonBase.InstanceId = value; }
+        }
+
+        public string Hash
+        {
+            get
+            {
+                return _hash;
+            }
         }
 
         public string GuidString
