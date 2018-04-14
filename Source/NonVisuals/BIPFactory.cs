@@ -31,12 +31,12 @@ namespace NonVisuals
         {
             return _bipEventHandlerManager.GetBips();
         }
-        
+
         public static void AddBipListener(ISaitekPanelListener iSaitekPanelListener)
         {
             _bipEventHandlerManager.AddBipListener(iSaitekPanelListener);
         }
-        
+
         public static void RemoveBipListener(ISaitekPanelListener iSaitekPanelListener)
         {
             _bipEventHandlerManager.RemoveBipListener(iSaitekPanelListener);
@@ -51,6 +51,16 @@ namespace NonVisuals
         {
             _bipEventHandlerManager.SetDark(hash);
         }
+
+        public static void SetAllDark()
+        {
+            _bipEventHandlerManager.SetAllDark();
+        }
+
+        public static void ShowLight(BIPLight bipLight)
+        {
+            _bipEventHandlerManager.ShowLight(bipLight);
+        }
     }
 
     public class BipEventHandlerManager
@@ -64,6 +74,28 @@ namespace NonVisuals
         public List<BacklitPanelBIP> GetBips()
         {
             return _backlitPanels;
+        }
+
+        public void SetAllDark()
+        {
+            foreach (var backlitPanelBIP in _backlitPanels)
+            {
+                foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
+                {
+                    backlitPanelBIP.SetLED(position, PanelLEDColor.DARK);
+                }
+            }
+        }
+
+        public void ShowLight(BIPLight bipLight)
+        {
+            foreach (var backlitPanelBIP in _backlitPanels)
+            {
+                if (bipLight.Hash == backlitPanelBIP.Hash)
+                {
+                    backlitPanelBIP.SetLED(bipLight.BIPLedPosition, bipLight.LEDColor);
+                }
+            }
         }
 
         public void LightUpGreen(string hash)
@@ -127,7 +159,7 @@ namespace NonVisuals
         {
             if (OnBipPanelRegistered != null)
             {
-                OnBipPanelRegistered(this, new BipPanelRegisteredEventArgs() { UniqueId = backlitPanelBip.InstanceId, BacklitPanelBip =  backlitPanelBip});
+                OnBipPanelRegistered(this, new BipPanelRegisteredEventArgs() { UniqueId = backlitPanelBip.InstanceId, BacklitPanelBip = backlitPanelBip });
             }
         }
     }

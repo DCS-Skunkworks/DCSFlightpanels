@@ -447,26 +447,21 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
-                if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
+                BIPLinkWindow bipLinkWindow;
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsBIPLink())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TextBoxTagHolderClass)textBox.Tag).DCSBIOSInputs, textBox.Text);
+                    var bipLink = ((TextBoxTagHolderClass)textBox.Tag).BIPLink;
+                    bipLinkWindow = new BIPLinkWindow("", bipLink);
                 }
                 else
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    bipLinkWindow = new BIPLinkWindow();
                 }
-                dcsBIOSControlsConfigsWindow.ShowDialog();
-                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true && dcsBIOSControlsConfigsWindow.DCSBIOSInputs.Count > 0)
+                bipLinkWindow.ShowDialog();
+                if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLinkPZ55 != null && bipLinkWindow.BIPLinkPZ55.BIPLights.Count > 0)
                 {
-                    var dcsBiosInputs = dcsBIOSControlsConfigsWindow.DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsBIOSControlsConfigsWindow.Description;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    textBox.Text = text;
-                    ((TextBoxTagHolderClass)textBox.Tag).DCSBIOSInputs = dcsBiosInputs;
-                    textBox.ToolTip = textBox.Text;
-                    UpdateDCSBIOSBinding(textBox);
+                    ((TextBoxTagHolderClass)textBox.Tag).BIPLink = bipLinkWindow.BIPLinkPZ55;
+                    UpdateBIPLinkBindings(textBox);
                 }
             }
             catch (Exception ex)
@@ -480,18 +475,25 @@ namespace DCSFlightpanels
         {
             try
             {
+                var contextMenu = (ContextMenu)sender;
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    foreach (MenuItem contextMenuItem in contextMenu.Items)
+                    {
+                        contextMenuItem.Visibility = Visibility.Collapsed;
+                    }
+                    return;
+                    //throw new Exception("Failed to locate which textbox is focused.");
+                }
+
                 if (!(bool)e.NewValue)
                 {
                     //Do not show if not visible
                     return;
                 }
 
-                var textBox = GetTextBoxInFocus();
-                var contextMenu = (ContextMenu)sender;
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
+
 
                 if (!((TextBoxTagHolderClass)textBox.Tag).ContainsSingleKey())
                 {
@@ -722,34 +724,35 @@ namespace DCSFlightpanels
         {
             try
             {
-                //Timing values
-                //Edit sequence
-                //Edit DCS-BIOC Control
-                var textBox = GetTextBoxInFocus();
-
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
+                var textBox = (TextBox)sender;
                 var contextMenu = textBox.ContextMenu;
-
-                // 1) If textbox.tag is List<DCSBIOSInput>, show Edit DCS-BIOS Control
-                // 2) If textbox.tag is key sequence, show Edit sequence
-                // 3) If textbox.tag is BIP lights, show Edit BIP lights
-                // 4) If empty && module!=NONE, show Edit sequence & DCS-BIOS Control
-                // 5) If textbox has simple key stroke text, show press times
-
-                //1
-                if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
+                if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
                 {
-                    // 1) 
+                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!item.Name.Contains("EditDCSBIOS"))
+                        item.Visibility = Visibility.Collapsed;
+                    }
+                    return;
+                }
+
+
+
+                foreach (MenuItem item in contextMenu.Items)
+                {
+                    item.Visibility = Visibility.Collapsed;
+                }
+
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsDCSBIOS())
+                {
+                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        if (item.Name.Contains("EditDCSBIOS"))
                         {
-                            item.Visibility = Visibility.Collapsed;
+                            item.Visibility = Visibility.Visible;
                         }
-                        else
+                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -760,29 +763,13 @@ namespace DCSFlightpanels
                     // 2) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                        else
+                        if (item.Name.Contains("EditSequence"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
-                    }
-                }
-                else if (((TextBoxTagHolderClass)textBox.Tag).ContainsBIPLight())
-                {
-                    // 3) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                        else
+                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
                         {
                             item.Visibility = Visibility.Visible;
-                            AddBIPHashMenuItems(item);
                         }
                     }
                 }
@@ -802,7 +789,6 @@ namespace DCSFlightpanels
                         else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
                         {
                             item.Visibility = Visibility.Visible;
-                            AddBIPHashMenuItems(item);
                         }
                         else
                         {
@@ -815,11 +801,26 @@ namespace DCSFlightpanels
                     // 5) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS") || item.Name.Contains("EditBIP"))
+                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
                         {
-                            item.Visibility = Visibility.Collapsed;
+                            item.Visibility = Visibility.Visible;
                         }
-                        else
+                    }
+                }
+                else if (((TextBoxTagHolderClass)textBox.Tag).ContainsBIPLink())
+                {
+                    // 3) 
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        if (item.Name.Contains("EditDCSBIOS"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                        if (item.Name.Contains("EditSequence"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -832,7 +833,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private void AddBIPHashMenuItems(ItemsControl menuItem)
+        /*private void AddBIPHashMenuItems(ItemsControl menuItem)
         {
             menuItem.Items.Clear();
             var bips = BipFactory.GetBips();
@@ -874,13 +875,13 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(204775, ex);
             }
-        }
+        }*/
 
         private TextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ55 && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
+                if (!Equals(textBox, TextBoxLogPZ55) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
                     return textBox;
                 }
@@ -892,7 +893,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var textBox = GetTextBoxInFocus();
+                var textBox = GetTextBoxInFocus();//OK
                 if (textBox == null)
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
@@ -1098,6 +1099,18 @@ namespace DCSFlightpanels
         }
 
 
+        private void TextBox_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                ((TextBox)sender).Background = Brushes.Yellow;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3004, ex);
+            }
+        }
+
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)
         {
             try
@@ -1114,7 +1127,15 @@ namespace DCSFlightpanels
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.White;
+                var textBox = (TextBox)sender;
+                if (((TextBoxTagHolderClass)textBox.Tag).ContainsBIPLink())
+                {
+                    ((TextBox)sender).Background = Brushes.Bisque;
+                }
+                else
+                {
+                    ((TextBox)sender).Background = Brushes.White;
+                }
             }
             catch (Exception ex)
             {
@@ -1311,9 +1332,9 @@ namespace DCSFlightpanels
                                 Dispatcher.BeginInvoke(
                                     (Action)delegate
                                     {
-                                //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
-                                //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
-                                ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
+                                        //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
+                                        ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
@@ -1470,6 +1491,157 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(3010, ex);
+            }
+        }
+
+
+        private void UpdateBIPLinkBindings(TextBox textBox)
+        {
+            try
+            {
+                /*
+                if (((TextBoxTagHolderClass)textBox.Tag) == null)
+                {
+                    ((TextBoxTagHolderClass)textBox.Tag) = xxnew SortedList<int, KeyPressInfo>();
+                }
+                */
+
+                if (textBox.Equals(TextBoxKnobOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxKnobR))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxKnobL))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxKnobAll))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxKnobStart))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.KNOB_ENGINE_START, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxCowlClose))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxCowlOpen))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxPanelOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxPanelOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxBeaconOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxBeaconOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxNavOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxNavOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxStrobeOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxStrobeOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxTaxiOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxTaxiOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxLandingOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxLandingOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxMasterBatOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxMasterBatOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxMasterAltOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxMasterAltOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxAvionicsMasterOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxAvionicsMasterOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxFuelPumpOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxFuelPumpOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxDeIceOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxDeIceOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxPitotHeatOff))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink, false);
+                }
+                if (textBox.Equals(TextBoxPitotHeatOn))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxGearUp))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.LEVER_GEAR_UP, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+                if (textBox.Equals(TextBoxGearDown))
+                {
+                    _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.LEVER_GEAR_DOWN, ((TextBoxTagHolderClass)textBox.Tag).BIPLink);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3011, ex);
             }
         }
 
@@ -1927,6 +2099,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(345012, ex);
             }
         }
+
 
         private SwitchPanelPZ55KeyOnOff GetPZ55Key(TextBox textBox)
         {
@@ -2737,6 +2910,295 @@ namespace DCSFlightpanels
                     }
                 }
 
+                foreach (var bipLinkPZ55 in _switchPanelPZ55.BIPLinkHashSet)
+                {
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
+                    {
+                        ((TextBoxTagHolderClass)TextBoxKnobOff.Tag).BIPLink = bipLinkPZ55;
+                        TextBoxKnobOff.Background = Brushes.Bisque;
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
+                    {
+                        ((TextBoxTagHolderClass)TextBoxKnobOff.Tag).BIPLink = bipLinkPZ55;
+                        TextBoxKnobR.Background = Brushes.Bisque;
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
+                    {
+                        ((TextBoxTagHolderClass)TextBoxKnobL.Tag).BIPLink = bipLinkPZ55;
+                        TextBoxKnobL.Background = Brushes.Bisque;
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
+                    {
+                        ((TextBoxTagHolderClass)TextBoxKnobAll.Tag).BIPLink = bipLinkPZ55;
+                        TextBoxKnobAll.Background = Brushes.Bisque;
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
+                    {
+                        ((TextBoxTagHolderClass)TextBoxKnobStart.Tag).BIPLink = bipLinkPZ55;
+                        TextBoxKnobStart.Background = Brushes.Bisque;
+                    }
+
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxCowlOpen.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxCowlOpen.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxCowlClose.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxCowlClose.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxPanelOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxPanelOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxPanelOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxPanelOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxBeaconOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxBeaconOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxBeaconOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxBeaconOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxNavOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxNavOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxNavOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxNavOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxStrobeOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxStrobeOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxStrobeOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxStrobeOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxTaxiOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxTaxiOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxTaxiOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxTaxiOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxLandingOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxLandingOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxLandingOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxLandingOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxMasterBatOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxMasterBatOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxMasterBatOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxMasterBatOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxMasterAltOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxMasterAltOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxMasterAltOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxMasterAltOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxAvionicsMasterOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxAvionicsMasterOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxAvionicsMasterOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxAvionicsMasterOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxFuelPumpOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxFuelPumpOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxFuelPumpOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxFuelPumpOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxDeIceOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxDeIceOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxDeIceOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxDeIceOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT)
+                    {
+                        if (bipLinkPZ55.WhenTurnedOn)
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxPitotHeatOn.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxPitotHeatOn.Background = Brushes.Bisque;
+                            }
+                        }
+                        else
+                        {
+                            if (bipLinkPZ55.BIPLights.Count > 0)
+                            {
+                                ((TextBoxTagHolderClass)TextBoxPitotHeatOff.Tag).BIPLink = bipLinkPZ55;
+                                TextBoxPitotHeatOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
+                    {
+                        //When gear is down is it OFF -> NOT BEING USED
+                        ((TextBoxTagHolderClass)TextBoxGearUp.Tag).BIPLink = bipLinkPZ55;
+                        TextBoxGearUp.Background = Brushes.Bisque;
+                    }
+                    if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
+                    {
+                        //When gear is down is it ON -> BEING USED
+                        ((TextBoxTagHolderClass)TextBoxGearDown.Tag).BIPLink = bipLinkPZ55;
+                        TextBoxGearDown.Background = Brushes.Bisque;
+                    }
+                }
+
                 checkBoxManualLEDs.IsChecked = _switchPanelPZ55.ManualLandingGearLeds;
                 SetConfigExistsImageVisibility();
             }
@@ -2811,6 +3273,6 @@ namespace DCSFlightpanels
             }
         }
 
-        
+
     }
 }

@@ -122,7 +122,7 @@
     <Compile Include="MultiPanelKnob.cs" />
     <Compile Include="MultiPanelPZ70.cs" />
     <Compile Include="OSKeyPress.cs" />
-    <Compile Include="PanelSwitchBIPLightBinding.cs" />
+    <Compile Include="BIPLight.cs" />
     <Compile Include="PerformanceTimer.cs" />
     <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

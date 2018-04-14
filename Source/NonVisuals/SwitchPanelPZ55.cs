@@ -27,6 +27,7 @@ namespace NonVisuals
          */
         private HashSet<DCSBIOSBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
+        private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
         //public static SwitchPanelPZ55 SwitchPanelPZ55SO;
         private HashSet<SwitchPanelKey> _switchPanelKeys = new HashSet<SwitchPanelKey>();
         private bool _isFirstNotification = true;
@@ -110,6 +111,12 @@ namespace NonVisuals
                         dcsBIOSBindingPZ55.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
                     }
+                    else if (setting.StartsWith("SwitchPanelBIPLink{"))
+                    {
+                        var bipLinkPZ55 = new BIPLinkPZ55();
+                        bipLinkPZ55.ImportSettings(setting);
+                        _bipLinks.Add(bipLinkPZ55);
+                    }
                     else if (setting.StartsWith("ManualLandingGearLEDs{"))
                     {
                         _manualLandingGearLeds = setting.Contains("True");
@@ -139,6 +146,13 @@ namespace NonVisuals
                 if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                 {
                     result.Add(dcsBiosBinding.ExportSettings());
+                }
+            }
+            foreach (var bipLink in _bipLinks)
+            {
+                if (bipLink.BIPLights.Count > 0)
+                {
+                    result.Add(bipLink.ExportSettings());
                 }
             }
             Common.DebugP("Exporting " + _listColorOutputBinding.Count + " ColorOutBindings from SwitchPanelPZ55");
@@ -177,6 +191,12 @@ namespace NonVisuals
         {
             get { return _keyBindings; }
             set { _keyBindings = value; }
+        }
+
+        public HashSet<BIPLinkPZ55> BIPLinkHashSet
+        {
+            get { return _bipLinks; }
+            set { _bipLinks = value; }
         }
 
         private void PZ55SwitchChanged(SwitchPanelKey switchPanelKey)
@@ -506,6 +526,39 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
+        public BIPLinkPZ55 AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn = true)
+        {
+            //This must accept lists
+            var found = false;
+            BIPLinkPZ55 tmpBIPLinkPZ55 = null;
+
+            RemoveSwitchPanelKeyFromList(3, switchPanelPZ55Key, whenTurnedOn);
+            foreach (var bipLink in _bipLinks)
+            {
+                if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
+                {
+                    bipLink.BIPLights = bipLinkPZ55.BIPLights;
+                    bipLink.Description = bipLinkPZ55.Description;
+                    bipLink.SwitchPanelPZ55Key = switchPanelPZ55Key;
+                    bipLink.WhenTurnedOn = whenTurnedOn;
+                    tmpBIPLinkPZ55 = bipLink;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found && bipLinkPZ55.BIPLights.Count > 0)
+            {
+                bipLinkPZ55.SwitchPanelPZ55Key = switchPanelPZ55Key;
+                bipLinkPZ55.WhenTurnedOn = whenTurnedOn;
+                tmpBIPLinkPZ55 = bipLinkPZ55;
+                _bipLinks.Add(bipLinkPZ55);
+            }
+            IsDirtyMethod();
+            return tmpBIPLinkPZ55;
+        }
+
+
+
         private void RemoveSwitchPanelKeyFromList(int list, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn = true)
         {
             switch (list)
@@ -529,6 +582,18 @@ namespace NonVisuals
                             if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                             {
                                 dcsBiosBinding.DCSBIOSInputs.Clear();
+                            }
+                            break;
+                        }
+                        break;
+                    }
+                case 3:
+                    {
+                        foreach (var bipLink in _bipLinks)
+                        {
+                            if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
+                            {
+                                bipLink.BIPLights.Clear();
                             }
                             break;
                         }
@@ -883,6 +948,8 @@ namespace NonVisuals
         {
             return "0X";
         }
+
+
     }
 
 

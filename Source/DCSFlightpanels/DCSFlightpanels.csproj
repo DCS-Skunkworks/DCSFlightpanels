@@ -138,9 +138,6 @@
     <Compile Include="ChooseProfileModuleWindow.xaml.cs">
       <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BIPLinkConfigsWindow.xaml.cs">
-      <DependentUpon>BIPLinkConfigsWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DCSBIOSControlsConfigsWindow.xaml.cs">
       <DependentUpon>DCSBIOSControlsConfigsWindow.xaml</DependentUpon>
     </Compile>
@@ -218,6 +215,9 @@
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BIPLinkWindow.xaml.cs">
+      <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SequenceWindow.xaml.cs">
       <DependentUpon>SequenceWindow.xaml</DependentUpon>
     </Compile>
@@ -245,10 +245,6 @@
     <Page Include="ChooseProfileModuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BIPLinkConfigsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="DCSBIOSControlsConfigsWindow.xaml">
       <SubType>Designer</SubType>
@@ -361,6 +357,10 @@
     <Page Include="RadioPanelPZ69UserControlUH1H.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BIPLinkWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SequenceWindow.xaml">
       <SubType>Designer</SubType>

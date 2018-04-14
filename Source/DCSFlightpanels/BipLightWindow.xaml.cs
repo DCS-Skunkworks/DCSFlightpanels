@@ -20,6 +20,7 @@ namespace DCSFlightpanels
         private string _description;
         private bool _formLoaded;
         private BIPLight _bipLight;
+        private bool _isDirty;
 
         public BipLightWindow()
         {
@@ -31,7 +32,6 @@ namespace DCSFlightpanels
             InitializeComponent();
             _description = description;
             _bipLight = bipLight;
-            PopulateComboBoxes();
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -39,11 +39,9 @@ namespace DCSFlightpanels
             try
             {
                 LabelDescription.Content = _description;
-                ShowValues1();
-                ShowValues2();
                 _formLoaded = true;
                 SetFormState();
-                ComboBoxPosition.SelectionChanged += ComboBox_OnSelectionChanged;
+                PopulateComboBoxes();
             }
             catch (Exception ex)
             {
@@ -52,7 +50,7 @@ namespace DCSFlightpanels
         }
 
 
-        
+
         private void SetFormState()
         {
             if (!_formLoaded)
@@ -64,94 +62,17 @@ namespace DCSFlightpanels
             {
                 LabelDescription.Visibility = Visibility.Collapsed;
             }
-            else if (_bipLight._dcsBiosInput != null && _dcsBiosInput.SelectedDCSBIOSInput == null)
-            {
-                LabelInterfaceType.Visibility = Visibility.Visible;
-                ComboBoxPosition.Visibility = Visibility.Visible;
-                SetVisibility((DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), ComboBoxPosition.SelectedValue.ToString()));
-            }
-            else if (_dcsBiosInput != null && _dcsBiosInput.SelectedDCSBIOSInput != null)
-            {
-                LabelInterfaceType.Visibility = Visibility.Visible;
-                ComboBoxPosition.Visibility = Visibility.Visible;
-                LabelInputValue.Visibility = Visibility.Visible;
-                SetVisibility(_dcsBiosInput.SelectedDCSBIOSInput.Interface);
-            }
         }
 
         private void CopyValues()
         {
             try
             {
-                /*
-                 * fixed_step = <INC/DEC>
-                 * set_state = <integer>
-                 * action = TOGGLE
-                 * variable_step = <new_value>|-<decrease_by>|+<increase_by>
-                 */
-                _dcsBiosInput.SetSelectedInputBasedOnInterfaceType(GetChosenInterfaceType());
-                _dcsBiosInput.SelectedDCSBIOSInput.Delay = int.Parse(ComboBoxDelay.SelectedValue.ToString());
-                _dcsBiosInput.Delay = int.Parse(ComboBoxDelay.SelectedValue.ToString());
-                switch (_dcsBiosInput.SelectedDCSBIOSInput.Interface)
-                {
-                    case DCSBIOSInputType.ACTION:
-                        {
-                            _dcsBiosInput.SelectedDCSBIOSInput.SpecifiedActionArgument = ComboBoxInputValueAction.SelectedValue.ToString();
-                            break;
-                        }
-                    case DCSBIOSInputType.SET_STATE:
-                        {
-                            uint tmp;
-                            try
-                            {
-                                tmp = uint.Parse(TextBoxInputValueSetState.Text);
-                            }
-                            catch (Exception)
-                            {
-                                var dcsbiosInputString = "";
-                                if (_dcsBiosInput != null)
-                                {
-                                    dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInput.Interface;
-                                }
-                                throw new Exception("Please enter a valid value (positive whole number). Value found : [" + TextBoxInputValueSetState.Text + "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
-                            }
-                            if (tmp > _dcsBiosInput.SelectedDCSBIOSInput.MaxValue)
-                            {
-                                throw new Exception("Input value must be between 0 - " + _dcsBiosInput.SelectedDCSBIOSInput.MaxValue);
-                            }
-                            _dcsBiosInput.SelectedDCSBIOSInput.SpecifiedSetStateArgument = tmp;
-
-                            break;
-                        }
-                    case DCSBIOSInputType.VARIABLE_STEP:
-                        {
-                            int tmp;
-                            try
-                            {
-                                tmp = int.Parse(TextBoxInputValueSetState.Text);
-                            }
-                            catch (Exception)
-                            {
-                                var dcsbiosInputString = "";
-                                if (_dcsBiosInput != null)
-                                {
-                                    dcsbiosInputString = _dcsBiosInput.ControlId + " / " + _dcsBiosInput.SelectedDCSBIOSInput.Interface;
-                                }
-                                throw new Exception("Please enter a valid value (whole number). Value found : [" + TextBoxInputValueSetState.Text + "]" + Environment.NewLine + " DCS-BIOS Input is " + dcsbiosInputString);
-                            }
-                            if (tmp > _dcsBiosInput.SelectedDCSBIOSInput.MaxValue)
-                            {
-                                throw new Exception("Input value must be between 0 - " + _dcsBiosInput.SelectedDCSBIOSInput.MaxValue);
-                            }
-                            _dcsBiosInput.SelectedDCSBIOSInput.SpecifiedVariableStepArgument = tmp;
-                            break;
-                        }
-                    case DCSBIOSInputType.FIXED_STEP:
-                        {
-                            _dcsBiosInput.SelectedDCSBIOSInput.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput)Enum.Parse(typeof(DCSBIOSFixedStepInput), ComboBoxInputValueFixedStep.SelectedValue.ToString());
-                            break;
-                        }
-                }
+                _bipLight = new BIPLight();
+                _bipLight.BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue;
+                _bipLight.LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue;
+                _bipLight.DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue;
+                _bipLight.Hash = (string)ComboBoxBIPPanel.SelectedValue;
             }
             catch (Exception e)
             {
@@ -202,6 +123,7 @@ namespace DCSFlightpanels
         {
             try
             {
+                BipFactory.SetAllDark();
                 ComboBoxPosition.SelectionChanged -= ComboBox_OnSelectionChanged;
                 ComboBoxPosition.Items.Clear();
                 foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
@@ -218,6 +140,7 @@ namespace DCSFlightpanels
                     var comboBoxItem = new ComboBoxItem();
                     comboBoxItem.Content = delay;
                     ComboBoxDelay.Items.Add(comboBoxItem);
+                    ComboBoxDelay.SelectedValue = BIPLightDelays.Zeroms;
                 }
 
                 ComboBoxColor.SelectionChanged -= ComboBox_OnSelectionChanged;
@@ -228,42 +151,83 @@ namespace DCSFlightpanels
                     comboBoxItem.Content = color;
                     ComboBoxColor.Items.Add(comboBoxItem);
                 }
+                ComboBoxColor.SelectedValue = PanelLEDColor.GREEN;
+
+                ComboBoxBIPPanel.SelectionChanged -= ComboBox_OnSelectionChanged;
+                ComboBoxBIPPanel.Items.Clear();
+                foreach (BacklitPanelBIP bip in BipFactory.GetBips())
+                {
+                    var comboBoxItem = new ComboBoxItem();
+                    comboBoxItem.Content = bip.Hash;
+                    ComboBoxBIPPanel.Items.Add(comboBoxItem);
+                }
 
                 if (_bipLight != null)
                 {
                     ComboBoxPosition.SelectedValue = _bipLight.BIPLedPosition;
                     ComboBoxDelay.SelectedValue = _bipLight.DelayBefore;
                     ComboBoxColor.SelectedValue = _bipLight.LEDColor;
+                    ComboBoxBIPPanel.SelectedValue = _bipLight.Hash;
                 }
+                ShowLED();
             }
             finally
             {
                 ComboBoxPosition.SelectionChanged += ComboBox_OnSelectionChanged;
                 ComboBoxDelay.SelectionChanged += ComboBox_OnSelectionChanged;
                 ComboBoxColor.SelectionChanged += ComboBox_OnSelectionChanged;
+                ComboBoxBIPPanel.SelectionChanged += ComboBox_OnSelectionChanged;
             }
         }
-        
+
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                if (_dcsBiosInput != null)
+                BipFactory.SetAllDark();
+                if (string.IsNullOrEmpty(ComboBoxPosition.Text) || ComboBoxPosition.SelectedIndex == -1)
                 {
-                    var inputType = (DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), ComboBoxPosition.SelectedValue.ToString());
-                    _dcsBiosInput.SetSelectedInputBasedOnInterfaceType(inputType);
-                    TextBoxInputTypeDescription.Text = _dcsBiosInput.SelectedDCSBIOSInput.Description;
-                    if (_dcsBiosInput.SelectedDCSBIOSInput.Interface == DCSBIOSInputType.SET_STATE || _dcsBiosInput.SelectedDCSBIOSInput.Interface == DCSBIOSInputType.VARIABLE_STEP)
-                    {
-                        TextBoxMaxValue.Text = _dcsBiosInput.SelectedDCSBIOSInput.MaxValue.ToString();
-                    }
-                    SetFormState();
+                    return;
                 }
+                if (string.IsNullOrEmpty(ComboBoxDelay.Text) || ComboBoxDelay.SelectedIndex == -1)
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(ComboBoxColor.Text) || ComboBoxColor.SelectedIndex == -1)
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(ComboBoxBIPPanel.Text) || ComboBoxBIPPanel.SelectedIndex == -1)
+                {
+                    return;
+                }
+                SetFormState();
+                _isDirty = true;
+                ShowLED();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(100906, ex);
             }
         }
+
+        private void ShowLED()
+        {
+            try
+            {
+                _bipLight = new BIPLight();
+                _bipLight.BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue;
+                _bipLight.LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue;
+                _bipLight.DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue;
+                _bipLight.Hash = (string)ComboBoxBIPPanel.SelectedValue;
+                BipFactory.SetDark(_bipLight.Hash);
+                BipFactory.ShowLight(_bipLight);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(10906, ex);
+            }
+        }
+        public bool IsDirty => _isDirty;
     }
 }

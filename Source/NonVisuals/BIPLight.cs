@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using NonVisuals;
 
 namespace NonVisuals
 {
@@ -54,7 +50,7 @@ namespace NonVisuals
             settings = settings.Replace("BIPLight{", "");
             settings = settings.Replace("}", "");
             //Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e
-            var settingsArray = settings.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries)[0];
+            var settingsArray = settings.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
             //Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e
             BIPLedPosition = (BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0].ToString());

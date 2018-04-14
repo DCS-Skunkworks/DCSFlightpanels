@@ -8,7 +8,7 @@ namespace DCSFlightpanels
     internal class TextBoxTagHolderClass
     {
         private List<DCSBIOSInput> _dcsbiosInputs;
-        private SortedList<int, BIPLight> _bipSequence;
+        private BIPLinkPZ55 _bipLinkPZ55;
         private OSKeyPress _osKeyPress;
 
 
@@ -17,9 +17,9 @@ namespace DCSFlightpanels
             return _dcsbiosInputs != null;
         }
 
-        public bool ContainsBIPLight()
+        public bool ContainsBIPLink()
         {
-            return _bipSequence != null;
+            return _bipLinkPZ55 != null;
         }
 
         public bool ContainsOSKeyPress()
@@ -49,7 +49,7 @@ namespace DCSFlightpanels
             }
             return _osKeyPress.GetSimpleVirtualKeyCodesAsString();
         }
-        
+
         public SortedList<int, KeyPressInfo> GetKeySequence()
         {
             return _osKeyPress.KeySequence;
@@ -62,7 +62,7 @@ namespace DCSFlightpanels
 
         public bool IsEmpty()
         {
-            return _bipSequence == null && _dcsbiosInputs == null && _osKeyPress == null;
+            return (_bipLinkPZ55 == null || _bipLinkPZ55.BIPLights.Count == 0) && (_dcsbiosInputs == null || _dcsbiosInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
         }
 
 
@@ -71,10 +71,6 @@ namespace DCSFlightpanels
             get => _dcsbiosInputs;
             set
             {
-                if (ContainsBIPLight())
-                {
-                    throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains BIPLights");
-                }
                 if (ContainsOSKeyPress())
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
@@ -83,20 +79,12 @@ namespace DCSFlightpanels
             }
         }
 
-        public SortedList<int, BIPLight> BIPSequence
+        public BIPLinkPZ55 BIPLink
         {
-            get => _bipSequence;
+            get => _bipLinkPZ55;
             set
             {
-                if (ContainsOSKeyPress())
-                {
-                    throw new Exception("Cannot insert BIPSequence, TextBoxTagHolderClass already contains KeyPress");
-                }
-                if (ContainsDCSBIOS())
-                {
-                    throw new Exception("Cannot insert BIPSequence, TextBoxTagHolderClass already contains DCSBIOSInputs");
-                }
-                _bipSequence = value;
+                _bipLinkPZ55 = value;
             }
         }
 
@@ -105,10 +93,6 @@ namespace DCSFlightpanels
             get => _osKeyPress;
             set
             {
-                if (ContainsBIPLight())
-                {
-                    throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains BIPLights");
-                }
                 if (ContainsDCSBIOS())
                 {
                     throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
@@ -120,7 +104,7 @@ namespace DCSFlightpanels
         public void ClearAll()
         {
             _dcsbiosInputs = null;
-            _bipSequence = null;
+            _bipLinkPZ55 = null;
             _osKeyPress = null;
         }
     }
