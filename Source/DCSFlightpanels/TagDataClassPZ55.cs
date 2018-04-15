@@ -14,17 +14,17 @@ namespace DCSFlightpanels
 
         public bool ContainsDCSBIOS()
         {
-            return _dcsbiosInputs != null;
+            return _dcsbiosInputs != null;// && _dcsbiosInputs.Count > 0;
         }
 
         public bool ContainsBIPLink()
         {
-            return _bipLinkPZ55 != null;
+            return _bipLinkPZ55 != null && _bipLinkPZ55.BIPLights.Count > 0;
         }
 
         public bool ContainsOSKeyPress()
         {
-            return _osKeyPress != null;
+            return _osKeyPress != null && _osKeyPress.KeySequence.Count > 0;
         }
 
         public bool ContainsKeySequence()

@@ -1462,6 +1462,7 @@ namespace DCSFlightpanels
                             return;
                         }
                         ((TagDataClassPZ70)textBox.Tag).BIPLink.BIPLights.Clear();
+                        textBox.Background = Brushes.White;
                         UpdateBIPLinkBindings(textBox);
                     }
                 }
@@ -1541,9 +1542,9 @@ namespace DCSFlightpanels
         {
             try
             {
-                //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
+                //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
                 var textBox = (TextBox)sender;
-                if (textBox.Tag is SortedList<int, KeyPressInfo>)
+                if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
                 }
@@ -2352,11 +2353,10 @@ namespace DCSFlightpanels
         {
             try
             {
-                //PZ70DialPosition is set by the panel
                 List<DCSBIOSInput> dcsBiosInputs = null;
-                if (textBox.Tag is List<DCSBIOSInput>)
+                if (((TagDataClassPZ70)textBox.Tag).ContainsDCSBIOS())
                 {
-                    dcsBiosInputs = ((List<DCSBIOSInput>)textBox.Tag);
+                    dcsBiosInputs = ((TagDataClassPZ70)textBox.Tag).DCSBIOSInputs;
                 }
                 if (textBox.Equals(TextBoxLcdKnobDecrease))
                 {
@@ -2531,7 +2531,7 @@ namespace DCSFlightpanels
                 if (textBox != TextBoxLogPZ70)
                 {
                     var contextMenu = (ContextMenu)Resources["TextBoxContextMenuPZ70"];
-                    if (!BipFactory.HasBips())
+                    /*if (!BipFactory.HasBips())
                     {
                         MenuItem bipMenuItem = null;
                         foreach (var item in contextMenu.Items)
@@ -2562,7 +2562,7 @@ namespace DCSFlightpanels
                         {
                             contextMenu.Items.Remove(dcsBIOSMenuItem);
                         }
-                    }
+                    }*/
                     textBox.ContextMenu = contextMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
@@ -2599,8 +2599,6 @@ namespace DCSFlightpanels
                     return;
                 }
 
-
-
                 foreach (MenuItem item in contextMenu.Items)
                 {
                     item.Visibility = Visibility.Collapsed;
@@ -2611,7 +2609,7 @@ namespace DCSFlightpanels
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (item.Name.Contains("EditDCSBIOS"))
+                        if (!_multiPanelPZ70.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -2666,7 +2664,17 @@ namespace DCSFlightpanels
                     {
                         if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
                         {
-                            item.Visibility = Visibility.Visible;
+                            if (item.Name.Contains("EditBIP"))
+                            {
+                                if (BipFactory.HasBips())
+                                {
+                                    item.Visibility = Visibility.Visible;
+                                }
+                            }
+                            else
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
                         }
                     }
                 }

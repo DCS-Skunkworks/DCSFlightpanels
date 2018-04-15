@@ -476,6 +476,7 @@ namespace NonVisuals
 
         public void RemoveMultiPanelKnobFromList(ControlListPZ70 controlListPZ70, MultiPanelPZ70Knobs multiPanelPZ70Knob, bool whenTurnedOn = true)
         {
+            var found = false;
             if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
             {
                 foreach (var knobBindingPZ70 in _knobBindings)
@@ -483,31 +484,36 @@ namespace NonVisuals
                     if (knobBindingPZ70.DialPosition == _pz70DialPosition && knobBindingPZ70.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBindingPZ70.WhenTurnedOn == whenTurnedOn)
                     {
                         knobBindingPZ70.OSKeyPress = null;
+                        found = true;
                     }
-                    break;
                 }
             }
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
+            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
                     if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
+                        found = true;
                     }
-                    break;
                 }
             }
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
+            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
                     if (bipLink.DialPosition == _pz70DialPosition && bipLink.MultiPanelPZ70Knob == multiPanelPZ70Knob && bipLink.WhenTurnedOn == whenTurnedOn)
                     {
                         bipLink.BIPLights.Clear();
+                        found = true;
                     }
-                    break;
                 }
+            }
+
+            if (found)
+            {
+                IsDirtyMethod();
             }
         }
         

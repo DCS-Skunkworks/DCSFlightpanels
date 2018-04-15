@@ -43,11 +43,12 @@ namespace NonVisuals
         private bool _manualLandingGearLeds;
         private Thread _manualLandingGearThread;
 
-        public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton)
+        public SwitchPanelPZ55(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton)
         {
             //Fixed values
             VendorId = 0x6A3;
             ProductId = 0xD67;
+            KeyboardEmulationOnly = !enableDCSBIOS;
             CreateSwitchKeys();
             //SwitchPanelPZ55SO = this;
             Startup();
@@ -546,6 +547,7 @@ namespace NonVisuals
         
         public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn = true)
         {
+            var found = false;
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
             {
                 foreach (var keyBindingPZ55 in _keyBindings)
@@ -553,8 +555,8 @@ namespace NonVisuals
                     if (keyBindingPZ55.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBindingPZ55.WhenTurnedOn == whenTurnedOn)
                     {
                         keyBindingPZ55.OSKeyPress = null;
+                        found = true;
                     }
-                    break;
                 }
             }
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.DCSBIOS)
@@ -564,8 +566,8 @@ namespace NonVisuals
                     if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
+                        found = true;
                     }
-                    break;
                 }
             }
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.BIPS)
@@ -575,9 +577,14 @@ namespace NonVisuals
                     if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
                     {
                         bipLink.BIPLights.Clear();
+                        found = true;
                     }
-                    break;
                 }
+            }
+
+            if (found)
+            {
+                IsDirtyMethod();
             }
         }
 

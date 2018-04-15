@@ -35,7 +35,7 @@ namespace DCSFlightpanels
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
+            _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton, enableDCSBIOS);
 
             _switchPanelPZ55.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_switchPanelPZ55);
@@ -622,7 +622,7 @@ namespace DCSFlightpanels
                 if (!Equals(textBox, TextBoxLogPZ55))
                 {
                     var contectMenu = (ContextMenu)Resources["TextBoxContextMenuPZ55"];
-                    if (!BipFactory.HasBips())
+                    /*if (!BipFactory.HasBips())
                     {
                         MenuItem bipMenuItem = null;
                         foreach (var item in contectMenu.Items)
@@ -653,7 +653,7 @@ namespace DCSFlightpanels
                         {
                             contectMenu.Items.Remove(dcsBIOSMenuItem);
                         }
-                    }
+                    }*/
                     textBox.ContextMenu = contectMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
@@ -744,7 +744,7 @@ namespace DCSFlightpanels
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (item.Name.Contains("EditDCSBIOS"))
+                        if (!_switchPanelPZ55.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -799,7 +799,17 @@ namespace DCSFlightpanels
                     {
                         if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
                         {
-                            item.Visibility = Visibility.Visible;
+                            if (item.Name.Contains("EditBIP"))
+                            {
+                                if (BipFactory.HasBips())
+                                {
+                                    item.Visibility = Visibility.Visible;
+                                }
+                            }
+                            else
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
                         }
                     }
                 }
@@ -1032,6 +1042,7 @@ namespace DCSFlightpanels
                             return;
                         }
                         ((TagDataClassPZ55)textBox.Tag).BIPLink.BIPLights.Clear();
+                        textBox.Background = Brushes.White;
                         UpdateBIPLinkBindings(textBox);
                     }
                 }
@@ -1160,7 +1171,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
+                //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
                 var textBox = (TextBox)sender;
                 if (((TagDataClassPZ55)textBox.Tag).ContainsKeySequence())
                 {
@@ -1902,10 +1913,6 @@ namespace DCSFlightpanels
             try
             {
                 List<DCSBIOSInput> dcsBiosInputs = null;
-                /*if (((TextBoxTagHolderClass)textBox.Tag) == null)
-                {
-                    return;
-                }*/
                 if (((TagDataClassPZ55)textBox.Tag).ContainsDCSBIOS())
                 {
                     dcsBiosInputs = ((TagDataClassPZ55)textBox.Tag).DCSBIOSInputs;
@@ -2859,6 +2866,7 @@ namespace DCSFlightpanels
                     }
                 }
 
+                SetTextBoxBackgroundColors(Brushes.White);
                 foreach (var bipLinkPZ55 in _switchPanelPZ55.BIPLinkHashSet)
                 {
                     if (bipLinkPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF && bipLinkPZ55.WhenTurnedOn && bipLinkPZ55.BIPLights.Count > 0)
@@ -3155,6 +3163,15 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(3013, ex);
             }
+        }
+        
+        private void SetTextBoxBackgroundColors(Brush brush)
+        {
+            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            {
+                textBox.Background = brush;
+            }
+            _textBoxTagsSet = true;
         }
 
         private void SetConfigExistsImageVisibility()
