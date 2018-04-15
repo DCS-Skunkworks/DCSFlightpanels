@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ClassLibraryCommon;
 
@@ -17,6 +18,9 @@ namespace NonVisuals
         private bool _whenOnTurnedOn = true;
         private const string SeparatorChars = "\\o/";
         private string _description;
+        private Thread _executingThread;
+        private long _abortCurrentSequence;
+        private long _threadHasFinished = 1;
 
         internal void ImportSettings(string settings)
         {
@@ -52,6 +56,112 @@ namespace NonVisuals
                     }
                 }
             }
+        }
+
+        public void Execute()
+        {
+            try
+            {
+                //Check for already executing thread
+                if (!ThreadHasFinished() && _executingThread != null)
+                {
+                    SetAbortThreadState();
+                    while (!ThreadHasFinished())
+                    {
+                        Thread.Sleep(50);
+                    }
+                    ResetAbortThreadState();
+                    ResetThreadHasFinishedState();
+                    _executingThread = new Thread(() => ExecuteThreaded(_bipLights));
+                    _executingThread.Start();
+                }
+                else
+                {
+                    ResetThreadHasFinishedState();
+                    _executingThread = new Thread(() => ExecuteThreaded(_bipLights));
+                    _executingThread.Start();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(1027, ex);
+            }
+        }
+
+
+        private void ExecuteThreaded(SortedList<int, BIPLight> bipLights)
+        {
+            try
+            {
+
+                try
+                {
+                    if (bipLights == null)
+                    {
+                        return;
+                    }
+                    var bipEventHandlerManager = BipFactory.GetBipEventHandlerManager();
+                    if (!BipFactory.HasBips())
+                    {
+                        return;
+                    }
+                    for (var i = 0; i < bipLights.Count; i++)
+                    {
+                        if (AbortThread())
+                        {
+                            Common.DebugP("Aborting BIPLinkPZ55 thread routine (AbortThread) #1");
+                            break;
+                        }
+                        var bipLight = bipLights[i];
+                        Thread.Sleep((int)bipLight.DelayBefore);
+                        if (AbortThread())
+                        {
+                            Common.DebugP("Aborting BIPLinkPZ55 thread routine (AbortThread) #2");
+                            break;
+                        }
+                        bipEventHandlerManager.ShowLight(bipLight);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Common.DebugP(ex.Message);
+                }
+            }
+            finally
+            {
+                SignalThreadHasFinished();
+            }
+        }
+
+
+        private void SetAbortThreadState()
+        {
+            Interlocked.Exchange(ref _abortCurrentSequence, 1);
+        }
+
+        private void ResetAbortThreadState()
+        {
+            Interlocked.Exchange(ref _abortCurrentSequence, 0);
+        }
+
+        private bool AbortThread()
+        {
+            return Interlocked.Read(ref _abortCurrentSequence) == 1;
+        }
+
+        private bool ThreadHasFinished()
+        {
+            return Interlocked.Read(ref _threadHasFinished) == 1;
+        }
+
+        private void SignalThreadHasFinished()
+        {
+            Interlocked.Exchange(ref _threadHasFinished, 1);
+        }
+
+        private void ResetThreadHasFinishedState()
+        {
+            Interlocked.Exchange(ref _threadHasFinished, 0);
         }
 
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key

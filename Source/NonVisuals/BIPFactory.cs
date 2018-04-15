@@ -32,6 +32,15 @@ namespace NonVisuals
             return _bipEventHandlerManager.GetBips();
         }
 
+        public static BipEventHandlerManager GetBipEventHandlerManager()
+        {
+            if (!HasBips())
+            {
+                return null;
+            }
+            return _bipEventHandlerManager;
+        }
+
         public static void AddBipListener(ISaitekPanelListener iSaitekPanelListener)
         {
             _bipEventHandlerManager.AddBipListener(iSaitekPanelListener);
@@ -70,7 +79,8 @@ namespace NonVisuals
         public event BipPanelRegisteredEventHandler OnBipPanelRegistered;
 
         private List<BacklitPanelBIP> _backlitPanels = new List<BacklitPanelBIP>();
-
+        //private object _panelLockObject = new object();
+        
         public List<BacklitPanelBIP> GetBips()
         {
             return _backlitPanels;

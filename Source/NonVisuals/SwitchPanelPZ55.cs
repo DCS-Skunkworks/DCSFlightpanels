@@ -185,6 +185,7 @@ namespace NonVisuals
             _keyBindings.Clear();
             _listColorOutputBinding.Clear();
             _dcsBiosBindings.Clear();
+            _bipLinks.Clear();
         }
 
         public HashSet<KeyBindingPZ55> KeyBindingsHashSet
@@ -314,6 +315,14 @@ namespace NonVisuals
                     {
                         keyBinding.OSKeyPress.Execute();
                         found = true;
+                        break;
+                    }
+                }
+                foreach (var bipLinkPZ55 in _bipLinks)
+                {
+                    if (bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && bipLinkPZ55.WhenTurnedOn == switchPanelKey.IsOn)
+                    {
+                        bipLinkPZ55.Execute();
                         break;
                     }
                 }

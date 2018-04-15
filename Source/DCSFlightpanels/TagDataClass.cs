@@ -5,7 +5,7 @@ using NonVisuals;
 
 namespace DCSFlightpanels
 {
-    internal class TextBoxTagHolderClass
+    internal class TagDataClass
     {
         private List<DCSBIOSInput> _dcsbiosInputs;
         private BIPLinkPZ55 _bipLinkPZ55;

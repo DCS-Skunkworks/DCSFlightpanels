@@ -230,7 +230,7 @@
     <Compile Include="TextBlockDialogWindow.xaml.cs">
       <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextBoxTagHolderClass.cs" />
+    <Compile Include="TagDataClass.cs" />
     <Compile Include="TPMPanelUserControl.xaml.cs">
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>

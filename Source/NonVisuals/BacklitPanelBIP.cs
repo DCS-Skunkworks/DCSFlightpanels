@@ -163,6 +163,7 @@ namespace NonVisuals
         {
             try
             {
+                BipFactory.DeRegisterBip(this);
                 Closed = true;
             }
             catch (Exception e)
