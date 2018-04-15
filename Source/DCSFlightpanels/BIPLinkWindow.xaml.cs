@@ -13,23 +13,16 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class BIPLinkWindow : Window
     {
-        private BIPLinkPZ55 _bipLinkPZ55;
+        private BIPLink _bipLink;
         private bool _isDirty;
-
-        public BIPLinkWindow()
+        
+        public BIPLinkWindow(BIPLink bipLink)
         {
             InitializeComponent();
-            SetFormState();
-            _bipLinkPZ55 = new BIPLinkPZ55();
-        }
-
-        public BIPLinkWindow(string information, BIPLinkPZ55 bipLinkPZ55)
-        {
-            InitializeComponent();
-            _bipLinkPZ55 = bipLinkPZ55;
-            textBoxInformation.Text = information;
-            DataGridSequences.DataContext = _bipLinkPZ55.BIPLights;
-            DataGridSequences.ItemsSource = _bipLinkPZ55.BIPLights;
+            _bipLink = bipLink;
+            textBoxInformation.Text = bipLink.Description;
+            DataGridSequences.DataContext = _bipLink.BIPLights;
+            DataGridSequences.ItemsSource = _bipLink.BIPLights;
             DataGridSequences.Items.Refresh();
 
             SetFormState();
@@ -74,10 +67,10 @@ namespace DCSFlightpanels
                 if (bipLightWindow.DialogResult.HasValue && bipLightWindow.DialogResult.Value)
                 {
                     
-                    _bipLinkPZ55.BIPLights.Add(GetNewKeyValue(), bipLightWindow.BIPLight);
+                    _bipLink.BIPLights.Add(GetNewKeyValue(), bipLightWindow.BIPLight);
 
-                    DataGridSequences.DataContext = _bipLinkPZ55.BIPLights;
-                    DataGridSequences.ItemsSource = _bipLinkPZ55.BIPLights;
+                    DataGridSequences.DataContext = _bipLink.BIPLights;
+                    DataGridSequences.ItemsSource = _bipLink.BIPLights;
                     DataGridSequences.Items.Refresh();
                     _isDirty = true;
                 }
@@ -90,11 +83,11 @@ namespace DCSFlightpanels
 
         private int GetNewKeyValue()
         {
-            if (_bipLinkPZ55.BIPLights.Count == 0)
+            if (_bipLink.BIPLights.Count == 0)
             {
                 return 0;
             }
-            return _bipLinkPZ55.BIPLights.Keys.Max() + 1;
+            return _bipLink.BIPLights.Keys.Max() + 1;
         }
 
         private void ButtonDeleteClick(object sender, RoutedEventArgs e)
@@ -102,7 +95,7 @@ namespace DCSFlightpanels
             try
             {
                 var value = (KeyValuePair<int, BIPLight>)DataGridSequences.SelectedItem;
-                _bipLinkPZ55.BIPLights.Remove(value.Key);
+                _bipLink.BIPLights.Remove(value.Key);
                 DataGridSequences.Items.Refresh();
                 _isDirty = true;
             }
@@ -117,7 +110,7 @@ namespace DCSFlightpanels
             try
             {
                 var keyValuePair = (KeyValuePair<int, BIPLight>)DataGridSequences.SelectedItem;
-                var bipLightWindow = new BipLightWindow(keyValuePair.Value, _bipLinkPZ55.Description);
+                var bipLightWindow = new BipLightWindow(keyValuePair.Value, _bipLink.Description);
                 bipLightWindow.ShowDialog();
                 if (bipLightWindow.DialogResult.HasValue && bipLightWindow.DialogResult.Value)
                 {
@@ -127,9 +120,9 @@ namespace DCSFlightpanels
                         //User made no changes
                         return;
                     }
-                    _bipLinkPZ55.BIPLights[keyValuePair.Key] = bipLightWindow.BIPLight;
-                    DataGridSequences.DataContext = _bipLinkPZ55.BIPLights;
-                    DataGridSequences.ItemsSource = _bipLinkPZ55.BIPLights;
+                    _bipLink.BIPLights[keyValuePair.Key] = bipLightWindow.BIPLight;
+                    DataGridSequences.DataContext = _bipLink.BIPLights;
+                    DataGridSequences.ItemsSource = _bipLink.BIPLights;
                     DataGridSequences.Items.Refresh();
                     _isDirty = true;
                 }
@@ -170,7 +163,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                _bipLinkPZ55.Description = textBoxInformation.Text;
+                _bipLink.Description = textBoxInformation.Text;
                 DialogResult = true;
                 Close();
             }
@@ -208,12 +201,12 @@ namespace DCSFlightpanels
         private void MoveItemDown(int key)
         {
             //Moved down means index increases, i.e. moved down further in the list
-            var itemToBeMovedDown = _bipLinkPZ55.BIPLights[key];
-            var itemToBeMovedUp = _bipLinkPZ55.BIPLights[key + 1];
-            _bipLinkPZ55.BIPLights.Remove(key);
-            _bipLinkPZ55.BIPLights.Remove(key + 1);
-            _bipLinkPZ55.BIPLights.Add(key + 1, itemToBeMovedDown);
-            _bipLinkPZ55.BIPLights.Add(key, itemToBeMovedUp);
+            var itemToBeMovedDown = _bipLink.BIPLights[key];
+            var itemToBeMovedUp = _bipLink.BIPLights[key + 1];
+            _bipLink.BIPLights.Remove(key);
+            _bipLink.BIPLights.Remove(key + 1);
+            _bipLink.BIPLights.Add(key + 1, itemToBeMovedDown);
+            _bipLink.BIPLights.Add(key, itemToBeMovedUp);
             DataGridSequences.Items.Refresh();
             _isDirty = true;
         }
@@ -221,12 +214,12 @@ namespace DCSFlightpanels
         private void MoveItemUp(int key)
         {
             //Moved down means index decreases, i.e. moved down further in the list
-            var itemToBeMovedUp = _bipLinkPZ55.BIPLights[key];
-            var itemToBeMovedDown = _bipLinkPZ55.BIPLights[key - 1];
-            _bipLinkPZ55.BIPLights.Remove(key);
-            _bipLinkPZ55.BIPLights.Remove(key - 1);
-            _bipLinkPZ55.BIPLights.Add(key - 1, itemToBeMovedUp);
-            _bipLinkPZ55.BIPLights.Add(key, itemToBeMovedDown);
+            var itemToBeMovedUp = _bipLink.BIPLights[key];
+            var itemToBeMovedDown = _bipLink.BIPLights[key - 1];
+            _bipLink.BIPLights.Remove(key);
+            _bipLink.BIPLights.Remove(key - 1);
+            _bipLink.BIPLights.Add(key - 1, itemToBeMovedUp);
+            _bipLink.BIPLights.Add(key, itemToBeMovedDown);
             DataGridSequences.Items.Refresh();
             _isDirty = true;
         }
@@ -243,6 +236,6 @@ namespace DCSFlightpanels
             }
         }
 
-        public BIPLinkPZ55 BIPLinkPZ55 => _bipLinkPZ55;
+        public BIPLink BIPLink => _bipLink;
     }
 }

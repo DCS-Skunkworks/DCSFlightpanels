@@ -279,9 +279,9 @@ namespace DCSFlightpanels
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
-                if (((TagDataClass)textBox.Tag).ContainsDCSBIOS())
+                if (((TagDataClassPZ55)textBox.Tag).ContainsDCSBIOS())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClass)textBox.Tag).DCSBIOSInputs, textBox.Text);
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassPZ55)textBox.Tag).DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
@@ -295,7 +295,7 @@ namespace DCSFlightpanels
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    ((TagDataClass)textBox.Tag).DCSBIOSInputs = dcsBiosInputs;
+                    ((TagDataClassPZ55)textBox.Tag).DCSBIOSInputs = dcsBiosInputs;
                     textBox.ToolTip = textBox.Text;
                     //UpdateDCSBIOSBinding(textBox);
                 }

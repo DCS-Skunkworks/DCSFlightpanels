@@ -5,10 +5,10 @@ using NonVisuals;
 
 namespace DCSFlightpanels
 {
-    internal class TagDataClass
+    internal class TagDataClassPZ70
     {
         private List<DCSBIOSInput> _dcsbiosInputs;
-        private BIPLinkPZ55 _bipLinkPZ55;
+        private BIPLinkPZ70 _bipLinkPZ70;
         private OSKeyPress _osKeyPress;
 
 
@@ -19,7 +19,7 @@ namespace DCSFlightpanels
 
         public bool ContainsBIPLink()
         {
-            return _bipLinkPZ55 != null;
+            return _bipLinkPZ70 != null;
         }
 
         public bool ContainsOSKeyPress()
@@ -62,7 +62,7 @@ namespace DCSFlightpanels
 
         public bool IsEmpty()
         {
-            return (_bipLinkPZ55 == null || _bipLinkPZ55.BIPLights.Count == 0) && (_dcsbiosInputs == null || _dcsbiosInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
+            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosInputs == null || _dcsbiosInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
         }
 
 
@@ -79,12 +79,12 @@ namespace DCSFlightpanels
             }
         }
 
-        public BIPLinkPZ55 BIPLink
+        public BIPLinkPZ70 BIPLink
         {
-            get => _bipLinkPZ55;
+            get => _bipLinkPZ70;
             set
             {
-                _bipLinkPZ55 = value;
+                _bipLinkPZ70 = value;
             }
         }
 
@@ -104,7 +104,7 @@ namespace DCSFlightpanels
         public void ClearAll()
         {
             _dcsbiosInputs = null;
-            _bipLinkPZ55 = null;
+            _bipLinkPZ70 = null;
             _osKeyPress = null;
         }
     }

@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="BacklitPanelBIP.cs" />
     <Compile Include="BIPFactory.cs" />
+    <Compile Include="BIPLink.cs" />
     <Compile Include="BIPLinkPZ55.cs" />
     <Compile Include="BIPLinkPZ69.cs" />
     <Compile Include="BIPLinkPZ70.cs" />
