@@ -370,12 +370,6 @@ namespace DCSFlightpanels
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = osKeyPress;
-                        //textBox.Text = string.IsNullOrEmpty(sequenceWindow.GetInformation) ? "Key press sequence" : sequenceWindow.GetInformation;
-                        /*if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
-                        {
-                            var toolTip = new ToolTip { Content = sequenceWindow.GetInformation };
-                            textBox.ToolTipa = toolTip;
-                        }*/
                         UpdateKeyBindingProfileSequencedKeyStrokesPZ55(textBox);
                     }
                     else
@@ -384,12 +378,6 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ55)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = osKeyPress;
-                        /*textBox.Text = sequenceList.Values[0].VirtualKeyCodesAsString;
-                        if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
-                        {
-                            var toolTip = new ToolTip { Content = sequenceWindow.GetInformation };
-                            textBox.ToolTipa = toolTip;
-                        }*/
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
                 }
@@ -622,38 +610,6 @@ namespace DCSFlightpanels
                 if (!Equals(textBox, TextBoxLogPZ55))
                 {
                     var contectMenu = (ContextMenu)Resources["TextBoxContextMenuPZ55"];
-                    /*if (!BipFactory.HasBips())
-                    {
-                        MenuItem bipMenuItem = null;
-                        foreach (var item in contectMenu.Items)
-                        {
-                            if (((MenuItem)item).Name.Contains("EditBIP"))
-                            {
-                                bipMenuItem = (MenuItem)item;
-                                break;
-                            }
-                        }
-                        if (bipMenuItem != null)
-                        {
-                            contectMenu.Items.Remove(bipMenuItem);
-                        }
-                    }
-                    if (!_enableDCSBIOS)
-                    {
-                        MenuItem dcsBIOSMenuItem = null;
-                        foreach (var item in contectMenu.Items)
-                        {
-                            if (((MenuItem)item).Name.Contains("EditDCSBIOS"))
-                            {
-                                dcsBIOSMenuItem = (MenuItem)item;
-                                break;
-                            }
-                        }
-                        if (dcsBIOSMenuItem != null)
-                        {
-                            contectMenu.Items.Remove(dcsBIOSMenuItem);
-                        }
-                    }*/
                     textBox.ContextMenu = contectMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
@@ -997,6 +953,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2083, ex);
             }
         }
+
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -1127,11 +1084,6 @@ namespace DCSFlightpanels
                     return;
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
-
-                /*if (((TextBoxTagHolderClass)textBox.Tag) == null)
-                {
-                    ((TextBoxTagHolderClass)textBox.Tag) = xxKeyPressLength.FiftyMilliSec;
-                }*/
 
                 var keyCode = KeyInterop.VirtualKeyFromKey(e.Key);
                 e.Handled = true;
@@ -1466,13 +1418,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                /*
-                if (((TextBoxTagHolderClass)textBox.Tag) == null)
-                {
-                    ((TextBoxTagHolderClass)textBox.Tag) = xxnew SortedList<int, KeyPressInfo>();
-                }
-                */
-
                 if (textBox.Equals(TextBoxKnobOff))
                 {
                     _switchPanelPZ55.AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, ((TagDataClassPZ55)textBox.Tag).BIPLink);
