@@ -227,6 +227,7 @@
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagDataClassTPM.cs" />
     <Compile Include="TagDataClassPZ69.cs" />
     <Compile Include="TagDataClassPZ70.cs" />
     <Compile Include="TextBlockDialogWindow.xaml.cs">
