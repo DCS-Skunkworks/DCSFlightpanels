@@ -1753,7 +1753,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (!textBox.Equals(TextBoxLogPZ70) && textBox.IsFocused && textBox.Background == Brushes.Yellow)
+                if (!textBox.Equals(TextBoxLogPZ70) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
                     return textBox;
                 }
@@ -2516,7 +2516,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ70)
+                if (!Equals(textBox, TextBoxLogPZ70))
                 {
                     textBox.ContextMenu = null;
                     textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
@@ -2528,41 +2528,10 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ70)
+                if (!Equals(textBox, TextBoxLogPZ70))
                 {
                     var contextMenu = (ContextMenu)Resources["TextBoxContextMenuPZ70"];
-                    /*if (!BipFactory.HasBips())
-                    {
-                        MenuItem bipMenuItem = null;
-                        foreach (var item in contextMenu.Items)
-                        {
-                            if (((MenuItem)item).Name.Contains("EditBIP"))
-                            {
-                                bipMenuItem = (MenuItem)item;
-                                break;
-                            }
-                        }
-                        if (bipMenuItem != null)
-                        {
-                            contextMenu.Items.Remove(bipMenuItem);
-                        }
-                    }
-                    if (!_enableDCSBIOS)
-                    {
-                        MenuItem dcsBIOSMenuItem = null;
-                        foreach (var item in contextMenu.Items)
-                        {
-                            if (((MenuItem)item).Name.Contains("EditDCSBIOS"))
-                            {
-                                dcsBIOSMenuItem = (MenuItem)item;
-                                break;
-                            }
-                        }
-                        if (dcsBIOSMenuItem != null)
-                        {
-                            contextMenu.Items.Remove(dcsBIOSMenuItem);
-                        }
-                    }*/
+                    
                     textBox.ContextMenu = contextMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }

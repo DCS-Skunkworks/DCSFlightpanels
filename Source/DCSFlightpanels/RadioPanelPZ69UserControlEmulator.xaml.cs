@@ -942,7 +942,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ69)
+                if (!Equals(textBox, TextBoxLogPZ69))
                 {
                     textBox.ContextMenu = null;
                     textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
@@ -1080,7 +1080,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogPZ69 && textBox.IsFocused && textBox.Background == Brushes.Yellow)
+                if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
                     return textBox;
                 }

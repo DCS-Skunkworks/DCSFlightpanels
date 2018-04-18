@@ -48,10 +48,10 @@ namespace DCSFlightpanels
                 _once = true;
             }
             var now = DateTime.Now.Ticks;
-            Debug.WriteLine("Start SwitchPanelTPMUserControl_OnLoaded");
+            Debug.WriteLine("Start TPMPanelUserControl_OnLoaded");
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
-            Debug.WriteLine("End SwitchPanelTPMUserControl_OnLoaded" + new TimeSpan(DateTime.Now.Ticks - now).Milliseconds);
+            Debug.WriteLine("End TPMPanelUserControl_OnLoaded" + new TimeSpan(DateTime.Now.Ticks - now).Milliseconds);
             _controlLoaded = true;
             ShowGraphicConfiguration();
         }
@@ -518,7 +518,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogTPM)
+                if (!Equals(textBox, TextBoxLogTPM))
                 {
                     var contectMenu = (ContextMenu)Resources["TextBoxContextMenuTPM"];
 
@@ -684,7 +684,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox != TextBoxLogTPM && textBox.IsFocused && textBox.Background == Brushes.Yellow)
+                if (!Equals(textBox, TextBoxLogTPM) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
                     return textBox;
                 }
