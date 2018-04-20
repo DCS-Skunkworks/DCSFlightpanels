@@ -1314,13 +1314,13 @@ namespace DCSFlightpanels
             try
             {
                 KeyPressLength keyPressLength;
-                if (!((TagDataClassPZ55)textBox.Tag).ContainsOSKeyPress() || ((TagDataClassPZ55)textBox.Tag).KeyPress.KeySequence.Count == 0)
+                if (!((TagDataClassTPM)textBox.Tag).ContainsOSKeyPress() || ((TagDataClassTPM)textBox.Tag).KeyPress.KeySequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
                 else
                 {
-                    keyPressLength = ((TagDataClassPZ55)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                    keyPressLength = ((TagDataClassTPM)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
                 if (textBox.Equals(TextBoxG1Off))
                 {

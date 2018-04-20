@@ -1,12 +1,12 @@
 # DCSFlightpanels
 
-DCSFlightpanels primary use is for using Saitek/Logitech panels in DCS-WORLD.
+DCSFlightpanels primary use is for using Saitek/Logitech panels in DCS World.
 Together with DCS-BIOS you can manage every control for the aircraft and use
 the Radio Panel to operate cockpit radio equipment and also show data from the
 aircraft in the Multipanel & Backlit Panel.
 Using DCSFlightpanels as a key emulator it can be used in almost any game like
 Elite Dangerous, War Thunder, Flaming Cliff Series, IL-2.
-You can use multiple panels of each sort and have them configured separately.
+You can use multiple panels of each type and configure them separately.
 
 DCSFlightpanels supports Simple Radio Standalone (PZ69 Radio Panel).
 
