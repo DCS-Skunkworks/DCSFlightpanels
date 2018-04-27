@@ -50,6 +50,11 @@ namespace ClassLibraryCommon
         HESP = 64
     }
 
+    /*
+     * Keyemulator
+     * DCS-BIOS Profile
+     * Radios : DCS-BIOS || SRS
+     */
     public enum DCSAirframe
     {
         [Description("NoFrameLoadedYet")]

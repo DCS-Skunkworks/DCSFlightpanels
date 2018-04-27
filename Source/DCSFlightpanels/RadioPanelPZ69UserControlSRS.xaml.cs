@@ -447,23 +447,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2019, ex);
             }
         }
-        /*
-        private void SetGroupboxVisibility(RadioPanelPZ69KnobsSRS panelPZ69KnobsA10C)
-        {
-            try
-            {
-                GroupLowerSelectorKnobUHF.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_UHF ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFFM.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_VHFFM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFAM.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_VHFAM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobTACAN.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_TACAN ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobILS.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_ILS ? Visibility.Visible : Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(129814, ex);
-            }
-        }
-        */
+        
         private void HideAllImages()
         {
             TopLeftCom1.Visibility = Visibility.Collapsed;
@@ -492,43 +476,7 @@ namespace DCSFlightpanels
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
 
-        private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-
-
-
-        }
-
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
+        
 
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
@@ -569,11 +517,6 @@ namespace DCSFlightpanels
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
-                /*ComboBoxSynchSleepTime.SelectedValue = Settings.Default.BAKDialSynchSleepTime;
-                ComboBoxSynchResetTimeout.SelectedValue = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.ResetSyncTimeout = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.SynchSleepTime = Settings.Default.BAKDialSynchSleepTime;*/
                 _userControlLoaded = true;
             }
             catch (Exception ex)
@@ -582,55 +525,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private void ComboBoxSynchSleepTime_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    Settings.Default.Save();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(244331, ex);
-            }
-        }
 
-        private void ComboBoxSynchResetTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    Settings.Default.Save();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(244331, ex);
-            }
-        }
 
-        private void ComboBoxSyncOKDelayTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                    _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(244331, ex);
-            }
-        }
     }
 }
