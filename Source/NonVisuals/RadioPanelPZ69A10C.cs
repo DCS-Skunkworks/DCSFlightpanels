@@ -195,7 +195,7 @@ namespace NonVisuals
         {
             UpdateCounter(e.Address, e.Data);
 
-            
+
             /*
              * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
              * Once a dial has been deemed to be "off" position and needs to be changed
@@ -422,45 +422,76 @@ namespace NonVisuals
             try
             {
 
-                Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + e.StringData + "<-");
+                //Common.DebugP("RadioPanelPZ69A10C Received DCSBIOS stringData : ->" + e.StringData + "<-");
                 if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
+                    //Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
                 if (e.Address.Equals(_tacanDcsbiosOutputFreqChannel.Address))
                 {
-                    //" 00X" --> "129X"
-                    lock (_lockTacanDialsObject1)
+                    try
                     {
-                        var tmp = _tacanCockpitFreq1DialPos;
-                        _tacanCockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
-                        if (tmp != _tacanCockpitFreq1DialPos)
+                        int changeCount = 0;
+                        //" 00X" --> "129X"
+                        lock (_lockTacanDialsObject1)
                         {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            if (!uint.TryParse(e.StringData.Substring(0, 2), out var tmpUint))
+                            {
+                                return;
+                            }
+                            if (tmpUint != _tacanCockpitFreq1DialPos)
+                            {
+                                changeCount = changeCount | 2;
+                                _tacanCockpitFreq1DialPos = tmpUint;
+                            }
+                        }
+                        lock (_lockTacanDialsObject2)
+                        {
+                            if (!uint.TryParse(e.StringData.Substring(2, 1), out var tmpUint))
+                            {
+                                return;
+                            }
+                            if (tmpUint != _tacanCockpitFreq2DialPos)
+                            {
+                                changeCount = changeCount | 4;
+                                _tacanCockpitFreq2DialPos = tmpUint;
+                            }
+                        }
+                        lock (_lockTacanDialsObject3)
+                        {
+                            var tmp = _tacanCockpitFreq3DialPos;
+                            var tmpXY = e.StringData.Substring(3, 1);
+                            _tacanCockpitFreq3DialPos = tmpXY.Equals("X") ? (uint)0 : (uint)1;
+                            if (tmp != _tacanCockpitFreq3DialPos)
+                            {
+                                changeCount = changeCount | 8;
+                            }
+                        }
+
+                        if ((changeCount & 2) > 0)
+                        {
                             Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 0);
-                        }
-                    }
-                    lock (_lockTacanDialsObject2)
-                    {
-                        var tmp = _tacanCockpitFreq2DialPos;
-                        _tacanCockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
-                        if (tmp != _tacanCockpitFreq2DialPos)
-                        {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+
+                        if ((changeCount & 4) > 0)
+                        {
                             Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 0);
-                        }
-                    }
-                    lock (_lockTacanDialsObject3)
-                    {
-                        var tmp = _tacanCockpitFreq3DialPos;
-                        var tmpXY = e.StringData.Substring(3, 1);
-                        _tacanCockpitFreq3DialPos = tmpXY.Equals("X") ? (uint)0 : (uint)1;
-                        if (tmp != _tacanCockpitFreq3DialPos)
-                        {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
                         }
+
+                        if ((changeCount & 8) > 0)
+                        {
+                            Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+
+                    }
+                    catch (Exception)
+                    {
+                        //Common.LogError(123, "DCSBIOSStringReceived TACAN: >" + e.StringData + "< " + exception.Message + " \n" + exception.StackTrace);
+                        //TODO Strange values from DCS-BIOS
                     }
                 }
             }

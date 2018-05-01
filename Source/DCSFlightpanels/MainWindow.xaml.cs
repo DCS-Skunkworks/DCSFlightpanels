@@ -109,11 +109,6 @@ namespace DCSFlightpanels
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewRelease();
-                //For me so that debugging is not on for anyone else.
-                if (!Environment.MachineName.Equals("TIMOFEI"))
-                {
-                    Common.DebugOn = false;
-                }
             }
             catch (Exception ex)
             {

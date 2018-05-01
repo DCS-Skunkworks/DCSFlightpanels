@@ -82,14 +82,14 @@ namespace NonVisuals
         {
             try
             {
-
+                /*
                 if (string.IsNullOrWhiteSpace(e.StringData))
                 {
                     Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
 
-
+                */
             }
             catch (Exception ex)
             {

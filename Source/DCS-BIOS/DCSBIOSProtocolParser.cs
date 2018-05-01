@@ -222,7 +222,7 @@ namespace DCS_BIOS
                         _data = (uint)(b << 8) | _data;
                         _count--;
                         //_iDcsBiosDataListener.DcsBiosDataReceived(_address, _data);
-                        if (OnDcsDataAddressValue != null && IsBroadcastable(_address))
+                        if (OnDcsDataAddressValue != null && IsBroadcastable(_address) && _data != 0x55)
                         {
                             /*if (_address == 25332)
                             {

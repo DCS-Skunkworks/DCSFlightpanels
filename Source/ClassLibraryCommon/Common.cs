@@ -91,7 +91,7 @@ namespace ClassLibraryCommon
             return string.Empty;
         }
 
-        private static bool _debugOn = false;
+        public static bool DebugOn { get; set; } = false;
         public static bool DebugToFile = false;
         public static APIModeEnum APIMode = 0;
         public static object _errorLoglockObject = new object();
@@ -141,16 +141,7 @@ namespace ClassLibraryCommon
                 DebugLog = filename;
             }
         }
-
-        public static bool DebugOn
-        {
-            get { return _debugOn; }
-            set
-            {
-                _debugOn = value;
-            }
-        }
-
+        
         public static void LogError(Exception ex, string message = null)
         {
             LogError(0, ex, message);
