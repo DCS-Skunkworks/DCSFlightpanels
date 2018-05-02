@@ -159,7 +159,7 @@ namespace NonVisuals
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69A10C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69A10C(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -4223,7 +4223,7 @@ namespace NonVisuals
                         break;
                     }
             }
-            throw new Exception("Should reach this code. private String GetCommandDirectionForVhfDial1(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
+            throw new Exception("Should not reach this code. private String GetCommandDirectionForVhfDial1(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
 
         private string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
@@ -4526,7 +4526,7 @@ namespace NonVisuals
                         break;
                     }
             }
-            throw new Exception("Should reach this code. private String GetCommandDirectionForVhfDial23(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
+            throw new Exception("Should not reach this code. private String GetCommandDirectionForVhfDial23(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
 
         private void SaveCockpitFrequencyVhfAm()

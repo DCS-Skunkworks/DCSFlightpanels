@@ -55,7 +55,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -91,7 +90,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -103,7 +101,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -115,7 +112,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -127,7 +123,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -139,7 +134,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -151,7 +145,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -163,7 +156,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo nada?
             }
             catch (Exception ex)
             {
@@ -175,7 +167,6 @@ namespace DCSFlightpanels
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {

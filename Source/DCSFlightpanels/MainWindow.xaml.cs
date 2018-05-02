@@ -68,11 +68,17 @@ namespace DCSFlightpanels
                 LoadSettings();
                 Common.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
                 Common.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
-                
+
+                /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 _hidHandler = new HIDHandler();
                 if (_doSearchForPanels)
                 {
                     _hidHandler.Startup();
+                }
+                _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+                if (!_dcsBios.HasLastException())
+                {
+                    RotateGear(2000);
                 }
                 _exceptionTimer.Elapsed += TimerCheckExceptions;
                 _exceptionTimer.Start();
@@ -93,14 +99,14 @@ namespace DCSFlightpanels
                 }
                 _dcsAirframe = _panelProfileHandler.Airframe;
 
-                if (!Common.IsKeyEmulationProfile(_dcsAirframe))
+                if (!Common.IsDCSBIOSProfile(_dcsAirframe))
                 {
-                    _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
-                    _dcsBios.Startup();
-                    if (!_dcsBios.HasLastException())
-                    {
-                        RotateGear(2000);
-                    }
+                    _dcsBios?.Shutdown();
+                    _dcsBios = null;
+                }
+                else
+                {
+                    _dcsBios?.Startup();
                 }
 
                 //SearchForPanels();
@@ -115,7 +121,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1017, ex);
             }
         }
-        
+
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
         }
@@ -162,7 +168,7 @@ namespace DCSFlightpanels
             }
             var itemCount = TabControlPanels.Items.Count;
             Common.DebugP("There are " + TabControlPanels.Items.Count + " TabControlPanels.Items");
-            
+
             var closedItemCount = CloseTabItems();
 
             if (Common.IsKeyEmulationProfile(dcsAirframe))
@@ -271,7 +277,6 @@ namespace DCSFlightpanels
             _panelProfileHandler.Detach(saitekPanel);
             saitekPanel.Detach(_panelProfileHandler);
             saitekPanel.Detach((IProfileHandlerListener)this);
-            _dcsBios?.DetachDataReceivedListener(saitekPanel);
         }
 
         public DCSAirframe GetAirframe()
@@ -325,7 +330,8 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
+                                    else
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
@@ -459,7 +465,7 @@ namespace DCSFlightpanels
                         }
                     } //for each
                 }
-                
+
                 SortTabs();
                 if (TabControlPanels.Items.Count > 0)
                 {
@@ -789,7 +795,7 @@ namespace DCSFlightpanels
 
         private async void CheckForNewRelease()
         {
-            #if !DEBUG
+#if !DEBUG
             var assembly = Assembly.GetExecutingAssembly();
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             try
@@ -852,7 +858,7 @@ namespace DCSFlightpanels
                 Common.LogError(9011, "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
                 LabelVersionInformation.Text = "v. " + fileVersionInfo.FileVersion;
             }
-            #endif
+#endif
         }
 
         private void TimerCheckExceptions(object sender, ElapsedEventArgs e)
@@ -1244,7 +1250,7 @@ namespace DCSFlightpanels
             {
                 forwardKeys = DigitalCombatSimulatorWindowFound();
             }
-            OnForwardKeyPressesChanged?.Invoke(this, new ForwardKeyPressEventArgs(){Forward = forwardKeys});
+            OnForwardKeyPressesChanged?.Invoke(this, new ForwardKeyPressEventArgs() { Forward = forwardKeys });
         }
 
         private static bool DigitalCombatSimulatorWindowFound()
@@ -1434,7 +1440,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2066, ex);
             }
         }
-        
+
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try

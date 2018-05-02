@@ -46,8 +46,7 @@ namespace ClassLibraryCommon
         PZ69RadioPanel = 4,
         PZ70MultiPanel = 8,
         BackLitPanel = 16,
-        TPM = 32,
-        HESP = 64
+        TPM = 32
     }
 
     /*
@@ -55,6 +54,7 @@ namespace ClassLibraryCommon
      * DCS-BIOS Profile
      * Radios : DCS-BIOS || SRS
      */
+
     public enum DCSAirframe
     {
         [Description("NoFrameLoadedYet")]

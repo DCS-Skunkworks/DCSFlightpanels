@@ -75,14 +75,14 @@ namespace DCS_BIOS
                 Common.LogError(2000, message);
             }
         }
-
+        
         public static DCSBIOSOutput GetDCSBIOSOutput(string controlId)
         {
             lock (_lockObject)
             {
                 if (_airframe == DCSAirframe.KEYEMULATOR || _airframe == DCSAirframe.KEYEMULATOR_SRS)
                 {
-                    return null;
+                    throw new Exception("DCSBIOSControlLocator.GetDCSBIOSOutput() Should not be called when only key emulator is active");
                 }
                 try
                 {

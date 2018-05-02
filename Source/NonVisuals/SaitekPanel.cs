@@ -186,11 +186,15 @@ namespace NonVisuals
         private Guid _guid = Guid.NewGuid();
         private string _hash;
 
-        protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton)
+        protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
         {
             _typeOfSaitekPanel = typeOfSaitekPanel;
             HIDSkeletonBase = hidSkeleton;
-            _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+            KeyboardEmulationOnly = !enableDCSBIOS;
+            if (enableDCSBIOS)
+            {
+                _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+            }
             _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
         }
 

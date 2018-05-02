@@ -132,9 +132,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelPZ69DisplayValue.cs" />
     <Compile Include="RadioPanelPZ69KnobEmulator.cs" />
-    <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelKnobSA342.cs" />
     <Compile Include="RadioPanelKnobAJS37.cs" />
     <Compile Include="RadioPanelKnobBf109.cs" />
@@ -146,7 +146,6 @@
     <Compile Include="RadioPanelKnobP51D.cs" />
     <Compile Include="RadiopanelKnobSpitfireLFMkIX.cs" />
     <Compile Include="RadioPanelKnobUH1H.cs" />
-    <Compile Include="RadioPanelPZ69SRS.cs" />
     <Compile Include="RadioPanelPZ69SA342.cs" />
     <Compile Include="RadioPanelPZ69AJS37.cs" />
     <Compile Include="RadioPanelPZ69Bf109.cs" />
@@ -159,13 +158,14 @@
     <Compile Include="RadioPanelPZ69A10C.cs" />
     <Compile Include="RadioPanelPZ69Base.cs" />
     <Compile Include="RadioPanelPZ69P51D.cs" />
+    <Compile Include="RadioPanelPZ69SRS.cs" />
     <Compile Include="RadioPanelPZ69UH1H.cs" />
     <Compile Include="RadiopanelSpitfireLFMkIX.cs" />
     <Compile Include="SaitekPanel.cs" />
+    <Compile Include="RadioPanelPZ69Emulator.cs" />
     <Compile Include="SRSListener.cs" />
     <Compile Include="SRSPlayerRadioInfo.cs" />
     <Compile Include="SRSRadioInformation.cs" />
-    <Compile Include="RadioPanelPZ69Emulator.cs" />
     <Compile Include="TPMPanelSwitch.cs" />
     <Compile Include="SwitchPanelKey.cs" />
     <Compile Include="TPMPanel.cs" />

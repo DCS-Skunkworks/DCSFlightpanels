@@ -175,9 +175,6 @@
     <Compile Include="RadioPanelPZ69UserControlEmulator.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlSRS.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
-    </Compile>
     <Compile Include="RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
     </Compile>
@@ -210,6 +207,9 @@
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSpitfireLFMkIX.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RadioPanelPZ69UserControlSRS.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlUH1H.xaml.cs">
       <SubType>Code</SubType>
@@ -309,10 +309,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlSRS.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="RadioPanelPZ69UserControlA10C.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -356,6 +352,10 @@
     <Page Include="RadioPanelPZ69UserControlSpitfireLFMkIX.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlSRS.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RadioPanelPZ69UserControlUH1H.xaml">
       <SubType>Designer</SubType>

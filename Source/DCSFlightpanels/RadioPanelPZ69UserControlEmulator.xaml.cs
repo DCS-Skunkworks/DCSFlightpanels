@@ -33,7 +33,7 @@ namespace DCSFlightpanels
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             HideAllImages();
 
-            _radioPanelPZ69 = new RadioPanelPZ69Emulator(hidSkeleton);
+            _radioPanelPZ69 = new RadioPanelPZ69Emulator(hidSkeleton, false);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
             _radioPanelPZ69.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);

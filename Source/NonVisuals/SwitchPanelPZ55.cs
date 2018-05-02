@@ -43,12 +43,11 @@ namespace NonVisuals
         private bool _manualLandingGearLeds;
         private Thread _manualLandingGearThread;
 
-        public SwitchPanelPZ55(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton)
+        public SwitchPanelPZ55(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton, enableDCSBIOS)
         {
             //Fixed values
             VendorId = 0x6A3;
             ProductId = 0xD67;
-            KeyboardEmulationOnly = !enableDCSBIOS;
             CreateSwitchKeys();
             //SwitchPanelPZ55SO = this;
             Startup();

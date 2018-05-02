@@ -72,7 +72,7 @@ namespace NonVisuals
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;

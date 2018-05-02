@@ -104,12 +104,12 @@ namespace ClassLibraryCommon
         public static bool IsKeyEmulationProfile(DCSAirframe dcsAirframe)
         {
             return dcsAirframe == DCSAirframe.KEYEMULATOR || dcsAirframe == DCSAirframe.KEYEMULATOR_SRS;
-        }
+    }
 
         public static bool IsDCSBIOSProfile(DCSAirframe dcsAirframe)
         {
             return dcsAirframe != DCSAirframe.KEYEMULATOR && dcsAirframe != DCSAirframe.KEYEMULATOR_SRS;
-        }
+    }
 
         public static void DebugP(string str)
         {

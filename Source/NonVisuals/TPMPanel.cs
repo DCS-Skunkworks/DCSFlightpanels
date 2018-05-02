@@ -26,12 +26,11 @@ namespace NonVisuals
         //private HidDevice _hidReadDevice;
         private object _dcsBiosDataReceivedLock = new object();
 
-        public TPMPanel(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.TPM, hidSkeleton)
+        public TPMPanel(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.TPM, hidSkeleton, enableDCSBIOS)
         {
             //Fixed values
             VendorId = 0x6A3;
             ProductId = 0xB4D;
-            KeyboardEmulationOnly = !enableDCSBIOS;
             CreateSwitchKeys();
             Startup();
         }

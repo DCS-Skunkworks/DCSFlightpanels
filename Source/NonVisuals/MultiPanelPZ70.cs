@@ -49,11 +49,10 @@ namespace NonVisuals
 
         private long _doUpdatePanelLCD;
 
-        public MultiPanelPZ70(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton)
+        public MultiPanelPZ70(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD06;
-            KeyboardEmulationOnly = !enableDCSBIOS;
             CreateMultiKnobs();
             Startup();
         }

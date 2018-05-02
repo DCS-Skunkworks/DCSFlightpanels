@@ -37,7 +37,7 @@ namespace DCSFlightpanels
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
+            _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton, enableDCSBIOS);
 
             _backlitPanelBIP.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);

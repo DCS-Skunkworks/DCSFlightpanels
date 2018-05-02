@@ -137,7 +137,7 @@ namespace NonVisuals
          * 00000000
          *
          */
-        public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.BackLitPanel, hidSkeleton)
+        public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.BackLitPanel, hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xB4E;
