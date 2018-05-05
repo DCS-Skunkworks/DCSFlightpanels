@@ -9,14 +9,12 @@ using DCSFlightpanels.Properties;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using NonVisuals;
 using Octokit;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
-using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using Timer = System.Timers.Timer;
 using ToolTip = System.Windows.Controls.ToolTip;
@@ -51,7 +49,8 @@ namespace DCSFlightpanels
         private object _lockObjectStatusMessages = new object();
         private List<UserControl> _saitekUserControls = new List<UserControl>();
         private DCSAirframe _dcsAirframe;
-
+        private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_debug_log.txt";
+        private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_error_log.txt";
         public MainWindow()
         {
             InitializeComponent();
@@ -66,8 +65,17 @@ namespace DCSFlightpanels
                     this.WindowState = WindowState.Minimized;
                 }
                 LoadSettings();
-                Common.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
-                Common.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
+
+                if (!File.Exists(_debugLogFile))
+                {
+                    File.Create(_debugLogFile);
+                }
+                if (!File.Exists(_errorLogFile))
+                {
+                    File.Create(_errorLogFile);
+                }
+                Common.SetErrorLog(_errorLogFile);
+                Common.SetDebugLog(_debugLogFile);
 
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 _hidHandler = new HIDHandler();
@@ -1399,12 +1407,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                var file = Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt";
-                if (!File.Exists(file))
+                if (!File.Exists(_errorLogFile))
                 {
-                    File.Create(file);
+                    File.Create(_errorLogFile);
                 }
-                Process.Start(file);
+                Process.Start(_errorLogFile);
             }
             catch (Exception ex)
             {
@@ -1416,12 +1423,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                var file = Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt";
-                if (!File.Exists(file))
+                if (!File.Exists(_debugLogFile))
                 {
-                    File.Create(file);
+                    File.Create(_debugLogFile);
                 }
-                Process.Start(file);
+                Process.Start(_debugLogFile);
             }
             catch (Exception ex)
             {

@@ -59,11 +59,8 @@ namespace DCSFlightpanels
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var now = DateTime.Now.Ticks;
-            Debug.WriteLine("Start SwitchPanelPZ55UserControl_OnLoaded");
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
-            Debug.WriteLine("End SwitchPanelPZ55UserControl_OnLoaded" + new TimeSpan(DateTime.Now.Ticks - now).Milliseconds);
             _controlLoaded = true;
             ShowGraphicConfiguration();
         }
