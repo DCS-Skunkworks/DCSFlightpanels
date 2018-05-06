@@ -7,6 +7,8 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
@@ -30,6 +32,28 @@ namespace ClassLibraryCommon
                 _pz69NumberFormatInfoFullDisplay.NumberGroupSeparator = "";
             }
             return _pz69NumberFormatInfoFullDisplay;
+        }
+
+        public static string GetMd5Hash(string input)
+        {
+
+            var md5 = MD5.Create();
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString().ToUpperInvariant();
         }
 
         public static NumberFormatInfo GetPZ69EmptyDisplayNumberFormat()
@@ -67,7 +91,7 @@ namespace ClassLibraryCommon
             return string.Empty;
         }
 
-        private static bool _debugOn = false;
+        public static bool DebugOn { get; set; } = false;
         public static bool DebugToFile = false;
         public static APIModeEnum APIMode = 0;
         public static object _errorLoglockObject = new object();
@@ -80,12 +104,12 @@ namespace ClassLibraryCommon
         public static bool IsKeyEmulationProfile(DCSAirframe dcsAirframe)
         {
             return dcsAirframe == DCSAirframe.KEYEMULATOR || dcsAirframe == DCSAirframe.KEYEMULATOR_SRS;
-        }
+    }
 
         public static bool IsDCSBIOSProfile(DCSAirframe dcsAirframe)
         {
             return dcsAirframe != DCSAirframe.KEYEMULATOR && dcsAirframe != DCSAirframe.KEYEMULATOR_SRS;
-        }
+    }
 
         public static void DebugP(string str)
         {
@@ -117,16 +141,7 @@ namespace ClassLibraryCommon
                 DebugLog = filename;
             }
         }
-
-        public static bool DebugOn
-        {
-            get { return _debugOn; }
-            set
-            {
-                _debugOn = value;
-            }
-        }
-
+        
         public static void LogError(Exception ex, string message = null)
         {
             LogError(0, ex, message);

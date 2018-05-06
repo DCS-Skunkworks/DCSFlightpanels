@@ -61,7 +61,7 @@ namespace NonVisuals
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69MiG21Bis(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69MiG21Bis(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -69,14 +69,10 @@ namespace NonVisuals
             Startup();
         }
 
-        ~RadioPanelPZ69MiG21Bis()
-        {
-        }
-
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
 
-            UpdateCounter(address, data);
+            UpdateCounter(e.Address, e.Data);
             
             /*
              * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -87,7 +83,7 @@ namespace NonVisuals
              */
 
             //Radio
-            if (address == _radioDcsbiosOutputFreqSelectorPosition.Address)
+            if (e.Address == _radioDcsbiosOutputFreqSelectorPosition.Address)
             {
 
                 lock (_lockRadioFreqSelectorPositionObject)
@@ -96,21 +92,21 @@ namespace NonVisuals
                     if (tmp != _radioFreqSelectorPositionCockpit)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        _radioFreqSelectorPositionCockpit = _radioDcsbiosOutputFreqSelectorPosition.GetUIntValue(data);
+                        _radioFreqSelectorPositionCockpit = _radioDcsbiosOutputFreqSelectorPosition.GetUIntValue(e.Data);
 
                     }
                 }
             }
 
             //RSBN Nav
-            if (address == _rsbnNavChannelCockpitOutput.Address)
+            if (e.Address == _rsbnNavChannelCockpitOutput.Address)
             {
 
                 lock (_lockRSBNNavChannelObject)
                 {
                     var tmp = _rsbnNavChannelCockpit;
 
-                    _rsbnNavChannelCockpit = _rsbnNavChannelCockpitOutput.GetUIntValue(data);
+                    _rsbnNavChannelCockpit = _rsbnNavChannelCockpitOutput.GetUIntValue(e.Data);
                     if (tmp != _rsbnNavChannelCockpit)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -119,14 +115,14 @@ namespace NonVisuals
             }
 
             //RSBN ILS
-            if (address == _rsbnILSChannelCockpitOutput.Address)
+            if (e.Address == _rsbnILSChannelCockpitOutput.Address)
             {
 
                 lock (_lockRSBNILSChannelObject)
                 {
                     var tmp = _rsbnILSChannelCockpit;
 
-                    _rsbnILSChannelCockpit = _rsbnILSChannelCockpitOutput.GetUIntValue(data);
+                    _rsbnILSChannelCockpit = _rsbnILSChannelCockpitOutput.GetUIntValue(e.Data);
                     if (tmp != _rsbnILSChannelCockpit)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -135,14 +131,14 @@ namespace NonVisuals
             }
 
             //ARC Sector
-            if (address == _arcSectorCockpitOutput.Address)
+            if (e.Address == _arcSectorCockpitOutput.Address)
             {
 
                 lock (_lockARCSectorObject)
                 {
                     var tmp = _arcSectorCockpit;
 
-                    _arcSectorCockpit = _arcSectorCockpitOutput.GetUIntValue(data);
+                    _arcSectorCockpit = _arcSectorCockpitOutput.GetUIntValue(e.Data);
                     if (tmp != _arcSectorCockpit)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -151,14 +147,14 @@ namespace NonVisuals
             }
 
             //ARC Preset
-            if (address == _arcPresetChannelCockpitOutput.Address)
+            if (e.Address == _arcPresetChannelCockpitOutput.Address)
             {
 
                 lock (_lockARCPresetChannelObject)
                 {
                     var tmp = _arcPresetChannelCockpit;
 
-                    _arcPresetChannelCockpit = _arcPresetChannelCockpitOutput.GetUIntValue(data) + 1;
+                    _arcPresetChannelCockpit = _arcPresetChannelCockpitOutput.GetUIntValue(e.Data) + 1;
                     if (tmp != _arcPresetChannelCockpit)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -172,15 +168,15 @@ namespace NonVisuals
 
         }
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
                 //nada
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(349998, e, "DCSBIOSStringReceived()");
+                Common.LogError(349998, ex, "DCSBIOSStringReceived()");
             }
         }
 

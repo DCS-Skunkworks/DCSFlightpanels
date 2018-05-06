@@ -37,6 +37,10 @@ namespace DCSFlightpanels
             //LoadConfiguration();
         }
 
+        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        {
+        }
+
         public SaitekPanel GetSaitekPanel()
         {
             return _radioPanelPZ69;
@@ -47,11 +51,10 @@ namespace DCSFlightpanels
             return GetType().Name;
         }
 
-        public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -59,7 +62,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
@@ -71,11 +74,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
-                SetGraphicsState(hashSet);
+                SetGraphicsState(e.Switches);
             }
             catch (Exception ex)
             {
@@ -83,11 +86,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -95,11 +97,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -107,11 +108,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -119,11 +119,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(string stringData)
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -131,11 +130,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -143,11 +141,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -155,11 +152,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {
-                //todo nada?
             }
             catch (Exception ex)
             {
@@ -167,11 +163,10 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(object sender, PanelEventArgs e)
         {
             try
             {
-                //todo
             }
             catch (Exception ex)
             {
@@ -443,23 +438,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2019, ex);
             }
         }
-        /*
-        private void SetGroupboxVisibility(RadioPanelPZ69KnobsSRS panelPZ69KnobsA10C)
-        {
-            try
-            {
-                GroupLowerSelectorKnobUHF.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_UHF ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFFM.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_VHFFM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobVHFAM.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_VHFAM ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobTACAN.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_TACAN ? Visibility.Visible : Visibility.Hidden;
-                GroupLowerSelectorKnobILS.Visibility = panelPZ69KnobsA10C == RadioPanelPZ69KnobsSRS.UPPER_ILS ? Visibility.Visible : Visibility.Hidden;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(129814, ex);
-            }
-        }
-        */
+        
         private void HideAllImages()
         {
             TopLeftCom1.Visibility = Visibility.Collapsed;
@@ -488,43 +467,7 @@ namespace DCSFlightpanels
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
 
-        private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-
-
-
-        }
-
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
+        
 
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
@@ -565,11 +508,6 @@ namespace DCSFlightpanels
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
-                /*ComboBoxSynchSleepTime.SelectedValue = Settings.Default.BAKDialSynchSleepTime;
-                ComboBoxSynchResetTimeout.SelectedValue = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.ResetSyncTimeout = Settings.Default.BAKDialResetSyncTimeout;
-                _radioPanelPZ69.SynchSleepTime = Settings.Default.BAKDialSynchSleepTime;*/
                 _userControlLoaded = true;
             }
             catch (Exception ex)
@@ -578,55 +516,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private void ComboBoxSynchSleepTime_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
-                    Settings.Default.Save();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(244331, ex);
-            }
-        }
 
-        private void ComboBoxSynchResetTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
-                    Settings.Default.Save();*/
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(244331, ex);
-            }
-        }
 
-        private void ComboBoxSyncOKDelayTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (_userControlLoaded)
-                {
-                    Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                    _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(244331, ex);
-            }
-        }
     }
 }

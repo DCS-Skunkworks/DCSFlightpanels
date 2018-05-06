@@ -137,11 +137,12 @@ namespace NonVisuals
          * 00000000
          *
          */
-        public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.BackLitPanel, hidSkeleton)
+        public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.BackLitPanel, hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xB4E;
             _ledBrightness = ledBrightness;
+            BipFactory.RegisterBip(this);
             Startup();
         }
         //sätta färg efter om Config finns
@@ -162,6 +163,7 @@ namespace NonVisuals
         {
             try
             {
+                BipFactory.DeRegisterBip(this);
                 Closed = true;
             }
             catch (Exception e)
@@ -383,15 +385,15 @@ namespace NonVisuals
             return result;
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            UpdateCounter(address, data);
-            CheckDcsDataForColorChangeHook(address, data);
+            UpdateCounter(e.Address, e.Data);
+            CheckDcsDataForColorChangeHook(e.Address, e.Data);
         }
 
         public override void ClearSettings()

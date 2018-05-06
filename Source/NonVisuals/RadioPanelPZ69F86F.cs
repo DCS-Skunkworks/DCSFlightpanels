@@ -84,7 +84,7 @@ namespace NonVisuals
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69F86F(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69F86F(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -92,30 +92,30 @@ namespace NonVisuals
             Startup();
         }
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
-
-                if (string.IsNullOrWhiteSpace(stringData))
+                /*
+                if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    Common.DebugP("Received DCSBIOS stringData : " + stringData);
+                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
-                }
+                }*/
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(78030, e, "DCSBIOSStringReceived()");
+                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
             }
             //ShowFrequenciesOnPanel();
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
 
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -127,12 +127,12 @@ namespace NonVisuals
 
 
                 //ARC-27 Preset Channel Dial
-                if (address == _arc27PresetDcsbiosOutputPresetDial.Address)
+                if (e.Address == _arc27PresetDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockARC27PresetDialObject1)
                     {
                         var tmp = _arc27PresetCockpitDialPos;
-                        _arc27PresetCockpitDialPos = _arc27PresetDcsbiosOutputPresetDial.GetUIntValue(data);
+                        _arc27PresetCockpitDialPos = _arc27PresetDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _arc27PresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -141,12 +141,12 @@ namespace NonVisuals
                 }
 
                 //ARC-27 Mode Dial
-                if (address == _arc27ModeDcsbiosOutputDial.Address)
+                if (e.Address == _arc27ModeDcsbiosOutputDial.Address)
                 {
                     lock (_lockARC27ModeDialObject1)
                     {
                         var tmp = _arc27ModeCockpitDialPos;
-                        _arc27ModeCockpitDialPos = _arc27ModeDcsbiosOutputDial.GetUIntValue(data);
+                        _arc27ModeCockpitDialPos = _arc27ModeDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _arc27ModeCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -155,12 +155,12 @@ namespace NonVisuals
                 }
 
                 //ARN-6 Frequency
-                if (address == _arn6ManualDcsbiosOutputCockpitFrequency.Address)
+                if (e.Address == _arn6ManualDcsbiosOutputCockpitFrequency.Address)
                 {
                     lock (_lockARN6FrequencyObject)
                     {
                         var tmp = _arn6CockpitFrequency;
-                        _arn6CockpitFrequency = _arn6ManualDcsbiosOutputCockpitFrequency.GetUIntValue(data);
+                        _arn6CockpitFrequency = _arn6ManualDcsbiosOutputCockpitFrequency.GetUIntValue(e.Data);
                         if (tmp != _arn6CockpitFrequency)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -169,12 +169,12 @@ namespace NonVisuals
                 }
 
                 //ARN-6 Band
-                if (address == _arn6BandDcsbiosOutputCockpit.Address)
+                if (e.Address == _arn6BandDcsbiosOutputCockpit.Address)
                 {
                     lock (_lockARN6BandObject)
                     {
                         var tmp = _arn6CockpitBand;
-                        _arn6CockpitBand = _arn6BandDcsbiosOutputCockpit.GetUIntValue(data);
+                        _arn6CockpitBand = _arn6BandDcsbiosOutputCockpit.GetUIntValue(e.Data);
                         if (tmp != _arn6CockpitBand)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -183,12 +183,12 @@ namespace NonVisuals
                 }
 
                 //ARN-6 Modes
-                if (address == _arn6ModeDcsbiosOutputPresetDial.Address)
+                if (e.Address == _arn6ModeDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockARN6ModeObject)
                     {
                         var tmp = _arn6ModeCockpitDialPos;
-                        _arn6ModeCockpitDialPos = _arn6ModeDcsbiosOutputPresetDial.GetUIntValue(data);
+                        _arn6ModeCockpitDialPos = _arn6ModeDcsbiosOutputPresetDial.GetUIntValue(e.Data);
                         if (tmp != _arn6ModeCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -197,12 +197,12 @@ namespace NonVisuals
                 }
 
                 //APX-6 Modes
-                if (address == _apx6ModeDcsbiosOutputCockpit.Address)
+                if (e.Address == _apx6ModeDcsbiosOutputCockpit.Address)
                 {
                     lock (_lockAPX6ModeObject)
                     {
                         var tmp = _apx6ModeCockpitDialPos;
-                        _apx6ModeCockpitDialPos = _apx6ModeDcsbiosOutputCockpit.GetUIntValue(data);
+                        _apx6ModeCockpitDialPos = _apx6ModeDcsbiosOutputCockpit.GetUIntValue(e.Data);
                         if (tmp != _apx6ModeCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);

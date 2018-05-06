@@ -22,20 +22,21 @@ namespace NonVisuals
         //private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
         private HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
         private HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
+        private HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
         private HashSet<RadioPanelPZ69KnobEmulator> _radioPanelKnobs = new HashSet<RadioPanelPZ69KnobEmulator>();
         private bool _isFirstNotification = true;
         private byte[] _oldRadioPanelValue = { 0, 0, 0 };
         private byte[] _newRadioPanelValue = { 0, 0, 0 };
         private object _dcsBiosDataReceivedLock = new object();
 
-        private List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator>(){RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR};
+        private List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator>() { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
         private List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new List<RadioPanelPZ69KnobsEmulator>() { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
         private double _upperActive = -1;
         private double _upperStandby = -1;
         private double _lowerActive = -1;
         private double _lowerStandby = -1;
-        
-        public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+
+        public RadioPanelPZ69Emulator(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -95,6 +96,12 @@ namespace NonVisuals
                         radioPanelPZ69DisplayValue.ImportSettings(setting);
                         _displayValues.Add(radioPanelPZ69DisplayValue);
                     }
+                    else if (setting.StartsWith("RadioPanelBIPLink{"))
+                    {
+                        var bipLinkPZ69 = new BIPLinkPZ69();
+                        bipLinkPZ69.ImportSettings(setting);
+                        _bipLinks.Add(bipLinkPZ69);
+                    }
                 }
             }
             OnSettingsApplied();
@@ -123,20 +130,28 @@ namespace NonVisuals
                     result.Add(tmp);
                 }
             }
+            foreach (var bipLink in _bipLinks)
+            {
+                var tmp = bipLink.ExportSettings();
+                if (!string.IsNullOrEmpty(tmp))
+                {
+                    result.Add(tmp);
+                }
+            }
             return result;
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
 
             lock (_dcsBiosDataReceivedLock)
             {
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
             }
 
         }
@@ -145,11 +160,17 @@ namespace NonVisuals
         {
             _keyBindings.Clear();
             _displayValues.Clear();
+            _bipLinks.Clear();
         }
 
         public HashSet<KeyBindingPZ69> KeyBindingsHashSet
         {
             get { return _keyBindings; }
+        }
+
+        public HashSet<BIPLinkPZ69> BipLinkHashSet
+        {
+            get { return _bipLinks; }
         }
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet
@@ -189,6 +210,14 @@ namespace NonVisuals
                             break;
                         }
                     }
+                    foreach (var bipLinkPZ55 in _bipLinks)
+                    {
+                        if (bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && bipLinkPZ55.WhenTurnedOn == radioPanelKey.IsOn)
+                        {
+                            bipLinkPZ55.Execute();
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -216,7 +245,7 @@ namespace NonVisuals
                         {
                             if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
                             {
-                                _upperActive =  double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
+                                _upperActive = double.Parse(displayValue.Value, Common.GetPZ69FullDisplayNumberFormat());
                             }
                             else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
                             {
@@ -392,7 +421,7 @@ namespace NonVisuals
         {
             //This must accept lists
             var found = false;
-            RemoveRadioPanelKeyFromList(2, radioPanelPZ69Knob, whenTurnedOn);
+            RemoveRadioPanelKnobFromList(ControlListPZ69.KEYS, radioPanelPZ69Knob, whenTurnedOn);
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBinding.WhenTurnedOn == whenTurnedOn)
@@ -420,26 +449,70 @@ namespace NonVisuals
             }
             IsDirtyMethod();
         }
-        private void RemoveRadioPanelKeyFromList(int list, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn = true)
+
+
+        public BIPLinkPZ69 AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, BIPLinkPZ69 bipLinkPZ69, bool whenTurnedOn = true)
         {
-            switch (list)
+            //This must accept lists
+            var found = false;
+            BIPLinkPZ69 tmpBIPLinkPZ69 = null;
+
+            RemoveRadioPanelKnobFromList(ControlListPZ69.BIPS, radioPanelPZ69Knob, whenTurnedOn);
+            foreach (var bipLink in _bipLinks)
             {
-                case 1:
+                if (bipLink.RadioPanelPZ69Knob == radioPanelPZ69Knob && bipLink.WhenTurnedOn == whenTurnedOn)
+                {
+                    bipLink.BIPLights = bipLinkPZ69.BIPLights;
+                    bipLink.Description = bipLinkPZ69.Description;
+                    bipLink.RadioPanelPZ69Knob = radioPanelPZ69Knob;
+                    bipLink.WhenTurnedOn = whenTurnedOn;
+                    tmpBIPLinkPZ69 = bipLink;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found && bipLinkPZ69.BIPLights.Count > 0)
+            {
+                bipLinkPZ69.RadioPanelPZ69Knob = radioPanelPZ69Knob;
+                bipLinkPZ69.WhenTurnedOn = whenTurnedOn;
+                tmpBIPLinkPZ69 = bipLinkPZ69;
+                _bipLinks.Add(bipLinkPZ69);
+            }
+            IsDirtyMethod();
+            return tmpBIPLinkPZ69;
+        }
+
+        private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn = true)
+        {
+            var found = false;
+            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.KEYS)
+            {
+                foreach (var keyBindingPZ55 in _keyBindings)
+                {
+                    if (keyBindingPZ55.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBindingPZ55.WhenTurnedOn == whenTurnedOn)
                     {
-                        foreach (var keyBindingPZ55 in _keyBindings)
-                        {
-                            if (keyBindingPZ55.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBindingPZ55.WhenTurnedOn == whenTurnedOn)
-                            {
-                                keyBindingPZ55.OSKeyPress = null;
-                            }
-                            break;
-                        }
-                        break;
+                        keyBindingPZ55.OSKeyPress = null;
                     }
-                case 2:
+                    found = true;
+                    break;
+                }
+            }
+            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.BIPS)
+            {
+                foreach (var bipLink in _bipLinks)
+                {
+                    if (bipLink.RadioPanelPZ69Knob == radioPanelPZ69Knob && bipLink.WhenTurnedOn == whenTurnedOn)
                     {
-                        break;
+                        bipLink.BIPLights.Clear();
                     }
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                IsDirtyMethod();
             }
         }
 
@@ -506,7 +579,7 @@ namespace NonVisuals
             }
         }
 
-        
+
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
@@ -563,8 +636,14 @@ namespace NonVisuals
             return "0X";
         }
 
-       
-        }
 
+    }
+    
+    public enum ControlListPZ69 : byte
+    {
+        ALL,
+        KEYS,
+        BIPS
+    }
 
 }

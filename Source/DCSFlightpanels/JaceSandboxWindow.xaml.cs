@@ -20,7 +20,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for JaceSandbox.xaml
     /// </summary>
-    public partial class JaceSandboxWindow : Window, IDcsBiosDataListener
+    public partial class JaceSandboxWindow : Window, IDcsBiosDataListener, IDisposable
     {
 
         private DCSBIOSOutput _dcsbiosOutput1 = null;
@@ -60,6 +60,28 @@ namespace DCSFlightpanels
             var thread = new Thread(ThreadLoop);
             thread.Start();
             InitializeComponent();
+        }
+
+        ~JaceSandboxWindow()
+        {
+            // Finalizer calls Dispose(false)  
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                _autoResetEvent?.Close();
+            }
+            // free native resources
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         private void ThreadLoop()
@@ -236,13 +258,13 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DcsBiosDataReceived(uint address, uint data)
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            if (_dcsbiosOutput1?.Address == address)
+            if (_dcsbiosOutput1?.Address == e.Address)
             {
-                if (!Equals(_value1, data))
+                if (!Equals(_value1, e.Data))
                 {
-                    _value1 = data;
+                    _value1 = e.Data;
                     _dataChanged = true;
                     Dispatcher.BeginInvoke(
                         (Action)delegate
@@ -251,11 +273,11 @@ namespace DCSFlightpanels
                         });
                 }
             }
-            if (_dcsbiosOutput2?.Address == address)
+            if (_dcsbiosOutput2?.Address == e.Address)
             {
-                if (!Equals(_value2, data))
+                if (!Equals(_value2, e.Data))
                 {
-                    _value2 = data;
+                    _value2 = e.Data;
                     _dataChanged = true;
                     Dispatcher.BeginInvoke(
                         (Action)delegate
@@ -264,11 +286,11 @@ namespace DCSFlightpanels
                         });
                 }
             }
-            if (_dcsbiosOutput3?.Address == address)
+            if (_dcsbiosOutput3?.Address == e.Address)
             {
-                if (!Equals(_value3, data))
+                if (!Equals(_value3, e.Data))
                 {
-                    _value3 = data;
+                    _value3 = e.Data;
                     _dataChanged = true;
                     Dispatcher.BeginInvoke(
                         (Action)delegate
@@ -277,11 +299,11 @@ namespace DCSFlightpanels
                         });
                 }
             }
-            if (_dcsbiosOutput4?.Address == address)
+            if (_dcsbiosOutput4?.Address == e.Address)
             {
-                if (!Equals(_value4, data))
+                if (!Equals(_value4, e.Data))
                 {
-                    _value4 = data;
+                    _value4 = e.Data;
                     _dataChanged = true;
                     Dispatcher.BeginInvoke(
                         (Action)delegate
@@ -290,11 +312,11 @@ namespace DCSFlightpanels
                         });
                 }
             }
-            if (_dcsbiosOutput5?.Address == address)
+            if (_dcsbiosOutput5?.Address == e.Address)
             {
-                if (!Equals(_value5, data))
+                if (!Equals(_value5, e.Data))
                 {
-                    _value5 = data;
+                    _value5 = e.Data;
                     _dataChanged = true;
                     Dispatcher.BeginInvoke(
                         (Action)delegate

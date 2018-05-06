@@ -20,7 +20,7 @@ namespace NonVisuals
 
     public interface ISRSDataListener
     {
-        void SRSDataReceived();
+        void SRSDataReceived(object sender);
     }
 
     public static class SRSListenerFactory
@@ -65,7 +65,7 @@ namespace NonVisuals
 
     public class SRSListener
     {
-        public delegate void SRSDataReceivedEventHandler();
+        public delegate void SRSDataReceivedEventHandler(object sender);
         public event SRSDataReceivedEventHandler OnSRSDataReceived;
 
         public void Attach(ISRSDataListener srsDataListener)
@@ -122,7 +122,7 @@ namespace NonVisuals
                             {
                                 _srsPlayerRadioInfo = srsPlayerRadioInfo;
                             }
-                            OnSRSDataReceived?.Invoke();
+                            OnSRSDataReceived?.Invoke(this);
                         }
                     }
                     catch (Exception e)

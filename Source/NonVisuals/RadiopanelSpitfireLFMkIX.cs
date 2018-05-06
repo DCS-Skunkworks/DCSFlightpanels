@@ -72,7 +72,7 @@ namespace NonVisuals
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69SpitfireLFMkIX(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -81,23 +81,23 @@ namespace NonVisuals
         }
 
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(78030, e, "DCSBIOSStringReceived()");
+                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
             }
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
                 
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -109,12 +109,12 @@ namespace NonVisuals
 
 
                 //HF Radio Off Button
-                if (address == _hfRadioOffDcsbiosOutput.Address)
+                if (e.Address == _hfRadioOffDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
                         var tmp = _hfRadioOffCockpitButton;
-                        _hfRadioOffCockpitButton = _hfRadioOffDcsbiosOutput.GetUIntValue(data);
+                        _hfRadioOffCockpitButton = _hfRadioOffDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioOffCockpitButton)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -123,12 +123,12 @@ namespace NonVisuals
                 }
 
                 //HF Radio Channel A Button
-                if (address == _hfRadioChannelAPresetDcsbiosOutput.Address)
+                if (e.Address == _hfRadioChannelAPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
                         var tmp = _hfRadioChannelACockpitButton;
-                        _hfRadioChannelACockpitButton = _hfRadioChannelAPresetDcsbiosOutput.GetUIntValue(data);
+                        _hfRadioChannelACockpitButton = _hfRadioChannelAPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelACockpitButton)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -137,12 +137,12 @@ namespace NonVisuals
                 }
 
                 //HF Radio Channel B Button
-                if (address == _hfRadioChannelBPresetDcsbiosOutput.Address)
+                if (e.Address == _hfRadioChannelBPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
                         var tmp = _hfRadioChannelBCockpitButton;
-                        _hfRadioChannelBCockpitButton = _hfRadioChannelBPresetDcsbiosOutput.GetUIntValue(data);
+                        _hfRadioChannelBCockpitButton = _hfRadioChannelBPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelBCockpitButton)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -151,12 +151,12 @@ namespace NonVisuals
                 }
 
                 //HF Radio Channel C Button
-                if (address == _hfRadioChannelCPresetDcsbiosOutput.Address)
+                if (e.Address == _hfRadioChannelCPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
                         var tmp = _hfRadioChannelCCockpitButton;
-                        _hfRadioChannelCCockpitButton = _hfRadioChannelCPresetDcsbiosOutput.GetUIntValue(data);
+                        _hfRadioChannelCCockpitButton = _hfRadioChannelCPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelCCockpitButton)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -165,12 +165,12 @@ namespace NonVisuals
                 }
 
                 //HF Radio Channel B Button
-                if (address == _hfRadioChannelDPresetDcsbiosOutput.Address)
+                if (e.Address == _hfRadioChannelDPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
                         var tmp = _hfRadioChannelDCockpitButton;
-                        _hfRadioChannelDCockpitButton = _hfRadioChannelDPresetDcsbiosOutput.GetUIntValue(data);
+                        _hfRadioChannelDCockpitButton = _hfRadioChannelDPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadioChannelDCockpitButton)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -179,12 +179,12 @@ namespace NonVisuals
                 }
 
                 //HF Radio Mode 1
-                if (address == _hfRadioMode1DialPresetDcsbiosOutput.Address)
+                if (e.Address == _hfRadioMode1DialPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioModeDialObject1)
                     {
                         var tmp = _hfRadio1ModeCockpitDialPosition;
-                        _hfRadio1ModeCockpitDialPosition = _hfRadioMode1DialPresetDcsbiosOutput.GetUIntValue(data);
+                        _hfRadio1ModeCockpitDialPosition = _hfRadioMode1DialPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadio1ModeCockpitDialPosition)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -193,12 +193,12 @@ namespace NonVisuals
                 }
 
                 //HF Radio Mode 2
-                if (address == _hfRadioMode2DialPresetDcsbiosOutput.Address)
+                if (e.Address == _hfRadioMode2DialPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioModeDialObject1)
                     {
                         var tmp = _hfRadio2ModeCockpitDialPosition;
-                        _hfRadio2ModeCockpitDialPosition = _hfRadioMode2DialPresetDcsbiosOutput.GetUIntValue(data);
+                        _hfRadio2ModeCockpitDialPosition = _hfRadioMode2DialPresetDcsbiosOutput.GetUIntValue(e.Data);
                         if (tmp != _hfRadio2ModeCockpitDialPosition)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -207,12 +207,12 @@ namespace NonVisuals
                 }
 
                 //IFF B
-                if (address == _iffBIFFDcsbiosOutputDial.Address)
+                if (e.Address == _iffBIFFDcsbiosOutputDial.Address)
                 {
                     lock (_lockIFFDialObject1)
                     {
                         var tmp = _iffBIFFCockpitDialPos;
-                        _iffBIFFCockpitDialPos = _iffBIFFDcsbiosOutputDial.GetUIntValue(data);
+                        _iffBIFFCockpitDialPos = _iffBIFFDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _iffBIFFCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -221,12 +221,12 @@ namespace NonVisuals
                 }
 
                 //HF Radio Channel B Button
-                if (address == _iffDIFFDcsbiosOutputDial.Address)
+                if (e.Address == _iffDIFFDcsbiosOutputDial.Address)
                 {
                     lock (_lockIFFDialObject1)
                     {
                         var tmp = _iffDIFFCockpitDialPos;
-                        _iffDIFFCockpitDialPos = _iffDIFFDcsbiosOutputDial.GetUIntValue(data);
+                        _iffDIFFCockpitDialPos = _iffDIFFDcsbiosOutputDial.GetUIntValue(e.Data);
                         if (tmp != _iffDIFFCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);

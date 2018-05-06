@@ -122,20 +122,6 @@
                 </Image.Style>
             </Image>
 
-            <Button>
-                <Image Source="/DCSFlightpanels;component/Images/black.png" Name="ButtonLoadProfileFast" MouseDown="ImageDcsBiosConnected_OnMouseDown"  ToolTip="Quick load profile (dev)" Tag="False" Visibility="Collapsed">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Style.Triggers>
-                                <Trigger Property="Tag" Value="False">
-                                    <Setter Property="Opacity" Value="0.5" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
-                </Image>
-            </Button>
-
             <Label Margin="200,0,0,0" Name="LabelAirframe" FontWeight="Bold" Content="None"/>
             <Label Margin="300,0,0,0" Name="LabelVersion" HorizontalContentAlignment="Right" HorizontalAlignment="Right" FontWeight="Bold" FontSize="9"/>
         </ToolBar>

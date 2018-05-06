@@ -235,6 +235,7 @@ namespace DCSFlightpanels
 
                     Settings.Default.DebugOn = CheckBoxDoDebug.IsChecked == true;
                     Settings.Default.DebugToFile = CheckBoxDebugToFile.IsChecked == true;
+                    Settings.Default.Save();
                 }
 
                 if (_dcsbiosChanged)

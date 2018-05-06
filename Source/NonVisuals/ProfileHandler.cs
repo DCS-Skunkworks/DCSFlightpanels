@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Windows;
 using ClassLibraryCommon;
@@ -15,57 +16,57 @@ namespace NonVisuals
 
     public class ProfileHandler : IProfileHandlerListener
     {
-        public delegate void ProfileReadFromFileEventHandler(List<string> listPanelSettingsData);
+        public delegate void ProfileReadFromFileEventHandler(object sender, SettingsReadFromFileEventArgs e);
         public event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
 
-        public delegate void SavePanelSettingsEventHandler(ProfileHandler panelProfileHandler);
+        public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
         public event SavePanelSettingsEventHandler OnSavePanelSettings;
 
-        public delegate void AirframeSelectedEventHandler(DCSAirframe dcsAirframe);
+        public delegate void AirframeSelectedEventHandler(object sender, AirframEventArgs e);
         public event AirframeSelectedEventHandler OnAirframeSelected;
 
-        public delegate void ClearPanelSettingsEventHandler();
+        public delegate void ClearPanelSettingsEventHandler(object sender);
         public event ClearPanelSettingsEventHandler OnClearPanelSettings;
 
-        public delegate void UserMessageEventHandler(string userMessage);
+        public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
         public event UserMessageEventHandler OnUserMessageEventHandler;
 
         public void Attach(SaitekPanel saitekPanel)
         {
-            OnSettingsReadFromFile += new ProfileReadFromFileEventHandler(saitekPanel.PanelSettingsReadFromFile);
-            OnSavePanelSettings += new SavePanelSettingsEventHandler(saitekPanel.SavePanelSettings);
-            OnClearPanelSettings += new ClearPanelSettingsEventHandler(saitekPanel.ClearPanelSettings);
-            OnAirframeSelected += new AirframeSelectedEventHandler(saitekPanel.SelectedAirframe);
+            OnSettingsReadFromFile += saitekPanel.PanelSettingsReadFromFile;
+            OnSavePanelSettings += saitekPanel.SavePanelSettings;
+            OnClearPanelSettings += saitekPanel.ClearPanelSettings;
+            OnAirframeSelected += saitekPanel.SelectedAirframe;
         }
 
         public void Detach(SaitekPanel saitekPanel)
         {
-            OnSettingsReadFromFile -= new ProfileReadFromFileEventHandler(saitekPanel.PanelSettingsReadFromFile);
-            OnSavePanelSettings -= new SavePanelSettingsEventHandler(saitekPanel.SavePanelSettings);
-            OnClearPanelSettings -= new ClearPanelSettingsEventHandler(saitekPanel.ClearPanelSettings);
-            OnAirframeSelected -= new AirframeSelectedEventHandler(saitekPanel.SelectedAirframe);
+            OnSettingsReadFromFile -= saitekPanel.PanelSettingsReadFromFile;
+            OnSavePanelSettings -= saitekPanel.SavePanelSettings;
+            OnClearPanelSettings -= saitekPanel.ClearPanelSettings;
+            OnAirframeSelected -= saitekPanel.SelectedAirframe;
         }
 
         public void Attach(IProfileHandlerListener saitekPanelSettingsListener)
         {
-            OnSettingsReadFromFile += new ProfileReadFromFileEventHandler(saitekPanelSettingsListener.PanelSettingsReadFromFile);
-            OnAirframeSelected += new AirframeSelectedEventHandler(saitekPanelSettingsListener.SelectedAirframe);
+            OnSettingsReadFromFile += saitekPanelSettingsListener.PanelSettingsReadFromFile;
+            OnAirframeSelected += saitekPanelSettingsListener.SelectedAirframe;
         }
 
         public void Detach(IProfileHandlerListener saitekPanelSettingsListener)
         {
-            OnSettingsReadFromFile -= new ProfileReadFromFileEventHandler(saitekPanelSettingsListener.PanelSettingsReadFromFile);
-            OnAirframeSelected -= new AirframeSelectedEventHandler(saitekPanelSettingsListener.SelectedAirframe);
+            OnSettingsReadFromFile -= saitekPanelSettingsListener.PanelSettingsReadFromFile;
+            OnAirframeSelected -= saitekPanelSettingsListener.SelectedAirframe;
         }
 
         public void AttachUserMessageHandler(IUserMessageHandler userMessageHandler)
         {
-            OnUserMessageEventHandler += new UserMessageEventHandler(userMessageHandler.UserMessage);
+            OnUserMessageEventHandler += userMessageHandler.UserMessage;
         }
 
         public void DetachUserMessageHandler(IUserMessageHandler userMessageHandler)
         {
-            OnUserMessageEventHandler -= new UserMessageEventHandler(userMessageHandler.UserMessage);
+            OnUserMessageEventHandler -= userMessageHandler.UserMessage;
         }
 
         //Both directory and filename
@@ -116,14 +117,7 @@ namespace NonVisuals
             }
         }
 
-        public void OpenProfileDEVELOPMENT()
-        {
-            var tempDirectory = string.IsNullOrEmpty(Filename) ? MyDocumentsPath() : Path.GetFullPath(Filename);
-            ClearAll();
-            LoadProfile("C:\\Users\\Jerker\\Documents\\A-10C.bindings");
-        }
-
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
@@ -135,11 +129,11 @@ namespace NonVisuals
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {
-                Common.DebugP("Settings changed for " + saitekPanelsEnum + "   " + uniqueId);
+                Common.DebugP("Settings changed for " + e.SaitekPanelEnum + "   " + e.UniqueId);
                 IsDirty = true;
             }
             catch (Exception ex)
@@ -160,7 +154,7 @@ namespace NonVisuals
             //This sends info to all to clear their settings
             if (OnClearPanelSettings != null)
             {
-                OnClearPanelSettings();
+                OnClearPanelSettings(this);
             }
         }
 
@@ -351,7 +345,7 @@ namespace NonVisuals
                 {
                     foreach (var profileFileInstanceID in _profileFileInstanceIDs)
                     {
-                        OnUserMessageEventHandler("The " + profileFileInstanceID.Value + " panel with USB Instance ID :" + Environment.NewLine + profileFileInstanceID.Key + Environment.NewLine + "cannot be found. Have you rearranged your panels (USB ports) or have you copied someone elses profile?" + Environment.NewLine + "Use the ID button to copy current Instance ID and replace the faulty one in the profile file.");
+                        OnUserMessageEventHandler(this, new UserMessageEventArgs(){UserMessage = "The " + profileFileInstanceID.Value + " panel with USB Instance ID :" + Environment.NewLine + profileFileInstanceID.Key + Environment.NewLine + "cannot be found. Have you rearranged your panels (USB ports) or have you copied someone elses profile?" + Environment.NewLine + "Use the ID button to copy current Instance ID and replace the faulty one in the profile file."});
                     }
                 }
             }
@@ -376,10 +370,10 @@ namespace NonVisuals
                     if (OnAirframeSelected != null)
                     {
                         //TODO DENNA ORSAKAR HÄNGANDE!!
-                        OnAirframeSelected(_airframe);
+                        OnAirframeSelected(this, new AirframEventArgs(){Airframe =  _airframe});
                     }
                     //TODO DENNA ORSAKAR HÄNGANDE!!
-                    OnSettingsReadFromFile(_listPanelSettingsData);
+                    OnSettingsReadFromFile(this, new SettingsReadFromFileEventArgs(){Settings = _listPanelSettingsData});
                 }
             }
             catch (Exception e)
@@ -412,7 +406,7 @@ namespace NonVisuals
         {
             if (OnSavePanelSettings != null)
             {
-                OnSavePanelSettings(this);
+                OnSavePanelSettings(this, new ProfileHandlerEventArgs(){ProfileHandlerEA =  this});
             }
         }
 
@@ -549,7 +543,7 @@ namespace NonVisuals
                 _airframe = value;
                 if (OnAirframeSelected != null)
                 {
-                    OnAirframeSelected(_airframe);
+                    OnAirframeSelected(this, new AirframEventArgs() {Airframe = _airframe});
                 }
             }
         }
@@ -570,7 +564,7 @@ namespace NonVisuals
             set { _lastProfileUsed = value; }
         }
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
@@ -588,5 +582,22 @@ namespace NonVisuals
         }
 
         public bool ProfileLoaded => _profileLoaded || _isNewProfile;
+
     }
+
+    public class AirframEventArgs : EventArgs
+    {
+        public DCSAirframe Airframe { get; set; }
+    }
+
+    public class ProfileHandlerEventArgs : EventArgs
+    {
+        public ProfileHandler ProfileHandlerEA { get; set; }
+    }
+
+    public class UserMessageEventArgs : EventArgs
+    {
+        public string UserMessage { get; set; }
+    }
+    
 }

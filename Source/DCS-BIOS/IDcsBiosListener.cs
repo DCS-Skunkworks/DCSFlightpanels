@@ -1,9 +1,15 @@
-﻿namespace DCS_BIOS
+﻿using System;
+
+namespace DCS_BIOS
 {
     public interface IDcsBiosDataListener
     {
-        void DcsBiosDataReceived(uint address, uint data);
-        //void DcsBiosDataReceived(byte[] array);
-        //void GetDcsBiosData(byte[] bytes);
+        void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
+    }
+
+    public class DCSBIOSDataEventArgs : EventArgs
+    {
+        public uint Address { get; set; }
+        public uint Data { get; set; }
     }
 }

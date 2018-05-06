@@ -76,8 +76,8 @@
     <Reference Include="Jace">
       <HintPath>..\packages\Jace.0.8.7\lib\net40\Jace.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -96,23 +96,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BacklitPanelBIP.cs" />
+    <Compile Include="BIPFactory.cs" />
+    <Compile Include="BIPLink.cs" />
+    <Compile Include="BIPLinkPZ55.cs" />
+    <Compile Include="BIPLinkPZ69.cs" />
+    <Compile Include="BIPLinkPZ70.cs" />
+    <Compile Include="BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
-    <Compile Include="DCSBIOSBindingHESP.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
     <Compile Include="DCSBIOSBindingBase.cs" />
     <Compile Include="DCSBIOSBindingTPM.cs" />
     <Compile Include="DCSBIOSBindingPZ70.cs" />
     <Compile Include="DCSBIOSBindingPZ55.cs" />
     <Compile Include="DcsOutputAndColorBinding.cs" />
-    <Compile Include="HESP.cs" />
-    <Compile Include="HESPKey.cs" />
     <Compile Include="HIDHandler.cs" />
     <Compile Include="IGlobalHandler.cs" />
     <Compile Include="IProfileHandlerListener.cs" />
     <Compile Include="IRadioPanel.cs" />
     <Compile Include="ISaitekPanelListener.cs" />
     <Compile Include="IUserMessageHandler.cs" />
-    <Compile Include="KeyBindingHESP.cs" />
     <Compile Include="KeyBindingPZ69.cs" />
     <Compile Include="KeyBindingTPM.cs" />
     <Compile Include="KnobBindingPZ70.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="MultiPanelKnob.cs" />
     <Compile Include="MultiPanelPZ70.cs" />
     <Compile Include="OSKeyPress.cs" />
+    <Compile Include="BIPLight.cs" />
     <Compile Include="PerformanceTimer.cs" />
     <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,9 +132,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelPZ69DisplayValue.cs" />
     <Compile Include="RadioPanelPZ69KnobEmulator.cs" />
-    <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelKnobSA342.cs" />
     <Compile Include="RadioPanelKnobAJS37.cs" />
     <Compile Include="RadioPanelKnobBf109.cs" />
@@ -143,7 +146,6 @@
     <Compile Include="RadioPanelKnobP51D.cs" />
     <Compile Include="RadiopanelKnobSpitfireLFMkIX.cs" />
     <Compile Include="RadioPanelKnobUH1H.cs" />
-    <Compile Include="RadioPanelPZ69SRS.cs" />
     <Compile Include="RadioPanelPZ69SA342.cs" />
     <Compile Include="RadioPanelPZ69AJS37.cs" />
     <Compile Include="RadioPanelPZ69Bf109.cs" />
@@ -156,19 +158,20 @@
     <Compile Include="RadioPanelPZ69A10C.cs" />
     <Compile Include="RadioPanelPZ69Base.cs" />
     <Compile Include="RadioPanelPZ69P51D.cs" />
+    <Compile Include="RadioPanelPZ69SRS.cs" />
     <Compile Include="RadioPanelPZ69UH1H.cs" />
     <Compile Include="RadiopanelSpitfireLFMkIX.cs" />
     <Compile Include="SaitekPanel.cs" />
+    <Compile Include="RadioPanelPZ69Emulator.cs" />
     <Compile Include="SRSListener.cs" />
     <Compile Include="SRSPlayerRadioInfo.cs" />
     <Compile Include="SRSRadioInformation.cs" />
-    <Compile Include="RadioPanelPZ69Emulator.cs" />
     <Compile Include="TPMPanelSwitch.cs" />
     <Compile Include="SwitchPanelKey.cs" />
     <Compile Include="TPMPanel.cs" />
     <Compile Include="SwitchPanelPZ55.cs" />
     <Compile Include="VirtualKeyCode.cs" />
-    <Compile Include="WindowsAPI.cs" />
+    <Compile Include="NativeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="huey_icon.ico" />

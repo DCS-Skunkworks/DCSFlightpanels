@@ -17,7 +17,7 @@ namespace DCS_BIOS
     }
 
 
-    public class DCSBIOS
+    public class DCSBIOS : IDisposable
     {
         //public delegate void DcsDataReceivedEventHandler(byte[] bytes);
         //public event DcsDataReceivedEventHandler OnDcsDataReceived;
@@ -91,6 +91,29 @@ namespace DCS_BIOS
 
             //_tcpIpPort = tcpIpPort;
             _dcsBIOSSO = this;
+        }
+
+        ~DCSBIOS()
+        {
+            // Finalizer calls Dispose(false)  
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // dispose managed resources
+                _udpSendClient?.Close();
+                _udpReceiveClient?.Close();
+            }
+            // free native resources
         }
 
         public void ReceiveDataUdp()
@@ -264,11 +287,19 @@ namespace DCS_BIOS
 
         public void AttachDataReceivedListener(IDcsBiosDataListener iDcsBiosDataListener)
         {
+            if (_dcsProtocolParser == null)
+            {
+                return;
+            }
             _dcsProtocolParser.OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
         }
 
         public void DetachDataReceivedListener(IDcsBiosDataListener iDcsBiosDataListener)
         {
+            if (_dcsProtocolParser == null)
+            {
+                return;
+            }
             _dcsProtocolParser.OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
         }
 

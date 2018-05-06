@@ -27,6 +27,7 @@ namespace NonVisuals
          */
         private HashSet<DCSBIOSBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
+        private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
         //public static SwitchPanelPZ55 SwitchPanelPZ55SO;
         private HashSet<SwitchPanelKey> _switchPanelKeys = new HashSet<SwitchPanelKey>();
         private bool _isFirstNotification = true;
@@ -42,7 +43,7 @@ namespace NonVisuals
         private bool _manualLandingGearLeds;
         private Thread _manualLandingGearThread;
 
-        public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton)
+        public SwitchPanelPZ55(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton, enableDCSBIOS)
         {
             //Fixed values
             VendorId = 0x6A3;
@@ -110,6 +111,12 @@ namespace NonVisuals
                         dcsBIOSBindingPZ55.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
                     }
+                    else if (setting.StartsWith("SwitchPanelBIPLink{"))
+                    {
+                        var bipLinkPZ55 = new BIPLinkPZ55();
+                        bipLinkPZ55.ImportSettings(setting);
+                        _bipLinks.Add(bipLinkPZ55);
+                    }
                     else if (setting.StartsWith("ManualLandingGearLEDs{"))
                     {
                         _manualLandingGearLeds = setting.Contains("True");
@@ -141,6 +148,13 @@ namespace NonVisuals
                     result.Add(dcsBiosBinding.ExportSettings());
                 }
             }
+            foreach (var bipLink in _bipLinks)
+            {
+                if (bipLink.BIPLights.Count > 0)
+                {
+                    result.Add(bipLink.ExportSettings());
+                }
+            }
             Common.DebugP("Exporting " + _listColorOutputBinding.Count + " ColorOutBindings from SwitchPanelPZ55");
             foreach (var colorOutputBinding in _listColorOutputBinding)
             {
@@ -150,18 +164,18 @@ namespace NonVisuals
             return result;
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
 
             lock (_dcsBiosDataReceivedLock)
             {
-                UpdateCounter(address, data);
-                CheckDcsDataForColorChangeHook(address, data);
+                UpdateCounter(e.Address, e.Data);
+                CheckDcsDataForColorChangeHook(e.Address, e.Data);
             }
 
         }
@@ -171,12 +185,19 @@ namespace NonVisuals
             _keyBindings.Clear();
             _listColorOutputBinding.Clear();
             _dcsBiosBindings.Clear();
+            _bipLinks.Clear();
         }
 
         public HashSet<KeyBindingPZ55> KeyBindingsHashSet
         {
             get { return _keyBindings; }
             set { _keyBindings = value; }
+        }
+
+        public HashSet<BIPLinkPZ55> BIPLinkHashSet
+        {
+            get { return _bipLinks; }
+            set { _bipLinks = value; }
         }
 
         private void PZ55SwitchChanged(SwitchPanelKey switchPanelKey)
@@ -297,6 +318,14 @@ namespace NonVisuals
                         break;
                     }
                 }
+                foreach (var bipLinkPZ55 in _bipLinks)
+                {
+                    if (bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && bipLinkPZ55.WhenTurnedOn == switchPanelKey.IsOn)
+                    {
+                        bipLinkPZ55.Execute();
+                        break;
+                    }
+                }
                 if (!found)
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -382,8 +411,8 @@ namespace NonVisuals
         {
             if (string.IsNullOrEmpty(keys))
             {
-                var tmp = new SwitchPanelPZ55KeyOnOff(switchPanelPZ55Key, whenTurnedOn);
-                ClearAllBindings(tmp);
+                RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
+                IsDirtyMethod();
                 return;
             }
             var found = false;
@@ -414,34 +443,14 @@ namespace NonVisuals
             Common.DebugP("SwitchPanelPZ55 _keyBindings : " + _keyBindings.Count);
             IsDirtyMethod();
         }
-
-        public void ClearAllBindings(SwitchPanelPZ55KeyOnOff switchPanelPZ55KeyOnOff)
-        {
-            //This must accept lists
-            foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelPZ55KeyOnOff.On)
-                {
-                    keyBinding.OSKeyPress = null;
-                }
-            }
-            foreach (var dcsBiosBinding in _dcsBiosBindings)
-            {
-                if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelPZ55KeyOnOff.On)
-                {
-                    dcsBiosBinding.DCSBIOSInputs.Clear();
-                }
-            }
-            Common.DebugP("SwitchPanelPZ55 _keyBindings : " + _keyBindings.Count);
-            Common.DebugP("SwitchPanelPZ55 _dcsBiosBindings : " + _dcsBiosBindings.Count);
-            IsDirtyMethod();
-        }
-
-        public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
+        
+        public OSKeyPress AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
         {
             //This must accept lists
             var found = false;
-            RemoveSwitchPanelKeyFromList(2, switchPanelPZ55Key, whenTurnedOn);
+            OSKeyPress osKeyPress = null;
+
+            RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBinding.WhenTurnedOn == whenTurnedOn)
@@ -452,7 +461,8 @@ namespace NonVisuals
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                        osKeyPress = new OSKeyPress(information, sortedList);
+                        keyBinding.OSKeyPress = osKeyPress;
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -463,11 +473,13 @@ namespace NonVisuals
             {
                 var keyBinding = new KeyBindingPZ55();
                 keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                osKeyPress = new OSKeyPress(information, sortedList);
+                keyBinding.OSKeyPress = osKeyPress;
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
             IsDirtyMethod();
+            return osKeyPress;
         }
 
         public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
@@ -477,7 +489,7 @@ namespace NonVisuals
 
             //This must accept lists
             var found = false;
-            RemoveSwitchPanelKeyFromList(1, switchPanelPZ55Key, whenTurnedOn);
+            RemoveSwitchPanelSwitchFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55Key, whenTurnedOn);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
@@ -501,34 +513,77 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        private void RemoveSwitchPanelKeyFromList(int list, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn = true)
+        public BIPLinkPZ55 AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn = true)
         {
-            switch (list)
+            //This must accept lists
+            var found = false;
+            BIPLinkPZ55 tmpBIPLinkPZ55 = null;
+
+            RemoveSwitchPanelSwitchFromList(ControlListPZ55.BIPS, switchPanelPZ55Key, whenTurnedOn);
+            foreach (var bipLink in _bipLinks)
             {
-                case 1:
+                if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
+                {
+                    bipLink.BIPLights = bipLinkPZ55.BIPLights;
+                    bipLink.Description = bipLinkPZ55.Description;
+                    bipLink.SwitchPanelPZ55Key = switchPanelPZ55Key;
+                    bipLink.WhenTurnedOn = whenTurnedOn;
+                    tmpBIPLinkPZ55 = bipLink;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found && bipLinkPZ55.BIPLights.Count > 0)
+            {
+                bipLinkPZ55.SwitchPanelPZ55Key = switchPanelPZ55Key;
+                bipLinkPZ55.WhenTurnedOn = whenTurnedOn;
+                tmpBIPLinkPZ55 = bipLinkPZ55;
+                _bipLinks.Add(bipLinkPZ55);
+            }
+            IsDirtyMethod();
+            return tmpBIPLinkPZ55;
+        }
+        
+        public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn = true)
+        {
+            var found = false;
+            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
+            {
+                foreach (var keyBindingPZ55 in _keyBindings)
+                {
+                    if (keyBindingPZ55.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBindingPZ55.WhenTurnedOn == whenTurnedOn)
                     {
-                        foreach (var keyBindingPZ55 in _keyBindings)
-                        {
-                            if (keyBindingPZ55.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBindingPZ55.WhenTurnedOn == whenTurnedOn)
-                            {
-                                keyBindingPZ55.OSKeyPress = null;
-                            }
-                            break;
-                        }
-                        break;
+                        keyBindingPZ55.OSKeyPress = null;
+                        found = true;
                     }
-                case 2:
+                }
+            }
+            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.DCSBIOS)
+            {
+                foreach (var dcsBiosBinding in _dcsBiosBindings)
+                {
+                    if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                     {
-                        foreach (var dcsBiosBinding in _dcsBiosBindings)
-                        {
-                            if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
-                            {
-                                dcsBiosBinding.DCSBIOSInputs.Clear();
-                            }
-                            break;
-                        }
-                        break;
+                        dcsBiosBinding.DCSBIOSInputs.Clear();
+                        found = true;
                     }
+                }
+            }
+            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.BIPS)
+            {
+                foreach (var bipLink in _bipLinks)
+                {
+                    if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
+                    {
+                        bipLink.BIPLights.Clear();
+                        found = true;
+                    }
+                }
+            }
+
+            if (found)
+            {
+                IsDirtyMethod();
             }
         }
 
@@ -878,7 +933,15 @@ namespace NonVisuals
         {
             return "0X";
         }
+
+
     }
 
-
+    public enum ControlListPZ55 : byte
+    {
+        ALL,
+        DCSBIOS,
+        KEYS,
+        BIPS
+    }
 }

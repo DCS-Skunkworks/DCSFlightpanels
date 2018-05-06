@@ -103,11 +103,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Jace.0.8.7\lib\net40\Jace.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Octokit, Version=0.28.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.28.0\lib\net45\Octokit.dll</HintPath>
+    <Reference Include="Octokit, Version=0.29.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.29.0\lib\net45\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -141,14 +141,14 @@
     <Compile Include="DCSBIOSControlsConfigsWindow.xaml.cs">
       <DependentUpon>DCSBIOSControlsConfigsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BipLightWindow.xaml.cs">
+      <DependentUpon>BipLightWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DCSBiosInputWindow.xaml.cs">
       <DependentUpon>DCSBiosInputWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="HESPUserControl.xaml.cs">
-      <DependentUpon>HESPUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
@@ -174,9 +174,6 @@
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlEmulator.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="RadioPanelPZ69UserControlSRS.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
@@ -211,9 +208,15 @@
     <Compile Include="RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSpitfireLFMkIX.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelPZ69UserControlSRS.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadioPanelPZ69UserControlUH1H.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BIPLinkWindow.xaml.cs">
+      <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SequenceWindow.xaml.cs">
       <DependentUpon>SequenceWindow.xaml</DependentUpon>
@@ -224,9 +227,13 @@
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagDataClassTPM.cs" />
+    <Compile Include="TagDataClassPZ69.cs" />
+    <Compile Include="TagDataClassPZ70.cs" />
     <Compile Include="TextBlockDialogWindow.xaml.cs">
       <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagDataClassPZ55.cs" />
     <Compile Include="TPMPanelUserControl.xaml.cs">
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -246,6 +253,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="BipLightWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DCSBiosInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -255,10 +266,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DCSBiosOutputTriggerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HESPUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -299,10 +306,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RadioPanelPZ69UserControlEmulator.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlSRS.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -350,9 +353,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="RadioPanelPZ69UserControlSRS.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="RadioPanelPZ69UserControlUH1H.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BIPLinkWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SequenceWindow.xaml">
       <SubType>Designer</SubType>
@@ -583,9 +594,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\hesp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

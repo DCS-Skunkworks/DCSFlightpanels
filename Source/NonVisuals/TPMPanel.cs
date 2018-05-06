@@ -18,6 +18,7 @@ namespace NonVisuals
          */
         private HashSet<DCSBIOSBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
+        private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private HashSet<TPMPanelSwitch> _tpmPanelSwitches = new HashSet<TPMPanelSwitch>();
         private bool _isFirstNotification = true;
         private byte[] _oldTPMPanelValue = { 0, 0, 0, 0, 0 };
@@ -25,7 +26,7 @@ namespace NonVisuals
         //private HidDevice _hidReadDevice;
         private object _dcsBiosDataReceivedLock = new object();
 
-        public TPMPanel(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.TPM, hidSkeleton)
+        public TPMPanel(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.TPM, hidSkeleton, enableDCSBIOS)
         {
             //Fixed values
             VendorId = 0x6A3;
@@ -88,6 +89,12 @@ namespace NonVisuals
                         dcsBIOSBindingTPM.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingTPM);
                     }
+                    else if (setting.StartsWith("TPMPanelBipLink{"))
+                    {
+                        var tmpBipLink = new BIPLinkTPM();
+                        tmpBipLink.ImportSettings(setting);
+                        _bipLinks.Add(tmpBipLink);
+                    }
                 }
             }
             OnSettingsApplied();
@@ -115,24 +122,30 @@ namespace NonVisuals
                     result.Add(dcsBiosBinding.ExportSettings());
                 }
             }
+            foreach (var bipLink in _bipLinks)
+            {
+                if (bipLink.BIPLights.Count > 0)
+                {
+                    result.Add(bipLink.ExportSettings());
+                }
+            }
             return result;
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
 
             lock (_dcsBiosDataReceivedLock)
             {
-                UpdateCounter(address, data);
+                UpdateCounter(e.Address, e.Data);
             }
 
         }
-
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
@@ -143,12 +156,19 @@ namespace NonVisuals
         {
             _keyBindings.Clear();
             _dcsBiosBindings.Clear();
+            _bipLinks.Clear();
         }
 
         public HashSet<KeyBindingTPM> KeyBindingsHashSet
         {
             get { return _keyBindings; }
             set { _keyBindings = value; }
+        }
+
+        public HashSet<BIPLinkTPM> BipLinkHashSet
+        {
+            get { return _bipLinks; }
+            set { _bipLinks = value; }
         }
 
         private void TPMSwitchChanged(TPMPanelSwitch tpmPanelSwitch)
@@ -182,6 +202,14 @@ namespace NonVisuals
                     {
                         keyBinding.OSKeyPress.Execute();
                         found = true;
+                        break;
+                    }
+                }
+                foreach (var bipLinkTPM in _bipLinks)
+                {
+                    if (bipLinkTPM.BIPLights.Count > 0 && bipLinkTPM.TPMSwitch == tpmPanelSwitch.TPMSwitch && bipLinkTPM.WhenTurnedOn == tpmPanelSwitch.IsOn)
+                    {
+                        bipLinkTPM.Execute();
                         break;
                     }
                 }
@@ -275,7 +303,7 @@ namespace NonVisuals
         {
             //This must accept lists
             var found = false;
-            RemoveTPMPanelSwitchFromList(2, tpmPanelSwitch, whenTurnedOn);
+            RemoveTPMPanelSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitch, whenTurnedOn);
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.TPMSwitch == tpmPanelSwitch && keyBinding.WhenTurnedOn == whenTurnedOn)
@@ -304,6 +332,39 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
+
+        public BIPLinkTPM AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches tpmPanelSwitch, BIPLinkTPM bipLinkTPM, bool whenTurnedOn = true)
+        {
+            //This must accept lists
+            var found = false;
+            BIPLinkTPM tmpBIPLinkTPM = null;
+
+            RemoveTPMPanelSwitchFromList(ControlListTPM.BIPS, tpmPanelSwitch, whenTurnedOn);
+            foreach (var bipLink in _bipLinks)
+            {
+                if (bipLink.TPMSwitch == tpmPanelSwitch && bipLink.WhenTurnedOn == whenTurnedOn)
+                {
+                    bipLink.BIPLights = bipLinkTPM.BIPLights;
+                    bipLink.Description = bipLinkTPM.Description;
+                    bipLink.TPMSwitch = tpmPanelSwitch;
+                    bipLink.WhenTurnedOn = whenTurnedOn;
+                    tmpBIPLinkTPM = bipLink;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found && bipLinkTPM.BIPLights.Count > 0)
+            {
+                bipLinkTPM.TPMSwitch = tpmPanelSwitch;
+                bipLinkTPM.WhenTurnedOn = whenTurnedOn;
+                tmpBIPLinkTPM = bipLinkTPM;
+                _bipLinks.Add(bipLinkTPM);
+            }
+            IsDirtyMethod();
+            return tmpBIPLinkTPM;
+        }
+
+
         public void AddOrUpdateDCSBIOSBinding(TPMPanelSwitches tpmPanelSwitch, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
         {
             //!!!!!!!
@@ -311,7 +372,7 @@ namespace NonVisuals
 
             //This must accept lists
             var found = false;
-            RemoveTPMPanelSwitchFromList(1, tpmPanelSwitch, whenTurnedOn);
+            RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, tpmPanelSwitch, whenTurnedOn);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.TPMSwitch == tpmPanelSwitch && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
@@ -334,35 +395,47 @@ namespace NonVisuals
             }
             IsDirtyMethod();
         }
-
-        private void RemoveTPMPanelSwitchFromList(int list, TPMPanelSwitches tpmPanelSwitch, bool whenTurnedOn = true)
+        
+        public void RemoveTPMPanelSwitchFromList(ControlListTPM controlListTPM, TPMPanelSwitches tpmPanelSwitch, bool whenTurnedOn = true)
         {
-            switch (list)
+            var found = false;
+            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.KEYS)
             {
-                case 1:
+                foreach (var keyBindingTPM in _keyBindings)
+                {
+                    if (keyBindingTPM.TPMSwitch == tpmPanelSwitch && keyBindingTPM.WhenTurnedOn == whenTurnedOn)
                     {
-                        foreach (var keyBinding in _keyBindings)
-                        {
-                            if (keyBinding.TPMSwitch == tpmPanelSwitch && keyBinding.WhenTurnedOn == whenTurnedOn)
-                            {
-                                keyBinding.OSKeyPress = null;
-                            }
-                            break;
-                        }
-                        break;
+                        keyBindingTPM.OSKeyPress = null;
+                        found = true;
                     }
-                case 2:
+                }
+            }
+            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.DCSBIOS)
+            {
+                foreach (var dcsBiosBinding in _dcsBiosBindings)
+                {
+                    if (dcsBiosBinding.TPMSwitch == tpmPanelSwitch && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                     {
-                        foreach (var dcsBiosBinding in _dcsBiosBindings)
-                        {
-                            if (dcsBiosBinding.TPMSwitch == tpmPanelSwitch && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
-                            {
-                                dcsBiosBinding.DCSBIOSInputs.Clear();
-                            }
-                            break;
-                        }
-                        break;
+                        dcsBiosBinding.DCSBIOSInputs.Clear();
+                        found = true;
                     }
+                }
+            }
+            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.BIPS)
+            {
+                foreach (var bipLink in _bipLinks)
+                {
+                    if (bipLink.TPMSwitch == tpmPanelSwitch && bipLink.WhenTurnedOn == whenTurnedOn)
+                    {
+                        bipLink.BIPLights.Clear();
+                        found = true;
+                    }
+                }
+            }
+
+            if (found)
+            {
+                IsDirtyMethod();
             }
         }
 
@@ -487,4 +560,12 @@ namespace NonVisuals
     }
 
 
+
+    public enum ControlListTPM : byte
+    {
+        ALL,
+        DCSBIOS,
+        KEYS,
+        BIPS
+    }
 }

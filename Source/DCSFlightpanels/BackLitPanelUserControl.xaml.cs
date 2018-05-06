@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,17 +30,19 @@ namespace DCSFlightpanels
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
         private bool _loaded;
         private IGlobalHandler _globalHandler;
+        private bool _enableDCSBIOS;
 
-        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
+        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
+            _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton, enableDCSBIOS);
 
             _backlitPanelBIP.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);
             _globalHandler = globalHandler;
+            _enableDCSBIOS = enableDCSBIOS;
         }
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -49,6 +52,10 @@ namespace DCSFlightpanels
             SetContextMenuClickHandlers();
             SetAllBlack();
             ShowGraphicConfiguration();
+        }
+
+        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        {
         }
 
         public SaitekPanel GetSaitekPanel()
@@ -61,7 +68,7 @@ namespace DCSFlightpanels
             return GetType().Name;
         }
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
@@ -73,7 +80,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
             {
@@ -85,7 +92,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
@@ -97,7 +104,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
@@ -109,7 +116,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
             {
@@ -121,7 +128,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
             {
@@ -137,7 +144,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(string stringData)
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
         {
             try
             {
@@ -149,7 +156,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
             {
@@ -165,7 +172,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {
@@ -181,11 +188,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.BackLitPanel && uniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -196,11 +203,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(object sender, PanelEventArgs e)
         {
             try
             {
-                if (saitekPanelsEnum == SaitekPanelsEnum.BackLitPanel && uniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.SaitekPanelEnum == SaitekPanelsEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -493,6 +500,10 @@ namespace DCSFlightpanels
 
         private void SetContextMenuClickHandlers()
         {
+            if (!_enableDCSBIOS)
+            {
+                return;
+            }
             foreach (var image in Common.FindVisualChildren<Image>(this))
             {
                 if (image.Name.StartsWith("ImagePosition"))
@@ -685,6 +696,22 @@ namespace DCSFlightpanels
                 {
                     Clipboard.SetText(_backlitPanelBIP.InstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2080, ex);
+            }
+        }
+
+        private void ButtonGetHash_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_backlitPanelBIP != null)
+                {
+                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.InstanceId));
+                    MessageBox.Show("The MD5 hash for the panel has been copied to the Clipboard.\nUse this value when you connect switches to B.I.P. lights.");
                 }
             }
             catch (Exception ex)

@@ -9,67 +9,69 @@ namespace NonVisuals
     public abstract class SaitekPanel : IProfileHandlerListener, IDcsBiosDataListener
     {
         //These events can be raised by the descendants of this class.
-        public delegate void SwitchesHasBeenChangedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet);
+        public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
         public event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
 
-        public delegate void PanelDataToDcsAvailableEventHandler(string stringData);
+        public delegate void PanelDataToDcsAvailableEventHandler(object sender, PanelDataToDCSBIOSEventEventArgs e);
         public event PanelDataToDcsAvailableEventHandler OnPanelDataAvailableA;
 
-        public delegate void DeviceAttachedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
+        public delegate void DeviceAttachedEventHandler(object sender, PanelEventArgs e);
         public event DeviceAttachedEventHandler OnDeviceAttachedA;
 
-        public delegate void DeviceDetachedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
+        public delegate void DeviceDetachedEventHandler(object sender, PanelEventArgs e);
         public event DeviceDetachedEventHandler OnDeviceDetachedA;
 
-        public delegate void SettingsHasChangedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
+        public delegate void SettingsHasChangedEventHandler(object sender, PanelEventArgs e);
         public event SettingsHasChangedEventHandler OnSettingsChangedA;
 
-        public delegate void SettingsHasBeenAppliedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
+        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
         public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
 
-        public delegate void SettingsClearedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
+        public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
         public event SettingsClearedEventHandler OnSettingsClearedA;
 
-        public delegate void LedLightChangedEventHandler(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor);
+        public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
         public event LedLightChangedEventHandler OnLedLightChangedA;
 
-        public delegate void UpdatesHasBeenMissedEventHandler(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count);
+        public delegate void UpdatesHasBeenMissedEventHandler(object sender, DCSBIOSUpdatesMissedEventArgs e);
         public event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
 
         //For those that wants to listen to this panel
         public void Attach(ISaitekPanelListener iSaitekPanelListener)
         {
-            OnDeviceAttachedA += new DeviceAttachedEventHandler(iSaitekPanelListener.DeviceAttached);
-            OnSwitchesChangedA += new SwitchesHasBeenChangedEventHandler(iSaitekPanelListener.SwitchesChanged);
-            OnPanelDataAvailableA += new PanelDataToDcsAvailableEventHandler(iSaitekPanelListener.PanelDataAvailable);
-            OnSettingsAppliedA += new SettingsHasBeenAppliedEventHandler(iSaitekPanelListener.SettingsApplied);
-            OnLedLightChangedA += new LedLightChangedEventHandler(iSaitekPanelListener.LedLightChanged);
-            OnSettingsClearedA += new SettingsClearedEventHandler(iSaitekPanelListener.SettingsCleared);
-            OnUpdatesHasBeenMissed += new UpdatesHasBeenMissedEventHandler(iSaitekPanelListener.UpdatesHasBeenMissed);
+            OnDeviceAttachedA += iSaitekPanelListener.DeviceAttached;
+            OnSwitchesChangedA += iSaitekPanelListener.SwitchesChanged;
+            OnPanelDataAvailableA += iSaitekPanelListener.PanelDataAvailable;
+            OnSettingsAppliedA += iSaitekPanelListener.SettingsApplied;
+            OnLedLightChangedA += iSaitekPanelListener.LedLightChanged;
+            OnSettingsClearedA += iSaitekPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed += iSaitekPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA += iSaitekPanelListener.PanelSettingsChanged;
         }
 
         //For those that wants to listen to this panel
         public void Detach(ISaitekPanelListener iSaitekPanelListener)
         {
-            OnDeviceAttachedA -= new DeviceAttachedEventHandler(iSaitekPanelListener.DeviceAttached);
-            OnSwitchesChangedA -= new SwitchesHasBeenChangedEventHandler(iSaitekPanelListener.SwitchesChanged);
-            OnPanelDataAvailableA -= new PanelDataToDcsAvailableEventHandler(iSaitekPanelListener.PanelDataAvailable);
-            OnSettingsAppliedA -= new SettingsHasBeenAppliedEventHandler(iSaitekPanelListener.SettingsApplied);
-            OnLedLightChangedA -= new LedLightChangedEventHandler(iSaitekPanelListener.LedLightChanged);
-            OnSettingsClearedA -= new SettingsClearedEventHandler(iSaitekPanelListener.SettingsCleared);
-            OnUpdatesHasBeenMissed -= new UpdatesHasBeenMissedEventHandler(iSaitekPanelListener.UpdatesHasBeenMissed);
+            OnDeviceAttachedA -= iSaitekPanelListener.DeviceAttached;
+            OnSwitchesChangedA -= iSaitekPanelListener.SwitchesChanged;
+            OnPanelDataAvailableA -= iSaitekPanelListener.PanelDataAvailable;
+            OnSettingsAppliedA -= iSaitekPanelListener.SettingsApplied;
+            OnLedLightChangedA -= iSaitekPanelListener.LedLightChanged;
+            OnSettingsClearedA -= iSaitekPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed -= iSaitekPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA -= iSaitekPanelListener.PanelSettingsChanged;
         }
 
         //For those that wants to listen to this panel when it's settings change
         public void Attach(IProfileHandlerListener iProfileHandlerListener)
         {
-            OnSettingsChangedA += new SettingsHasChangedEventHandler(iProfileHandlerListener.PanelSettingsChanged);
+            OnSettingsChangedA += iProfileHandlerListener.PanelSettingsChanged;
         }
 
         //For those that wants to listen to this panel
         public void Detach(IProfileHandlerListener iProfileHandlerListener)
         {
-            OnSettingsChangedA -= new SettingsHasChangedEventHandler(iProfileHandlerListener.PanelSettingsChanged);
+            OnSettingsChangedA -= iProfileHandlerListener.PanelSettingsChanged;
         }
 
         //Used by descendants that wants to raise the event
@@ -77,7 +79,7 @@ namespace NonVisuals
         {
             if (OnSwitchesChangedA != null)
             {
-                OnSwitchesChangedA(InstanceId, _typeOfSaitekPanel, hashSet);
+                OnSwitchesChangedA(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Switches = hashSet });
             }
         }
 
@@ -86,7 +88,7 @@ namespace NonVisuals
         {
             if (OnPanelDataAvailableA != null)
             {
-                OnPanelDataAvailableA(stringData);
+                OnPanelDataAvailableA(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
             }
         }
 
@@ -96,7 +98,7 @@ namespace NonVisuals
             if (OnDeviceAttachedA != null)
             {
                 //IsAttached = true;
-                OnDeviceAttachedA(InstanceId, _typeOfSaitekPanel);
+                OnDeviceAttachedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
             }
         }
 
@@ -106,7 +108,7 @@ namespace NonVisuals
             if (OnDeviceDetachedA != null)
             {
                 //IsAttached = false;
-                OnDeviceDetachedA(InstanceId, _typeOfSaitekPanel);
+                OnDeviceDetachedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
             }
         }
 
@@ -115,7 +117,7 @@ namespace NonVisuals
         {
             if (OnSettingsChangedA != null)
             {
-                OnSettingsChangedA(InstanceId, _typeOfSaitekPanel);
+                OnSettingsChangedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
             }
         }
 
@@ -124,7 +126,7 @@ namespace NonVisuals
         {
             if (OnSettingsAppliedA != null)
             {
-                OnSettingsAppliedA(InstanceId, _typeOfSaitekPanel);
+                OnSettingsAppliedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
             }
         }
 
@@ -133,7 +135,7 @@ namespace NonVisuals
         {
             if (OnSettingsClearedA != null)
             {
-                OnSettingsClearedA(InstanceId, _typeOfSaitekPanel);
+                OnSettingsClearedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
             }
         }
 
@@ -142,22 +144,22 @@ namespace NonVisuals
         {
             if (OnLedLightChangedA != null)
             {
-                OnLedLightChangedA(InstanceId, saitekPanelLEDPosition, panelLEDColor);
+                OnLedLightChangedA(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             //do nada
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
-            ClearPanelSettings();
-            ImportSettings(settings);
+            ClearPanelSettings(this);
+            ImportSettings(e.Settings);
         }
 
-        public void ClearPanelSettings()
+        public void ClearPanelSettings(object sender)
         {
             ClearSettings();
             OnSettingsCleared();
@@ -182,12 +184,18 @@ namespace NonVisuals
         private uint _count;
         private bool _synchedOnce;
         private Guid _guid = Guid.NewGuid();
+        private string _hash;
 
-        protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton)
+        protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
         {
             _typeOfSaitekPanel = typeOfSaitekPanel;
             HIDSkeletonBase = hidSkeleton;
-            _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+            KeyboardEmulationOnly = !enableDCSBIOS;
+            if (enableDCSBIOS)
+            {
+                _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+            }
+            _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
         }
 
         public abstract string SettingsVersion();
@@ -196,13 +204,14 @@ namespace NonVisuals
         public abstract void ClearSettings();
         public abstract void ImportSettings(List<string> settings);
         public abstract List<string> ExportSettings();
-        public abstract void SavePanelSettings(ProfileHandler panelProfileHandler);
+        public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
         public abstract DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput);
-        public abstract void DcsBiosDataReceived(uint address, uint data);
+        public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
         //public abstract void DcsBiosDataReceived(byte[] array);
         //public abstract void GetDcsBiosData(byte[] bytes);
         protected HIDSkeleton HIDSkeletonBase;
         private bool _closed;
+
 
         protected void UpdateCounter(uint address, uint data)
         {
@@ -228,7 +237,7 @@ namespace NonVisuals
                         //Not good
                         if (OnUpdatesHasBeenMissed != null)
                         {
-                            OnUpdatesHasBeenMissed(HIDSkeletonBase.InstanceId, _typeOfSaitekPanel, (int)(newCount - _count));
+                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Count = (int)(newCount - _count) });
                             _count = newCount;
                         }
                     }
@@ -236,15 +245,15 @@ namespace NonVisuals
             }
         }
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
-            _keyboardEmulation = Common.IsKeyEmulationProfile(dcsAirframe);
+            _keyboardEmulation = Common.IsKeyEmulationProfile(e.Airframe);
         }
 
         //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
-        public void SetForwardKeyPresses(bool forward)
+        public void SetForwardKeyPresses(object sender, ForwardKeyPressEventArgs e)
         {
-            _forwardKeyPresses = forward;
+            _forwardKeyPresses = e.Forward;
         }
 
         public bool ForwardKeyPresses
@@ -272,6 +281,14 @@ namespace NonVisuals
                 return HIDSkeletonBase.InstanceId;
             }
             set { HIDSkeletonBase.InstanceId = value; }
+        }
+
+        public string Hash
+        {
+            get
+            {
+                return _hash;
+            }
         }
 
         public string GuidString
@@ -424,5 +441,49 @@ namespace NonVisuals
             return ((oldValue ^ newValue) & bitMask) > 0;
         }
 
+    }
+
+    public class LedLightChangeEventArgs : EventArgs
+    {
+        public string UniqueId { get; set; }
+        public SaitekPanelLEDPosition LEDPosition { get; set; }
+        public PanelLEDColor LEDColor { get; set; }
+    }
+
+    public class DCSBIOSUpdatesMissedEventArgs : EventArgs
+    {
+        public string UniqueId { get; set; }
+        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class PanelEventArgs : EventArgs
+    {
+        public string UniqueId { get; set; }
+        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
+    }
+
+    public class PanelDataToDCSBIOSEventEventArgs : EventArgs
+    {
+        public string StringData { get; set; }
+    }
+
+    public class SwitchesChangedEventArgs : EventArgs
+    {
+        public string UniqueId { get; set; }
+        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
+        public HashSet<object> Switches { get; set; }
+    }
+
+    public class SwitchesChangedEventArgsdd : EventArgs
+    {
+        public string UniqueId { get; set; }
+        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
+        public HashSet<object> Switches { get; set; }
+    }
+
+    public class ForwardKeyPressEventArgs : EventArgs
+    {
+        public bool Forward { get; set; }
     }
 }

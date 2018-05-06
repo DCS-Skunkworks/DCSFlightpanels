@@ -5,13 +5,15 @@ namespace NonVisuals
 {
     public interface ISaitekPanelListener
     {
-        void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet);
-        void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
-        void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
-        void PanelDataAvailable(string stringData);
-        void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor);
-        void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
-        void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
-        void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count);
+        void SwitchesChanged(object sender, SwitchesChangedEventArgs e);
+        void SettingsApplied(object sender, PanelEventArgs e);
+        void SettingsCleared(object sender, PanelEventArgs e);
+        void PanelSettingsChanged(object sender, PanelEventArgs e);
+        void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e);
+        void LedLightChanged(object sender, LedLightChangeEventArgs e);
+        void DeviceAttached(object sender, PanelEventArgs e);
+        void DeviceDetached(object sender, PanelEventArgs e);
+        void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e);
+        void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
@@ -6,8 +7,13 @@ namespace NonVisuals
 {
     public interface IProfileHandlerListener
     {
-        void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum);
-        void PanelSettingsReadFromFile(List<string> settings);
-        void SelectedAirframe(DCSAirframe dcsAirframe);
+        void PanelSettingsChanged(object sender, PanelEventArgs e);
+        void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e);
+        void SelectedAirframe(object sender, AirframEventArgs e);
+    }
+
+    public class SettingsReadFromFileEventArgs : EventArgs
+    {
+        public List<string> Settings { get; set; }
     }
 }

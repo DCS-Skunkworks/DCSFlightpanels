@@ -38,7 +38,7 @@ namespace NonVisuals
         private long _syncOKDelayTimeout = 50000000; //5s
 
 
-        public RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton)
+        public RadioPanelPZ69Base(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -438,9 +438,9 @@ namespace NonVisuals
             }
         }
 
-        public override void SavePanelSettings(ProfileHandler panelProfileHandler)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            panelProfileHandler.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
         protected void DeviceAttachedHandler()

@@ -9,14 +9,12 @@ using DCSFlightpanels.Properties;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using NonVisuals;
 using Octokit;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
-using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using Timer = System.Timers.Timer;
 using ToolTip = System.Windows.Controls.ToolTip;
@@ -34,7 +32,7 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class MainWindow : ISaitekPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler
     {
-        public delegate void ForwardKeyPressesChangedEventHandler(bool forwardKeyPress);
+        public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardKeyPressEventArgs e);
         public event ForwardKeyPressesChangedEventHandler OnForwardKeyPressesChanged;
 
         private bool _doSearchForPanels = true;
@@ -51,7 +49,8 @@ namespace DCSFlightpanels
         private object _lockObjectStatusMessages = new object();
         private List<UserControl> _saitekUserControls = new List<UserControl>();
         private DCSAirframe _dcsAirframe;
-
+        private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_debug_log.txt";
+        private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_error_log.txt";
         public MainWindow()
         {
             InitializeComponent();
@@ -66,13 +65,28 @@ namespace DCSFlightpanels
                     this.WindowState = WindowState.Minimized;
                 }
                 LoadSettings();
-                Common.SetErrorLog(Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt");
-                Common.SetDebugLog(Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt");
-                
+
+                if (!File.Exists(_debugLogFile))
+                {
+                    File.Create(_debugLogFile);
+                }
+                if (!File.Exists(_errorLogFile))
+                {
+                    File.Create(_errorLogFile);
+                }
+                Common.SetErrorLog(_errorLogFile);
+                Common.SetDebugLog(_debugLogFile);
+
+                /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 _hidHandler = new HIDHandler();
                 if (_doSearchForPanels)
                 {
                     _hidHandler.Startup();
+                }
+                _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+                if (!_dcsBios.HasLastException())
+                {
+                    RotateGear(2000);
                 }
                 _exceptionTimer.Elapsed += TimerCheckExceptions;
                 _exceptionTimer.Start();
@@ -93,14 +107,14 @@ namespace DCSFlightpanels
                 }
                 _dcsAirframe = _panelProfileHandler.Airframe;
 
-                if (!Common.IsKeyEmulationProfile(_dcsAirframe))
+                if (!Common.IsDCSBIOSProfile(_dcsAirframe))
                 {
-                    _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
-                    _dcsBios.Startup();
-                    if (!_dcsBios.HasLastException())
-                    {
-                        RotateGear(2000);
-                    }
+                    _dcsBios?.Shutdown();
+                    _dcsBios = null;
+                }
+                else
+                {
+                    _dcsBios?.Startup();
                 }
 
                 //SearchForPanels();
@@ -109,11 +123,6 @@ namespace DCSFlightpanels
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewRelease();
-                //For me so that debugging is not on for anyone else.
-                if (!Environment.MachineName.Equals("TIMOFEI"))
-                {
-                    Common.DebugOn = false;
-                }
             }
             catch (Exception ex)
             {
@@ -121,11 +130,15 @@ namespace DCSFlightpanels
             }
         }
 
-        public void UserMessage(string userMessage)
+        public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
+        {
+        }
+
+        public void UserMessage(object sender, UserMessageEventArgs e)
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(() => MessageBox.Show(userMessage, "Information")));
+                Dispatcher.BeginInvoke((Action)(() => MessageBox.Show(e.UserMessage, "Information")));
             }
             catch (Exception ex)
             {
@@ -163,7 +176,7 @@ namespace DCSFlightpanels
             }
             var itemCount = TabControlPanels.Items.Count;
             Common.DebugP("There are " + TabControlPanels.Items.Count + " TabControlPanels.Items");
-            
+
             var closedItemCount = CloseTabItems();
 
             if (Common.IsKeyEmulationProfile(dcsAirframe))
@@ -243,11 +256,11 @@ namespace DCSFlightpanels
             return closedItemCount;
         }
 
-        public void UpdatesHasBeenMissed(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, int count)
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
         {
             try
             {
-                var str = "DCS-BIOS UPDATES MISSED = " + saitekPanelsEnum + "  " + count;
+                var str = "DCS-BIOS UPDATES MISSED = " + e.SaitekPanelEnum + "  " + e.Count;
                 ShowStatusBarMessage(str);
                 Common.LogError(471072, str);
             }
@@ -259,7 +272,7 @@ namespace DCSFlightpanels
 
         public void Attach(SaitekPanel saitekPanel)
         {
-            OnForwardKeyPressesChanged += new ForwardKeyPressesChangedEventHandler(saitekPanel.SetForwardKeyPresses);
+            OnForwardKeyPressesChanged += saitekPanel.SetForwardKeyPresses;
             _panelProfileHandler.Attach(saitekPanel);
             saitekPanel.Attach(_panelProfileHandler);
             saitekPanel.Attach((IProfileHandlerListener)this);
@@ -268,11 +281,10 @@ namespace DCSFlightpanels
 
         public void Detach(SaitekPanel saitekPanel)
         {
-            OnForwardKeyPressesChanged -= new ForwardKeyPressesChangedEventHandler(saitekPanel.SetForwardKeyPresses);
+            OnForwardKeyPressesChanged -= saitekPanel.SetForwardKeyPresses;
             _panelProfileHandler.Detach(saitekPanel);
             saitekPanel.Detach(_panelProfileHandler);
             saitekPanel.Detach((IProfileHandlerListener)this);
-            _dcsBios?.DetachDataReceivedListener(saitekPanel);
         }
 
         public DCSAirframe GetAirframe()
@@ -326,7 +338,8 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
+                                    else
+                                    if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
@@ -437,13 +450,9 @@ namespace DCSFlightpanels
                                 }
                             case SaitekPanelsEnum.BackLitPanel:
                                 {
-                                    if (_panelProfileHandler.IsKeyEmulationProfile )
-                                    {
-                                        break;
-                                    }
                                     var tabItem = new TabItem();
                                     tabItem.Header = "B.I.P.";
-                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
+                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton, _panelProfileHandler.IsDCSBIOSProfile);
                                     _saitekUserControls.Add(backLitPanelUserControl);
                                     _panelProfileHandler.Attach(backLitPanelUserControl);
                                     tabItem.Content = backLitPanelUserControl;
@@ -464,7 +473,7 @@ namespace DCSFlightpanels
                         }
                     } //for each
                 }
-                
+
                 SortTabs();
                 if (TabControlPanels.Items.Count > 0)
                 {
@@ -633,7 +642,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SwitchesChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum, HashSet<object> hashSet)
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {
@@ -646,7 +655,7 @@ namespace DCSFlightpanels
         }
 
 
-        public void SettingsCleared(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsCleared(object sender, PanelEventArgs e)
         {
             try
             {
@@ -658,7 +667,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(string uniqueId, SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
         {
             try
             {
@@ -670,7 +679,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsChanged(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
             try
             {
@@ -683,13 +692,13 @@ namespace DCSFlightpanels
         }
 
 
-        public void SelectedAirframe(DCSAirframe dcsAirframe)
+        public void SelectedAirframe(object sender, AirframEventArgs e)
         {
             try
             {
-                if (_dcsAirframe != dcsAirframe)
+                if (_dcsAirframe != e.Airframe)
                 {
-                    _dcsAirframe = dcsAirframe;
+                    _dcsAirframe = e.Airframe;
                     SetApplicationMode(_dcsAirframe);
                     SendEventRegardingForwardingOfKeys();
                 }
@@ -700,7 +709,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelSettingsReadFromFile(List<string> settings)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
             try
             {
@@ -717,7 +726,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SettingsApplied(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void SettingsApplied(object sender, PanelEventArgs e)
         {
             try
             {
@@ -729,7 +738,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(string stringData)
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
         {
             try
             {
@@ -741,7 +750,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(object sender, PanelEventArgs e)
         {
             try
             {
@@ -753,7 +762,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceDetached(string uniqueId, SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(object sender, PanelEventArgs e)
         {
             try
             {
@@ -794,7 +803,7 @@ namespace DCSFlightpanels
 
         private async void CheckForNewRelease()
         {
-            #if !DEBUG
+#if !DEBUG
             var assembly = Assembly.GetExecutingAssembly();
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             try
@@ -857,7 +866,7 @@ namespace DCSFlightpanels
                 Common.LogError(9011, "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
                 LabelVersionInformation.Text = "v. " + fileVersionInfo.FileVersion;
             }
-            #endif
+#endif
         }
 
         private void TimerCheckExceptions(object sender, ElapsedEventArgs e)
@@ -1249,15 +1258,15 @@ namespace DCSFlightpanels
             {
                 forwardKeys = DigitalCombatSimulatorWindowFound();
             }
-            OnForwardKeyPressesChanged?.Invoke(forwardKeys);
+            OnForwardKeyPressesChanged?.Invoke(this, new ForwardKeyPressEventArgs() { Forward = forwardKeys });
         }
 
         private static bool DigitalCombatSimulatorWindowFound()
         {
-            var hwnd = WindowsAPI.FindWindow("DCS");
+            var hwnd = NativeMethods.FindWindow("DCS");
             if (hwnd == IntPtr.Zero)
             {
-                hwnd = WindowsAPI.FindWindow("Digital Combat Simulator");
+                hwnd = NativeMethods.FindWindow("Digital Combat Simulator");
             }
             if (hwnd != IntPtr.Zero)
             {
@@ -1308,7 +1317,7 @@ namespace DCSFlightpanels
             return;
         }
 
-        public void DcsBiosDataReceived(uint address, uint data)
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             try
             {
@@ -1398,12 +1407,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                var file = Path.GetTempPath() + "\\DCSFlightpanels_error_log.txt";
-                if (!File.Exists(file))
+                if (!File.Exists(_errorLogFile))
                 {
-                    File.Create(file);
+                    File.Create(_errorLogFile);
                 }
-                Process.Start(file);
+                Process.Start(_errorLogFile);
             }
             catch (Exception ex)
             {
@@ -1415,12 +1423,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                var file = Path.GetTempPath() + "\\DCSFlightpanels_debug_log.txt";
-                if (!File.Exists(file))
+                if (!File.Exists(_debugLogFile))
                 {
-                    File.Create(file);
+                    File.Create(_debugLogFile);
                 }
-                Process.Start(file);
+                Process.Start(_debugLogFile);
             }
             catch (Exception ex)
             {
@@ -1438,11 +1445,6 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(2066, ex);
             }
-        }
-
-        private void ImageDcsBiosConnected_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            _panelProfileHandler.OpenProfileDEVELOPMENT();
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -1505,3 +1507,4 @@ namespace DCSFlightpanels
         }
     }
 }
+

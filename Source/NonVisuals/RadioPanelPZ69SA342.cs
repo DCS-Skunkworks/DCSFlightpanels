@@ -148,7 +148,7 @@ namespace NonVisuals
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69SA342(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69SA342(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -165,9 +165,9 @@ namespace NonVisuals
 
         }
 
-        public override void DcsBiosDataReceived(uint address, uint data)
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            UpdateCounter(address, data);
+            UpdateCounter(e.Address, e.Data);
 
 
             /*
@@ -179,16 +179,16 @@ namespace NonVisuals
              */
 
             //VHF AM
-            if (address == _vhfAmDcsbiosOutputReading10s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReading10s.Address)
             {
                 lock (_lockVhfAm10sObject)
                 {
                     //When dialing this radio a lot of intermediate (incorrect) raw values are sent. Only trap
                     //know raw values as in the member array _dialPositions
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading10s.GetUIntValue(data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading10s.GetUIntValue(e.Data)))
                     {
                         var tmp = _vhfAmCockpit10sFrequencyValue;
-                        _vhfAmCockpit10sFrequencyValue = _vhfAmDcsbiosOutputReading10s.GetUIntValue(data);
+                        _vhfAmCockpit10sFrequencyValue = _vhfAmDcsbiosOutputReading10s.GetUIntValue(e.Data);
                         if (tmp != _vhfAmCockpit10sFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpit10sFrequencyValue " + _vhfAmCockpit10sFrequencyValue);
@@ -199,14 +199,14 @@ namespace NonVisuals
             }
 
 
-            if (address == _vhfAmDcsbiosOutputReading1s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReading1s.Address)
             {
                 lock (_lockVhfAm1sObject)
                 {
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading1s.GetUIntValue(data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading1s.GetUIntValue(e.Data)))
                     {
                         var tmp = _vhfAmCockpit1sFrequencyValue;
-                        _vhfAmCockpit1sFrequencyValue = _vhfAmDcsbiosOutputReading1s.GetUIntValue(data);
+                        _vhfAmCockpit1sFrequencyValue = _vhfAmDcsbiosOutputReading1s.GetUIntValue(e.Data);
                         if (tmp != _vhfAmCockpit1sFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpit1sFrequencyValue " + _vhfAmCockpit1sFrequencyValue);
@@ -217,15 +217,15 @@ namespace NonVisuals
             }
 
 
-            if (address == _vhfAmDcsbiosOutputReadingDecimal10s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal10s.Address)
             {
                 lock (_lockVhfAmDecimal10sObject)
                 {
                     //Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReadingDecimal10s.GetUIntValue(data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReadingDecimal10s.GetUIntValue(e.Data)))
                     {
                         var tmp = _vhfAmCockpitDecimal10sFrequencyValue;
-                        _vhfAmCockpitDecimal10sFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal10s.GetUIntValue(data);
+                        _vhfAmCockpitDecimal10sFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal10s.GetUIntValue(e.Data);
                         if (tmp != _vhfAmCockpitDecimal10sFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
@@ -237,15 +237,15 @@ namespace NonVisuals
             }
 
 
-            if (address == _vhfAmDcsbiosOutputReadingDecimal100s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal100s.Address)
             {
                 //Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue (" + _vhfAmDcsbiosOutputReadingDecimal100s.Address + ") " + _vhfAmCockpitDecimal100sFrequencyValue);
                 lock (_lockVhfAmDecimal100sObject)
                 {
-                    if (CorrectPositionDecimal100s(_vhfAmDcsbiosOutputReadingDecimal100s.GetUIntValue(data)))
+                    if (CorrectPositionDecimal100s(_vhfAmDcsbiosOutputReadingDecimal100s.GetUIntValue(e.Data)))
                     {
                         var tmp = _vhfAmCockpitDecimal100sFrequencyValue;
-                        _vhfAmCockpitDecimal100sFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal100s.GetUIntValue(data);
+                        _vhfAmCockpitDecimal100sFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal100s.GetUIntValue(e.Data);
                         if (tmp != _vhfAmCockpitDecimal100sFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue " + _vhfAmCockpitDecimal100sFrequencyValue);
@@ -257,12 +257,12 @@ namespace NonVisuals
             }
 
             //VHF FM PR4G
-            if (address == _fmRadioPresetDcsbiosOutput.Address)
+            if (e.Address == _fmRadioPresetDcsbiosOutput.Address)
             {
                 lock (_lockFmRadioPresetObject)
                 {
                     var tmp = _fmRadioPresetCockpitDialPos;
-                    _fmRadioPresetCockpitDialPos = _fmRadioPresetDcsbiosOutput.GetUIntValue(data);
+                    _fmRadioPresetCockpitDialPos = _fmRadioPresetDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _fmRadioPresetCockpitDialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -271,12 +271,12 @@ namespace NonVisuals
             }
 
             //ADF
-            if (address == _adfSwitchUnitDcsbiosOutput.Address)
+            if (e.Address == _adfSwitchUnitDcsbiosOutput.Address)
             {
                 lock (_lockAdfUnitObject)
                 {
                     var tmp = _adfCockpitSelectedUnitValue;
-                    _adfCockpitSelectedUnitValue = _adfSwitchUnitDcsbiosOutput.GetUIntValue(data);
+                    _adfCockpitSelectedUnitValue = _adfSwitchUnitDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _adfCockpitSelectedUnitValue)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -285,12 +285,12 @@ namespace NonVisuals
             }
 
             //NADIR Mode
-            if (address == _nadirModeDcsbiosOutput.Address)
+            if (e.Address == _nadirModeDcsbiosOutput.Address)
             {
                 lock (_lockNADIRUnitObject)
                 {
                     var tmp = _nadirModeCockpitValue;
-                    _nadirModeCockpitValue = _nadirModeDcsbiosOutput.GetUIntValue(data);
+                    _nadirModeCockpitValue = _nadirModeDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _nadirModeCockpitValue)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -299,12 +299,12 @@ namespace NonVisuals
             }
 
             //NADIR Doppler Mode
-            if (address == _nadirDopplerModeDcsbiosOutput.Address)
+            if (e.Address == _nadirDopplerModeDcsbiosOutput.Address)
             {
                 lock (_lockNADIRUnitObject)
                 {
                     var tmp = _nadirDopplerModeCockpitValue;
-                    _nadirDopplerModeCockpitValue = _nadirDopplerModeDcsbiosOutput.GetUIntValue(data);
+                    _nadirDopplerModeCockpitValue = _nadirDopplerModeDcsbiosOutput.GetUIntValue(e.Data);
                     if (tmp != _nadirDopplerModeCockpitValue)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -317,16 +317,16 @@ namespace NonVisuals
             ShowFrequenciesOnPanel();
         }
 
-        public void DCSBIOSStringReceived(uint address, string stringData)
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try
             {
 
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Common.LogError(349998, e, "DCSBIOSStringReceived()");
+                Common.LogError(349998, ex, "DCSBIOSStringReceived()");
             }
         }
 
