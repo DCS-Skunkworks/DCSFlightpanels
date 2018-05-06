@@ -16,10 +16,11 @@ Saitek / Logitech Panels Supported:
 * PZ70 Multi Panel (DCS-BIOS & KeyEmulator**)
 * TPM (DCS-BIOS & KeyEmulator)
 * PZ69 Radio Panel (DCS-BIOS & KeyEmulator** & KeyEmulator_SRS***)
-* BIP Back Lit Information Panel (DCS-BIOS)
+* BIP Back Lit Information Panel (DCS-BIOS & KeyEmulator****)
 
-**LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
-***Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
+**	LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
+***	Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
+****	BIP can be linked to PZ69 (keyemulator), PZ55, PZ70, TPM so that switching changes LEDs.
 
 Support thread : https://forums.eagle.ru/showthread.php?t=137670
 Demo video key emulation : https://www.youtube.com/watch?v=_TurR-WTgkY
@@ -29,6 +30,15 @@ Demo video UH-1H : https://www.youtube.com/watch?v=jQxLX7UHMR8
 Simple Radio Standalone : https://github.com/ciribob/DCS-SimpleRadioStandalone
 
 Please consider donating if you like the software : https://tinyurl.com/y79umjue
+
+v2.2.24 6 May 2018
+-----------------------------
+PZ55, PZ70, TPM, PZ69 can be linked to BIP. Switching on either of these
+panels then changes LEDs on the BIP.
+Key emulator mode for PZ69.
+SRS (Simple Radio Standalone) supported. (FC3)
+Refactoring of event handlers (sender object)
+Debug & error file now located where the .exe is located.
 
 v2.3.1 7 April 2018
 -----------------------------
