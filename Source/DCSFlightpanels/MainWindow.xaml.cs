@@ -803,7 +803,7 @@ namespace DCSFlightpanels
 
         private async void CheckForNewRelease()
         {
-#if !DEBUG
+            #if !DEBUG
             var assembly = Assembly.GetExecutingAssembly();
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             try
@@ -811,7 +811,7 @@ namespace DCSFlightpanels
                 var dateTime = Settings.Default.LastGitHubCheck;
 
                 var timeSpan = DateTime.Now - dateTime;
-                if (timeSpan.Days > 15)
+                if (timeSpan.Days > 3)
                 {
                     Settings.Default.LastGitHubCheck = DateTime.Now;
                     Settings.Default.Save();
@@ -866,7 +866,7 @@ namespace DCSFlightpanels
                 Common.LogError(9011, "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
                 LabelVersionInformation.Text = "v. " + fileVersionInfo.FileVersion;
             }
-#endif
+            #endif
         }
 
         private void TimerCheckExceptions(object sender, ElapsedEventArgs e)
