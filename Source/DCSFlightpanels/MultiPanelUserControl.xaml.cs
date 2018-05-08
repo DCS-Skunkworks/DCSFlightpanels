@@ -1852,7 +1852,7 @@ namespace DCSFlightpanels
                 DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
                 if (((TagDataClassPZ70)textBox.Tag).ContainsDCSBIOS())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), (List<DCSBIOSInput>)textBox.Tag, textBox.Text);
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassPZ70)textBox.Tag).DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
