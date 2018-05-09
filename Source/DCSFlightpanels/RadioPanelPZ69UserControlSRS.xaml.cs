@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -30,6 +31,7 @@ namespace DCSFlightpanels
 
             _radioPanelPZ69 = new RadioPanelPZ69SRS(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo, hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
+            _radioPanelPZ69.SmallFreqStepping = Settings.Default.SRSSmallFreqStepping;
             _radioPanelPZ69.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             _globalHandler = globalHandler;
@@ -503,11 +505,33 @@ namespace DCSFlightpanels
             }
         }
 
+        private void ComboBoxSmallFreqStepping_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (_userControlLoaded)
+                {
+                    var numberFormat = new NumberFormatInfo();
+                    numberFormat.NumberDecimalSeparator = ".";
+                    numberFormat.NumberDecimalDigits = 3;
+                    numberFormat.NumberGroupSeparator = "";
+                    Settings.Default.SRSSmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
+                    _radioPanelPZ69.SmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
+                    Settings.Default.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(204330, ex);
+            }
+        }
+
         private void RadioPanelPZ69UserControlSRS_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
+                ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
                 _userControlLoaded = true;
             }
             catch (Exception ex)

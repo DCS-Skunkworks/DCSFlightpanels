@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
-using Newtonsoft;
-using Newtonsoft.Json;
 
 namespace NonVisuals
 {
+    public struct SRSRadioSmallFreqStepping
+    {
+        public const double One = 0.001;
+        public const double Five = 0.005;
+        public const double Ten = 0.010;
+        public const double Fifty = 0.050;
+    }
+
     public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel, ISRSDataListener
     {
         private HashSet<RadioPanelKnobSRS> _radioPanelKnobs = new HashSet<RadioPanelKnobSRS>();
@@ -50,6 +54,7 @@ namespace NonVisuals
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
+        private double _smallFreqStepping = 0.001;
 
         public RadioPanelPZ69SRS(int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton, false)
         {
@@ -93,6 +98,12 @@ namespace NonVisuals
                 SetLastException(e);
             }
             Common.DebugP("Leaving SRS Radio Shutdown()");
+        }
+
+        public double SmallFreqStepping
+        {
+            get => _smallFreqStepping;
+            set => _smallFreqStepping = value;
         }
 
         public void SRSDataReceived(object sender)
@@ -367,14 +378,14 @@ namespace NonVisuals
                                     _secondSmallDialIncreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        var changeValue = 0.001;
+                                        var changeValue = _smallFreqStepping;
                                         if (_firstSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = 0.01;
+                                            changeValue = changeValue * 10;
                                         }
                                         if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = 0.1;
+                                            changeValue = changeValue * 100;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
                                         SRSListenerFactory.GetSRSListener().SendDataFunction(command);
@@ -387,14 +398,14 @@ namespace NonVisuals
                                     _secondSmallDialDecreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        var changeValue = -0.001;
+                                        var changeValue = _smallFreqStepping * -1;
                                         if (_firstSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = -0.01;
+                                            changeValue = changeValue * 10;
                                         }
                                         if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = -0.1;
+                                            changeValue = changeValue * 100;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
                                         SRSListenerFactory.GetSRSListener().SendDataFunction(command);
@@ -453,14 +464,14 @@ namespace NonVisuals
                                     _secondSmallDialIncreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        var changeValue = 0.001;
+                                        var changeValue = _smallFreqStepping;
                                         if (_firstSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = 0.01;
+                                            changeValue = changeValue * 10;
                                         }
                                         if (_secondSmallDialIncreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = 0.1;
+                                            changeValue = changeValue * 100;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
                                         SRSListenerFactory.GetSRSListener().SendDataFunction(command);
@@ -473,14 +484,14 @@ namespace NonVisuals
                                     _secondSmallDialDecreaseChangeMonitor.Click();
                                     if (!SkipSmallDialDialChange())
                                     {
-                                        var changeValue = -0.001;
+                                        var changeValue = _smallFreqStepping * -1;
                                         if (_firstSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = -0.01;
+                                            changeValue = changeValue * 10;
                                         }
                                         if (_secondSmallDialDecreaseChangeMonitor.ClickThresholdReached())
                                         {
-                                            changeValue = -0.1;
+                                            changeValue = changeValue * 100;
                                         }
                                         var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
                                         SRSListenerFactory.GetSRSListener().SendDataFunction(command);

@@ -86,6 +86,13 @@
                     <ComboBoxItem >-1</ComboBoxItem>
                     <ComboBoxItem >-2</ComboBoxItem>
                 </ComboBox>
+                <Label Content="Small Frequency Knob Stepping"></Label>
+                <ComboBox Name="ComboBoxSmallFreqStepping" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSmallFreqStepping_OnSelectionChanged">
+                    <ComboBoxItem >0.001</ComboBoxItem>
+                    <ComboBoxItem >0.005</ComboBoxItem>
+                    <ComboBoxItem >0.010</ComboBoxItem>
+                    <ComboBoxItem >0.050</ComboBoxItem>
+                </ComboBox>
             </StackPanel>
         </GroupBox>
 
