@@ -367,6 +367,11 @@ namespace DCSFlightpanels
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ55) textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        if (!String.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        {
+                            textBox.Text = sequenceWindow.GetInformation;
+                        }
                         UpdateKeyBindingProfileSequencedKeyStrokesPZ55(textBox);
                     }
                     else
@@ -375,6 +380,8 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ55)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ55)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
                 }

@@ -278,6 +278,11 @@ namespace DCSFlightpanels
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassPZ69)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ69)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        if (!String.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        {
+                            textBox.Text = sequenceWindow.GetInformation;
+                        }
                         UpdateKeyBindingProfileSequencedKeyStrokesPZ69(textBox);
                     }
                     else
@@ -286,6 +291,8 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ69)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassPZ69)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ69)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
                 }
@@ -338,110 +345,110 @@ namespace DCSFlightpanels
             {
                 if (textBox.Equals(TextBoxUpperCom1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM1, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM1,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperCom2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM2, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM2,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperNav1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperNav2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV2, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV2,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperADF))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperADF, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperADF,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperDME))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperDME, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperDME,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperXPDR))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperXPDR, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperXPDR,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerCom1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM1, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM1,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerCom2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM2, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM2,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerNav1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerNav2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerNAV2, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerNAV2,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerADF))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerADF, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerADF,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerDME))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerDME, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerDME,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerXPDR))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerXPDR, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerXPDR,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
 
 
 
                 if (textBox.Equals(TextBoxUpperLargePlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperSmallPlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperSmallMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperActStbyOn))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperActStbyOff))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxLowerLargePlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerSmallPlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerActStbyOn))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, (SortedList<int, KeyPressInfo>)textBox.Tag);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerActStbyOff))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, (SortedList<int, KeyPressInfo>)textBox.Tag, false);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch,  ((TagDataClassPZ69)textBox.Tag).GetKeySequence(), false);
                 }
             }
             catch (Exception ex)

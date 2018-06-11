@@ -1795,6 +1795,11 @@ namespace DCSFlightpanels
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassPZ70)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        if (!String.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        {
+                            textBox.Text = sequenceWindow.GetInformation;
+                        }
                         //textBox.Text = string.IsNullOrEmpty(sequenceWindow.GetInformation) ? "Key press sequence" : sequenceWindow.GetInformation;
                         /*if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
                         {
@@ -1809,6 +1814,8 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ70)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassPZ70)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         /*textBox.Text = sequenceList.Values[0].VirtualKeyCodesAsString;
                         if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
                         {
