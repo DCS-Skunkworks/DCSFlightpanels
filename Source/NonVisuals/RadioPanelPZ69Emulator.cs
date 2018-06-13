@@ -407,13 +407,14 @@ namespace NonVisuals
         public void ClearDisplayValue(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, RadioPanelPZ69Display radioPanelPZ69Display)
         {
             //This must accept lists
-            foreach (var displayValue in _displayValues)
+            /*foreach (var displayValue in _displayValues)
             {
                 if (displayValue.RadioPanelPZ69Knob == radioPanelPZ69Knob && displayValue.RadioPanelDisplay == radioPanelPZ69Display)
                 {
                     displayValue.Value = null;
                 }
-            }
+            }*/
+            _displayValues.RemoveWhere(x => x.RadioPanelPZ69Knob == radioPanelPZ69Knob && x.RadioPanelDisplay == radioPanelPZ69Display);
             IsDirtyMethod();
         }
 

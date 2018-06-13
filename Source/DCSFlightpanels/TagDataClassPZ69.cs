@@ -9,6 +9,7 @@ namespace DCSFlightpanels
     {
         private BIPLinkPZ69 _bipLinkPZ69;
         private OSKeyPress _osKeyPress;
+        //hit ska komma värde för LCD:n också....
         
         public bool ContainsBIPLink()
         {
