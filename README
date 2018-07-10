@@ -35,14 +35,20 @@ Simple Radio Standalone : https://github.com/ciribob/DCS-SimpleRadioStandalone
 
 Please consider donating if you like the software : https://tinyurl.com/y79umjue
 
+
+v2.4.53 10 July 2018
+-----------------------------
+Bugfix, SRS channel forced to freq when using small dial
+Bugfix, removing PZ69 keyemulator display value caused error.
+Bugfix, information not stored for key sequences.
+
 v2.2.29 6 May 2018
 -----------------------------
 Bug fix, edit DCS-BIOS on PZ70 caused error.
 
 v2.2.24 6 May 2018
 -----------------------------
-PZ55, PZ70, TPM, PZ69 can be linked to BIP. Switching on either of these
-panels then changes LEDs on the BIP.
+PZ55, PZ70, TPM, PZ69 can be linked to BIP. Switching on either of these panels then changes LEDs on the BIP.
 Key emulator mode for PZ69.
 SRS (Simple Radio Standalone) supported. (FC3)
 Refactoring of event handlers (sender object)
