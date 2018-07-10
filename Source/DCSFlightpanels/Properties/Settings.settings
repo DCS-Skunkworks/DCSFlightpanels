@@ -81,7 +81,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="SRSSmallFreqStepping" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">0.001</Value>
     </Setting>
   </Settings>
 </SettingsFile>
