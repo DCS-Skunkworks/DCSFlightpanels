@@ -63,21 +63,23 @@
 
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
-        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" >
+        <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = AN/ARC-186(V) VHF AM <LineBreak/>
-                    COM 2 = AN/ARC-164 UHF<LineBreak/>
-                    NAV 1 = AN/ARC-186(V) VHF FM<LineBreak/>
+                    COM 1 = AN/ARC-186(V) VHF AM* <LineBreak/>
+                    COM 2 = AN/ARC-164 UHF*<LineBreak/>
+                    NAV 1 = AN/ARC-186(V) VHF FM*<LineBreak/>
                     NAV 2 = ILS<LineBreak/>
                     ADF   = TACAN (TCN)<LineBreak/>
                         x.0 -> X<LineBreak/>
-                        x.1 -> Y
+                        x.1 -> Y<LineBreak/><LineBreak/>
+                    Hold ACT/STBY + Small Dial to switch between<LineBreak/>Frequency or Preset Channel.<LineBreak/>
+                    Large dial changes selected Preset Channel.
                 </TextBlock>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="3"  Grid.ColumnSpan="3" Grid.RowSpan="2" >
+        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="4"  Grid.ColumnSpan="3" Grid.RowSpan="2" >
             <StackPanel >
                 <Label Content="Frequency Knobs sensitivity"></Label>
                 <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
@@ -111,8 +113,8 @@
             <Label Content="ILS" FontWeight="Bold"/>
             <Image Height="80" Source="/DCSFlightpanels;component/Images/A-10C_ILS.png" />
         </StackPanel>
-        <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
-            <Label Name="LabelAirframe" Content="A-10C" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
+        <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="3">
+            <Label Name="LabelAirframe" Content="A-10C" FontSize="30" FontWeight="Bold"/>
             <Label Content="AN/ARC-164 UHF" FontWeight="Bold"/>
             <Image Height="160" Source="/DCSFlightpanels;component/Images/A-10C_an_arc_164_UHF_radio2.png" />
             <Label Content="TACAN" FontWeight="Bold"/>
@@ -162,6 +164,8 @@
                 </ComboBox>
             </StackPanel>
         </GroupBox>
-        <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="159" Grid.Row="5" Grid.RowSpan="2" Grid.Column="6"/>
+        <StackPanel Grid.Row="4" Grid.RowSpan="2" Grid.Column="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible"  VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="120" />
+        </StackPanel>
     </Grid>
 </UserControl>

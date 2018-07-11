@@ -58,6 +58,11 @@ namespace NonVisuals
             return result;
         }
 
+        public bool ClickAndCheck()
+        {
+            Click();
+            return ClickThresholdReached();
+        }
 
         public bool ClickThresholdReached()
         {

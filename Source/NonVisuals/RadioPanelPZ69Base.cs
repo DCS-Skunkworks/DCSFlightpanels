@@ -24,8 +24,8 @@ namespace NonVisuals
         protected NumberFormatInfo NumberFormatInfoFullDisplay;
         protected NumberFormatInfo NumberFormatInfoEmpty;
         private int _frequencyKnobSensitivity;
-        protected volatile byte FrequencySensitivitySkipper;
-        protected object _lockLCDUpdateObject = new object();
+        private volatile byte FrequencySensitivitySkipper;
+        protected readonly object _lockLCDUpdateObject = new object();
         protected bool DataHasBeenReceivedFromDCSBIOS;
         private Guid _guid = Guid.NewGuid();
         /*
