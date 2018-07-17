@@ -15,6 +15,8 @@ namespace NonVisuals
 
         private bool _upperButtonPressed = false;
         private bool _lowerButtonPressed = false;
+        private bool _upperButtonPressedAndDialRotated = false;
+        private bool _lowerButtonPressedAndDialRotated = false;
 
         /*A-10C AN/ARC-186(V) VHF AM Radio 1*/
         //Large dial 116-151 [step of 1]
@@ -400,7 +402,7 @@ namespace NonVisuals
             if (e.Address == _uhfDcsbiosOutputSelectedChannel.Address)
             {
                 var tmp = _uhfCockpitPresetChannel;
-                _uhfCockpitPresetChannel = _uhfDcsbiosOutputSelectedChannel.GetUIntValue(e.Data);
+                _uhfCockpitPresetChannel = _uhfDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
                 if (tmp != _uhfCockpitPresetChannel)
                 {
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -2426,72 +2428,87 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_upperButtonPressed && _vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmModeIncrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmModeIncrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfAmPresetIncrease);
+                                                if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmPresetIncrease);
+                                                }
+                                                else if (_vhfAmBigFrequencyStandby.Equals(151.00))
+                                                {
+                                                    //@ max value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfAmBigFrequencyStandby++;
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && _vhfAmBigFrequencyStandby.Equals(151.00))
-                                            {
-                                                //@ max value
-                                                break;
-                                            }
-
-                                            if (!_upperButtonPressed)
-                                            {
-                                                _vhfAmBigFrequencyStandby++;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_upperButtonPressed && _uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFunctionIncrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFunctionIncrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(UhfPresetIncrease);
+                                                if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfPresetIncrease);
+                                                }
+                                                else if (_uhfBigFrequencyStandby.Equals(399.00))
+                                                {
+                                                    //225-399
+                                                    //@ max value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _uhfBigFrequencyStandby++;
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && _uhfBigFrequencyStandby.Equals(399.00))
-                                            {
-                                                //225-399
-                                                //@ max value
-                                                break;
-                                            }
-
-                                            if (!_upperButtonPressed)
-                                            {
-                                                _uhfBigFrequencyStandby++;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_upperButtonPressed && _vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmModeIncrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmModeIncrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfFmPresetIncrease);
+                                                if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmPresetIncrease);
+                                                }
+                                                else if (_vhfFmBigFrequencyStandby.Equals(76))
+                                                {
+                                                    //@ max value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfFmBigFrequencyStandby++;
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && _vhfFmBigFrequencyStandby.Equals(76))
-                                            {
-                                                //@ max value
-                                                break;
-                                            }
-
-                                            if (!_upperButtonPressed)
-                                            {
-                                                _vhfFmBigFrequencyStandby++;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.ILS:
@@ -2535,71 +2552,86 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_upperButtonPressed && _vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmModeDecrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmModeDecrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfAmPresetDecrease);
+                                                if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmPresetDecrease);
+                                                }
+                                                else if (_vhfAmBigFrequencyStandby.Equals(116.00))
+                                                {
+                                                    //@ min value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfAmBigFrequencyStandby--;
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && _vhfAmBigFrequencyStandby.Equals(116.00))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }
-
-                                            if (!_upperButtonPressed)
-                                            {
-                                                _vhfAmBigFrequencyStandby--;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_upperButtonPressed && _uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFunctionDecrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFunctionDecrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(UhfPresetDecrease);
+                                                if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfPresetDecrease);
+                                                }
+                                                else if (_uhfBigFrequencyStandby.Equals(225.00))
+                                                {
+                                                    //@ min value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _uhfBigFrequencyStandby--;
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && _uhfBigFrequencyStandby.Equals(225.00))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }
-
-                                            if (!_upperButtonPressed)
-                                            {
-                                                _uhfBigFrequencyStandby--;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_upperButtonPressed && _vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmModeDecrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmModeDecrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfFmPresetDecrease);
+                                                if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmPresetDecrease);
+                                                }
+                                                else if (_vhfFmBigFrequencyStandby.Equals(30))
+                                                {
+                                                    //@ min value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfFmBigFrequencyStandby--;
+                                                }
                                             }
-                                            else if (!_upperButtonPressed && _vhfFmBigFrequencyStandby.Equals(30))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }
-
-                                            if (!_upperButtonPressed)
-                                            {
-                                                _vhfFmBigFrequencyStandby--;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.ILS:
@@ -2643,11 +2675,15 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_upperButtonPressed && _vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmFreqModeIncrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmFreqModeIncrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed)
+                                            else
                                             {
                                                 if (_vhfAmSmallFrequencyStandby >= 0.95)
                                                 {
@@ -2655,21 +2691,21 @@ namespace NonVisuals
                                                     _vhfAmSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-
-                                                if (!_upperButtonPressed)
-                                                {
-                                                    _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.05;
-                                                }
+                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_upperButtonPressed && _uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFreqModeIncrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFreqModeIncrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed)
+                                            else
                                             {
                                                 //Small dial 0.000 0.025 0.050 0.075 [only 0.00 and 0.05 are used]
                                                 if (_uhfSmallFrequencyStandby >= 0.95)
@@ -2678,21 +2714,21 @@ namespace NonVisuals
                                                     _uhfSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-
-                                                if (!_upperButtonPressed)
-                                                {
-                                                    _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 0.05;
-                                                }
+                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_upperButtonPressed && _vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmFreqModeIncrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmFreqModeIncrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed)
+                                            else
                                             {
                                                 if (_vhfFmSmallFrequencyStandby >= 975)
                                                 {
@@ -2700,11 +2736,7 @@ namespace NonVisuals
                                                     _vhfFmSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-
-                                                if (!_upperButtonPressed)
-                                                {
-                                                    _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby + 25;
-                                                }
+                                                _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby + 25;
                                             }
                                             break;
                                         }
@@ -2800,11 +2832,15 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_upperButtonPressed && _vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmFreqModeDecrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmFreqModeDecrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed)
+                                            else
                                             {
                                                 if (_vhfAmSmallFrequencyStandby <= 0.00)
                                                 {
@@ -2812,21 +2848,21 @@ namespace NonVisuals
                                                     _vhfAmSmallFrequencyStandby = 0.95;
                                                     break;
                                                 }
-
-                                                if (!_upperButtonPressed)
-                                                {
-                                                    _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.05;
-                                                }
+                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_upperButtonPressed && _uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFreqModeDecrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFreqModeDecrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed)
+                                            else
                                             {
                                                 if (_uhfSmallFrequencyStandby <= 0.00)
                                                 {
@@ -2834,21 +2870,21 @@ namespace NonVisuals
                                                     _uhfSmallFrequencyStandby = 0.95;
                                                     break;
                                                 }
-
-                                                if (!_upperButtonPressed)
-                                                {
-                                                    _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 0.05;
-                                                }
+                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_upperButtonPressed && _vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_upperButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmFreqModeDecrease);
+                                                _upperButtonPressedAndDialRotated = true;
+                                                if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmFreqModeDecrease);
+                                                }
                                             }
-                                            else if (!_upperButtonPressed)
+                                            else
                                             {
                                                 if (_vhfFmSmallFrequencyStandby <= 0)
                                                 {
@@ -2856,11 +2892,7 @@ namespace NonVisuals
                                                     _vhfFmSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-
-                                                if (!_upperButtonPressed)
-                                                {
-                                                    _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby - 25;
-                                                }
+                                                _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby - 25;
                                             }
                                             break;
                                         }
@@ -2955,72 +2987,87 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_lowerButtonPressed && _vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmModeIncrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmModeIncrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfAmPresetIncrease);
+                                                if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmPresetIncrease);
+                                                }
+                                                else if (!_lowerButtonPressed && _vhfAmBigFrequencyStandby.Equals(151.00))
+                                                {
+                                                    //@ max value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby + 1;
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && _vhfAmBigFrequencyStandby.Equals(151.00))
-                                            {
-                                                //@ max value
-                                                break;
-                                            }
-
-                                            if (!_lowerButtonPressed)
-                                            {
-                                                _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby + 1;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_lowerButtonPressed && _uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFunctionIncrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFunctionIncrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                //225-399
-                                                DCSBIOS.Send(UhfPresetIncrease);
+                                                if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    //225-399
+                                                    DCSBIOS.Send(UhfPresetIncrease);
+                                                }
+                                                else if (_uhfBigFrequencyStandby.Equals(399.00))
+                                                {
+                                                    //@ max value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _uhfBigFrequencyStandby++;
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && _uhfBigFrequencyStandby.Equals(399.00))
-                                            {
-                                                //@ max value
-                                                break;
-                                            }
-
-                                            if (!_lowerButtonPressed)
-                                            {
-                                                _uhfBigFrequencyStandby++;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_lowerButtonPressed && _vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmModeIncrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmModeIncrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfFmPresetIncrease);
+                                                if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmPresetIncrease);
+                                                }
+                                                else if (_vhfFmBigFrequencyStandby.Equals(76))
+                                                {
+                                                    //@ max value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfFmBigFrequencyStandby = _vhfFmBigFrequencyStandby + 1;
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && _vhfFmBigFrequencyStandby.Equals(76))
-                                            {
-                                                //@ max value
-                                                break;
-                                            }
-
-                                            if (!_lowerButtonPressed)
-                                            {
-                                                _vhfFmBigFrequencyStandby = _vhfFmBigFrequencyStandby + 1;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.ILS:
@@ -3064,71 +3111,86 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_lowerButtonPressed && _vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmModeDecrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfAmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmModeDecrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfAmPresetDecrease);
+                                                if (VhfAmPresetSelected() && _vhfAmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmPresetDecrease);
+                                                }
+                                                else if (_vhfAmBigFrequencyStandby.Equals(116.00))
+                                                {
+                                                    //@ min value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby - 1;
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && _vhfAmBigFrequencyStandby.Equals(116.00))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }
-
-                                            if (!_lowerButtonPressed)
-                                            {
-                                                _vhfAmBigFrequencyStandby = _vhfAmBigFrequencyStandby - 1;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_lowerButtonPressed && _uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFunctionDecrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_uhfFunctionClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFunctionDecrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(UhfPresetDecrease);
+                                                if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfPresetDecrease);
+                                                }
+                                                else if (_uhfBigFrequencyStandby.Equals(225.00))
+                                                {
+                                                    //@ min value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _uhfBigFrequencyStandby--;
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && _uhfBigFrequencyStandby.Equals(225.00))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }
-
-                                            if (!_lowerButtonPressed)
-                                            {
-                                                _uhfBigFrequencyStandby--;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_lowerButtonPressed && _vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmModeDecrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfFmModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmModeDecrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                            else
                                             {
-                                                DCSBIOS.Send(VhfFmPresetDecrease);
+                                                if (VhfFmPresetSelected() && _vhfFmChannelClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmPresetDecrease);
+                                                }
+                                                else if (_vhfFmBigFrequencyStandby.Equals(30))
+                                                {
+                                                    //@ min value
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    _vhfFmBigFrequencyStandby = _vhfFmBigFrequencyStandby - 1;
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed && _vhfFmBigFrequencyStandby.Equals(30))
-                                            {
-                                                //@ min value
-                                                break;
-                                            }
-
-                                            if (!_lowerButtonPressed)
-                                            {
-                                                _vhfFmBigFrequencyStandby = _vhfFmBigFrequencyStandby - 1;
-                                            }
-
                                             break;
                                         }
                                     case CurrentA10RadioMode.ILS:
@@ -3172,11 +3234,15 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_lowerButtonPressed && _vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmFreqModeIncrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmFreqModeIncrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed)
+                                            else
                                             {
                                                 if (_vhfAmSmallFrequencyStandby >= 0.95)
                                                 {
@@ -3184,18 +3250,21 @@ namespace NonVisuals
                                                     _vhfAmSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-
                                                 _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_lowerButtonPressed && _uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFreqModeIncrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFreqModeIncrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed)
+                                            else
                                             {
                                                 //Small dial 0.000 0.025 0.050 0.075 [only 0.00 and 0.05 are used]
                                                 if (_uhfSmallFrequencyStandby >= 0.95)
@@ -3204,18 +3273,21 @@ namespace NonVisuals
                                                     _uhfSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-
                                                 _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_lowerButtonPressed && _vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmFreqModeIncrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmFreqModeIncrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed)
+                                            else
                                             {
                                                 if (_vhfFmSmallFrequencyStandby >= 975)
                                                 {
@@ -3320,11 +3392,15 @@ namespace NonVisuals
                                 {
                                     case CurrentA10RadioMode.VHFAM:
                                         {
-                                            if (_lowerButtonPressed && _vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfAmFreqModeDecrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfAmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfAmFreqModeDecrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed)
+                                            else
                                             {
                                                 if (_vhfAmSmallFrequencyStandby <= 0.00)
                                                 {
@@ -3332,18 +3408,21 @@ namespace NonVisuals
                                                     _vhfAmSmallFrequencyStandby = 0.95;
                                                     break;
                                                 }
-
                                                 _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.UHF:
                                         {
-                                            if (_lowerButtonPressed && _uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(UhfFreqModeDecrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_uhfFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(UhfFreqModeDecrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed)
+                                            else
                                             {
                                                 if (_uhfSmallFrequencyStandby <= 0.00)
                                                 {
@@ -3351,18 +3430,21 @@ namespace NonVisuals
                                                     _uhfSmallFrequencyStandby = 0.95;
                                                     break;
                                                 }
-
                                                 _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 0.05;
                                             }
                                             break;
                                         }
                                     case CurrentA10RadioMode.VHFFM:
                                         {
-                                            if (_lowerButtonPressed && _vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                            if (_lowerButtonPressed)
                                             {
-                                                DCSBIOS.Send(VhfFmFreqModeDecrease);
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                if (_vhfFmFreqModeClickSpeedDetector.ClickAndCheck())
+                                                {
+                                                    DCSBIOS.Send(VhfFmFreqModeDecrease);
+                                                }
                                             }
-                                            else if (!_lowerButtonPressed)
+                                            else
                                             {
                                                 if (_vhfFmSmallFrequencyStandby <= 0)
                                                 {
@@ -3370,7 +3452,6 @@ namespace NonVisuals
                                                     _vhfFmSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-
                                                 _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby - 25;
                                             }
                                             break;
@@ -3691,8 +3772,13 @@ namespace NonVisuals
                                 _upperButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
                                 {
-                                    //Do when user releases button
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH);
+                                    if (!_upperButtonPressedAndDialRotated)
+                                    {
+                                        //Do not synch if user has pressed the button to configure the radio
+                                        //Do when user releases button
+                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH);
+                                    }
+                                    _upperButtonPressedAndDialRotated = false;
                                 }
                                 break;
                             }
@@ -3701,7 +3787,13 @@ namespace NonVisuals
                                 _lowerButtonPressed = radioPanelKnob.IsOn;
                                 if (!radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH);
+                                    if (!_lowerButtonPressedAndDialRotated)
+                                    {
+                                        //Do not synch if user has pressed the button to configure the radio
+                                        //Do when user releases button
+                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH);
+                                    }
+                                    _lowerButtonPressedAndDialRotated = false;
                                 }
                                 break;
                             }
@@ -3829,7 +3921,7 @@ namespace NonVisuals
                         foreach (var radioPanelKnob in hashSet)
                         {
                             var knob = (RadioPanelKnobA10C)radioPanelKnob;
-                            
+
                         }
                     }
                 }
