@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.DCSBiosInputWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DCS-BIOS Control Search" Height="500" Width="800"  Loaded="WindowLoaded" Icon="/DCSFlightpanels;component/Images/huey_icon.ico" WindowStartupLocation="CenterScreen"  >
+        Title="DCS-BIOS Control Search" Height="500" Width="800"  Loaded="WindowLoaded" Icon="/DCSFlightpanels;component/Images/huey_icon.ico" WindowStartupLocation="CenterScreen"  KeyDown="DCSBiosInputWindow_OnKeyDown">
     <Window.Resources>
         <Popup x:Key="PopUpSearchResults" Width="600" Height="150" PlacementTarget="{Binding ElementName=text}" StaysOpen="False">
             <Grid HorizontalAlignment="Stretch">

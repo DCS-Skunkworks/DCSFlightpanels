@@ -516,5 +516,14 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(100906, ex);
             }
         }
+
+        private void DCSBiosInputWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!ButtonOk.IsEnabled)
+            {
+                DialogResult = false;
+                Close();
+            }
+        }
     }
 }

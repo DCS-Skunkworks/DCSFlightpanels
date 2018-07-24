@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
 
 namespace DCSFlightpanels
@@ -497,6 +498,15 @@ namespace DCSFlightpanels
         {
             _generalChanged = true;
             ButtonOk.IsEnabled = true;
+        }
+
+        private void SettingsWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!ButtonOk.IsEnabled)
+            {
+                DialogResult = false;
+                Close();
+            }
         }
     }
 }

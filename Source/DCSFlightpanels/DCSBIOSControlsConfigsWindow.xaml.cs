@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
@@ -185,6 +186,16 @@ namespace DCSFlightpanels
         private void NewDelayButton_OnClick(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void DCSBIOSControlsConfigsWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (!ButtonOk.IsEnabled)
+            {
+                DialogResult = false;
+                Close();
+            }
         }
     }
 }

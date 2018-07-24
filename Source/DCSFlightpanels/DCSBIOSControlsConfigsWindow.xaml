@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.DCSBIOSControlsConfigsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DCS-BIOS Control configurations" Height="400" Width="800" Loaded="DCSBIOSControlsConfigsWindow_OnLoaded" Icon="/DCSFlightpanels;component/huey_icon.ico" WindowStartupLocation="CenterScreen" >
+        Title="DCS-BIOS Control configurations" Height="400" Width="800" Loaded="DCSBIOSControlsConfigsWindow_OnLoaded" Icon="/DCSFlightpanels;component/huey_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="DCSBIOSControlsConfigsWindow_OnKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
@@ -65,8 +65,8 @@
                 <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7"/>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  >
-                        <Button Name="OkButton"  Content="Ok" Width="70" Margin="0,0,0,0" VerticalAlignment="Center" Click="OkButton_OnClick"/>
-                        <Button Name="CancelButton"  Content="Cancel" Width="70" Margin="5,0,5,0" VerticalAlignment="Center" Click="CancelButton_OnClick"/>
+                        <Button Name="ButtonOk"  Content="Ok" Width="70" Margin="0,0,0,0" VerticalAlignment="Center" Click="OkButton_OnClick"/>
+                        <Button Name="ButtonCancel"  Content="Cancel" Width="70" Margin="5,0,5,0" VerticalAlignment="Center" Click="CancelButton_OnClick"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>

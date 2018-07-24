@@ -634,5 +634,9 @@ namespace DCSFlightpanels
             }
         }
 
+        private void JaceSandboxWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            Close();
+        }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Formula sandbox" Height="600" Width="800" WindowStartupLocation="CenterScreen" Loaded="JaceSandboxWindow_OnLoaded" Closing="JaceSandboxWindow_OnClosing">
+        Title="Formula sandbox" Height="600" Width="800" WindowStartupLocation="CenterScreen" Loaded="JaceSandboxWindow_OnLoaded" Closing="JaceSandboxWindow_OnClosing" KeyDown="JaceSandboxWindow_OnKeyDown">
     <Window.Resources>
         <Popup x:Key="PopUpSearchResults" Width="600" Height="150" PlacementTarget="{Binding ElementName=text}" StaysOpen="False">
             <Grid HorizontalAlignment="Stretch">
@@ -31,7 +31,11 @@
         </Popup>
     </Window.Resources>
     <Grid>
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="292*"/>
+            <ColumnDefinition Width="501*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />

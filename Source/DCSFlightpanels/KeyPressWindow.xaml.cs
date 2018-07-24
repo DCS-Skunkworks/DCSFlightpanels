@@ -146,5 +146,14 @@ namespace DCSFlightpanels
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void KeyPressWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!ButtonOk.IsEnabled)
+            {
+                DialogResult = false;
+                Close();
+            }
+        }
     }
 }

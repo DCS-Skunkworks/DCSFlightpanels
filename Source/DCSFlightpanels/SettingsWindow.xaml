@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Settings" Height="600" Width="800"
         Loaded="SettingsWindow_OnLoaded"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" KeyDown="SettingsWindow_OnKeyDown">
     <Grid Margin="-4,0,4,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="20*"/>

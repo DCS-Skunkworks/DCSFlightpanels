@@ -339,5 +339,13 @@ namespace DCSFlightpanels
             }
         }
 
+        private void DCSBiosOutputTriggerWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!ButtonOk.IsEnabled)
+            {
+                DialogResult = false;
+                Close();
+            }
+        }
     }
 }

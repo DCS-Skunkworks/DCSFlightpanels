@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
 
@@ -27,10 +28,10 @@ namespace DCSFlightpanels
         {
             InitializeComponent();
             _sortedList = sortedList;
-            textBoxInformation.Text = information;
-            dataGridSequences.DataContext = _sortedList;
-            dataGridSequences.ItemsSource = _sortedList;
-            dataGridSequences.Items.Refresh();
+            TextBoxInformation.Text = information;
+            DataGridSequences.DataContext = _sortedList;
+            DataGridSequences.ItemsSource = _sortedList;
+            DataGridSequences.Items.Refresh();
 
             SetFormState();
         }
@@ -47,16 +48,16 @@ namespace DCSFlightpanels
 
         public string GetInformation
         {
-            get { return textBoxInformation.Text; }
+            get { return TextBoxInformation.Text; }
         }
 
         private void SetFormState()
         {
-            buttonUp.IsEnabled = dataGridSequences.SelectedItems.Count == 1 && dataGridSequences.SelectedIndex > 0;
-            buttonDown.IsEnabled = dataGridSequences.SelectedItems.Count == 1 && dataGridSequences.SelectedIndex < dataGridSequences.Items.Count - 1;
-            buttonAdd.IsEnabled = true;
-            buttonEdit.IsEnabled = dataGridSequences.SelectedItems.Count == 1;
-            buttonDelete.IsEnabled = dataGridSequences.SelectedItems.Count > 0;
+            ButtonUp.IsEnabled = DataGridSequences.SelectedItems.Count == 1 && DataGridSequences.SelectedIndex > 0;
+            ButtonDown.IsEnabled = DataGridSequences.SelectedItems.Count == 1 && DataGridSequences.SelectedIndex < DataGridSequences.Items.Count - 1;
+            ButtonAdd.IsEnabled = true;
+            ButtonEdit.IsEnabled = DataGridSequences.SelectedItems.Count == 1;
+            ButtonDelete.IsEnabled = DataGridSequences.SelectedItems.Count > 0;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -85,9 +86,9 @@ namespace DCSFlightpanels
                     keyPressInfo.LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
                     _sortedList.Add(GetNewKeyValue(), keyPressInfo);
 
-                    dataGridSequences.DataContext = _sortedList;
-                    dataGridSequences.ItemsSource = _sortedList;
-                    dataGridSequences.Items.Refresh();
+                    DataGridSequences.DataContext = _sortedList;
+                    DataGridSequences.ItemsSource = _sortedList;
+                    DataGridSequences.Items.Refresh();
                     _isDirty = true;
                 }
             }
@@ -110,9 +111,9 @@ namespace DCSFlightpanels
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)dataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
                 _sortedList.Remove(value.Key);
-                dataGridSequences.Items.Refresh();
+                DataGridSequences.Items.Refresh();
                 _isDirty = true;
             }
             catch (Exception ex)
@@ -125,7 +126,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var keyValuePair = (KeyValuePair<int, KeyPressInfo>)dataGridSequences.SelectedItem;
+                var keyValuePair = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
                 var keyPressWindow = new KeyPressWindow(keyValuePair.Value);
                 keyPressWindow.ShowDialog();
                 if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
@@ -139,9 +140,9 @@ namespace DCSFlightpanels
                     _sortedList[keyValuePair.Key].LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
                     _sortedList[keyValuePair.Key].VirtualKeyCodes = OSKeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
                     _sortedList[keyValuePair.Key].LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
-                    dataGridSequences.DataContext = _sortedList;
-                    dataGridSequences.ItemsSource = _sortedList;
-                    dataGridSequences.Items.Refresh();
+                    DataGridSequences.DataContext = _sortedList;
+                    DataGridSequences.ItemsSource = _sortedList;
+                    DataGridSequences.Items.Refresh();
                     _isDirty = true;
                 }
             }
@@ -155,7 +156,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)dataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
                 MoveItemUp(value.Key);
             }
             catch (Exception ex)
@@ -168,7 +169,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var value = (KeyValuePair<int, KeyPressInfo>)dataGridSequences.SelectedItem;
+                var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
                 MoveItemDown(value.Key);
             }
             catch (Exception ex)
@@ -224,7 +225,7 @@ namespace DCSFlightpanels
             _sortedList.Remove(key + 1);
             _sortedList.Add(key + 1, itemToBeMovedDown);
             _sortedList.Add(key, itemToBeMovedUp);
-            dataGridSequences.Items.Refresh();
+            DataGridSequences.Items.Refresh();
             _isDirty = true;
         }
 
@@ -237,7 +238,7 @@ namespace DCSFlightpanels
             _sortedList.Remove(key - 1);
             _sortedList.Add(key - 1, itemToBeMovedUp);
             _sortedList.Add(key, itemToBeMovedDown);
-            dataGridSequences.Items.Refresh();
+            DataGridSequences.Items.Refresh();
             _isDirty = true;
         }
 
@@ -250,6 +251,15 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(2007, ex);
+            }
+        }
+
+        private void SequenceWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!ButtonOk.IsEnabled)
+            {
+                DialogResult = false;
+                Close();
             }
         }
     }
