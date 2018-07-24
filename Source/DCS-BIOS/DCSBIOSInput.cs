@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using ClassLibraryCommon;
 
 namespace DCS_BIOS

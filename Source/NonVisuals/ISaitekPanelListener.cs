@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using ClassLibraryCommon;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
     public interface ISaitekPanelListener
     {

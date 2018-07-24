@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
-using DCS_BIOS;
 using NonVisuals;
 
 namespace DCSFlightpanels

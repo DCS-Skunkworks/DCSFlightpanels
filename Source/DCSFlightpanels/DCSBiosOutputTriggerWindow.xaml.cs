@@ -9,7 +9,6 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using CommonClassLibraryJD;
 using DCS_BIOS;
-using NonVisuals;
 
 namespace DCSFlightpanels
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ClassLibraryCommon;
-using Jace;
 
 namespace DCS_BIOS
 {

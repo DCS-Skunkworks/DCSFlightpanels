@@ -12,8 +12,6 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using NonVisuals;
-using Jace;
 
 namespace DCSFlightpanels
 {

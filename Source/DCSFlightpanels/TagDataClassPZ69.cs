@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DCS_BIOS;
+﻿using System.Collections.Generic;
 using NonVisuals;
 
 namespace DCSFlightpanels
