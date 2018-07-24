@@ -636,7 +636,11 @@ namespace DCSFlightpanels
 
         private void JaceSandboxWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            Close();
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                Close();
+            }
         }
     }
 }

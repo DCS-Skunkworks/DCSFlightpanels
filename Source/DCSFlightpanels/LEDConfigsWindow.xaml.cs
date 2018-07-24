@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
 
@@ -225,5 +226,14 @@ namespace DCSFlightpanels
             }
         }
 
+        private void LEDConfigsWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                DialogResult = false;
+                e.Handled = true;
+                Close();
+            }
+        }
     }
 }

@@ -190,10 +190,10 @@ namespace DCSFlightpanels
 
         private void DCSBIOSControlsConfigsWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-
-            if (!ButtonOk.IsEnabled)
+            if (e.Key == Key.Escape)
             {
                 DialogResult = false;
+                e.Handled = true;
                 Close();
             }
         }

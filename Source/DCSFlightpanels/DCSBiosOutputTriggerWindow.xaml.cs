@@ -341,9 +341,10 @@ namespace DCSFlightpanels
 
         private void DCSBiosOutputTriggerWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (!ButtonOk.IsEnabled)
+            if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
             {
                 DialogResult = false;
+                e.Handled = true;
                 Close();
             }
         }

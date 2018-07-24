@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
 
@@ -223,5 +224,15 @@ namespace DCSFlightpanels
             }
         }
         public bool IsDirty => _isDirty;
+
+        private void BipLightWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!IsDirty && e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                Close();
+            }
+
+        }
     }
 }

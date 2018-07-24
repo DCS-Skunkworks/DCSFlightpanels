@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
 
@@ -237,5 +238,14 @@ namespace DCSFlightpanels
         }
 
         public BIPLink BIPLink => _bipLink;
+
+        private void BIPLinkWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                Close();
+            }
+        }
     }
 }

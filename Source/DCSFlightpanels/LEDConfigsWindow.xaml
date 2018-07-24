@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.LEDConfigsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="LED configurations" Height="400" Width="800" Loaded="LEDConfigsWindow_OnLoaded" Icon="/DCSFlightpanels;component/huey_icon.ico" WindowStartupLocation="CenterScreen" >
+        Title="LED configurations" Height="400" Width="800" Loaded="LEDConfigsWindow_OnLoaded" Icon="/DCSFlightpanels;component/huey_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="LEDConfigsWindow_OnKeyDown">
     <Window.Resources>
         <ContextMenu x:Key="ConfigContextMenu" x:Shared="False">
             <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick"/>

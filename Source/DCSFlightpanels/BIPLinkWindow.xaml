@@ -4,7 +4,7 @@
         xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
         xmlns:data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
-        Title="BIP Lights" Height="422" Width="787" Loaded="WindowLoaded" WindowStartupLocation="CenterScreen" Icon="/DCSFlightpanels;component/huey_icon.ico">
+        Title="BIP Lights" Height="422" Width="787" Loaded="WindowLoaded" WindowStartupLocation="CenterScreen" Icon="/DCSFlightpanels;component/huey_icon.ico" KeyDown="BIPLinkWindow_OnKeyDown">
     <controls:Grid>
         <controls:Grid.RowDefinitions>
             <controls:RowDefinition Height="3*" />
