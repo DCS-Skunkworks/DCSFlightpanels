@@ -763,13 +763,13 @@ namespace NonVisuals
                 if (HIDSkeletonBase.HIDWriteDevice != null)
                 {
                     var array = new[] { (byte)0x0, (byte)switchPanelPZ55LEDs };
-                    Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                    //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(new byte[] { 0, 0 });
                     HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
                 }
                 //if (IsAttached)
                 //{
-                Common.DebugP("Write ending");
+                //Common.DebugP("Write ending");
                 //}
             }
             catch (Exception e)

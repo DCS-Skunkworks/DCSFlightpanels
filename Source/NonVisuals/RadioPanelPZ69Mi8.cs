@@ -33,7 +33,7 @@ namespace NonVisuals
         private volatile uint _r863ManualCockpitFreq1DialPos = 1;
         private volatile uint _r863ManualCockpitFreq2DialPos = 1;
         private volatile uint _r863ManualCockpitFreq3DialPos = 1;
-        private volatile uint _r863ManualCockpitFreq4DialPos = 1;
+        private volatile uint _r863ManualCockpitFreq4DialPos = 0;
         private double _r863ManualCockpitFrequency = 100.000;
         private DCSBIOSOutput _r863ManualDcsbiosOutputCockpitFrequency;
         private const string R863ManualFreq1DialCommand = "R863_FREQ1 ";
@@ -233,7 +233,7 @@ namespace NonVisuals
                     Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
-                
+
                 if (e.Address.Equals(_yadro1aDcsbiosOutputCockpitFrequency.Address))
                 {
                     // "02000.0" - "17999.9"
@@ -381,7 +381,7 @@ namespace NonVisuals
             {
 
                 UpdateCounter(e.Address, e.Data);
-                
+
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -818,12 +818,22 @@ namespace NonVisuals
                             {
                                 lock (_lockR863ManualDialsObject1)
                                 {
-
                                     Common.DebugP("_r863ManualCockpitFreq1DialPos is " + _r863ManualCockpitFreq1DialPos + " and should be " + desiredPositionDial1X);
                                     if (_r863ManualCockpitFreq1DialPos != desiredPositionDial1X)
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
-                                        str = R863ManualFreq1DialCommand + GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
+                                        str = R863ManualFreq1DialCommand + "DEC\n";// GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
+                                        /*
+                                            25.7.2018
+                                            10	0.22999967634678
+                                            39	0.21999971568584
+
+                                            10Mhz  Rotary Knob (Mi-8MT/R863_FREQ1)
+                                            Changing the dial (in cockpit) 39 => 10 does not show in DCS-BIOS in the CTRL-Ref page. But going down from 10 => 39 is OK.
+                                            I have gotten the values above from DCS using the Lua console so I can see that they do actually change but there is something not working in DCS-BIOS
+                                            So only go down with it
+                                         */
+
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial1SendCount++;
@@ -944,8 +954,10 @@ namespace NonVisuals
                         SwapCockpitStandbyFrequencyR863Manual();
                         ShowFrequenciesOnPanel();
                     }
-                    catch (ThreadAbortException)
-                    { }
+                    catch (ThreadAbortException ex)
+                    {
+                        Common.LogError(56442, ex);
+                    }
                     catch (Exception ex)
                     {
                         Common.LogError(56443, ex);
@@ -2250,18 +2262,15 @@ namespace NonVisuals
                                 }
                                 lock (_lockR863ManualDialsObject2)
                                 {
-
                                     frequencyAsString = frequencyAsString + _r863ManualCockpitFreq2DialPos;
                                 }
                                 frequencyAsString = frequencyAsString + ".";
                                 lock (_lockR863ManualDialsObject3)
                                 {
-
                                     frequencyAsString = frequencyAsString + _r863ManualCockpitFreq3DialPos;
                                 }
                                 lock (_lockR863ManualDialsObject4)
                                 {
-
                                     frequencyAsString = frequencyAsString + GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
                                 }
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -2932,8 +2941,6 @@ namespace NonVisuals
                  * Min is 10
                  * Max is 39
                  */
-
-
                 Common.DebugP("Entering Mi-8 Radio GetCommandDirectionForR863ManualDial1()");
                 //count up
                 var tmpActualDialPositionUp = actualDialPosition;
@@ -2956,7 +2963,7 @@ namespace NonVisuals
                     upCount++;
                 } while (tmpActualDialPositionUp != desiredDialPosition);
 
-                //down up
+                //count down
                 var tmpActualDialPositionDown = actualDialPosition;
                 var downCount = actualDialPosition;
                 do
@@ -3371,13 +3378,13 @@ namespace NonVisuals
                             return "0";
                         }
                 }
-                Common.DebugP("ERROR!!! Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition()");
+                Common.LogError(1111, "ERROR!!! Leaving Mi-8 Radio GetR863ManualDialFrequencyForPosition() Position : [" + position + "]");
             }
             catch (Exception ex)
             {
                 Common.LogError(78019, ex);
             }
-            return "";
+            return "0";
         }
 
         private bool SkipR863PresetDialChange()
