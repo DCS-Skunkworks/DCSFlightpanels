@@ -246,11 +246,17 @@ namespace DCS_BIOS
                                 //41 = A
                                 //42 = B
                                 var hex = Convert.ToString(data, 16);
+
+
+                                /*
+                                25.7.2018
+                                Was the TACAN problem related to something else? Perhaps to the flickering which was caused in mainwindow's constructor (wrong order instantiation)? Wrong fix which didn't help??
+
                                 if (hex.Length < 4)
                                 {
                                     //TODO Keep getting garbage from DCS-BIOS, especially A-10C TACAN
                                     return;
-                                }
+                                }*/
                                 //Little Endian !
                                 //Common.DebugP("**********data = [" + data + "] ****************");
                                 //Common.DebugP("**********hex = [" + hex + "] ****************");
