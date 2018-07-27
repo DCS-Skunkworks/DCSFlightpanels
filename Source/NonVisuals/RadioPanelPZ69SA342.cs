@@ -34,8 +34,8 @@ namespace NonVisuals
         /*COM1 SA342 VHF AM Radio*/
         //Large dial 118-143
         //Small dial 0-975
-        private int[] _dialPositionsWholeNumbers = new int[] { 0, 6553, 13107, 19660, 26214, 32767, 39321, 45874, 52428, 58981 };
-        private int[] _dialPositionsDecial100s = new int[] { 0, 16383, 32767, 49151 };
+        private readonly int[] _dialPositionsWholeNumbers = new int[] { 0, 6553, 13107, 19660, 26214, 32767, 39321, 45874, 52428, 58981 };
+        private readonly int[] _dialPositionsDecial100s = new int[] { 0, 16383, 32767, 49151 };
         private double _vhfAmBigFrequencyStandby = 118;
         private double _vhfAmSmallFrequencyStandby;
         private double _vhfAmSavedCockpitBigFrequency;
@@ -72,15 +72,15 @@ namespace NonVisuals
         private volatile uint _fmRadioPresetCockpitDialPos = 1;
         private const string FmRadioPresetCommandInc = "FM_RADIO_CHANNEL INC\n";
         private const string FmRadioPresetCommandDec = "FM_RADIO_CHANNEL DEC\n";
-        private object _lockFmRadioPresetObject = new object();
+        private readonly object _lockFmRadioPresetObject = new object();
 
         /*NAV1 SA342 UHF Radio*/
         //Large dial 225-399
         //Small dial 000-975 where only 2 digits can be used
-        private ClickSpeedDetector _uhfBigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _uhfBigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _uhfSmallFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _uhfSmallFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _uhfBigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _uhfBigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _uhfSmallFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _uhfSmallFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         private double _uhfBigFrequencyStandby = 225;
         private double _uhfSmallFrequencyStandby = 0;
         private const string UhfButton0CommandOn = "UHF_RADIO_BUTTON_0 1\n";

@@ -14,10 +14,10 @@ namespace DCSFlightpanels
     public partial class LEDConfigsWindow : Window
     {
         private List<DcsOutputAndColorBinding> _colorOutputBindings;
-        private string _description;
-        private SaitekPanel _callingPanel;
-        private SaitekPanelLEDPosition _saitekPanelLEDPosition;
-        private DCSAirframe _dcsAirframe = DCSAirframe.A10C;
+        private readonly string _description;
+        private readonly SaitekPanel _callingPanel;
+        private readonly SaitekPanelLEDPosition _saitekPanelLEDPosition;
+        private readonly DCSAirframe _dcsAirframe = DCSAirframe.A10C;
 
         public LEDConfigsWindow(DCSAirframe dcsAirframe, string description, SaitekPanelLEDPosition saitekPanelLEDPosition, List<DcsOutputAndColorBinding> colorOutputBindings, SaitekPanel callingPanel)
         {

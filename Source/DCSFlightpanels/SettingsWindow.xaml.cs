@@ -34,7 +34,7 @@ namespace DCSFlightpanels
         private string _ipAddressToSRS;
         private string _portToSRS;
 
-        private DCSAirframe _dcsAirframe;
+        private readonly DCSAirframe _dcsAirframe;
 
         public SettingsWindow(DCSAirframe dcsAirframe)
         {

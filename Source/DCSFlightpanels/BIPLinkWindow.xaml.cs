@@ -12,9 +12,9 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml
     /// </summary>
-    public partial class BIPLinkWindow : Window
+    public partial class BIPLinkWindow
     {
-        private BIPLink _bipLink;
+        private readonly BIPLink _bipLink;
         private bool _isDirty;
         
         public BIPLinkWindow(BIPLink bipLink)

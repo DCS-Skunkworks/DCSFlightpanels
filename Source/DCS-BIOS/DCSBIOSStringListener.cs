@@ -8,12 +8,12 @@ namespace DCS_BIOS
 
     public class DCSBIOSString
     {
-        private string[] _internalBuffer;
+        private readonly string[] _internalBuffer;
         private int _length;
         private uint _address;
 
         //Use this, some strings need to be fully contructed before being broadcasted
-        private List<uint> _receivedAddresses = new List<uint>();
+        private readonly List<uint> _receivedAddresses = new List<uint>();
 
         public DCSBIOSString(uint address, int length)
         {
@@ -142,9 +142,9 @@ namespace DCS_BIOS
         public delegate void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e);
         public event DCSBIOSStringReceived OnDCSBIOSStringReceived;
 
-        private List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new List<KeyValuePair<uint, DCSBIOSString>>();
-        private object _lockObject = new object();
-        private Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
+        private readonly List<KeyValuePair<uint, DCSBIOSString>> _dcsBiosStrings = new List<KeyValuePair<uint, DCSBIOSString>>();
+        private readonly object _lockObject = new object();
+        private readonly Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
 
 
         //For those that wants to listen to Strings received from DCS-BIOS

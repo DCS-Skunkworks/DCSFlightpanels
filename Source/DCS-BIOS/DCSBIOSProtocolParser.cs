@@ -39,13 +39,13 @@ namespace DCS_BIOS
         private uint _data;
         private byte _syncByteCount;
         private bool _shutdown;
-        private List<uint> _listOfAddressesToBroascast = new List<uint>();
+        private readonly List<uint> _listOfAddressesToBroascast = new List<uint>();
         public static DCSBIOSProtocolParser DCSBIOSProtocolParserSO;
-        private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
         //private object _lockArrayToProcess = new object();
         //private List<byte[]> _arraysToProcess = new List<byte[]>();
-        private ConcurrentQueue<byte[]> _arraysToProcess = new ConcurrentQueue<byte[]>();
+        private readonly ConcurrentQueue<byte[]> _arraysToProcess = new ConcurrentQueue<byte[]>();
         private Thread _processingThread;
 
         private DCSBIOSProtocolParser()

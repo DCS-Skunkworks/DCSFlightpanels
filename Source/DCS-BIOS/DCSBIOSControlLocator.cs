@@ -11,7 +11,7 @@ namespace DCS_BIOS
 
     public static class DCSBIOSControlLocator
     {
-        private static object _lockObject = new object();
+        private static readonly object _lockObject = new object();
         private static DCSAirframe _airframe;
         private static string _jsonDirectory;
         private static bool _airFrameChanged;

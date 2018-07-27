@@ -20,12 +20,12 @@ namespace DCSFlightpanels
     public partial class MultiPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
-        private TabItem _parentTabItem;
+        private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
-        private IGlobalHandler _globalHandler;
+        private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
         private bool _textBoxTagsSet;
-        private bool _enableDCSBIOS;
+        private readonly bool _enableDCSBIOS;
 
         public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
         {

@@ -8,9 +8,9 @@ namespace NonVisuals
 {
     abstract class PerformanceTimer
     {
-        private string _id;
-        private List<KeyValuePair<bool, long>> _clickTimesList;
-        private long _start = DateTime.Now.Ticks;
+        private readonly string _id;
+        private readonly List<KeyValuePair<bool, long>> _clickTimesList;
+        private readonly long _start = DateTime.Now.Ticks;
 
         public PerformanceTimer(string id)
         {

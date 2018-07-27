@@ -21,10 +21,10 @@ namespace NonVisuals
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private HashSet<TPMPanelSwitch> _tpmPanelSwitches = new HashSet<TPMPanelSwitch>();
         private bool _isFirstNotification = true;
-        private byte[] _oldTPMPanelValue = { 0, 0, 0, 0, 0 };
-        private byte[] _newTPMPanelValue = { 0, 0, 0, 0, 0 };
+        private readonly byte[] _oldTPMPanelValue = { 0, 0, 0, 0, 0 };
+        private readonly byte[] _newTPMPanelValue = { 0, 0, 0, 0, 0 };
         //private HidDevice _hidReadDevice;
-        private object _dcsBiosDataReceivedLock = new object();
+        private readonly object _dcsBiosDataReceivedLock = new object();
 
         public TPMPanel(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.TPM, hidSkeleton, enableDCSBIOS)
         {

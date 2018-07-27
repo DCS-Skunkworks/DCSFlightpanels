@@ -41,11 +41,11 @@ namespace NonVisuals
         //0-360
         private int _crsLCDKeyEmulatorValue = 0;
 
-        private ClickSpeedDetector _altLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private ClickSpeedDetector _vsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private ClickSpeedDetector _iasLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private ClickSpeedDetector _hdgLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
-        private ClickSpeedDetector _crsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private readonly ClickSpeedDetector _altLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private readonly ClickSpeedDetector _vsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private readonly ClickSpeedDetector _iasLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private readonly ClickSpeedDetector _hdgLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
+        private readonly ClickSpeedDetector _crsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
 
         private long _doUpdatePanelLCD;
 
@@ -1304,20 +1304,20 @@ LCD Button Byte
 ||_ APR_BUTTON
 |_ REV_BUTTON
  */
-        private byte _apMask = 1;
-        private byte _hdgMask = 2;
-        private byte _navMask = 4;
-        private byte _iasMask = 8;
-        private byte _altMask = 16;
-        private byte _vsMask = 32;
-        private byte _aprMask = 64;
-        private byte _revMask = 128;
-        private int _dialAltMask = 256;
-        private int _dialVsMask = 512;
-        private int _dialIasMask = 1024;
-        private int _dialHdgMask = 2048;
-        private int _dialCrsMask = 4096;
-        private int _buttonIsOnMask = 8192;
+        private readonly byte _apMask = 1;
+        private readonly byte _hdgMask = 2;
+        private readonly byte _navMask = 4;
+        private readonly byte _iasMask = 8;
+        private readonly byte _altMask = 16;
+        private readonly byte _vsMask = 32;
+        private readonly byte _aprMask = 64;
+        private readonly byte _revMask = 128;
+        private readonly int _dialAltMask = 256;
+        private readonly int _dialVsMask = 512;
+        private readonly int _dialIasMask = 1024;
+        private readonly int _dialHdgMask = 2048;
+        private readonly int _dialCrsMask = 4096;
+        private readonly int _buttonIsOnMask = 8192;
 
         //bool isSet = (b & mask) != 0
         //Set to 1" b |= mask
@@ -1325,8 +1325,8 @@ LCD Button Byte
         //b &= ~mask
         //Toggle
         //b ^= mask
-        private byte[] _buttonBytes = new byte[8];
-        private int[] _buttonDialPosition = new int[8];
+        private readonly byte[] _buttonBytes = new byte[8];
+        private readonly int[] _buttonDialPosition = new int[8];
 
         public PZ70LCDButtonByteList()
         {

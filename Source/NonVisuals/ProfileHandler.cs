@@ -74,13 +74,13 @@ namespace NonVisuals
         private string _jsonDirectory = "";
         private bool _isDirty;
         private bool _isNewProfile;
-        private List<string> _listPanelSettingsData = new List<string>();
-        private object _lockObject = new object();
+        private readonly List<string> _listPanelSettingsData = new List<string>();
+        private readonly object _lockObject = new object();
         private const string OpenFileDialogFileName = "*.bindings";
         private const string OpenFileDialogDefaultExt = ".bindings";
         private const string OpenFileDialogFilter = "DCSFlightpanels (.bindings)|*.bindings";
         private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
-        private List<KeyValuePair<string, SaitekPanelsEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, SaitekPanelsEnum>>();
+        private readonly List<KeyValuePair<string, SaitekPanelsEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, SaitekPanelsEnum>>();
         private bool _profileLoaded;
 
         public ProfileHandler(string jsonDirectory)

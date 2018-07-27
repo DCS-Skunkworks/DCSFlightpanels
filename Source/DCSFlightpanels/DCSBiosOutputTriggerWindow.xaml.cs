@@ -18,14 +18,14 @@ namespace DCSFlightpanels
     public partial class DCSBiosOutputTriggerWindow
     {
         private DCSBIOSOutput _dcsBiosOutput;
-        private string _description;
+        private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
         private DCSAirframe _dcsAirframe;
-        private IEnumerable<DCSBIOSControl> _dcsbiosControls;
+        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
-        private bool _showCriteria;
+        private readonly bool _showCriteria;
 
         public DCSBiosOutputTriggerWindow(DCSAirframe dcsAirframe, string description, bool showCriteria = true)
         {

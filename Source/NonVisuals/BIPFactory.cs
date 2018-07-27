@@ -5,7 +5,7 @@ namespace NonVisuals
 {
     public static class BipFactory
     {
-        private static BipEventHandlerManager _bipEventHandlerManager = new BipEventHandlerManager();
+        private static readonly BipEventHandlerManager _bipEventHandlerManager = new BipEventHandlerManager();
 
         public static void BroadcastRegisteredBips()
         {
@@ -78,7 +78,7 @@ namespace NonVisuals
         public delegate void BipPanelRegisteredEventHandler(object sender, BipPanelRegisteredEventArgs e);
         public event BipPanelRegisteredEventHandler OnBipPanelRegistered;
 
-        private List<BacklitPanelBIP> _backlitPanels = new List<BacklitPanelBIP>();
+        private readonly List<BacklitPanelBIP> _backlitPanels = new List<BacklitPanelBIP>();
         //private object _panelLockObject = new object();
         
         public List<BacklitPanelBIP> GetBips()

@@ -5,7 +5,7 @@ namespace NonVisuals
 {
     public class ClickSpeedDetector
     {
-        private List<long> _clicksTimeTicksList = new List<long>();
+        private readonly List<long> _clicksTimeTicksList = new List<long>();
         private int _maxClicksToKeep = 200;
         private int _defaultPeriod = 2000;
         private int _clickCountThreshold = 20;

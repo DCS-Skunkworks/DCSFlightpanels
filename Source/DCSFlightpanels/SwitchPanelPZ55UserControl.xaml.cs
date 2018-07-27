@@ -20,13 +20,13 @@ namespace DCSFlightpanels
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
-        private TabItem _parentTabItem;
+        private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
-        private Image[] _imageArrayUpper = new Image[4];
-        private Image[] _imageArrayLeft = new Image[4];
-        private Image[] _imageArrayRight = new Image[4];
-        private IGlobalHandler _globalHandler;
-        private bool _enableDCSBIOS;
+        private readonly Image[] _imageArrayUpper = new Image[4];
+        private readonly Image[] _imageArrayLeft = new Image[4];
+        private readonly Image[] _imageArrayRight = new Image[4];
+        private readonly IGlobalHandler _globalHandler;
+        private readonly bool _enableDCSBIOS;
         private bool _textBoxTagsSet;
         private bool _controlLoaded;
 

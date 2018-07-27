@@ -38,11 +38,11 @@ namespace NonVisuals
         /*F-86F ARN-6 MANUAL NAV1*/
         //Large dial -> tuning
         //Small dial -> bands
-        private ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         const int ChangeValue = 10;
-        private object _lockARN6FrequencyObject = new object();
-        private object _lockARN6BandObject = new object();
+        private readonly object _lockARN6FrequencyObject = new object();
+        private readonly object _lockARN6BandObject = new object();
         private volatile uint _arn6CockpitFrequency = 108;
         private volatile uint _arn6CockpitBand;
         private DCSBIOSOutput _arn6ManualDcsbiosOutputCockpitFrequency;
@@ -58,7 +58,7 @@ namespace NonVisuals
         /*F-86F ARN-6 MODES NAV2*/
         //Large dial MODES
         //Small dial volume control
-        private object _lockARN6ModeObject = new object();
+        private readonly object _lockARN6ModeObject = new object();
         private DCSBIOSOutput _arn6ModeDcsbiosOutputPresetDial;
         private volatile uint _arn6ModeCockpitDialPos = 1;
         private const string ARN6ModeCommandInc = "ARN6_FUNC_SEL INC\n";
@@ -72,7 +72,7 @@ namespace NonVisuals
         //Small - No Use
         //ACT-STBY, Toggles IFF Dial Stop Button, button must be depressed to go into Emergency Mode.
         private volatile uint _apx6ModeCockpitDialPos = 1;
-        private object _lockAPX6ModeObject = new object();
+        private readonly object _lockAPX6ModeObject = new object();
         private int _apx6ModeDialSkipper;
         private DCSBIOSOutput _apx6ModeDcsbiosOutputCockpit;
         private const string APX6ModeDialCommandInc = "APX6_MASTER INC\n";

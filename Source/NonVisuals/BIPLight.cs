@@ -4,7 +4,7 @@ using System.Text;
 namespace NonVisuals
 {
 
-    public enum BIPLightDelays :int
+    public enum BIPLightDelays 
     {
         Zeroms = 0,
         Fiftyms = 50,

@@ -17,11 +17,11 @@ namespace DCSFlightpanels
     {
         private DCSBIOSOutput _dcsBiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula;
-        private string _description;
+        private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
         private DCSAirframe _dcsAirframe;
-        private IEnumerable<DCSBIOSControl> _dcsbiosControls;
+        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
         private readonly JaceExtended _jaceExtended = new JaceExtended();

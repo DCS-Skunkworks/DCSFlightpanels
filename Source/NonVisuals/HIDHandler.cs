@@ -68,7 +68,7 @@ namespace NonVisuals
 
     public class HIDHandler
     {
-        private List<HIDSkeleton> _hidSkeletons = new List<HIDSkeleton>();
+        private readonly List<HIDSkeleton> _hidSkeletons = new List<HIDSkeleton>();
 
         public void Startup()
         {

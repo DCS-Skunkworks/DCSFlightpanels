@@ -45,12 +45,12 @@ namespace NonVisuals
         private long _lowerFreqSwitchPressed = 0;
         private int _largeDialSkipper;
         private int _smallDialSkipper;
-        private ClickSpeedDetector _largeDialIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _largeDialDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _firstSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(30);
-        private ClickSpeedDetector _firstSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(30);
-        private ClickSpeedDetector _secondSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(36);
-        private ClickSpeedDetector _secondSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(36);
+        private readonly ClickSpeedDetector _largeDialIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _largeDialDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _firstSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(30);
+        private readonly ClickSpeedDetector _firstSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(30);
+        private readonly ClickSpeedDetector _secondSmallDialIncreaseChangeMonitor = new ClickSpeedDetector(36);
+        private readonly ClickSpeedDetector _secondSmallDialDecreaseChangeMonitor = new ClickSpeedDetector(36);
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;

@@ -18,7 +18,7 @@ namespace NonVisuals
         /*UH-1H INTERCOMM*/
         //PVT INT 1 2 3 4  (6 positions 0-5)
         private volatile uint _intercommSkipper;
-        private object _lockIntercommDialObject = new object();
+        private readonly object _lockIntercommDialObject = new object();
         //private volatile uint _intercommDialPosStandby = 0;  <--- Only active, user operates the knob directly, no need for a standby value
         //private volatile uint _intercommSavedCockpitDialPosition = 0;
         private DCSBIOSOutput _intercommDcsbiosOutputCockpitPos;
@@ -33,8 +33,8 @@ namespace NonVisuals
         /*UH-1H AN/ARC-134 VHF Comm Radio Set Left side of lower control panel */
         //Large dial 116-149 [step of 1]
         //Small dial 0.00-0.95 [step of 0.05]
-        private object _lockVhfCommDialsObject1 = new object();
-        private object _lockVhfCommDialsObject2 = new object();
+        private readonly object _lockVhfCommDialsObject1 = new object();
+        private readonly object _lockVhfCommDialsObject2 = new object();
         private volatile uint _vhfCommBigFrequencyStandby = 116;
         private volatile uint _vhfCommSmallFrequencyStandby;
         private volatile uint _vhfCommSavedCockpitSmallFrequency;
@@ -59,14 +59,14 @@ namespace NonVisuals
         private const string UhfPresetDialCommandInc = "UHF_PRESET INC\n";
         private const string UhfPresetDialCommandDec = "UHF_PRESET DEC\n";
         private DCSBIOSOutput _uhfDcsbiosOutputCockpitPresetChannel;
-        private object _lockUhfPresetChannelObject = new object();
+        private readonly object _lockUhfPresetChannelObject = new object();
         //private Thread _uhfPresetChannelSyncThread;
         //private long _uhfPresetChannelThreadNowSynching = 0;
         //private long _uhfPresetChannelWaitingForFeedback = 0;
 
-        private object _lockUhfDialsObject1 = new object();
-        private object _lockUhfDialsObject2 = new object();
-        private object _lockUhfDialsObject3 = new object();
+        private readonly object _lockUhfDialsObject1 = new object();
+        private readonly object _lockUhfDialsObject2 = new object();
+        private readonly object _lockUhfDialsObject3 = new object();
         private volatile uint _uhfBigFrequencyStandby = 225;
         private volatile uint _uhfSmallFrequencyStandby;
         private volatile uint _uhfSavedCockpitBigFrequency = 225;
@@ -88,8 +88,8 @@ namespace NonVisuals
         /*UH-1H AN/ARN-82 VHF Navigation Set*/
         //Large dial 107-126 [step of 1]
         //Small dial 0.00-0.95 [step of 0.05]
-        private object _lockVhfNavDialsObject1 = new object();
-        private object _lockVhfNavDialsObject2 = new object();
+        private readonly object _lockVhfNavDialsObject1 = new object();
+        private readonly object _lockVhfNavDialsObject2 = new object();
         private volatile uint _vhfNavBigFrequencyStandby = 107;
         private volatile uint _vhfNavSmallFrequencyStandby;
         private volatile uint _vhfNavSavedCockpitBigFrequency = 107;
@@ -111,10 +111,10 @@ namespace NonVisuals
         private uint _vhfFmSmallFrequencyStandby;
         private uint _vhfFmSavedCockpitBigFrequency = 30;
         private uint _vhfFmSavedCockpitSmallFrequency;
-        private object _lockVhfFmDialsObject1 = new object();
-        private object _lockVhfFmDialsObject2 = new object();
-        private object _lockVhfFmDialsObject3 = new object();
-        private object _lockVhfFmDialsObject4 = new object();
+        private readonly object _lockVhfFmDialsObject1 = new object();
+        private readonly object _lockVhfFmDialsObject2 = new object();
+        private readonly object _lockVhfFmDialsObject3 = new object();
+        private readonly object _lockVhfFmDialsObject4 = new object();
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial1;
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial2;
         private DCSBIOSOutput _vhfFmDcsbiosOutputFreqDial3;
@@ -145,9 +145,9 @@ namespace NonVisuals
             190-1800 kHz
          */
         private bool _increaseAdfBand;
-        private object _lockAdfFrequencyBandObject = new object();
-        private object _lockAdfCockpitFrequencyObject = new object();
-        private object _lockAdfSignalStrengthObject = new object();
+        private readonly object _lockAdfFrequencyBandObject = new object();
+        private readonly object _lockAdfCockpitFrequencyObject = new object();
+        private readonly object _lockAdfSignalStrengthObject = new object();
         private DCSBIOSOutput _adfDcsbiosOutputCockpitFrequencyBand;
         private DCSBIOSOutput _adfDcsbiosOutputCockpitFrequency;
         private DCSBIOSOutput _adfDcsbiosOutputSignalStrength;

@@ -11,7 +11,7 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class InformationWindow : Window
     {
-        private byte[] _bytes;
+        private readonly byte[] _bytes;
 
         public InformationWindow(byte[] bytes)
         {

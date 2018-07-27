@@ -36,7 +36,7 @@ namespace DCS_BIOS
         private int _dcsbiosSendPortUdp = 7778;
         private IPEndPoint _ipEndPointReceiverUdp;
         private IPEndPoint _ipEndPointSenderUdp;
-        private string _receivedDataUdp = null;
+        private readonly string _receivedDataUdp = null;
         /************************
         *************************
         ************************/
@@ -60,9 +60,9 @@ namespace DCS_BIOS
         private readonly object _lockExceptionObject = new object();
         private Exception _lastException;
         private DCSBIOSProtocolParser _dcsProtocolParser;
-        private DcsBiosNotificationMode _dcsBiosNotificationMode;
+        private readonly DcsBiosNotificationMode _dcsBiosNotificationMode;
         private readonly IDcsBiosDataListener _iDcsBiosDataListener;
-        private object _lockObjectForSendingData = new object();
+        private readonly object _lockObjectForSendingData = new object();
         private Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
         private bool _started;
         private bool _shutdown;

@@ -14,7 +14,7 @@ namespace DCSFlightpanels
     public partial class RadioPanelPZ69UserControlP51D : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly RadioPanelPZ69P51D _radioPanelPZ69;
-        private TabItem _parentTabItem;
+        private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
         private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;

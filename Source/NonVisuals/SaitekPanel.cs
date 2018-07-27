@@ -173,18 +173,18 @@ namespace NonVisuals
         private bool _isDirty;
         //private bool _isAttached;
         private bool _forwardKeyPresses;
-        private static object _lockObject = new object();
-        private static List<SaitekPanel> _saitekPanels = new List<SaitekPanel>();
+        private static readonly object _lockObject = new object();
+        private static readonly List<SaitekPanel> _saitekPanels = new List<SaitekPanel>();
         private bool _keyboardEmulation;
         /*
          * IMPORTANT STUFF
          */
-        private DCSBIOSOutput _updateCounterDCSBIOSOutput;
-        private static object _updateCounterLockObject = new object();
+        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
+        private static readonly object _updateCounterLockObject = new object();
         private uint _count;
         private bool _synchedOnce;
-        private Guid _guid = Guid.NewGuid();
-        private string _hash;
+        private readonly Guid _guid = Guid.NewGuid();
+        private readonly string _hash;
 
         protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
         {

@@ -17,11 +17,11 @@ namespace DCSFlightpanels
     public partial class DCSBiosInputWindow : Window
     {
         private DCSBIOSInput _dcsBiosInput;
-        private string _description;
+        private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
         private DCSAirframe _dcsAirframe;
-        private IEnumerable<DCSBIOSControl> _dcsbiosControls;
+        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
 

@@ -51,9 +51,9 @@ namespace NonVisuals
         private volatile uint _tilsChannelCockpitValue;
         private volatile uint _tilsChannelLayerSelectorCockpitValue;
         private volatile uint _masterModeSelectorCockpitValue;
-        private object _lockTILSChannelSelectorDialObject1 = new object();
-        private object _lockTILSChannelLayerSelectorObject2 = new object();
-        private object _lockMasterModeSelectorObject = new object();
+        private readonly object _lockTILSChannelSelectorDialObject1 = new object();
+        private readonly object _lockTILSChannelLayerSelectorObject2 = new object();
+        private readonly object _lockMasterModeSelectorObject = new object();
         private DCSBIOSOutput _tilsChannelSelectorDcsbiosOutput;
         private DCSBIOSOutput _tilsChannelLayerSelectorDcsbiosOutput;
         private DCSBIOSOutput _masterModeSelectorDcsbiosOutput;

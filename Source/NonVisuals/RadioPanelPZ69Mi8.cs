@@ -18,18 +18,18 @@ namespace NonVisuals
         /*Mi-8 VHF/UHF R-863 MANUAL COM1*/
         //Large dial 100-149  -> 220 - 399 [step of 1]
         //Small dial 0 - 95
-        private ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _bigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _bigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         const int ChangeValue = 10;
         //private int[] _r863ManualFreq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
         private volatile uint _r863ManualBigFrequencyStandby = 108;
         private volatile uint _r863ManualSmallFrequencyStandby;
         private volatile uint _r863ManualSavedCockpitBigFrequency;
         private volatile uint _r863ManualSavedCockpitSmallFrequency;
-        private object _lockR863ManualDialsObject1 = new object();
-        private object _lockR863ManualDialsObject2 = new object();
-        private object _lockR863ManualDialsObject3 = new object();
-        private object _lockR863ManualDialsObject4 = new object();
+        private readonly object _lockR863ManualDialsObject1 = new object();
+        private readonly object _lockR863ManualDialsObject2 = new object();
+        private readonly object _lockR863ManualDialsObject3 = new object();
+        private readonly object _lockR863ManualDialsObject4 = new object();
         private volatile uint _r863ManualCockpitFreq1DialPos = 1;
         private volatile uint _r863ManualCockpitFreq2DialPos = 1;
         private volatile uint _r863ManualCockpitFreq3DialPos = 1;
@@ -73,10 +73,10 @@ namespace NonVisuals
         private volatile uint _yadro1aSmallFrequencyStandby;
         private volatile uint _yadro1aSavedCockpitBigFrequency;
         private volatile uint _yadro1aSavedCockpitSmallFrequency;
-        private object _lockYADRO1ADialsObject1 = new object();
-        private object _lockYADRO1ADialsObject2 = new object();
-        private object _lockYADRO1ADialsObject3 = new object();
-        private object _lockYADRO1ADialsObject4 = new object();
+        private readonly object _lockYADRO1ADialsObject1 = new object();
+        private readonly object _lockYADRO1ADialsObject2 = new object();
+        private readonly object _lockYADRO1ADialsObject3 = new object();
+        private readonly object _lockYADRO1ADialsObject4 = new object();
         private volatile uint _yadro1aCockpitFreq1DialPos = 1;
         private volatile uint _yadro1aCockpitFreq2DialPos = 1;
         private volatile uint _yadro1aCockpitFreq3DialPos = 1;

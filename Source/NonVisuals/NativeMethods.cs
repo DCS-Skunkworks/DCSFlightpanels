@@ -323,12 +323,12 @@ namespace NonVisuals
     [StructLayout(LayoutKind.Sequential)]
     public struct MOUSEINPUT
     {
-        private int dx;
-        private int dy;
-        private uint mouseData;
-        private uint dwFlags;
-        private uint time;
-        private IntPtr dwExtraInfo;
+        private readonly int dx;
+        private readonly int dy;
+        private readonly uint mouseData;
+        private readonly uint dwFlags;
+        private readonly uint time;
+        private readonly IntPtr dwExtraInfo;
     }
 
 
@@ -356,9 +356,9 @@ namespace NonVisuals
     [StructLayout(LayoutKind.Sequential)]
     public struct HARDWAREINPUT
     {
-        private uint uMsg;
-        private ushort wParamL;
-        private ushort wParamH;
+        private readonly uint uMsg;
+        private readonly ushort wParamL;
+        private readonly ushort wParamH;
     }
 
     /*

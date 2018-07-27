@@ -19,11 +19,11 @@ namespace DCSFlightpanels
     {
 
         private readonly TPMPanel _tpmPanel;
-        private TabItem _parentTabItem;
+        private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
-        private IGlobalHandler _globalHandler;
+        private readonly IGlobalHandler _globalHandler;
         private bool _once;
-        private bool _enableDCSBIOS;
+        private readonly bool _enableDCSBIOS;
         private bool _textBoxTagsSet;
         private bool _controlLoaded;
 

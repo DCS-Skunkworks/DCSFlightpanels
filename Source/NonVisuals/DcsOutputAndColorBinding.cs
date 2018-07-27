@@ -42,7 +42,7 @@ namespace NonVisuals
     public abstract class DcsOutputAndColorBinding
     {
         private DCSBIOSOutput _dcsBiosOutputLED;
-        private string[] SeparatorChars = { "\\o/" };
+        private readonly string[] SeparatorChars = { "\\o/" };
 
         public abstract void ImportSettings(string settings);
         public abstract string ExportSettings();

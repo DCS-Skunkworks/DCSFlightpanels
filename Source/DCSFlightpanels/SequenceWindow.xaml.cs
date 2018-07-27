@@ -15,7 +15,7 @@ namespace DCSFlightpanels
     public partial class SequenceWindow : Window
     {
 
-        private SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
+        private readonly SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
         private bool _isDirty;
 
         public SequenceWindow()

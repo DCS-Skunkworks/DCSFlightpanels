@@ -12,7 +12,7 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class BipLightWindow : Window
     {
-        private string _description;
+        private readonly string _description;
         private bool _formLoaded;
         private BIPLight _bipLight;
         private bool _isDirty;

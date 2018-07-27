@@ -109,19 +109,19 @@ namespace NonVisuals
          */
         //public static BacklitPanelBIP BacklitPanelBIPSO;
         //private HidDevice _hidWriteDevice;
-        private byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
-        private byte[] _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
-        private byte[] _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
-        private byte _1BIPMask = 0x01;
-        private byte _2BIPMask = 0x02;
-        private byte _3BIPMask = 0x04;
-        private byte _4BIPMask = 0x08;
-        private byte _5BIPMask = 0x10;
-        private byte _6BIPMask = 0x20;
-        private byte _7BIPMask = 0x40;
-        private byte _8BIPMask = 0x80;
+        private readonly byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
+        private readonly byte[] _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
+        private readonly byte[] _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
+        private readonly byte _1BIPMask = 0x01;
+        private readonly byte _2BIPMask = 0x02;
+        private readonly byte _3BIPMask = 0x04;
+        private readonly byte _4BIPMask = 0x08;
+        private readonly byte _5BIPMask = 0x10;
+        private readonly byte _6BIPMask = 0x20;
+        private readonly byte _7BIPMask = 0x40;
+        private readonly byte _8BIPMask = 0x80;
         private int _ledBrightness = 50; // 0 - 100 in 5 step intervals
-        private List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
+        private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
 
         /*
          * 01000000 2nd BIP from left GREEN

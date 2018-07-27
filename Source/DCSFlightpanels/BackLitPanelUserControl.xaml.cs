@@ -16,19 +16,19 @@ namespace DCSFlightpanels
     public partial class BackLitPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
-        private BacklitPanelBIP _backlitPanelBIP;
-        private TabItem _parentTabItem;
+        private readonly BacklitPanelBIP _backlitPanelBIP;
+        private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
-        private List<Image> _colorImages = new List<Image>();
-        private List<Image> _configurationIndicatorImages = new List<Image>();
-        private BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/black.png"));
-        private BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/red.png"));
-        private BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/green.png"));
-        private BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/yellow1.png"));
+        private readonly List<Image> _colorImages = new List<Image>();
+        private readonly List<Image> _configurationIndicatorImages = new List<Image>();
+        private readonly BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/black.png"));
+        private readonly BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/red.png"));
+        private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/green.png"));
+        private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
         private bool _loaded;
-        private IGlobalHandler _globalHandler;
-        private bool _enableDCSBIOS;
+        private readonly IGlobalHandler _globalHandler;
+        private readonly bool _enableDCSBIOS;
 
         public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
         {

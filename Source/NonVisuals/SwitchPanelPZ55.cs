@@ -31,15 +31,15 @@ namespace NonVisuals
         //public static SwitchPanelPZ55 SwitchPanelPZ55SO;
         private HashSet<SwitchPanelKey> _switchPanelKeys = new HashSet<SwitchPanelKey>();
         private bool _isFirstNotification = true;
-        private byte[] _oldSwitchPanelValue = { 0, 0, 0 };
-        private byte[] _newSwitchPanelValue = { 0, 0, 0 };
+        private readonly byte[] _oldSwitchPanelValue = { 0, 0, 0 };
+        private readonly byte[] _newSwitchPanelValue = { 0, 0, 0 };
         //private HidDevice _hidReadDevice;
         //private HidDevice _hidWriteDevice;
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledRightColor = SwitchPanelPZ55LEDs.ALL_DARK;
-        private List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new List<DcsOutputAndColorBindingPZ55>();
-        private object _dcsBiosDataReceivedLock = new object();
+        private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new List<DcsOutputAndColorBindingPZ55>();
+        private readonly object _dcsBiosDataReceivedLock = new object();
         private bool _manualLandingGearLeds;
         private Thread _manualLandingGearThread;
 

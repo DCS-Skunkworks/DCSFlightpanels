@@ -7,8 +7,8 @@ namespace DCS_BIOS
     public class DCSBIOSOutputFormula
     {
         private string _formula;
-        private List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
-        Dictionary<string, double> _variables = new Dictionary<string, double>();
+        private readonly List<DCSBIOSOutput> _dcsbiosOutputs = new List<DCSBIOSOutput>();
+        readonly Dictionary<string, double> _variables = new Dictionary<string, double>();
         readonly JaceExtended _jaceExtended = new JaceExtended();
 
         public DCSBIOSOutputFormula()

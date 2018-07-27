@@ -14,9 +14,9 @@ namespace DCSFlightpanels
     public partial class DCSBIOSControlsConfigsWindow : Window
     {
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
-        private string _header;
+        private readonly string _header;
         private string _description;
-        private DCSAirframe _dcsAirframe = DCSAirframe.A10C;
+        private readonly DCSAirframe _dcsAirframe = DCSAirframe.A10C;
 
         public DCSBIOSControlsConfigsWindow(DCSAirframe dcsAirframe, string header, string description)
         {
