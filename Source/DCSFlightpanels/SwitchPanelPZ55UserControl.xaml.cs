@@ -3167,9 +3167,8 @@ namespace DCSFlightpanels
 
         private void ButtonSwitchPanelInfo_OnClick(object sender, RoutedEventArgs e)
         {
-
             var bytes = Encoding.UTF8.GetBytes(Properties.Resources.PZ55Notes);
-            var informationWindow = new InformationWindow(bytes);
+            var informationWindow = new InformationRichTextWindow(bytes);
             informationWindow.ShowDialog();
         }
 

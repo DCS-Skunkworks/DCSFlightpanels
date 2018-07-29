@@ -150,8 +150,11 @@
     <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InformationWindow.xaml.cs">
-      <DependentUpon>InformationWindow.xaml</DependentUpon>
+    <Compile Include="InformationTextBlockWindow.xaml.cs">
+      <DependentUpon>InformationTextBlockWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InformationRichTextWindow.xaml.cs">
+      <DependentUpon>InformationRichTextWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ISaitekUserControl.cs" />
     <Compile Include="JaceHelpWindow.xaml.cs">
@@ -269,7 +272,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InformationWindow.xaml">
+    <Page Include="InformationTextBlockWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="InformationRichTextWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

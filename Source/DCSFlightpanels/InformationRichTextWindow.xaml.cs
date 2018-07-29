@@ -9,11 +9,11 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for InformationWindow.xaml
     /// </summary>
-    public partial class InformationWindow : Window
+    public partial class InformationRichTextWindow : Window
     {
         private readonly byte[] _bytes;
 
-        public InformationWindow(byte[] bytes)
+        public InformationRichTextWindow(byte[] bytes)
         {
             InitializeComponent();
             _bytes = bytes;
