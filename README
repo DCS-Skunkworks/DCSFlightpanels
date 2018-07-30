@@ -35,6 +35,11 @@ Simple Radio Standalone : https://github.com/ciribob/DCS-SimpleRadioStandalone
 
 Please consider donating if you like the software : https://tinyurl.com/y79umjue
 
+v2.4.61 30 July 2018
+-----------------------------
+DCSBIOSStringListener changed back regarding HEX byte length.
+Added option to disable to Windows 10 USB Enhanced Power Management which was made by http://uraster.com
+
 v2.4.47 10 July 2018
 -----------------------------
 A-10C, radio changes. 

@@ -822,7 +822,7 @@ namespace NonVisuals
                                     if (_r863ManualCockpitFreq1DialPos != desiredPositionDial1X)
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
-                                        str = R863ManualFreq1DialCommand + "DEC\n";// GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
+                                        str = R863ManualFreq1DialCommand + "DEC\n";//TODO is this still a problem? 30.7.2018 Went into loop GetCommandDirectionForR863ManualDial1(desiredPositionDial1X, _r863ManualCockpitFreq1DialPos);
                                         /*
                                             25.7.2018
                                             10	0.22999967634678

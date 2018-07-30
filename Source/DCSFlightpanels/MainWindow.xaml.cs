@@ -1512,6 +1512,9 @@ namespace DCSFlightpanels
 
         private void FixUSBEnhancedPowerManagerIssues()
         {
+            /*
+             * This is a slightly modified code version of the original code which was made by http://uraster.com
+             */
             MessageBox.Show("You need to run DCSFP as Administrator for this function to work!");
             const string saitekVID = "VID_06A3";
             var result = new StringBuilder();
