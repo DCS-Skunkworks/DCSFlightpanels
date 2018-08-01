@@ -129,14 +129,14 @@ namespace NonVisuals
 
         public MultiPanelPZ70Knobs MultiPanelPZ70Knob
         {
-            get { return _multiPanelPZ70Knob; }
-            set { _multiPanelPZ70Knob = value; }
+            get => _multiPanelPZ70Knob;
+            set => _multiPanelPZ70Knob = value;
         }
 
         public List<DCSBIOSInput> DCSBIOSInputs
         {
-            get { return _dcsbiosInputs; }
-            set { _dcsbiosInputs = value; }
+            get => _dcsbiosInputs;
+            set => _dcsbiosInputs = value;
         }
 
 
@@ -163,14 +163,14 @@ namespace NonVisuals
 
         public bool WhenTurnedOn
         {
-            get { return _whenOnTurnedOn; }
-            set { _whenOnTurnedOn = value; }
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
         }
 
         public string Description
         {
-            get { return string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description; }
-            set { _description = value; }
+            get => string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description;
+            set => _description = value;
         }
     }
 }

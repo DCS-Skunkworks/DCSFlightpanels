@@ -167,10 +167,7 @@ namespace NonVisuals
 
         private void OnPanelRegistered(BacklitPanelBIP backlitPanelBip)
         {
-            if (OnBipPanelRegistered != null)
-            {
-                OnBipPanelRegistered(this, new BipPanelRegisteredEventArgs() { UniqueId = backlitPanelBip.InstanceId, BacklitPanelBip = backlitPanelBip });
-            }
+            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs() { UniqueId = backlitPanelBip.InstanceId, BacklitPanelBip = backlitPanelBip });
         }
     }
 

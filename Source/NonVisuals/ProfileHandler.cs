@@ -151,10 +151,7 @@ namespace NonVisuals
             ClearAll();
             Airframe = DCSAirframe.NOFRAMELOADEDYET;//Just a default that doesn't remove non emulation panels from the GUI
             //This sends info to all to clear their settings
-            if (OnClearPanelSettings != null)
-            {
-                OnClearPanelSettings(this);
-            }
+            OnClearPanelSettings?.Invoke(this);
         }
 
         public void ClearAll()
@@ -236,7 +233,7 @@ namespace NonVisuals
                 string currentPanelInstanceID = null;
                 string currentPanelSettingsVersion = null;
                 var insidePanel = false;
-                var sepString = "\\o/";
+                const string sepString = "\\o/";
 
                 foreach (var fileLine in fileLines)
                 {
@@ -365,12 +362,8 @@ namespace NonVisuals
                 }
                 if (OnSettingsReadFromFile != null)
                 {
-
-                    if (OnAirframeSelected != null)
-                    {
-                        //TODO DENNA ORSAKAR HÄNGANDE!!
-                        OnAirframeSelected(this, new AirframEventArgs(){Airframe =  _airframe});
-                    }
+                    //TODO DENNA ORSAKAR HÄNGANDE!!
+                    OnAirframeSelected?.Invoke(this, new AirframEventArgs(){Airframe =  _airframe});
                     //TODO DENNA ORSAKAR HÄNGANDE!!
                     OnSettingsReadFromFile(this, new SettingsReadFromFileEventArgs(){Settings = _listPanelSettingsData});
                 }
@@ -403,21 +396,15 @@ namespace NonVisuals
 
         public void SendEventRegardingSavingPanelConfigurations()
         {
-            if (OnSavePanelSettings != null)
-            {
-                OnSavePanelSettings(this, new ProfileHandlerEventArgs(){ProfileHandlerEA =  this});
-            }
+            OnSavePanelSettings?.Invoke(this, new ProfileHandlerEventArgs(){ProfileHandlerEA =  this});
         }
 
-        public bool IsNewProfile
-        {
-            get { return _isNewProfile; }
-        }
+        public bool IsNewProfile => _isNewProfile;
 
         public string Filename
         {
-            get { return _filename; }
-            set { _filename = value; }
+            get => _filename;
+            set => _filename = value;
         }
 
         public void RegisterProfileData(SaitekPanel saitekPanel, List<string> strings)
@@ -526,13 +513,13 @@ namespace NonVisuals
 
         public bool IsDirty
         {
-            get { return _isDirty; }
-            set { _isDirty = value; }
+            get => _isDirty;
+            set => _isDirty = value;
         }
 
         public DCSAirframe Airframe
         {
-            get { return _airframe; }
+            get => _airframe;
             set
             {
                 if (value != _airframe)
@@ -540,27 +527,18 @@ namespace NonVisuals
                     _isDirty = true;
                 }
                 _airframe = value;
-                if (OnAirframeSelected != null)
-                {
-                    OnAirframeSelected(this, new AirframEventArgs() {Airframe = _airframe});
-                }
+                OnAirframeSelected?.Invoke(this, new AirframEventArgs() {Airframe = _airframe});
             }
         }
 
-        public bool IsKeyEmulationProfile
-        {
-            get { return _airframe == DCSAirframe.KEYEMULATOR || _airframe == DCSAirframe.KEYEMULATOR_SRS; }
-        }
+        public bool IsKeyEmulationProfile => _airframe == DCSAirframe.KEYEMULATOR || _airframe == DCSAirframe.KEYEMULATOR_SRS;
 
-        public bool IsDCSBIOSProfile
-        {
-            get { return _airframe != DCSAirframe.KEYEMULATOR && _airframe != DCSAirframe.KEYEMULATOR_SRS; }
-        }
+        public bool IsDCSBIOSProfile => _airframe != DCSAirframe.KEYEMULATOR && _airframe != DCSAirframe.KEYEMULATOR_SRS;
 
         public string LastProfileUsed
         {
-            get { return _lastProfileUsed; }
-            set { _lastProfileUsed = value; }
+            get => _lastProfileUsed;
+            set => _lastProfileUsed = value;
         }
 
         public void SelectedAirframe(object sender, AirframEventArgs e)
@@ -576,8 +554,8 @@ namespace NonVisuals
         }
         public string JSONDirectory
         {
-            get { return _jsonDirectory; }
-            set { _jsonDirectory = value; }
+            get => _jsonDirectory;
+            set => _jsonDirectory = value;
         }
 
         public bool ProfileLoaded => _profileLoaded || _isNewProfile;

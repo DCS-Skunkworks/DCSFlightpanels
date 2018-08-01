@@ -77,75 +77,51 @@ namespace NonVisuals
         //Used by descendants that wants to raise the event
         protected virtual void OnSwitchesChanged(HashSet<object> hashSet)
         {
-            if (OnSwitchesChangedA != null)
-            {
-                OnSwitchesChangedA(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Switches = hashSet });
-            }
+            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Switches = hashSet });
         }
 
         //Used by descendants that wants to raise the event
         protected virtual void OnPanelDataAvailable(string stringData)
         {
-            if (OnPanelDataAvailableA != null)
-            {
-                OnPanelDataAvailableA(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
-            }
+            OnPanelDataAvailableA?.Invoke(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
         }
 
         //Used by descendants that wants to raise the event
         protected virtual void OnDeviceAttached()
         {
-            if (OnDeviceAttachedA != null)
-            {
-                //IsAttached = true;
-                OnDeviceAttachedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-            }
+            //IsAttached = true;
+            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
         //Used by descendants that wants to raise the event
         protected virtual void OnDeviceDetached()
         {
-            if (OnDeviceDetachedA != null)
-            {
-                //IsAttached = false;
-                OnDeviceDetachedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-            }
+            //IsAttached = false;
+            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
         //Used by descendants that wants to raise the event
         protected virtual void OnSettingsChanged()
         {
-            if (OnSettingsChangedA != null)
-            {
-                OnSettingsChangedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-            }
+            OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
         //Used by descendants that wants to raise the event
         protected virtual void OnSettingsApplied()
         {
-            if (OnSettingsAppliedA != null)
-            {
-                OnSettingsAppliedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-            }
+            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
         //Used by descendants that wants to raise the event
         protected virtual void OnSettingsCleared()
         {
-            if (OnSettingsClearedA != null)
-            {
-                OnSettingsClearedA(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-            }
+            OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
         //Used by descendants that wants to raise the event
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
-            if (OnLedLightChangedA != null)
-            {
-                OnLedLightChangedA(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
-            }
+            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
@@ -258,43 +234,31 @@ namespace NonVisuals
 
         public bool ForwardKeyPresses
         {
-            get { return _forwardKeyPresses; }
-            set { _forwardKeyPresses = value; }
+            get => _forwardKeyPresses;
+            set => _forwardKeyPresses = value;
         }
 
         public int VendorId
         {
-            get { return _vendorId; }
-            set { _vendorId = value; }
+            get => _vendorId;
+            set => _vendorId = value;
         }
 
         public int ProductId
         {
-            get { return _productId; }
-            set { _productId = value; }
+            get => _productId;
+            set => _productId = value;
         }
 
         public string InstanceId
         {
-            get
-            {
-                return HIDSkeletonBase.InstanceId;
-            }
-            set { HIDSkeletonBase.InstanceId = value; }
+            get => HIDSkeletonBase.InstanceId;
+            set => HIDSkeletonBase.InstanceId = value;
         }
 
-        public string Hash
-        {
-            get
-            {
-                return _hash;
-            }
-        }
+        public string Hash => _hash;
 
-        public string GuidString
-        {
-            get { return _guid.ToString(); }
-        }
+        public string GuidString => _guid.ToString();
 
         public void SetLastException(Exception ex)
         {
@@ -367,17 +331,14 @@ namespace NonVisuals
 
         public bool IsDirty
         {
-            get { return _isDirty; }
-            set
-            {
-                _isDirty = value;
-            }
+            get => _isDirty;
+            set => _isDirty = value;
         }
 
         public SaitekPanelsEnum TypeOfSaitekPanel
         {
-            get { return _typeOfSaitekPanel; }
-            set { _typeOfSaitekPanel = value; }
+            get => _typeOfSaitekPanel;
+            set => _typeOfSaitekPanel = value;
         }
         //TODO fixa att man kan koppla in/ur panelerna?
         /*
@@ -391,14 +352,14 @@ namespace NonVisuals
         */
         public bool KeyboardEmulationOnly
         {
-            get { return _keyboardEmulation; }
-            set { _keyboardEmulation = value; }
+            get => _keyboardEmulation;
+            set => _keyboardEmulation = value;
         }
 
         public bool Closed
         {
-            get { return _closed; }
-            set { _closed = value; }
+            get => _closed;
+            set => _closed = value;
         }
 
         protected static bool FlagHasChanged(byte oldValue, byte newValue, int bitMask)

@@ -95,24 +95,24 @@ namespace NonVisuals
 
 
 
-        /*NAV1 Ka-50 ARBIS NAV1 (Not radio but programmed as there are so few radio systems on the KA-50*/
-        //Large ARBIS Left Dial
-        //Small ARBIS Right Dial
-        //ACT/STBY Push Right ARBIS Dial IN/OUT
-        private readonly ClickSpeedDetector _arbisLeftDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
-        private readonly ClickSpeedDetector _arbisLeftDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
-        private const string ARBISLeftDialCommandIncMore = "ABRIS_BRIGHTNESS +2500\n";
-        private const string ARBISLeftDialCommandDecMore = "ABRIS_BRIGHTNESS -2500\n";
-        private const string ARBISLeftDialCommandInc = "ABRIS_BRIGHTNESS +1000\n";
-        private const string ARBISLeftDialCommandDec = "ABRIS_BRIGHTNESS -1000\n";
-        private readonly ClickSpeedDetector _arbisRightDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
-        private readonly ClickSpeedDetector _arbisRightDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
-        private const string ARBISRightDialCommandIncMore = "ABRIS_CURSOR_ROT +2500\n";
-        private const string ARBISRightDialCommandDecMore = "ABRIS_CURSOR_ROT -2500\n";
-        private const string ARBISRightDialCommandInc = "ABRIS_CURSOR_ROT +5000\n";
-        private const string ARBISRightDialCommandDec = "ABRIS_CURSOR_ROT -5000\n";
-        private const string ARBISRightDialPushToggleOnCommand = "ABRIS_CURSOR_BTN 1\n";
-        private const string ARBISRightDialPushToggleOffCommand = "ABRIS_CURSOR_BTN 0\n";
+        /*NAV1 Ka-50 ABRIS NAV1 (Not radio but programmed as there are so few radio systems on the KA-50*/
+        //Large ABRIS Left Dial
+        //Small ABRIS Right Dial
+        //ACT/STBY Push Right ABRIS Dial IN/OUT
+        private readonly ClickSpeedDetector _abrisLeftDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
+        private readonly ClickSpeedDetector _abrisLeftDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
+        private const string ABRISLeftDialCommandIncMore = "ABRIS_BRIGHTNESS +2500\n";
+        private const string ABRISLeftDialCommandDecMore = "ABRIS_BRIGHTNESS -2500\n";
+        private const string ABRISLeftDialCommandInc = "ABRIS_BRIGHTNESS +1000\n";
+        private const string ABRISLeftDialCommandDec = "ABRIS_BRIGHTNESS -1000\n";
+        private readonly ClickSpeedDetector _abrisRightDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
+        private readonly ClickSpeedDetector _abrisRightDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
+        private const string ABRISRightDialCommandIncMore = "ABRIS_CURSOR_ROT +2500\n";
+        private const string ABRISRightDialCommandDecMore = "ABRIS_CURSOR_ROT -2500\n";
+        private const string ABRISRightDialCommandInc = "ABRIS_CURSOR_ROT +5000\n";
+        private const string ABRISRightDialCommandDec = "ABRIS_CURSOR_ROT -5000\n";
+        private const string ABRISRightDialPushToggleOnCommand = "ABRIS_CURSOR_BTN 1\n";
+        private const string ABRISRightDialPushToggleOffCommand = "ABRIS_CURSOR_BTN 0\n";
 
         /*NAV2 Ka-50 Datalink Operation*/
         //Large dial Datalink Master Mode 0-3
@@ -152,10 +152,7 @@ namespace NonVisuals
 
         ~RadioPanelPZ69Ka50()
         {
-            if (_r800l1SyncThread != null)
-            {
-                _r800l1SyncThread.Abort();
-            }
+            _r800l1SyncThread?.Abort();
         }
 
 
@@ -360,17 +357,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ABRIS:
-                                    {
-                                        if (isOn)
-                                        {
-                                            DCSBIOS.Send(ARBISRightDialPushToggleOnCommand);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(ARBISRightDialPushToggleOffCommand);
-                                        }
-                                        break;
-                                    }
+                                {
+                                    DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
+                                    break;
+                                }
                                 case CurrentKa50RadioMode.ADF_ARK22:
                                     {
                                         break;
@@ -395,17 +385,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ABRIS:
-                                    {
-                                        if (isOn)
-                                        {
-                                            DCSBIOS.Send(ARBISRightDialPushToggleOnCommand);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(ARBISRightDialPushToggleOffCommand);
-                                        }
-                                        break;
-                                    }
+                                {
+                                    DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
+                                    break;
+                                }
                                 case CurrentKa50RadioMode.ADF_ARK22:
                                     {
                                         break;
@@ -435,10 +418,7 @@ namespace NonVisuals
                 SaveCockpitFrequencyR800L1();
 
 
-                if (_r800l1SyncThread != null)
-                {
-                    _r800l1SyncThread.Abort();
-                }
+                _r800l1SyncThread?.Abort();
                 _r800l1SyncThread = new Thread(() => R800L1SynchThreadMethod());
                 _r800l1SyncThread.Start();
 
@@ -461,7 +441,6 @@ namespace NonVisuals
                      * Ka-50 R-800L1 VHF 2
                      */
                         Common.DebugP("Entering Ka-50 Radio R800L1SynchThreadMethod()");
-                        string str;
                         Interlocked.Exchange(ref _r800l1ThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -536,6 +515,8 @@ namespace NonVisuals
                                 Interlocked.Exchange(ref _r800l1Dial4WaitingForFeedback, 0);
                                 Common.DebugP("Resetting SYNC for R-800L1 4");
                             }
+
+                            string str;
                             if (Interlocked.Read(ref _r800l1Dial1WaitingForFeedback) == 0)
                             {
                                 lock (_lockR800L1DialsObject1)
@@ -831,14 +812,7 @@ namespace NonVisuals
                                 {
                                     if (_currentUpperRadioMode == CurrentKa50RadioMode.VHF1_R828)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(Vhf1TunerButtonPress);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(Vhf1TunerButtonRelease);
-                                        }
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? Vhf1TunerButtonPress : Vhf1TunerButtonRelease);
                                     }
                                     else if (_currentUpperRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
@@ -888,14 +862,7 @@ namespace NonVisuals
                                 {
                                     if (_currentLowerRadioMode == CurrentKa50RadioMode.VHF1_R828)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(Vhf1TunerButtonPress);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(Vhf1TunerButtonRelease);
-                                        }
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? Vhf1TunerButtonPress : Vhf1TunerButtonRelease);
                                     }
                                     else if (_currentLowerRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
@@ -994,15 +961,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisLeftDialIncreaseChangeMonitor.Click();
-                                                if (_arbisLeftDialIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandInc);
-                                                }
+                                                _abrisLeftDialIncreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandIncMore : ABRISLeftDialCommandInc);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1061,15 +1021,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisLeftDialDecreaseChangeMonitor.Click();
-                                                if (_arbisLeftDialDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandDec);
-                                                }
+                                                _abrisLeftDialDecreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandDecMore : ABRISLeftDialCommandDec);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1117,15 +1070,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisRightDialIncreaseChangeMonitor.Click();
-                                                if (_arbisRightDialIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandInc);
-                                                }
+                                                _abrisRightDialIncreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandIncMore : ABRISRightDialCommandInc);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1170,15 +1116,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisRightDialDecreaseChangeMonitor.Click();
-                                                if (_arbisRightDialDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandDec);
-                                                }
+                                                _abrisRightDialDecreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandDecMore : ABRISRightDialCommandDec);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1246,15 +1185,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisLeftDialIncreaseChangeMonitor.Click();
-                                                if (_arbisLeftDialIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandInc);
-                                                }
+                                                _abrisLeftDialIncreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandIncMore : ABRISLeftDialCommandInc);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1325,15 +1257,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisLeftDialDecreaseChangeMonitor.Click();
-                                                if (_arbisLeftDialDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISLeftDialCommandDec);
-                                                }
+                                                _abrisLeftDialDecreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandDecMore : ABRISLeftDialCommandDec);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1381,15 +1306,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisRightDialIncreaseChangeMonitor.Click();
-                                                if (_arbisRightDialIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandInc);
-                                                }
+                                                _abrisRightDialIncreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandIncMore : ABRISRightDialCommandInc);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1434,15 +1352,8 @@ namespace NonVisuals
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
-                                                _arbisRightDialDecreaseChangeMonitor.Click();
-                                                if (_arbisRightDialDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARBISRightDialCommandDec);
-                                                }
+                                                _abrisRightDialDecreaseChangeMonitor.Click();
+                                                DCSBIOS.Send(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandDecMore : ABRISRightDialCommandDec);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
@@ -1689,8 +1600,7 @@ namespace NonVisuals
                             }
                         case CurrentKa50RadioMode.ABRIS:
                             {
-                                var channelAsString = "88888";
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32("88888"), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 break;
                             }
@@ -1805,8 +1715,7 @@ namespace NonVisuals
                             }
                         case CurrentKa50RadioMode.ABRIS:
                             {
-                                var channelAsString = "88888";
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32("88888"), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 break;
                             }
@@ -2159,8 +2068,8 @@ namespace NonVisuals
 
         private string GetCommandDirectionForR800L1Dial1(int desiredDialPosition, uint actualDialPosition)
         {
-            var inc = "INC\n";
-            var dec = "DEC\n";
+            const string inc = "INC\n";
+            const string dec = "DEC\n";
             try
             {
                 Common.DebugP("Entering Ka-50 Radio GetCommandDirectionForR800L1Dial1()");
@@ -2230,8 +2139,8 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering Ka-50 Radio GetCommandDirectionFor0To9Dials()");
-                var inc = "INC\n";
-                var dec = "DEC\n";
+                const string inc = "INC\n";
+                const string dec = "DEC\n";
                 switch (desiredDialPosition)
                 {
                     case 0:
@@ -2612,7 +2521,7 @@ namespace NonVisuals
             return "";
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

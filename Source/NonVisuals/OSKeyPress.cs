@@ -16,20 +16,20 @@ namespace NonVisuals
 
         public KeyPressLength LengthOfBreak
         {
-            get { return _lengthOfBreak; }
-            set { _lengthOfBreak = value; }
+            get => _lengthOfBreak;
+            set => _lengthOfBreak = value;
         }
 
         public KeyPressLength LengthOfKeyPress
         {
-            get { return _lengthOfKeyPress; }
-            set { _lengthOfKeyPress = value; }
+            get => _lengthOfKeyPress;
+            set => _lengthOfKeyPress = value;
         }
 
         public HashSet<VirtualKeyCode> VirtualKeyCodes
         {
-            get { return _virtualKeyCodes; }
-            set { _virtualKeyCodes = value; }
+            get => _virtualKeyCodes;
+            set => _virtualKeyCodes = value;
         }
 
         public string VirtualKeyCodesAsString
@@ -81,10 +81,7 @@ namespace NonVisuals
 
         ~OSKeyPress()
         {
-            if (_executingThread != null)
-            {
-                _executingThread.Abort();
-            }
+            _executingThread?.Abort();
         }
 
         private void SetAbortThreadState()
@@ -331,14 +328,7 @@ namespace NonVisuals
                 }
             }
             //Insert 1. or 2. indicating API used
-            if (Common.APIMode == APIModeEnum.keybd_event)
-            {
-                result.Insert(0, "1. ");
-            }
-            else
-            {
-                result.Insert(0, "2. ");
-            }
+            result.Insert(0, Common.APIMode == APIModeEnum.keybd_event ? "1. " : "2. ");
             return result.ToString();
         }
 
@@ -507,8 +497,8 @@ namespace NonVisuals
 
         public string Information
         {
-            get { return _information; }
-            set { _information = value; }
+            get => _information;
+            set => _information = value;
         }
 
         public bool IsEmpty()

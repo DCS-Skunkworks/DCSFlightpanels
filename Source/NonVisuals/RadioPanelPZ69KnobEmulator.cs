@@ -131,15 +131,9 @@ namespace NonVisuals
                 _on = @on;
             }
 
-            public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key
-            {
-                get { return _radioPanelPZ69Key; }
-            }
+            public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key => _radioPanelPZ69Key;
 
-            public bool On
-            {
-                get { return _on; }
-            }
+            public bool On => _on;
         }
 
     }

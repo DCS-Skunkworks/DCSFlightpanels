@@ -388,7 +388,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(true);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -420,7 +420,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(true);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -448,7 +448,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(true);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -476,7 +476,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(false);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -504,7 +504,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(true);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -532,7 +532,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
                                                     var s = GetHFRadioModeStringCommand(false);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -560,7 +560,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(true);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -588,7 +588,7 @@ namespace NonVisuals
                                                 if (!SkipHFRadioChannelPresetDialChange())
                                                 {
                                                     var s = GetHFRadioChannelStringCommand(false);
-                                                    if (!String.IsNullOrEmpty(s))
+                                                    if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
                                                     }
@@ -1108,7 +1108,7 @@ namespace NonVisuals
             return false;
         }
 
-        private String GetHFRadioChannelStringCommand(bool moveUp)
+        private string GetHFRadioChannelStringCommand(bool moveUp)
         {
             lock (_lockHFRadioPresetDialObject1)
             {
@@ -1154,7 +1154,7 @@ namespace NonVisuals
             return null;
         }
 
-        private String GetHFRadioModeStringCommand(bool moveUp)
+        private string GetHFRadioModeStringCommand(bool moveUp)
         {
             lock (_lockHFRadioModeDialObject1)
             {
@@ -1185,7 +1185,7 @@ namespace NonVisuals
             return null;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

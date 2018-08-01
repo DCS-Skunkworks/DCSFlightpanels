@@ -395,8 +395,8 @@ namespace DCSFlightpanels
             {
                 return;
             }
-            ButtonTestFormula.IsEnabled = !String.IsNullOrEmpty(TextBoxFormula.Text) && !_isLooping;
-            ButtonStartTest.IsEnabled = !String.IsNullOrEmpty(TextBoxFormula.Text) && !_isLooping;
+            ButtonTestFormula.IsEnabled = !string.IsNullOrEmpty(TextBoxFormula.Text) && !_isLooping;
+            ButtonStartTest.IsEnabled = !string.IsNullOrEmpty(TextBoxFormula.Text) && !_isLooping;
             ButtonStopTest.IsEnabled = _isLooping;
 
             ButtonClear1.IsEnabled = !_isLooping && _dcsbiosOutput1 != null;

@@ -43,26 +43,26 @@ namespace NonVisuals
 
         public SaitekPanelsEnum PanelType
         {
-            get { return _panelType; }
-            set { _panelType = value; }
+            get => _panelType;
+            set => _panelType = value;
         }
 
         public string InstanceId
         {
-            get { return _instanceId; }
-            set { _instanceId = value; }
+            get => _instanceId;
+            set => _instanceId = value;
         }
 
         public HidDevice HIDReadDevice
         {
-            get { return _hidReadDevice; }
-            set { _hidReadDevice = value; }
+            get => _hidReadDevice;
+            set => _hidReadDevice = value;
         }
 
         public HidDevice HIDWriteDevice
         {
-            get { return _hidWriteDevice; }
-            set { _hidWriteDevice = value; }
+            get => _hidWriteDevice;
+            set => _hidWriteDevice = value;
         }
     }
 
@@ -155,7 +155,7 @@ namespace NonVisuals
 
         private bool HIDDeviceAlreadyExists(string instanceId)
         {
-            if (String.IsNullOrEmpty(instanceId))
+            if (string.IsNullOrEmpty(instanceId))
             {
                 throw new Exception("Looking for empty/null InstanceId HIDDeviceAlreadyExists().");
             }
@@ -175,10 +175,7 @@ namespace NonVisuals
             return false;
         }
 
-        public List<HIDSkeleton> HIDSkeletons
-        {
-            get { return _hidSkeletons; }
-        }
+        public List<HIDSkeleton> HIDSkeletons => _hidSkeletons;
     }
 
 }

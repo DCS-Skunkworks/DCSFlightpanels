@@ -1161,7 +1161,7 @@ namespace NonVisuals
                                 }
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
-                                    var str = UhfFreq1DialCommand + "INC\n";
+                                    const string str = UhfFreq1DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1169,7 +1169,7 @@ namespace NonVisuals
                                 }
                                 else if (_uhfCockpitFreq1DialPos > desiredPosition1)
                                 {
-                                    var str = UhfFreq1DialCommand + "DEC\n";
+                                    const string str = UhfFreq1DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1193,7 +1193,7 @@ namespace NonVisuals
                                 }
                                 if (_uhfCockpitFreq2DialPos < desiredPosition2)
                                 {
-                                    var str = UhfFreq2DialCommand + "INC\n";
+                                    const string str = UhfFreq2DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1201,7 +1201,7 @@ namespace NonVisuals
                                 }
                                 else if (_uhfCockpitFreq2DialPos > desiredPosition2)
                                 {
-                                    var str = UhfFreq2DialCommand + "DEC\n";
+                                    const string str = UhfFreq2DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1225,7 +1225,7 @@ namespace NonVisuals
                                 }
                                 if (_uhfCockpitFreq3DialPos < desiredPosition3)
                                 {
-                                    var str = UhfFreq3DialCommand + "INC\n";
+                                    const string str = UhfFreq3DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
@@ -1233,7 +1233,7 @@ namespace NonVisuals
                                 }
                                 else if (_uhfCockpitFreq3DialPos > desiredPosition3)
                                 {
-                                    var str = UhfFreq3DialCommand + "DEC\n";
+                                    const string str = UhfFreq3DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
@@ -1257,7 +1257,7 @@ namespace NonVisuals
                                 }
                                 if (_uhfCockpitFreq4DialPos < desiredPosition4)
                                 {
-                                    var str = UhfFreq4DialCommand + "INC\n";
+                                    const string str = UhfFreq4DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
@@ -1265,7 +1265,7 @@ namespace NonVisuals
                                 }
                                 else if (_uhfCockpitFreq4DialPos > desiredPosition4)
                                 {
-                                    var str = UhfFreq4DialCommand + "DEC\n";
+                                    const string str = UhfFreq4DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
@@ -1289,7 +1289,7 @@ namespace NonVisuals
                                 }
                                 if (_uhfCockpitFreq5DialPos < desiredPosition5)
                                 {
-                                    var str = UhfFreq5DialCommand + "INC\n";
+                                    const string str = UhfFreq5DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
@@ -1297,7 +1297,7 @@ namespace NonVisuals
                                 }
                                 else if (_uhfCockpitFreq5DialPos > desiredPosition5)
                                 {
-                                    var str = UhfFreq5DialCommand + "DEC\n";
+                                    const string str = UhfFreq5DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
@@ -1414,10 +1414,7 @@ namespace NonVisuals
                 desiredPositionDial4 = 0;
             }
 
-            if (_vhfFmSyncThread != null)
-            {
-                _vhfFmSyncThread.Abort();
-            }
+            _vhfFmSyncThread?.Abort();
             _vhfFmSyncThread = new Thread(() => VhfFmSynchThreadMethod(desiredPositionDial1, desiredPositionDial2, desiredPositionDial3, desiredPositionDial4));
             _vhfFmSyncThread.Start();
         }
@@ -1543,7 +1540,7 @@ namespace NonVisuals
                                 if (_vhfFmCockpitFreq4DialPos < frequencyDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    var str = VhfFmFreq4DialCommand + "INC\n";
+                                    const string str = VhfFmFreq4DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
@@ -1552,7 +1549,7 @@ namespace NonVisuals
                                 else if (_vhfFmCockpitFreq4DialPos > frequencyDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    var str = VhfFmFreq4DialCommand + "DEC\n";
+                                    const string str = VhfFmFreq4DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
@@ -1602,7 +1599,7 @@ namespace NonVisuals
                 return;
             }
             SaveCockpitFrequencyIls();
-            var frequency = Double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay);
+            var frequency = double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay);
             var frequencyAsString = frequency.ToString("0.00", NumberFormatInfoFullDisplay);
 
             //Frequency selector 1   
@@ -1666,7 +1663,7 @@ namespace NonVisuals
                                 if (_ilsCockpitFreq1DialPos < position1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = ILSFreq1DialCommand + "INC\n";
+                                    const string str = ILSFreq1DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1675,7 +1672,7 @@ namespace NonVisuals
                                 else if (_ilsCockpitFreq1DialPos > position1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = ILSFreq1DialCommand + "DEC\n";
+                                    const string str = ILSFreq1DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1697,7 +1694,7 @@ namespace NonVisuals
                                 if (_ilsCockpitFreq2DialPos < position2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    var str = ILSFreq2DialCommand + "INC\n";
+                                    const string str = ILSFreq2DialCommand + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1706,7 +1703,7 @@ namespace NonVisuals
                                 else if (_ilsCockpitFreq2DialPos > position2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    var str = ILSFreq2DialCommand + "DEC\n";
+                                    const string str = ILSFreq2DialCommand + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1768,10 +1765,7 @@ namespace NonVisuals
             //#2 = 0   (position = value)
             //#3 = 1   (position = value)
 
-            if (_tacanSyncThread != null)
-            {
-                _tacanSyncThread.Abort();
-            }
+            _tacanSyncThread?.Abort();
             _tacanSyncThread = new Thread(() => TacanSynchThreadMethod(_tacanBigFrequencyStandby, _tacanSmallFrequencyStandby, _tacanXYStandby));
             _tacanSyncThread.Start();
         }
@@ -1784,8 +1778,8 @@ namespace NonVisuals
                 {
                     Interlocked.Exchange(ref _tacanThreadNowSynching, 1);
 
-                    var inc = "INC\n";
-                    var dec = "DEC\n";
+                    const string inc = "INC\n";
+                    const string dec = "DEC\n";
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1994,7 +1988,7 @@ namespace NonVisuals
                                         frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(4, _vhfAmCockpitFreq4DialPos);
                                     }
 
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                     SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
@@ -2072,7 +2066,7 @@ namespace NonVisuals
                                         frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
                                     }
 
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                     SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
@@ -2136,8 +2130,8 @@ namespace NonVisuals
                                         dial4 = GetVhfFmDialFrequencyForPosition(4, _vhfFmCockpitFreq4DialPos);
                                     }
 
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 }
                             }
                             break;
@@ -2156,8 +2150,8 @@ namespace NonVisuals
                             {
                                 frequencyAsString = frequencyAsString + GetILSDialFrequencyForPosition(2, _ilsCockpitFreq2DialPos);
                             }
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_ilsBigFrequencyStandby.ToString(NumberFormatInfoFullDisplay) + "." + _ilsSmallFrequencyStandby.ToString(NumberFormatInfoFullDisplay), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                     case CurrentA10RadioMode.TACAN:
@@ -2186,8 +2180,8 @@ namespace NonVisuals
                                 frequencyAsString = frequencyAsString + _tacanCockpitFreq3DialPos.ToString();
                             }
 
-                            SetPZ69DisplayBytes(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, Double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanBigFrequencyStandby.ToString() + _tacanSmallFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
                 }
@@ -2236,7 +2230,7 @@ namespace NonVisuals
                                         frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(4, _vhfAmCockpitFreq4DialPos);
                                     }
 
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                     SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
@@ -2294,7 +2288,7 @@ namespace NonVisuals
                                         frequencyAsString = frequencyAsString + GetUhfDialFrequencyForPosition(5, _uhfCockpitFreq5DialPos);
                                     }
 
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                     SetPZ69DisplayBytesDefault(ref bytes, _uhfBigFrequencyStandby + _uhfSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
@@ -2360,8 +2354,8 @@ namespace NonVisuals
                                         dial4 = GetVhfFmDialFrequencyForPosition(4, _vhfFmCockpitFreq4DialPos);
                                     }
 
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                    SetPZ69DisplayBytesDefault(ref bytes, Double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(dial1 + dial2 + "." + dial3 + dial4, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 }
                             }
                             break;
@@ -4448,8 +4442,8 @@ namespace NonVisuals
 
         private string GetCommandDirectionForVhfDial1(int desiredDialPosition, uint actualDialPosition)
         {
-            var inc = "INC\n";
-            var dec = "DEC\n";
+            const string inc = "INC\n";
+            const string dec = "DEC\n";
             switch (desiredDialPosition)
             {
                 case 0:
@@ -4880,8 +4874,8 @@ namespace NonVisuals
 
         private string GetCommandDirectionForVhfDial23(int desiredDialPosition, uint actualDialPosition)
         {
-            var inc = "INC\n";
-            var dec = "DEC\n";
+            const string inc = "INC\n";
+            const string dec = "DEC\n";
             switch (desiredDialPosition)
             {
                 case 0:
@@ -5225,8 +5219,8 @@ namespace NonVisuals
                                         break;
                                     }
                             }
-                            _vhfAmSavedCockpitBigFrequency = Double.Parse((_vhfAmCockpitFreq1DialPos + 3).ToString() + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
-                            _vhfAmSavedCockpitSmallFrequency = Double.Parse("0." + _vhfAmCockpitFreq3DialPos.ToString() + dial4, NumberFormatInfoFullDisplay);
+                            _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3).ToString() + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
+                            _vhfAmSavedCockpitSmallFrequency = double.Parse("0." + _vhfAmCockpitFreq3DialPos.ToString() + dial4, NumberFormatInfoFullDisplay);
                         }
                     }
                 }
@@ -5289,8 +5283,8 @@ namespace NonVisuals
                 }
 
 
-                _uhfSavedCockpitBigFrequency = Double.Parse(bigFrequencyAsString, NumberFormatInfoFullDisplay);
-                _uhfSavedCockpitSmallFrequency = Double.Parse(smallFrequencyAsString, NumberFormatInfoFullDisplay);
+                _uhfSavedCockpitBigFrequency = double.Parse(bigFrequencyAsString, NumberFormatInfoFullDisplay);
+                _uhfSavedCockpitSmallFrequency = double.Parse(smallFrequencyAsString, NumberFormatInfoFullDisplay);
 
 
 
@@ -5463,7 +5457,7 @@ namespace NonVisuals
             return Interlocked.Read(ref _tacanThreadNowSynching) > 0;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

@@ -41,14 +41,14 @@ namespace NonVisuals
 
         public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key
         {
-            get { return _panelPZ69Knob; }
-            set { _panelPZ69Knob = value; }
+            get => _panelPZ69Knob;
+            set => _panelPZ69Knob = value;
         }
 
         public OSKeyPress OSKeyPress
         {
-            get { return _osKeyPress; }
-            set { _osKeyPress = value; }
+            get => _osKeyPress;
+            set => _osKeyPress = value;
         }
 
 
@@ -65,8 +65,8 @@ namespace NonVisuals
 
         public bool WhenTurnedOn
         {
-            get { return _whenOnTurnedOn; }
-            set { _whenOnTurnedOn = value; }
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
         }
 
 

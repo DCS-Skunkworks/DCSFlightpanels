@@ -1,5 +1,9 @@
 ﻿namespace NonVisuals
 {
+    // ReSharper disable All
+    /*
+     * Do not change SRS code
+     */
     public class SRSRadioInformation
     {
         public enum EncryptionMode

@@ -217,10 +217,7 @@ namespace NonVisuals
 
         ~RadioPanelPZ69Mi8()
         {
-            if (_r863ManualSyncThread != null)
-            {
-                _r863ManualSyncThread.Abort();
-            }
+            _r863ManualSyncThread?.Abort();
         }
 
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
@@ -240,7 +237,7 @@ namespace NonVisuals
                     // Last digit not used in panel
 
 
-                    var tmpFreq = Double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_yadro1aCockpitFrequency))
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -306,7 +303,7 @@ namespace NonVisuals
                     // Last digit not used in panel
 
 
-                    var tmpFreq = Double.Parse(e.StringData, NumberFormatInfoFullDisplay);
+                    var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_r863ManualCockpitFrequency))
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -619,17 +616,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentMi8RadioMode.R828_PRESETS:
-                                    {
-                                        if (knobIsOn)
-                                        {
-                                            DCSBIOS.Send(R828GainControlCommandOn);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(R828GainControlCommandOff);
-                                        }
-                                        break;
-                                    }
+                                {
+                                    DCSBIOS.Send(knobIsOn ? R828GainControlCommandOn : R828GainControlCommandOff);
+                                    break;
+                                }
                                 case CurrentMi8RadioMode.ADF_ARK9:
                                     {
                                         break;
@@ -664,17 +654,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentMi8RadioMode.R828_PRESETS:
-                                    {
-                                        if (knobIsOn)
-                                        {
-                                            DCSBIOS.Send(R828GainControlCommandOn);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(R828GainControlCommandOff);
-                                        }
-                                        break;
-                                    }
+                                {
+                                    DCSBIOS.Send(knobIsOn ? R828GainControlCommandOn : R828GainControlCommandOff);
+                                    break;
+                                }
                                 case CurrentMi8RadioMode.ADF_ARK9:
                                     {
                                         break;
@@ -712,10 +695,7 @@ namespace NonVisuals
                 SaveCockpitFrequencyR863Manual();
 
 
-                if (_r863ManualSyncThread != null)
-                {
-                    _r863ManualSyncThread.Abort();
-                }
+                _r863ManualSyncThread?.Abort();
                 _r863ManualSyncThread = new Thread(() => R863ManualSynchThreadMethod());
                 _r863ManualSyncThread.Start();
 
@@ -738,7 +718,6 @@ namespace NonVisuals
                      * Mi-8 R-863 COM1
                      */
                         Common.DebugP("Entering Mi-8 Radio R863ManualSynchThreadMethod()");
-                        string str;
                         Interlocked.Exchange(ref _r863ManualThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -814,6 +793,8 @@ namespace NonVisuals
                                 Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 0);
                                 Common.DebugP("Resetting SYNC for R-863 4");
                             }
+
+                            string str;
                             if (Interlocked.Read(ref _r863ManualDial1WaitingForFeedback) == 0)
                             {
                                 lock (_lockR863ManualDialsObject1)
@@ -1009,10 +990,7 @@ namespace NonVisuals
                 SaveCockpitFrequencyYaDRO1A();
 
 
-                if (_yadro1aSyncThread != null)
-                {
-                    _yadro1aSyncThread.Abort();
-                }
+                _yadro1aSyncThread?.Abort();
                 _yadro1aSyncThread = new Thread(() => YaDRO1ASynchThreadMethod());
                 _yadro1aSyncThread.Start();
 
@@ -1035,7 +1013,6 @@ namespace NonVisuals
                      * Mi-8 YaDRO-1A
                      */
                         Common.DebugP("Entering Mi-8 Radio YaDRO1ASynchThreadMethod()");
-                        string str;
                         Interlocked.Exchange(ref _yadro1aThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -1110,6 +1087,8 @@ namespace NonVisuals
                                 Interlocked.Exchange(ref _yadro1aDial4WaitingForFeedback, 0);
                                 Common.DebugP("Resetting SYNC for YaDRO-1A 4");
                             }
+
+                            string str;
                             if (Interlocked.Read(ref _yadro1aDial1WaitingForFeedback) == 0)
                             {
                                 lock (_lockYADRO1ADialsObject1)
@@ -1535,14 +1514,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandInc);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandInc);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain100KhzPresetCommandInc : ADFBackup100KhzPresetCommandInc);
                                                 }
                                                 break;
                                             }
@@ -1644,14 +1616,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandDec);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandDec);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain100KhzPresetCommandDec : ADFBackup100KhzPresetCommandDec);
                                                 }
                                                 break;
                                             }
@@ -1718,14 +1683,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandInc);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandInc);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain10KhzPresetCommandInc : ADFBackup10KhzPresetCommandInc);
                                                 }
                                                 break;
                                             }
@@ -1789,14 +1747,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandDec);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandDec);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain10KhzPresetCommandDec : ADFBackup10KhzPresetCommandDec);
                                                 }
                                                 break;
                                             }
@@ -1895,14 +1846,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandInc);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandInc);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain100KhzPresetCommandInc : ADFBackup100KhzPresetCommandInc);
                                                 }
                                                 break;
                                             }
@@ -2004,14 +1948,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial1Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain100KhzPresetCommandDec);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup100KhzPresetCommandDec);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain100KhzPresetCommandDec : ADFBackup100KhzPresetCommandDec);
                                                 }
                                                 break;
                                             }
@@ -2078,14 +2015,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandInc);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandInc);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain10KhzPresetCommandInc : ADFBackup10KhzPresetCommandInc);
                                                 }
                                                 break;
                                             }
@@ -2149,14 +2079,7 @@ namespace NonVisuals
                                             {
                                                 if (!SkipADFPresetDial2Change())
                                                 {
-                                                    if (_adfBackupMainCockpitDial1Pos == 1)
-                                                    {
-                                                        DCSBIOS.Send(ADFMain10KhzPresetCommandDec);
-                                                    }
-                                                    else
-                                                    {
-                                                        DCSBIOS.Send(ADFBackup10KhzPresetCommandDec);
-                                                    }
+                                                    DCSBIOS.Send(_adfBackupMainCockpitDial1Pos == 1 ? ADFMain10KhzPresetCommandDec : ADFBackup10KhzPresetCommandDec);
                                                 }
                                                 break;
                                             }
@@ -2933,8 +2856,8 @@ namespace NonVisuals
 
         private string GetCommandDirectionForR863ManualDial1(int desiredDialPosition, uint actualDialPosition)
         {
-            var inc = "INC\n";
-            var dec = "DEC\n";
+            const string inc = "INC\n";
+            const string dec = "DEC\n";
             try
             {
                 /*
@@ -3005,8 +2928,8 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                var inc = "INC\n";
-                var dec = "DEC\n";
+                const string inc = "INC\n";
+                const string dec = "DEC\n";
                 switch (desiredDialPosition)
                 {
                     case 0:
@@ -3569,7 +3492,7 @@ namespace NonVisuals
             return false;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

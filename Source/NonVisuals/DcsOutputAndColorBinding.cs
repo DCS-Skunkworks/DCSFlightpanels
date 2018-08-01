@@ -34,8 +34,8 @@ namespace NonVisuals
 
         public Enum Position
         {
-            get { return _position; }
-            set { _position = value; }
+            get => _position;
+            set => _position = value;
         }
     }
 
@@ -50,15 +50,12 @@ namespace NonVisuals
         public PanelLEDColor LEDColor { get; set; }
         public SaitekPanelLEDPosition SaitekLEDPosition { get; set; }
 
-        public string[] Separator
-        {
-            get { return SeparatorChars; }
-        }
+        public string[] Separator => SeparatorChars;
 
         public DCSBIOSOutput DCSBiosOutputLED
         {
-            get { return _dcsBiosOutputLED; }
-            set { _dcsBiosOutputLED = value; }
+            get => _dcsBiosOutputLED;
+            set => _dcsBiosOutputLED = value;
         }
     }
 

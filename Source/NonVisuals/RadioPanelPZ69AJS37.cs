@@ -17,11 +17,11 @@ namespace NonVisuals
         /*AJS-37 FR22 COM1*/
         //Large dial freqs can't be read from DCS as it is now (15.11.2017)
         //Small dial 
-        private ClickSpeedDetector _bigFreqFR22IncreaseChangeMonitor = new ClickSpeedDetector(20);
+        /*private ClickSpeedDetector _bigFreqFR22IncreaseChangeMonitor = new ClickSpeedDetector(20);
         private ClickSpeedDetector _bigFreqFR22DecreaseChangeMonitor = new ClickSpeedDetector(20);
         private ClickSpeedDetector _smallFreqFR22IncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private ClickSpeedDetector _smallFreqFR22DecreaseChangeMonitor = new ClickSpeedDetector(20);
-        const int ChangeValue = 10;
+        private ClickSpeedDetector _smallFreqFR22DecreaseChangeMonitor = new ClickSpeedDetector(20);*/
+        //const int ChangeValue = 10;
         private enum FR22DialSideSelected
         {
             Right,
@@ -327,14 +327,7 @@ namespace NonVisuals
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                            {
-                                                _fr22DialSideSelected = FR22DialSideSelected.Right;
-                                            }
-                                            else
-                                            {
-                                                _fr22DialSideSelected = FR22DialSideSelected.Left;
-                                            }
+                                            _fr22DialSideSelected = _fr22DialSideSelected == FR22DialSideSelected.Left ? FR22DialSideSelected.Right : FR22DialSideSelected.Left;
                                         }
                                     }
                                     else if (_currentUpperRadioMode == CurrentAJS37RadioMode.FR24 && radioPanelKnob.IsOn)
@@ -357,14 +350,7 @@ namespace NonVisuals
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                            {
-                                                _fr22DialSideSelected = FR22DialSideSelected.Right;
-                                            }
-                                            else
-                                            {
-                                                _fr22DialSideSelected = FR22DialSideSelected.Left;
-                                            }
+                                            _fr22DialSideSelected = _fr22DialSideSelected == FR22DialSideSelected.Left ? FR22DialSideSelected.Right : FR22DialSideSelected.Left;
                                         }
                                     }
                                     else if (_currentLowerRadioMode == CurrentAJS37RadioMode.FR24 && radioPanelKnob.IsOn)
@@ -416,17 +402,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftBigDialIncreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightBigDialIncreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -451,17 +430,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftBigDialDecreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightBigDialDecreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -486,17 +458,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftSmallDialIncreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightSmallDialIncreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -521,17 +486,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftSmallDialDecreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightSmallDialDecreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -556,17 +514,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftBigDialIncreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightBigDialIncreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
 
@@ -592,18 +543,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftBigDialDecreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightBigDialDecreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
 
@@ -629,17 +572,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftSmallDialIncreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightSmallDialIncreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -664,17 +600,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                            {
-                                                if (_fr22DialSideSelected == FR22DialSideSelected.Left)
-                                                {
-                                                    DCSBIOS.Send(FR22LeftSmallDialDecreaseCommand);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(FR22RightSmallDialDecreaseCommand);
-                                                }
-                                                break;
-                                            }
+                                        {
+                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
+                                            break;
+                                        }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -1102,7 +1031,7 @@ namespace NonVisuals
             return false;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

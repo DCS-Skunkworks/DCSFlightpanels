@@ -86,20 +86,20 @@ namespace NonVisuals
 
         public int MaxClicksToKeep
         {
-            get { return _maxClicksToKeep; }
-            set { _maxClicksToKeep = value; }
+            get => _maxClicksToKeep;
+            set => _maxClicksToKeep = value;
         }
 
         public int DefaultPeriod
         {
-            get { return _defaultPeriod; }
-            set { _defaultPeriod = value; }
+            get => _defaultPeriod;
+            set => _defaultPeriod = value;
         }
 
         public int ClickCountThreshold
         {
-            get { return _clickCountThreshold; }
-            set { _clickCountThreshold = value; }
+            get => _clickCountThreshold;
+            set => _clickCountThreshold = value;
         }
     }
 }

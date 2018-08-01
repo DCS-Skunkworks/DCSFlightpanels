@@ -73,8 +73,8 @@ namespace NonVisuals
 
         public PZ70DialPosition DialPosition
         {
-            get { return _pz70DialPosition; }
-            set { _pz70DialPosition = value; }
+            get => _pz70DialPosition;
+            set => _pz70DialPosition = value;
         }
 
         public int CurrentValue
@@ -85,7 +85,7 @@ namespace NonVisuals
 
         public DCSBIOSOutput DCSBIOSOutputObject
         {
-            get { return _dcsbiosOutput; }
+            get => _dcsbiosOutput;
             set
             {
                 _dcsbiosOutput = value;
@@ -95,7 +95,7 @@ namespace NonVisuals
 
         public DCSBIOSOutputFormula DCSBIOSOutputFormulaObject
         {
-            get { return _dcsbiosOutputFormula; }
+            get => _dcsbiosOutputFormula;
             set
             {
                 _dcsbiosOutputFormula = value;
@@ -120,18 +120,12 @@ namespace NonVisuals
 
         public PZ70LCDPosition PZ70LCDPosition
         {
-            get { return _pz70LCDPosition; }
-            set { _pz70LCDPosition = value; }
+            get => _pz70LCDPosition;
+            set => _pz70LCDPosition = value;
         }
 
-        public bool HasBinding
-        {
-            get { return _dcsbiosOutput != null || _dcsbiosOutputFormula != null; }
-        }
+        public bool HasBinding => _dcsbiosOutput != null || _dcsbiosOutputFormula != null;
 
-        public bool UseFormula
-        {
-            get { return _dcsbiosOutputFormula != null; }
-        }
+        public bool UseFormula => _dcsbiosOutputFormula != null;
     }
 }

@@ -284,7 +284,7 @@ namespace DCSFlightpanels
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassTPM)textBox.Tag).KeyPress = osKeyPress;
                         ((TagDataClassTPM)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
-                        if (!String.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
                         {
                             textBox.Text = sequenceWindow.GetInformation;
                         }

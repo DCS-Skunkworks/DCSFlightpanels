@@ -41,14 +41,14 @@ namespace NonVisuals
 
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key
         {
-            get { return _switchPanelPZ55Key; }
-            set { _switchPanelPZ55Key = value; }
+            get => _switchPanelPZ55Key;
+            set => _switchPanelPZ55Key = value;
         }
 
         public OSKeyPress OSKeyPress
         {
-            get { return _osKeyPress; }
-            set { _osKeyPress = value; }
+            get => _osKeyPress;
+            set => _osKeyPress = value;
         }
 
 
@@ -65,8 +65,8 @@ namespace NonVisuals
 
         public bool WhenTurnedOn
         {
-            get { return _whenOnTurnedOn; }
-            set { _whenOnTurnedOn = value; }
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
         }
 
 

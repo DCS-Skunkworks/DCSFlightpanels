@@ -129,8 +129,8 @@ namespace NonVisuals
         
         public SortedList<int, BIPLight> BIPLights
         {
-            get { return _bipLights; }
-            set { _bipLights = value; }
+            get => _bipLights;
+            set => _bipLights = value;
         }
         
         private int GetNewKeyValue()
@@ -144,8 +144,8 @@ namespace NonVisuals
 
         public bool WhenTurnedOn
         {
-            get { return _whenOnTurnedOn; }
-            set { _whenOnTurnedOn = value; }
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
         }
 
         public string Description

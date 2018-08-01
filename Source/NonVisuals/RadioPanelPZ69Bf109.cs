@@ -299,14 +299,7 @@ namespace NonVisuals
                                 {
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandInc);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandDec);
-                                        }
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FuG25ATestCommandInc : FuG25ATestCommandDec);
                                     }
                                     if (_currentUpperRadioMode == CurrentBf109RadioMode.HOMING)
                                     {
@@ -314,14 +307,7 @@ namespace NonVisuals
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                if (_homingCockpitDialPos == 1)
-                                                {
-                                                    DCSBIOS.Send(HomingCommandDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(HomingCommandInc);
-                                                }
+                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HomingCommandDec : HomingCommandInc);
                                             }
                                         }
                                     }
@@ -331,14 +317,7 @@ namespace NonVisuals
                                 {
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandInc);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandDec);
-                                        }
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FuG25ATestCommandInc : FuG25ATestCommandDec);
                                     }
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.HOMING)
                                     {
@@ -346,14 +325,7 @@ namespace NonVisuals
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                if (_homingCockpitDialPos == 1)
-                                                {
-                                                    DCSBIOS.Send(HomingCommandDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(HomingCommandInc);
-                                                }
+                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HomingCommandDec : HomingCommandInc);
                                             }
                                         }
                                     }
@@ -467,14 +439,7 @@ namespace NonVisuals
                                                     //Change faster
                                                     changeFaster = true;
                                                 }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
-                                                }
+                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandIncMore : Fug16ZyFineTuneCommandInc);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
@@ -507,14 +472,8 @@ namespace NonVisuals
                                                     //Change faster
                                                     changeFaster = true;
                                                 }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
-                                                }
+
+                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandDecMore : Fug16ZyFineTuneCommandDec);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
@@ -611,14 +570,8 @@ namespace NonVisuals
                                                     //Change faster
                                                     changeFaster = true;
                                                 }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandIncMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandInc);
-                                                }
+
+                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandIncMore : Fug16ZyFineTuneCommandInc);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
@@ -651,14 +604,8 @@ namespace NonVisuals
                                                     //Change faster
                                                     changeFaster = true;
                                                 }
-                                                if (changeFaster)
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDecMore);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(Fug16ZyFineTuneCommandDec);
-                                                }
+
+                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandDecMore : Fug16ZyFineTuneCommandDec);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
@@ -1110,7 +1057,7 @@ namespace NonVisuals
             return false;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Permissions;
 using System.Text;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
@@ -24,6 +23,10 @@ using Timer = System.Timers.Timer;
 using ToolTip = System.Windows.Controls.ToolTip;
 using UserControl = System.Windows.Controls.UserControl;
 
+/*
+ Custom Resharper Naming abbreviations
+ ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS
+*/
 namespace DCSFlightpanels
 {
 

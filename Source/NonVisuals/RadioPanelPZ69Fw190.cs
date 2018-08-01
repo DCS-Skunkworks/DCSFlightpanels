@@ -295,14 +295,7 @@ namespace NonVisuals
                                 {
                                     if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandInc);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandDec);
-                                        }
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FuG25ATestCommandInc : FuG25ATestCommandDec);
                                     }
                                     if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING)
                                     {
@@ -310,14 +303,7 @@ namespace NonVisuals
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                if (_homingCockpitDialPos == 1)
-                                                {
-                                                    DCSBIOS.Send(HomingCommandDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(HomingCommandInc);
-                                                }
+                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HomingCommandDec : HomingCommandInc);
                                             }
                                         }
                                     }
@@ -327,14 +313,7 @@ namespace NonVisuals
                                 {
                                     if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                                     {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandInc);
-                                        }
-                                        else
-                                        {
-                                            DCSBIOS.Send(FuG25ATestCommandDec);
-                                        }
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FuG25ATestCommandInc : FuG25ATestCommandDec);
                                     }
                                     if (_currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
                                     {
@@ -342,14 +321,7 @@ namespace NonVisuals
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                if (_homingCockpitDialPos == 1)
-                                                {
-                                                    DCSBIOS.Send(HomingCommandDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(HomingCommandInc);
-                                                }
+                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HomingCommandDec : HomingCommandInc);
                                             }
                                         }
                                     }
@@ -1058,7 +1030,7 @@ namespace NonVisuals
             return false;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }
