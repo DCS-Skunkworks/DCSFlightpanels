@@ -65,24 +65,28 @@ namespace ClassLibraryCommon
         KEYEMULATOR_SRS,
         [Description("A-10C")]
         A10C,
-        [Description("UH-1H")]
-        UH1H,
-        [Description("MiG-21bis")]
-        Mig21Bis,
-        [Description("Ka-50")]
-        Ka50,
-        [Description("Mi-8MT")]
-        Mi8,
+        [Description("AJS37")]
+        AJS37,
         [Description("Bf-109K-4")]
         Bf109,
         [Description("FW-190D9")]
         Fw190,
-        [Description("P-51D")]
-        P51D,
+        [Description("FA-18C_hornet")]
+        FA18C,
         [Description("F-86F Sabre")]
         F86F,
-        [Description("AJS37")]
-        AJS37,
+        [Description("Ka-50")]
+        Ka50,
+        [Description("L-39ZA")]
+        L39ZA,
+        [Description("M2000C")]
+        M2000C,
+        [Description("MiG-21bis")]
+        Mig21Bis,
+        [Description("Mi-8MT")]
+        Mi8,
+        [Description("P-51D")]
+        P51D,
         [Description("SpitfireLFMkIX")]
         SpitfireLFMkIX,
         [Description("SA342L")]
@@ -90,7 +94,10 @@ namespace ClassLibraryCommon
         [Description("SA342M")]
         SA342M,
         [Description("SA342Mistral")]
-        SA342Mistral
+        SA342Mistral,
+        [Description("UH-1H")]
+        UH1H
+
     }
 
     class CommonEnums

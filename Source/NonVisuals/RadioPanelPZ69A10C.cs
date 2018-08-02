@@ -241,7 +241,6 @@ namespace NonVisuals
              * Only after a *change* has been acknowledged will the _*WaitingForFeedback be
              * reset. Reading the dial's position with no change in value will not reset.
              */
-
             //VHF AM
             if (e.Address == _vhfAmDcsbiosOutputFreqDial1.Address)
             {

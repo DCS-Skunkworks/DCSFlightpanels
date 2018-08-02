@@ -442,6 +442,14 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.FA18C || _panelProfileHandler.Airframe == DCSAirframe.M2000C || _panelProfileHandler.Airframe == DCSAirframe.L39ZA)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlNotImplemented(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
                                     break;
                                 }
                             case SaitekPanelsEnum.PZ70MultiPanel:
@@ -986,7 +994,7 @@ namespace DCSFlightpanels
             {
                 foreach (var saitekUserControl in _saitekUserControls)
                 {
-                    ((ISaitekUserControl)saitekUserControl).GetSaitekPanel().Shutdown();
+                    ((ISaitekUserControl)saitekUserControl).GetSaitekPanel()?.Shutdown();
                 }
             }
             catch (Exception ex)
