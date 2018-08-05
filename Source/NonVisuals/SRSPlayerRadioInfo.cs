@@ -1,6 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
-
+// ReSharper disable All
+/*
+ * Do not change SRS code
+ */
 namespace NonVisuals
 {
 

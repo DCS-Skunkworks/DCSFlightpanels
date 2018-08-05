@@ -123,7 +123,6 @@ namespace NonVisuals
                  */
 
 
-
                 //ARC-27 Preset Channel Dial
                 if (e.Address == _arc27PresetDcsbiosOutputPresetDial.Address)
                 {
@@ -207,11 +206,9 @@ namespace NonVisuals
                         }
                     }
                 }
-
                 //Set once
                 DataHasBeenReceivedFromDCSBIOS = true;
                 ShowFrequenciesOnPanel();
-
             }
             catch (Exception ex)
             {
@@ -489,14 +486,7 @@ namespace NonVisuals
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
-                                                if (_bigFreqIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandMoreInc);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandInc);
-                                                }
+                                                DCSBIOS.Send(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6FrequencyCommandMoreInc : ARN6FrequencyCommandInc);
                                                 break;
                                             }
                                         case CurrentF86FRadioMode.ARN6_MODES:
@@ -537,14 +527,7 @@ namespace NonVisuals
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
-                                                if (_bigFreqDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandMoreDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandDec);
-                                                }
+                                                DCSBIOS.Send(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6FrequencyCommandMoreDec : ARN6FrequencyCommandDec);
                                                 break;
                                             }
                                         case CurrentF86FRadioMode.ARN6_MODES:
@@ -667,14 +650,7 @@ namespace NonVisuals
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqIncreaseChangeMonitor.Click();
-                                                if (_bigFreqIncreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandMoreInc);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandInc);
-                                                }
+                                                DCSBIOS.Send(_bigFreqIncreaseChangeMonitor.ClickThresholdReached() ? ARN6FrequencyCommandMoreInc : ARN6FrequencyCommandInc);
                                                 break;
                                             }
                                         case CurrentF86FRadioMode.ARN6_MODES:
@@ -715,14 +691,7 @@ namespace NonVisuals
                                         case CurrentF86FRadioMode.ARN6:
                                             {
                                                 _bigFreqDecreaseChangeMonitor.Click();
-                                                if (_bigFreqDecreaseChangeMonitor.ClickThresholdReached())
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandMoreDec);
-                                                }
-                                                else
-                                                {
-                                                    DCSBIOS.Send(ARN6FrequencyCommandDec);
-                                                }
+                                                DCSBIOS.Send(_bigFreqDecreaseChangeMonitor.ClickThresholdReached() ? ARN6FrequencyCommandMoreDec : ARN6FrequencyCommandDec);
                                                 break;
                                             }
                                         case CurrentF86FRadioMode.ARN6_MODES:
@@ -1419,7 +1388,7 @@ namespace NonVisuals
             return false;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

@@ -190,14 +190,14 @@ namespace NonVisuals
 
         public HashSet<KeyBindingPZ55> KeyBindingsHashSet
         {
-            get { return _keyBindings; }
-            set { _keyBindings = value; }
+            get => _keyBindings;
+            set => _keyBindings = value;
         }
 
         public HashSet<BIPLinkPZ55> BIPLinkHashSet
         {
-            get { return _bipLinks; }
-            set { _bipLinks = value; }
+            get => _bipLinks;
+            set => _bipLinks = value;
         }
 
         private void PZ55SwitchChanged(SwitchPanelKey switchPanelKey)
@@ -291,20 +291,14 @@ namespace NonVisuals
                 {
                     if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && switchPanelKey.IsOn)
                     {
-                        if (_manualLandingGearThread != null)
-                        {
-                            _manualLandingGearThread.Abort();
-                        }
+                        _manualLandingGearThread?.Abort();
                         // Changed Lights to go DARK when gear level is selected to UP, instead of RED.
                         _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.DARK));
                         _manualLandingGearThread.Start();
                     }
                     else if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN && switchPanelKey.IsOn)
                     {
-                        if (_manualLandingGearThread != null)
-                        {
-                            _manualLandingGearThread.Abort();
-                        }
+                        _manualLandingGearThread?.Abort();
                         _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.GREEN));
                         _manualLandingGearThread.Start();
                     }
@@ -915,13 +909,13 @@ namespace NonVisuals
 
         public HashSet<DCSBIOSBindingPZ55> DCSBiosBindings
         {
-            get { return _dcsBiosBindings; }
-            set { _dcsBiosBindings = value; }
+            get => _dcsBiosBindings;
+            set => _dcsBiosBindings = value;
         }
 
         public bool ManualLandingGearLeds
         {
-            get { return _manualLandingGearLeds; }
+            get => _manualLandingGearLeds;
             set
             {
                 _manualLandingGearLeds = value;
@@ -929,7 +923,7 @@ namespace NonVisuals
             }
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

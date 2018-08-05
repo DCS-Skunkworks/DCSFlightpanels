@@ -196,14 +196,8 @@ namespace NonVisuals
             _on = @on;
         }
 
-        public SwitchPanelPZ55Keys SwitchPanelPZ55Key
-        {
-            get { return _switchPanelPZ55Key; }
-        }
+        public SwitchPanelPZ55Keys SwitchPanelPZ55Key => _switchPanelPZ55Key;
 
-        public bool On
-        {
-            get { return _on; }
-        }
+        public bool On => _on;
     }
 }

@@ -44,20 +44,20 @@ namespace NonVisuals
 
         public PZ70DialPosition DialPosition
         {
-            get { return _pz70DialPosition; }
-            set { _pz70DialPosition = value; }
+            get => _pz70DialPosition;
+            set => _pz70DialPosition = value;
         }
 
         public MultiPanelPZ70Knobs MultiPanelPZ70Knob
         {
-            get { return _multiPanelPZ70Knob; }
-            set { _multiPanelPZ70Knob = value; }
+            get => _multiPanelPZ70Knob;
+            set => _multiPanelPZ70Knob = value;
         }
 
         public OSKeyPress OSKeyPress
         {
-            get { return _osKeyPress; }
-            set { _osKeyPress = value; }
+            get => _osKeyPress;
+            set => _osKeyPress = value;
         }
 
 
@@ -74,8 +74,8 @@ namespace NonVisuals
 
         public bool WhenTurnedOn
         {
-            get { return _whenOnTurnedOn; }
-            set { _whenOnTurnedOn = value; }
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
         }
 
     }

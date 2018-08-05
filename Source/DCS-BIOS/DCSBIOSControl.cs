@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-
+// ReSharper disable All
+/*
+ * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
+ */
 namespace DCS_BIOS
 {
     public class DCSBIOSControlInput

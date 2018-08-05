@@ -88,14 +88,7 @@ namespace NonVisuals
                 //1     -> DDDD1
 
                 byte b;
-                if (digitsAsString[i].ToString().Equals(" "))
-                {
-                    b = 0xFF;
-                }
-                else
-                {
-                    b = Byte.Parse(digitsAsString[i].ToString());
-                }
+                b = digitsAsString[i].ToString().Equals(" ") ? (byte) 0xFF : byte.Parse(digitsAsString[i].ToString());
                 bytes[arrayPosition] = b;
 
                 arrayPosition++;
@@ -140,16 +133,7 @@ namespace NonVisuals
                 //1     -> DDDD1
 
                 byte b;
-                if (digitsAsString[i].ToString().Equals(" "))
-                {
-                    b = 0xFF;
-                    //Debug.WriteLine("Current string char is " + b + " from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
-                }
-                else
-                {
-                    b = Byte.Parse(digitsAsString[i].ToString());
-                    //Debug.WriteLine("Current string char is >" + digitsAsString[i] + "< from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
-                }
+                b = digitsAsString[i].ToString().Equals(" ") ? (byte) 0xFF : byte.Parse(digitsAsString[i].ToString());
                 bytes[arrayPosition] = b;
 
                 arrayPosition++;
@@ -174,14 +158,7 @@ namespace NonVisuals
                     i++;
                 }
                 byte b;
-                if (digitsAsString[i].ToString().Equals(" "))
-                {
-                    b = 0xFF;
-                }
-                else
-                {
-                    b = Byte.Parse(digitsAsString[i].ToString());
-                }
+                b = digitsAsString[i].ToString().Equals(" ") ? (byte) 0xFF : byte.Parse(digitsAsString[i].ToString());
                 bytes[arrayPosition] = b;
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
                 {
@@ -225,7 +202,6 @@ namespace NonVisuals
                     i++;
                 }
 
-                byte b = 0;
                 try
                 {
                     if (digits[i] == ' ')
@@ -234,7 +210,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        b = Byte.Parse(digits[i].ToString());
+                        var b = byte.Parse(digits[i].ToString());
                         bytes[arrayPosition] = b;
                     }
                 }
@@ -279,11 +255,10 @@ namespace NonVisuals
                     i++;
                 }
 
-                byte b = 0;
                 try
                 {
                     var tmp = digitsAsString[i].ToString();
-                    b = Byte.Parse(tmp);
+                    var b = byte.Parse(tmp);
                     bytes[arrayPosition] = b;
                     //Debug.WriteLine("Current string char is " + tmp + " from i = " + i + ", writing byte " + b + " to array position " + arrayPosition);
                 }
@@ -332,11 +307,7 @@ namespace NonVisuals
         {
             try
             {
-                if (HIDSkeletonBase.HIDWriteDevice != null)
-                {
-
-                    HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
-                }
+                HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
                 //if (IsAttached)
                 //{
 
@@ -482,36 +453,31 @@ namespace NonVisuals
 
         public int SynchSleepTime
         {
-            get { return _synchSleepTime; }
-            set { _synchSleepTime = value; }
+            get => _synchSleepTime;
+            set => _synchSleepTime = value;
         }
 
         public long ResetSyncTimeout
         {
-            get { return _resetSyncTimeout; }
-            set { _resetSyncTimeout = value; }
+            get => _resetSyncTimeout;
+            set => _resetSyncTimeout = value;
         }
 
         public long SyncOKDelayTimeout
         {
-            get
-            {
-                //10,000 ticks in a millisecond
-                return _syncOKDelayTimeout / 10000;
-            }
-            set { _syncOKDelayTimeout = value * 10000; }
-
+            get => _syncOKDelayTimeout / 10000;
+            set => _syncOKDelayTimeout = value * 10000;
         }
         public NumberFormatInfo NumberFormatInfo
         {
-            get { return NumberFormatInfoFullDisplay; }
-            set { NumberFormatInfoFullDisplay = value; }
+            get => NumberFormatInfoFullDisplay;
+            set => NumberFormatInfoFullDisplay = value;
         }
 
         public int FrequencyKnobSensitivity
         {
-            get { return _frequencyKnobSensitivity; }
-            set { _frequencyKnobSensitivity = value; }
+            get => _frequencyKnobSensitivity;
+            set => _frequencyKnobSensitivity = value;
         }
 
 

@@ -1140,11 +1140,8 @@ namespace NonVisuals
         {
             try
             {
-                if (HIDSkeletonBase.HIDWriteDevice != null)
-                {
-                    //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
-                }
+                //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
+                HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
             }
             catch (Exception e)
             {
@@ -1235,44 +1232,44 @@ namespace NonVisuals
 
         public HashSet<DCSBIOSBindingPZ70> DCSBiosBindings
         {
-            get { return _dcsBiosBindings; }
-            set { _dcsBiosBindings = value; }
+            get => _dcsBiosBindings;
+            set => _dcsBiosBindings = value;
         }
 
         public HashSet<KnobBindingPZ70> KeyBindings
         {
-            get { return _knobBindings; }
-            set { _knobBindings = value; }
+            get => _knobBindings;
+            set => _knobBindings = value;
         }
 
         public HashSet<BIPLinkPZ70> BIPLinkHashSet
         {
-            get { return _bipLinks; }
-            set { _bipLinks = value; }
+            get => _bipLinks;
+            set => _bipLinks = value;
         }
 
         public HashSet<MultiPanelKnob> MultiPanelKnobs
         {
-            get { return _multiPanelKnobs; }
-            set { _multiPanelKnobs = value; }
+            get => _multiPanelKnobs;
+            set => _multiPanelKnobs = value;
         }
 
         public HashSet<KnobBindingPZ70> KeyBindingsHashSet
         {
-            get { return _knobBindings; }
-            set { _knobBindings = value; }
+            get => _knobBindings;
+            set => _knobBindings = value;
         }
 
         public HashSet<DCSBIOSBindingLCDPZ70> LCDBindings
         {
-            get { return _dcsBiosLcdBindings; }
-            set { _dcsBiosLcdBindings = value; }
+            get => _dcsBiosLcdBindings;
+            set => _dcsBiosLcdBindings = value;
         }
 
         public int LCDKnobSensitivity
         {
-            get { return _lcdKnobSensitivity; }
-            set { _lcdKnobSensitivity = value; }
+            get => _lcdKnobSensitivity;
+            set => _lcdKnobSensitivity = value;
         }
 
         public PZ70DialPosition PZ70_DialPosition
@@ -1281,7 +1278,7 @@ namespace NonVisuals
             set => _pz70DialPosition = value;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "2X";
         }
@@ -1304,20 +1301,20 @@ LCD Button Byte
 ||_ APR_BUTTON
 |_ REV_BUTTON
  */
-        private readonly byte _apMask = 1;
-        private readonly byte _hdgMask = 2;
-        private readonly byte _navMask = 4;
-        private readonly byte _iasMask = 8;
-        private readonly byte _altMask = 16;
-        private readonly byte _vsMask = 32;
-        private readonly byte _aprMask = 64;
-        private readonly byte _revMask = 128;
-        private readonly int _dialAltMask = 256;
-        private readonly int _dialVsMask = 512;
-        private readonly int _dialIasMask = 1024;
-        private readonly int _dialHdgMask = 2048;
-        private readonly int _dialCrsMask = 4096;
-        private readonly int _buttonIsOnMask = 8192;
+        private const byte ApMask = 1;
+        private const byte HDGMask = 2;
+        private const byte NAVMask = 4;
+        private const byte IASMask = 8;
+        private const byte ALTMask = 16;
+        private const byte VSMask = 32;
+        private const byte APRMask = 64;
+        private const byte REVMask = 128;
+        private const int DialAltMask = 256;
+        private const int DialVsMask = 512;
+        private const int DialIasMask = 1024;
+        private const int DialHdgMask = 2048;
+        private const int DialCrsMask = 4096;
+        private const int ButtonIsOnMask = 8192;
 
         //bool isSet = (b & mask) != 0
         //Set to 1" b |= mask
@@ -1330,11 +1327,11 @@ LCD Button Byte
 
         public PZ70LCDButtonByteList()
         {
-            _buttonDialPosition[0] |= _dialAltMask;
-            _buttonDialPosition[1] |= _dialVsMask;
-            _buttonDialPosition[2] |= _dialIasMask;
-            _buttonDialPosition[3] |= _dialHdgMask;
-            _buttonDialPosition[4] |= _dialCrsMask;
+            _buttonDialPosition[0] |= DialAltMask;
+            _buttonDialPosition[1] |= DialVsMask;
+            _buttonDialPosition[2] |= DialIasMask;
+            _buttonDialPosition[3] |= DialHdgMask;
+            _buttonDialPosition[4] |= DialCrsMask;
         }
 
         public bool FlipButton(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knob)
@@ -1421,31 +1418,31 @@ LCD Button Byte
                         }
                     case MultiPanelPZ70Knobs.HDG_BUTTON:
                         {
-                            return HdgMask;
+                            return HDGMask;
                         }
                     case MultiPanelPZ70Knobs.NAV_BUTTON:
                         {
-                            return NavMask;
+                            return NAVMask;
                         }
                     case MultiPanelPZ70Knobs.IAS_BUTTON:
                         {
-                            return IasMask;
+                            return IASMask;
                         }
                     case MultiPanelPZ70Knobs.ALT_BUTTON:
                         {
-                            return AltMask;
+                            return ALTMask;
                         }
                     case MultiPanelPZ70Knobs.VS_BUTTON:
                         {
-                            return VsMask;
+                            return VSMask;
                         }
                     case MultiPanelPZ70Knobs.APR_BUTTON:
                         {
-                            return AprMask;
+                            return APRMask;
                         }
                     case MultiPanelPZ70Knobs.REV_BUTTON:
                         {
-                            return RevMask;
+                            return REVMask;
                         }
                 }
                 throw new Exception("Multipanel : Failed to find Mask for button " + multiPanelPZ70Knob);
@@ -1576,33 +1573,7 @@ LCD Button Byte
             return SetButtonOnOrOff(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob.MultiPanelPZ70Knob), multiPanelPZ70Knob.IsOn);
         }
 
-        public byte ApMask => _apMask;
 
-        public byte HdgMask => _hdgMask;
-
-        public byte NavMask => _navMask;
-
-        public byte IasMask => _iasMask;
-
-        public byte AltMask => _altMask;
-
-        public byte VsMask => _vsMask;
-
-        public byte AprMask => _aprMask;
-
-        public byte RevMask => _revMask;
-
-        public int DialAltMask => _dialAltMask;
-
-        public int DialVsMask => _dialVsMask;
-
-        public int DialIasMask => _dialIasMask;
-
-        public int DialHdgMask => _dialHdgMask;
-
-        public int DialCrsMask => _dialCrsMask;
-
-        public int ButtonIsOnMask => _buttonIsOnMask;
     }
 
 

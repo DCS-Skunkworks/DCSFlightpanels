@@ -161,14 +161,14 @@ namespace NonVisuals
 
         public HashSet<KeyBindingTPM> KeyBindingsHashSet
         {
-            get { return _keyBindings; }
-            set { _keyBindings = value; }
+            get => _keyBindings;
+            set => _keyBindings = value;
         }
 
         public HashSet<BIPLinkTPM> BipLinkHashSet
         {
-            get { return _bipLinks; }
-            set { _bipLinks = value; }
+            get => _bipLinks;
+            set => _bipLinks = value;
         }
 
         private void TPMSwitchChanged(TPMPanelSwitch tpmPanelSwitch)
@@ -549,11 +549,11 @@ namespace NonVisuals
 
         public HashSet<DCSBIOSBindingTPM> DCSBiosBindings
         {
-            get { return _dcsBiosBindings; }
-            set { _dcsBiosBindings = value; }
+            get => _dcsBiosBindings;
+            set => _dcsBiosBindings = value;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

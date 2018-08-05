@@ -91,15 +91,9 @@ namespace NonVisuals
                 _on = @on;
             }
 
-            public TPMPanelSwitches TPMSwitch
-            {
-                get { return _tpmPanelSwitch; }
-            }
+            public TPMPanelSwitches TPMSwitch => _tpmPanelSwitch;
 
-            public bool On
-            {
-                get { return _on; }
-            }
+            public bool On => _on;
         }
     }
 }

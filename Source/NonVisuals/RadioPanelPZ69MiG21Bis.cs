@@ -875,7 +875,7 @@ namespace NonVisuals
             return result;
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

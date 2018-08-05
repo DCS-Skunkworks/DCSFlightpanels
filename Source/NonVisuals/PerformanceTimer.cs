@@ -76,11 +76,10 @@ namespace NonVisuals
                 for (var i = 0; i < _clickTimesList.Count; i++)
                 {
                     var kvp = _clickTimesList[i];
-                    long diff = 0;
                     if (i > 0)
                     {
                         var previousKvp = _clickTimesList[i - 1];
-                        diff = kvp.Value - previousKvp.Value;
+                        var diff = kvp.Value - previousKvp.Value;
                         if (kvp.Key)
                         {
                             result.Add("Start : " + (kvp.Value - _start) / 10000 + " ms");//", diff from previous " + diff/10000 + " ms.");

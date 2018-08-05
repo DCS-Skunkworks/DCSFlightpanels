@@ -160,20 +160,11 @@ namespace NonVisuals
             _bipLinks.Clear();
         }
 
-        public HashSet<KeyBindingPZ69> KeyBindingsHashSet
-        {
-            get { return _keyBindings; }
-        }
+        public HashSet<KeyBindingPZ69> KeyBindingsHashSet => _keyBindings;
 
-        public HashSet<BIPLinkPZ69> BipLinkHashSet
-        {
-            get { return _bipLinks; }
-        }
+        public HashSet<BIPLinkPZ69> BipLinkHashSet => _bipLinks;
 
-        public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet
-        {
-            get { return _displayValues; }
-        }
+        public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
         private void PZ69SwitchChanged(RadioPanelPZ69KnobEmulator radioPanelKey)
         {
@@ -629,7 +620,7 @@ namespace NonVisuals
             set { _dcsBiosBindings = value; }
         }*/
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }

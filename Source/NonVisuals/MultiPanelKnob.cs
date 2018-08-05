@@ -115,14 +115,8 @@ namespace NonVisuals
             _on = @on;
         }
 
-        public MultiPanelPZ70Knobs MultiPanelPZ70Knob
-        {
-            get { return _multiPanelPZ70Knobs; }
-        }
+        public MultiPanelPZ70Knobs MultiPanelPZ70Knob => _multiPanelPZ70Knobs;
 
-        public bool On
-        {
-            get { return _on; }
-        }
+        public bool On => _on;
     }
 }

@@ -112,14 +112,14 @@ namespace NonVisuals
         private readonly byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
         private readonly byte[] _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
         private readonly byte[] _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
-        private readonly byte _1BIPMask = 0x01;
-        private readonly byte _2BIPMask = 0x02;
-        private readonly byte _3BIPMask = 0x04;
-        private readonly byte _4BIPMask = 0x08;
-        private readonly byte _5BIPMask = 0x10;
-        private readonly byte _6BIPMask = 0x20;
-        private readonly byte _7BIPMask = 0x40;
-        private readonly byte _8BIPMask = 0x80;
+        private const byte _1BIPMask = 0x01;
+        private const byte _2BIPMask = 0x02;
+        private const byte _3BIPMask = 0x04;
+        private const byte _4BIPMask = 0x08;
+        private const byte _5BIPMask = 0x10;
+        private const byte _6BIPMask = 0x20;
+        private const byte _7BIPMask = 0x40;
+        private const byte _8BIPMask = 0x80;
         private int _ledBrightness = 50; // 0 - 100 in 5 step intervals
         private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
 
@@ -241,8 +241,6 @@ namespace NonVisuals
 
         public PanelLEDColor GetColor(BIPLedPositionEnum bipLedPositionEnum)
         {
-            var result = PanelLEDColor.RED;
-
             try
             {
                 var row = GetRow(bipLedPositionEnum);
@@ -343,7 +341,7 @@ namespace NonVisuals
             {
                 Common.ShowErrorMessageBox(1000, ex);
             }
-            return result;
+            return PanelLEDColor.RED;
         }
 
         public bool HasConfiguration(BIPLedPositionEnum position)
@@ -567,10 +565,7 @@ namespace NonVisuals
         {
             try
             {
-                if (HIDSkeletonBase.HIDWriteDevice != null)
-                {
-                    HIDSkeletonBase.HIDWriteDevice.WriteFeatureData(array);
-                }
+                HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
             }
             catch (Exception e)
             {
@@ -603,8 +598,8 @@ namespace NonVisuals
 
         public int LEDBrightness
         {
-            get { return _ledBrightness; }
-            set { _ledBrightness = value; }
+            get => _ledBrightness;
+            set => _ledBrightness = value;
         }
 
         public void LEDBrightnessDecrease()
@@ -627,7 +622,7 @@ namespace NonVisuals
             SetLedStrength();
         }
 
-        public override String SettingsVersion()
+        public override string SettingsVersion()
         {
             return "0X";
         }
