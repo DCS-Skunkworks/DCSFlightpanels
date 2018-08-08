@@ -16,11 +16,56 @@ namespace DCSFlightpanels
     {
         private static Mutex _mutex;
         private bool _hasHandle;
+        private System.Windows.Forms.NotifyIcon _notifyIcon;
+        
+        private void InitNotificationIcon()
+        {
+            System.Windows.Forms.MenuItem notifyIconContextMenuShow = new System.Windows.Forms.MenuItem
+            {
+                Index = 0,
+                Text = "Show"
+            };
+            notifyIconContextMenuShow.Click += new EventHandler(NotifyIcon_Show);
+
+            System.Windows.Forms.MenuItem notifyIconContextMenuQuit = new System.Windows.Forms.MenuItem
+            {
+                Index = 1,
+                Text = "Quit"
+            };
+            notifyIconContextMenuQuit.Click += new EventHandler(NotifyIcon_Quit);
+
+            System.Windows.Forms.ContextMenu notifyIconContextMenu = new System.Windows.Forms.ContextMenu();
+            notifyIconContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] { notifyIconContextMenuShow, notifyIconContextMenuQuit });
+
+            _notifyIcon = new System.Windows.Forms.NotifyIcon
+            {
+                Icon = DCSFlightpanels.Properties.Resources.huey_icon,
+                Visible = true,
+                ContextMenu = notifyIconContextMenu
+            };
+            _notifyIcon.DoubleClick += new EventHandler(NotifyIcon_Show);
+
+        }
+        
+        private void NotifyIcon_Show(object sender, EventArgs args)
+        {
+            MainWindow?.Show();
+            if (MainWindow != null)
+            {
+                MainWindow.WindowState = WindowState.Normal;
+            }
+        }
+
+        private void NotifyIcon_Quit(object sender, EventArgs args)
+        {
+            MainWindow?.Close();
+        }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             try
             {
+                InitNotificationIcon();
                 //DCSFlightpanels.exe OpenProfile="C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings"
                 //DCSFlightpanels.exe OpenProfile='C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings'
 
@@ -106,6 +151,7 @@ namespace DCSFlightpanels
 
         protected override void OnExit(ExitEventArgs e)
         {
+            _notifyIcon.Visible = false;
             if (_hasHandle)
             {
                 _mutex?.ReleaseMutex();

@@ -83,5 +83,8 @@
     <Setting Name="SRSSmallFreqStepping" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.001</Value>
     </Setting>
+    <Setting Name="MinimizeToTray" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

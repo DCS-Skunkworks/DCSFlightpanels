@@ -92,6 +92,8 @@ namespace DCSFlightpanels
             TextBoxSRSPortTo.TextChanged += TextBoxSRS_OnTextChanged;
             CheckBoxDoDebug.Checked += CheckBoxDebug_OnChecked;
             CheckBoxDebugToFile.Checked += CheckBoxDebug_OnChecked;
+            CheckBoxMinimizeToTray.Checked += CheckBoxMinimizeToTray_OnChecked;
+            CheckBoxMinimizeToTray.Unchecked += CheckBoxMinimizeToTray_OnUnchecked;
         }
 
         private void LoadSettings()
@@ -135,6 +137,7 @@ namespace DCSFlightpanels
             
             CheckBoxDoDebug.IsChecked = Settings.Default.DebugOn;
             CheckBoxDebugToFile.IsChecked = Settings.Default.DebugToFile;
+            CheckBoxMinimizeToTray.IsChecked = Settings.Default.RunMinimized;
 
             if (_dcsAirframe != DCSAirframe.KEYEMULATOR)
             {
@@ -234,6 +237,9 @@ namespace DCSFlightpanels
 
                     Settings.Default.DebugOn = CheckBoxDoDebug.IsChecked == true;
                     Settings.Default.DebugToFile = CheckBoxDebugToFile.IsChecked == true;
+                    Settings.Default.Save();
+
+                    Settings.Default.RunMinimized = CheckBoxMinimizeToTray.IsChecked == true;
                     Settings.Default.Save();
                 }
 
@@ -508,6 +514,30 @@ namespace DCSFlightpanels
                 e.Handled = true;
                 Close();
             }
+        }
+
+        private void CheckBoxMinimizeToTray_OnChecked(object sender, RoutedEventArgs e)
+        {
+            _generalChanged = true;
+            ButtonOk.IsEnabled = true;
+        }
+
+        private void CheckBoxMinimizeToTray_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            _generalChanged = true;
+            ButtonOk.IsEnabled = true;
+        }
+
+        private void CheckBoxSystemStartup_OnChecked(object sender, RoutedEventArgs e)
+        {
+            _generalChanged = true;
+            ButtonOk.IsEnabled = true;
+        }
+
+        private void CheckBoxSystemStartup_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            _generalChanged = true;
+            ButtonOk.IsEnabled = true;
         }
     }
 }

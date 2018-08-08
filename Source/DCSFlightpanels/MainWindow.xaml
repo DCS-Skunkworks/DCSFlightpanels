@@ -96,7 +96,7 @@
                 </Image>
             </Button>
 
-            <Image Name="ImageDcsBiosConnected"  Source="/DCSFlightpanels;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS">
+            <Image Name="ImageDcsBiosConnected"  Source="/DCSFlightpanels;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
                 <Image.RenderTransform>
                     <RotateTransform CenterX="9" CenterY="9" />
                 </Image.RenderTransform>
