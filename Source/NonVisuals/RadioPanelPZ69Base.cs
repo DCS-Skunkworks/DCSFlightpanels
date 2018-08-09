@@ -24,8 +24,8 @@ namespace NonVisuals
         protected NumberFormatInfo NumberFormatInfoFullDisplay;
         protected NumberFormatInfo NumberFormatInfoEmpty;
         private int _frequencyKnobSensitivity;
-        private volatile byte FrequencySensitivitySkipper;
-        protected readonly object _lockLCDUpdateObject = new object();
+        private volatile byte _frequencySensitivitySkipper;
+        protected readonly object LockLCDUpdateObject = new object();
         protected bool DataHasBeenReceivedFromDCSBIOS;
         private Guid _guid = Guid.NewGuid();
         /*
@@ -37,8 +37,12 @@ namespace NonVisuals
         private long _syncOKDelayTimeout = 50000000; //5s
 
 
-        public RadioPanelPZ69Base(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton, enableDCSBIOS)
+        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton, enableDCSBIOS)
         {
+            if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ69RadioPanel)
+            {
+                throw new ArgumentException();
+            }
             VendorId = 0x6A3;
             ProductId = 0xD05;
             NumberFormatInfoFullDisplay = new NumberFormatInfo();
@@ -345,23 +349,23 @@ namespace NonVisuals
                 case -1:
                     {
                         //Skip every 2 manipulations
-                        FrequencySensitivitySkipper++;
-                        if (FrequencySensitivitySkipper <= 2)
+                        _frequencySensitivitySkipper++;
+                        if (_frequencySensitivitySkipper <= 2)
                         {
                             return true;
                         }
-                        FrequencySensitivitySkipper = 0;
+                        _frequencySensitivitySkipper = 0;
                         break;
                     }
                 case -2:
                     {
                         //Skip every 4 manipulations
-                        FrequencySensitivitySkipper++;
-                        if (FrequencySensitivitySkipper <= 4)
+                        _frequencySensitivitySkipper++;
+                        if (_frequencySensitivitySkipper <= 4)
                         {
                             return true;
                         }
-                        FrequencySensitivitySkipper = 0;
+                        _frequencySensitivitySkipper = 0;
                         break;
                     }
             }

@@ -45,6 +45,10 @@ namespace NonVisuals
 
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton, enableDCSBIOS)
         {
+            if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ55SwitchPanel)
+            {
+                throw new ArgumentException();
+            }
             //Fixed values
             VendorId = 0x6A3;
             ProductId = 0xD67;

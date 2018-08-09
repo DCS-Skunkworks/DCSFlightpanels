@@ -128,7 +128,7 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering SRS Radio PZ69KnobChanged()");
-                lock (_lockLCDUpdateObject)
+                lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
                     {

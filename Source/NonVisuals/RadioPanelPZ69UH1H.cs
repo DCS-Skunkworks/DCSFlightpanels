@@ -2441,7 +2441,7 @@ namespace NonVisuals
         public void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-            lock (_lockLCDUpdateObject)
+            lock (LockLCDUpdateObject)
             {
                 foreach (var radioPanelKnobObject in hashSet)
                 {

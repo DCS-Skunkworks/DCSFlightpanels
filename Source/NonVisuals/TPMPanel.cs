@@ -28,6 +28,10 @@ namespace NonVisuals
 
         public TPMPanel(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.TPM, hidSkeleton, enableDCSBIOS)
         {
+            if (hidSkeleton.PanelType != SaitekPanelsEnum.TPM)
+            {
+                throw new ArgumentException();
+            }
             //Fixed values
             VendorId = 0x6A3;
             ProductId = 0xB4D;

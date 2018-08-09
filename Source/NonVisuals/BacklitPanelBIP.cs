@@ -139,6 +139,10 @@ namespace NonVisuals
          */
         public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.BackLitPanel, hidSkeleton, enableDCSBIOS)
         {
+            if (hidSkeleton.PanelType != SaitekPanelsEnum.BackLitPanel)
+            {
+                throw new ArgumentException();
+            }
             VendorId = 0x6A3;
             ProductId = 0xB4E;
             _ledBrightness = ledBrightness;
@@ -146,7 +150,7 @@ namespace NonVisuals
             Startup();
         }
         //sätta färg efter om Config finns
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {
@@ -358,10 +362,12 @@ namespace NonVisuals
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingBIP();
-            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
-            dcsOutputAndColorBinding.LEDColor = panelLEDColor;
-            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingBIP
+            {
+                DCSBiosOutputLED = dcsBiosOutput,
+                LEDColor = panelLEDColor,
+                SaitekLEDPosition = saitekPanelLEDPosition
+            };
             return dcsOutputAndColorBinding;
         }
 

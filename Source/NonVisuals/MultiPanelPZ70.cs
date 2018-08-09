@@ -51,6 +51,10 @@ namespace NonVisuals
 
         public MultiPanelPZ70(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton, enableDCSBIOS)
         {
+            if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ70MultiPanel)
+            {
+                throw new ArgumentException();
+            }
             VendorId = 0x6A3;
             ProductId = 0xD06;
             CreateMultiKnobs();

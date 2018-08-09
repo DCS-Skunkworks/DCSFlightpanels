@@ -250,7 +250,7 @@ namespace NonVisuals
             {
                 Common.DebugP("Entering Spitfire LF Mk. IX Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                lock (_lockLCDUpdateObject)
+                lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
                     {

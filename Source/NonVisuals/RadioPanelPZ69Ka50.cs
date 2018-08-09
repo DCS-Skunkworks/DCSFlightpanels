@@ -690,7 +690,7 @@ namespace NonVisuals
             {
                 Common.DebugP("Entering Ka-50 Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                lock (_lockLCDUpdateObject)
+                lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
                     {
