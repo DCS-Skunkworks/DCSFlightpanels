@@ -1,7 +1,7 @@
 ﻿<Window x:Class="DCSFlightpanels.BipLightWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="BIP Light" Height="400" Width="300"  Loaded="WindowLoaded" Icon="/DCSFlightpanels;component/Images/huey_icon.ico" WindowStartupLocation="CenterScreen"  KeyDown="BipLightWindow_OnKeyDown">
+        Title="BIP Light" Height="400" Width="300"  Loaded="WindowLoaded" Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen"  KeyDown="BipLightWindow_OnKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="91*" />

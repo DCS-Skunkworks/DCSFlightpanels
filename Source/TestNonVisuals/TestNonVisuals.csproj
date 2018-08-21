@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="TestBacklitPanelBIP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestSwitchPanelKey.cs" />
+    <Compile Include="TestProfileHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -595,17 +595,28 @@ namespace NonVisuals
 
         private void SetLedStrength()
         {
-            byte[] array;
-            array = new byte[2];
-            array[0] = 0xb2;
-            array[1] = (byte)_ledBrightness;
-            SendLEDData(array);
+            try
+            {
+                var array = new byte[2];
+                array[0] = 0xb2;
+                array[1] = (byte)_ledBrightness;
+                SendLEDData(array);
+            }
+            catch (Exception ex)
+            {
+                Common.DebugP("BacklitPanelBIP.SetLedStrength() : " + ex.Message);
+                SetLastException(ex);
+            }
         }
 
         public int LEDBrightness
         {
             get => _ledBrightness;
-            set => _ledBrightness = value;
+            set
+            {
+                _ledBrightness = value;
+                SetLedStrength();
+            }
         }
 
         public void LEDBrightnessDecrease()

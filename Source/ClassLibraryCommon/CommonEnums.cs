@@ -75,6 +75,8 @@ namespace ClassLibraryCommon
         FA18C,
         [Description("F-86F Sabre")]
         F86F,
+        [Description("F-5E")]
+        F5E,
         [Description("Ka-50")]
         Ka50,
         [Description("L-39ZA")]

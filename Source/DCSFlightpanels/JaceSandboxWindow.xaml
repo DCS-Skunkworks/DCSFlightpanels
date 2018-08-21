@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Formula sandbox" Height="600" Width="800" WindowStartupLocation="CenterScreen" Loaded="JaceSandboxWindow_OnLoaded" Closing="JaceSandboxWindow_OnClosing" KeyDown="JaceSandboxWindow_OnKeyDown">
+        Title="Formula sandbox" Height="600" Width="800" WindowStartupLocation="CenterScreen" Loaded="JaceSandboxWindow_OnLoaded" Closing="JaceSandboxWindow_OnClosing" KeyDown="JaceSandboxWindow_OnKeyDown" Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico">
     <Window.Resources>
         <Popup x:Key="PopUpSearchResults" Width="600" Height="150" PlacementTarget="{Binding ElementName=text}" StaysOpen="False">
             <Grid HorizontalAlignment="Stretch">

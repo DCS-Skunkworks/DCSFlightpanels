@@ -14,7 +14,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon_image.ico</ApplicationIcon>
+    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -77,6 +77,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="flightpanels02_8Rc_icon.ico" />
     <Content Include="icon_image.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ClassLibraryCommon;
+using DCS_BIOS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NonVisuals;
 
@@ -106,8 +107,11 @@ namespace TestNonVisuals
             var backlitPanelBIP = new BacklitPanelBIP(10, hidSkeleton, false);
             var saitekPanelLEDPosition = new SaitekPanelLEDPosition(position);
             var dcsOutputAndColorBindings = new List<DcsOutputAndColorBinding>();
+            DCSBIOSControlLocator.JSONDirectory = @"USERDIRECTORY$$$###\Saved Games\DCS\Scripts\DCS-BIOS\doc\json";
+            DCSBIOSControlLocator.Airframe = DCSAirframe.A10C;
+            var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("AAP_CDUPWR");
 
-            dcsOutputAndColorBinding.DCSBiosOutputLED = null;
+            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsbiosOutput;
             dcsOutputAndColorBinding.LEDColor = PanelLEDColor.DARK;
             dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
             dcsOutputAndColorBindings.Add(dcsOutputAndColorBinding);
@@ -126,14 +130,62 @@ namespace TestNonVisuals
             var backlitPanelBIP = new BacklitPanelBIP(10, hidSkeleton, false);
             var saitekPanelLEDPosition = new SaitekPanelLEDPosition(positionAdded);
             var dcsOutputAndColorBindings = new List<DcsOutputAndColorBinding>();
+            DCSBIOSControlLocator.JSONDirectory = @"USERDIRECTORY$$$###\Saved Games\DCS\Scripts\DCS-BIOS\doc\json";
+            DCSBIOSControlLocator.Airframe = DCSAirframe.A10C;
+            var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("AAP_CDUPWR");
 
-            dcsOutputAndColorBinding.DCSBiosOutputLED = null;
+            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsbiosOutput;
             dcsOutputAndColorBinding.LEDColor = PanelLEDColor.DARK;
             dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
             dcsOutputAndColorBindings.Add(dcsOutputAndColorBinding);
             backlitPanelBIP.SetLedDcsBiosOutput(positionAdded, dcsOutputAndColorBindings);
 
             Assert.IsFalse(backlitPanelBIP.HasConfiguration(nonExistentPosition));
+        }
+
+        [TestMethod]
+        public void TestGetLedDcsBiosOutputsResultOne()
+        {
+            var positionAdded = BIPLedPositionEnum.Position_2_5;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingBIP();
+            var hidSkeleton = new HIDSkeleton(SaitekPanelsEnum.BackLitPanel, "");
+            var backlitPanelBIP = new BacklitPanelBIP(10, hidSkeleton, false);
+            var saitekPanelLEDPosition = new SaitekPanelLEDPosition(positionAdded);
+            var dcsOutputAndColorBindings = new List<DcsOutputAndColorBinding>();
+            DCSBIOSControlLocator.JSONDirectory = @"USERDIRECTORY$$$###\Saved Games\DCS\Scripts\DCS-BIOS\doc\json";
+            DCSBIOSControlLocator.Airframe = DCSAirframe.A10C;
+            var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("AAP_CDUPWR");
+
+            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsbiosOutput;
+            dcsOutputAndColorBinding.LEDColor = PanelLEDColor.DARK;
+            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            dcsOutputAndColorBindings.Add(dcsOutputAndColorBinding);
+            backlitPanelBIP.SetLedDcsBiosOutput(positionAdded, dcsOutputAndColorBindings);
+
+            Assert.AreEqual(1, backlitPanelBIP.GetLedDcsBiosOutputs(positionAdded).Count);
+        }
+
+        [TestMethod]
+        public void TestGetLedDcsBiosOutputsResultZero()
+        {
+            var positionAdded = BIPLedPositionEnum.Position_2_5;
+            var nonExistentPosition = BIPLedPositionEnum.Position_1_5;
+            var dcsOutputAndColorBinding = new DcsOutputAndColorBindingBIP();
+            var hidSkeleton = new HIDSkeleton(SaitekPanelsEnum.BackLitPanel, "");
+            var backlitPanelBIP = new BacklitPanelBIP(10, hidSkeleton, false);
+            var saitekPanelLEDPosition = new SaitekPanelLEDPosition(positionAdded);
+            var dcsOutputAndColorBindings = new List<DcsOutputAndColorBinding>();
+            DCSBIOSControlLocator.JSONDirectory = @"USERDIRECTORY$$$###\Saved Games\DCS\Scripts\DCS-BIOS\doc\json";
+            DCSBIOSControlLocator.Airframe = DCSAirframe.A10C;
+            var dcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("AAP_CDUPWR");
+
+            dcsOutputAndColorBinding.DCSBiosOutputLED = dcsbiosOutput;
+            dcsOutputAndColorBinding.LEDColor = PanelLEDColor.DARK;
+            dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
+            dcsOutputAndColorBindings.Add(dcsOutputAndColorBinding);
+            backlitPanelBIP.SetLedDcsBiosOutput(positionAdded, dcsOutputAndColorBindings);
+
+            Assert.AreEqual(0, backlitPanelBIP.GetLedDcsBiosOutputs(nonExistentPosition).Count);
         }
     }
 }

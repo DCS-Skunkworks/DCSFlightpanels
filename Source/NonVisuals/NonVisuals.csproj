@@ -14,7 +14,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>huey_icon.ico</ApplicationIcon>
+    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -142,6 +142,7 @@
     <Compile Include="NativeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="flightpanels02_8Rc_icon.ico" />
     <Content Include="huey_icon.ico" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

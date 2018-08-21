@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
         xmlns:nonVisuals="clr-namespace:NonVisuals;assembly=NonVisuals"
         xmlns:classLibraryCommon="clr-namespace:ClassLibraryCommon;assembly=ClassLibraryCommon"
-        Title="Configure key press" Height="257" Width="633" WindowStartupLocation="CenterScreen" Icon="/DCSFlightpanels;component/huey_icon.ico" KeyDown="KeyPressWindow_OnKeyDown">
+        Title="Configure key press" Height="257" Width="633" WindowStartupLocation="CenterScreen"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" KeyDown="KeyPressWindow_OnKeyDown">
     <windows:Window.Resources>
         <data:ObjectDataProvider x:Key="KeyPressLengthEnum"  MethodName="GetValues" ObjectType="{x:Type system:Enum}">
             <data:ObjectDataProvider.MethodParameters>

@@ -63,9 +63,9 @@ namespace DCSFlightpanels.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon huey_icon {
+        internal static System.Drawing.Icon flightpanels02_8Rc_icon {
             get {
-                object obj = ResourceManager.GetObject("huey_icon", resourceCulture);
+                object obj = ResourceManager.GetObject("flightpanels02_8Rc_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

@@ -34,7 +34,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>huey_icon.ico</ApplicationIcon>
+    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>DCSFlightpanels.App</StartupObject>
@@ -395,7 +395,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\fip.jpg" />
-    <Resource Include="Images\huey_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\knob_ALL.png" />
@@ -570,6 +569,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\FlightPanels01.png" />
+    <Resource Include="Images\FlightPanels02.png" />
+    <Resource Include="Images\flightpanels02_8Rc_icon.ico" />
+    <Resource Include="Images\FlightPanels03.png" />
+    <Resource Include="Images\FlightPanels04.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="flightpanels02_8Rc_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

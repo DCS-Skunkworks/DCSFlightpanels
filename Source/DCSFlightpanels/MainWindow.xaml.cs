@@ -25,7 +25,7 @@ using UserControl = System.Windows.Controls.UserControl;
 
 /*
  Custom Resharper Naming abbreviations
- ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS
+ ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID
 */
 namespace DCSFlightpanels
 {
@@ -89,7 +89,10 @@ namespace DCSFlightpanels
                 Common.SetErrorLog(_errorLogFile);
                 Common.SetDebugLog(_debugLogFile);
 
+                /*******************************************************************************************/
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
+                /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
+                /*******************************************************************************************/
                 _hidHandler = new HIDHandler();
                 if (_doSearchForPanels)
                 {
@@ -112,6 +115,10 @@ namespace DCSFlightpanels
                 _dcsCheckDcsBiosStatusTimer.Start();
                 _checkForDcsGameWindowTimer.Start();
 
+                /*******************************************************************************************/
+                /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
+                /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
+                /*******************************************************************************************/
                 _panelProfileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
                 _panelProfileHandler.Attach(this);
                 _panelProfileHandler.AttachUserMessageHandler(this);
@@ -1063,7 +1070,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2018, ex);
             }
             Common.DebugP("Mainwindow Shutdown() _fipHandler shutdown");*/
-            Common.DebugP("Leaving Mainwindow Shutdown()");
+                Common.DebugP("Leaving Mainwindow Shutdown()");
         }
 
         private void MenuItemExitClick(object sender, RoutedEventArgs e)

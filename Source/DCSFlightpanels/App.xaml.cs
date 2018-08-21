@@ -39,7 +39,7 @@ namespace DCSFlightpanels
 
             _notifyIcon = new System.Windows.Forms.NotifyIcon
             {
-                Icon = DCSFlightpanels.Properties.Resources.huey_icon,
+                Icon = DCSFlightpanels.Properties.Resources.flightpanels02_8Rc_icon,
                 Visible = true,
                 ContextMenu = notifyIconContextMenu
             };
