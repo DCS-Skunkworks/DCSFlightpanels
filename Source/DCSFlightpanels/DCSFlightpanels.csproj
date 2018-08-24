@@ -147,6 +147,9 @@
     <Compile Include="RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelPZ69UserControlFA18C.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlFA18C.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadioPanelPZ69UserControlSA342.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSA342.xaml</DependentUpon>
     </Compile>
@@ -288,6 +291,10 @@
     <Page Include="RadioPanelPZ69UserControlA10C.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlFA18C.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RadioPanelPZ69UserControlSA342.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -579,6 +586,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="flightpanels02_8Rc_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\fa18C_comms.jpg" />
+    <Resource Include="Images\fa18C_ils_manual.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

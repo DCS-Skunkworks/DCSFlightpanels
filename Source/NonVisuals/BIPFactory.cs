@@ -5,31 +5,31 @@ namespace NonVisuals
 {
     public static class BipFactory
     {
-        private static readonly BipEventHandlerManager _bipEventHandlerManager = new BipEventHandlerManager();
+        private static readonly BipEventHandlerManager BIPEventHandlerManager = new BipEventHandlerManager();
 
         public static void BroadcastRegisteredBips()
         {
-            _bipEventHandlerManager.BroadcastRegisteredBips();
+            BIPEventHandlerManager.BroadcastRegisteredBips();
         }
 
         public static bool HasBips()
         {
-            return _bipEventHandlerManager.GetBips().Count > 0;
+            return BIPEventHandlerManager.GetBips().Count > 0;
         }
 
         public static void RegisterBip(BacklitPanelBIP backlitPanelBip)
         {
-            _bipEventHandlerManager.RegisterBip(backlitPanelBip);
+            BIPEventHandlerManager.RegisterBip(backlitPanelBip);
         }
 
         public static void DeRegisterBip(BacklitPanelBIP backlitPanelBip)
         {
-            _bipEventHandlerManager.DeRegisterBip(backlitPanelBip);
+            BIPEventHandlerManager.DeRegisterBip(backlitPanelBip);
         }
 
         public static List<BacklitPanelBIP> GetBips()
         {
-            return _bipEventHandlerManager.GetBips();
+            return BIPEventHandlerManager.GetBips();
         }
 
         public static BipEventHandlerManager GetBipEventHandlerManager()
@@ -38,37 +38,37 @@ namespace NonVisuals
             {
                 return null;
             }
-            return _bipEventHandlerManager;
+            return BIPEventHandlerManager;
         }
 
         public static void AddBipListener(ISaitekPanelListener iSaitekPanelListener)
         {
-            _bipEventHandlerManager.AddBipListener(iSaitekPanelListener);
+            BIPEventHandlerManager.AddBipListener(iSaitekPanelListener);
         }
 
         public static void RemoveBipListener(ISaitekPanelListener iSaitekPanelListener)
         {
-            _bipEventHandlerManager.RemoveBipListener(iSaitekPanelListener);
+            BIPEventHandlerManager.RemoveBipListener(iSaitekPanelListener);
         }
 
         public static void LightUpGreen(string hash)
         {
-            _bipEventHandlerManager.LightUpGreen(hash);
+            BIPEventHandlerManager.LightUpGreen(hash);
         }
 
         public static void SetDark(string hash)
         {
-            _bipEventHandlerManager.SetDark(hash);
+            BIPEventHandlerManager.SetDark(hash);
         }
 
         public static void SetAllDark()
         {
-            _bipEventHandlerManager.SetAllDark();
+            BIPEventHandlerManager.SetAllDark();
         }
 
         public static void ShowLight(BIPLight bipLight)
         {
-            _bipEventHandlerManager.ShowLight(bipLight);
+            BIPEventHandlerManager.ShowLight(bipLight);
         }
     }
 

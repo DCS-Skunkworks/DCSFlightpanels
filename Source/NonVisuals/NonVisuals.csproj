@@ -100,8 +100,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelKnobFA18C.cs" />
     <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelPZ69DisplayValue.cs" />
+    <Compile Include="RadioPanelPZ69FA18C.cs" />
     <Compile Include="RadioPanelPZ69KnobEmulator.cs" />
     <Compile Include="RadioPanelKnobSA342.cs" />
     <Compile Include="RadioPanelKnobAJS37.cs" />
