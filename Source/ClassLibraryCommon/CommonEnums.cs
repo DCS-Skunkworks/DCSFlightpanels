@@ -69,34 +69,34 @@ namespace ClassLibraryCommon
         AJS37,
         [Description("Bf-109K-4")]
         Bf109,
-        [Description("FW-190D9")]
-        Fw190,
-        [Description("FA-18C_hornet")]
-        FA18C,
-        [Description("F-86F Sabre")]
-        F86F,
         [Description("F-5E")]
         F5E,
+        [Description("F-86F Sabre")]
+        F86F,
+        [Description("FA-18C_hornet")]
+        FA18C,
+        [Description("FW-190D9")]
+        Fw190,
         [Description("Ka-50")]
         Ka50,
         [Description("L-39ZA")]
         L39ZA,
         [Description("M2000C")]
         M2000C,
-        [Description("MiG-21bis")]
-        Mig21Bis,
         [Description("Mi-8MT")]
         Mi8,
+        [Description("MiG-21bis")]
+        Mig21Bis,
         [Description("P-51D")]
         P51D,
-        [Description("SpitfireLFMkIX")]
-        SpitfireLFMkIX,
         [Description("SA342L")]
         SA342L,
         [Description("SA342M")]
         SA342M,
         [Description("SA342Mistral")]
         SA342Mistral,
+        [Description("SpitfireLFMkIX")]
+        SpitfireLFMkIX,
         [Description("UH-1H")]
         UH1H
 
