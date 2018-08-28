@@ -423,7 +423,7 @@ namespace DCSFlightpanels
                                     tabItem.Content = radioPanelPZ69UserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                 }
-                                else if (_panelProfileHandler.Airframe == DCSAirframe.P51D)
+                                else if (_panelProfileHandler.Airframe == DCSAirframe.P51D || _panelProfileHandler.Airframe == DCSAirframe.TF51D)
                                 {
                                     var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem, this);
                                     _saitekUserControls.Add(radioPanelPZ69UserControl);

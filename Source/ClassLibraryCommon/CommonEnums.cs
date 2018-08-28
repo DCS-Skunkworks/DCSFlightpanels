@@ -97,6 +97,8 @@ namespace ClassLibraryCommon
         SA342Mistral,
         [Description("SpitfireLFMkIX")]
         SpitfireLFMkIX,
+        [Description("TF-51D")]
+        TF51D,
         [Description("UH-1H")]
         UH1H
 
