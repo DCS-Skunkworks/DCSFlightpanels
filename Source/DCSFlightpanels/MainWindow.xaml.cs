@@ -25,7 +25,7 @@ using UserControl = System.Windows.Controls.UserControl;
 
 /*
  Custom Resharper Naming abbreviations
- ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID FA ZA
+ ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID FA ZA AV8BNA
 */
 namespace DCSFlightpanels
 {
@@ -471,7 +471,7 @@ namespace DCSFlightpanels
                                     tabItem.Content = radioPanelPZ69UserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                 }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.M2000C || _panelProfileHandler.Airframe == DCSAirframe.L39ZA)
+                                else if (_panelProfileHandler.Airframe == DCSAirframe.M2000C || _panelProfileHandler.Airframe == DCSAirframe.L39ZA || _panelProfileHandler.Airframe == DCSAirframe.AV8BNA)
                                 {
                                     var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlNotImplemented(hidSkeleton, tabItem, this);
                                     _saitekUserControls.Add(radioPanelPZ69UserControl);

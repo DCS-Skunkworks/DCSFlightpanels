@@ -408,9 +408,14 @@ namespace NonVisuals
 
         public void AddOrUpdateSequencedKeyBinding(string information, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
         {
+            if (sortedList.Count == 0)
+            {
+                RemoveRadioPanelKnobFromList(ControlListPZ69.KEYS, radioPanelPZ69Knob, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            RemoveRadioPanelKnobFromList(ControlListPZ69.KEYS, radioPanelPZ69Knob, whenTurnedOn);
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBinding.WhenTurnedOn == whenTurnedOn)
@@ -440,13 +445,17 @@ namespace NonVisuals
         }
 
 
-        public BIPLinkPZ69 AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, BIPLinkPZ69 bipLinkPZ69, bool whenTurnedOn = true)
+        public void AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, BIPLinkPZ69 bipLinkPZ69, bool whenTurnedOn = true)
         {
+            if (bipLinkPZ69.BIPLights.Count == 0)
+            {
+                RemoveRadioPanelKnobFromList(ControlListPZ69.BIPS, radioPanelPZ69Knob, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            BIPLinkPZ69 tmpBIPLinkPZ69 = null;
 
-            RemoveRadioPanelKnobFromList(ControlListPZ69.BIPS, radioPanelPZ69Knob, whenTurnedOn);
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.RadioPanelPZ69Knob == radioPanelPZ69Knob && bipLink.WhenTurnedOn == whenTurnedOn)
@@ -455,7 +464,6 @@ namespace NonVisuals
                     bipLink.Description = bipLinkPZ69.Description;
                     bipLink.RadioPanelPZ69Knob = radioPanelPZ69Knob;
                     bipLink.WhenTurnedOn = whenTurnedOn;
-                    tmpBIPLinkPZ69 = bipLink;
                     found = true;
                     break;
                 }
@@ -464,11 +472,9 @@ namespace NonVisuals
             {
                 bipLinkPZ69.RadioPanelPZ69Knob = radioPanelPZ69Knob;
                 bipLinkPZ69.WhenTurnedOn = whenTurnedOn;
-                tmpBIPLinkPZ69 = bipLinkPZ69;
                 _bipLinks.Add(bipLinkPZ69);
             }
             IsDirtyMethod();
-            return tmpBIPLinkPZ69;
         }
 
         private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn = true)

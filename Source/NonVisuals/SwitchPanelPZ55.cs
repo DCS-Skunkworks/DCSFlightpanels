@@ -442,13 +442,17 @@ namespace NonVisuals
             IsDirtyMethod();
         }
         
-        public OSKeyPress AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
+        public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
         {
+            if (sortedList.Count == 0)
+            {
+                RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            OSKeyPress osKeyPress = null;
 
-            RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBinding.WhenTurnedOn == whenTurnedOn)
@@ -459,7 +463,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        osKeyPress = new OSKeyPress(information, sortedList);
+                        var osKeyPress = new OSKeyPress(information, sortedList);
                         keyBinding.OSKeyPress = osKeyPress;
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
@@ -471,23 +475,27 @@ namespace NonVisuals
             {
                 var keyBinding = new KeyBindingPZ55();
                 keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                osKeyPress = new OSKeyPress(information, sortedList);
+                var osKeyPress = new OSKeyPress(information, sortedList);
                 keyBinding.OSKeyPress = osKeyPress;
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
             IsDirtyMethod();
-            return osKeyPress;
         }
 
         public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
         {
+            if (dcsbiosInputs.Count == 0)
+            {
+                RemoveSwitchPanelSwitchFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55Key, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //!!!!!!!
             //If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
 
             //This must accept lists
             var found = false;
-            RemoveSwitchPanelSwitchFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55Key, whenTurnedOn);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
@@ -511,13 +519,17 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public BIPLinkPZ55 AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn = true)
+        public void AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn = true)
         {
+            if (bipLinkPZ55.BIPLights.Count == 0)
+            {
+                RemoveSwitchPanelSwitchFromList(ControlListPZ55.BIPS, switchPanelPZ55Key, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            BIPLinkPZ55 tmpBIPLinkPZ55 = null;
 
-            RemoveSwitchPanelSwitchFromList(ControlListPZ55.BIPS, switchPanelPZ55Key, whenTurnedOn);
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
@@ -526,7 +538,6 @@ namespace NonVisuals
                     bipLink.Description = bipLinkPZ55.Description;
                     bipLink.SwitchPanelPZ55Key = switchPanelPZ55Key;
                     bipLink.WhenTurnedOn = whenTurnedOn;
-                    tmpBIPLinkPZ55 = bipLink;
                     found = true;
                     break;
                 }
@@ -535,16 +546,14 @@ namespace NonVisuals
             {
                 bipLinkPZ55.SwitchPanelPZ55Key = switchPanelPZ55Key;
                 bipLinkPZ55.WhenTurnedOn = whenTurnedOn;
-                tmpBIPLinkPZ55 = bipLinkPZ55;
                 _bipLinks.Add(bipLinkPZ55);
             }
             IsDirtyMethod();
-            return tmpBIPLinkPZ55;
         }
         
         public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn = true)
         {
-            var found = false;
+            bool found = false;
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
             {
                 foreach (var keyBindingPZ55 in _keyBindings)
@@ -590,32 +599,7 @@ namespace NonVisuals
             OnSettingsChanged();
             IsDirty = true;
         }
-
-        public void Clear(SwitchPanelPZ55Keys switchPanelPZ55Key)
-        {
-            foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.SwitchPanelPZ55Key == switchPanelPZ55Key)
-                {
-                    keyBinding.OSKeyPress = null;
-                }
-            }
-            IsDirtyMethod();
-        }
-
-        /*internal DCSBiosOutput GetOutput(PanelLEDColor switchPanelPZ55LEDColor, SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition)
-        {
-            foreach (var colorOutputBinding in _listColorOutputBinding)
-            {
-                //todo
-                if (colorOutputBinding.PanelPZ55LEDColor == switchPanelPZ55LEDColor && colorOutputBinding.PanelPZ55LEDPosition == switchPanelPZ55LEDPosition && colorOutputBinding.DCSBiosOutputLED.HasBeenSet)
-                {
-                    return colorOutputBinding.DCSBiosOutputLED;
-                }
-            }
-            return null;
-        }*/
-
+        
         public bool LedIsConfigured(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition)
         {
             return _listColorOutputBinding.Any(colorOutputBinding => (SwitchPanelPZ55LEDPosition)colorOutputBinding.SaitekLEDPosition.GetPosition() == switchPanelPZ55LEDPosition);

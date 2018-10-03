@@ -1825,6 +1825,7 @@ namespace DCSFlightpanels
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
                 }
+                TextBoxLogPZ70.Focus();
             }
             catch (Exception ex)
             {
@@ -1866,7 +1867,7 @@ namespace DCSFlightpanels
                     dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
                 dcsBIOSControlsConfigsWindow.ShowDialog();
-                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true && dcsBIOSControlsConfigsWindow.DCSBIOSInputs.Count > 0)
+                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true)
                 {
                     var dcsBiosInputs = dcsBIOSControlsConfigsWindow.DCSBIOSInputs;
                     var text = string.IsNullOrWhiteSpace(dcsBIOSControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsBIOSControlsConfigsWindow.Description;
@@ -1876,6 +1877,7 @@ namespace DCSFlightpanels
                     ((TagDataClassPZ70)textBox.Tag).DCSBIOSInputs = dcsBiosInputs;
                     UpdateDCSBIOSBinding(textBox);
                 }
+                TextBoxLogPZ70.Focus();
             }
             catch (Exception ex)
             {
@@ -1904,11 +1906,12 @@ namespace DCSFlightpanels
                     bipLinkWindow = new BIPLinkWindow(bipLink);
                 }
                 bipLinkWindow.ShowDialog();
-                if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null && bipLinkWindow.BIPLink.BIPLights.Count > 0)
+                if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
                 {
                     ((TagDataClassPZ70)textBox.Tag).BIPLink = (BIPLinkPZ70) bipLinkWindow.BIPLink;
                     UpdateBIPLinkBindings(textBox);
                 }
+                TextBoxLogPZ70.Focus();
             }
             catch (Exception ex)
             {

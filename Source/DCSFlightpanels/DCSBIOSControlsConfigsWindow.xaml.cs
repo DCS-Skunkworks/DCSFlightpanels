@@ -17,6 +17,7 @@ namespace DCSFlightpanels
         private readonly string _header;
         private string _description;
         private readonly DCSAirframe _dcsAirframe = DCSAirframe.A10C;
+        private bool _isDirty = false;
 
         public DCSBIOSControlsConfigsWindow(DCSAirframe dcsAirframe, string header, string description)
         {
@@ -51,6 +52,7 @@ namespace DCSFlightpanels
         {
             EditButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
             DeleteButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
+            ButtonOk.IsEnabled = _isDirty;
         }
 
         private void ShowItems()
@@ -111,6 +113,7 @@ namespace DCSFlightpanels
                 }
                 var dcsBIOSInput = (DCSBIOSInput)DataGridValues.SelectedItem;
                 _dcsbiosInputs.Remove(dcsBIOSInput);
+                _isDirty = true;
                 ShowItems();
                 SetFormState();
             }
@@ -131,6 +134,7 @@ namespace DCSFlightpanels
                     _dcsbiosInputs.Remove(dcsBIOSInput);
                     var tmpdcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
                     _dcsbiosInputs.Add(tmpdcsBiosInput);
+                    _isDirty = true;
                     ShowItems();
                 }
                 ShowItems();
@@ -155,6 +159,7 @@ namespace DCSFlightpanels
                     //1 appropriate text to textbox
                     //2 update bindings
                     _dcsbiosInputs.Add(dcsBiosInput);
+                    _isDirty = true;
                 }
                 SetFormState();
                 ShowItems();
@@ -190,12 +195,18 @@ namespace DCSFlightpanels
 
         private void DCSBIOSControlsConfigsWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
             {
                 DialogResult = false;
                 e.Handled = true;
                 Close();
             }
+        }
+
+        private void TextBoxDescription_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            _isDirty = true;
+            SetFormState();
         }
     }
 }

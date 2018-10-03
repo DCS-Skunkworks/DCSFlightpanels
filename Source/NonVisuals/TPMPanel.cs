@@ -305,9 +305,14 @@ namespace NonVisuals
 
         public void AddOrUpdateSequencedKeyBinding(string information, TPMPanelSwitches tpmPanelSwitch, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
         {
+            if (sortedList.Count == 0)
+            {
+                RemoveTPMPanelSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitch, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            RemoveTPMPanelSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitch, whenTurnedOn);
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.TPMSwitch == tpmPanelSwitch && keyBinding.WhenTurnedOn == whenTurnedOn)
@@ -337,13 +342,17 @@ namespace NonVisuals
         }
 
 
-        public BIPLinkTPM AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches tpmPanelSwitch, BIPLinkTPM bipLinkTPM, bool whenTurnedOn = true)
+        public void AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches tpmPanelSwitch, BIPLinkTPM bipLinkTPM, bool whenTurnedOn = true)
         {
+            if (bipLinkTPM.BIPLights.Count == 0)
+            {
+                RemoveTPMPanelSwitchFromList(ControlListTPM.BIPS, tpmPanelSwitch, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            BIPLinkTPM tmpBIPLinkTPM = null;
 
-            RemoveTPMPanelSwitchFromList(ControlListTPM.BIPS, tpmPanelSwitch, whenTurnedOn);
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.TPMSwitch == tpmPanelSwitch && bipLink.WhenTurnedOn == whenTurnedOn)
@@ -352,7 +361,6 @@ namespace NonVisuals
                     bipLink.Description = bipLinkTPM.Description;
                     bipLink.TPMSwitch = tpmPanelSwitch;
                     bipLink.WhenTurnedOn = whenTurnedOn;
-                    tmpBIPLinkTPM = bipLink;
                     found = true;
                     break;
                 }
@@ -361,22 +369,25 @@ namespace NonVisuals
             {
                 bipLinkTPM.TPMSwitch = tpmPanelSwitch;
                 bipLinkTPM.WhenTurnedOn = whenTurnedOn;
-                tmpBIPLinkTPM = bipLinkTPM;
                 _bipLinks.Add(bipLinkTPM);
             }
             IsDirtyMethod();
-            return tmpBIPLinkTPM;
         }
 
 
         public void AddOrUpdateDCSBIOSBinding(TPMPanelSwitches tpmPanelSwitch, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
         {
+            if (dcsbiosInputs.Count == 0)
+            {
+                RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, tpmPanelSwitch, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //!!!!!!!
             //If all DCS-BIOS commands has been deleted then provide a empty list, not null object!!!
 
             //This must accept lists
             var found = false;
-            RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, tpmPanelSwitch, whenTurnedOn);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.TPMSwitch == tpmPanelSwitch && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)

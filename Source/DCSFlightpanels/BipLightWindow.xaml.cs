@@ -35,8 +35,9 @@ namespace DCSFlightpanels
             {
                 LabelDescription.Content = _description;
                 _formLoaded = true;
-                SetFormState();
                 PopulateComboBoxes();
+                CopyValues();
+                SetFormState();
             }
             catch (Exception ex)
             {

@@ -62,7 +62,7 @@
                 <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" Click="EditButton_OnClick"/>
                 <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="DeleteButton_OnClick" />
                 <Label Content="Description" Grid.Row="6" Grid.ColumnSpan="3"/>
-                <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7"/>
+                <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7" KeyDown="TextBoxDescription_OnKeyDown"/>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  >
                         <Button Name="ButtonOk"  Content="Ok" Width="70" Margin="0,0,0,0" VerticalAlignment="Center" Click="OkButton_OnClick"/>

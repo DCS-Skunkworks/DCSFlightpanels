@@ -46,6 +46,7 @@ namespace DCSFlightpanels
             buttonAdd.IsEnabled = true;
             buttonEdit.IsEnabled = DataGridSequences.SelectedItems.Count == 1;
             buttonDelete.IsEnabled = DataGridSequences.SelectedItems.Count > 0;
+            buttonOk.IsEnabled = IsDirty;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -75,6 +76,7 @@ namespace DCSFlightpanels
                     DataGridSequences.Items.Refresh();
                     _isDirty = true;
                 }
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -99,6 +101,7 @@ namespace DCSFlightpanels
                 _bipLink.BIPLights.Remove(value.Key);
                 DataGridSequences.Items.Refresh();
                 _isDirty = true;
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -127,6 +130,7 @@ namespace DCSFlightpanels
                     DataGridSequences.Items.Refresh();
                     _isDirty = true;
                 }
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -241,7 +245,7 @@ namespace DCSFlightpanels
 
         private void BIPLinkWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (!buttonOk.IsEnabled && e.Key == Key.Escape)
             {
                 e.Handled = true;
                 Close();

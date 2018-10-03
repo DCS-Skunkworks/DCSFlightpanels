@@ -324,9 +324,14 @@ namespace NonVisuals
 
         public void AddOrUpdateSequencedKeyBinding(string information, MultiPanelPZ70Knobs multiPanelPZ70Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
         {
+            if (sortedList.Count == 0)
+            {
+                RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
             foreach (var knobBinding in _knobBindings)
             {
                 if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
@@ -358,9 +363,14 @@ namespace NonVisuals
 
         public void AddOrUpdateDCSBIOSBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
         {
+            if (dcsbiosInputs.Count == 0)
+            {
+                RemoveMultiPanelKnobFromList(ControlListPZ70.DCSBIOS, multiPanelPZ70Knob, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            RemoveMultiPanelKnobFromList(ControlListPZ70.DCSBIOS, multiPanelPZ70Knob, whenTurnedOn);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
@@ -446,13 +456,17 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public BIPLinkPZ70 AddOrUpdateBIPLinkKnobBinding(MultiPanelPZ70Knobs multiPanelKnob, BIPLinkPZ70 bipLinkPZ70, bool whenTurnedOn = true)
+        public void AddOrUpdateBIPLinkKnobBinding(MultiPanelPZ70Knobs multiPanelKnob, BIPLinkPZ70 bipLinkPZ70, bool whenTurnedOn = true)
         {
+            if (bipLinkPZ70.BIPLights.Count == 0)
+            {
+                RemoveMultiPanelKnobFromList(ControlListPZ70.BIPS, multiPanelKnob, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
             //This must accept lists
             var found = false;
-            BIPLinkPZ70 tmpBIPLinkPZ70 = null;
 
-            RemoveMultiPanelKnobFromList(ControlListPZ70.BIPS, multiPanelKnob, whenTurnedOn);
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.MultiPanelPZ70Knob == multiPanelKnob && bipLink.WhenTurnedOn == whenTurnedOn)
@@ -461,7 +475,6 @@ namespace NonVisuals
                     bipLink.Description = bipLinkPZ70.Description;
                     bipLink.MultiPanelPZ70Knob = multiPanelKnob;
                     bipLink.WhenTurnedOn = whenTurnedOn;
-                    tmpBIPLinkPZ70 = bipLink;
                     found = true;
                     break;
                 }
@@ -470,11 +483,9 @@ namespace NonVisuals
             {
                 bipLinkPZ70.MultiPanelPZ70Knob = multiPanelKnob;
                 bipLinkPZ70.WhenTurnedOn = whenTurnedOn;
-                tmpBIPLinkPZ70 = bipLinkPZ70;
                 _bipLinks.Add(bipLinkPZ70);
             }
             IsDirtyMethod();
-            return tmpBIPLinkPZ70;
         }
 
         public void RemoveMultiPanelKnobFromList(ControlListPZ70 controlListPZ70, MultiPanelPZ70Knobs multiPanelPZ70Knob, bool whenTurnedOn = true)

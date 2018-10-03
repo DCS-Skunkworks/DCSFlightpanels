@@ -58,6 +58,7 @@ namespace DCSFlightpanels
             ButtonAdd.IsEnabled = true;
             ButtonEdit.IsEnabled = DataGridSequences.SelectedItems.Count == 1;
             ButtonDelete.IsEnabled = DataGridSequences.SelectedItems.Count > 0;
+            ButtonOk.IsEnabled = IsDirty;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
