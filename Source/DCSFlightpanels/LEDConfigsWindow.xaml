@@ -3,9 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="LED configurations" Height="400" Width="800" Loaded="LEDConfigsWindow_OnLoaded"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="LEDConfigsWindow_OnKeyDown">
     <Window.Resources>
-        <ContextMenu x:Key="ConfigContextMenu" x:Shared="False">
-            <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick"/>
-        </ContextMenu>
     </Window.Resources>
     <Grid Name="Grid">
         <Grid.ColumnDefinitions>
@@ -27,7 +24,16 @@
                       CanUserSortColumns="False" 
                       CanUserAddRows="False"
                       Height="366" 
-                      Width="592">
+                      Width="592"
+                      ContextMenuOpening="DataGridValues_OnContextMenuOpening">
+                <DataGrid.ContextMenu>
+                    <ContextMenu Name="ContextMenuColors" >
+                        <MenuItem Header="Dark" Name="ContextDark" Click="ContextMenuColors_OnClick"/>
+                        <MenuItem Header="Green" Name="ContextGreen" Click="ContextMenuColors_OnClick"/>
+                        <MenuItem Header="Yellow" Name="ContextYellow" Click="ContextMenuColors_OnClick"/>
+                        <MenuItem Header="Red" Name="ContextRed" Click="ContextMenuColors_OnClick"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Color" IsReadOnly="True" Binding="{Binding Path=LEDColor}" Width="Auto" />
                     <!--<DataGridTextColumn Header="Address" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.ControlId, StringFormat=0x{0:X4}}"  Width="*"/>-->
@@ -67,6 +73,7 @@
                 <Button Name="NewGreenButton" Content="New Green" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" Click="NewButton_OnClick"/>
                 <Button Name="NewYellowButton" Content="New Yellow" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="NewButton_OnClick"/>
                 <Button Name="NewRedButton" Content="New Red" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="5" Click="NewButton_OnClick"/>
+                <Button Name="CloneButton" Content="Clone" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="5" Click="CloneButton_OnClick"/>
                 <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="7" Click="EditButton_OnClick"/>
                 <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="8" Click="DeleteButton_OnClick" />
                 <Button Name="MoveUpButton"  Content="Up" Width="40" Margin="10,3,0,3" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="9" Click="MoveUpButton_OnClick" Visibility="Hidden" />

@@ -42,6 +42,7 @@ namespace DCSFlightpanels
         {
             EditButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
             DeleteButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
+            CloneButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
         }
 
         private void ShowItems()
@@ -56,17 +57,6 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(1013, ex);
-            }
-        }
-
-        private void ContextConfigureLandingGearLEDClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1014, ex);
             }
         }
 
@@ -233,6 +223,80 @@ namespace DCSFlightpanels
                 DialogResult = false;
                 e.Handled = true;
                 Close();
+            }
+        }
+
+        private void ContextMenuColors_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (DataGridValues.SelectedItems.Count == 0)
+                {
+                    return;
+                }
+
+                PanelLEDColor color = PanelLEDColor.DARK;
+                var menu = (MenuItem)sender;
+
+                if (menu.Name.Contains("Dark"))
+                {
+                    color = PanelLEDColor.DARK;
+                }
+                else if (menu.Name.Contains("Green"))
+                {
+                    color = PanelLEDColor.GREEN;
+                }
+                else if (menu.Name.Contains("Yellow"))
+                {
+                    color = PanelLEDColor.YELLOW;
+                }
+                else if (menu.Name.Contains("Red"))
+                {
+                    color = PanelLEDColor.RED;
+                }
+
+                for (var i = 0; i < DataGridValues.SelectedItems.Count; i++)
+                {
+                    var binding = (DcsOutputAndColorBinding)DataGridValues.SelectedItems[i];
+                    _colorOutputBindings.Remove(binding);
+                    _colorOutputBindings.Add(_callingPanel.CreateDcsOutputAndColorBinding(_saitekPanelLEDPosition, color, binding.DCSBiosOutputLED));
+                    ShowItems();
+                }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2012, ex);
+            }
+        }
+
+        private void DataGridValues_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (DataGridValues.SelectedItems.Count == 0)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void CloneButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (DataGridValues.SelectedItems.Count == 0)
+                {
+                    e.Handled = true;
+                }
+                for (var i = 0; i < DataGridValues.SelectedItems.Count; i++)
+                {
+                    var binding = (DcsOutputAndColorBinding)DataGridValues.SelectedItems[i];
+                    _colorOutputBindings.Add(_callingPanel.CreateDcsOutputAndColorBinding(_saitekPanelLEDPosition, binding.LEDColor, binding.DCSBiosOutputLED));
+                    ShowItems();
+                }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2012, ex);
             }
         }
     }
