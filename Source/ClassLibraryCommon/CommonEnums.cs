@@ -83,12 +83,18 @@ namespace ClassLibraryCommon
         Ka50,
         [Description("L-39ZA")]
         L39ZA,
+        [Description("L-39ZA_NS430")]
+        L39ZANS430,
         [Description("M2000C")]
         M2000C,
         [Description("Mi-8MT")]
         Mi8,
+        [Description("Mi-8MT_NS430")]
+        Mi8NS430,
         [Description("MiG-21bis")]
         Mig21Bis,
+        [Description("NS430")]
+        NS430,
         [Description("P-51D")]
         P51D,
         [Description("SA342L")]

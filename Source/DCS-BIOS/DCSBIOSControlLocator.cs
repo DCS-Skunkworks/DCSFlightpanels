@@ -27,6 +27,7 @@ namespace DCS_BIOS
                 }
                 try
                 {
+                    //PrintDuplicateControlIdentifiers(_dcsbiosControls, true);
                     LoadControls();
                     return _dcsbiosControls.Single(controlObject => controlObject.identifier.Equals(controlId));
                 }
@@ -37,12 +38,13 @@ namespace DCS_BIOS
             }
         }
 
-        static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls)
+        static void PrintDuplicateControlIdentifiers(List<DCSBIOSControl> dcsbiosControls, bool printAll = false)
         {
             var result = new List<string>();
             var dupes = new List<string>();
             foreach (var dcsbiosControl in dcsbiosControls)
             {
+                result.Add(dcsbiosControl.identifier);
                 //Debug.Print(dcsbiosControl.identifier);
                 var found = false;
                 foreach (var str in result)
@@ -98,28 +100,33 @@ namespace DCS_BIOS
             }
         }
 
-        public static void LoadControls()
+        public static void LoadControls(string jsonDirectory, DCSAirframe airframe, bool clearList = true)
         {
-            if (_airframe == DCSAirframe.KEYEMULATOR || _airframe == DCSAirframe.KEYEMULATOR_SRS || _airframe == DCSAirframe.NOFRAMELOADEDYET)
+            if (airframe == DCSAirframe.KEYEMULATOR || airframe == DCSAirframe.KEYEMULATOR_SRS || airframe == DCSAirframe.NOFRAMELOADEDYET)
             {
                 return;
             }
-            if (_dcsbiosControls.Count > 0 && !_airFrameChanged)
+
+            if (clearList)
             {
-                return;
+                if (_dcsbiosControls.Count > 0 && !_airFrameChanged)
+                {
+                    return;
+                }
+                _dcsbiosControls = new List<DCSBIOSControl>();
             }
-            _dcsbiosControls = new List<DCSBIOSControl>();
+
             try
             {
                 lock (_lockObject)
                 {
                     //Always read CommonData.json
-                    var directoryInfo = new DirectoryInfo(_jsonDirectory);
+                    var directoryInfo = new DirectoryInfo(jsonDirectory);
                     IEnumerable<FileInfo> files;
-                    Common.DebugP("Searching for " + _airframe.GetDescription() + ".json in directory " + _jsonDirectory);
+                    Common.DebugP("Searching for " + airframe.GetDescription() + ".json in directory " + jsonDirectory);
                     try
                     {
-                        files = directoryInfo.EnumerateFiles(_airframe.GetDescription() + ".json", SearchOption.TopDirectoryOnly);
+                        files = directoryInfo.EnumerateFiles(airframe.GetDescription() + ".json", SearchOption.TopDirectoryOnly);
                     }
                     catch (Exception ex)
                     {
@@ -158,13 +165,13 @@ namespace DCS_BIOS
                             Debug.Print(control.identifier);
                         }*/
                     }
-                    var commonDataText = File.ReadAllText(_jsonDirectory + "\\CommonData.json");
+                    var commonDataText = File.ReadAllText(jsonDirectory + "\\CommonData.json");
                     var commonDataControlsText = DCSBIOSJsonFormatterVersion1.Format(commonDataText);
                     var commonDataControls = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(commonDataControlsText);
                     _dcsbiosControls.AddRange(commonDataControls.DCSBIOSControls);
 
 
-                    var metaDataEndText = File.ReadAllText(_jsonDirectory + "\\MetadataEnd.json");
+                    var metaDataEndText = File.ReadAllText(jsonDirectory + "\\MetadataEnd.json");
                     var metaDataEndControlsText = DCSBIOSJsonFormatterVersion1.Format(metaDataEndText);
                     var metaDataEndControls = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(metaDataEndControlsText);
                     _dcsbiosControls.AddRange(metaDataEndControls.DCSBIOSControls);
@@ -177,11 +184,25 @@ namespace DCS_BIOS
             }
         }
 
-        public static void LoadControls(string jsonDirectory, DCSAirframe airframe)
+        public static void LoadControls()
         {
-            JSONDirectory = jsonDirectory;
-            Airframe = airframe;
-            LoadControls();
+            var tmpAirframe = _airframe;
+            if (_airframe == DCSAirframe.Mi8NS430)
+            {
+                tmpAirframe = DCSAirframe.Mi8;
+            }
+            else if (_airframe == DCSAirframe.L39ZANS430)
+            {
+                tmpAirframe = DCSAirframe.L39ZA;
+            }
+            LoadControls(_jsonDirectory, tmpAirframe);
+            if (_airframe.GetDescription().Contains("NS430") && tmpAirframe != _airframe && !_dcsbiosControls.Exists(control => control.identifier == "NS430_ENT"))
+            {
+                LoadControls(_jsonDirectory, DCSAirframe.NS430, false);
+                
+                _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")));
+                _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject => controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")));
+            }
         }
 
         public static DCSAirframe Airframe

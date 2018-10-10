@@ -56,6 +56,7 @@ namespace DCSFlightpanels
             try
             {
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
+                _popupSearch.Height = 400;
                 _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
                 LabelDescription.Content = _description;
                 ShowValues1();
