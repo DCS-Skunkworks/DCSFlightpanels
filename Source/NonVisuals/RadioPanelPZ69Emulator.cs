@@ -166,7 +166,7 @@ namespace NonVisuals
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
-        private void PZ69SwitchChanged(RadioPanelPZ69KnobEmulator radioPanelKey)
+        private void PZ69KnobChanged(RadioPanelPZ69KnobEmulator radioPanelKey)
         {
             if (!ForwardKeyPresses)
             {
@@ -181,7 +181,7 @@ namespace NonVisuals
             }
         }
 
-        private void PZ69SwitchChanged(IEnumerable<object> hashSet)
+        private void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             if (ForwardKeyPresses)
             {
@@ -190,6 +190,20 @@ namespace NonVisuals
                     //Looks which switches has been switched and sees whether any key emulation has been tied to them.
                     var radioPanelKey = (RadioPanelPZ69KnobEmulator)radioPanelKeyObject;
 
+                    if (radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc ||
+                        radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec ||
+                        radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc ||
+                        radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec ||
+                        radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc ||
+                        radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec ||
+                        radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc ||
+                        radioPanelKey.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec)
+                    {
+                        if (SkipCurrentFrequencyChange())
+                        {
+                            return;
+                        }
+                    }
                     foreach (var keyBinding in _keyBindings)
                     {
                         if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
@@ -538,7 +552,7 @@ namespace NonVisuals
                 Array.Copy(_newRadioPanelValue, _oldRadioPanelValue, 3);
                 Array.Copy(report.Data, _newRadioPanelValue, 3);
                 var hashSet = GetHashSetOfSwitchedKeys(_oldRadioPanelValue, _newRadioPanelValue);
-                PZ69SwitchChanged(hashSet);
+                PZ69KnobChanged(hashSet);
                 OnSwitchesChanged(hashSet);
                 _isFirstNotification = false;
                 /*if (Common.Debug)
