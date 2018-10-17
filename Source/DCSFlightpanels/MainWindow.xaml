@@ -32,6 +32,9 @@
                 <MenuItem Name ="MenuItemSettings" Header="Settings" Click="MenuItemSettings_OnClick" />
                 <MenuItem Name ="MenuItemUSBPowerManagement" Header="Disable USB Power Management" Click="MenuItemUSBPowerManagement_OnClick" />
             </MenuItem>
+            <MenuItem Header="Extras">
+                <MenuItem Name ="MenuItemUseNS430" Header="Load NS 430" Click="MenuItemUseNS430_OnClick" IsChecked="false"/>
+            </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Click="MenuItemAboutClick" />
             </MenuItem>

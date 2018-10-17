@@ -7,7 +7,7 @@ namespace NonVisuals
     {
         void PanelSettingsChanged(object sender, PanelEventArgs e);
         void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e);
-        void SelectedAirframe(object sender, AirframEventArgs e);
+        void SelectedAirframe(object sender, AirframeEventArgs e);
     }
 
     public class SettingsReadFromFileEventArgs : EventArgs

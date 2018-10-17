@@ -14,6 +14,8 @@ namespace DCS_BIOS
         private static readonly object _lockObject = new object();
         private static DCSAirframe _airframe;
         private static string _jsonDirectory;
+        private static bool _useNS430 = false;
+        private static bool _NS430Loaded = false;
         private static bool _airFrameChanged;
         private static List<DCSBIOSControl> _dcsbiosControls = new List<DCSBIOSControl>();
 
@@ -44,7 +46,11 @@ namespace DCS_BIOS
             var dupes = new List<string>();
             foreach (var dcsbiosControl in dcsbiosControls)
             {
-                result.Add(dcsbiosControl.identifier);
+                if (printAll)
+                {
+                    result.Add(dcsbiosControl.identifier);
+                }
+
                 //Debug.Print(dcsbiosControl.identifier);
                 var found = false;
                 foreach (var str in result)
@@ -102,7 +108,12 @@ namespace DCS_BIOS
 
         public static void LoadControls(string jsonDirectory, DCSAirframe airframe, bool clearList = true)
         {
-            if (airframe == DCSAirframe.KEYEMULATOR || airframe == DCSAirframe.KEYEMULATOR_SRS || airframe == DCSAirframe.NOFRAMELOADEDYET)
+            LoadControls(jsonDirectory, airframe.GetDescription(), clearList);
+        }
+
+        public static void LoadControls(string jsonDirectory, string airframe, bool clearList = true)
+        {
+            if (airframe == "KEYEMULATOR" || airframe == "KEYEMULATOR_SRS" || airframe == "NOFRAMELOADEDYET")
             {
                 return;
             }
@@ -114,6 +125,7 @@ namespace DCS_BIOS
                     return;
                 }
                 _dcsbiosControls = new List<DCSBIOSControl>();
+                _NS430Loaded = false;
             }
 
             try
@@ -123,10 +135,10 @@ namespace DCS_BIOS
                     //Always read CommonData.json
                     var directoryInfo = new DirectoryInfo(jsonDirectory);
                     IEnumerable<FileInfo> files;
-                    Common.DebugP("Searching for " + airframe.GetDescription() + ".json in directory " + jsonDirectory);
+                    Common.DebugP("Searching for " + airframe + ".json in directory " + jsonDirectory);
                     try
                     {
-                        files = directoryInfo.EnumerateFiles(airframe.GetDescription() + ".json", SearchOption.TopDirectoryOnly);
+                        files = directoryInfo.EnumerateFiles(airframe + ".json", SearchOption.TopDirectoryOnly);
                     }
                     catch (Exception ex)
                     {
@@ -186,22 +198,14 @@ namespace DCS_BIOS
 
         public static void LoadControls()
         {
-            var tmpAirframe = _airframe;
-            if (_airframe == DCSAirframe.Mi8NS430)
+            LoadControls(_jsonDirectory, _airframe);
+            if (UseNS430 && !_NS430Loaded)
             {
-                tmpAirframe = DCSAirframe.Mi8;
-            }
-            else if (_airframe == DCSAirframe.L39ZANS430)
-            {
-                tmpAirframe = DCSAirframe.L39ZA;
-            }
-            LoadControls(_jsonDirectory, tmpAirframe);
-            if (_airframe.GetDescription().Contains("NS430") && tmpAirframe != _airframe && !_dcsbiosControls.Exists(control => control.identifier == "NS430_ENT"))
-            {
-                LoadControls(_jsonDirectory, DCSAirframe.NS430, false);
+                LoadControls(_jsonDirectory, "NS430", false);
                 
                 _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")));
                 _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject => controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")));
+                _NS430Loaded = true;
             }
         }
 
@@ -222,6 +226,14 @@ namespace DCS_BIOS
         {
             get { return _jsonDirectory; }
             set { _jsonDirectory = DBCommon.GetDCSBIOSJSONDirectory(value); }
+        }
+
+        public static bool UseNS430
+        {
+            get => _useNS430;
+            set { _useNS430 = value;
+                _dcsbiosControls.Clear();
+            }
         }
 
         public static IEnumerable<DCSBIOSControl> GetControls()

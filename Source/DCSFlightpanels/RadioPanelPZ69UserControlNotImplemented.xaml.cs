@@ -45,7 +45,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void SelectedAirframe(object sender, AirframEventArgs e)
+        public void SelectedAirframe(object sender, AirframeEventArgs e)
         {
             try
             {

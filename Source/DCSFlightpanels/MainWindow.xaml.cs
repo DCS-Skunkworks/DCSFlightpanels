@@ -745,7 +745,7 @@ namespace DCSFlightpanels
         }
 
 
-        public void SelectedAirframe(object sender, AirframEventArgs e)
+        public void SelectedAirframe(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -772,6 +772,7 @@ namespace DCSFlightpanels
                     SetApplicationMode(_dcsAirframe);
                 }
 
+                MenuItemUseNS430.IsChecked = _panelProfileHandler.UseNS430;
                 SetWindowState();
             }
             catch (Exception ex)
@@ -1704,6 +1705,20 @@ namespace DCSFlightpanels
             {
                 Hide();
 
+            }
+        }
+
+        private void MenuItemUseNS430_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ((MenuItem) sender).IsChecked = !((MenuItem) sender).IsChecked;
+                _panelProfileHandler.UseNS430 = ((MenuItem) sender).IsChecked;
+                SetWindowState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20297, ex);
             }
         }
     }

@@ -221,7 +221,7 @@ namespace NonVisuals
             }
         }
 
-        public void SelectedAirframe(object sender, AirframEventArgs e)
+        public void SelectedAirframe(object sender, AirframeEventArgs e)
         {
             _keyboardEmulation = Common.IsKeyEmulationProfile(e.Airframe);
         }

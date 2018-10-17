@@ -21,7 +21,7 @@ namespace NonVisuals
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
         public event SavePanelSettingsEventHandler OnSavePanelSettings;
 
-        public delegate void AirframeSelectedEventHandler(object sender, AirframEventArgs e);
+        public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
         public event AirframeSelectedEventHandler OnAirframeSelected;
 
         public delegate void ClearPanelSettingsEventHandler(object sender);
@@ -80,6 +80,8 @@ namespace NonVisuals
         private const string OpenFileDialogDefaultExt = ".bindings";
         private const string OpenFileDialogFilter = "DCSFlightpanels (.bindings)|*.bindings";
         private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
+        private bool _useNS430 = false;
+
         private readonly List<KeyValuePair<string, SaitekPanelsEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, SaitekPanelsEnum>>();
         private bool _profileLoaded;
 
@@ -87,12 +89,14 @@ namespace NonVisuals
         {
             _jsonDirectory = jsonDirectory;
             DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
+            DCSBIOSControlLocator.UseNS430 = _useNS430;
         }
 
         public ProfileHandler(string jsonDirectory, string lastProfileUsed)
         {
             _jsonDirectory = jsonDirectory;
             DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
+            DCSBIOSControlLocator.UseNS430 = _useNS430;
             _lastProfileUsed = lastProfileUsed;
         }
 
@@ -250,6 +254,10 @@ namespace NonVisuals
                         }
                         DCSBIOSControlLocator.Airframe = _airframe;
                         DCSBIOSControlLocator.JSONDirectory = _jsonDirectory;
+                    }else if (fileLine.StartsWith("UseNS430="))
+                    {
+                        _useNS430 = bool.Parse(fileLine.Replace("UseNS430=", "").Trim());
+                        DCSBIOSControlLocator.UseNS430 = _useNS430;
                     }
                     else if (!fileLine.StartsWith("#") && fileLine.Length > 2)
                     {
@@ -363,7 +371,7 @@ namespace NonVisuals
                 if (OnSettingsReadFromFile != null)
                 {
                     //TODO DENNA ORSAKAR HÄNGANDE!!
-                    OnAirframeSelected?.Invoke(this, new AirframEventArgs(){Airframe =  _airframe});
+                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs(){Airframe =  _airframe});
                     //TODO DENNA ORSAKAR HÄNGANDE!!
                     OnSettingsReadFromFile(this, new SettingsReadFromFileEventArgs(){Settings = _listPanelSettingsData});
                 }
@@ -479,6 +487,7 @@ namespace NonVisuals
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
                 stringBuilder.AppendLine("Airframe=" + _airframe);
+                stringBuilder.AppendLine("UseNS430=" + _useNS430);
                 foreach (var s in _listPanelSettingsData)
                 {
                     stringBuilder.AppendLine(s);
@@ -527,7 +536,7 @@ namespace NonVisuals
                     _isDirty = true;
                 }
                 _airframe = value;
-                OnAirframeSelected?.Invoke(this, new AirframEventArgs() {Airframe = _airframe});
+                OnAirframeSelected?.Invoke(this, new AirframeEventArgs() {Airframe = _airframe});
             }
         }
 
@@ -541,7 +550,7 @@ namespace NonVisuals
             set => _lastProfileUsed = value;
         }
 
-        public void SelectedAirframe(object sender, AirframEventArgs e)
+        public void SelectedAirframe(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -560,9 +569,18 @@ namespace NonVisuals
 
         public bool ProfileLoaded => _profileLoaded || _isNewProfile;
 
+
+        public bool UseNS430
+        {
+            get => _useNS430;
+            set { _useNS430 = value;
+                DCSBIOSControlLocator.UseNS430 = _useNS430;
+                _isDirty = true;
+            }
+        }
     }
 
-    public class AirframEventArgs : EventArgs
+    public class AirframeEventArgs : EventArgs
     {
         public DCSAirframe Airframe { get; set; }
     }
@@ -576,5 +594,7 @@ namespace NonVisuals
     {
         public string UserMessage { get; set; }
     }
+
+
     
 }
