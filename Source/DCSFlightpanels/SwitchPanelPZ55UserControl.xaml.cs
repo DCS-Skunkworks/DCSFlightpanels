@@ -1202,7 +1202,7 @@ namespace DCSFlightpanels
                 {
                     var key = (SwitchPanelKey)switchPanelKey;
 
-                    if (_switchPanelPZ55.ForwardKeyPresses)
+                    if (_switchPanelPZ55.ForwardPanelEvent)
                     {
                         if (!string.IsNullOrEmpty(_switchPanelPZ55.GetKeyPressForLoggingPurposes(key)))
                         {
@@ -1219,7 +1219,7 @@ namespace DCSFlightpanels
                             (Action)
                             (() =>
                              TextBoxLogPZ55.Text =
-                             TextBoxLogPZ55.Text = TextBoxLogPZ55.Text.Insert(0, "No action taken, virtual key press disabled.\n")));
+                             TextBoxLogPZ55.Text = TextBoxLogPZ55.Text.Insert(0, "No action taken, panel events Disabled.\n")));
                     }
                 }
                 SetGraphicsState(switches);

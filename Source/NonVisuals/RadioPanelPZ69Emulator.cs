@@ -168,7 +168,7 @@ namespace NonVisuals
 
         private void PZ69KnobChanged(RadioPanelPZ69KnobEmulator radioPanelKey)
         {
-            if (!ForwardKeyPresses)
+            if (!ForwardPanelEvent)
             {
                 return;
             }
@@ -183,7 +183,7 @@ namespace NonVisuals
 
         private void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
-            if (ForwardKeyPresses)
+            if (ForwardPanelEvent)
             {
                 foreach (var radioPanelKeyObject in hashSet)
                 {

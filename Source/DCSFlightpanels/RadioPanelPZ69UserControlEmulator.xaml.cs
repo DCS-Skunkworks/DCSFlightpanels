@@ -1583,7 +1583,7 @@ namespace DCSFlightpanels
                 {
                     var key = (RadioPanelPZ69KnobEmulator)radioPanelKey;
 
-                    if (_radioPanelPZ69.ForwardKeyPresses)
+                    if (_radioPanelPZ69.ForwardPanelEvent)
                     {
                         if (!string.IsNullOrEmpty(_radioPanelPZ69.GetKeyPressForLoggingPurposes(key)))
                         {
@@ -1600,7 +1600,7 @@ namespace DCSFlightpanels
                             (Action)
                             (() =>
                              TextBoxLogPZ69.Text =
-                             TextBoxLogPZ69.Text = TextBoxLogPZ69.Text.Insert(0, "No action taken, virtual key press disabled.\n")));
+                             TextBoxLogPZ69.Text = TextBoxLogPZ69.Text.Insert(0, "No action taken, panel events Disabled.\n")));
                     }
                 }
                 SetGraphicsState(switches);

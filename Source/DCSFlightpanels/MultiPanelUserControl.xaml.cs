@@ -2693,7 +2693,7 @@ namespace DCSFlightpanels
                 {
                     var multiPanelKnob = (MultiPanelKnob)knob;
 
-                    if (_multiPanelPZ70.ForwardKeyPresses)
+                    if (_multiPanelPZ70.ForwardPanelEvent)
                     {
                         if (!string.IsNullOrEmpty(_multiPanelPZ70.GetKeyPressForLoggingPurposes(multiPanelKnob)))
                         {
@@ -2708,7 +2708,7 @@ namespace DCSFlightpanels
                         Dispatcher.BeginInvoke(
                             (Action)
                             (() =>
-                             TextBoxLogPZ70.Text = TextBoxLogPZ70.Text.Insert(0, "No action taken, virtual key press disabled.\n")));
+                             TextBoxLogPZ70.Text = TextBoxLogPZ70.Text.Insert(0, "No action taken, panel events Disabled.\n")));
                     }
                 }
                 SetGraphicsState(knobs);

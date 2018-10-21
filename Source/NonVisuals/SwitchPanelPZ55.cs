@@ -206,7 +206,7 @@ namespace NonVisuals
 
         private void PZ55SwitchChanged(SwitchPanelKey switchPanelKey)
         {
-            if (!ForwardKeyPresses)
+            if (!ForwardPanelEvent)
             {
                 return;
             }
@@ -280,7 +280,7 @@ namespace NonVisuals
 
         private void PZ55SwitchChanged(IEnumerable<object> hashSet)
         {
-            if (!ForwardKeyPresses)
+            if (!ForwardPanelEvent)
             {
                 return;
             }

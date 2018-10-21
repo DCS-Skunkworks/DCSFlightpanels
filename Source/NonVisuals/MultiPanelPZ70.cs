@@ -627,7 +627,7 @@ namespace NonVisuals
                 }
             }
             UpdateLCD();
-            if (!ForwardKeyPresses)
+            if (!ForwardPanelEvent)
             {
                 return;
             }

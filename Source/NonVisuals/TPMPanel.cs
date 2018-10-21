@@ -177,7 +177,7 @@ namespace NonVisuals
 
         private void TPMSwitchChanged(TPMPanelSwitch tpmPanelSwitch)
         {
-            if (!ForwardKeyPresses)
+            if (!ForwardPanelEvent)
             {
                 return;
             }
@@ -192,7 +192,7 @@ namespace NonVisuals
 
         private void TPMSwitchChanged(IEnumerable<object> hashSet)
         {
-            if (!ForwardKeyPresses)
+            if (!ForwardPanelEvent)
             {
                 return;
             }

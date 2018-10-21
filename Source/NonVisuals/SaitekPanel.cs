@@ -148,7 +148,7 @@ namespace NonVisuals
         private SaitekPanelsEnum _typeOfSaitekPanel;
         private bool _isDirty;
         //private bool _isAttached;
-        private bool _forwardKeyPresses;
+        private bool _forwardPanelEvent;
         private static readonly object _lockObject = new object();
         private static readonly List<SaitekPanel> _saitekPanels = new List<SaitekPanel>();
         private bool _keyboardEmulation;
@@ -227,15 +227,15 @@ namespace NonVisuals
         }
 
         //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
-        public void SetForwardKeyPresses(object sender, ForwardKeyPressEventArgs e)
+        public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)
         {
-            _forwardKeyPresses = e.Forward;
+            _forwardPanelEvent = e.Forward;
         }
 
-        public bool ForwardKeyPresses
+        public bool ForwardPanelEvent
         {
-            get => _forwardKeyPresses;
-            set => _forwardKeyPresses = value;
+            get => _forwardPanelEvent;
+            set => _forwardPanelEvent = value;
         }
 
         public int VendorId
@@ -443,7 +443,7 @@ namespace NonVisuals
         public HashSet<object> Switches { get; set; }
     }
 
-    public class ForwardKeyPressEventArgs : EventArgs
+    public class ForwardPanelEventArgs : EventArgs
     {
         public bool Forward { get; set; }
     }

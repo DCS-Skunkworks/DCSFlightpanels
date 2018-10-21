@@ -1004,7 +1004,7 @@ namespace DCSFlightpanels
                 {
                     var key = (TPMPanelSwitch)tpmPanelSwitch;
 
-                    if (_tpmPanel.ForwardKeyPresses)
+                    if (_tpmPanel.ForwardPanelEvent)
                     {
                         if (!string.IsNullOrEmpty(_tpmPanel.GetKeyPressForLoggingPurposes(key)))
                         {
@@ -1021,7 +1021,7 @@ namespace DCSFlightpanels
                             (Action)
                             (() =>
                              TextBoxLogTPM.Text =
-                             TextBoxLogTPM.Text = TextBoxLogTPM.Text.Insert(0, "No action taken, virtual key press disabled.\n")));
+                             TextBoxLogTPM.Text = TextBoxLogTPM.Text.Insert(0, "No action taken, panel events Disabled.\n")));
                     }
                 }
                 SetGraphicsState(switches);

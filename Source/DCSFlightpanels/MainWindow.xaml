@@ -25,7 +25,6 @@
                 <MenuItem Header="Exit" Click="MenuItemExitClick" />
             </MenuItem>
             <MenuItem Header="Options">
-                <MenuItem Name ="MenuItemCheckForDCS" Header="Check for Digital Combat Simulator" Click="MenuItemCheckForDCSClick" IsChecked="True"/>
                 <MenuItem Name ="MenuItemErrorLog" Header="Open error log" Click="MenuItemErrorLog_OnClick" />
                 <MenuItem Name ="MenuItemDebugLog" Header="Open debug log" Click="MenuItemDebugLog_OnClick" />
                 <MenuItem Name ="MenuItemFormulaSandbox" Header="Formula sandbox" Click="MenuItemFormulaSandbox_OnClick" />
@@ -125,6 +124,7 @@
                     </Style>
                 </Image.Style>
             </Image>
+            <Button Name="ButtonDisablePanelEventsFromBeingRouted" Content="Enabled!" Height="35" Width="75"  FontWeight="Bold" Margin="10,0,0,0" ToolTip="Panel events are routed" MouseLeave="ButtonDisablePanelEventsFromBeingRouted_OnMouseLeave" MouseEnter="ButtonDisablePanelEventsFromBeingRouted_OnMouseEnter" Click="ButtonDisableAllPanelInteractions_OnClick"/>
             <Label Margin="200,0,0,0" Name="LabelAirframe" FontWeight="Bold" Content="None"/>
         </ToolBar>
         <TabControl Name="TabControlPanels" Grid.Row="2" SelectedIndex="3" >
