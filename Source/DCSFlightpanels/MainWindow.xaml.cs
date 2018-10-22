@@ -25,7 +25,7 @@ using UserControl = System.Windows.Controls.UserControl;
 
 /*
  Custom Resharper Naming abbreviations
- ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID FA ZA AV8BNA COMM NS
+ ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID FA ZA AV8BNA COMM NS DCSFP
 */
 namespace DCSFlightpanels
 {
@@ -142,7 +142,7 @@ namespace DCSFlightpanels
                 SetWindowState();
                 SendEventRegardingForwardingOfKeys();
 
-                CheckForNewRelease();
+                CheckForNewDCSFPRelease();
             }
             catch (Exception ex)
             {
@@ -847,7 +847,7 @@ namespace DCSFlightpanels
         }
 
 
-        private async void CheckForNewRelease()
+        private async void CheckForNewDCSFPRelease()
         {
             //#if !DEBUG
             var assembly = Assembly.GetExecutingAssembly();
@@ -856,12 +856,12 @@ namespace DCSFlightpanels
             {
                 var dateTime = Settings.Default.LastGitHubCheck;
 
+                var client = new GitHubClient(new ProductHeaderValue("DCSFlightpanels"));
                 var timeSpan = DateTime.Now - dateTime;
                 if (timeSpan.Days > 1)
                 {
                     Settings.Default.LastGitHubCheck = DateTime.Now;
                     Settings.Default.Save();
-                    var client = new GitHubClient(new ProductHeaderValue("DCSFlightpanels"));
                     var lastRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "DCSFlightpanels");
                     var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                     var gitHubReleaseArray = lastRelease.TagName.Replace("v.", "").Replace("v", "").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
@@ -903,20 +903,29 @@ namespace DCSFlightpanels
                             LabelVersionInformation.Visibility = Visibility.Visible;
                         });
                     }
+                    var lastDCSBIOSRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "dcs-bios");
+                    Dispatcher.Invoke(() =>
+                    {
+                        LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + lastDCSBIOSRelease.CreatedAt.Date.ToLongDateString();
+                        Settings.Default.LastDCSBIOSRelease = lastDCSBIOSRelease.CreatedAt.Date.ToLongDateString();
+                        Settings.Default.Save();
+                    });
                 }
                 else
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        LabelVersionInformation.Text = "v." + fileVersionInfo.FileVersion;
+                        LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                         LabelVersionInformation.Visibility = Visibility.Visible;
+                        LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " +  Settings.Default.LastDCSBIOSRelease;
                     });
                 }
             }
             catch (Exception ex)
             {
                 Common.LogError(9011, "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
-                LabelVersionInformation.Text = "v. " + fileVersionInfo.FileVersion;
+                LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
+                LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }
             //#endif
         }

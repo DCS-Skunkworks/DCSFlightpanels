@@ -346,5 +346,17 @@ namespace DCSFlightpanels.Properties {
                 this["MinimizeToTray"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastDCSBIOSRelease {
+            get {
+                return ((string)(this["LastDCSBIOSRelease"]));
+            }
+            set {
+                this["LastDCSBIOSRelease"] = value;
+            }
+        }
     }
 }

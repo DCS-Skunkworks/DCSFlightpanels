@@ -132,7 +132,7 @@
         </TabControl>
         <StatusBar Name="StatusBarMainWindow" HorizontalAlignment="Stretch" Height="26" Grid.Row="3" VerticalAlignment="Top" >
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
-                <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBlock Name="LabelVersionInformation" HorizontalAlignment="Right" Margin="10,0,10,0"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <TextBlock Name="LabelDownloadNewVersion" HorizontalAlignment="Right" Margin="0,0,10,0" Visibility="Hidden">
@@ -142,7 +142,10 @@
                 </TextBlock>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
-                <TextBlock Name="LabelInformation" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBlock Name="LabelInformation" HorizontalAlignment="Right" Margin="0,0,10,0" Width="300"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
+                <TextBlock Name="LabelDCSBIOSReleaseDate" HorizontalAlignment="Right" Margin="0,0,10,0"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>
