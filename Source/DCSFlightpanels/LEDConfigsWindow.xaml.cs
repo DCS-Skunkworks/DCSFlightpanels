@@ -155,29 +155,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(1090, ex);
             }
         }
-
-        private void MoveUpButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1091, ex);
-            }
-        }
-
-        private void MoveDownButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1092, ex);
-            }
-        }
-
+        
         private void OkButton_OnClick(object sender, RoutedEventArgs e)
         {
             try

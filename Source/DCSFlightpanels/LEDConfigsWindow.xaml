@@ -73,11 +73,9 @@
                 <Button Name="NewGreenButton" Content="New Green" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" Click="NewButton_OnClick"/>
                 <Button Name="NewYellowButton" Content="New Yellow" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="NewButton_OnClick"/>
                 <Button Name="NewRedButton" Content="New Red" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="5" Click="NewButton_OnClick"/>
-                <Button Name="CloneButton" Content="Clone" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="5" Click="CloneButton_OnClick"/>
-                <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="7" Click="EditButton_OnClick"/>
-                <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="8" Click="DeleteButton_OnClick" />
-                <Button Name="MoveUpButton"  Content="Up" Width="40" Margin="10,3,0,3" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="9" Click="MoveUpButton_OnClick" Visibility="Hidden" />
-                <Button Name="MoveDownButton"  Content="Down" Width="40" Margin="10,3,0,3" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="10" Click="MoveDownButton_OnClick" Visibility="Hidden" />
+                <Button Name="CloneButton" Content="Clone" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="6" Click="CloneButton_OnClick"/>
+                <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="8" Click="EditButton_OnClick"/>
+                <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="9" Click="DeleteButton_OnClick" />
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  >
                         <Button Name="OkButton"  Content="Ok" Width="70" Margin="0,0,0,0" VerticalAlignment="Center" Click="OkButton_OnClick"/>
