@@ -151,7 +151,6 @@ namespace NonVisuals
         private bool _forwardPanelEvent;
         private static readonly object _lockObject = new object();
         private static readonly List<SaitekPanel> _saitekPanels = new List<SaitekPanel>();
-        private bool _keyboardEmulation;
         /*
          * IMPORTANT STUFF
          */
@@ -161,13 +160,12 @@ namespace NonVisuals
         private bool _synchedOnce;
         private readonly Guid _guid = Guid.NewGuid();
         private readonly string _hash;
-
-        protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
+        
+        protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton)
         {
             _typeOfSaitekPanel = typeOfSaitekPanel;
             HIDSkeletonBase = hidSkeleton;
-            KeyboardEmulationOnly = !enableDCSBIOS;
-            if (enableDCSBIOS)
+            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
             {
                 _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
             }
@@ -187,6 +185,7 @@ namespace NonVisuals
         //public abstract void GetDcsBiosData(byte[] bytes);
         protected HIDSkeleton HIDSkeletonBase;
         private bool _closed;
+
 
 
         protected void UpdateCounter(uint address, uint data)
@@ -223,7 +222,7 @@ namespace NonVisuals
 
         public void SelectedAirframe(object sender, AirframeEventArgs e)
         {
-            _keyboardEmulation = Common.IsKeyEmulationProfile(e.Airframe);
+            
         }
 
         //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
@@ -350,11 +349,6 @@ namespace NonVisuals
             set { _isAttached = value; }
         }
         */
-        public bool KeyboardEmulationOnly
-        {
-            get => _keyboardEmulation;
-            set => _keyboardEmulation = value;
-        }
 
         public bool Closed
         {

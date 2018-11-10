@@ -38,7 +38,6 @@ namespace NonVisuals
         private DCSBIOSOutput _comm1DcsbiosOutputChannel; // comm1 channel 1 to 24 from CDSbios
         private volatile uint _comm1CockpitFreq = 12400;
         private volatile uint _comm1CockpitChannel = 1; // channel number 1 to 24
-        private Thread _comm1SyncThread;
         private long _comm1ThreadNowSynching;
         private long _comm1DialWaitingForFeedback;
         private readonly ClickSpeedDetector _comm1ChannelClickSpeedDetector = new ClickSpeedDetector(8);
@@ -63,7 +62,6 @@ namespace NonVisuals
         //private DCSBIOSOutput _comm2DcsbiosOutputVol;   // comm2 volume
         private volatile uint _comm2CockpitFreq = 12400;
         private volatile uint _comm2CockpitChannel = 1; // channel number 1 to 24
-        private Thread _comm2SyncThread;
         private long _comm2ThreadNowSynching;
         private long _comm2DialWaitingForFeedback;
         private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
@@ -91,7 +89,7 @@ namespace NonVisuals
 
 
 
-        public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
+        public RadioPanelPZ69FA18C(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
@@ -101,9 +99,6 @@ namespace NonVisuals
 
         ~RadioPanelPZ69FA18C()
         {
-            _comm1SyncThread?.Abort();
-           
-            _comm2SyncThread?.Abort();
             _ilsSyncThread?.Abort();
            
         }

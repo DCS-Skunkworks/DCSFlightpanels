@@ -37,7 +37,7 @@ namespace NonVisuals
         private long _syncOKDelayTimeout = 50000000; //5s
 
 
-        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton, enableDCSBIOS)
+        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton)
         {
             if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ69RadioPanel)
             {

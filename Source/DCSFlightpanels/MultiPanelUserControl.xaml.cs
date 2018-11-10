@@ -25,18 +25,16 @@ namespace DCSFlightpanels
         private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
         private bool _textBoxTagsSet;
-        private readonly bool _enableDCSBIOS;
 
-        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
+        public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton, enableDCSBIOS);
+            _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
             _multiPanelPZ70.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_multiPanelPZ70);
             _globalHandler = globalHandler;
-            _enableDCSBIOS = enableDCSBIOS;
 
             HideAllImages();
         }
@@ -95,8 +93,8 @@ namespace DCSFlightpanels
 
         private void SetApplicationMode(DCSAirframe dcsAirframe)
         {
-            ButtonLcdUpper.IsEnabled = Common.IsDCSBIOSProfile(dcsAirframe);
-            ButtonLcdLower.IsEnabled = Common.IsDCSBIOSProfile(dcsAirframe);
+            ButtonLcdUpper.IsEnabled = Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled);
+            ButtonLcdLower.IsEnabled = Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled);
         }
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
@@ -1327,11 +1325,11 @@ namespace DCSFlightpanels
                 ImageLcdUpperRow.Visibility = Visibility.Collapsed;
                 ImageLcdLowerRow.Visibility = Visibility.Collapsed;
                 //Dial position IAS HDG CRS -> Only upper LCD row can be used -> Hide Lower Button
-                if (!_enableDCSBIOS || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.IAS || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.HDG || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.CRS)
+                if (Common.NoDCSBIOSEnabled() || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.IAS || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.HDG || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.CRS)
                 {
                     ButtonLcdLower.Visibility = Visibility.Hidden;
                 }
-                else if (_enableDCSBIOS)  
+                else if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))  
                 {
                     ButtonLcdLower.Visibility = Visibility.Visible;
                 }
@@ -1839,7 +1837,7 @@ namespace DCSFlightpanels
                 var contextMenu = (ContextMenu)sender;
                 foreach (MenuItem item in contextMenu.Items)
                 {
-                    item.IsEnabled = !_multiPanelPZ70.KeyboardEmulationOnly;
+                    item.IsEnabled = !Common.KeyEmulationOnly();
                 }
             }
             catch (Exception ex)
@@ -2546,7 +2544,7 @@ namespace DCSFlightpanels
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
-            if (!_enableDCSBIOS)
+            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Hidden;
                 ButtonLcdLower.Visibility = Visibility.Hidden;
@@ -2588,7 +2586,7 @@ namespace DCSFlightpanels
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!_multiPanelPZ70.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -2622,7 +2620,7 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
-                        else if (!_multiPanelPZ70.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        else if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -2662,7 +2660,7 @@ namespace DCSFlightpanels
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!_multiPanelPZ70.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -2749,7 +2747,7 @@ namespace DCSFlightpanels
             try
             {
                 var contextMenu = (ContextMenu)sender;
-                if (_enableDCSBIOS)
+                if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
                 {
                     ((MenuItem)contextMenu.Items[0]).IsEnabled = true;
                 }

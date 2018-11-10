@@ -34,12 +34,10 @@ namespace DCSFlightpanels
         private string _ipAddressToSRS;
         private string _portToSRS;
 
-        private readonly DCSAirframe _dcsAirframe;
 
-        public SettingsWindow(DCSAirframe dcsAirframe)
+        public SettingsWindow()
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
         }
 
         private void SettingsWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -48,18 +46,12 @@ namespace DCSFlightpanels
             {
                 ButtonOk.IsEnabled = false;
                 LoadSettings();
-                if (_dcsAirframe == DCSAirframe.KEYEMULATOR)
+                if (!Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled))
+                {
+                    LabelSRS.Visibility = Visibility.Collapsed;
+                }else if (Common.NoDCSBIOSEnabled())
                 {
                     LabelDCSBIOS.Visibility = Visibility.Collapsed;
-                    LabelSRS.Visibility = Visibility.Collapsed;
-                }else if (_dcsAirframe == DCSAirframe.KEYEMULATOR_SRS)
-                {
-                    LabelDCSBIOS.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    //DCS-BIOS Airframe
-                    LabelSRS.Visibility = Visibility.Collapsed;
                 }
                 StackPanelGeneralSettings.Visibility = Visibility.Visible;
                 StackPanelDCSBIOSSettings.Visibility = Visibility.Collapsed;
@@ -139,7 +131,7 @@ namespace DCSFlightpanels
             CheckBoxDebugToFile.IsChecked = Settings.Default.DebugToFile;
             CheckBoxMinimizeToTray.IsChecked = Settings.Default.RunMinimized;
 
-            if (_dcsAirframe != DCSAirframe.KEYEMULATOR)
+            if (Common.PartialDCSBIOSEnabled())
             {
                 TextBoxDcsBiosJSONLocation.Text = Settings.Default.DCSBiosJSONLocation;
                 TextBoxDCSBIOSIPFrom.Text = Settings.Default.DCSBiosIPFrom;
@@ -147,7 +139,7 @@ namespace DCSFlightpanels
                 TextBoxDCSBIOSPortFrom.Text = Settings.Default.DCSBiosPortFrom;
                 TextBoxDCSBIOSPortTo.Text = Settings.Default.DCSBiosPortTo;
             }
-            if (_dcsAirframe == DCSAirframe.KEYEMULATOR_SRS)
+            if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled))
             {
                 TextBoxSRSIPFrom.Text = Settings.Default.SRSIpFrom;
                 TextBoxSRSIPTo.Text = Settings.Default.SRSIpTo;

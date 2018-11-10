@@ -23,21 +23,19 @@ namespace DCSFlightpanels
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
         private bool _once;
-        private readonly bool _enableDCSBIOS;
         private bool _textBoxTagsSet;
         private bool _controlLoaded;
 
-        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
+        public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _tpmPanel = new TPMPanel(hidSkeleton, enableDCSBIOS);
+            _tpmPanel = new TPMPanel(hidSkeleton);
 
             _tpmPanel.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_tpmPanel);
             _globalHandler = globalHandler;
-            _enableDCSBIOS = enableDCSBIOS;
         }
 
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -548,7 +546,7 @@ namespace DCSFlightpanels
                             contectMenu.Items.Remove(bipMenuItem);
                         }
                     }
-                    if (!_enableDCSBIOS)
+                    if (Common.NoDCSBIOSEnabled())
                     {
                         MenuItem dcsBIOSMenuItem = null;
                         foreach (var item in contectMenu.Items)
@@ -595,7 +593,7 @@ namespace DCSFlightpanels
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!_tpmPanel.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -629,7 +627,7 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
-                        else if (!_tpmPanel.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        else if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -669,7 +667,7 @@ namespace DCSFlightpanels
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!_tpmPanel.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }

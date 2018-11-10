@@ -26,21 +26,19 @@ namespace DCSFlightpanels
         private readonly Image[] _imageArrayLeft = new Image[4];
         private readonly Image[] _imageArrayRight = new Image[4];
         private readonly IGlobalHandler _globalHandler;
-        private readonly bool _enableDCSBIOS;
         private bool _textBoxTagsSet;
         private bool _controlLoaded;
 
-        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, bool enableDCSBIOS)
+        public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton, enableDCSBIOS);
+            _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             _switchPanelPZ55.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_switchPanelPZ55);
             _globalHandler = globalHandler;
-            _enableDCSBIOS = enableDCSBIOS;
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -90,12 +88,12 @@ namespace DCSFlightpanels
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsKeyEmulationProfile(e.Airframe))
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
                     {
                         image.ContextMenu = null;
                     }
                     else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsDCSBIOSProfile(e.Airframe))
+                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         if (image.ContextMenu != null)
@@ -622,7 +620,7 @@ namespace DCSFlightpanels
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
-            if (_enableDCSBIOS)
+            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
@@ -708,7 +706,7 @@ namespace DCSFlightpanels
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!_switchPanelPZ55.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -742,7 +740,7 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
-                        else if (!_switchPanelPZ55.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        else if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -782,7 +780,7 @@ namespace DCSFlightpanels
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!_switchPanelPZ55.KeyboardEmulationOnly && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }

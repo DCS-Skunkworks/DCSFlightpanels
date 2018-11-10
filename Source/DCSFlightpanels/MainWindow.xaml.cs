@@ -127,7 +127,7 @@ namespace DCSFlightpanels
 
                 _dcsAirframe = _panelProfileHandler.Airframe;
 
-                if (!Common.IsDCSBIOSProfile(_dcsAirframe))
+                if (!Common.PartialDCSBIOSEnabled())
                 {
                     _dcsBios?.Shutdown();
                     _dcsBios = null;
@@ -202,7 +202,7 @@ namespace DCSFlightpanels
 
             var closedItemCount = CloseTabItems();
 
-            if (Common.IsKeyEmulationProfile(dcsAirframe))
+            if (Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
             {
                 Common.DebugP("Shutting down DCSBIOS");
                 _dcsBios?.Shutdown();
@@ -333,7 +333,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ55";
-                                    var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this, _panelProfileHandler.IsDCSBIOSProfile);
+                                    var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this);
                                     _saitekUserControls.Add(switchPanelPZ55UserControl);
                                     _panelProfileHandler.Attach(switchPanelPZ55UserControl);
                                     tabItem.Content = switchPanelPZ55UserControl;
@@ -353,7 +353,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                     }
 
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR_SRS)
+                                    if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled) || _panelProfileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
@@ -480,7 +480,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ70";
-                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.IsDCSBIOSProfile);
+                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this);
                                     _saitekUserControls.Add(multiPanelUserControl);
                                     _panelProfileHandler.Attach(multiPanelUserControl);
                                     tabItem.Content = multiPanelUserControl;
@@ -491,7 +491,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "B.I.P.";
-                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton, _panelProfileHandler.IsDCSBIOSProfile);
+                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
                                     _saitekUserControls.Add(backLitPanelUserControl);
                                     _panelProfileHandler.Attach(backLitPanelUserControl);
                                     tabItem.Content = backLitPanelUserControl;
@@ -502,7 +502,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "TPM";
-                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this, _panelProfileHandler.IsDCSBIOSProfile);
+                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this);
                                     _saitekUserControls.Add(tpmPanelUserControl);
                                     _panelProfileHandler.Attach(tpmPanelUserControl);
                                     tabItem.Content = tpmPanelUserControl;
@@ -1491,7 +1491,7 @@ namespace DCSFlightpanels
 
         private void MenuItemSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(_dcsAirframe);
+            var settingsWindow = new SettingsWindow();
             if (settingsWindow.ShowDialog() == true)
             {
                 if (settingsWindow.GeneralChanged)
@@ -1501,7 +1501,7 @@ namespace DCSFlightpanels
                     Common.DebugToFile = Settings.Default.DebugToFile;
                 }
 
-                if (settingsWindow.DCSBIOSChanged && Common.IsDCSBIOSProfile(_dcsAirframe))
+                if (settingsWindow.DCSBIOSChanged && Common.PartialDCSBIOSEnabled())
                 {
                     //Refresh, make sure they are using the latest settings
                     DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;

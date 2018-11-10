@@ -77,6 +77,8 @@ namespace ClassLibraryCommon
         F86F,
         [Description("FA-18C_hornet")]
         FA18C,
+        [Description("FC3-CD-SRS")]
+        FC3_CD_SRS,
         [Description("FW-190D9")]
         Fw190,
         [Description("Ka-50")]

@@ -28,19 +28,17 @@ namespace DCSFlightpanels
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
         private bool _loaded;
         private readonly IGlobalHandler _globalHandler;
-        private readonly bool _enableDCSBIOS;
 
-        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton, bool enableDCSBIOS)
+        public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton, enableDCSBIOS);
+            _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
 
             _backlitPanelBIP.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);
             _globalHandler = globalHandler;
-            _enableDCSBIOS = enableDCSBIOS;
         }
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -498,7 +496,7 @@ namespace DCSFlightpanels
 
         private void SetContextMenuClickHandlers()
         {
-            if (!_enableDCSBIOS)
+            if (!Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
             {
                 return;
             }
