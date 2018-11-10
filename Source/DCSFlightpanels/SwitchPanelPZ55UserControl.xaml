@@ -28,7 +28,7 @@
             <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick" />
         </ContextMenu>
         <ContextMenu x:Key="PZ55LEDContextMenu" x:Shared="False">
-            <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick" ContextMenuOpening="ContextConfigureLandingGearLED_OnContextMenuOpening"/>
+            <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick"/>
         </ContextMenu>
     </UserControl.Resources>
     <Grid Name="PZ55Grid">

@@ -59,7 +59,7 @@ namespace ClassLibraryCommon
 
         public static void SetOperationModeFlag(OperationFlag flagValue)
         {
-            _operationLevelFlag &= (int)flagValue;
+            _operationLevelFlag = _operationLevelFlag | (int)flagValue;
             ValidateFlag();
         }
 
@@ -70,7 +70,7 @@ namespace ClassLibraryCommon
 
         public static void ClearOperationModeFlag(OperationFlag flagValue)
         {
-            _operationLevelFlag = _operationLevelFlag & ~((int)flagValue);
+            _operationLevelFlag &= ~((int)flagValue);
         }
 
         public static void ResetOperationModeFlag()

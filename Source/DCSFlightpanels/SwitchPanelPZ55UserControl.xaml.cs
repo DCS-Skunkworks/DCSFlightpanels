@@ -633,18 +633,6 @@ namespace DCSFlightpanels
             }
         }
 
-
-        private void ContextConfigureLandingGearLED_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(204165, ex);
-            }
-        }
-
         private void ContextConfigureLandingGearLEDClick(object sender, RoutedEventArgs e)
         {
             try

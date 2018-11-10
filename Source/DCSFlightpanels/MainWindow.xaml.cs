@@ -1140,8 +1140,21 @@ namespace DCSFlightpanels
                 _panelProfileHandler.NewProfile();
                 var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
                 chooseProfileModuleWindow.ShowDialog();
+                ClearNS430();
                 _panelProfileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
                 SetWindowState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(237022, ex);
+            }
+        }
+
+        private void ClearNS430()
+        {
+            try
+            {
+                MenuItemUseNS430.IsChecked = false;
             }
             catch (Exception ex)
             {

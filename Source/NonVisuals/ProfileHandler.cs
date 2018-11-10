@@ -555,12 +555,13 @@ namespace NonVisuals
             get => _airframe;
             set
             {
+                //Called only when user creates a new profile
                 if (value != _airframe)
                 {
                     _isDirty = true;
                 }
                 _airframe = value;
-
+                Common.ResetOperationModeFlag();
                 SetOperationLevelFlag();
                 OnAirframeSelected?.Invoke(this, new AirframeEventArgs() {Airframe = _airframe});
             }
