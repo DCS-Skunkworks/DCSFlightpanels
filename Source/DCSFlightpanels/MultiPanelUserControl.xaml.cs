@@ -83,7 +83,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                SetApplicationMode(e.Airframe);
+                SetApplicationMode();
             }
             catch (Exception ex)
             {
@@ -91,10 +91,18 @@ namespace DCSFlightpanels
             }
         }
 
-        private void SetApplicationMode(DCSAirframe dcsAirframe)
+        private void SetApplicationMode()
         {
-            ButtonLcdUpper.IsEnabled = Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled);
-            ButtonLcdLower.IsEnabled = Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled);
+            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            {
+                ButtonLcdUpper.Visibility = Visibility.Visible;
+                ButtonLcdLower.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ButtonLcdUpper.Visibility = Visibility.Hidden;
+                ButtonLcdLower.Visibility = Visibility.Hidden;
+            }
         }
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
@@ -634,6 +642,8 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
+
+                SetApplicationMode();
                 ImageLcdButtonAp.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.AP_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
                 ImageLcdButtonHdg.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
                 ImageLcdButtonNav.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
