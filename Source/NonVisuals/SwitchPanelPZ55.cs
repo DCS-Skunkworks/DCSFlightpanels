@@ -43,7 +43,7 @@ namespace NonVisuals
         private bool _manualLandingGearLeds;
         private Thread _manualLandingGearThread;
 
-        public SwitchPanelPZ55(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton, enableDCSBIOS)
+        public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton)
         {
             if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ55SwitchPanel)
             {

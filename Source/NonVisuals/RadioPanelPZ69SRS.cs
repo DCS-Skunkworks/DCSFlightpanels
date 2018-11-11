@@ -56,7 +56,7 @@ namespace NonVisuals
         private long _doUpdatePanelLCD;
         private double _smallFreqStepping = 0.001;
 
-        public RadioPanelPZ69SRS(int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton, false)
+        public RadioPanelPZ69SRS(int portFrom, string ipAddressTo, int portTo, HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             SRSListenerFactory.SetParams(portFrom, ipAddressTo, portTo);
             SRSListenerFactory.GetSRSListener().Attach(this);

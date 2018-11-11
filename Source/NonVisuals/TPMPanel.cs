@@ -26,7 +26,7 @@ namespace NonVisuals
         //private HidDevice _hidReadDevice;
         private readonly object _dcsBiosDataReceivedLock = new object();
 
-        public TPMPanel(HIDSkeleton hidSkeleton, bool enableDCSBIOS) : base(SaitekPanelsEnum.TPM, hidSkeleton, enableDCSBIOS)
+        public TPMPanel(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.TPM, hidSkeleton)
         {
             if (hidSkeleton.PanelType != SaitekPanelsEnum.TPM)
             {

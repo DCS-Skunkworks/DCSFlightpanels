@@ -14,6 +14,15 @@ using System.Windows.Media;
 
 namespace ClassLibraryCommon
 {
+    [Flags]
+    public enum OperationFlag
+    {
+        DCSBIOSInputEnabled = 1,
+        DCSBIOSOutputEnabled = 2,
+        KeyboardEmulationOnly = 4,
+        SRSEnabled = 8,
+        NS430Enabled = 16
+    }
 
     public static class Common
     {
@@ -21,6 +30,77 @@ namespace ClassLibraryCommon
 
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
         private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
+
+        private static int _operationLevelFlag = 0;
+
+        public static void ValidateFlag()
+        {
+            if (IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
+            {
+                if (IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled) ||
+                    IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled))
+                {
+                    throw new Exception("Invalid operation level flag : " + _operationLevelFlag);
+                }
+            }
+        }
+
+        public static void SetOperationModeFlag(int flag)
+        {
+            _operationLevelFlag = flag;
+            ValidateFlag();
+        }
+
+        public static int GetOperationModeFlag()
+        {
+            ValidateFlag();
+            return _operationLevelFlag;
+        }
+
+        public static void SetOperationModeFlag(OperationFlag flagValue)
+        {
+            _operationLevelFlag = _operationLevelFlag | (int)flagValue;
+            ValidateFlag();
+        }
+
+        public static bool IsOperationModeFlagSet(OperationFlag flagValue)
+        {
+            return (_operationLevelFlag & (int)flagValue) > 0;
+        }
+
+        public static void ClearOperationModeFlag(OperationFlag flagValue)
+        {
+            _operationLevelFlag &= ~((int)flagValue);
+        }
+
+        public static void ResetOperationModeFlag()
+        {
+            _operationLevelFlag = 0;
+        }
+
+        public static bool NoDCSBIOSEnabled()
+        {
+            ValidateFlag();
+            return !IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled) && !IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled);
+        }
+
+        public static bool KeyEmulationOnly()
+        {
+            ValidateFlag();
+            return IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly);
+        }
+
+        public static bool FullDCSBIOSEnabled()
+        {
+            ValidateFlag();
+            return IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled) && IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled);
+        }
+
+        public static bool PartialDCSBIOSEnabled()
+        {
+            ValidateFlag();
+            return IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled) || IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled);
+        }
 
         public static NumberFormatInfo GetPZ69FullDisplayNumberFormat()
         {
@@ -99,18 +179,6 @@ namespace ClassLibraryCommon
         public static string ErrorLog = "";
         public static string DebugLog = "";
 
-
-
-        public static bool IsKeyEmulationProfile(DCSAirframe dcsAirframe)
-        {
-            return dcsAirframe == DCSAirframe.KEYEMULATOR || dcsAirframe == DCSAirframe.KEYEMULATOR_SRS;
-    }
-
-        public static bool IsDCSBIOSProfile(DCSAirframe dcsAirframe)
-        {
-            return dcsAirframe != DCSAirframe.KEYEMULATOR && dcsAirframe != DCSAirframe.KEYEMULATOR_SRS;
-    }
-
         public static void DebugP(string str)
         {
             if (DebugOn)
@@ -141,7 +209,7 @@ namespace ClassLibraryCommon
                 DebugLog = filename;
             }
         }
-        
+
         public static void LogError(Exception ex, string message = null)
         {
             LogError(0, ex, message);
@@ -230,7 +298,7 @@ namespace ClassLibraryCommon
             return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        
+
 
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject

@@ -80,7 +80,6 @@ namespace NonVisuals
         private const string OpenFileDialogDefaultExt = ".bindings";
         private const string OpenFileDialogFilter = "DCSFlightpanels (.bindings)|*.bindings";
         private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
-        private bool _useNS430 = false;
 
         private readonly List<KeyValuePair<string, SaitekPanelsEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, SaitekPanelsEnum>>();
         private bool _profileLoaded;
@@ -89,14 +88,12 @@ namespace NonVisuals
         {
             _jsonDirectory = jsonDirectory;
             DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
-            DCSBIOSControlLocator.UseNS430 = _useNS430;
         }
 
         public ProfileHandler(string jsonDirectory, string lastProfileUsed)
         {
             _jsonDirectory = jsonDirectory;
             DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
-            DCSBIOSControlLocator.UseNS430 = _useNS430;
             _lastProfileUsed = lastProfileUsed;
         }
 
@@ -254,10 +251,9 @@ namespace NonVisuals
                         }
                         DCSBIOSControlLocator.Airframe = _airframe;
                         DCSBIOSControlLocator.JSONDirectory = _jsonDirectory;
-                    }else if (fileLine.StartsWith("UseNS430="))
+                    }else if (fileLine.StartsWith("OperationLevelFlag="))
                     {
-                        _useNS430 = bool.Parse(fileLine.Replace("UseNS430=", "").Trim());
-                        DCSBIOSControlLocator.UseNS430 = _useNS430;
+                        Common.SetOperationModeFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", "").Trim()));
                     }
                     else if (!fileLine.StartsWith("#") && fileLine.Length > 2)
                     {
@@ -313,6 +309,12 @@ namespace NonVisuals
                         }
                     }
                 }
+                //For backwards compability 10.11.2018
+                if (Common.GetOperationModeFlag() == 0)
+                {
+                    SetOperationLevelFlag();
+                }
+
                 SendSettingsReadEvent();
                 CheckAllProfileInstanceIDsAgainstAttachedHardware();
                 return true;
@@ -321,6 +323,28 @@ namespace NonVisuals
             {
                 Common.ShowErrorMessageBox(1061, ex);
                 return false;
+            }
+        }
+
+        private void SetOperationLevelFlag()
+        {
+            if (_airframe == DCSAirframe.KEYEMULATOR)
+            {
+                Common.SetOperationModeFlag(OperationFlag.KeyboardEmulationOnly);
+            }
+            else if (_airframe == DCSAirframe.KEYEMULATOR_SRS)
+            {
+                Common.SetOperationModeFlag(OperationFlag.KeyboardEmulationOnly);
+                Common.SetOperationModeFlag(OperationFlag.SRSEnabled);
+            }
+            else if (_airframe == DCSAirframe.FC3_CD_SRS)
+            {
+                Common.SetOperationModeFlag(OperationFlag.SRSEnabled);
+                Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled);
+            }
+            else
+            {
+                Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled | OperationFlag.DCSBIOSInputEnabled);
             }
         }
 
@@ -487,7 +511,7 @@ namespace NonVisuals
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
                 stringBuilder.AppendLine("Airframe=" + _airframe);
-                stringBuilder.AppendLine("UseNS430=" + _useNS430);
+                stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
                 foreach (var s in _listPanelSettingsData)
                 {
                     stringBuilder.AppendLine(s);
@@ -531,18 +555,17 @@ namespace NonVisuals
             get => _airframe;
             set
             {
+                //Called only when user creates a new profile
                 if (value != _airframe)
                 {
                     _isDirty = true;
                 }
                 _airframe = value;
+                Common.ResetOperationModeFlag();
+                SetOperationLevelFlag();
                 OnAirframeSelected?.Invoke(this, new AirframeEventArgs() {Airframe = _airframe});
             }
         }
-
-        public bool IsKeyEmulationProfile => _airframe == DCSAirframe.KEYEMULATOR || _airframe == DCSAirframe.KEYEMULATOR_SRS;
-
-        public bool IsDCSBIOSProfile => _airframe != DCSAirframe.KEYEMULATOR && _airframe != DCSAirframe.KEYEMULATOR_SRS;
 
         public string LastProfileUsed
         {
@@ -572,9 +595,16 @@ namespace NonVisuals
 
         public bool UseNS430
         {
-            get => _useNS430;
-            set { _useNS430 = value;
-                DCSBIOSControlLocator.UseNS430 = _useNS430;
+            get => Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled);
+            set {
+                if (value)
+                {
+                    Common.SetOperationModeFlag(OperationFlag.NS430Enabled);
+                }
+                else
+                {
+                    Common.ClearOperationModeFlag(OperationFlag.NS430Enabled);
+                }
                 _isDirty = true;
             }
         }

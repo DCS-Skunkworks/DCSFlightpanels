@@ -170,7 +170,7 @@ namespace NonVisuals
 
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69UH1H(HIDSkeleton hidSkeleton, bool enableDCSBIOS = true) : base(hidSkeleton, enableDCSBIOS)
+        public RadioPanelPZ69UH1H(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;
