@@ -91,6 +91,8 @@ namespace ClassLibraryCommon
         Mi8,
         [Description("MiG-21bis")]
         Mig21Bis,
+        [Description("NS430")]
+        NS430,
         [Description("P-51D")]
         P51D,
         [Description("SA342L")]

@@ -62,7 +62,7 @@ namespace DCSFlightpanels
             ComboBoxAirframe.Items.Clear();
             foreach (DCSAirframe airframe in Enum.GetValues(typeof(DCSAirframe)))
             {
-                if (airframe != DCSAirframe.NOFRAMELOADEDYET)
+                if (airframe != DCSAirframe.NOFRAMELOADEDYET && airframe != DCSAirframe.NS430)
                 {
                     ComboBoxAirframe.Items.Add(EnumEx.GetDescription(airframe));
                 }
