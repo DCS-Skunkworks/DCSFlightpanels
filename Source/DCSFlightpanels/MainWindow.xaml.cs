@@ -745,6 +745,14 @@ namespace DCSFlightpanels
                     SetApplicationMode(_dcsAirframe);
                     SendEventRegardingForwardingOfKeys();
                 }
+                if (Common.KeyEmulationOnly())
+                {
+                    SetNS430Status(false, false);
+                }
+                else
+                {
+                    SetNS430Status(false);
+                }
             }
             catch (Exception ex)
             {
@@ -1140,7 +1148,6 @@ namespace DCSFlightpanels
                 _panelProfileHandler.NewProfile();
                 var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
                 chooseProfileModuleWindow.ShowDialog();
-                ClearNS430();
                 _panelProfileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
                 SetWindowState();
             }
@@ -1150,11 +1157,12 @@ namespace DCSFlightpanels
             }
         }
 
-        private void ClearNS430()
+        private void SetNS430Status(bool enable, bool menuIsEnabled = true)
         {
             try
             {
-                MenuItemUseNS430.IsChecked = false;
+                MenuItemUseNS430.IsChecked = enable;
+                MenuItemUseNS430.IsEnabled = menuIsEnabled;
             }
             catch (Exception ex)
             {
