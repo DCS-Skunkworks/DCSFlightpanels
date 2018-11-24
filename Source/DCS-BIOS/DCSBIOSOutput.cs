@@ -71,6 +71,53 @@ namespace DCS_BIOS
             }
         }
         */
+
+        public static DCSBIOSOutput CreateCopy(DCSBIOSOutput dcsbiosOutput)
+        {
+            var tmp = new DCSBIOSOutput();
+            tmp.DCSBiosOutputType = dcsbiosOutput.DCSBiosOutputType;
+            tmp.ControlId = dcsbiosOutput.ControlId;
+            tmp.Address = dcsbiosOutput.Address;
+            tmp.ControlDescription = dcsbiosOutput.ControlDescription;
+            tmp.ControlType = dcsbiosOutput.ControlType;
+            tmp.DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison;
+            tmp.Mask = dcsbiosOutput.Mask;
+            tmp.MaxLength = dcsbiosOutput.MaxLength;
+            tmp.MaxValue = dcsbiosOutput.MaxValue;
+            tmp.Shiftvalue = dcsbiosOutput.Shiftvalue;
+            if (tmp.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            {
+                tmp.SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
+            }
+            if (tmp.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            {
+                tmp.SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
+            }
+            return tmp;
+        }
+
+        public void Copy(DCSBIOSOutput dcsbiosOutput)
+        {
+            DCSBiosOutputType = dcsbiosOutput.DCSBiosOutputType;
+            ControlId = dcsbiosOutput.ControlId;
+            Address = dcsbiosOutput.Address;
+            ControlDescription = dcsbiosOutput.ControlDescription;
+            ControlType = dcsbiosOutput.ControlType;
+            DCSBiosOutputComparison = dcsbiosOutput.DCSBiosOutputComparison;
+            Mask = dcsbiosOutput.Mask;
+            MaxLength = dcsbiosOutput.MaxLength;
+            MaxValue = dcsbiosOutput.MaxValue;
+            Shiftvalue = dcsbiosOutput.Shiftvalue;
+            if (DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            {
+                SpecifiedValueInt = dcsbiosOutput.SpecifiedValueInt;
+            }
+            if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            {
+                SpecifiedValueString = dcsbiosOutput.SpecifiedValueString;
+            }
+        }
+
         public bool CheckForValueMatchAndChange(object data)
         {
             //todo change not processed

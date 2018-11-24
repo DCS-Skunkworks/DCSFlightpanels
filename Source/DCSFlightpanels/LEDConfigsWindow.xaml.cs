@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using DCS_BIOS;
 using NonVisuals;
 
 namespace DCSFlightpanels
@@ -124,9 +125,7 @@ namespace DCSFlightpanels
                 var dcsBiosOutputTriggerWindow = new DCSBiosOutputTriggerWindow(_dcsAirframe, "Set hook for color " + dcsOutputAndColorBinding.LEDColor, dcsOutputAndColorBinding.DCSBiosOutputLED);
                 if (dcsBiosOutputTriggerWindow.ShowDialog() == true)
                 {
-                    _colorOutputBindings.Remove(dcsOutputAndColorBinding);
-                    _colorOutputBindings.Add(_callingPanel.CreateDcsOutputAndColorBinding(_saitekPanelLEDPosition, dcsOutputAndColorBinding.LEDColor, dcsBiosOutputTriggerWindow.DCSBiosOutput));
-                    ShowItems();
+                    ((DcsOutputAndColorBinding) DataGridValues.SelectedItem).DCSBiosOutputLED.Copy(dcsBiosOutputTriggerWindow.DCSBiosOutput);
                 }
                 ShowItems();
                 SetFormState();
@@ -213,7 +212,7 @@ namespace DCSFlightpanels
                     return;
                 }
 
-                PanelLEDColor color = PanelLEDColor.DARK;
+                var color = PanelLEDColor.DARK;
                 var menu = (MenuItem)sender;
 
                 if (menu.Name.Contains("Dark"))
@@ -264,10 +263,11 @@ namespace DCSFlightpanels
                 {
                     e.Handled = true;
                 }
-                for (var i = 0; i < DataGridValues.SelectedItems.Count; i++)
+                foreach (var t in DataGridValues.SelectedItems)
                 {
-                    var binding = (DcsOutputAndColorBinding)DataGridValues.SelectedItems[i];
-                    _colorOutputBindings.Add(_callingPanel.CreateDcsOutputAndColorBinding(_saitekPanelLEDPosition, binding.LEDColor, binding.DCSBiosOutputLED));
+                    var binding = (DcsOutputAndColorBinding) t;
+                    var tmp = DCSBIOSOutput.CreateCopy(binding.DCSBiosOutputLED);
+                    _colorOutputBindings.Add(_callingPanel.CreateDcsOutputAndColorBinding(_saitekPanelLEDPosition, binding.LEDColor, tmp));
                     ShowItems();
                 }
                 SetFormState();
