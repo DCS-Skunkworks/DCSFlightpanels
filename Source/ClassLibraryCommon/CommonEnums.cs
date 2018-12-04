@@ -63,6 +63,8 @@ namespace ClassLibraryCommon
         KEYEMULATOR,
         [Description("KeyEmulator_SRS")]
         KEYEMULATOR_SRS,
+        [Description("A-4E-C")]
+        A4E,
         [Description("A-10C")]
         A10C,
         [Description("AJS37")]
@@ -71,7 +73,7 @@ namespace ClassLibraryCommon
         AV8BNA,
         [Description("Bf-109K-4")]
         Bf109,
-        [Description("F-5E")]
+        [Description("F-5E-3")]
         F5E,
         [Description("F-86F Sabre")]
         F86F,
@@ -87,6 +89,8 @@ namespace ClassLibraryCommon
         L39ZA,
         [Description("M2000C")]
         M2000C,
+        [Description("MB-339PAN")]
+        MB339,
         [Description("Mi-8MT")]
         Mi8,
         [Description("MiG-21bis")]
