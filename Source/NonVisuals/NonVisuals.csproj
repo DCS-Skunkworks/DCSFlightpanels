@@ -71,6 +71,7 @@
     <Compile Include="BIPLinkPZ70.cs" />
     <Compile Include="BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="DCSBIOSBindingLCDPZ69.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
     <Compile Include="DCSBIOSBindingBase.cs" />
     <Compile Include="DCSBIOSBindingTPM.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="RadioPanelKnobFA18C.cs" />
     <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelPZ69DisplayValue.cs" />
+    <Compile Include="RadioPanelPZ69FullEmulator.cs" />
     <Compile Include="RadioPanelPZ69FA18C.cs" />
     <Compile Include="RadioPanelPZ69KnobEmulator.cs" />
     <Compile Include="RadioPanelKnobSA342.cs" />
