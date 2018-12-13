@@ -127,9 +127,9 @@ namespace NonVisuals
             if (_dcsbiosOutputFormula != null)
             {
                 //RadioPanelEmulatorDCSBIOSLCD{ALT}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "RadioPanelEmulatorDCSBIOSLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
+                return "RadioPanelEmulatorDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
             }
-            return "RadioPanelEmulatorDCSBIOSLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutput.ToString();
+            return "RadioPanelEmulatorDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutput.ToString();
         }
 
         public PZ69EmulatorLCDPosition PZ69EmulatorLCDPosition

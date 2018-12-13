@@ -1226,6 +1226,7 @@ namespace DCSFlightpanels
             }
         }
 
+
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
             try
@@ -2482,6 +2483,11 @@ namespace DCSFlightpanels
             LowerRightSwitch.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobDec.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
+
+            DotTopLeftLcd.Visibility = Visibility.Collapsed;
+            DotBottomLeftLcd.Visibility = Visibility.Collapsed;
+            DotTopRightLcd.Visibility = Visibility.Collapsed;
+            DotBottomRightLcd.Visibility = Visibility.Collapsed;
         }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
