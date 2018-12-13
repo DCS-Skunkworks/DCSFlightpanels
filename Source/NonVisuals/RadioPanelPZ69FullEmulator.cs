@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using ClassLibraryCommon;
+using System.Text;
 using DCS_BIOS;
 using HidLibrary;
+using System.Threading;
+using ClassLibraryCommon;
 
 namespace NonVisuals
 {
@@ -736,6 +738,4 @@ namespace NonVisuals
             set => _pz69DialPosition = value;
         }
     }
-    
-
 }
