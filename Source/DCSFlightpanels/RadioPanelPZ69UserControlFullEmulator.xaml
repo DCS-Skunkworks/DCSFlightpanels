@@ -87,10 +87,10 @@
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
 
 
-            <Button Name="ButtonTopLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>
-            <Button Name="ButtonBottomLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
-            <Button Name="ButtonTopRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>
-            <Button Name="ButtonBottomRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
+            <Button Name="ButtonUpperLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>
+            <Button Name="ButtonLowerLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
+            <Button Name="ButtonUpperRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>
+            <Button Name="ButtonLowerRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
             <Image Height="76" Name="DotTopLeftLcd" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="178" Canvas.Top="69" />
             <Image Height="76" Name="DotBottomLeftLcd" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="178" Canvas.Top="143" />
             <Image Height="76" Name="DotTopRightLcd" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="341" Canvas.Top="69" />
@@ -255,7 +255,8 @@
             </Grid>
         </GroupBox>
         <StackPanel Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" >
-            <Label Name="LabelAirframe" Content="Key + DCS-BIOS" FontSize="30" FontWeight="Bold" Margin="10,0,0,0"/>
+            <Label Name="LabelDialPosUpper" Content="Upper Dial Profile : COM1" FontSize="20" FontWeight="Bold" Margin="10,0,0,0"/>
+            <Label Name="LabelDialPosLower" Content="Lower Dial Profile : COM1" FontSize="20" FontWeight="Bold" Margin="10,0,0,0"/>
             <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Margin="10,0,0,0">
                 <StackPanel Margin="10,0,0,0">
                     <Label Content="Frequency Knobs sensitivity"></Label>

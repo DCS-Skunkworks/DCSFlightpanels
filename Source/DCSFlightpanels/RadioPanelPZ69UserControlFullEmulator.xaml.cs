@@ -26,6 +26,8 @@ namespace DCSFlightpanels
         private bool _textBoxTagsSet;
         private bool _buttonTagsSet;
         private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
+        private const string UpperText = "Upper Dial Profile : ";
+        private const string LowerText = "Lower Dial Profile : ";
 
         public RadioPanelPZ69UserControlFullEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -252,10 +254,10 @@ namespace DCSFlightpanels
             {
                 return;
             }
-            ButtonTopLeftLcd.Tag = new TagDataClassPZ69Full();
-            ButtonBottomLeftLcd.Tag = new TagDataClassPZ69Full();
-            ButtonTopRightLcd.Tag = new TagDataClassPZ69Full();
-            ButtonBottomRightLcd.Tag = new TagDataClassPZ69Full();
+            ButtonUpperLeftLcd.Tag = new TagDataClassPZ69Full();
+            ButtonLowerLeftLcd.Tag = new TagDataClassPZ69Full();
+            ButtonUpperRightLcd.Tag = new TagDataClassPZ69Full();
+            ButtonLowerRightLcd.Tag = new TagDataClassPZ69Full();
             _buttonTagsSet = true;
         }
 
@@ -1640,6 +1642,7 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
+                HideButtonImages();
 
                 foreach (var displayValue in _radioPanelPZ69.DisplayValueHashSet)
                 {
@@ -2114,30 +2117,30 @@ namespace DCSFlightpanels
 
                     if (lcdBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition)
                     {
-                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.TopLeftLCD)
+                        if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                         {
-                            ((TagDataClassPZ69Full)ButtonTopLeftLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            ((TagDataClassPZ69Full)ButtonUpperLeftLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
                             DotTopLeftLcd.Visibility = Visibility.Visible;
                         }
 
-                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.TopRightLCD)
+                        if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                         {
-                            ((TagDataClassPZ69Full)ButtonTopRightLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            ((TagDataClassPZ69Full)ButtonUpperRightLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
                             DotTopRightLcd.Visibility = Visibility.Visible;
                         }
 
                     }
                     else if (lcdBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition)
                     {
-                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.BottomLeftLCD)
+                        if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                         {
-                            ((TagDataClassPZ69Full)ButtonBottomLeftLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            ((TagDataClassPZ69Full)ButtonLowerLeftLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
                             DotBottomLeftLcd.Visibility = Visibility.Visible;
                         }
 
-                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.BottomRightLCD)
+                        if (lcdBinding.PZ69LcdPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                         {
-                            ((TagDataClassPZ69Full)ButtonBottomRightLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            ((TagDataClassPZ69Full)ButtonLowerRightLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
                             DotBottomRightLcd.Visibility = Visibility.Visible;
                         }
                     }
@@ -2234,9 +2237,6 @@ namespace DCSFlightpanels
                         }
                     }
 
-                    if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition)
-                    {
-                    }
 
                     foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                     {
@@ -2446,6 +2446,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         TopLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosUpper.Content = UpperText + "COM1";
+                                        }
                                     });
                                 break;
                             }
@@ -2456,6 +2462,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         TopLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosUpper.Content = UpperText + "COM2";
+                                        }
                                     });
                                 break;
                             }
@@ -2466,6 +2478,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         TopLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosUpper.Content = UpperText + "NAV1";
+                                        }
                                     });
                                 break;
                             }
@@ -2476,6 +2494,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         TopLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosUpper.Content = UpperText + "NAV2";
+                                        }
                                     });
                                 break;
                             }
@@ -2486,6 +2510,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         TopLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosUpper.Content = UpperText + "ADF";
+                                        }
                                     });
                                 break;
                             }
@@ -2496,6 +2526,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         TopLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosUpper.Content = UpperText + "DME";
+                                        }
                                     });
                                 break;
                             }
@@ -2506,6 +2542,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         TopLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosUpper.Content = UpperText + "XPDR";
+                                        }
                                     });
                                 break;
                             }
@@ -2516,6 +2558,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         LowerLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosLower.Content = UpperText + "COM1";
+                                        }
                                     });
                                 break;
                             }
@@ -2526,6 +2574,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         LowerLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosLower.Content = UpperText + "COM2";
+                                        }
                                     });
                                 break;
                             }
@@ -2536,6 +2590,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         LowerLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosLower.Content = UpperText + "NAV1";
+                                        }
                                     });
                                 break;
                             }
@@ -2546,6 +2606,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         LowerLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosLower.Content = UpperText + "NAV2";
+                                        }
                                     });
                                 break;
                             }
@@ -2556,6 +2622,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         LowerLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosLower.Content = UpperText + "ADF";
+                                        }
                                     });
                                 break;
                             }
@@ -2566,6 +2638,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         LowerLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosLower.Content = UpperText + "DME";
+                                        }
                                     });
                                 break;
                             }
@@ -2576,6 +2654,12 @@ namespace DCSFlightpanels
                                     (Action)delegate
                                     {
                                         LowerLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        if (key.IsOn)
+                                        {
+                                            ClearAll(false);
+                                            ShowGraphicConfiguration();
+                                            LabelDialPosLower.Content = UpperText + "XPSR";
+                                        }
                                     });
                                 break;
                             }
@@ -2688,7 +2772,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private void HideAllImages()
+        private void HideSwitchImages()
         {
             TopLeftCom1.Visibility = Visibility.Collapsed;
             TopLeftCom2.Visibility = Visibility.Collapsed;
@@ -2714,11 +2798,20 @@ namespace DCSFlightpanels
             LowerRightSwitch.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobDec.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
+        }
 
-            DotTopLeftLcd.Visibility = Visibility.Collapsed;
-            DotBottomLeftLcd.Visibility = Visibility.Collapsed;
-            DotTopRightLcd.Visibility = Visibility.Collapsed;
-            DotBottomRightLcd.Visibility = Visibility.Collapsed;
+        private void HideButtonImages()
+        {
+                DotTopLeftLcd.Visibility = Visibility.Collapsed;
+                DotBottomLeftLcd.Visibility = Visibility.Collapsed;
+                DotTopRightLcd.Visibility = Visibility.Collapsed;
+                DotBottomRightLcd.Visibility = Visibility.Collapsed;
+        }
+
+        private void HideAllImages()
+        {
+            HideButtonImages();
+            HideSwitchImages();
         }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
@@ -2879,24 +2972,24 @@ namespace DCSFlightpanels
 
                 switch (button.Name)
                 {
-                    case "ButtonTopLeftLcd":
+                    case "ButtonUpperLeftLcd":
                         {
-                            ButtonLcdConfig(PZ69EmulatorLCDPosition.TopLeftLCD, button, "Data to display on upper left LCD");
+                            ButtonLcdConfig(PZ69LCDPosition.UPPER_ACTIVE_LEFT, "Data to display on upper left LCD");
                             break;
                         }
-                    case "ButtonBottomLeftLcd":
+                    case "ButtonLowerLeftLcd":
                         {
-                            ButtonLcdConfig(PZ69EmulatorLCDPosition.BottomLeftLCD, button, "Data to display on bottom left LCD");
+                            ButtonLcdConfig(PZ69LCDPosition.LOWER_ACTIVE_LEFT, "Data to display on bottom left LCD");
                             break;
                         }
-                    case "ButtonTopRightLcd":
+                    case "ButtonUpperRightLcd":
                         {
-                            ButtonLcdConfig(PZ69EmulatorLCDPosition.TopLeftLCD, button, "Data to display on upper right LCD");
+                            ButtonLcdConfig(PZ69LCDPosition.UPPER_STBY_RIGHT, "Data to display on upper right LCD");
                             break;
                         }
-                    case "ButtonBottomRightLcd":
+                    case "ButtonLowerRightLcd":
                         {
-                            ButtonLcdConfig(PZ69EmulatorLCDPosition.BottomLeftLCD, button, "Data to display on bottom right LCD");
+                            ButtonLcdConfig(PZ69LCDPosition.LOWER_STBY_RIGHT, "Data to display on bottom right LCD");
                             break;
                         }
                 }
@@ -2908,23 +3001,21 @@ namespace DCSFlightpanels
         }
 
 
-        private void ButtonLcdConfig(PZ69EmulatorLCDPosition pz69LCDPosition, Button button, string description)
+        private void ButtonLcdConfig(PZ69LCDPosition pz69LCDPosition, string description)
         {
             try
             {
-                if (button == null)
-                {
-                    throw new Exception("Failed to locate which button was clicked.");
-                }
                 DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow = null;
                 var dialPosition = _radioPanelPZ69.PZ69UpperDialPosition;
-                if (button.Name.Contains("Lower"))
+                Button button = null;
+                if (pz69LCDPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT ||
+                    pz69LCDPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                 {
                     dialPosition = _radioPanelPZ69.PZ69LowerDialPosition;
                 }
                 foreach (var dcsbiosBindingLCDPZ69 in _radioPanelPZ69.LCDBindings)
                 {
-                    if (dcsbiosBindingLCDPZ69.DialPosition == dialPosition && dcsbiosBindingLCDPZ69.PZ69EmulatorLCDPosition == pz69LCDPosition)
+                    if (dcsbiosBindingLCDPZ69.DialPosition == dialPosition && dcsbiosBindingLCDPZ69.PZ69LcdPosition == pz69LCDPosition)
                     {
                         if (dcsbiosBindingLCDPZ69.UseFormula)
                         {
@@ -2946,17 +3037,17 @@ namespace DCSFlightpanels
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
                         var dcsBiosOutputFormula = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, button);
+                        UpdateDCSBIOSBindingLCD(true, false, null, dcsBiosOutputFormula, pz69LCDPosition);
                     }
                     else if (dcsBiosOutputFormulaWindow.UseSingleDCSBiosControl())
                     {
                         var dcsBiosOutput = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, button);
+                        UpdateDCSBIOSBindingLCD(false, false, dcsBiosOutput, null, pz69LCDPosition);
                     }
                     else
                     {
                         //Delete config
-                        UpdateDCSBIOSBindingLCD(false, true, null, null, button);
+                        UpdateDCSBIOSBindingLCD(false, true, null, null, pz69LCDPosition);
                     }
                 }
             }
@@ -2967,81 +3058,82 @@ namespace DCSFlightpanels
         }
 
 
-        private void UpdateDCSBIOSBindingLCD(bool useFormula, bool deleteConfig, DCSBIOSOutput dcsbiosOutput, DCSBIOSOutputFormula dcsbiosOutputFormula, Button button)
+        private void UpdateDCSBIOSBindingLCD(bool useFormula, bool deleteConfig, DCSBIOSOutput dcsbiosOutput, DCSBIOSOutputFormula dcsbiosOutputFormula, PZ69LCDPosition pz69LCDPosition)
         {
             try
             {
                 if (deleteConfig)
                 {
-                    if (button.Equals(ButtonTopLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                     {
                         DotTopLeftLcd.Visibility = Visibility.Hidden;
-                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(RadioPanelPZ69Area.UpperArea, PZ69EmulatorLCDPosition.TopLeftLCD);
+                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                     }
 
-                    if (button.Equals(ButtonBottomLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                     {
                         DotBottomLeftLcd.Visibility = Visibility.Hidden;
-                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(RadioPanelPZ69Area.LowerArea, PZ69EmulatorLCDPosition.BottomLeftLCD);
+                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                     }
 
-                    if (button.Equals(ButtonTopRightLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                     {
                         DotTopRightLcd.Visibility = Visibility.Hidden;
-                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(RadioPanelPZ69Area.UpperArea, PZ69EmulatorLCDPosition.TopRightLCD);
+                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(PZ69LCDPosition.UPPER_STBY_RIGHT);
                     }
 
-                    if (button.Equals(ButtonBottomRightLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                     {
                         DotBottomRightLcd.Visibility = Visibility.Hidden;
-                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(RadioPanelPZ69Area.LowerArea, PZ69EmulatorLCDPosition.BottomRightLCD);
+                        _radioPanelPZ69.DeleteDCSBIOSLcdBinding(PZ69LCDPosition.LOWER_STBY_RIGHT);
                     }
                 }
 
                 if (!useFormula)
                 {
-                    if (button.Equals(ButtonTopLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                     {
                         DotTopLeftLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.UpperArea, dcsbiosOutput, PZ69EmulatorLCDPosition.TopLeftLCD);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                     }
-                    if (button.Equals(ButtonBottomLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                     {
                         DotBottomLeftLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.LowerArea, dcsbiosOutput, PZ69EmulatorLCDPosition.BottomLeftLCD);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                     }
-                    if (button.Equals(ButtonTopLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                     {
-                        DotTopLeftLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.UpperArea, dcsbiosOutput, PZ69EmulatorLCDPosition.TopLeftLCD);
+                        DotTopRightLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.UPPER_STBY_RIGHT);
                     }
-                    if (button.Equals(ButtonBottomLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                     {
-                        DotBottomLeftLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.LowerArea, dcsbiosOutput, PZ69EmulatorLCDPosition.BottomLeftLCD);
+                        DotBottomRightLcd.Visibility = dcsbiosOutput == null ? Visibility.Collapsed : Visibility.Visible;
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutput, PZ69LCDPosition.LOWER_STBY_RIGHT);
                     }
                 }
+
                 if (useFormula)
                 {
-                    if (button.Equals(ButtonTopLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
                     {
                         DotTopLeftLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.UpperArea, dcsbiosOutputFormula, PZ69EmulatorLCDPosition.TopLeftLCD);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                     }
-                    if (button.Equals(ButtonBottomLeftLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
                     {
                         DotBottomLeftLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.LowerArea, dcsbiosOutputFormula, PZ69EmulatorLCDPosition.BottomLeftLCD);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                     }
-                    if (button.Equals(ButtonTopRightLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
                     {
                         DotTopRightLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.UpperArea, dcsbiosOutputFormula, PZ69EmulatorLCDPosition.TopRightLCD);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.UPPER_STBY_RIGHT);
                     }
-                    if (button.Equals(ButtonBottomRightLcd))
+                    if (pz69LCDPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                     {
                         DotBottomRightLcd.Visibility = dcsbiosOutputFormula == null ? Visibility.Collapsed : Visibility.Visible;
-                        _radioPanelPZ69.AddOrUpdateLCDBinding(RadioPanelPZ69Area.LowerArea, dcsbiosOutputFormula, PZ69EmulatorLCDPosition.BottomRightLCD);
+                        _radioPanelPZ69.AddOrUpdateLCDBinding(dcsbiosOutputFormula, PZ69LCDPosition.LOWER_STBY_RIGHT);
                     }
                 }
             }

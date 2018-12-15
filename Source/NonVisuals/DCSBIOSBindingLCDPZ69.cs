@@ -3,22 +3,7 @@ using DCS_BIOS;
 
 namespace NonVisuals
 {
-    [Flags]
-    public enum PZ69EmulatorLCDPosition 
-    {
-        TopLeftLCD = 1,
-        TopRightLCD = 2,
-        BottomLeftLCD = 4,
-        BottomRightLCD = 8
-    }
-
-    [Flags]
-    public enum PZ69Zone
-    {
-        UpperArea = 0x3,
-        LowerArea = 0xC
-    }
-
+    
     public class DCSBIOSBindingLCDPZ69
     {
         /*
@@ -32,7 +17,7 @@ namespace NonVisuals
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
         private const string SeparatorChars = "\\o/";
-        private PZ69EmulatorLCDPosition _pz69LCDPosition;
+        private PZ69LCDPosition _pz69LCDPosition;
 
         internal void ImportSettings(string settings)
         {
@@ -53,7 +38,7 @@ namespace NonVisuals
                 //[1]
                 //{LowerLCD}
                 var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
-                _pz69LCDPosition = (PZ69EmulatorLCDPosition)Enum.Parse(typeof(PZ69EmulatorLCDPosition), param1);
+                _pz69LCDPosition = (PZ69LCDPosition)Enum.Parse(typeof(PZ69LCDPosition), param1);
 
                 //[2]
                 //DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
@@ -73,7 +58,7 @@ namespace NonVisuals
                 //[1]
                 //{UpperLCD}
                 var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
-                _pz69LCDPosition = (PZ69EmulatorLCDPosition)Enum.Parse(typeof(PZ69EmulatorLCDPosition), param1);
+                _pz69LCDPosition = (PZ69LCDPosition)Enum.Parse(typeof(PZ69LCDPosition), param1);
 
                 //[2]
                 //DCSBiosOutputFormula{ANT_EGIHQTOD+10}
@@ -129,7 +114,7 @@ namespace NonVisuals
             return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutput.ToString();
         }
 
-        public PZ69EmulatorLCDPosition PZ69EmulatorLCDPosition
+        public PZ69LCDPosition PZ69LcdPosition
         {
             get => _pz69LCDPosition;
             set => _pz69LCDPosition = value;

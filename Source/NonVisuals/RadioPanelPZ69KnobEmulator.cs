@@ -4,12 +4,6 @@ using System.Collections.Generic;
 namespace NonVisuals
 {
 
-    public enum RadioPanelPZ69Area
-    {
-        UpperArea = 0,
-        LowerArea = 2
-    }
-
     public enum PZ69DialPosition
     {
         UpperCOM1 = 0,
