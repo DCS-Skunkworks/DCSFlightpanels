@@ -3007,7 +3007,6 @@ namespace DCSFlightpanels
             {
                 DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow = null;
                 var dialPosition = _radioPanelPZ69.PZ69UpperDialPosition;
-                Button button = null;
                 if (pz69LCDPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT ||
                     pz69LCDPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
                 {

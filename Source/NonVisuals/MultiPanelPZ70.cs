@@ -978,31 +978,8 @@ namespace NonVisuals
             _knobSensitivitySkipper = 0;
             return false;
         }
-        /*
-        public void ClearAllBindings(MultiPanelPZ70KnobOnOff multiPanelPZ70KnobOnOff)
-        {
-            //This must accept lists
-            foreach (var knobBinding in _knobBindings)
-            {
-                if (knobBinding.MultiPanelPZ70Knob == multiPanelPZ70KnobOnOff.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelPZ70KnobOnOff.On)
-                {
-                    knobBinding.OSKeyPress = null;
-                }
-            }
-            foreach (var dcsBiosBinding in _dcsBiosBindings)
-            {
-                if (dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70KnobOnOff.MultiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == multiPanelPZ70KnobOnOff.On)
-                {
-                    dcsBiosBinding.DCSBIOSInputs.Clear();
-                }
-            }
-            Common.DebugP("MultiPanelPZ70 _knobBindings : " + _knobBindings.Count);
-            Common.DebugP("MultiPanelPZ70 _dcsBiosBindings : " + _dcsBiosBindings.Count);
-            IsDirtyMethod();
-        }
-        */
 
-        public void UpdateLCD()
+        private void UpdateLCD()
         {
             //345
             //15600
@@ -1026,8 +1003,8 @@ namespace NonVisuals
 
             bytes[11] = _lcdButtonByteListHandler.GetButtonByte(PZ70_DialPosition);
 
-            bool foundUpperValue = false;
-            bool foundLowerValue = false;
+            var foundUpperValue = false;
+            var foundLowerValue = false;
 
             var upperValue = 0;
             var lowerValue = 0;

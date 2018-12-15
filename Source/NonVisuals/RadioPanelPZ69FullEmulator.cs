@@ -29,7 +29,7 @@ namespace NonVisuals
         private bool _isFirstNotification = true;
         private readonly byte[] _oldRadioPanelValue = { 0, 0, 0 };
         private readonly byte[] _newRadioPanelValue = { 0, 0, 0 };
-        private readonly object _dcsBiosDataReceivedLock = new object();
+        private readonly object _lcdDataVariablesLockObject = new object();
 
         private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesUpper = new List<RadioPanelPZ69KnobsEmulator>() { RadioPanelPZ69KnobsEmulator.UpperCOM1, RadioPanelPZ69KnobsEmulator.UpperCOM2, RadioPanelPZ69KnobsEmulator.UpperNAV1, RadioPanelPZ69KnobsEmulator.UpperNAV2, RadioPanelPZ69KnobsEmulator.UpperADF, RadioPanelPZ69KnobsEmulator.UpperDME, RadioPanelPZ69KnobsEmulator.UpperXPDR };
         private readonly List<RadioPanelPZ69KnobsEmulator> _panelPZ69DialModesLower = new List<RadioPanelPZ69KnobsEmulator>() { RadioPanelPZ69KnobsEmulator.LowerCOM1, RadioPanelPZ69KnobsEmulator.LowerCOM2, RadioPanelPZ69KnobsEmulator.LowerNAV1, RadioPanelPZ69KnobsEmulator.LowerNAV2, RadioPanelPZ69KnobsEmulator.LowerADF, RadioPanelPZ69KnobsEmulator.LowerDME, RadioPanelPZ69KnobsEmulator.LowerXPDR };
@@ -39,6 +39,7 @@ namespace NonVisuals
         private double _lowerStandby = -1;
         private PZ69DialPosition _pz69UpperDialPosition = PZ69DialPosition.UpperCOM1;
         private PZ69DialPosition _pz69LowerDialPosition = PZ69DialPosition.LowerCOM1;
+        private long _doUpdatePanelLCD;
 
         public RadioPanelPZ69FullEmulator(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -172,12 +173,38 @@ namespace NonVisuals
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-
-            lock (_dcsBiosDataReceivedLock)
+            UpdateCounter(e.Address, e.Data);
+            foreach (var dcsbiosBindingLCD in _dcsBiosLcdBindings)
             {
-                UpdateCounter(e.Address, e.Data);
+                if (!dcsbiosBindingLCD.UseFormula && dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition && e.Address == dcsbiosBindingLCD.DCSBIOSOutputObject.Address)
+                {
+                    lock (_lcdDataVariablesLockObject)
+                    {
+                        var tmp = dcsbiosBindingLCD.CurrentValue;
+                        dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
+                        if (tmp != dcsbiosBindingLCD.CurrentValue)
+                        {
+                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                        }
+                    }
+                }
+                else if (dcsbiosBindingLCD.DialPosition == _pz70DialPosition && dcsbiosBindingLCD.UseFormula)
+                {
+                    if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
+                    {
+                        lock (_lcdDataVariablesLockObject)
+                        {
+                            var tmp = dcsbiosBindingLCD.CurrentValue;
+                            dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
+                            if (tmp != dcsbiosBindingLCD.CurrentValue)
+                            {
+                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
+                            }
+                        }
+                    }
+                }
             }
-
+            ShowFrequenciesOnPanel();
         }
 
         public override void ClearSettings()
@@ -353,7 +380,7 @@ namespace NonVisuals
                             }
                         }
                     }
-
+                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
                     ShowFrequenciesOnPanel();
                 }
             }
@@ -361,42 +388,55 @@ namespace NonVisuals
 
         private void ShowFrequenciesOnPanel()
         {
-            var bytes = new byte[21];
-            bytes[0] = 0x0;
-            if (_upperActive < 0)
+            if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
             {
-                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                return;
             }
-            else
+            visa lcd data om finns, annars statiskt.
+            lock (_lcdDataVariablesLockObject)
             {
-                SetPZ69DisplayBytesDefault(ref bytes, _upperActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-            }
-            if (_upperStandby < 0)
-            {
-                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
-            }
-            else
-            {
-                SetPZ69DisplayBytesDefault(ref bytes, _upperStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
-            }
-            if (_lowerActive < 0)
-            {
-                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-            }
-            else
-            {
-                SetPZ69DisplayBytesDefault(ref bytes, _lowerActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-            }
-            if (_lowerStandby < 0)
-            {
-                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
-            }
-            else
-            {
-                SetPZ69DisplayBytesDefault(ref bytes, _lowerStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                var bytes = new byte[21];
+                bytes[0] = 0x0;
+                if (_upperActive < 0)
+                {
+                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                }
+                else
+                {
+                    SetPZ69DisplayBytesDefault(ref bytes, _upperActive, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                }
+
+                if (_upperStandby < 0)
+                {
+                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                }
+                else
+                {
+                    SetPZ69DisplayBytesDefault(ref bytes, _upperStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                }
+
+                if (_lowerActive < 0)
+                {
+                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                }
+                else
+                {
+                    SetPZ69DisplayBytesDefault(ref bytes, _lowerActive, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                }
+
+                if (_lowerStandby < 0)
+                {
+                    SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                }
+                else
+                {
+                    SetPZ69DisplayBytesDefault(ref bytes, _lowerStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                }
+
+                SendLCDData(bytes);
             }
 
-            SendLCDData(bytes);
+            Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
 
 
@@ -700,10 +740,10 @@ namespace NonVisuals
 
         public void DeleteDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob)
         {
-            var pz69DialPosition = PZ69DialPosition.UpperCOM1;
+            var pz69DialPosition = _pz69UpperDialPosition;
             if (IsLowerArea(knob))
             {
-                pz69DialPosition = _pz69UpperDialPosition;
+                pz69DialPosition = _pz69LowerDialPosition;
             }
             //Removes config
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -829,10 +869,6 @@ namespace NonVisuals
         private HashSet<object> GetHashSetOfSwitchedKeys(byte[] oldValue, byte[] newValue)
         {
             var result = new HashSet<object>();
-
-
-
-
             for (var i = 0; i < 3; i++)
             {
                 var oldByte = oldValue[i];
