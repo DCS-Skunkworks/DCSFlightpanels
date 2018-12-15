@@ -37,7 +37,7 @@ namespace DCSFlightpanels
 
         public bool ContainsDCSBIOSBinding()
         {
-            return _dcsbiosBindingPZ69 != null && _dcsbiosBindingPZ69.HasBinding;
+            return _dcsbiosBindingPZ69 != null && _dcsbiosBindingPZ69.HasBinding();
         }
 
         public string GetTextBoxKeyPressInfo()

@@ -177,5 +177,10 @@ namespace NonVisuals
             get => string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description;
             set => _description = value;
         }
+
+        public bool HasBinding()
+        {
+            return DCSBIOSInputs != null && DCSBIOSInputs.Count > 0;
+        }
     }
 }

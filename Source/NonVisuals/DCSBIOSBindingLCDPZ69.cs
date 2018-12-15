@@ -3,25 +3,22 @@ using DCS_BIOS;
 
 namespace NonVisuals
 {
-    public enum PZ69EmulatorLCDPosition
+    [Flags]
+    public enum PZ69EmulatorLCDPosition 
     {
         TopLeftLCD = 1,
-        BottomLeftLCD = 2,
-        TopRightLCD = 4,
+        TopRightLCD = 2,
+        BottomLeftLCD = 4,
         BottomRightLCD = 8
     }
-    /*
-    public enum RadioPanelPZ69DialPosition
+
+    [Flags]
+    public enum PZ69Zone
     {
-        COM1 = 0,
-        COM2 = 2,
-        NAV1 = 4,
-        NAV2 = 8,
-        ADF = 16,
-        DME = 32,
-        XPDR = 64
+        UpperArea = 0x3,
+        LowerArea = 0xC
     }
-    */
+
     public class DCSBIOSBindingLCDPZ69
     {
         /*
