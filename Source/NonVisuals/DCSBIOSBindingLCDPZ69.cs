@@ -10,8 +10,8 @@ namespace NonVisuals
         TopRightLCD = 4,
         BottomRightLCD = 8
     }
-
-    public enum PZ69DialPosition
+    /*
+    public enum RadioPanelPZ69DialPosition
     {
         COM1 = 0,
         COM2 = 2,
@@ -21,7 +21,7 @@ namespace NonVisuals
         DME = 32,
         XPDR = 64
     }
-
+    */
     public class DCSBIOSBindingLCDPZ69
     {
         /*
@@ -43,14 +43,14 @@ namespace NonVisuals
             {
                 throw new ArgumentException("Import string empty. (DCSBIOSBindingPZ69)");
             }
-            if (settings.StartsWith("RadioPanelEmulatorDCSBIOSLCD{") && settings.Contains("DCSBiosOutput{"))
+            if (settings.StartsWith("RadioPanelDCSBIOSLCD{") && settings.Contains("DCSBiosOutput{"))
             {
-                //RadioPanelEmulatorDCSBIOSLCD{ALT}\o/{LowerLCD}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
+                //RadioPanelDCSBIOSLCD{COM1}\o/{LowerLCD}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
-                //RadioPanelEmulatorDCSBIOSLCD{ALT}
-                var param0 = parameters[0].Replace("RadioPanelEmulatorDCSBIOSLCD{", "").Replace("}", "");
+                //RadioPanelDCSBIOSLCD{COM1}
+                var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", "").Replace("}", "");
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
 
                 //[1]
@@ -63,14 +63,14 @@ namespace NonVisuals
                 _dcsbiosOutput = new DCSBIOSOutput();
                 _dcsbiosOutput.ImportString(parameters[2]);
             }
-            if (settings.StartsWith("RadioPanelEmulatorDCSBIOSLCD{") && settings.Contains("DCSBiosOutputFormula{"))
+            if (settings.StartsWith("RadioPanelDCSBIOSLCD{") && settings.Contains("DCSBiosOutputFormula{"))
             {
-                //RadioPanelEmulatorDCSBIOSLCD{ALT}\o/{UpperLCD}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
+                //RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCD}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
-                //MultiPanelDCSBIOSFormulaLCD{ALT}
-                var param0 = parameters[0].Replace("RadioPanelEmulatorDCSBIOSLCD{", "").Replace("}", "").Trim();
+                //MultiPanelDCSBIOSFormulaLCD{COM1}
+                var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", "").Replace("}", "").Trim();
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
 
                 //[1]
@@ -126,10 +126,10 @@ namespace NonVisuals
             }
             if (_dcsbiosOutputFormula != null)
             {
-                //RadioPanelEmulatorDCSBIOSLCD{ALT}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "RadioPanelEmulatorDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
+                //RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
+                return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
             }
-            return "RadioPanelEmulatorDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutput.ToString();
+            return "RadioPanelDCSBIOSLCD{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" + SeparatorChars + "{" + _pz69LCDPosition + "}" + SeparatorChars + _dcsbiosOutput.ToString();
         }
 
         public PZ69EmulatorLCDPosition PZ69EmulatorLCDPosition

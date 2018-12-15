@@ -24,6 +24,7 @@ namespace DCSFlightpanels
         private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
         private bool _textBoxTagsSet;
+        private bool _buttonTagsSet;
         private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
 
         public RadioPanelPZ69UserControlFullEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
@@ -48,6 +49,7 @@ namespace DCSFlightpanels
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
                 SetTextBoxTagObjects();
+                SetButtonTagObjects();
                 SetContextMenuClickHandlers();
                 _userControlLoaded = true;
                 ShowGraphicConfiguration();
@@ -239,9 +241,22 @@ namespace DCSFlightpanels
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
-                textBox.Tag = new TagDataClassPZ69();
+                textBox.Tag = new TagDataClassPZ69Full();
             }
             _textBoxTagsSet = true;
+        }
+
+        private void SetButtonTagObjects()
+        {
+            if (_buttonTagsSet)
+            {
+                return;
+            }
+            ButtonTopLeftLcd.Tag = new TagDataClassPZ69Full();
+            ButtonBottomLeftLcd.Tag = new TagDataClassPZ69Full();
+            ButtonTopRightLcd.Tag = new TagDataClassPZ69Full();
+            ButtonBottomRightLcd.Tag = new TagDataClassPZ69Full();
+            _buttonTagsSet = true;
         }
 
         private void MenuContextEditTextBoxClick(object sender, RoutedEventArgs e)
@@ -254,9 +269,9 @@ namespace DCSFlightpanels
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 SequenceWindow sequenceWindow;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                 {
-                    sequenceWindow = new SequenceWindow(textBox.Text, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    sequenceWindow = new SequenceWindow(textBox.Text, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 else
                 {
@@ -277,8 +292,8 @@ namespace DCSFlightpanels
                     if (sequenceList.Count > 1)
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
                         {
                             textBox.Text = sequenceWindow.GetInformation;
@@ -288,10 +303,10 @@ namespace DCSFlightpanels
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        ((TagDataClassPZ69)textBox.Tag).ClearAll();
+                        ((TagDataClassPZ69Full)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
@@ -315,9 +330,9 @@ namespace DCSFlightpanels
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 BIPLinkWindow bipLinkWindow;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsBIPLink())
                 {
-                    var bipLink = ((TagDataClassPZ69)textBox.Tag).BIPLink;
+                    var bipLink = ((TagDataClassPZ69Full)textBox.Tag).BIPLink;
                     bipLinkWindow = new BIPLinkWindow(bipLink);
                 }
                 else
@@ -328,7 +343,7 @@ namespace DCSFlightpanels
                 bipLinkWindow.ShowDialog();
                 if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null && bipLinkWindow.BIPLink.BIPLights.Count > 0)
                 {
-                    ((TagDataClassPZ69)textBox.Tag).BIPLink = (BIPLinkPZ69)bipLinkWindow.BIPLink;
+                    ((TagDataClassPZ69Full)textBox.Tag).BIPLink = (BIPLinkPZ69)bipLinkWindow.BIPLink;
                     UpdateBipLinkBindings(textBox);
                 }
             }
@@ -345,110 +360,110 @@ namespace DCSFlightpanels
             {
                 if (textBox.Equals(TextBoxUpperCom1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM1, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM1, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperCom2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM2, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperCOM2, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperNav1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperNav2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV2, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV2, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperADF))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperADF, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperADF, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperDME))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperDME, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperDME, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperXPDR))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperXPDR, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperXPDR, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerCom1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM1, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM1, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerCom2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM2, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerCOM2, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerNav1))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerNav2))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerNAV2, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerNAV2, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerADF))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerADF, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerADF, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerDME))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerDME, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerDME, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerXPDR))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerXPDR, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerXPDR, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
 
 
 
                 if (textBox.Equals(TextBoxUpperLargePlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperSmallPlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperSmallMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperActStbyOn))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxUpperActStbyOff))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69)textBox.Tag).GetKeySequence(), false);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence(), false);
                 }
                 if (textBox.Equals(TextBoxLowerLargePlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerSmallPlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerActStbyOn))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence());
                 }
                 if (textBox.Equals(TextBoxLowerActStbyOff))
                 {
-                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69)textBox.Tag).GetKeySequence(), false);
+                    _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).GetKeySequence(), false);
                 }
             }
             catch (Exception ex)
@@ -464,110 +479,110 @@ namespace DCSFlightpanels
             {
                 if (textBox.Equals(TextBoxUpperCom1))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperCOM1, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperCOM1, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperCom2))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperCOM2, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperCOM2, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperNav1))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperNav2))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperNAV2, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperNAV2, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperADF))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperADF, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperADF, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperDME))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperDME, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperDME, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperXPDR))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperXPDR, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperXPDR, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerCom1))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerCOM1, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerCOM1, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerCom2))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerCOM2, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerCOM2, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerNav1))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperNAV1, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerNav2))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerNAV2, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerNAV2, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerADF))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerADF, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerADF, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerDME))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerDME, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerDME, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerXPDR))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerXPDR, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerXPDR, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
 
 
 
                 if (textBox.Equals(TextBoxUpperLargePlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperSmallPlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperSmallMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperActStbyOn))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxUpperActStbyOff))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69)textBox.Tag).BIPLink, false);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.UpperFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).BIPLink, false);
                 }
                 if (textBox.Equals(TextBoxLowerLargePlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerSmallPlus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerLargeMinus))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerActStbyOn))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69)textBox.Tag).BIPLink);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).BIPLink);
                 }
                 if (textBox.Equals(TextBoxLowerActStbyOff))
                 {
-                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69)textBox.Tag).BIPLink, false);
+                    _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator.LowerFreqSwitch, ((TagDataClassPZ69Full)textBox.Tag).BIPLink, false);
                 }
             }
             catch (Exception ex)
@@ -582,13 +597,13 @@ namespace DCSFlightpanels
             try
             {
                 KeyPressLength keyPressLength;
-                if (!((TagDataClassPZ69)textBox.Tag).ContainsOSKeyPress() || ((TagDataClassPZ69)textBox.Tag).KeyPress.KeySequence.Count == 0)
+                if (!((TagDataClassPZ69Full)textBox.Tag).ContainsOSKeyPress() || ((TagDataClassPZ69Full)textBox.Tag).KeyPress.KeySequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
                 else
                 {
-                    keyPressLength = ((TagDataClassPZ69)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                    keyPressLength = ((TagDataClassPZ69Full)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
                 if (textBox.Equals(TextBoxUpperCom1))
                 {
@@ -849,11 +864,11 @@ namespace DCSFlightpanels
 
 
 
-                if (!((TagDataClassPZ69)textBox.Tag).ContainsSingleKey())
+                if (!((TagDataClassPZ69Full)textBox.Tag).ContainsSingleKey())
                 {
                     return;
                 }
-                var keyPressLength = ((TagDataClassPZ69)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                var keyPressLength = ((TagDataClassPZ69Full)textBox.Tag).KeyPress.GetLengthOfKeyPress();
 
                 foreach (MenuItem item in contextMenu.Items)
                 {
@@ -934,7 +949,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                var tagHolderClass = (TagDataClassPZ69)textBox.Tag;
+                var tagHolderClass = (TagDataClassPZ69Full)textBox.Tag;
                 textBox.Text = "";
                 tagHolderClass.ClearAll();
             }
@@ -1016,7 +1031,7 @@ namespace DCSFlightpanels
                 {
                     item.Visibility = Visibility.Collapsed;
                 }
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                 {
                     // 2) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1031,7 +1046,7 @@ namespace DCSFlightpanels
                         }
                     }
                 }
-                else if (((TagDataClassPZ69)textBox.Tag).IsEmpty())
+                else if (((TagDataClassPZ69Full)textBox.Tag).IsEmpty())
                 {
                     // 4) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1050,7 +1065,7 @@ namespace DCSFlightpanels
                         }
                     }
                 }
-                else if (((TagDataClassPZ69)textBox.Tag).ContainsSingleKey())
+                else if (((TagDataClassPZ69Full)textBox.Tag).ContainsSingleKey())
                 {
                     // 5) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1071,7 +1086,7 @@ namespace DCSFlightpanels
                         }
                     }
                 }
-                else if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+                else if (((TagDataClassPZ69Full)textBox.Tag).ContainsBIPLink())
                 {
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1119,59 +1134,59 @@ namespace DCSFlightpanels
                 var contextMenuItem = (MenuItem)sender;
                 if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemHalfSecond")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecond")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecondAndHalf")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwoSeconds")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThreeSeconds")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFourSeconds")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFiveSecs")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTenSecs")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFifteenSecs")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwentySecs")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtySecs")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFortySecs")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSixtySecs")
                 {
-                    ((TagDataClassPZ69)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
+                    ((TagDataClassPZ69Full)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
                 }
 
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
@@ -1190,31 +1205,31 @@ namespace DCSFlightpanels
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-                    if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                    if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.KeySequence.Clear();
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    else if (((TagDataClassPZ69)textBox.Tag).ContainsSingleKey())
+                    else if (((TagDataClassPZ69Full)textBox.Tag).ContainsSingleKey())
                     {
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.KeySequence.Clear();
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+                    if (((TagDataClassPZ69Full)textBox.Tag).ContainsBIPLink())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassPZ69)textBox.Tag).BIPLink.BIPLights.Clear();
+                        ((TagDataClassPZ69Full)textBox.Tag).BIPLink.BIPLights.Clear();
                         textBox.Background = Brushes.White;
                         UpdateBipLinkBindings(textBox);
                     }
@@ -1258,7 +1273,7 @@ namespace DCSFlightpanels
         private void TextBoxLostFocus(object sender, RoutedEventArgs e)
         {
             var textBox = (TextBox)sender;
-            if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+            if (((TagDataClassPZ69Full)textBox.Tag).ContainsBIPLink())
             {
                 ((TextBox)sender).Background = Brushes.Bisque;
             }
@@ -1276,7 +1291,7 @@ namespace DCSFlightpanels
                 var textBox = ((TextBox)sender);
 
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                 {
                     return;
                 }
@@ -1358,7 +1373,7 @@ namespace DCSFlightpanels
             {
                 //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
                 var textBox = (TextBox)sender;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
                 }
@@ -1516,7 +1531,7 @@ namespace DCSFlightpanels
             {
                 //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
                 var textBox = (TextBox)sender;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
                 }
@@ -1538,7 +1553,7 @@ namespace DCSFlightpanels
             {
                 var textBox = ((TextBox)sender);
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                 {
                     return;
                 }
@@ -1789,15 +1804,15 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperCom1.Tag).KeyPress = keyBinding.OSKeyPress;
-                            TextBoxUpperCom1.Text = ((TagDataClassPZ69)TextBoxUpperCom1.Tag).GetTextBoxKeyPressInfo();
+                            ((TagDataClassPZ69Full)TextBoxUpperCom1.Tag).KeyPress = keyBinding.OSKeyPress;
+                            TextBoxUpperCom1.Text = ((TagDataClassPZ69Full)TextBoxUpperCom1.Tag).GetTextBoxKeyPressInfo();
                         }
                     }
                     if (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM2)
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperCom2.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperCom2.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperCom2.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1805,7 +1820,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperNav1.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperNav1.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperNav1.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1813,7 +1828,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperNav2.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperNav2.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperNav2.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1821,7 +1836,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperADF.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperADF.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperADF.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1830,7 +1845,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperDME.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperDME.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperDME.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1838,7 +1853,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperXPDR.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperXPDR.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperXPDR.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
 
@@ -1847,7 +1862,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperLargePlus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperLargePlus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperLargePlus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1855,7 +1870,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperLargeMinus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperLargeMinus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperLargeMinus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1863,7 +1878,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperSmallPlus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperSmallPlus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperSmallPlus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1871,7 +1886,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperSmallMinus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxUpperSmallMinus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxUpperSmallMinus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1881,7 +1896,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxUpperActStbyOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOn.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxUpperActStbyOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1889,7 +1904,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxUpperActStbyOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOff.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxUpperActStbyOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1900,7 +1915,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerCom1.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerCom1.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerCom1.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1911,7 +1926,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerCom2.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerCom2.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerCom2.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1922,7 +1937,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerNav1.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerNav1.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerNav1.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1933,7 +1948,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerNav2.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerNav2.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerNav2.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1944,7 +1959,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerADF.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerADF.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerADF.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1956,7 +1971,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerDME.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerDME.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerDME.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1968,7 +1983,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerXPDR.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerXPDR.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerXPDR.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -1977,7 +1992,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxLowerLargePlus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxLowerLargePlus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxLowerLargePlus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1985,7 +2000,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxLowerLargeMinus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxLowerLargeMinus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxLowerLargeMinus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -1993,7 +2008,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxLowerSmallPlus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxLowerSmallPlus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxLowerSmallPlus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -2001,7 +2016,7 @@ namespace DCSFlightpanels
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ69)TextBoxLowerSmallMinus.Tag).KeyPress = keyBinding.OSKeyPress;
+                            ((TagDataClassPZ69Full)TextBoxLowerSmallMinus.Tag).KeyPress = keyBinding.OSKeyPress;
                             TextBoxLowerSmallMinus.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                         }
                     }
@@ -2011,7 +2026,7 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerActStbyOn.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOn.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerActStbyOn.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
@@ -2019,180 +2034,299 @@ namespace DCSFlightpanels
                         {
                             if (keyBinding.OSKeyPress != null)
                             {
-                                ((TagDataClassPZ69)TextBoxLowerActStbyOff.Tag).KeyPress = keyBinding.OSKeyPress;
+                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOff.Tag).KeyPress = keyBinding.OSKeyPress;
                                 TextBoxLowerActStbyOff.Text = keyBinding.OSKeyPress.GetSimpleVirtualKeyCodesAsString();
                             }
                         }
                     }
                 }
 
-
-                foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
+                foreach (var lcdBinding in _radioPanelPZ69.LCDBindings)
                 {
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM1)
+                    if (!lcdBinding.HasBinding)
                     {
-                        ((TagDataClassPZ69)TextBoxUpperCom1.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperCom1.Background = Brushes.Bisque;
-
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperCom2.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperCom2.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperNav1.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperNav1.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperNav2.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperNav2.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperADF.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperADF.Background = Brushes.Bisque;
+                        continue;
                     }
 
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
+                    if (lcdBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition)
                     {
-                        ((TagDataClassPZ69)TextBoxUpperDME.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperDME.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperXPDR.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperXPDR.Background = Brushes.Bisque;
+                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.TopLeftLCD)
+                        {
+                            ((TagDataClassPZ69Full)ButtonTopLeftLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            DotTopLeftLcd.Visibility = Visibility.Visible;
+                        }
+                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.TopRightLCD)
+                        {
+                            ((TagDataClassPZ69Full)ButtonTopRightLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            DotTopRightLcd.Visibility = Visibility.Visible;
+                        }
 
                     }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc)
+                    else if (lcdBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition)
                     {
-                        ((TagDataClassPZ69)TextBoxUpperLargePlus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperLargePlus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperLargeMinus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperLargeMinus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperSmallPlus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperSmallPlus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec)
-                    {
-                        ((TagDataClassPZ69)TextBoxUpperSmallMinus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxUpperSmallMinus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
+                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.BottomLeftLCD)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperActStbyOn.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxUpperActStbyOn.Background = Brushes.Bisque;
+                            ((TagDataClassPZ69Full)ButtonBottomLeftLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            DotBottomLeftLcd.Visibility = Visibility.Visible;
                         }
-                        else
+                        if (lcdBinding.PZ69EmulatorLCDPosition == PZ69EmulatorLCDPosition.BottomRightLCD)
                         {
-                            ((TagDataClassPZ69)TextBoxUpperActStbyOff.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxUpperActStbyOff.Background = Brushes.Bisque;
-                        }
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM1)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerCom1.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerCom1.Background = Brushes.Bisque;
-                        }
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM2)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerCom2.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerCom2.Background = Brushes.Bisque;
-                        }
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV1)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerNav1.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerNav1.Background = Brushes.Bisque;
-                        }
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV2)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerNav2.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerNav2.Background = Brushes.Bisque;
-                        }
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerADF)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerADF.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerADF.Background = Brushes.Bisque;
-                        }
-                    }
-
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerDME)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerDME.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerDME.Background = Brushes.Bisque;
-                        }
-                    }
-
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerXPDR)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerXPDR.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerXPDR.Background = Brushes.Bisque;
-                        }
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc)
-                    {
-                        ((TagDataClassPZ69)TextBoxLowerLargePlus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxLowerLargePlus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec)
-                    {
-                        ((TagDataClassPZ69)TextBoxLowerLargeMinus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxLowerLargeMinus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc)
-                    {
-                        ((TagDataClassPZ69)TextBoxLowerSmallPlus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxLowerSmallPlus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec)
-                    {
-                        ((TagDataClassPZ69)TextBoxLowerSmallMinus.Tag).BIPLink = bipLinkPZ69;
-                        TextBoxLowerSmallMinus.Background = Brushes.Bisque;
-                    }
-                    if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerFreqSwitch)
-                    {
-                        if (bipLinkPZ69.WhenTurnedOn)
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerActStbyOn.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerActStbyOn.Background = Brushes.Bisque;
-                        }
-                        else
-                        {
-                            ((TagDataClassPZ69)TextBoxLowerActStbyOff.Tag).BIPLink = bipLinkPZ69;
-                            TextBoxLowerActStbyOff.Background = Brushes.Bisque;
+                            ((TagDataClassPZ69Full)ButtonBottomRightLcd.Tag).DCSBIOSBindingLCD = lcdBinding;
+                            DotBottomRightLcd.Visibility = Visibility.Visible;
                         }
                     }
                 }
-            }
+
+                foreach (var dcsbiosBinding in _radioPanelPZ69.DCSBIOSBindings)
+                {
+                    if (!dcsbiosBinding.HasBinding)
+                    {
+                        continue;
+                    }
+
+                    if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition)
+                    {
+                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM1)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperCom1.Tag).DCSBIOSBinding = dcsbiosBinding;
+                            TextBoxUpperCom1.Text = dcsbiosBinding.Description;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperCom2.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperCom2.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperNav1.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperNav1.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperNav2.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperNav2.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperADF.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperADF.Background = Brushes.Bisque;
+                        }
+
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperDME.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperDME.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperXPDR.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperXPDR.Background = Brushes.Bisque;
+
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperLargePlus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperLargePlus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperLargeMinus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperLargeMinus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperSmallPlus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperSmallPlus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperSmallMinus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperSmallMinus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOn.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxUpperActStbyOn.Background = Brushes.Bisque;
+                            }
+                            else
+                            {
+                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOff.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxUpperActStbyOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+
+                    if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition)
+                    {
+                    }
+
+                    foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
+                    {
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM1)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperCom1.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperCom1.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperCom2.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperCom2.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperNav1.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperNav1.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperNav2.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperNav2.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperADF.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperADF.Background = Brushes.Bisque;
+                        }
+
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperDME.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperDME.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperXPDR.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperXPDR.Background = Brushes.Bisque;
+
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperLargePlus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperLargePlus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperLargeMinus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperLargeMinus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperSmallPlus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperSmallPlus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxUpperSmallMinus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxUpperSmallMinus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOn.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxUpperActStbyOn.Background = Brushes.Bisque;
+                            }
+                            else
+                            {
+                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOff.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxUpperActStbyOff.Background = Brushes.Bisque;
+                            }
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM1)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerCom1.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerCom1.Background = Brushes.Bisque;
+                            }
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM2)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerCom2.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerCom2.Background = Brushes.Bisque;
+                            }
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV1)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerNav1.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerNav1.Background = Brushes.Bisque;
+                            }
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV2)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerNav2.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerNav2.Background = Brushes.Bisque;
+                            }
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerADF)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerADF.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerADF.Background = Brushes.Bisque;
+                            }
+                        }
+
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerDME)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerDME.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerDME.Background = Brushes.Bisque;
+                            }
+                        }
+
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerXPDR)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerXPDR.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerXPDR.Background = Brushes.Bisque;
+                            }
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxLowerLargePlus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxLowerLargePlus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxLowerLargeMinus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxLowerLargeMinus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxLowerSmallPlus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxLowerSmallPlus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec)
+                        {
+                            ((TagDataClassPZ69Full)TextBoxLowerSmallMinus.Tag).BIPLink = bipLinkPZ69;
+                            TextBoxLowerSmallMinus.Background = Brushes.Bisque;
+                        }
+                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerFreqSwitch)
+                        {
+                            if (bipLinkPZ69.WhenTurnedOn)
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOn.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerActStbyOn.Background = Brushes.Bisque;
+                            }
+                            else
+                            {
+                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOff.Tag).BIPLink = bipLinkPZ69;
+                                TextBoxLowerActStbyOff.Background = Brushes.Bisque;
+                            }
+                        }
+                    }
+                }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(3013, ex);
@@ -2649,25 +2783,25 @@ namespace DCSFlightpanels
                 switch (button.Name)
                 {
                     case "ButtonTopLeftLcd":
-                    {
-                        ButtonLcdConfig(PZ69EmulatorLCDPosition.TopLeftLCD, button, "Data to display on upper left LCD");
-                        break;
-                    }
+                        {
+                            ButtonLcdConfig(PZ69EmulatorLCDPosition.TopLeftLCD, button, "Data to display on upper left LCD");
+                            break;
+                        }
                     case "ButtonBottomLeftLcd":
-                    {
-                        ButtonLcdConfig(PZ69EmulatorLCDPosition.BottomLeftLCD, button, "Data to display on bottom left LCD");
-                        break;
-                    }
+                        {
+                            ButtonLcdConfig(PZ69EmulatorLCDPosition.BottomLeftLCD, button, "Data to display on bottom left LCD");
+                            break;
+                        }
                     case "ButtonTopRightLcd":
-                    {
-                        ButtonLcdConfig(PZ69EmulatorLCDPosition.TopLeftLCD, button, "Data to display on upper right LCD");
-                        break;
-                    }
+                        {
+                            ButtonLcdConfig(PZ69EmulatorLCDPosition.TopLeftLCD, button, "Data to display on upper right LCD");
+                            break;
+                        }
                     case "ButtonBottomRightLcd":
-                    {
-                        ButtonLcdConfig(PZ69EmulatorLCDPosition.BottomLeftLCD, button, "Data to display on bottom right LCD");
-                        break;
-                    }
+                        {
+                            ButtonLcdConfig(PZ69EmulatorLCDPosition.BottomLeftLCD, button, "Data to display on bottom right LCD");
+                            break;
+                        }
                 }
             }
             catch (Exception ex)

@@ -71,6 +71,7 @@
     <Compile Include="BIPLinkPZ70.cs" />
     <Compile Include="BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="DCSBIOSBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ69.cs" />
     <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
     <Compile Include="DCSBIOSBindingBase.cs" />

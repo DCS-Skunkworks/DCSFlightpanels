@@ -652,7 +652,9 @@ namespace NonVisuals
     {
         ALL,
         KEYS,
-        BIPS
+        BIPS,
+        DCSBIOS,
+        LCD
     }
 
 }

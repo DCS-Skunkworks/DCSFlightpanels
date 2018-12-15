@@ -23,6 +23,7 @@ namespace NonVisuals
         private readonly HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private HashSet<DCSBIOSBindingLCDPZ69> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ69>();
+        private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
         private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
         private HashSet<RadioPanelPZ69KnobEmulator> _radioPanelKnobs = new HashSet<RadioPanelPZ69KnobEmulator>();
         private bool _isFirstNotification = true;
@@ -36,7 +37,8 @@ namespace NonVisuals
         private double _upperStandby = -1;
         private double _lowerActive = -1;
         private double _lowerStandby = -1;
-        private PZ69DialPosition _pz69DialPosition = PZ69DialPosition.COM1;
+        private PZ69DialPosition _pz69UpperDialPosition = PZ69DialPosition.UpperCOM1;
+        private PZ69DialPosition _pz69LowerDialPosition = PZ69DialPosition.LowerCOM1;
 
         public RadioPanelPZ69FullEmulator(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
@@ -104,11 +106,17 @@ namespace NonVisuals
                         bipLinkPZ69.ImportSettings(setting);
                         _bipLinks.Add(bipLinkPZ69);
                     }
-                    else if (setting.StartsWith("RadioPanelEmulatorDCSBIOSLCD{"))
+                    else if (setting.StartsWith("RadioPanelDCSBIOSLCD{"))
                     {
                         var dcsbiosBindingLCDPZ69 = new DCSBIOSBindingLCDPZ69();
                         dcsbiosBindingLCDPZ69.ImportSettings(setting);
                         _dcsBiosLcdBindings.Add(dcsbiosBindingLCDPZ69);
+                    }
+                    else if (setting.StartsWith("RadioPanelDCSBIOS{"))
+                    {
+                        var dcsbiosBindingPZ69 = new DCSBIOSBindingPZ69();
+                        dcsbiosBindingPZ69.ImportSettings(setting);
+                        _dcsBiosBindings.Add(dcsbiosBindingPZ69);
                     }
                 }
             }
@@ -512,12 +520,17 @@ namespace NonVisuals
         }
 
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ69EmulatorLCDPosition pz69LCDPosition)
+        public void AddOrUpdateLCDBinding(RadioPanelPZ69Area radioPanelPZ69Area, DCSBIOSOutput dcsbiosOutput, PZ69EmulatorLCDPosition pz69LCDPosition)
         {
             var found = false;
+            var pz69DialPosition = PZ69DialPosition.UpperCOM1;
+            if (radioPanelPZ69Area == RadioPanelPZ69Area.UpperArea)
+            {
+                pz69DialPosition = _pz69UpperDialPosition;
+            }
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.DialPosition == _pz69DialPosition && dcsBiosBindingLCD.PZ69EmulatorLCDPosition == pz69LCDPosition)
+                if (dcsBiosBindingLCD.DialPosition == pz69DialPosition && dcsBiosBindingLCD.PZ69EmulatorLCDPosition == pz69LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                     found = true;
@@ -527,7 +540,7 @@ namespace NonVisuals
             if (!found)
             {
                 var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ69();
-                dcsBiosBindingLCD.DialPosition = _pz69DialPosition;
+                dcsBiosBindingLCD.DialPosition = pz69DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 dcsBiosBindingLCD.PZ69EmulatorLCDPosition = pz69LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
@@ -535,12 +548,17 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ69EmulatorLCDPosition pz69LCDPosition)
+        public void AddOrUpdateLCDBinding(RadioPanelPZ69Area radioPanelPZ69Area, DCSBIOSOutputFormula dcsbiosOutputFormula, PZ69EmulatorLCDPosition pz69LCDPosition)
         {
             var found = false;
+            var pz69DialPosition = PZ69DialPosition.UpperCOM1;
+            if (radioPanelPZ69Area == RadioPanelPZ69Area.UpperArea)
+            {
+                pz69DialPosition = _pz69UpperDialPosition;
+            }
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.DialPosition == _pz69DialPosition && dcsBiosBindingLCD.PZ69EmulatorLCDPosition == pz69LCDPosition)
+                if (dcsBiosBindingLCD.DialPosition == pz69DialPosition && dcsBiosBindingLCD.PZ69EmulatorLCDPosition == pz69LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                     Debug.Print("3 found");
@@ -551,7 +569,7 @@ namespace NonVisuals
             if (!found)
             {
                 var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ69();
-                dcsBiosBindingLCD.DialPosition = _pz69DialPosition;
+                dcsBiosBindingLCD.DialPosition = pz69DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.PZ69EmulatorLCDPosition = pz69LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
@@ -559,14 +577,74 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(PZ69EmulatorLCDPosition pz69LCDPosition)
+        public void AddOrUpdateDCSBIOSLcdBinding(RadioPanelPZ69Area radioPanelPZ69Area, PZ69EmulatorLCDPosition pz69LCDPosition)
         {
+            var pz69DialPosition = PZ69DialPosition.UpperCOM1;
+            if (radioPanelPZ69Area == RadioPanelPZ69Area.UpperArea)
+            {
+                pz69DialPosition = _pz69UpperDialPosition;
+            }
             //Removes config
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.DialPosition == _pz69DialPosition && dcsBiosBindingLCD.PZ69EmulatorLCDPosition == pz69LCDPosition)
+                if (dcsBiosBindingLCD.DialPosition == pz69DialPosition && dcsBiosBindingLCD.PZ69EmulatorLCDPosition == pz69LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = null;
+                    break;
+                }
+            }
+            IsDirtyMethod();
+        }
+
+        //public void AddOrUpdateDCSBIOSBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
+        public void AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob, RadioPanelPZ69Area radioPanelPZ69Area, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
+        {
+            if (dcsbiosInputs.Count == 0)
+            {
+                RemoveRadioPanelKnobFromList(ControlListPZ69.DCSBIOS, knob, whenTurnedOn);
+                IsDirtyMethod();
+                return;
+            }
+            //This must accept lists
+            var found = false;
+            var pzDialPosition = pz69
+            foreach (var dcsBiosBinding in _dcsBiosBindings)
+            {
+                if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                {
+                    dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
+                    dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
+                    dcsBiosBinding.Description = description;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                var dcsBiosBinding = new DCSBIOSBindingPZ70();
+                dcsBiosBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                dcsBiosBinding.DialPosition = _pz70DialPosition;
+                dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
+                dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
+                dcsBiosBinding.Description = description;
+                _dcsBiosBindings.Add(dcsBiosBinding);
+            }
+            IsDirtyMethod();
+        }
+
+        public void AddOrUpdateDCSBIOSLcdBinding(RadioPanelPZ69Area radioPanelPZ69Area, RadioPanelPZ69KnobsEmulator knob)
+        {
+            var pz69DialPosition = PZ69DialPosition.UpperCOM1;
+            if (radioPanelPZ69Area == RadioPanelPZ69Area.UpperArea)
+            {
+                pz69DialPosition = _pz69UpperDialPosition;
+            }
+            //Removes config
+            foreach (var dcsBiosBinding in _dcsBiosBindings)
+            {
+                if (dcsBiosBinding.DialPosition == pz69DialPosition && dcsBiosBinding.RadioPanelPZ69Knob == knob)
+                {
+                    dcsBiosBinding.dcsbiosInput = null;
                     break;
                 }
             }
@@ -732,10 +810,21 @@ namespace NonVisuals
             get => _dcsBiosLcdBindings;
             set => _dcsBiosLcdBindings = value;
         }
-        public PZ69DialPosition PZ69_DialPosition
+
+        public HashSet<DCSBIOSBindingPZ69> DCSBIOSBindings
         {
-            get => _pz69DialPosition;
-            set => _pz69DialPosition = value;
+            get => _dcsBiosBindings;
+            set => _dcsBiosBindings = value;
+        }
+
+        public PZ69DialPosition PZ69UpperDialPosition
+        {
+            get => _pz69UpperDialPosition;
+        }
+
+        public PZ69DialPosition PZ69LowerDialPosition
+        {
+            get => _pz69LowerDialPosition;
         }
     }
 }

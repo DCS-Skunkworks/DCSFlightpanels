@@ -3,6 +3,31 @@ using System.Collections.Generic;
 
 namespace NonVisuals
 {
+
+    public enum RadioPanelPZ69Area
+    {
+        UpperArea = 0,
+        LowerArea = 2
+    }
+
+    public enum PZ69DialPosition
+    {
+        UpperCOM1 = 0,
+        UpperCOM2 = 2,
+        UpperNAV1 = 4,
+        UpperNAV2 = 8,
+        UpperADF = 16,
+        UpperDME = 32,
+        UpperXPDR = 64,
+        LowerCOM1 = 4096,
+        LowerCOM2 = 8192,
+        LowerNAV1 = 16384,
+        LowerNAV2 = 32768,
+        LowerADF = 65536,
+        LowerDME = 131072,
+        LowerXPDR = 262144
+    }
+
     public enum RadioPanelPZ69KnobsEmulator
     {
         UpperCOM1 = 0,
