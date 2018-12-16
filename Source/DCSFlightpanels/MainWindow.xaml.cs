@@ -253,18 +253,20 @@ namespace DCSFlightpanels
                         TabControlPanels.Items.Remove(item);
                         var saitekPanelUserControl = ((ISaitekUserControl)item.Content);
                         var saitekPanel = saitekPanelUserControl.GetSaitekPanel();
+                        if (saitekPanel != null)
+                        {
+                            _panelProfileHandler.Detach(saitekPanel);
+                            saitekPanel.Detach(_panelProfileHandler);
+                            saitekPanel.Detach((IProfileHandlerListener) this);
+                            _dcsBios?.DetachDataReceivedListener(saitekPanel);
 
-                        _panelProfileHandler.Detach(saitekPanel);
-                        saitekPanel.Detach(_panelProfileHandler);
-                        saitekPanel.Detach((IProfileHandlerListener)this);
-                        _dcsBios?.DetachDataReceivedListener(saitekPanel);
-
-                        Common.DebugP("Shutting down " + saitekPanel.GetType().Name);
-                        saitekPanel.Shutdown();
-                        _saitekUserControls.Remove((UserControl)item.Content);
-                        Common.DebugP("_saitekUserControls count is " + _saitekUserControls.Count);
-                        Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
-                        closedItemCount++;
+                            Common.DebugP("Shutting down " + saitekPanel.GetType().Name);
+                            saitekPanel.Shutdown();
+                            _saitekUserControls.Remove((UserControl) item.Content);
+                            Common.DebugP("_saitekUserControls count is " + _saitekUserControls.Count);
+                            Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
+                            closedItemCount++;
+                        }
                     } while (TabControlPanels.Items.Count > 0);
                 }
 
@@ -352,8 +354,7 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-
-                                    if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled) || _panelProfileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
+                                    else if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled) || _panelProfileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
