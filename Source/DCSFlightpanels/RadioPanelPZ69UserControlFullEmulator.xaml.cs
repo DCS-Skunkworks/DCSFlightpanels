@@ -2562,7 +2562,7 @@ namespace DCSFlightpanels
                                         {
                                             ClearAll(false);
                                             ShowGraphicConfiguration();
-                                            LabelDialPosLower.Content = UpperText + "COM1";
+                                            LabelDialPosLower.Content = LowerText + "COM1";
                                         }
                                     });
                                 break;
@@ -2578,7 +2578,7 @@ namespace DCSFlightpanels
                                         {
                                             ClearAll(false);
                                             ShowGraphicConfiguration();
-                                            LabelDialPosLower.Content = UpperText + "COM2";
+                                            LabelDialPosLower.Content = LowerText + "COM2";
                                         }
                                     });
                                 break;
@@ -2594,7 +2594,7 @@ namespace DCSFlightpanels
                                         {
                                             ClearAll(false);
                                             ShowGraphicConfiguration();
-                                            LabelDialPosLower.Content = UpperText + "NAV1";
+                                            LabelDialPosLower.Content = LowerText + "NAV1";
                                         }
                                     });
                                 break;
@@ -2610,7 +2610,7 @@ namespace DCSFlightpanels
                                         {
                                             ClearAll(false);
                                             ShowGraphicConfiguration();
-                                            LabelDialPosLower.Content = UpperText + "NAV2";
+                                            LabelDialPosLower.Content = LowerText + "NAV2";
                                         }
                                     });
                                 break;
@@ -2626,7 +2626,7 @@ namespace DCSFlightpanels
                                         {
                                             ClearAll(false);
                                             ShowGraphicConfiguration();
-                                            LabelDialPosLower.Content = UpperText + "ADF";
+                                            LabelDialPosLower.Content = LowerText + "ADF";
                                         }
                                     });
                                 break;
@@ -2642,7 +2642,7 @@ namespace DCSFlightpanels
                                         {
                                             ClearAll(false);
                                             ShowGraphicConfiguration();
-                                            LabelDialPosLower.Content = UpperText + "DME";
+                                            LabelDialPosLower.Content = LowerText + "DME";
                                         }
                                     });
                                 break;
@@ -2658,7 +2658,7 @@ namespace DCSFlightpanels
                                         {
                                             ClearAll(false);
                                             ShowGraphicConfiguration();
-                                            LabelDialPosLower.Content = UpperText + "XPSR";
+                                            LabelDialPosLower.Content = LowerText + "XPDR";
                                         }
                                     });
                                 break;

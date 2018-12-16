@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using DCS_BIOS;
 using HidLibrary;
@@ -176,19 +177,20 @@ namespace NonVisuals
             UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (!dcsbiosBindingLCD.UseFormula && dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition && e.Address == dcsbiosBindingLCD.DCSBIOSOutputObject.Address)
+                if (!dcsbiosBindingLCD.UseFormula && e.Address == dcsbiosBindingLCD.DCSBIOSOutputObject.Address)
                 {
                     lock (_lcdDataVariablesLockObject)
                     {
                         var tmp = dcsbiosBindingLCD.CurrentValue;
-                        dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp != dcsbiosBindingLCD.CurrentValue)
+                        dcsbiosBindingLCD.CurrentValue = (int) dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
+                        if (tmp != dcsbiosBindingLCD.CurrentValue && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                         {
+                            //Update only if this LCD binding is in current use
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
                     }
                 }
-                else if (dcsbiosBindingLCD.DialPosition == _pz70DialPosition && dcsbiosBindingLCD.UseFormula)
+                else if (dcsbiosBindingLCD.UseFormula)
                 {
                     if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
                     {
@@ -196,8 +198,9 @@ namespace NonVisuals
                         {
                             var tmp = dcsbiosBindingLCD.CurrentValue;
                             dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
-                            if (tmp != dcsbiosBindingLCD.CurrentValue)
+                            if (tmp != dcsbiosBindingLCD.CurrentValue && (dcsbiosBindingLCD.DialPosition == _pz69UpperDialPosition || dcsbiosBindingLCD.DialPosition == _pz69LowerDialPosition))
                             {
+                                //Update only if this LCD binding is in current use
                                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                             }
                         }
@@ -392,11 +395,61 @@ namespace NonVisuals
             {
                 return;
             }
-            visa lcd data om finns, annars statiskt.
             lock (_lcdDataVariablesLockObject)
             {
                 var bytes = new byte[21];
                 bytes[0] = 0x0;
+                //Find upper left => lower right data from the DCS-BIOS LCD holders
+                foreach (var dcsbiosBindingLCDPZ69 in LCDBindings)
+                {
+                    if (dcsbiosBindingLCDPZ69.DialPosition == _pz69UpperDialPosition)
+                    {
+                        if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_ACTIVE_LEFT)
+                        {
+                            if (_upperActive.ToString(CultureInfo.InvariantCulture).Length > 5)
+                            {
+                                _upperActive = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
+                            }
+                            else
+                            {
+                                _upperActive = dcsbiosBindingLCDPZ69.CurrentValue;
+                            }
+                        }
+                        else if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.UPPER_STBY_RIGHT)
+                        {
+                            if (_upperStandby.ToString(CultureInfo.InvariantCulture).Length > 5)
+                            {
+                                _upperStandby = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
+                            }
+                            else
+                            {
+                                _upperStandby = dcsbiosBindingLCDPZ69.CurrentValue;
+                            }
+                        }
+                        else if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.LOWER_ACTIVE_LEFT)
+                        {
+                            if (_lowerActive.ToString(CultureInfo.InvariantCulture).Length > 5)
+                            {
+                                _lowerActive = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
+                            }
+                            else
+                            {
+                                _lowerActive = dcsbiosBindingLCDPZ69.CurrentValue;
+                            }
+                        }
+                        else if (dcsbiosBindingLCDPZ69.PZ69LcdPosition == PZ69LCDPosition.LOWER_STBY_RIGHT)
+                        {
+                            if (_lowerStandby.ToString(CultureInfo.InvariantCulture).Length > 5)
+                            {
+                                _lowerStandby = int.Parse(dcsbiosBindingLCDPZ69.CurrentValue.ToString().Substring(0, 5));
+                            }
+                            else
+                            {
+                                _lowerStandby = dcsbiosBindingLCDPZ69.CurrentValue;
+                            }
+                        }
+                    }
+                }
                 if (_upperActive < 0)
                 {
                     SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
