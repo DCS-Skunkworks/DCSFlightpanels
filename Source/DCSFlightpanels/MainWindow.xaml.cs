@@ -137,7 +137,6 @@ namespace DCSFlightpanels
                     _dcsBios?.Startup();
                 }
 
-                //SearchForPanels();
                 SetWindowTitle();
                 SetWindowState();
                 SendEventRegardingForwardingOfKeys();
@@ -362,7 +361,8 @@ namespace DCSFlightpanels
                                     }
                                     else if (_panelProfileHandler.Airframe == DCSAirframe.A10C)
                                     {
-                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
+                                        //var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFullEmulator(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
                                         _panelProfileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;

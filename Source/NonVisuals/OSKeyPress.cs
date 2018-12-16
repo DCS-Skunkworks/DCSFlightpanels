@@ -332,7 +332,20 @@ namespace NonVisuals
             return result.ToString();
         }
 
-        public string GetSimpleVirtualKeyCodesAsString()
+        public string GetKeyPressInformation()
+        {
+            if (IsMultiSequenced())
+            {
+                if (!string.IsNullOrWhiteSpace(Information))
+                {
+                    return Information;
+                }
+                return "key press sequence";
+            }
+            return GetSimpleVirtualKeyCodesAsString();
+        }
+
+        private string GetSimpleVirtualKeyCodesAsString()
         {
             if (IsMultiSequenced())
             {

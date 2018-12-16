@@ -21,7 +21,7 @@ namespace NonVisuals
          * - DCS-BIOS control
          */
         //private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
-        private readonly HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
+        private readonly HashSet<KeyBindingPZ69DialPosition> _keyBindings = new HashSet<KeyBindingPZ69DialPosition>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private HashSet<DCSBIOSBindingLCDPZ69> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ69>();
         private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
@@ -90,9 +90,9 @@ namespace NonVisuals
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
-                    if (setting.StartsWith("RadioPanelKey{"))
+                    if (setting.StartsWith("RadioPanelKeyDialPos{"))
                     {
-                        var keyBinding = new KeyBindingPZ69();
+                        var keyBinding = new KeyBindingPZ69DialPosition();
                         keyBinding.ImportSettings(setting);
                         _keyBindings.Add(keyBinding);
                     }
@@ -219,7 +219,7 @@ namespace NonVisuals
             _dcsBiosBindings.Clear();
         }
 
-        public HashSet<KeyBindingPZ69> KeyBindingsHashSet => _keyBindings;
+        public HashSet<KeyBindingPZ69DialPosition> KeyBindingsHashSet => _keyBindings;
 
         public HashSet<BIPLinkPZ69> BipLinkHashSet => _bipLinks;
 
@@ -539,18 +539,19 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateSingleKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn = true)
+        public void AddOrUpdateSingleKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
         {
+            var pz69DialPosition = GetDial(radioPanelPZ69Knob);
             if (string.IsNullOrEmpty(keys))
             {
-                var tmp = new RadioPanelPZ69KnobEmulator.RadioPanelPZ69KeyOnOff(radioPanelPZ69Knob, whenTurnedOn);
-                ClearAllBindings(tmp);
+                var tmp = new RadioPanelPZ69KeyOnOff(radioPanelPZ69Knob, whenTurnedOn);
+                ClearAllBindings(pz69DialPosition, tmp);
                 return;
             }
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBinding.WhenTurnedOn == whenTurnedOn && keyBinding.DialPosition == pz69DialPosition)
                 {
                     if (string.IsNullOrEmpty(keys))
                     {
@@ -566,8 +567,9 @@ namespace NonVisuals
             }
             if (!found && !string.IsNullOrEmpty(keys))
             {
-                var keyBinding = new KeyBindingPZ69();
+                var keyBinding = new KeyBindingPZ69DialPosition();
                 keyBinding.RadioPanelPZ69Key = radioPanelPZ69Knob;
+                keyBinding.DialPosition = pz69DialPosition;
                 keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
@@ -577,12 +579,12 @@ namespace NonVisuals
         }
 
 
-        public void ClearAllBindings(RadioPanelPZ69KnobEmulator.RadioPanelPZ69KeyOnOff radioPanelPZ69KnobOnOff)
+        public void ClearAllBindings(PZ69DialPosition pz69DialPosition, RadioPanelPZ69KeyOnOff radioPanelPZ69KnobOnOff)
         {
             //This must accept lists
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69KnobOnOff.RadioPanelPZ69Key && keyBinding.WhenTurnedOn == radioPanelPZ69KnobOnOff.On)
+                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69KnobOnOff.RadioPanelPZ69Key && keyBinding.WhenTurnedOn == radioPanelPZ69KnobOnOff.ButtonState)
                 {
                     keyBinding.OSKeyPress = null;
                 }
@@ -604,8 +606,10 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateSequencedKeyBinding(string information, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
+        public void AddOrUpdateSequencedKeyBinding(string information, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
         {
+            var pz69DialPosition = GetDial(radioPanelPZ69Knob);
+            
             if (sortedList.Count == 0)
             {
                 RemoveRadioPanelKnobFromList(ControlListPZ69.KEYS, radioPanelPZ69Knob, whenTurnedOn);
@@ -616,7 +620,7 @@ namespace NonVisuals
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBinding.WhenTurnedOn == whenTurnedOn && keyBinding.DialPosition == pz69DialPosition)
                 {
                     if (sortedList.Count == 0)
                     {
@@ -633,8 +637,9 @@ namespace NonVisuals
             }
             if (!found && sortedList.Count > 0)
             {
-                var keyBinding = new KeyBindingPZ69();
+                var keyBinding = new KeyBindingPZ69DialPosition();
                 keyBinding.RadioPanelPZ69Key = radioPanelPZ69Knob;
+                keyBinding.DialPosition = pz69DialPosition;
                 keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
@@ -643,7 +648,7 @@ namespace NonVisuals
         }
 
 
-        public void AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, BIPLinkPZ69 bipLinkPZ69, bool whenTurnedOn = true)
+        public void AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, BIPLinkPZ69 bipLinkPZ69, bool whenTurnedOn)
         {
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
@@ -752,7 +757,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
+        public void AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
         {
             if (dcsbiosInputs.Count == 0)
             {
@@ -762,11 +767,7 @@ namespace NonVisuals
             }
             //This must accept lists
             var found = false;
-            var pz69DialPosition = _pz69UpperDialPosition;
-            if (IsLowerArea(knob))
-            {
-                pz69DialPosition = _pz69LowerDialPosition;
-            }
+            var pz69DialPosition = GetDial(knob);
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.DialPosition == pz69DialPosition && dcsBiosBinding.RadioPanelPZ69Knob == knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
@@ -793,11 +794,7 @@ namespace NonVisuals
 
         public void DeleteDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob)
         {
-            var pz69DialPosition = _pz69UpperDialPosition;
-            if (IsLowerArea(knob))
-            {
-                pz69DialPosition = _pz69LowerDialPosition;
-            }
+            var pz69DialPosition = GetDial(knob);
             //Removes config
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
@@ -810,16 +807,17 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn = true)
+        private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn)
         {
             var found = false;
+            var pz69DialPosition = GetDial(radioPanelPZ69Knob);
             if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.KEYS)
             {
-                foreach (var keyBindingPZ55 in _keyBindings)
+                foreach (var keyBinding in _keyBindings)
                 {
-                    if (keyBindingPZ55.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBindingPZ55.WhenTurnedOn == whenTurnedOn)
+                    if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && keyBinding.WhenTurnedOn == whenTurnedOn && keyBinding.DialPosition == pz69DialPosition)
                     {
-                        keyBindingPZ55.OSKeyPress = null;
+                        keyBinding.OSKeyPress = null;
                     }
                     found = true;
                     break;
@@ -844,6 +842,26 @@ namespace NonVisuals
             }
         }
 
+        public bool IsBindingActive(KeyBindingPZ69DialPosition keyBindingPZ69DialPosition)
+        {
+            var dial = GetDial(keyBindingPZ69DialPosition.RadioPanelPZ69Key);
+            if (dial == keyBindingPZ69DialPosition.DialPosition)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private PZ69DialPosition GetDial(RadioPanelPZ69KnobsEmulator knob)
+        {
+            if (knob.ToString().Contains("Upper"))
+            {
+                return _pz69UpperDialPosition;
+            }
+            return _pz69LowerDialPosition;
+        }
+
+        /*
         private bool IsLowerArea(RadioPanelPZ69KnobsEmulator knob)
         {
             if (knob.ToString().Contains("Upper"))
@@ -861,7 +879,7 @@ namespace NonVisuals
             }
             return false;
         }
-
+        */
         private void IsDirtyMethod()
         {
             OnSettingsChanged();

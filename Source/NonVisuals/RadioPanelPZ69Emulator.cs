@@ -356,11 +356,11 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateSingleKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn = true)
+        public void AddOrUpdateSingleKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
         {
             if (string.IsNullOrEmpty(keys))
             {
-                var tmp = new RadioPanelPZ69KnobEmulator.RadioPanelPZ69KeyOnOff(radioPanelPZ69Knob, whenTurnedOn);
+                var tmp = new RadioPanelPZ69KeyOnOff(radioPanelPZ69Knob, whenTurnedOn);
                 ClearAllBindings(tmp);
                 return;
             }
@@ -393,12 +393,12 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void ClearAllBindings(RadioPanelPZ69KnobEmulator.RadioPanelPZ69KeyOnOff radioPanelPZ69KnobOnOff)
+        public void ClearAllBindings(RadioPanelPZ69KeyOnOff radioPanelPZ69KnobOnOff)
         {
             //This must accept lists
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69KnobOnOff.RadioPanelPZ69Key && keyBinding.WhenTurnedOn == radioPanelPZ69KnobOnOff.On)
+                if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69KnobOnOff.RadioPanelPZ69Key && keyBinding.WhenTurnedOn == radioPanelPZ69KnobOnOff.ButtonState)
                 {
                     keyBinding.OSKeyPress = null;
                 }
@@ -420,7 +420,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateSequencedKeyBinding(string information, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
+        public void AddOrUpdateSequencedKeyBinding(string information, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
         {
             if (sortedList.Count == 0)
             {
@@ -459,7 +459,7 @@ namespace NonVisuals
         }
 
 
-        public void AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, BIPLinkPZ69 bipLinkPZ69, bool whenTurnedOn = true)
+        public void AddOrUpdateBIPLinkKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, BIPLinkPZ69 bipLinkPZ69, bool whenTurnedOn)
         {
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
@@ -491,7 +491,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn = true)
+        private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn)
         {
             var found = false;
             if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.KEYS)

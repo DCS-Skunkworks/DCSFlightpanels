@@ -80,20 +80,21 @@ namespace NonVisuals
             return result;
         }
 
-        public class TPMPanelSwitchOnOff
+        
+    }
+    public class TPMPanelSwitchOnOff
+    {
+        private readonly TPMPanelSwitches _tpmPanelSwitch;
+        private readonly bool _buttonState;
+
+        public TPMPanelSwitchOnOff(TPMPanelSwitches tpmPanelSwitch, bool buttonState)
         {
-            private readonly TPMPanelSwitches _tpmPanelSwitch;
-            private readonly bool _on;
-
-            public TPMPanelSwitchOnOff(TPMPanelSwitches tpmPanelSwitch, bool on)
-            {
-                _tpmPanelSwitch = tpmPanelSwitch;
-                _on = @on;
-            }
-
-            public TPMPanelSwitches TPMSwitch => _tpmPanelSwitch;
-
-            public bool On => _on;
+            _tpmPanelSwitch = tpmPanelSwitch;
+            _buttonState = buttonState;
         }
+
+        public TPMPanelSwitches TPMSwitch => _tpmPanelSwitch;
+
+        public bool ButtonState => _buttonState;
     }
 }

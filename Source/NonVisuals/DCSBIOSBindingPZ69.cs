@@ -145,6 +145,10 @@ namespace NonVisuals
                 return null;
             }
 
+            if (_pz69DialPosition == PZ69DialPosition.Unknown)
+            {
+                throw new Exception("Unknown dial position in DCSBIOSBindingPZ69 for knob " + RadioPanelPZ69Knob + ". Cannot export.");
+            }
             Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "      " + _whenOnTurnedOn);
             var onStr = _whenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();

@@ -405,7 +405,7 @@ namespace NonVisuals
             return result;
         }
 
-        public void AddOrUpdateSingleKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, string keys, KeyPressLength keyPressLength, bool whenTurnedOn = true)
+        public void AddOrUpdateSingleKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
         {
             if (string.IsNullOrEmpty(keys))
             {
@@ -442,7 +442,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
         
-        public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn = true)
+        public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
         {
             if (sortedList.Count == 0)
             {
@@ -483,7 +483,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn = true)
+        public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
         {
             if (dcsbiosInputs.Count == 0)
             {
@@ -519,7 +519,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn = true)
+        public void AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn)
         {
             if (bipLinkPZ55.BIPLights.Count == 0)
             {
@@ -551,7 +551,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
         
-        public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn = true)
+        public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn)
         {
             bool found = false;
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)

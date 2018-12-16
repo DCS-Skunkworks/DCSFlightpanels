@@ -106,6 +106,10 @@ namespace NonVisuals
             {
                 return null;
             }
+            if (_pz69DialPosition == PZ69DialPosition.Unknown)
+            {
+                throw new Exception("Unknown dial position in DCSBIOSBindingLCDPZ69 for LCD " + _pz69LCDPosition + ". Cannot export.");
+            }
             if (_dcsbiosOutputFormula != null)
             {
                 //RadioPanelDCSBIOSLCD{COM1}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}

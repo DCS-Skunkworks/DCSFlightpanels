@@ -19,7 +19,8 @@ namespace NonVisuals
         LowerNAV2 = 32768,
         LowerADF = 65536,
         LowerDME = 131072,
-        LowerXPDR = 262144
+        LowerXPDR = 262144,
+        Unknown = 0x80000
     }
 
     public enum RadioPanelPZ69KnobsEmulator
@@ -137,23 +138,20 @@ namespace NonVisuals
             result.Add(new RadioPanelPZ69KnobEmulator(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsEmulator.LowerCOM1));
             return result;
         }
+    }
+    public class RadioPanelPZ69KeyOnOff
+    {
+        private readonly RadioPanelPZ69KnobsEmulator _radioPanelPZ69Key;
+        private readonly bool _buttonState;
 
-
-        public class RadioPanelPZ69KeyOnOff
+        public RadioPanelPZ69KeyOnOff(RadioPanelPZ69KnobsEmulator radioPanelPZ69Key, bool buttonState)
         {
-            private readonly RadioPanelPZ69KnobsEmulator _radioPanelPZ69Key;
-            private readonly bool _on;
-
-            public RadioPanelPZ69KeyOnOff(RadioPanelPZ69KnobsEmulator radioPanelPZ69Key, bool on)
-            {
-                _radioPanelPZ69Key = radioPanelPZ69Key;
-                _on = @on;
-            }
-
-            public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key => _radioPanelPZ69Key;
-
-            public bool On => _on;
+            _radioPanelPZ69Key = radioPanelPZ69Key;
+            _buttonState = buttonState;
         }
 
+        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key => _radioPanelPZ69Key;
+
+        public bool ButtonState => _buttonState;
     }
 }

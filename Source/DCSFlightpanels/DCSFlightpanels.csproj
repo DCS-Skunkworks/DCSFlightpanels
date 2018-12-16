@@ -206,6 +206,7 @@
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagDataClassPZ69Button.cs" />
     <Compile Include="TagDataClassPZ69Full.cs" />
     <Compile Include="TagDataClassTPM.cs" />
     <Compile Include="TagDataClassPZ69.cs" />
