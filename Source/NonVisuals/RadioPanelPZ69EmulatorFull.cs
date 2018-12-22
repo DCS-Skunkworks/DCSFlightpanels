@@ -116,7 +116,7 @@ namespace NonVisuals
                         dcsbiosBindingLCDPZ69.ImportSettings(setting);
                         _dcsBiosLcdBindings.Add(dcsbiosBindingLCDPZ69);
                     }
-                    else if (setting.StartsWith("RadioPanelDCSBIOS{"))
+                    else if (setting.StartsWith("RadioPanelDCSBIOSControl{"))
                     {
                         var dcsbiosBindingPZ69 = new DCSBIOSBindingPZ69();
                         dcsbiosBindingPZ69.ImportSettings(setting);
@@ -161,6 +161,14 @@ namespace NonVisuals
             foreach (var dcsBiosLcdBindings in _dcsBiosLcdBindings)
             {
                 var tmp = dcsBiosLcdBindings.ExportSettings();
+                if (!string.IsNullOrEmpty(tmp))
+                {
+                    result.Add(tmp);
+                }
+            }
+            foreach (var dcsBiosBindings in _dcsBiosBindings)
+            {
+                var tmp = dcsBiosBindings.ExportSettings();
                 if (!string.IsNullOrEmpty(tmp))
                 {
                     result.Add(tmp);
@@ -799,13 +807,13 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void DeleteDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob)
+        public void DeleteDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob, bool whenTurnedOn)
         {
             var pz69DialPosition = GetDial(knob);
             //Removes config
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.DialPosition == pz69DialPosition && dcsBiosBinding.RadioPanelPZ69Knob == knob)
+                if (dcsBiosBinding.DialPosition == pz69DialPosition && dcsBiosBinding.RadioPanelPZ69Knob == knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs.Clear();
                     break;

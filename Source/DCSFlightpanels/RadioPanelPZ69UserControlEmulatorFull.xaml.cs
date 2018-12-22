@@ -16,7 +16,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlEmulator.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlFullEmulator : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class RadioPanelPZ69UserControlEmulatorFull : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly RadioPanelPZ69EmulatorFull _radioPanelPZ69;
         private readonly TabItem _parentTabItem;
@@ -29,7 +29,7 @@ namespace DCSFlightpanels
         private const string UpperText = "Upper Dial Profile : ";
         private const string LowerText = "Lower Dial Profile : ";
 
-        public RadioPanelPZ69UserControlFullEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlEmulatorFull(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -45,7 +45,7 @@ namespace DCSFlightpanels
             //LoadConfiguration();
         }
 
-        private void RadioPanelPZ69UserControlFullEmulator_OnLoaded(object sender, RoutedEventArgs e)
+        private void RadioPanelPZ69UserControlEmulatorFull_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -675,7 +675,7 @@ namespace DCSFlightpanels
             {
                 if (!textBox.Name.EndsWith("Numbers"))
                 {
-                    var tagHolderClass = (TagDataClassPZ69Full) textBox.Tag;
+                    var tagHolderClass = (TagDataClassPZ69Full)textBox.Tag;
                     textBox.Text = "";
                     tagHolderClass.ClearAll();
                 }
@@ -942,7 +942,18 @@ namespace DCSFlightpanels
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-                    if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
+                    if (((TagDataClassPZ69Full)textBox.Tag).ContainsDCSBIOS())
+                    {
+                        if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS configuration?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+                        {
+                            return;
+                        }
+                        textBox.Text = "";
+                        var knobObject = GetPZ69Key(textBox);
+                        _radioPanelPZ69.DeleteDCSBIOSBinding(knobObject.RadioPanelPZ69Key, knobObject.ButtonState);
+                        ((TagDataClassPZ69Full)textBox.Tag).DCSBIOSBinding = null;
+                    }
+                    else if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
@@ -1381,7 +1392,7 @@ namespace DCSFlightpanels
 
                 foreach (var displayValue in _radioPanelPZ69.DisplayValueHashSet)
                 {
-                    
+
                     if (displayValue.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM1)
                     {
                         if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
@@ -1582,239 +1593,17 @@ namespace DCSFlightpanels
 
                 foreach (var keyBinding in _radioPanelPZ69.KeyBindingsHashSet)
                 {
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM1)
+                    var textBox = GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
+                    if (keyBinding.OSKeyPress != null)
                     {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperCom1.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
+                        ((TagDataClassPZ69)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
                     }
+                }
 
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM2)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperCom2.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV1)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperNav1.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV2)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperNav2.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperADF)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperADF.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperDME)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperDME.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperXPDR)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperXPDR.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperLargePlus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperLargeMinus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperSmallPlus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperSmallMinus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOn.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOff.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerCOM1)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerCom1.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerCOM2)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerCom2.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV1)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerNav1.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV2)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerNav2.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerADF)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerADF.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerDME)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerDME.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerXPDR)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerXPDR.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerLargePlus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerLargeMinus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerSmallPlus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec)
-                    {
-                        if (keyBinding.OSKeyPress != null)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerSmallMinus.Tag).KeyPress = keyBinding.OSKeyPress;
-                        }
-                    }
-
-                    if (_radioPanelPZ69.IsBindingActive(keyBinding) && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerFreqSwitch)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOn.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOff.Tag).KeyPress = keyBinding.OSKeyPress;
-                            }
-                        }
-                    }
+                foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
+                {
+                    var textBox = GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
+                    ((TagDataClassPZ69)textBox.Tag).BIPLink = bipLinkPZ69;
                 }
 
                 foreach (var lcdBinding in _radioPanelPZ69.LCDBindings)
@@ -1862,331 +1651,11 @@ namespace DCSFlightpanels
                         continue;
                     }
 
-                    if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition)
+                    var textBox = GetTextBox(dcsbiosBinding.RadioPanelPZ69Knob, dcsbiosBinding.WhenTurnedOn);
+
+                    if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition)
                     {
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM1)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperCom1.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperCom1.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperCom2.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperCom2.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperNav1.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperNav1.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperNav2.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperNav2.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperADF.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperADF.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperDME.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperDME.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperXPDR.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperXPDR.Text = dcsbiosBinding.Description;
-
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperLargePlus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperLargePlus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperLargeMinus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperLargeMinus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperSmallPlus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperSmallPlus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperSmallMinus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxUpperSmallMinus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch)
-                        {
-                            if (dcsbiosBinding.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOn.Tag).DCSBIOSBinding = dcsbiosBinding;
-                                TextBoxUpperActStbyOn.Text = dcsbiosBinding.Description;
-                            }
-                            else
-                            {
-                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOff.Tag).DCSBIOSBinding = dcsbiosBinding;
-                                TextBoxUpperActStbyOff.Text = dcsbiosBinding.Description;
-                            }
-                        }
-                    }
-                    else if(dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition)
-                    {
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM1)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerCom1.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerCom1.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM2)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerCom2.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerCom2.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV1)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerNav1.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerNav1.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV2)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerNav2.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerNav2.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerADF)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerADF.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerADF.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerDME)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerDME.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerDME.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerXPDR)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerXPDR.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerXPDR.Text = dcsbiosBinding.Description;
-
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerLargePlus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerLargePlus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerLargeMinus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerLargeMinus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerSmallPlus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerSmallPlus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerSmallMinus.Tag).DCSBIOSBinding = dcsbiosBinding;
-                            TextBoxLowerSmallMinus.Text = dcsbiosBinding.Description;
-                        }
-
-                        if (dcsbiosBinding.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerFreqSwitch)
-                        {
-                            if (dcsbiosBinding.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOn.Tag).DCSBIOSBinding = dcsbiosBinding;
-                                TextBoxLowerActStbyOn.Text = dcsbiosBinding.Description;
-                            }
-                            else
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOff.Tag).DCSBIOSBinding = dcsbiosBinding;
-                                TextBoxLowerActStbyOff.Text = dcsbiosBinding.Description;
-                            }
-                        }
-                    }
-
-
-                    foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
-                    {
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM1)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperCom1.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperCOM2)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperCom2.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV1)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperNav1.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperNAV2)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperNav2.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperADF)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperADF.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperDME)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperDME.Tag).BIPLink = bipLinkPZ69;
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperXPDR)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperXPDR.Tag).BIPLink = bipLinkPZ69; 
-
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperLargePlus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperLargeMinus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperSmallPlus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxUpperSmallMinus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOn.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                            else
-                            {
-                                ((TagDataClassPZ69Full)TextBoxUpperActStbyOff.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM1)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerCom1.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerCOM2)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerCom2.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV1)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerNav1.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerNAV2)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerNav2.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerADF)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerADF.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerDME)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerDME.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerXPDR)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerXPDR.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerLargePlus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerLargeMinus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerSmallPlus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec)
-                        {
-                            ((TagDataClassPZ69Full)TextBoxLowerSmallMinus.Tag).BIPLink = bipLinkPZ69; 
-                        }
-
-                        if (bipLinkPZ69.RadioPanelPZ69Knob == RadioPanelPZ69KnobsEmulator.LowerFreqSwitch)
-                        {
-                            if (bipLinkPZ69.WhenTurnedOn)
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOn.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                            else
-                            {
-                                ((TagDataClassPZ69Full)TextBoxLowerActStbyOff.Tag).BIPLink = bipLinkPZ69; 
-                            }
-                        }
+                        ((TagDataClassPZ69Full)textBox.Tag).DCSBIOSBinding = dcsbiosBinding;
                     }
                 }
             }
@@ -2568,10 +2037,10 @@ namespace DCSFlightpanels
 
         private void HideButtonImages()
         {
-                DotTopLeftLcd.Visibility = Visibility.Collapsed;
-                DotBottomLeftLcd.Visibility = Visibility.Collapsed;
-                DotTopRightLcd.Visibility = Visibility.Collapsed;
-                DotBottomRightLcd.Visibility = Visibility.Collapsed;
+            DotTopLeftLcd.Visibility = Visibility.Collapsed;
+            DotBottomLeftLcd.Visibility = Visibility.Collapsed;
+            DotTopRightLcd.Visibility = Visibility.Collapsed;
+            DotBottomRightLcd.Visibility = Visibility.Collapsed;
         }
 
         private void HideAllImages()
