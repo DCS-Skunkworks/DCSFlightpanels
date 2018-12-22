@@ -61,6 +61,15 @@ namespace DCSFlightpanels
             return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM == null || _dcsbiosBindingTPM.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
         }
 
+        public void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        {
+            if (_dcsbiosBindingTPM == null)
+            {
+                _dcsbiosBindingTPM = new DCSBIOSBindingTPM();
+            }
+
+            _dcsbiosBindingTPM.DCSBIOSInputs = dcsBiosInputs;
+        }
 
         public DCSBIOSBindingTPM DCSBIOSBinding
         {
@@ -72,13 +81,20 @@ namespace DCSFlightpanels
                     throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
                 }
                 _dcsbiosBindingTPM = value;
-                if (string.IsNullOrEmpty(_dcsbiosBindingTPM.Description))
+                if (_dcsbiosBindingTPM != null)
                 {
-                    _textBox.Text = "DCS-BIOS";
+                    if (string.IsNullOrEmpty(_dcsbiosBindingTPM.Description))
+                    {
+                        _textBox.Text = "DCS-BIOS";
+                    }
+                    else
+                    {
+                        _textBox.Text = _dcsbiosBindingTPM.Description;
+                    }
                 }
                 else
                 {
-                    _textBox.Text = _dcsbiosBindingTPM.Description;
+                    _textBox.Text = "";
                 }
             }
         }
@@ -89,7 +105,14 @@ namespace DCSFlightpanels
             set
             {
                 _bipLinkTPM = value;
-                _textBox.Background = Brushes.Bisque;
+                if (_bipLinkTPM != null)
+                {
+                    _textBox.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    _textBox.Background = Brushes.White;
+                }
             }
         }
 
@@ -103,7 +126,14 @@ namespace DCSFlightpanels
                     throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
                 }
                 _osKeyPress = value;
-                _textBox.Text = _osKeyPress.GetKeyPressInformation();
+                if (_osKeyPress != null)
+                {
+                    _textBox.Text = _osKeyPress.GetKeyPressInformation();
+                }
+                else
+                {
+                    _textBox.Text = "";
+                }
             }
         }
 

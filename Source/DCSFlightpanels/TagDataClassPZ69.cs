@@ -59,7 +59,14 @@ namespace DCSFlightpanels
             set
             {
                 _bipLinkPZ69 = value;
-                _textBox.Background = Brushes.Bisque;
+                if (_bipLinkPZ69 != null)
+                {
+                    _textBox.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    _textBox.Background = Brushes.White;
+                }
             }
         }
 
@@ -69,7 +76,14 @@ namespace DCSFlightpanels
             set
             {
                 _osKeyPress = value;
-                _textBox.Text = _osKeyPress.GetKeyPressInformation();
+                if (_osKeyPress != null)
+                {
+                    _textBox.Text = _osKeyPress.GetKeyPressInformation();
+                }
+                else
+                {
+                    _textBox.Text = "";
+                }
             }
         }
 

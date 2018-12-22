@@ -18,7 +18,7 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class RadioPanelPZ69UserControlFullEmulator : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
-        private readonly RadioPanelPZ69FullEmulator _radioPanelPZ69;
+        private readonly RadioPanelPZ69EmulatorFull _radioPanelPZ69;
         private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
         private IGlobalHandler _globalHandler;
@@ -36,7 +36,7 @@ namespace DCSFlightpanels
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             HideAllImages();
 
-            _radioPanelPZ69 = new RadioPanelPZ69FullEmulator(hidSkeleton);
+            _radioPanelPZ69 = new RadioPanelPZ69EmulatorFull(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
             _radioPanelPZ69.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
@@ -243,6 +243,10 @@ namespace DCSFlightpanels
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
+                if (textBox.Equals(TextBoxLogPZ69))
+                {
+                    continue;
+                }
                 textBox.Tag = new TagDataClassPZ69Full(textBox);
             }
             _textBoxTagsSet = true;
@@ -640,6 +644,10 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
+                if (textBox.Equals(TextBoxLogPZ69))
+                {
+                    continue;
+                }
                 var tagHolderClass = (TagDataClassPZ69Full)textBox.Tag;
                 textBox.Text = "";
                 tagHolderClass.ClearAll();
@@ -731,11 +739,28 @@ namespace DCSFlightpanels
                     }
                     return;
                 }
+
                 foreach (MenuItem item in contextMenu.Items)
                 {
                     item.Visibility = Visibility.Collapsed;
                 }
-                if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
+
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsDCSBIOS())
+                {
+                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+                else if (((TagDataClassPZ69Full)textBox.Tag).ContainsKeySequence())
                 {
                     // 2) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -759,6 +784,10 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
+                        else if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
                         else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
                         {
                             item.Visibility = Visibility.Visible;
@@ -774,7 +803,7 @@ namespace DCSFlightpanels
                     // 5) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!item.Name.Contains("EditSequence"))
+                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
                         {
                             if (item.Name.Contains("EditBIP"))
                             {
@@ -795,6 +824,10 @@ namespace DCSFlightpanels
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
+                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
                         if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
                         {
                             item.Visibility = Visibility.Visible;
@@ -2759,6 +2792,19 @@ namespace DCSFlightpanels
             }
         }
 
+        private void UpdateDCSBIOSBinding(TextBox textBox)
+        {
+            try
+            {
+                var key = GetPZ69Key(textBox);
+                _radioPanelPZ69.AddOrUpdateDCSBIOSBinding(key.RadioPanelPZ69Key, ((TagDataClassPZ69Full)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(345012, ex);
+            }
+        }
+
         private RadioPanelPZ69KeyOnOff GetPZ69Key(TextBox textBox)
         {
             try
@@ -2989,6 +3035,59 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(345012, ex);
             }
             throw new Exception("Failed to find TextBox for Radiopanel knob " + knob);
+        }
+
+        private void MenuContextEditDCSBIOSControlTextBoxClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+                DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
+                if (((TagDataClassPZ69Full)textBox.Tag).ContainsDCSBIOS())
+                {
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassPZ69Full)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                }
+                else
+                {
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                }
+                dcsBIOSControlsConfigsWindow.ShowDialog();
+                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true)
+                {
+                    var dcsBiosInputs = dcsBIOSControlsConfigsWindow.DCSBIOSInputs;
+                    var text = string.IsNullOrWhiteSpace(dcsBIOSControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsBIOSControlsConfigsWindow.Description;
+                    //1 appropriate text to textbox
+                    //2 update bindings
+                    textBox.Text = text;
+                    ((TagDataClassPZ69Full)textBox.Tag).Consume(dcsBiosInputs);
+                    UpdateDCSBIOSBinding(textBox);
+                }
+                TextBoxLogPZ69.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(442044, ex);
+            }
+        }
+
+        private void ContextMenuItemEditDCSBIOS_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            try
+            {
+                var contextMenu = (ContextMenu)sender;
+                foreach (MenuItem item in contextMenu.Items)
+                {
+                    item.IsEnabled = !Common.KeyEmulationOnly();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(204165, ex);
+            }
         }
     }
 }

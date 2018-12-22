@@ -82,13 +82,20 @@ namespace DCSFlightpanels
                     throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
                 }
                 _dcsbiosBindingPZ55 = value;
-                if (string.IsNullOrEmpty(_dcsbiosBindingPZ55.Description))
+                if (_dcsbiosBindingPZ55 != null)
                 {
-                    _textBox.Text = "DCS-BIOS";
+                    if (string.IsNullOrEmpty(_dcsbiosBindingPZ55.Description))
+                    {
+                        _textBox.Text = "DCS-BIOS";
+                    }
+                    else
+                    {
+                        _textBox.Text = _dcsbiosBindingPZ55.Description;
+                    }
                 }
                 else
                 {
-                    _textBox.Text = _dcsbiosBindingPZ55.Description;
+                    _textBox.Text = "";
                 }
             }
         }
@@ -99,7 +106,14 @@ namespace DCSFlightpanels
             set
             {
                 _bipLinkPZ55 = value;
-                _textBox.Background = Brushes.Bisque;
+                if (_bipLinkPZ55 != null)
+                {
+                    _textBox.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    _textBox.Background = Brushes.White;
+                }
             }
         }
 
@@ -119,7 +133,14 @@ namespace DCSFlightpanels
                     throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
                 }
                 _osKeyPress = value;
-                _textBox.Text = _osKeyPress.GetKeyPressInformation();
+                if (_osKeyPress != null)
+                {
+                    _textBox.Text = _osKeyPress.GetKeyPressInformation();
+                }
+                else
+                {
+                    _textBox.Text = "";
+                }
             }
         }
 

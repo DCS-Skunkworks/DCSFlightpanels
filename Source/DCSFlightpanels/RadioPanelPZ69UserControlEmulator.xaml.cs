@@ -237,6 +237,10 @@ namespace DCSFlightpanels
             }
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
+                if (textBox.Equals(TextBoxLogPZ69))
+                {
+                    continue;
+                }
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
                 textBox.Tag = new TagDataClassPZ69(textBox, GetPZ69Key(textBox));
             }
@@ -621,6 +625,10 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
+                if (textBox.Equals(TextBoxLogPZ69))
+                {
+                    continue;
+                }
                 var tagHolderClass = (TagDataClassPZ69)textBox.Tag;
                 textBox.Text = "";
                 tagHolderClass.ClearAll();

@@ -333,7 +333,7 @@ namespace DCSFlightpanels
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    ((TagDataClassTPM)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs = dcsBiosInputs;
+                    ((TagDataClassTPM)textBox.Tag).Consume(dcsBiosInputs);
                     UpdateDCSBIOSBinding(textBox);
                 }
                 TextBoxLogTPM.Focus();
@@ -486,6 +486,10 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
+                if (textBox.Equals(TextBoxLogTPM))
+                {
+                    continue;
+                }
                 var tagHolderClass = (TagDataClassTPM)textBox.Tag;
                 textBox.Text = "";
                 tagHolderClass.ClearAll();
@@ -505,6 +509,10 @@ namespace DCSFlightpanels
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
+                if (textBox.Equals(TextBoxLogTPM))
+                {
+                    continue;
+                }
                 textBox.Tag = new TagDataClassTPM(textBox, GetTPMSwitch(textBox));
             }
             _textBoxTagsSet = true;

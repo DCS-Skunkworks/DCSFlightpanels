@@ -149,6 +149,10 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
+                if (textBox.Equals(TextBoxLogPZ70))
+                {
+                    continue;
+                }
                 var tagHolderClass = (TagDataClassPZ70)textBox.Tag;
                 textBox.Text = "";
                 tagHolderClass.ClearAll();
@@ -168,7 +172,10 @@ namespace DCSFlightpanels
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
-                textBox.Tag = new TagDataClassPZ70(textBox, GetPZ70Knob(textBox));
+                if (!textBox.Equals(TextBoxLogPZ70))
+                {
+                    textBox.Tag = new TagDataClassPZ70(textBox, GetPZ70Knob(textBox));
+                }
             }
             _textBoxTagsSet = true;
         }
@@ -1234,7 +1241,7 @@ namespace DCSFlightpanels
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    ((TagDataClassPZ70)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs = dcsBiosInputs;
+                    ((TagDataClassPZ70)textBox.Tag).Consume(dcsBiosInputs);
                     UpdateDCSBIOSBinding(textBox);
                 }
                 TextBoxLogPZ70.Focus();
