@@ -128,7 +128,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("LoadMetaDataEnd() : " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -152,7 +152,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("LoadCommonData() : " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -218,7 +218,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("LoadControls() : " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -232,52 +232,63 @@ namespace DCS_BIOS
              *
              * This function will have to change when (if) new types of profiles are added to DCS-BIOS
              */
-
-            if (_airframe == DCSAirframe.NOFRAMELOADEDYET || Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
+            try
             {
-                return;
-            }
-
-            if (!Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled))
-            {
-                if (DCSBIOSProfileLoadStatus.IsLoaded(DCSAirframe.NS430.GetDescription()))
+                if (_airframe == DCSAirframe.NOFRAMELOADEDYET ||
+                    Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
                 {
-                    //Discard all DCS-BIOS controls if user "unloaded" NS430. Not possible to remove them specifically
-                    //Better to force load all controls
-                    Reset();
+                    return;
+                }
+
+                if (!Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled))
+                {
+                    if (DCSBIOSProfileLoadStatus.IsLoaded(DCSAirframe.NS430.GetDescription()))
+                    {
+                        //Discard all DCS-BIOS controls if user "unloaded" NS430. Not possible to remove them specifically
+                        //Better to force load all controls
+                        Reset();
+                    }
+                    else
+                    {
+                        DCSBIOSProfileLoadStatus.Remove(DCSAirframe.NS430.GetDescription());
+                    }
+                }
+
+                if (Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled))
+                {
+                    LoadControls(_jsonDirectory, DCSAirframe.NS430.GetDescription());
+                }
+
+                if (_airframe == DCSAirframe.FC3_CD_SRS)
+                {
+                    LoadCommonData(_jsonDirectory);
+                    LoadMetaDataEnd(_jsonDirectory);
                 }
                 else
                 {
-                    DCSBIOSProfileLoadStatus.Remove(DCSAirframe.NS430.GetDescription());
+                    LoadCommonData(_jsonDirectory);
+                    LoadMetaDataEnd(_jsonDirectory);
+                    //Load the controls for the actual aircraft/helicopter
+                    LoadControls(_jsonDirectory, _airframe.GetDescription());
+                }
+
+                //Remove duplicates which may come from loading NS430 or other additional profiles
+                while (_dcsbiosControls.Count(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")) > 1)
+                {
+                    _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject =>
+                        controlObject.identifier.Equals("_UPDATE_COUNTER")));
+                }
+
+                while (_dcsbiosControls.Count(controlObject =>
+                           controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")) > 1)
+                {
+                    _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject =>
+                        controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")));
                 }
             }
-
-            if (Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled))
+            catch (Exception e)
             {
-                LoadControls(_jsonDirectory, DCSAirframe.NS430.GetDescription());
-            }
-
-            if (_airframe == DCSAirframe.FC3_CD_SRS)
-            {
-                LoadCommonData(_jsonDirectory);
-                LoadMetaDataEnd(_jsonDirectory);
-            }
-            else
-            {
-                LoadCommonData(_jsonDirectory);
-                LoadMetaDataEnd(_jsonDirectory);
-                //Load the controls for the actual aircraft/helicopter
-                LoadControls(_jsonDirectory, _airframe.GetDescription());
-            }
-
-            //Remove duplicates which may come from loading NS430 or other additional profiles
-            while (_dcsbiosControls.Count(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")) > 1)
-            {
-                _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject => controlObject.identifier.Equals("_UPDATE_COUNTER")));
-            }
-            while (_dcsbiosControls.Count(controlObject => controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")) > 1)
-            {
-                _dcsbiosControls.Remove(_dcsbiosControls.FindLast(controlObject => controlObject.identifier.Equals("_UPDATE_SKIP_COUNTER")));
+                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + e.Message);
             }
         }
 
