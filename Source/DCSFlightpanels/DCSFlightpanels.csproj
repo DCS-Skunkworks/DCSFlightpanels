@@ -142,6 +142,9 @@
     <Compile Include="LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelPZ69UserControlFullEmulator.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlFullEmulator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadioPanelPZ69UserControlEmulator.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
     </Compile>
@@ -203,6 +206,8 @@
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagDataClassPZ69Button.cs" />
+    <Compile Include="TagDataClassPZ69Full.cs" />
     <Compile Include="TagDataClassTPM.cs" />
     <Compile Include="TagDataClassPZ69.cs" />
     <Compile Include="TagDataClassPZ70.cs" />
@@ -284,6 +289,10 @@
     <Page Include="MultiPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlFullEmulator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="RadioPanelPZ69UserControlEmulator.xaml">
       <Generator>MSBuild:Compile</Generator>

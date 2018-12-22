@@ -105,7 +105,7 @@ namespace DCSFlightpanels
             TextBoxFormula.IsEnabled = LabelFormula.IsEnabled;
             LabelResult.IsEnabled = LabelFormula.IsEnabled;
             ButtonTestFormula.IsEnabled = LabelFormula.IsEnabled;
-            ButtonOk.IsEnabled = _dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true);
+            ButtonOk.IsEnabled = (_dcsbiosControl == null && _dcsBiosOutput == null) || (_dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true));
             if (_dcsbiosControl == null && _dcsBiosOutput == null)
             {
                 TextBoxControlId.Text = "";
@@ -117,41 +117,34 @@ namespace DCSFlightpanels
 
         private void CopyValues()
         {
-            try
+            if (CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value)
             {
-                if (CheckBoxUseFormula.IsChecked.HasValue && CheckBoxUseFormula.IsChecked.Value)
+                //Use formula
+                try
                 {
-                    //Use formula
-                    try
-                    {
-                        _dcsbiosOutputFormula = new DCSBIOSOutputFormula(TextBoxFormula.Text);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Error while creating formula object : " + e.Message);
-                    }
+                    _dcsbiosOutputFormula = new DCSBIOSOutputFormula(TextBoxFormula.Text);
                 }
-                else
+                catch (Exception e)
                 {
-                    //Use single DCSBIOSOutput
-                    //This is were DCSBiosOutput (subset of DCSBIOSControl) get populated from DCSBIOSControl
-                    try
-                    {
-                        if (_dcsbiosControl == null && !string.IsNullOrWhiteSpace(TextBoxControlId.Text))
-                        {
-                            _dcsbiosControl = DCSBIOSControlLocator.GetControl(TextBoxControlId.Text);
-                            _dcsBiosOutput.Consume(_dcsbiosControl);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Error while creating DCSBIOSOutput object : " + e.Message);
-                    }
+                    throw new Exception("Error while creating formula object : " + e.Message);
                 }
             }
-            catch (Exception e)
+            else
             {
-                Common.ShowErrorMessageBox(1030771, e, "Error in CopyValues() : ");
+                //Use single DCSBIOSOutput
+                //This is were DCSBiosOutput (subset of DCSBIOSControl) get populated from DCSBIOSControl
+                try
+                {
+                    if (_dcsbiosControl == null && !string.IsNullOrWhiteSpace(TextBoxControlId.Text))
+                    {
+                        _dcsbiosControl = DCSBIOSControlLocator.GetControl(TextBoxControlId.Text);
+                        _dcsBiosOutput.Consume(_dcsbiosControl);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error while creating DCSBIOSOutput object : " + e.Message);
+                }
             }
         }
 

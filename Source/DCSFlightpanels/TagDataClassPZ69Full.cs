@@ -7,28 +7,26 @@ using NonVisuals;
 
 namespace DCSFlightpanels
 {
-    internal class TagDataClassTPM
+    internal class TagDataClassPZ69Full
     {
-        private TPMPanelSwitchOnOff _key;
-        private DCSBIOSBindingTPM _dcsbiosBindingTPM;
-        private BIPLinkTPM _bipLinkTPM;
+        private BIPLinkPZ69 _bipLinkPZ69;
         private OSKeyPress _osKeyPress;
+        private DCSBIOSBindingPZ69 _dcsbiosBindingPZ69;
         private readonly TextBox _textBox;
 
-        public TagDataClassTPM(TextBox textBox, TPMPanelSwitchOnOff key)
+        public TagDataClassPZ69Full(TextBox textBox)
         {
             _textBox = textBox;
-            _key = key;
         }
 
         public bool ContainsDCSBIOS()
         {
-            return _dcsbiosBindingTPM != null;// && _dcsbiosInputs.Count > 0;
+            return _dcsbiosBindingPZ69 != null;// && _dcsbiosInputs.Count > 0;
         }
 
         public bool ContainsBIPLink()
         {
-            return _bipLinkTPM != null && _bipLinkTPM.BIPLights.Count > 0;
+            return _bipLinkPZ69 != null && _bipLinkPZ69.BIPLights.Count > 0;
         }
 
         public bool ContainsOSKeyPress()
@@ -46,6 +44,11 @@ namespace DCSFlightpanels
             return _osKeyPress != null && !_osKeyPress.IsMultiSequenced();
         }
 
+        public bool ContainsDCSBIOSBinding()
+        {
+            return _dcsbiosBindingPZ69 != null && _dcsbiosBindingPZ69.HasBinding();
+        }
+
         public SortedList<int, KeyPressInfo> GetKeySequence()
         {
             return _osKeyPress.KeySequence;
@@ -56,56 +59,28 @@ namespace DCSFlightpanels
             _osKeyPress.KeySequence = sortedList;
         }*/
 
-        public bool IsEmpty()
-        {
-            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM == null || _dcsbiosBindingTPM.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
-        }
-
         public void Consume(List<DCSBIOSInput> dcsBiosInputs)
         {
-            if (_dcsbiosBindingTPM == null)
+            if (_dcsbiosBindingPZ69 == null)
             {
-                _dcsbiosBindingTPM = new DCSBIOSBindingTPM();
+                _dcsbiosBindingPZ69 = new DCSBIOSBindingPZ69();
             }
 
-            _dcsbiosBindingTPM.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBindingPZ69.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSBindingTPM DCSBIOSBinding
+        public bool IsEmpty()
         {
-            get => _dcsbiosBindingTPM;
-            set
-            {
-                if (ContainsOSKeyPress())
-                {
-                    throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
-                }
-                _dcsbiosBindingTPM = value;
-                if (_dcsbiosBindingTPM != null)
-                {
-                    if (string.IsNullOrEmpty(_dcsbiosBindingTPM.Description))
-                    {
-                        _textBox.Text = "DCS-BIOS";
-                    }
-                    else
-                    {
-                        _textBox.Text = _dcsbiosBindingTPM.Description;
-                    }
-                }
-                else
-                {
-                    _textBox.Text = "";
-                }
-            }
+            return (_bipLinkPZ69 == null || _bipLinkPZ69.BIPLights.Count == 0) && (_dcsbiosBindingPZ69 == null || _dcsbiosBindingPZ69.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
         }
 
-        public BIPLinkTPM BIPLink
+        public BIPLinkPZ69 BIPLink
         {
-            get => _bipLinkTPM;
+            get => _bipLinkPZ69;
             set
             {
-                _bipLinkTPM = value;
-                if (_bipLinkTPM != null)
+                _bipLinkPZ69 = value;
+                if (_bipLinkPZ69 != null)
                 {
                     _textBox.Background = Brushes.Bisque;
                 }
@@ -121,7 +96,7 @@ namespace DCSFlightpanels
             get => _osKeyPress;
             set
             {
-                if (ContainsDCSBIOS())
+                if (ContainsDCSBIOSBinding())
                 {
                     throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
                 }
@@ -137,17 +112,39 @@ namespace DCSFlightpanels
             }
         }
 
-        public TPMPanelSwitchOnOff Key
+        public DCSBIOSBindingPZ69 DCSBIOSBinding
         {
-            get => _key;
-            set => _key = value;
+            get => _dcsbiosBindingPZ69;
+            set
+            {
+                if (ContainsOSKeyPress())
+                {
+                    throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
+                }
+                _dcsbiosBindingPZ69 = value;
+                if (_dcsbiosBindingPZ69 != null)
+                {
+                    if (string.IsNullOrEmpty(_dcsbiosBindingPZ69.Description))
+                    {
+                        _textBox.Text = "DCS-BIOS";
+                    }
+                    else
+                    {
+                        _textBox.Text = _dcsbiosBindingPZ69.Description;
+                    }
+                }
+                else
+                {
+                    _textBox.Text = "";
+                }
+            }
         }
 
         public void ClearAll()
         {
-            _dcsbiosBindingTPM = null;
-            _bipLinkTPM = null;
+            _bipLinkPZ69 = null;
             _osKeyPress = null;
+            _dcsbiosBindingPZ69 = null;
             _textBox.Background = Brushes.White;
             _textBox.Text = "";
         }

@@ -256,7 +256,6 @@ namespace DCS_BIOS
 
         public void Consume(DCSBIOSControl dcsbiosControl)
         {
-
             _controlId = dcsbiosControl.identifier;
             _controlDescription = dcsbiosControl.description;
             _controlType = dcsbiosControl.physical_variant;

@@ -319,7 +319,7 @@ namespace DCSFlightpanels
                 DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
                 if (((TagDataClassTPM)textBox.Tag).ContainsDCSBIOS())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassTPM)textBox.Tag).DCSBIOSInputs, textBox.Text);
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassTPM)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
@@ -333,7 +333,7 @@ namespace DCSFlightpanels
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    ((TagDataClassTPM)textBox.Tag).DCSBIOSInputs = dcsBiosInputs;
+                    ((TagDataClassTPM)textBox.Tag).Consume(dcsBiosInputs);
                     UpdateDCSBIOSBinding(textBox);
                 }
                 TextBoxLogTPM.Focus();
@@ -486,6 +486,10 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
+                if (textBox.Equals(TextBoxLogTPM))
+                {
+                    continue;
+                }
                 var tagHolderClass = (TagDataClassTPM)textBox.Tag;
                 textBox.Text = "";
                 tagHolderClass.ClearAll();
@@ -505,7 +509,11 @@ namespace DCSFlightpanels
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
-                textBox.Tag = new TagDataClassTPM();
+                if (textBox.Equals(TextBoxLogTPM))
+                {
+                    continue;
+                }
+                textBox.Tag = new TagDataClassTPM(textBox, GetTPMSwitch(textBox));
             }
             _textBoxTagsSet = true;
         }
@@ -792,8 +800,8 @@ namespace DCSFlightpanels
                             return;
                         }
                         textBox.Text = "";
-                        _tpmPanel.RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, GetTPMSwitch(textBox).TPMSwitch, GetTPMSwitch(textBox).On);
-                        ((TagDataClassTPM)textBox.Tag).DCSBIOSInputs.Clear();
+                        _tpmPanel.RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, GetTPMSwitch(textBox).TPMSwitch, GetTPMSwitch(textBox).ButtonState);
+                        ((TagDataClassTPM)textBox.Tag).DCSBIOSBinding = null;
                     }
                     else if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence())
                     {
@@ -1155,78 +1163,8 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (textBox.Equals(TextBoxG1Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G1, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG1On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G1, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG2Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G2, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG2On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G2, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG3Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G3, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG3On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G3, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG4Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G4, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG4On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G4, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG5Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G5, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG5On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G5, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG6Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G6, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG6On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G6, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG7Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G7, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG7On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G7, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG8Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G8, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG8On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G8, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
-                if (textBox.Equals(TextBoxG9Off))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G9, ((TagDataClassTPM)textBox.Tag).GetKeySequence(), false);
-                }
-                if (textBox.Equals(TextBoxG9On))
-                {
-                    _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, TPMPanelSwitches.G9, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
-                }
+                var tag = (TagDataClassTPM)textBox.Tag;
+                _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, tag.Key.TPMSwitch, tag.GetKeySequence(), tag.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1238,78 +1176,8 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (textBox.Equals(TextBoxG1Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G1, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG1On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G1, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG2Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G2, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG2On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G2, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG3Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G3, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG3On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G3, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG4Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G4, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG4On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G4, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG5Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G5, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG5On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G5, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG6Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G6, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG6On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G6, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG7Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G7, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG7On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G7, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG8Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G8, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG8On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G8, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
-                if (textBox.Equals(TextBoxG9Off))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G9, ((TagDataClassTPM)textBox.Tag).BIPLink, false);
-                }
-                if (textBox.Equals(TextBoxG9On))
-                {
-                    _tpmPanel.AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches.G9, ((TagDataClassTPM)textBox.Tag).BIPLink);
-                }
+                var tag = (TagDataClassTPM)textBox.Tag;
+                _tpmPanel.AddOrUpdateBIPLinkKeyBinding(tag.Key.TPMSwitch, tag.BIPLink, tag.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1330,78 +1198,8 @@ namespace DCSFlightpanels
                 {
                     keyPressLength = ((TagDataClassTPM)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
-                if (textBox.Equals(TextBoxG1Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G1, TextBoxG1Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG1On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G1, TextBoxG1On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG2Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G2, TextBoxG2Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG2On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G2, TextBoxG2On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG3Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G3, TextBoxG3Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG3On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G3, TextBoxG3On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG4Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G4, TextBoxG4Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG4On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G4, TextBoxG4On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG5Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G5, TextBoxG5Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG5On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G5, TextBoxG5On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG6Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G6, TextBoxG6Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG6On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G6, TextBoxG6On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG7Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G7, TextBoxG7Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG7On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G7, TextBoxG7On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG8Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G8, TextBoxG8Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG8On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G8, TextBoxG8On.Text, keyPressLength);
-                }
-                if (textBox.Equals(TextBoxG9Off))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G9, TextBoxG9Off.Text, keyPressLength, false);
-                }
-                if (textBox.Equals(TextBoxG9On))
-                {
-                    _tpmPanel.AddOrUpdateSingleKeyBinding(TPMPanelSwitches.G9, TextBoxG9On.Text, keyPressLength);
-                }
+                var tag = (TagDataClassTPM)textBox.Tag;
+                _tpmPanel.AddOrUpdateSingleKeyBinding(tag.Key.TPMSwitch, textBox.Text, keyPressLength, tag.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1413,83 +1211,8 @@ namespace DCSFlightpanels
         {
             try
             {
-                List<DCSBIOSInput> dcsBiosInputs = null;
-                if (((TagDataClassTPM)textBox.Tag).ContainsDCSBIOS())
-                {
-                    dcsBiosInputs = ((TagDataClassTPM)textBox.Tag).DCSBIOSInputs;
-                }
-                if (textBox.Equals(TextBoxG1Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G1, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG1On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G1, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG2Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G2, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG2On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G2, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG3Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G3, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG3On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G3, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG4Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G4, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG4On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G4, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG5Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G5, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG5On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G5, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG6Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G6, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG6On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G6, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG7Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G7, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG7On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G7, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG8Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G8, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG8On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G8, dcsBiosInputs, textBox.Text);
-                }
-                if (textBox.Equals(TextBoxG9Off))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G9, dcsBiosInputs, textBox.Text, false);
-                }
-                if (textBox.Equals(TextBoxG9On))
-                {
-                    _tpmPanel.AddOrUpdateDCSBIOSBinding(TPMPanelSwitches.G9, dcsBiosInputs, textBox.Text);
-                }
+                var tag = (TagDataClassTPM)textBox.Tag;
+                _tpmPanel.AddOrUpdateDCSBIOSBinding(tag.Key.TPMSwitch, tag.DCSBIOSBinding.DCSBIOSInputs, textBox.Text, tag.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1497,89 +1220,6 @@ namespace DCSFlightpanels
             }
         }
 
-        private TPMPanelSwitch.TPMPanelSwitchOnOff GetTPMSwitch(TextBox textBox)
-        {
-            try
-            {
-                if (textBox.Equals(TextBoxG1Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G1, false);
-                }
-                if (textBox.Equals(TextBoxG1On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G1, true);
-                }
-                if (textBox.Equals(TextBoxG2Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G2, false);
-                }
-                if (textBox.Equals(TextBoxG2On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G2, true);
-                }
-                if (textBox.Equals(TextBoxG3Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G3, false);
-                }
-                if (textBox.Equals(TextBoxG3On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G3, true);
-                }
-                if (textBox.Equals(TextBoxG4Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G4, false);
-                }
-                if (textBox.Equals(TextBoxG4On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G4, true);
-                }
-                if (textBox.Equals(TextBoxG5Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G5, false);
-                }
-                if (textBox.Equals(TextBoxG5On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G5, true);
-                }
-                if (textBox.Equals(TextBoxG6Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G6, false);
-                }
-                if (textBox.Equals(TextBoxG6On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G6, true);
-                }
-                if (textBox.Equals(TextBoxG7Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G7, false);
-                }
-                if (textBox.Equals(TextBoxG7On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G7, true);
-                }
-                if (textBox.Equals(TextBoxG8Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G8, false);
-                }
-                if (textBox.Equals(TextBoxG8On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G8, true);
-                }
-                if (textBox.Equals(TextBoxG9Off))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G9, false);
-                }
-                if (textBox.Equals(TextBoxG9On))
-                {
-                    return new TPMPanelSwitch.TPMPanelSwitchOnOff(TPMPanelSwitches.G9, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(345012, ex);
-            }
-            throw new Exception("Should not reach this point");
-        }
 
         private void ShowGraphicConfiguration()
         {
@@ -1591,547 +1231,28 @@ namespace DCSFlightpanels
                 }
                 foreach (var keyBinding in _tpmPanel.KeyBindingsHashSet)
                 {
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G1)
+                    var textBox = GetTextBox(keyBinding.TPMSwitch, keyBinding.WhenTurnedOn);
+                    if (keyBinding.OSKeyPress != null)
                     {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG1On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG1On.Text = ((TagDataClassTPM)TextBoxG1On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG1Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG1Off.Text = ((TagDataClassTPM)TextBoxG1Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G2)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG2On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG2On.Text = ((TagDataClassTPM)TextBoxG2On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null && !keyBinding.OSKeyPress.IsMultiSequenced())
-                            {
-                                ((TagDataClassTPM)TextBoxG2Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG2Off.Text = ((TagDataClassTPM)TextBoxG2Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G3)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG3On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG3On.Text = ((TagDataClassTPM)TextBoxG3On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG3Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG3Off.Text = ((TagDataClassTPM)TextBoxG3Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G4)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG4On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG4On.Text = ((TagDataClassTPM)TextBoxG4On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG4Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG4Off.Text = ((TagDataClassTPM)TextBoxG4Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G5)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG5On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG5On.Text = ((TagDataClassTPM)TextBoxG5On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG5Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG5Off.Text = ((TagDataClassTPM)TextBoxG5Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G6)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG6On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG6On.Text = ((TagDataClassTPM)TextBoxG6On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG6Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG6Off.Text = ((TagDataClassTPM)TextBoxG6Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G7)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG7On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG7On.Text = ((TagDataClassTPM)TextBoxG7On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG7Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG7Off.Text = ((TagDataClassTPM)TextBoxG7Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G8)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG8On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG8On.Text = ((TagDataClassTPM)TextBoxG8On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG8Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG8Off.Text = ((TagDataClassTPM)TextBoxG8Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                    }
-                    if (keyBinding.TPMSwitch == TPMPanelSwitches.G9)
-                    {
-                        if (keyBinding.WhenTurnedOn)
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG9On.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG9On.Text = ((TagDataClassTPM)TextBoxG9On.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
-                        else
-                        {
-                            if (keyBinding.OSKeyPress != null)
-                            {
-                                ((TagDataClassTPM)TextBoxG9Off.Tag).KeyPress = keyBinding.OSKeyPress;
-                                TextBoxG9Off.Text = ((TagDataClassTPM)TextBoxG9Off.Tag).GetTextBoxKeyPressInfo();
-                            }
-                        }
+                        ((TagDataClassTPM)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
-
-
-
-
                 foreach (var dcsBiosBinding in _tpmPanel.DCSBiosBindings)
                 {
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G1)
+                    var textBox = GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
+                    if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG1On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG1On.Text = dcsBiosBinding.Description;
-                                TextBoxG1On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG1Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG1Off.Text = dcsBiosBinding.Description;
-                                TextBoxG1Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G2)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG2On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG2On.Text = dcsBiosBinding.Description;
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG2Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG2Off.Text = dcsBiosBinding.Description;
-                                TextBoxG2Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G3)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG3On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG3On.Text = dcsBiosBinding.Description;
-                                TextBoxG3On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG3Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG3Off.Text = dcsBiosBinding.Description;
-                                TextBoxG3Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G4)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG4On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG4On.Text = dcsBiosBinding.Description;
-                                TextBoxG4On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG4Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG4Off.Text = dcsBiosBinding.Description;
-                                TextBoxG4Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G5)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG5On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG5On.Text = dcsBiosBinding.Description;
-                                TextBoxG5On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG5Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG5Off.Text = dcsBiosBinding.Description;
-                                TextBoxG5Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G6)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG6On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG6On.Text = dcsBiosBinding.Description;
-                                TextBoxG6On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG6Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG6Off.Text = dcsBiosBinding.Description;
-                                TextBoxG6Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G7)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG7On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG7On.Text = dcsBiosBinding.Description;
-                                TextBoxG7On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG7Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG7Off.Text = dcsBiosBinding.Description;
-                                TextBoxG7Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G8)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG8On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG8On.Text = dcsBiosBinding.Description;
-                                TextBoxG8On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG8Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG8Off.Text = dcsBiosBinding.Description;
-                                TextBoxG8Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                    }
-                    if (dcsBiosBinding.TPMSwitch == TPMPanelSwitches.G9)
-                    {
-                        if (dcsBiosBinding.WhenTurnedOn)
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG9On.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG9On.Text = dcsBiosBinding.Description;
-                                TextBoxG9On.ToolTip = "DCS-BIOS";
-                            }
-                        }
-                        else
-                        {
-                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG9Off.Tag).DCSBIOSInputs = dcsBiosBinding.DCSBIOSInputs;
-                                TextBoxG9Off.Text = dcsBiosBinding.Description;
-                                TextBoxG9Off.ToolTip = "DCS-BIOS";
-                            }
-                        }
+                        ((TagDataClassTPM)textBox.Tag).DCSBIOSBinding = dcsBiosBinding;
                     }
                 }
 
                 foreach (var bipLink in _tpmPanel.BipLinkHashSet)
                 {
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G1)
+                    var textBox = GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
+                    if (bipLink.BIPLights.Count > 0)
                     {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG1On.Tag).BIPLink = bipLink;
-                                TextBoxG1On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG1Off.Tag).BIPLink = bipLink;
-                                TextBoxG1Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G2)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG2On.Tag).BIPLink = bipLink;
-                                TextBoxG2On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG2Off.Tag).BIPLink = bipLink;
-                                TextBoxG2Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G3)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG3On.Tag).BIPLink = bipLink;
-                                TextBoxG3On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG3Off.Tag).BIPLink = bipLink;
-                                TextBoxG3Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G4)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG4On.Tag).BIPLink = bipLink;
-                                TextBoxG4On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG4Off.Tag).BIPLink = bipLink;
-                                TextBoxG4Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G5)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG5On.Tag).BIPLink = bipLink;
-                                TextBoxG5On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG5Off.Tag).BIPLink = bipLink;
-                                TextBoxG5Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G6)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG6On.Tag).BIPLink = bipLink;
-                                TextBoxG6On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG6Off.Tag).BIPLink = bipLink;
-                                TextBoxG6Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G7)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG7On.Tag).BIPLink = bipLink;
-                                TextBoxG7On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG7Off.Tag).BIPLink = bipLink;
-                                TextBoxG7Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G8)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG8On.Tag).BIPLink = bipLink;
-                                TextBoxG8On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG8Off.Tag).BIPLink = bipLink;
-                                TextBoxG8Off.Background = Brushes.Bisque;
-                            }
-                        }
-                    }
-                    if (bipLink.TPMSwitch == TPMPanelSwitches.G9)
-                    {
-                        if (bipLink.WhenTurnedOn)
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG9On.Tag).BIPLink = bipLink;
-                                TextBoxG9On.Background = Brushes.Bisque;
-                            }
-                        }
-                        else
-                        {
-                            if (bipLink.BIPLights.Count > 0)
-                            {
-                                ((TagDataClassTPM)TextBoxG9Off.Tag).BIPLink = bipLink;
-                                TextBoxG9Off.Background = Brushes.Bisque;
-                            }
-                        }
+                        ((TagDataClassTPM)textBox.Tag).BIPLink = bipLink;
                     }
                 }
             }
@@ -2156,7 +1277,174 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(3015, ex);
             }
         }
+
+
+        private TPMPanelSwitchOnOff GetTPMSwitch(TextBox textBox)
+        {
+            try
+            {
+                if (textBox.Equals(TextBoxG1Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G1, false);
+                }
+                if (textBox.Equals(TextBoxG1On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G1, true);
+                }
+                if (textBox.Equals(TextBoxG2Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G2, false);
+                }
+                if (textBox.Equals(TextBoxG2On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G2, true);
+                }
+                if (textBox.Equals(TextBoxG3Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G3, false);
+                }
+                if (textBox.Equals(TextBoxG3On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G3, true);
+                }
+                if (textBox.Equals(TextBoxG4Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G4, false);
+                }
+                if (textBox.Equals(TextBoxG4On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G4, true);
+                }
+                if (textBox.Equals(TextBoxG5Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G5, false);
+                }
+                if (textBox.Equals(TextBoxG5On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G5, true);
+                }
+                if (textBox.Equals(TextBoxG6Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G6, false);
+                }
+                if (textBox.Equals(TextBoxG6On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G6, true);
+                }
+                if (textBox.Equals(TextBoxG7Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G7, false);
+                }
+                if (textBox.Equals(TextBoxG7On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G7, true);
+                }
+                if (textBox.Equals(TextBoxG8Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G8, false);
+                }
+                if (textBox.Equals(TextBoxG8On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G8, true);
+                }
+                if (textBox.Equals(TextBoxG9Off))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G9, false);
+                }
+                if (textBox.Equals(TextBoxG9On))
+                {
+                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G9, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(345012, ex);
+            }
+            throw new Exception("Failed to find TPM switch for TextBox : " + textBox.Name);
+        }
+
+        private TextBox GetTextBox(TPMPanelSwitches key, bool whenTurnedOn)
+        {
+            try
+            {
+                if (key == TPMPanelSwitches.G1 && !whenTurnedOn)
+                {
+                    return TextBoxG1Off;
+                }
+                if (key == TPMPanelSwitches.G1 && whenTurnedOn)
+                {
+                    return TextBoxG1On;
+                }
+                if (key == TPMPanelSwitches.G2 && !whenTurnedOn)
+                {
+                    return TextBoxG2Off;
+                }
+                if (key == TPMPanelSwitches.G2 && whenTurnedOn)
+                {
+                    return TextBoxG2On;
+                }
+                if (key == TPMPanelSwitches.G3 && !whenTurnedOn)
+                {
+                    return TextBoxG3Off;
+                }
+                if (key == TPMPanelSwitches.G3 && whenTurnedOn)
+                {
+                    return TextBoxG3On;
+                }
+                if (key == TPMPanelSwitches.G4 && !whenTurnedOn)
+                {
+                    return TextBoxG4Off;
+                }
+                if (key == TPMPanelSwitches.G4 && whenTurnedOn)
+                {
+                    return TextBoxG4On;
+                }
+                if (key == TPMPanelSwitches.G5 && !whenTurnedOn)
+                {
+                    return TextBoxG5Off;
+                }
+                if (key == TPMPanelSwitches.G5 && whenTurnedOn)
+                {
+                    return TextBoxG5On;
+                }
+                if (key == TPMPanelSwitches.G6 && !whenTurnedOn)
+                {
+                    return TextBoxG6Off;
+                }
+                if (key == TPMPanelSwitches.G6 && whenTurnedOn)
+                {
+                    return TextBoxG6On;
+                }
+                if (key == TPMPanelSwitches.G7 && !whenTurnedOn)
+                {
+                    return TextBoxG7Off;
+                }
+                if (key == TPMPanelSwitches.G7 && whenTurnedOn)
+                {
+                    return TextBoxG7On;
+                }
+                if (key == TPMPanelSwitches.G8 && !whenTurnedOn)
+                {
+                    return TextBoxG8Off;
+                }
+                if (key == TPMPanelSwitches.G8 && whenTurnedOn)
+                {
+                    return TextBoxG8On;
+                }
+                if (key == TPMPanelSwitches.G9 && !whenTurnedOn)
+                {
+                    return TextBoxG9Off;
+                }
+                if (key == TPMPanelSwitches.G9 && whenTurnedOn)
+                {
+                    return TextBoxG9On;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(345012, ex);
+            }
+            throw new Exception("Failed to find TextBox for TPM switch : " + key);
+        }
     }
 }
-
-

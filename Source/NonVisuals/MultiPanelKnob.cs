@@ -107,16 +107,16 @@ namespace NonVisuals
     public class MultiPanelPZ70KnobOnOff
     {
         private readonly MultiPanelPZ70Knobs _multiPanelPZ70Knobs;
-        private readonly bool _on;
+        private readonly bool _buttonState;
 
-        public MultiPanelPZ70KnobOnOff(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knobs, bool on)
+        public MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs multiPanelPZ70Knobs, bool buttonState)
         {
             _multiPanelPZ70Knobs = multiPanelPZ70Knobs;
-            _on = @on;
+            _buttonState = buttonState;
         }
 
         public MultiPanelPZ70Knobs MultiPanelPZ70Knob => _multiPanelPZ70Knobs;
 
-        public bool On => _on;
+        public bool ButtonState => _buttonState;
     }
 }
