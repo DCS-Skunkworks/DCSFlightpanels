@@ -1840,7 +1840,7 @@ namespace DCSFlightpanels
                 {
                     return TextBoxFlapsUp;
                 }
-                if (knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN && !whenTurnedOn)
+                if (knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN && whenTurnedOn)
                 {
                     return TextBoxFlapsDown;
                 }
@@ -1848,7 +1848,7 @@ namespace DCSFlightpanels
                 {
                     return TextBoxPitchTrimUp;
                 }
-                if (knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN && !whenTurnedOn)
+                if (knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN && whenTurnedOn)
                 {
                     return TextBoxPitchTrimDown;
                 }
