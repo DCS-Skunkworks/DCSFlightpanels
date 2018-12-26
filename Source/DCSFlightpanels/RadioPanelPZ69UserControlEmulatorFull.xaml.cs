@@ -402,7 +402,7 @@ namespace DCSFlightpanels
                     keyPressLength = ((TagDataClassPZ69Full)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
                 var key = GetPZ69Key(textBox);
-                _radioPanelPZ69.AddOrUpdateSingleKeyBinding(key.RadioPanelPZ69Key, TextBoxUpperCom1.Text, keyPressLength, key.ButtonState);
+                _radioPanelPZ69.AddOrUpdateSingleKeyBinding(key.RadioPanelPZ69Key, textBox.Text, keyPressLength, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -981,6 +981,7 @@ namespace DCSFlightpanels
                         textBox.Background = Brushes.White;
                         UpdateBipLinkBindings(textBox);
                     }
+                    TextBoxLogPZ69.Focus();
                 }
             }
             catch (Exception ex)

@@ -832,6 +832,7 @@ namespace DCSFlightpanels
                         textBox.Background = Brushes.White;
                         UpdateBIPLinkBindings(textBox);
                     }
+                    TextBoxLogPZ70.Focus();
                 }
             }
             catch (Exception ex)
@@ -1328,7 +1329,7 @@ namespace DCSFlightpanels
                     keyPressLength = ((TagDataClassPZ70)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
                 var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateSingleKeyBinding(key.MultiPanelPZ70Knob, TextBoxLcdKnobDecrease.Text, keyPressLength, key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateSingleKeyBinding(key.MultiPanelPZ70Knob, textBox.Text, keyPressLength, key.ButtonState);
             }
             catch (Exception ex)
             {

@@ -831,6 +831,7 @@ namespace DCSFlightpanels
                         textBox.Background = Brushes.White;
                         UpdateBIPLinkBindings(textBox);
                     }
+                    TextBoxLogTPM.Focus();
                 }
             }
             catch (Exception ex)

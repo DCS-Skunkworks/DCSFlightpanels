@@ -44,7 +44,7 @@ namespace DCSFlightpanels
 
         public bool ContainsSingleKey()
         {
-            return _osKeyPress != null && !_osKeyPress.IsMultiSequenced();
+            return _osKeyPress != null && !_osKeyPress.IsMultiSequenced() && _osKeyPress.KeySequence.Count > 0;
         }
 
         public SortedList<int, KeyPressInfo> GetKeySequence()
