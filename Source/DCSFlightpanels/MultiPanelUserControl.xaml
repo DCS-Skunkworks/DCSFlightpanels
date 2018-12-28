@@ -1,0 +1,220 @@
+﻿<UserControl x:Class="DCSFlightpanels.MultiPanelUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="1000" Loaded="MultiPanelUserControl_OnLoaded">
+    <UserControl.Resources>
+        <ContextMenu x:Key="ButtonLcdContextMenu" IsVisibleChanged="ButtonLcdContextMenu_OnIsVisibleChanged" x:Shared="False">
+            <MenuItem Header="Delete" Name="contextMenuItemDeleteBinding" Click="ButtonLcdMenuItemDeleteBinding_OnClick"/>
+        </ContextMenu>
+        <ContextMenu x:Key="TextBoxContextMenuPZ70" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged">
+            <!--<MenuItem Header="Zero" Name="contextMenuItemZero" Click="MenuContextTextBoxClick"/>-->
+            <MenuItem Header="FiftyMilliSec" Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="HalfSecond" Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Second" Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="SecondAndHalf" Name="contextMenuItemSecondAndHalf" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TwoSeconds" Name="contextMenuItemTwoSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThreeSeconds" Name="contextMenuItemThreeSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FourSeconds" Name="contextMenuItemFourSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FiveSecs" Name="contextMenuItemFiveSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TenSecs" Name="contextMenuItemTenSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FifteenSecs" Name="contextMenuItemFifteenSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TwentySecs" Name="contextMenuItemTwentySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThirtySecs" Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FortySecs" Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="SixtySecs" Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Edit sequence" Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
+            <MenuItem Header="Edit DCS-BIOS Control" Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick" ContextMenuOpening="ContextMenuItemEditDCSBIOS_OnContextMenuOpening"/>
+            <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick"/>
+        </ContextMenu>
+    </UserControl.Resources>
+    <Grid>
+        <Grid Name="PZ70Grid" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26" />
+                <RowDefinition Height="240"/>
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="26" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="227*" />
+                <ColumnDefinition Width="357*" />
+                <ColumnDefinition Width="97*" />
+                <ColumnDefinition Width="301*" />
+            </Grid.ColumnDefinitions>
+            <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
+                <Image Height="226" Name="ImagePZ70MultiPanel" Stretch="None" Source="/DCSFlightpanels;component/Images/pz70multipanel.jpg"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="13" Grid.RowSpan="4"  />
+
+                <!-- LEFT KNOB -->
+                <Image Height="76" Name="ImageLeftKnobAlt" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="62" Canvas.Top="61" />
+                <Image Height="76" Name="ImageLeftKnobVs" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="51" Canvas.Top="64" />
+                <Image Height="76" Name="ImageLeftKnobIas" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="42" Canvas.Top="73" />
+                <Image Height="76" Name="ImageLeftKnobHdg" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="40" Canvas.Top="85" />
+                <Image Height="76" Name="ImageLeftKnobCrs" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="44" Canvas.Top="98" />
+
+                <!-- LCD Buttons -->
+                <Image Height="76" Name="ImageLcdButtonAp" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="108" Canvas.Top="152" />
+                <Image Height="76" Name="ImageLcdButtonHdg" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="147" Canvas.Top="142" />
+                <Image Height="76" Name="ImageLcdButtonNav" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="188" Canvas.Top="142" />
+                <Image Height="76" Name="ImageLcdButtonIas" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="229" Canvas.Top="142" />
+                <Image Height="76" Name="ImageLcdButtonAlt" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="270" Canvas.Top="142" />
+                <Image Height="76" Name="ImageLcdButtonVs" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="142" />
+                <Image Height="76" Name="ImageLcdButtonApr" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="147" Canvas.Top="165" />
+                <Image Height="76" Name="ImageLcdButtonRev" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="188" Canvas.Top="165" />
+
+                <!-- LCD Knob -->
+                <Image Height="76" Name="ImageLcdKnobDec" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="370" Canvas.Top="87" />
+                <Image Height="76" Name="ImageLcdKnobInc" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="400" Canvas.Top="87" />
+
+                <!-- Auto Throttle -->
+                <Image Height="76" Name="ImageLcdAutoThrottleOff" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="67" />
+                <Image Height="76" Name="ImageLcdAutoThrottleArm" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="490" Canvas.Top="67" />
+
+                <!-- Flaps -->
+                <Image Height="76" Name="ImageFlapsUp" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="117" />
+                <Image Height="76" Name="ImageFlapsDown" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="440" Canvas.Top="167" />
+
+                <!-- Pitch -->
+                <Image Height="76" Name="ImagePitchUp" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="52" />
+                <Image Height="76" Name="ImagePitchDown" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="155" />
+
+
+                <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="500" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
+                <Button Name="ButtonLcdUpper" Content="Upper LCD Data" Canvas.Left="165" Canvas.Top="87" Width="120" Click="ButtonLcd_OnClick"/>
+                <Button Name="ButtonLcdLower" Content="Lower LCD Data" Canvas.Left="165" Canvas.Top="124" Width="120" Click="ButtonLcd_OnClick"/>
+
+                <Image Height="76" Name="ImageLcdUpperRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="45" />
+                <Image Height="76" Name="ImageLcdLowerRow" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="225" Canvas.Top="112" />
+            </Canvas>
+            <GroupBox Header="Buttons"  FontSize="10" Grid.Column="3" Grid.Row="1" Grid.RowSpan="8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="13*" />
+                        <ColumnDefinition Width="36*"/>
+                        <ColumnDefinition Width="49*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="2">
+                        <Label Content="AP Button ON" FontSize="10" Height="23"   />
+                        <TextBox Height="18" IsReadOnly="True" Name="TextBoxApButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="HDG Button ON" FontSize="10" Height="23"   />
+                        <TextBox Height="18" IsReadOnly="True" Name="TextBoxHdgButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="NAV Button ON" Height="23"  FontSize="10"  />
+                        <TextBox Height="18" IsReadOnly="True" Name="TextBoxNavButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="IAS Button ON" Height="23"  FontSize="10"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxIasButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="ALT Button ON" Height="23"  FontSize="10"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxAltButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="VS Button ON" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxVsButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="APR Button ON" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxAprButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="REV Button ON" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxRevButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="AP Button OFF" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxApButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="HDG Button OFF" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxHdgButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="NAV Button OFF" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxNavButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="IAS Button OFF" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxIasButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="ALT Button OFF" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxAltButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="VS Button OFF" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxVsButtonOff" MouseDoubleClick="TextBoxMouseDoubleClick" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="APR Button OFF" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxAprButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="REV Button OFF" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxRevButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Information"  FontSize="10"  Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="1" Margin="0,0,0,0">
+                <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+                    <TextBlock TextWrapping="Wrap" FontSize="10" FontWeight="Bold">
+                        Dial = IAS/HDG/CRS : Only upper LCD row used<LineBreak/>
+                        Right click buttons to delete any bindings.<LineBreak/>
+                        Negative numbers can only be shown in the lower LCD row.
+                    </TextBlock>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="6"   Grid.RowSpan="3" >
+                <StackPanel >
+                    <Label Content="LCD Knob sensitivity"></Label>
+                    <ComboBox Name="ComboBoxLcdKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxLcdKnobSensitivity_OnSelectionChanged">
+                        <ComboBoxItem >0</ComboBoxItem>
+                        <ComboBoxItem >-1</ComboBoxItem>
+                        <ComboBoxItem >-2</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header=""  FontSize="10"  Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="7*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label Content="Dial Profile : " FontSize="20" FontWeight="Bold" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" >
+                        <Label Name="LabelDialPos" Content="ALT" FontSize="20" FontWeight="Bold" />
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Right part of panel"  FontSize="10"  Grid.Column="1" Grid.Row="4" Grid.RowSpan="10" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="7*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="2">
+                        <Label Content="LCD Knob (+/-) DEC" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxLcdKnobDecrease"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Auto Throttle OFF" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxAutoThrottleOff" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Flaps UP" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxFlapsUp"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Pitch Trim Up" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxPitchTrimUp"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+
+                        
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="LCD Knob (+/-) INC" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxLcdKnobIncrease"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Auto Throttle ARM" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxAutoThrottleOn" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Flaps DOWN" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxFlapsDown"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Pitch Trim Down" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxPitchTrimDown"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+
+                        
+                    </StackPanel>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Log"  FontSize="10"  Grid.Column="3" Grid.Row="10" Grid.RowSpan="4" Margin="0,0.5,0,-1">
+                <TextBox Name="TextBoxLogPZ70" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

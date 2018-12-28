@@ -1,0 +1,71 @@
+﻿<Window x:Class="DCSFlightpanels.DCSBiosOutputTriggerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DCS-BIOS Control Search" Height="350" Width="800"  Loaded="WindowLoaded"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen"  KeyDown="DCSBiosOutputTriggerWindow_OnKeyDown">
+    <Window.Resources>
+        <Popup x:Key="PopUpSearchResults" Width="600" Height="150" PlacementTarget="{Binding ElementName=text}" StaysOpen="False">
+            <Grid HorizontalAlignment="Stretch">
+                <DataGrid AutoGenerateColumns="false" 
+                          Background="White" ItemsSource="{Binding}" SelectionMode="Single" SelectionUnit="FullRow" 
+                          HorizontalAlignment="Stretch" Name="DataGridValues" VerticalAlignment="Stretch" 
+                          VerticalScrollBarVisibility="Visible" MouseDown="UIElement_OnMouseDown" MouseDoubleClick="Control_OnMouseDoubleClick" 
+                          SelectionChanged="Selector_OnSelectionChanged" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=identifier}" Width="*" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=description}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Popup>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="91*" />
+            <ColumnDefinition Width="32*"/>
+            <ColumnDefinition Width="123*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.RowSpan="8" Grid.ColumnSpan="2">
+            <Label Content="Control Id" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="False" />
+            <TextBox Name="TextBoxControlId" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True" />
+
+            <Label Content="Control description" HorizontalAlignment="Stretch" Margin="10,0,0,0"  IsEnabled="False" />
+            <TextBox Name="TextBoxControlDescription" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True"  />
+
+            <Label Content="Output type" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="False"  />
+            <TextBox Name="TextBoxOutputType" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True"  />
+
+            <Label Content="Max value" HorizontalAlignment="Stretch" Margin="10,0,0,0"  IsEnabled="False" />
+            <TextBox Name="TextBoxMaxValue" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True"  />
+        </StackPanel>
+        <!-- <Label Name="ColorLabel"  VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="GREEN" Visibility="Hidden" Grid.Column="1" Grid.Row="0" FontSize="20"/> -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Grid.Row="6">
+            <Button Content="Ok" Height="23" VerticalAlignment="Bottom" Margin="10,0,0,10"  x:Name="ButtonOk" Width="75" Click="ButtonOkClick" />
+            <Button Content="Cancel" Height="23" VerticalAlignment="Bottom" Margin="10,0,10,10" x:Name="ButtonCancel" Width="75" Click="ButtonCancelClick" />
+        </StackPanel>
+        <StackPanel Grid.Column="2" Grid.RowSpan="6">
+            <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
+            <Label Content="Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
+            <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true"/>
+
+            <Label Name="LabelCriteria" Content="Criteria for trigger value" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
+            <ComboBox x:Name="ComboBoxComparisonCriteria" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0">
+                <ComboBoxItem Content="Equals" />
+                <ComboBoxItem Content="Less than" />
+                <ComboBoxItem Content="Bigger than" />
+                <ComboBoxItem Content="Not equals" />
+            </ComboBox>
+
+            <Label Name="LabelTriggerValue" Content="Enter trigger value:" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
+            <TextBox Name="TextBoxTriggerValue" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" />
+        </StackPanel>
+    </Grid>
+</Window>
