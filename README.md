@@ -42,6 +42,6 @@ Simple Radio Standalone : https://github.com/ciribob/DCS-SimpleRadioStandalone
 
 Contributors : Tossler, ZoeESummers, Capt. Zeen
 
-(28.12.2018 My poor Git skills caused a reset in the repo with all old commits and contributors to be erased)
+(28.12.2018 My poor Git skills led to a reset in the repo with all old commits and contributors to be erased)
 
 [![](http://i67.tinypic.com/2qjddt3.jpg)](https://www.paypal.me/jerkerdahlblom)
