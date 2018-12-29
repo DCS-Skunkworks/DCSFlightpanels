@@ -40,4 +40,8 @@ Demo video UH-1H : https://www.youtube.com/watch?v=jQxLX7UHMR8
 
 Simple Radio Standalone : https://github.com/ciribob/DCS-SimpleRadioStandalone
 
+Contributors : Tossler, ZoeESummers, Capt. Zeen
+
+(28.12.2018 My poor Git skills caused a reset in the repo with all old commits and contributors to be erased)
+
 [![](http://i67.tinypic.com/2qjddt3.jpg)](https://www.paypal.me/jerkerdahlblom)
