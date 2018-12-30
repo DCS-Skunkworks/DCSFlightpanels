@@ -7,14 +7,95 @@ using DCS_BIOS;
 
 namespace NonVisuals
 {
-    public class DCSBIOSBindingBase
+    public abstract class DCSBIOSBindingBase
     {
+        //private SwitchPanelPZ55Keys _switchPanelPZ55Key;
+        private bool _whenOnTurnedOn = true;
+        internal const string SeparatorChars = "\\o/";
+        private string _description;
+        private Thread _sendDCSBIOSCommandsThread;
+
+        internal abstract void ImportSettings(string settings);
+        public abstract string ExportSettings();
+
+
+        public bool WhenTurnedOn
+        {
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
+        }
+
+        public string Description
+        {
+            get => string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description;
+            set => _description = value;
+        }
+
+        public List<DCSBIOSInput> DCSBIOSInputs { get; set; }
+
+        protected bool WhenOnTurnedOn
+        {
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
+        }
+
+        public bool HasBinding()
+        {
+            return DCSBIOSInputs != null && DCSBIOSInputs.Count > 0;
+        }
+
+        protected Thread DCSBIOSCommandsThread => _sendDCSBIOSCommandsThread;
+
+        protected bool CancelSendDCSBIOSCommands { get; set; }
+
+
+        public void SendDCSBIOSCommands()
+        {
+            CancelSendDCSBIOSCommands = true;
+            _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(DCSBIOSInputs));
+            _sendDCSBIOSCommandsThread.Start();
+        }
+
+        private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs)
+        {
+            CancelSendDCSBIOSCommands = false;
+            try
+            {
+                try
+                {
+                    foreach (var dcsbiosInput in dcsbiosInputs)
+                    {
+                        if (CancelSendDCSBIOSCommands)
+                        {
+                            return;
+                        }
+                        var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
+                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
+                        if (CancelSendDCSBIOSCommands)
+                        {
+                            return;
+                        }
+                        DCSBIOS.Send(command);
+                    }
+                }
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
+                {
+                    Common.LogError(34912, ex);
+                }
+            }
+            finally
+            {
+            }
+        }
+
 
         /*
          * 
          * Cannot use this, if a switch is toggled which includes a long delay then all subsequent switch toggles will have to wait for the first one before being executed.
          * 
-         */
+         *
         private readonly ConcurrentQueue<DCSBIOSInput> _dcsbiosInputsToSend = new ConcurrentQueue<DCSBIOSInput>();
 
         private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
@@ -77,7 +158,7 @@ namespace NonVisuals
             finally
             {
             }
-        }
-        
+        }*/
+
     }
 }

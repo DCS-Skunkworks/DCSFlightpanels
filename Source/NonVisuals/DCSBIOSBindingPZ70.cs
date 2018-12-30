@@ -1,34 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
 namespace NonVisuals
 {
-    public class DCSBIOSBindingPZ70
+    public class DCSBIOSBindingPZ70 : DCSBIOSBindingBase
     {
         /*
          This class binds a physical switch on the PZ70 with a DCSBIOSInput
          */
         private PZ70DialPosition _pz70DialPosition;
         private MultiPanelPZ70Knobs _multiPanelPZ70Knob;
-        private List<DCSBIOSInput> _dcsbiosInputs;
-        private bool _whenOnTurnedOn = true;
-        private const string SeparatorChars = "\\o/";
-        private string _description;
-
-        private Thread _sendDCSBIOSCommandsThread;
-        private bool _cancelSendDCSBIOSCommands;
-
+        
         ~DCSBIOSBindingPZ70()
         {
-            _cancelSendDCSBIOSCommands = true;
-            _sendDCSBIOSCommandsThread?.Abort();
+            CancelSendDCSBIOSCommands = true;
+            DCSBIOSCommandsThread?.Abort();
         }
 
-        internal void ImportSettings(string settings)
+        internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
             {
@@ -50,7 +42,7 @@ namespace NonVisuals
                 //1KNOB_ALT
                 //or
                 //1KNOB_ALT|Landing gear up and blablabla description
-                _whenOnTurnedOn = (param1.Substring(0, 1) == "1");
+                WhenTurnedOn = (param1.Substring(0, 1) == "1");
                 if (param1.Contains("|"))
                 {
                     //1KNOB_ALT|Landing gear up and blablabla description
@@ -58,7 +50,7 @@ namespace NonVisuals
                     //KNOB_ALT|Landing gear up and blablabla description
                     var stringArray = param1.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                     _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), stringArray[0]);
-                    _description = stringArray[1];
+                    Description = stringArray[1];
                 }
                 else
                 {
@@ -67,60 +59,19 @@ namespace NonVisuals
                 }
                 //The rest of the array besides last entry are DCSBIOSInput
                 //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
-                _dcsbiosInputs = new List<DCSBIOSInput>();
+                DCSBIOSInputs = new List<DCSBIOSInput>();
                 for (int i = 2; i < parameters.Length - 1; i++)
                 {
                     if (parameters[i].StartsWith("DCSBIOSInput{"))
                     {
                         var dcsbiosInput = new DCSBIOSInput();
                         dcsbiosInput.ImportString(parameters[i]);
-                        _dcsbiosInputs.Add(dcsbiosInput);
+                        DCSBIOSInputs.Add(dcsbiosInput);
                     }
                 }
             }
         }
-
-        public void SendDCSBIOSCommands()
-        {
-            _cancelSendDCSBIOSCommands = true;
-            _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(_dcsbiosInputs));
-            _sendDCSBIOSCommandsThread.Start();
-        }
-
-        private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs)
-        {
-            _cancelSendDCSBIOSCommands = false;
-            try
-            {
-                try
-                {
-                    foreach (var dcsbiosInput in dcsbiosInputs)
-                    {
-                        if (_cancelSendDCSBIOSCommands)
-                        {
-                            return;
-                        }
-                        var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
-                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
-                        if (_cancelSendDCSBIOSCommands)
-                        {
-                            return;
-                        }
-                        DCSBIOS.Send(command);
-                    }
-                }
-                catch (ThreadAbortException)
-                { }
-                catch (Exception ex)
-                {
-                    Common.LogError(34172, ex);
-                }
-            }
-            finally
-            {
-            }
-        }
-
+        
         public PZ70DialPosition DialPosition
         {
             get => _pz70DialPosition;
@@ -132,45 +83,27 @@ namespace NonVisuals
             get => _multiPanelPZ70Knob;
             set => _multiPanelPZ70Knob = value;
         }
-
-        public List<DCSBIOSInput> DCSBIOSInputs
+        
+        public override string ExportSettings()
         {
-            get => _dcsbiosInputs;
-            set => _dcsbiosInputs = value;
-        }
-
-
-        public string ExportSettings()
-        {
-            if (_dcsbiosInputs.Count == 0)
+            if (DCSBIOSInputs.Count == 0)
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "      " + _whenOnTurnedOn);
-            var onStr = _whenOnTurnedOn ? "1" : "0";
+            Common.DebugP(Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "      " + WhenTurnedOn);
+            var onStr = WhenTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
-            foreach (var dcsbiosInput in _dcsbiosInputs)
+            foreach (var dcsbiosInput in DCSBIOSInputs)
             {
                 stringBuilder.Append(SeparatorChars + dcsbiosInput.ToString());
             }
-            if (!string.IsNullOrWhiteSpace(_description))
+            if (!string.IsNullOrWhiteSpace(Description))
             {
                 //MultiPanelDCSBIOSControl{0ALT_BUTTON|Oxygen System Test}\o/\o/DCSBIOSInput{ENVCP_OXY_TEST|SET_STATE|0}
-                return "MultiPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "|" + _description + "}" + SeparatorChars + stringBuilder.ToString();
+                return "MultiPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "|" + Description + "}" + SeparatorChars + stringBuilder.ToString();
             }
             return "MultiPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + SeparatorChars + stringBuilder.ToString();
         }
 
-        public bool WhenTurnedOn
-        {
-            get => _whenOnTurnedOn;
-            set => _whenOnTurnedOn = value;
-        }
-
-        public string Description
-        {
-            get => string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description;
-            set => _description = value;
-        }
     }
 }

@@ -15,9 +15,9 @@ namespace NonVisuals
         internal bool _whenOnTurnedOn = true;
         internal const string SeparatorChars = "\\o/";
         internal string _description;
-        internal Thread _executingThread;
-        internal long _abortCurrentSequence;
-        internal long _threadHasFinished = 1;
+        private Thread _executingThread;
+        private long _abortCurrentSequence;
+        private long _threadHasFinished = 1;
         public abstract string ExportSettings();
         public abstract void ImportSettings(string settings);
 

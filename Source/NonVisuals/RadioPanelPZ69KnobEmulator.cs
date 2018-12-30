@@ -139,19 +139,4 @@ namespace NonVisuals
             return result;
         }
     }
-    public class RadioPanelPZ69KeyOnOff
-    {
-        private readonly RadioPanelPZ69KnobsEmulator _radioPanelPZ69Key;
-        private readonly bool _buttonState;
-
-        public RadioPanelPZ69KeyOnOff(RadioPanelPZ69KnobsEmulator radioPanelPZ69Key, bool buttonState)
-        {
-            _radioPanelPZ69Key = radioPanelPZ69Key;
-            _buttonState = buttonState;
-        }
-
-        public RadioPanelPZ69KnobsEmulator RadioPanelPZ69Key => _radioPanelPZ69Key;
-
-        public bool ButtonState => _buttonState;
-    }
 }
