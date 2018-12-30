@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
@@ -9,7 +8,6 @@ namespace NonVisuals
 {
     public abstract class DCSBIOSBindingBase
     {
-        //private SwitchPanelPZ55Keys _switchPanelPZ55Key;
         private bool _whenOnTurnedOn = true;
         internal const string SeparatorChars = "\\o/";
         private string _description;

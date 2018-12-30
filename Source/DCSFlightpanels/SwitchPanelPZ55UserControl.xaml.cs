@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
-using DCS_BIOS;
 using NonVisuals;
 
 namespace DCSFlightpanels
