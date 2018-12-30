@@ -104,6 +104,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RadioPanelKnobFA18C.cs" />
+    <Compile Include="RadioPanelKnobF5E.cs" />
+    <Compile Include="RadioPanelPZ69F5E.cs" />
     <Compile Include="RadioPanelKnobSRS.cs" />
     <Compile Include="RadioPanelPZ69DisplayValue.cs" />
     <Compile Include="RadioPanelPZ69EmulatorFull.cs" />
