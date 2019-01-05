@@ -1733,7 +1733,7 @@ namespace DCSFlightpanels
                 }
                 if (textBox.Equals(TextBoxFlapsDown))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, false);
+                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true);
                 }
                 if (textBox.Equals(TextBoxPitchTrimUp))
                 {
@@ -1921,7 +1921,7 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(3012, ex);
             }
-            throw new Exception("Failed to find TextBox MultiPanel knob " + knob);
+            throw new Exception("Failed to find TextBox from MultiPanel Knob : " + knob);
         }
 
 
