@@ -7,13 +7,11 @@ using NonVisuals;
 
 namespace DCSFlightpanels
 {
-    internal class TagDataClassTPM
+    internal class TagDataClassTPM : TagDataClassBase
     {
         private TPMPanelSwitchOnOff _key;
         private DCSBIOSBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
-        private OSKeyPress _osKeyPress;
-        private readonly TextBox _textBox;
 
         public TagDataClassTPM(TextBox textBox, TPMPanelSwitchOnOff key)
         {
@@ -21,47 +19,22 @@ namespace DCSFlightpanels
             _key = key;
         }
 
-        public bool ContainsDCSBIOS()
+        public override bool ContainsDCSBIOS()
         {
             return _dcsbiosBindingTPM != null;// && _dcsbiosInputs.Count > 0;
         }
 
-        public bool ContainsBIPLink()
+        public override bool ContainsBIPLink()
         {
             return _bipLinkTPM != null && _bipLinkTPM.BIPLights.Count > 0;
         }
-
-        public bool ContainsOSKeyPress()
+        
+        public override bool IsEmpty()
         {
-            return _osKeyPress != null && _osKeyPress.KeySequence.Count > 0;
+            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
         }
 
-        public bool ContainsKeySequence()
-        {
-            return _osKeyPress != null && _osKeyPress.IsMultiSequenced();
-        }
-
-        public bool ContainsSingleKey()
-        {
-            return _osKeyPress != null && !_osKeyPress.IsMultiSequenced() && _osKeyPress.KeySequence.Count > 0;
-        }
-
-        public SortedList<int, KeyPressInfo> GetKeySequence()
-        {
-            return _osKeyPress.KeySequence;
-        }
-
-        /*public void SetKeySequence(SortedList<int, KeyPressInfo> sortedList)
-        {
-            _osKeyPress.KeySequence = sortedList;
-        }*/
-
-        public bool IsEmpty()
-        {
-            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM == null || _dcsbiosBindingTPM.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
-        }
-
-        public void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
         {
             if (_dcsbiosBindingTPM == null)
             {
@@ -115,35 +88,14 @@ namespace DCSFlightpanels
                 }
             }
         }
-
-        public OSKeyPress KeyPress
-        {
-            get => _osKeyPress;
-            set
-            {
-                if (ContainsDCSBIOS())
-                {
-                    throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
-                }
-                _osKeyPress = value;
-                if (_osKeyPress != null)
-                {
-                    _textBox.Text = _osKeyPress.GetKeyPressInformation();
-                }
-                else
-                {
-                    _textBox.Text = "";
-                }
-            }
-        }
-
+        
         public TPMPanelSwitchOnOff Key
         {
             get => _key;
             set => _key = value;
         }
 
-        public void ClearAll()
+        public override void ClearAll()
         {
             _dcsbiosBindingTPM = null;
             _bipLinkTPM = null;

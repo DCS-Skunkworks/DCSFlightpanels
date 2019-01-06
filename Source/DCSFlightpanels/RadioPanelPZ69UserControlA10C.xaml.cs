@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
 using DCSFlightpanels.Properties;
@@ -489,46 +488,7 @@ namespace DCSFlightpanels
             LowerSmallerLCDKnobDec.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
-
-        private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-
-        }
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-
-
-
-        }
-
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-
-
+        
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {
             try

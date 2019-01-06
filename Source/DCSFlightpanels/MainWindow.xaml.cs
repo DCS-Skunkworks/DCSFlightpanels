@@ -20,7 +20,6 @@ using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
 using MessageBox = System.Windows.MessageBox;
 using Timer = System.Timers.Timer;
-using ToolTip = System.Windows.Controls.ToolTip;
 using UserControl = System.Windows.Controls.UserControl;
 
 /*

@@ -1,33 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
 namespace NonVisuals
 {
-    public class DCSBIOSBindingPZ55
+    public class DCSBIOSBindingPZ55 : DCSBIOSBindingBase
     {
         /*
          This class binds a physical switch on the PZ55 with a DCSBIOSInput
          */
         private SwitchPanelPZ55Keys _switchPanelPZ55Key;
-        private List<DCSBIOSInput> _dcsbiosInputs;
-        private bool _whenOnTurnedOn = true;
-        private const string SeparatorChars = "\\o/";
-        private string _description;
-
-        private Thread _sendDCSBIOSCommandsThread;
-        private bool _cancelSendDCSBIOSCommands;
-
+        
         ~DCSBIOSBindingPZ55()
         {
-            _cancelSendDCSBIOSCommands = true;
-            _sendDCSBIOSCommandsThread?.Abort();
+            CancelSendDCSBIOSCommands = true;
+            DCSBIOSCommandsThread?.Abort();
         }
 
-        internal void ImportSettings(string settings)
+        internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
             {
@@ -43,7 +35,7 @@ namespace NonVisuals
                 //1KNOB_ENGINE_LEFT}
                 param0 = param0.Remove(param0.Length - 1, 1);
                 //1KNOB_ENGINE_LEFT
-                _whenOnTurnedOn = (param0.Substring(0, 1) == "1");
+                WhenOnTurnedOn = (param0.Substring(0, 1) == "1");
                 if (param0.Contains("|"))
                 {
                     //1KNOB_ALT|Landing gear up and blablabla description
@@ -51,7 +43,7 @@ namespace NonVisuals
                     //KNOB_ALT|Landing gear up and blablabla description
                     var stringArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                     _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), stringArray[0]);
-                    _description = stringArray[1];
+                    Description = stringArray[1];
                 }
                 else
                 {
@@ -60,103 +52,43 @@ namespace NonVisuals
                 }
                 //The rest of the array besides last entry are DCSBIOSInput
                 //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
-                _dcsbiosInputs = new List<DCSBIOSInput>();
+                DCSBIOSInputs = new List<DCSBIOSInput>();
                 for (int i = 1; i < parameters.Length - 1; i++)
                 {
                     var dcsbiosInput = new DCSBIOSInput();
                     dcsbiosInput.ImportString(parameters[i]);
-                    _dcsbiosInputs.Add(dcsbiosInput);
+                    DCSBIOSInputs.Add(dcsbiosInput);
                 }
 
             }
         }
 
-        public void SendDCSBIOSCommands()
+        public override string ExportSettings()
         {
-            _cancelSendDCSBIOSCommands = true;
-            _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(_dcsbiosInputs));
-            _sendDCSBIOSCommandsThread.Start();
-        }
-
-        private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs)
-        {
-            _cancelSendDCSBIOSCommands = false;
-            try
+            if (DCSBIOSInputs.Count == 0)
             {
-                try
-                {
-                    foreach (var dcsbiosInput in dcsbiosInputs)
-                    {
-                        if (_cancelSendDCSBIOSCommands)
-                        {
-                            return;
-                        }
-                        var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
-                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
-                        if (_cancelSendDCSBIOSCommands)
-                        {
-                            return;
-                        }
-                        DCSBIOS.Send(command);
-                    }
-                }
-                catch (ThreadAbortException)
-                { }
-                catch (Exception ex)
-                {
-                    Common.LogError(34912, ex);
-                }
+                return null;
             }
-            finally
-            {
-            }
-        }
+            Common.DebugP(Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "      " + WhenOnTurnedOn);
+            var onStr = WhenOnTurnedOn ? "1" : "0";
 
+            //\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}
+            var stringBuilder = new StringBuilder();
+            foreach (var dcsbiosInput in DCSBIOSInputs)
+            {
+                stringBuilder.Append(SeparatorChars + dcsbiosInput.ToString());
+            }
+            if (!string.IsNullOrWhiteSpace(Description))
+            {
+                return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "|" + Description + "}" + SeparatorChars + stringBuilder.ToString();
+            }
+            return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SeparatorChars + stringBuilder.ToString();
+        }
+        
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key
         {
             get => _switchPanelPZ55Key;
             set => _switchPanelPZ55Key = value;
-        }
-
-        public List<DCSBIOSInput> DCSBIOSInputs
-        {
-            get => _dcsbiosInputs;
-            set => _dcsbiosInputs = value;
-        }
-
-
-        public string ExportSettings()
-        {
-            if (_dcsbiosInputs.Count == 0)
-            {
-                return null;
-            }
-            Common.DebugP(Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "      " + _whenOnTurnedOn);
-            var onStr = _whenOnTurnedOn ? "1" : "0";
-
-            //\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}
-            var stringBuilder = new StringBuilder();
-            foreach (var dcsbiosInput in _dcsbiosInputs)
-            {
-                stringBuilder.Append(SeparatorChars + dcsbiosInput.ToString());
-            }
-            if (!string.IsNullOrWhiteSpace(_description))
-            {
-                return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "|" + _description + "}" + SeparatorChars + stringBuilder.ToString();
-            }
-            return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SeparatorChars + stringBuilder.ToString();
-        }
-
-        public bool WhenTurnedOn
-        {
-            get => _whenOnTurnedOn;
-            set => _whenOnTurnedOn = value;
-        }
-
-        public string Description
-        {
-            get => string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description;
-            set => _description = value;
         }
     }
 }

@@ -173,7 +173,7 @@ namespace DCSFlightpanels
                 TextBoxControlId.Text = _dcsbiosControl.identifier;
                 TextBoxControlDescription.Text = _dcsbiosControl.description;
             }
-            if (_dcsBiosInput != null && _dcsBiosInput.SelectedDCSBIOSInput != null)
+            if (_dcsBiosInput?.SelectedDCSBIOSInput != null)
             {
                 TextBoxInputTypeDescription.Text = _dcsBiosInput.SelectedDCSBIOSInput.Description;
                 if (_dcsBiosInput.SelectedDCSBIOSInput.Interface == DCSBIOSInputType.SET_STATE || _dcsBiosInput.SelectedDCSBIOSInput.Interface == DCSBIOSInputType.VARIABLE_STEP)
@@ -211,7 +211,7 @@ namespace DCSFlightpanels
                 ComboBoxInterfaceType.Visibility = Visibility.Visible;
                 SetVisibility((DCSBIOSInputType)Enum.Parse(typeof(DCSBIOSInputType), ComboBoxInterfaceType.SelectedValue.ToString()));
             }
-            else if (_dcsBiosInput != null && _dcsBiosInput.SelectedDCSBIOSInput != null)
+            else if (_dcsBiosInput?.SelectedDCSBIOSInput != null)
             {
                 LabelInterfaceType.Visibility = Visibility.Visible;
                 ComboBoxInterfaceType.Visibility = Visibility.Visible;

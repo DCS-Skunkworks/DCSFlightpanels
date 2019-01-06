@@ -20,8 +20,8 @@ namespace NonVisuals
         private PZ70DialPosition _pz70DialPosition;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
-        private const string SeparatorChars = "\\o/";
         private PZ70LCDPosition _pz70LCDPosition;
+        private const string SeparatorChars = "\\o/";
 
         internal void ImportSettings(string settings)
         {

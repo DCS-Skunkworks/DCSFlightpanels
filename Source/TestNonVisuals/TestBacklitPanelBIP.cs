@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NonVisuals;
-
-namespace TestNonVisuals
+﻿namespace TestNonVisuals
 {
     /*
     [TestClass]
