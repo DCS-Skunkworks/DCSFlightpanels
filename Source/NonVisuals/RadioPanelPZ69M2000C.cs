@@ -307,10 +307,10 @@ namespace NonVisuals
 
                 foreach (var o in hashSet)
                 {
-                    var radioPanelKnobF86F = (RadioPanelKnobM2000C)o;
-                    if (radioPanelKnobF86F.IsOn)
+                    var radioPanelKnobM2000C = (RadioPanelKnobM2000C)o;
+                    if (radioPanelKnobM2000C.IsOn)
                     {
-                        switch (radioPanelKnobF86F.RadioPanelPZ69Knob)
+                        switch (radioPanelKnobM2000C.RadioPanelPZ69Knob)
                         {
                             case RadioPanelPZ69KnobsM2000C.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
@@ -730,13 +730,13 @@ namespace NonVisuals
             return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
         }
 
-        private void SetUpperRadioMode(CurrentM2000CRadioMode currentF86FRadioMode)
+        private void SetUpperRadioMode(CurrentM2000CRadioMode currentM2000CRadioMode)
         {
             try
             {
                 Common.DebugP("Entering M2000C Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentF86FRadioMode);
-                _currentUpperRadioMode = currentF86FRadioMode;
+                Common.DebugP("Setting upper radio mode to " + currentM2000CRadioMode);
+                _currentUpperRadioMode = currentM2000CRadioMode;
             }
             catch (Exception ex)
             {
@@ -745,13 +745,13 @@ namespace NonVisuals
             Common.DebugP("Leaving M2000C Radio SetUpperRadioMode()");
         }
 
-        private void SetLowerRadioMode(CurrentM2000CRadioMode currentF86FRadioMode)
+        private void SetLowerRadioMode(CurrentM2000CRadioMode currentM2000CRadioMode)
         {
             try
             {
                 Common.DebugP("Entering M2000C Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentF86FRadioMode);
-                _currentLowerRadioMode = currentF86FRadioMode;
+                Common.DebugP("Setting lower radio mode to " + currentM2000CRadioMode);
+                _currentLowerRadioMode = currentM2000CRadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
             }

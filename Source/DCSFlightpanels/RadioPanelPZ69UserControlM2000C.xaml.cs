@@ -9,7 +9,7 @@ using DCSFlightpanels.Properties;
 namespace DCSFlightpanels
 {
     /// <summary>
-    /// Interaction logic for RadioPanelPZ69UserControlF86F.xaml
+    /// Interaction logic for RadioPanelPZ69UserControlM2000C.xaml
     /// </summary>
     public partial class RadioPanelPZ69UserControlM2000C : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
@@ -444,7 +444,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(2019, ex);
             }
         }
-        private void RadioPanelPZ69UserControlF86F_OnLoaded(object sender, RoutedEventArgs e)
+        private void RadioPanelPZ69UserControlM2000C_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {

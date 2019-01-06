@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DCSFlightpanels"
              mc:Ignorable="d" 
-             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlF86F_OnLoaded">
+             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlM2000C_OnLoaded">
     <Grid Name="PZ69Grid" >
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
