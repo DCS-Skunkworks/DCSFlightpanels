@@ -832,8 +832,8 @@ namespace DCSFlightpanels
                         textBox.Background = Brushes.White;
                         UpdateBIPLinkBindings(textBox);
                     }
-                    TextBoxLogPZ70.Focus();
                 }
+                TextBoxLogPZ70.Focus();
             }
             catch (Exception ex)
             {
@@ -955,84 +955,20 @@ namespace DCSFlightpanels
                     //throw new Exception("Failed to locate which textbox is focused.");
                 }
 
+                //Check new value, is menu visible?
                 if (!(bool)e.NewValue)
                 {
                     //Do not show if not visible
                     return;
                 }
-
-
-
+                
                 if (!((TagDataClassPZ70)textBox.Tag).ContainsSingleKey())
                 {
                     return;
                 }
                 var keyPressLength = ((TagDataClassPZ70)textBox.Tag).KeyPress.GetLengthOfKeyPress();
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.IsChecked = false;
-                }
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    if (item.Name == "contextMenuItemFiftyMilliSec" && keyPressLength == KeyPressLength.FiftyMilliSec)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemHalfSecond" && keyPressLength == KeyPressLength.HalfSecond)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSecond" && keyPressLength == KeyPressLength.Second)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSecondAndHalf" && keyPressLength == KeyPressLength.SecondAndHalf)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTwoSeconds" && keyPressLength == KeyPressLength.TwoSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThreeSeconds" && keyPressLength == KeyPressLength.ThreeSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFourSeconds" && keyPressLength == KeyPressLength.FourSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFiveSecs" && keyPressLength == KeyPressLength.FiveSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFifteenSecs" && keyPressLength == KeyPressLength.FifteenSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTenSecs" && keyPressLength == KeyPressLength.TenSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTwentySecs" && keyPressLength == KeyPressLength.TwentySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThirtySecs" && keyPressLength == KeyPressLength.ThirtySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFortySecs" && keyPressLength == KeyPressLength.FortySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSixtySecs" && keyPressLength == KeyPressLength.SixtySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                }
+                CheckContextMenuItems(keyPressLength, contextMenu);
+                TextBoxLogPZ70.Focus();
             }
             catch (Exception ex)
             {
@@ -1046,69 +982,8 @@ namespace DCSFlightpanels
             try
             {
                 var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                var contextMenuItem = (MenuItem)sender;
-                if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemHalfSecond")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSecond")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSecondAndHalf")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTwoSeconds")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThreeSeconds")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFourSeconds")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFiveSecs")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTenSecs")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFifteenSecs")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTwentySecs")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThirtySecs")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFortySecs")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSixtySecs")
-                {
-                    ((TagDataClassPZ70)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
-                }
-
+                SetKeyPressLength(textBox, (MenuItem)sender);
+                
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
             catch (Exception ex)

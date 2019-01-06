@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 using DCS_BIOS;
 using HidLibrary;
 using System.Threading;

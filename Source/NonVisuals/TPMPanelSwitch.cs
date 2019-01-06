@@ -82,19 +82,5 @@ namespace NonVisuals
 
         
     }
-    public class TPMPanelSwitchOnOff
-    {
-        private readonly TPMPanelSwitches _tpmPanelSwitch;
-        private readonly bool _buttonState;
 
-        public TPMPanelSwitchOnOff(TPMPanelSwitches tpmPanelSwitch, bool buttonState)
-        {
-            _tpmPanelSwitch = tpmPanelSwitch;
-            _buttonState = buttonState;
-        }
-
-        public TPMPanelSwitches TPMSwitch => _tpmPanelSwitch;
-
-        public bool ButtonState => _buttonState;
-    }
 }

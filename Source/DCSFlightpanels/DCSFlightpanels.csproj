@@ -209,6 +209,7 @@
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TagDataClassBase.cs" />
     <Compile Include="TagDataClassPZ69Button.cs" />
     <Compile Include="TagDataClassPZ69Full.cs" />
     <Compile Include="TagDataClassTPM.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="TPMPanelUserControl.xaml.cs">
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControlBase.cs" />
     <Page Include="AboutFPWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -7,13 +7,11 @@ using NonVisuals;
 
 namespace DCSFlightpanels
 {
-    internal class TagDataClassPZ70
+    internal class TagDataClassPZ70 : TagDataClassBase
     {
         private MultiPanelPZ70KnobOnOff _key;
         private DCSBIOSBindingPZ70 _dcsbiosBindingPZ70;
         private BIPLinkPZ70 _bipLinkPZ70;
-        private OSKeyPress _osKeyPress;
-        private readonly TextBox _textBox;
 
         public TagDataClassPZ70(TextBox textBox, MultiPanelPZ70KnobOnOff key)
         {
@@ -21,47 +19,22 @@ namespace DCSFlightpanels
             _key = key;
         }
 
-        public bool ContainsDCSBIOS()
+        public override bool ContainsDCSBIOS()
         {
             return _dcsbiosBindingPZ70 != null;// && _dcsbiosInputs.Count > 0;
         }
 
-        public bool ContainsBIPLink()
+        public override bool ContainsBIPLink()
         {
             return _bipLinkPZ70 != null && _bipLinkPZ70.BIPLights.Count > 0;
         }
 
-        public bool ContainsOSKeyPress()
+        public override bool IsEmpty()
         {
-            return _osKeyPress != null && _osKeyPress.KeySequence.Count > 0;
+            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
         }
 
-        public bool ContainsKeySequence()
-        {
-            return _osKeyPress != null && _osKeyPress.IsMultiSequenced();
-        }
-
-        public bool ContainsSingleKey()
-        {
-            return _osKeyPress != null && !_osKeyPress.IsMultiSequenced() && _osKeyPress.KeySequence.Count > 0;
-        }
-
-        public SortedList<int, KeyPressInfo> GetKeySequence()
-        {
-            return _osKeyPress.KeySequence;
-        }
-
-        /*public void SetKeySequence(SortedList<int, KeyPressInfo> sortedList)
-        {
-            _osKeyPress.KeySequence = sortedList;
-        }*/
-
-        public bool IsEmpty()
-        {
-            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70 == null || _dcsbiosBindingPZ70.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
-        }
-
-        public void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
         {
             if (_dcsbiosBindingPZ70 == null)
             {
@@ -115,35 +88,14 @@ namespace DCSFlightpanels
                 }
             }
         }
-
-        public OSKeyPress KeyPress
-        {
-            get => _osKeyPress;
-            set
-            {
-                if (ContainsDCSBIOS())
-                {
-                    throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
-                }
-                _osKeyPress = value;
-                if (_osKeyPress != null)
-                {
-                    _textBox.Text = _osKeyPress.GetKeyPressInformation();
-                }
-                else
-                {
-                    _textBox.Text = "";
-                }
-            }
-        }
-
+        
         public MultiPanelPZ70KnobOnOff Key
         {
             get => _key;
             set => _key = value;
         }
 
-        public void ClearAll()
+        public override void ClearAll()
         {
             _dcsbiosBindingPZ70 = null;
             _bipLinkPZ70 = null;

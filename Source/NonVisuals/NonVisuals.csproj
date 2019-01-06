@@ -95,6 +95,7 @@
     <Compile Include="MultiPanelPZ70.cs" />
     <Compile Include="OSKeyPress.cs" />
     <Compile Include="BIPLight.cs" />
+    <Compile Include="PanelKeyOnOff.cs" />
     <Compile Include="PerformanceTimer.cs" />
     <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

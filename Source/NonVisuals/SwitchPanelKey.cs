@@ -184,19 +184,4 @@ namespace NonVisuals
         }
          */
     }
-
-    public class SwitchPanelPZ55KeyOnOff
-    {
-        private readonly SwitchPanelPZ55Keys _switchPanelPZ55Key;
-
-        public SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys switchPanelPZ55Key, bool buttonState)
-        {
-            _switchPanelPZ55Key = switchPanelPZ55Key;
-            ButtonState = buttonState;
-        }
-
-        public SwitchPanelPZ55Keys SwitchPanelPZ55Key => _switchPanelPZ55Key;
-
-        public bool ButtonState { get; }
-    }
 }
