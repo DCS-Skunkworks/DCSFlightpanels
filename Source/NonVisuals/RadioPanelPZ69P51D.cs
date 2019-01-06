@@ -177,12 +177,12 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsP51D.UPPER_NOUSE0:
-                            case RadioPanelPZ69KnobsP51D.UPPER_NOUSE1:
-                            case RadioPanelPZ69KnobsP51D.UPPER_NOUSE2:
-                            case RadioPanelPZ69KnobsP51D.UPPER_NOUSE3:
-                            case RadioPanelPZ69KnobsP51D.UPPER_NOUSE4:
-                            case RadioPanelPZ69KnobsP51D.UPPER_NOUSE5:
+                            case RadioPanelPZ69KnobsP51D.UPPER_NO_USE0:
+                            case RadioPanelPZ69KnobsP51D.UPPER_NO_USE1:
+                            case RadioPanelPZ69KnobsP51D.UPPER_NO_USE2:
+                            case RadioPanelPZ69KnobsP51D.UPPER_NO_USE3:
+                            case RadioPanelPZ69KnobsP51D.UPPER_NO_USE4:
+                            case RadioPanelPZ69KnobsP51D.UPPER_NO_USE5:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
@@ -198,12 +198,12 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsP51D.LOWER_NOUSE0:
-                            case RadioPanelPZ69KnobsP51D.LOWER_NOUSE1:
-                            case RadioPanelPZ69KnobsP51D.LOWER_NOUSE2:
-                            case RadioPanelPZ69KnobsP51D.LOWER_NOUSE3:
-                            case RadioPanelPZ69KnobsP51D.LOWER_NOUSE4:
-                            case RadioPanelPZ69KnobsP51D.LOWER_NOUSE5:
+                            case RadioPanelPZ69KnobsP51D.LOWER_NO_USE0:
+                            case RadioPanelPZ69KnobsP51D.LOWER_NO_USE1:
+                            case RadioPanelPZ69KnobsP51D.LOWER_NO_USE2:
+                            case RadioPanelPZ69KnobsP51D.LOWER_NO_USE3:
+                            case RadioPanelPZ69KnobsP51D.LOWER_NO_USE4:
+                            case RadioPanelPZ69KnobsP51D.LOWER_NO_USE5:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {

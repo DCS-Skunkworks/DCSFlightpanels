@@ -87,7 +87,7 @@ namespace ClassLibraryCommon
         Ka50,
         [Description("L-39ZA")]
         L39ZA,
-        [Description("M2000C")]
+        [Description("M-2000C")]
         M2000C,
         [Description("MB-339PAN")]
         MB339,

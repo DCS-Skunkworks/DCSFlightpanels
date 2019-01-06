@@ -298,14 +298,14 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE0:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE1:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE2:
-                            case RadioPanelPZ69KnobsAJS37.UPPER_NOUSE3:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE0:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE1:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE2:
-                            case RadioPanelPZ69KnobsAJS37.LOWER_NOUSE3:
+                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE0:
+                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE1:
+                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE2:
+                            case RadioPanelPZ69KnobsAJS37.UPPER_NO_USE3:
+                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE0:
+                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE1:
+                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE2:
+                            case RadioPanelPZ69KnobsAJS37.LOWER_NO_USE3:
                                 {
                                     break;
                                 }
