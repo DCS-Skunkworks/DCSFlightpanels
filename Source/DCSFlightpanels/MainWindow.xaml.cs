@@ -473,6 +473,14 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
+                                    //else if (_panelProfileHandler.Airframe == DCSAirframe.F5E)
+                                    //{
+                                    //    var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton, tabItem, this);
+                                    //    _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                    //    _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                    //    tabItem.Content = radioPanelPZ69UserControl;
+                                    //    TabControlPanels.Items.Add(tabItem);
+                                    //}
                                     else //if (_panelProfileHandler.Airframe == DCSAirframe.M2000C || _panelProfileHandler.Airframe == DCSAirframe.L39ZA || _panelProfileHandler.Airframe == DCSAirframe.AV8BNA)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulatorFull(hidSkeleton, tabItem, this);

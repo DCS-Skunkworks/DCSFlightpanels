@@ -154,6 +154,9 @@
     <Compile Include="RadioPanelPZ69UserControlM2000C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlM2000C.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RadioPanelPZ69UserControlF5E.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlF5E.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RadioPanelPZ69UserControlFA18C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlFA18C.xaml</DependentUpon>
     </Compile>
@@ -308,6 +311,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RadioPanelPZ69UserControlM2000C.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RadioPanelPZ69UserControlF5E.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -577,7 +584,7 @@
   <ItemGroup>
     <Resource Include="Images\Ka50_ARK-22 ADF.jpg" />
     <Resource Include="Images\Ka50_R-828_radio.jpg" />
-    <Resource Include="Images\Ka50_АВСК.jpg" />
+    <Resource Include="Images\Ka50_АВСK.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Ka50_Betty.jpg" />
@@ -609,6 +616,12 @@
   <ItemGroup>
     <Resource Include="Images\fa18C_comms.jpg" />
     <Resource Include="Images\fa18C_ils_manual.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\F-5E_an_arc_164_radio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\F-5E_TACAN.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
