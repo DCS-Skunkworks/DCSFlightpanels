@@ -349,8 +349,8 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsF86F.UPPER_NOUSE1:
-                            case RadioPanelPZ69KnobsF86F.UPPER_NOUSE2:
+                            case RadioPanelPZ69KnobsF86F.UPPER_NO_USE1:
+                            case RadioPanelPZ69KnobsF86F.UPPER_NO_USE2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
@@ -398,8 +398,8 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsF86F.LOWER_NOUSE1:
-                            case RadioPanelPZ69KnobsF86F.LOWER_NOUSE2:
+                            case RadioPanelPZ69KnobsF86F.LOWER_NO_USE1:
+                            case RadioPanelPZ69KnobsF86F.LOWER_NO_USE2:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {

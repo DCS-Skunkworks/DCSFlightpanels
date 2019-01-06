@@ -233,10 +233,10 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE1:
-                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE2:
-                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE3:
-                            case RadioPanelPZ69KnobsFw190.UPPER_NOUSE4:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE1:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE2:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE3:
+                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE4:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
@@ -268,10 +268,10 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE1:
-                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE2:
-                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE3:
-                            case RadioPanelPZ69KnobsFw190.LOWER_NOUSE4:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE1:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE2:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE3:
+                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE4:
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
