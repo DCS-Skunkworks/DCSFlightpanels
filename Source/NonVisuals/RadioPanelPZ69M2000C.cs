@@ -796,13 +796,13 @@ namespace NonVisuals
                 Common.DebugP("Entering M2000C Radio SkipUHFPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentM2000CRadioMode.UHF || _currentLowerRadioMode == CurrentM2000CRadioMode.UHF)
                 {
-                    if (_vuhfPresetDialSkipper > 2)
+                    if (_uhfPresetDialSkipper > 2)
                     {
-                        _vuhfPresetDialSkipper = 0;
+                        _uhfPresetDialSkipper = 0;
                         Common.DebugP("Leaving M2000C Radio SkipUHFPresetDialChange()");
                         return false;
                     }
-                    _vuhfPresetDialSkipper++;
+                    _uhfPresetDialSkipper++;
                     Common.DebugP("Leaving M2000C Radio SkipUHFPresetDialChange()");
                     return true;
                 }
