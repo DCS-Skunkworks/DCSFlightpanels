@@ -577,7 +577,7 @@
   <ItemGroup>
     <Resource Include="Images\Ka50_ARK-22 ADF.jpg" />
     <Resource Include="Images\Ka50_R-828_radio.jpg" />
-    <Resource Include="Images\Ka50_АВСК.jpg" />
+    <Resource Include="Images\Ka50_АВСK.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Ka50_Betty.jpg" />
@@ -610,12 +610,12 @@
     <Resource Include="Images\fa18C_comms.jpg" />
     <Resource Include="Images\fa18C_ils_manual.jpg" />
   </ItemGroup>
-   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\F-5E_an_arc_164_radio.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\F-5E_TACAN.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
