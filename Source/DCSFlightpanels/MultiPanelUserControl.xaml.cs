@@ -1616,7 +1616,7 @@ namespace DCSFlightpanels
                 }
                 if (textBox.Equals(TextBoxPitchTrimDown))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, false);
+                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true);
                 }
                 if (textBox.Equals(TextBoxApButtonOn))
                 {
