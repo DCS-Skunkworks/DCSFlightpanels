@@ -21,7 +21,7 @@ namespace DCSFlightpanels
 
         public override bool ContainsDCSBIOS()
         {
-            throw  new Exception("TagDataClassPZ69 cannot contain DCS-BIOS");
+            return false;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)

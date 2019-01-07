@@ -91,6 +91,7 @@ namespace DCSFlightpanels
                     DataGridSequences.ItemsSource = _sortedList;
                     DataGridSequences.Items.Refresh();
                     _isDirty = true;
+                    SetFormState();
                 }
             }
             catch (Exception ex)
