@@ -623,6 +623,19 @@
   <ItemGroup>
     <Resource Include="Images\F-5E_TACAN.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\AJS37_.png" />
+    <Resource Include="Images\AJS37_FR22.png" />
+    <Resource Include="Images\AJS37_FR24.png" />
+    <Resource Include="Images\F86_.png" />
+    <Resource Include="Images\FW190_FUG_16zy.png" />
+    <Resource Include="Images\M2000c_tacan.png" />
+    <Resource Include="Images\M2000c_TRT ERA 7000.png" />
+    <Resource Include="Images\Mi8_R828.png" />
+    <Resource Include="Images\Mi8_r836.png" />
+    <Resource Include="Images\Mi8_Yadro.png" />
+    <Resource Include="Images\Radio TF51_P51_preview.jpeg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

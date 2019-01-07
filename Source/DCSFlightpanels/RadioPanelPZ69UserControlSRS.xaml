@@ -97,9 +97,13 @@
         </GroupBox>
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6"/>
-        <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
+        <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="4">
             <Label Name="LabelAirframe" Content="Simple Radio Standalone" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
         </StackPanel>
-        <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="159" Grid.Row="5" Grid.RowSpan="2" Grid.Column="6"/>
+        <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" >
+            <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">
+                <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="140" />
+            </GroupBox>
+        </DockPanel>
     </Grid>
 </UserControl>

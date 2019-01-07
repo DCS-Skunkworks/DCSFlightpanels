@@ -237,7 +237,7 @@ namespace DCSFlightpanels
             }
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogPZ69))
+                if (textBox.Equals(TextBoxLogPZ69) || textBox.Name.EndsWith("Numbers"))
                 {
                     continue;
                 }
@@ -541,8 +541,6 @@ namespace DCSFlightpanels
                     //Do not show if not visible
                     return;
                 }
-
-
 
                 if (!((TagDataClassPZ69)textBox.Tag).ContainsSingleKey())
                 {
