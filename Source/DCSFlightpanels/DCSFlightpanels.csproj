@@ -636,6 +636,12 @@
     <Resource Include="Images\Mi8_Yadro.png" />
     <Resource Include="Images\Radio TF51_P51_preview.jpeg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Spitfire_ARI1063.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Bf109_FUG 16ZY.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

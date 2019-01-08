@@ -103,7 +103,7 @@
         </GroupBox>
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="6">
-            <Label Content="FUG 16zy" FontWeight="Bold"/>
+            <Label Content="FUG 16ZY" FontWeight="Bold"/>
             <Image Height="270" Source="/DCSFlightpanels;component/Images/FW190_FUG_16zy.png" />
         </StackPanel>
 

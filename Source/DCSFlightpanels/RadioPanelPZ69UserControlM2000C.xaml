@@ -72,10 +72,11 @@
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = V/UHF Preset Channels <LineBreak/>
                     COM 2 = UHF Preset Channels<LineBreak/>
-                    NAV 1 = <LineBreak/>
-                    NAV 2 = <LineBreak/>
+                    NAV 1 = TACAN<LineBreak/>
+                    NAV 2 = VOR.ILS<LineBreak/>
                     ADF = <LineBreak/> 
-                    ACT/STBY : <LineBreak/>
+                    ACT/STBY : Press Down + Dial <LineBreak/>in VOR.ILS and TACAN 
+                    to change Modes, Settings
                 </TextBlock>
             </StackPanel>
         </GroupBox>
@@ -107,7 +108,7 @@
         </GroupBox>
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="6">
-            <Label Content="TACAN" FontWeight="Bold"/>
+            <Label Content="VOR / TACAN" FontWeight="Bold"/>
             <Image Height="140" Source="/DCSFlightpanels;component/Images/M2000c_tacan.png" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="4">

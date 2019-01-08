@@ -107,6 +107,8 @@
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
             <Label Name="LabelAirframe" Content="Bf-109" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
+            <Label Content="FUG 16ZY" FontWeight="Bold"/>
+            <Image Height="340" Source="/DCSFlightpanels;component/Images/Bf109_FUG 16ZY.png" />
         </StackPanel>
 
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" LastChildFill="False">
