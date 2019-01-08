@@ -1469,14 +1469,14 @@ namespace DCSFlightpanels
                     var textBox = GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
-                    ((TagDataClassPZ69)textBox.Tag).BIPLink = bipLinkPZ69;
+                    ((TagDataClassPZ69Full)textBox.Tag).BIPLink = bipLinkPZ69;
                 }
 
                 foreach (var lcdBinding in _radioPanelPZ69.LCDBindings)

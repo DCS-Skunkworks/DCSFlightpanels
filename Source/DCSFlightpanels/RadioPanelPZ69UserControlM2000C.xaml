@@ -15,6 +15,9 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80*" />
@@ -69,15 +72,16 @@
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = V/UHF Preset Channels <LineBreak/>
                     COM 2 = UHF Preset Channels<LineBreak/>
-                    NAV 1 = <LineBreak/>
-                    NAV 2 = <LineBreak/>
+                    NAV 1 = TACAN<LineBreak/>
+                    NAV 2 = VOR.ILS<LineBreak/>
                     ADF = <LineBreak/> 
-                    ACT/STBY : <LineBreak/>
+                    ACT/STBY : Press Down + Dial <LineBreak/>in VOR.ILS and TACAN 
+                    to change Modes, Settings
                 </TextBlock>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="4"  Grid.ColumnSpan="3" Grid.RowSpan="2" >
+        <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Grid.Column="0" Grid.Row="4"  Grid.ColumnSpan="3" Grid.RowSpan="4" >
             <StackPanel >
                 <Label Content="Frequency Knobs sensitivity"></Label>
                 <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
@@ -103,56 +107,20 @@
             </StackPanel>
         </GroupBox>
 
-        <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+        <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="6">
+            <Label Content="VOR / TACAN" FontWeight="Bold"/>
+            <Image Height="140" Source="/DCSFlightpanels;component/Images/M2000c_tacan.png" />
+        </StackPanel>
+        <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="4">
+            <Label Content="M-2000C" FontSize="30" FontWeight="Bold"/>
+            <Label Content="V/UHF UHF" FontWeight="Bold"/>
+            <Image Height="290" Source="/DCSFlightpanels;component/Images/M2000c_TRT ERA 7000.png" />
+        </StackPanel>
+        <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="6" LastChildFill="False">
+            <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">
+                <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="120" />
+            </GroupBox>
+        </DockPanel>
 
-        </StackPanel>
-        <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
-            <Label Name="LabelAirframe" Content="M-2000C" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
-        </StackPanel>
-        <GroupBox Header="Synchronization" FontSize="14" FontWeight="Bold" Grid.Column="3" Grid.Row="1"  Grid.ColumnSpan="3" Grid.RowSpan="4" Visibility="Hidden">
-            <StackPanel >
-                <Label FontSize="10" Margin="0,5,0,0"  FontWeight="Bold">
-                    <TextBlock TextWrapping="WrapWithOverflow">
-                        Frequency Dial Synchronization Wait-For-Updates-Timeout (ms)
-                    </TextBlock>
-                </Label>
-                <ComboBox IsEnabled="True" Name="ComboBoxSynchSleepTime" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0"  SelectedIndex="5" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSynchSleepTime_OnSelectionChanged">
-                    <ComboBoxItem >10</ComboBoxItem>
-                    <ComboBoxItem >20</ComboBoxItem>
-                    <ComboBoxItem >30</ComboBoxItem>
-                    <ComboBoxItem >40</ComboBoxItem>
-                    <ComboBoxItem >50</ComboBoxItem>
-                    <ComboBoxItem >60</ComboBoxItem>
-                    <ComboBoxItem >100</ComboBoxItem>
-                    <ComboBoxItem >150</ComboBoxItem>
-                    <ComboBoxItem >200</ComboBoxItem>
-                    <ComboBoxItem >300</ComboBoxItem>
-                    <ComboBoxItem >400</ComboBoxItem>
-                    <ComboBoxItem >500</ComboBoxItem>
-                    <ComboBoxItem >1000</ComboBoxItem>
-                    <ComboBoxItem >1500</ComboBoxItem>
-                    <ComboBoxItem >2000</ComboBoxItem>
-                </ComboBox>
-                <Label FontSize="10" Margin="0,5,0,0"  FontWeight="Bold">
-                    <TextBlock TextWrapping="WrapWithOverflow">
-                        Synchronization Reset timeout (ms)
-                    </TextBlock>
-                </Label>
-                <ComboBox IsEnabled="True" Name="ComboBoxSynchResetTimeout" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0"  SelectedIndex="5" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxSynchResetTimeout_OnSelectionChanged">
-                    <ComboBoxItem >1000</ComboBoxItem>
-                    <ComboBoxItem >1500</ComboBoxItem>
-                    <ComboBoxItem >2000</ComboBoxItem>
-                    <ComboBoxItem >2500</ComboBoxItem>
-                    <ComboBoxItem >3000</ComboBoxItem>
-                    <ComboBoxItem >3500</ComboBoxItem>
-                    <ComboBoxItem >4000</ComboBoxItem>
-                    <ComboBoxItem >5000</ComboBoxItem>
-                    <ComboBoxItem >6000</ComboBoxItem>
-                    <ComboBoxItem >7000</ComboBoxItem>
-                    <ComboBoxItem >8000</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-        </GroupBox>
-        <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="159" Grid.Row="5" Grid.RowSpan="2" Grid.Column="6"/>
     </Grid>
 </UserControl>

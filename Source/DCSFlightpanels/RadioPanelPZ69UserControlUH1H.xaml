@@ -117,6 +117,10 @@
             <Label Content="AN/ARC-51BX UHF" FontWeight="Bold"/>
             <Image Height="170" Source="/DCSFlightpanels;component/Images/UH-1H_AN_ARC-51BX_UHF.png" />
         </StackPanel>
-        <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="159" Grid.Row="5" Grid.RowSpan="2" Grid.Column="6"/>
+        <DockPanel Grid.Column="6" Grid.Row="5" Grid.RowSpan="2" >
+            <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">
+                <TextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="100" />
+            </GroupBox>
+        </DockPanel>
     </Grid>
 </UserControl>

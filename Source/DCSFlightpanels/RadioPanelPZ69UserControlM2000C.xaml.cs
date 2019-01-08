@@ -216,7 +216,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsM2000C.UPPER_NO_USE0:
+                        case RadioPanelPZ69KnobsM2000C.UPPER_TACAN:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -226,7 +226,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsM2000C.UPPER_NO_USE1:
+                        case RadioPanelPZ69KnobsM2000C.UPPER_VOR:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -286,7 +286,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsM2000C.LOWER_NO_USE0:
+                        case RadioPanelPZ69KnobsM2000C.LOWER_TACAN:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -296,7 +296,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsM2000C.LOWER_NO_USE1:
+                        case RadioPanelPZ69KnobsM2000C.LOWER_VOR:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
