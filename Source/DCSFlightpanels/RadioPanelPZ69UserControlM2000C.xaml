@@ -70,8 +70,8 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = V/UHF Preset Channels <LineBreak/>
-                    COM 2 = UHF Preset Channels<LineBreak/>
+                    COM 1 = V/UHF Preset Channels + Volume<LineBreak/>
+                    COM 2 = UHF Preset Channels + Volume<LineBreak/>
                     NAV 1 = TACAN<LineBreak/>
                     NAV 2 = VOR.ILS<LineBreak/>
                     ADF = <LineBreak/> 

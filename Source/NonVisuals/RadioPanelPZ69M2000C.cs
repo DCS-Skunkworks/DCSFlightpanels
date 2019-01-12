@@ -16,20 +16,29 @@ namespace NonVisuals
 
         /*M-2000C V/UHF PRESETS COM1*/
         //Large dial PRESETS [step of 1]
+        //Small dial Volume
         private readonly object _lockVUHFPresetDialObject = new object();
         private DCSBIOSOutput _vuhfDcsbiosOutputPresetDial;
         private volatile uint _vuhfPresetCockpitDialPos = 1;
         private const string VUHFPresetCommandInc = "UVHF_PRESET_KNOB INC\n";
         private const string VUHFPresetCommandDec = "UVHF_PRESET_KNOB DEC\n";
         private int _vuhfPresetDialSkipper;
+        private const string VUHFVolumeCommandInc = "VUHF_RADIO_VOL_KNOB +3200\n";
+        private const string VUHFVolumeCommandDec = "VUHF_RADIO_VOL_KNOB -3200\n";
 
         /*M2000C UHF PRESETS COM2*/
+        //Large dial PRESETS [step of 1]
+        //Small dial Volume
         private readonly object _lockUHFPresetDialObject = new object();
         private DCSBIOSOutput _uhfDcsbiosOutputPresetDial;
         private volatile uint _uhfPresetCockpitDialPos = 1;
         private const string UHFPresetCommandInc = "UHF_PRESET_KNOB INC\n";
         private const string UHFPresetCommandDec = "UHF_PRESET_KNOB DEC\n";
         private int _uhfPresetDialSkipper;
+        private const string UHFVolumeCommandInc = "UHF_RADIO_VOL_KNOB +3200\n";
+        private const string UHFVolumeCommandDec = "UHF_RADIO_VOL_KNOB -3200\n";
+
+        //definePotentiometer("UHF_RADIO_VOL_KNOB", 16, 3706, 706, { 0, 1}, "AUDIO PANEL", "I - UHF - Radio Volume Knob")
 
         /*M-2000C TACAN NAV1*/
         private readonly object _lockTACANDialObject = new object();
@@ -583,6 +592,16 @@ namespace NonVisuals
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
+                                        case CurrentM2000CRadioMode.VUHF:
+                                            {
+                                                DCSBIOS.Send(VUHFVolumeCommandInc);
+                                                break;
+                                            }
+                                        case CurrentM2000CRadioMode.UHF:
+                                            {
+                                                DCSBIOS.Send(UHFVolumeCommandInc);
+                                                break;
+                                            }
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
                                                 if (!SkipTACANDialChange())
@@ -610,6 +629,16 @@ namespace NonVisuals
                                 {
                                     switch (_currentUpperRadioMode)
                                     {
+                                        case CurrentM2000CRadioMode.UHF:
+                                            {
+                                                DCSBIOS.Send(UHFVolumeCommandDec);
+                                                break;
+                                            }
+                                        case CurrentM2000CRadioMode.VUHF:
+                                            {
+                                                DCSBIOS.Send(VUHFVolumeCommandDec);
+                                                break;
+                                            }
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
                                                 if (!SkipTACANDialChange())
@@ -723,6 +752,16 @@ namespace NonVisuals
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
+                                        case CurrentM2000CRadioMode.UHF:
+                                            {
+                                                DCSBIOS.Send(UHFVolumeCommandInc);
+                                                break;
+                                            }
+                                        case CurrentM2000CRadioMode.VUHF:
+                                            {
+                                                DCSBIOS.Send(VUHFVolumeCommandInc);
+                                                break;
+                                            }
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
                                                 if (!SkipTACANDialChange())
@@ -750,6 +789,16 @@ namespace NonVisuals
                                 {
                                     switch (_currentLowerRadioMode)
                                     {
+                                        case CurrentM2000CRadioMode.UHF:
+                                            {
+                                                DCSBIOS.Send(UHFVolumeCommandDec);
+                                                break;
+                                            }
+                                        case CurrentM2000CRadioMode.VUHF:
+                                            {
+                                                DCSBIOS.Send(VUHFVolumeCommandDec);
+                                                break;
+                                            }
                                         case CurrentM2000CRadioMode.TACAN:
                                             {
                                                 if (!SkipTACANDialChange())
