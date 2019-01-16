@@ -251,11 +251,7 @@ namespace NonVisuals
                             var airframeAsString = fileLine.Replace("Airframe=", "").Trim();
                             if (airframeAsString.StartsWith("SA342"))
                             {
-                                _airframe = DCSAirframe.SA342;
-                            }
-                            else if (airframeAsString.StartsWith("P51D") || airframeAsString.StartsWith("TF51D"))
-                            {
-                                _airframe = DCSAirframe.P51D;
+                                _airframe = DCSAirframe.SA342M;
                             }
                             else if (airframeAsString.StartsWith("P51D") || airframeAsString.StartsWith("TF51D"))
                             {

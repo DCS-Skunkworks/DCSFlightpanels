@@ -99,10 +99,10 @@ namespace ClassLibraryCommon
         Mig15Bis,
         [Description("NS430")]
         NS430,
-        [Description("P-51D  TF-51D")]
+        [Description("P-51D")]
         P51D,
-        [Description("SA342")]
-        SA342,
+        [Description("SA342M")]
+        SA342M,
         [Description("SpitfireLFMkIX")]
         SpitfireLFMkIX,
         [Description("UH-1H")]
