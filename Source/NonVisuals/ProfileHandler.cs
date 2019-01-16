@@ -242,12 +242,33 @@ namespace NonVisuals
                     {
                         if (fileLine.StartsWith("Airframe=NONE"))
                         {
-                            //Backward compat
+                            //Backward compability
                             _airframe = DCSAirframe.KEYEMULATOR;
                         }
                         else
                         {
-                            _airframe = (DCSAirframe)Enum.Parse(typeof(DCSAirframe), fileLine.Replace("Airframe=", "").Trim());
+                            //Backward compability
+                            var airframeAsString = fileLine.Replace("Airframe=", "").Trim();
+                            if (airframeAsString.StartsWith("SA342"))
+                            {
+                                _airframe = DCSAirframe.SA342;
+                            }
+                            else if (airframeAsString.StartsWith("P51D") || airframeAsString.StartsWith("TF51D"))
+                            {
+                                _airframe = DCSAirframe.P51D;
+                            }
+                            else if (airframeAsString.StartsWith("P51D") || airframeAsString.StartsWith("TF51D"))
+                            {
+                                _airframe = DCSAirframe.P51D;
+                            }
+                            else if (airframeAsString.StartsWith("L39"))
+                            {
+                                _airframe = DCSAirframe.L39ZA;
+                            }
+                            else
+                            {
+                                _airframe = (DCSAirframe)Enum.Parse(typeof(DCSAirframe), airframeAsString);
+                            }
                         }
                         DCSBIOSControlLocator.Airframe = _airframe;
                         DCSBIOSControlLocator.JSONDirectory = _jsonDirectory;
