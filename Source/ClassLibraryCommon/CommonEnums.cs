@@ -15,7 +15,7 @@ namespace ClassLibraryCommon
 
     public enum KeyPressLength
     {
-        //Zero = 0, <-- DCS & keybd_event fungerar inte utan fördröjning mellan tangent tryck & släpp
+        //Zero = 0, <-- DCS & keybd_event does not work without delay between key press & release
         //Indefinite = 0,
         FiftyMilliSec = 50,
         HalfSecond = 500,
