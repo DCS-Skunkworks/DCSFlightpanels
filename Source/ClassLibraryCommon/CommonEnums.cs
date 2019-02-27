@@ -55,6 +55,10 @@ namespace ClassLibraryCommon
      * Radios : DCS-BIOS || SRS
      */
 
+    /*
+     * Description = What is defined (XYZ) in BIOS.protocol.setExportModuleAircrafts({"XYZ"})
+     * Value => not used
+     */
     public enum DCSAirframe
     {
         [Description("NoFrameLoadedYet")]
@@ -73,6 +77,8 @@ namespace ClassLibraryCommon
         AV8BNA,
         [Description("Bf-109K-4")]
         Bf109,
+        [Description("Christen Eagle I")]
+        ChristenEagle,
         [Description("F-5E-3")]
         F5E,
         [Description("F-86F Sabre")]
@@ -106,8 +112,9 @@ namespace ClassLibraryCommon
         [Description("SpitfireLFMkIX")]
         SpitfireLFMkIX,
         [Description("UH-1H")]
-        UH1H
-
+        UH1H,
+        [Description("Yak-52")]
+        Yak52
     }
 
     class CommonEnums
