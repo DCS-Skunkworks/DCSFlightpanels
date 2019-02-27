@@ -317,6 +317,30 @@ namespace DCS_BIOS
             return _dcsbiosControls;
         }
 
+        public static IEnumerable<DCSBIOSControl> GetStringOutputControls()
+        {
+            /*"CM_CHAFFCNT_DISPLAY": {
+                   "category": "Countermeasures",
+               "control_type": "display",
+                "description": "Chaff Counter",
+                 "identifier": "CM_CHAFFCNT_DISPLAY",
+                     "inputs": [  ],
+                    "outputs": [ {
+                                       "address": 5408,
+                                   "description": "Chaff Counter",
+                                    "max_length": 2,
+                                        "suffix": "",
+                                          "type": "string"
+                               } ]
+                },*/
+            if (!Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            {
+                return null;
+            }
+            LoadControls();
+            return _dcsbiosControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.STRING_TYPE);
+        }
+
         public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()
         {
             if (!Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))

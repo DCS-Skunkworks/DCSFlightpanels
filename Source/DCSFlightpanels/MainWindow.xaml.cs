@@ -417,7 +417,7 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.P51D || _panelProfileHandler.Airframe == DCSAirframe.TF51D)
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.P51D)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
@@ -449,7 +449,7 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.SA342L || _panelProfileHandler.Airframe == DCSAirframe.SA342M || _panelProfileHandler.Airframe == DCSAirframe.SA342Mistral)
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.SA342M)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
@@ -473,15 +473,7 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    //else if (_panelProfileHandler.Airframe == DCSAirframe.F5E)
-                                    //{
-                                    //    var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton, tabItem, this);
-                                    //    _saitekUserControls.Add(radioPanelPZ69UserControl);
-                                    //    _panelProfileHandler.Attach(radioPanelPZ69UserControl);
-                                    //    tabItem.Content = radioPanelPZ69UserControl;
-                                    //    TabControlPanels.Items.Add(tabItem);
-                                    //}
-                                    else //if (_panelProfileHandler.Airframe == DCSAirframe.M2000C || _panelProfileHandler.Airframe == DCSAirframe.L39ZA || _panelProfileHandler.Airframe == DCSAirframe.AV8BNA)
+                                    else
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulatorFull(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);

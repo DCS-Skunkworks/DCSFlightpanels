@@ -101,16 +101,10 @@ namespace ClassLibraryCommon
         NS430,
         [Description("P-51D")]
         P51D,
-        [Description("SA342L")]
-        SA342L,
         [Description("SA342M")]
         SA342M,
-        [Description("SA342Mistral")]
-        SA342Mistral,
         [Description("SpitfireLFMkIX")]
         SpitfireLFMkIX,
-        [Description("TF-51D")]
-        TF51D,
         [Description("UH-1H")]
         UH1H
 
