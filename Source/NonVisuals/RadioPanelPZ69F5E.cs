@@ -21,6 +21,11 @@ namespace NonVisuals
         /*F-5E UHF Radio COM1*/
         //Large dial 225-399 [step of 1]
         //Small dial 0.00-0.95 [step of 0.05]
+
+        /*
+         * Note, because of lack of information the A & T of the UHF
+         * will be treated as 100 and 400 MHz.
+         */
         private double _uhfBigFrequencyStandby = 299;
         private double _uhfSmallFrequencyStandby;
         private double _uhfSavedCockpitBigFrequency;
@@ -60,6 +65,8 @@ namespace NonVisuals
         private DCSBIOSOutput _uhfDcsbiosOutputSelectedChannel;
         private volatile uint _uhfCockpitFreqMode = 0;
         private volatile uint _uhfCockpitPresetChannel = 0;
+        private readonly ClickSpeedDetector _uhfBigFreqIncreaseClickSpeedDetector = new ClickSpeedDetector(15);
+        private readonly ClickSpeedDetector _uhfBigFreqDecreaseClickSpeedDetector = new ClickSpeedDetector(15);
         private readonly ClickSpeedDetector _uhfChannelClickSpeedDetector = new ClickSpeedDetector(8);
         private readonly ClickSpeedDetector _uhfFreqModeClickSpeedDetector = new ClickSpeedDetector(6);
 
@@ -133,7 +140,8 @@ namespace NonVisuals
                 lock (_lockUhfDialsObject1)
                 {
                     var tmp = _uhfCockpitFreq1DialPos;
-                    _uhfCockpitFreq1DialPos = 3 - _uhfDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
+                    _uhfCockpitFreq1DialPos = 4 - _uhfDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
+                    Common.DebugP("_uhfCockpitFreq1DialPos NOW : " + _uhfCockpitFreq1DialPos);
                     if (tmp != _uhfCockpitFreq1DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -406,6 +414,19 @@ namespace NonVisuals
             var freqDial3 = 0;
             var freqDial4 = 0;
             var freqDial5 = 0;
+            freqDial1 = int.Parse(frequencyAsString.Substring(0, 1));
+            freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
+            freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
+            freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
+            freqDial5 = int.Parse(frequencyAsString.Substring(5, 1));
+            Common.DebugP("freqDial1 =" + freqDial1);
+            Common.DebugP("freqDial2 =" + freqDial2);
+            Common.DebugP("freqDial3 =" + freqDial3);
+            Common.DebugP("freqDial4 =" + freqDial4);
+            Common.DebugP("freqDial5 =" + freqDial5);
+
+            /*
+             ATM A & T are disregarded as we don't exactly know how they should work.
 
             //Special case! If Dial 1 = "A" then all digits can be disregarded once they are set to zero
             switch (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture))
@@ -440,7 +461,7 @@ namespace NonVisuals
                         freqDial5 = int.Parse(frequencyAsString.Substring(5, 1));
                         break;
                     }
-            }
+            }*/
             switch (freqDial5)
             {
                 //Frequency selector 5
@@ -494,10 +515,13 @@ namespace NonVisuals
                 _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1 - 2, freqDial2, freqDial3, freqDial4, freqDial5));
             }
             else
-            {*/
+            {
             //The first dial is set to "A", pos 3   (freqDial1 == -1)
+            
             _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(3, freqDial2, freqDial3, freqDial4, freqDial5));
+            */
             //}
+            _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
             _uhfSyncThread.Start();
         }
 
@@ -1184,7 +1208,7 @@ namespace NonVisuals
                                                 }
                                                 else
                                                 {
-                                                    _uhfBigFrequencyStandby++;
+                                                    UHFBigFrequencyStandbyAdjust(true);
                                                 }
                                             }
                                             break;
@@ -1240,7 +1264,7 @@ namespace NonVisuals
                                                 }
                                                 else
                                                 {
-                                                    _uhfBigFrequencyStandby--;
+                                                    UHFBigFrequencyStandbyAdjust(false);
                                                 }
                                             }
                                             break;
@@ -1400,7 +1424,7 @@ namespace NonVisuals
                                                 }
                                                 else
                                                 {
-                                                    _uhfBigFrequencyStandby++;
+                                                    UHFBigFrequencyStandbyAdjust(true);
                                                 }
                                             }
                                             break;
@@ -1456,7 +1480,7 @@ namespace NonVisuals
                                                 }
                                                 else
                                                 {
-                                                    _uhfBigFrequencyStandby--;
+                                                    UHFBigFrequencyStandbyAdjust(false);
                                                 }
                                             }
                                             break;
@@ -1594,6 +1618,32 @@ namespace NonVisuals
             ShowFrequenciesOnPanel();
         }
 
+        private void UHFBigFrequencyStandbyAdjust(bool increase)
+        {
+            if (increase)
+            {
+                if (_uhfBigFreqIncreaseClickSpeedDetector.ClickAndCheck())
+                {
+                    _uhfBigFrequencyStandby += 10;
+                }
+                else
+                {
+                    _uhfBigFrequencyStandby++;
+                }
+            }
+            else
+            {
+                if (_uhfBigFreqDecreaseClickSpeedDetector.ClickAndCheck())
+                {
+                    _uhfBigFrequencyStandby -= 10;
+                }
+                else
+                {
+                    _uhfBigFrequencyStandby--;
+                }
+            }
+        }
+
         private void CheckFrequenciesForValidity()
         {
             //Crude fix if any freqs are outside the valid boundaries
@@ -1670,13 +1720,13 @@ namespace NonVisuals
                         case RadioPanelPZ69KnobsF5E.UPPER_NOUSE3:
                         case RadioPanelPZ69KnobsF5E.UPPER_NOUSE4:
                         case RadioPanelPZ69KnobsF5E.UPPER_NOUSE5:
-                        {
-                            if (radioPanelKnob.IsOn)
                             {
-                                _currentUpperRadioMode = CurrentF5ERadioMode.NO_USE;
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    _currentUpperRadioMode = CurrentF5ERadioMode.NO_USE;
+                                }
+                                break;
                             }
-                            break;
-                        }
                         case RadioPanelPZ69KnobsF5E.LOWER_UHF:
                             {
                                 if (radioPanelKnob.IsOn)
@@ -1924,120 +1974,6 @@ namespace NonVisuals
             return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
         }
 
-        private string GetVhfAmDialFrequencyForPosition(int dial, uint position)
-        {
-
-            //Frequency selector 1      VHFAM_FREQ1
-            //      " 3" " 4" " 5" " 6" " 7" " 8" " 9" "10" "11" "12" "13" "14" "15"
-            //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-
-            //Frequency selector 2      VHFAM_FREQ2
-            //0 1 2 3 4 5 6 7 8 9
-
-            //Frequency selector 3      VHFAM_FREQ3
-            //0 1 2 3 4 5 6 7 8 9
-
-            //Frequency selector 4      VHFAM_FREQ4
-            //      "00" "25" "50" "75", only "00" and "50" used.
-            //Pos     0    1    2    3
-            switch (dial)
-            {
-                case 1:
-                    {
-                        switch (position)
-                        {
-                            case 0:
-                                {
-                                    return "3";
-                                }
-                            case 1:
-                                {
-                                    return "4";
-                                }
-                            case 2:
-                                {
-                                    return "5";
-                                }
-                            case 3:
-                                {
-                                    return "6";
-                                }
-                            case 4:
-                                {
-                                    return "7";
-                                }
-                            case 5:
-                                {
-                                    return "8";
-                                }
-                            case 6:
-                                {
-                                    return "9";
-                                }
-                            case 7:
-                                {
-                                    return "10";
-                                }
-                            case 8:
-                                {
-                                    return "11";
-                                }
-                            case 9:
-                                {
-                                    return "12";
-                                }
-                            case 10:
-                                {
-                                    return "13";
-                                }
-                            case 11:
-                                {
-                                    return "14";
-                                }
-                            case 12:
-                                {
-                                    return "15";
-                                }
-                        }
-                        break;
-                    }
-                case 2:
-                    {
-                        return position.ToString();
-                    }
-                case 3:
-                    {
-                        return position.ToString();
-                    }
-                case 4:
-                    {
-                        switch (position)
-                        {
-                            //      "00" "25" "50" "75", only "00" and "50" used.
-                            //Pos     0    1    2    3
-                            case 0:
-                                {
-                                    return "0";
-                                }
-                            case 1:
-                                {
-                                    return "0";
-                                }
-                            case 2:
-                                {
-                                    return "5";
-                                }
-                            case 3:
-                                {
-                                    return "5";
-                                }
-                        }
-                    }
-                    break;
-            }
-            return "";
-        }
-
         private string GetUhfDialFrequencyForPosition(int dial, uint position)
         {
             //Frequency selector 1     
@@ -2063,22 +1999,23 @@ namespace NonVisuals
                     {
                         switch (position)
                         {
-                            case 0:
-                                {
-                                    return "0";
-                                }
                             case 1:
                                 {
-                                    return "2";
+                                    return "1";
                                 }
                             case 2:
                                 {
-                                    return "3";
+                                    return "2";
                                 }
                             case 3:
                                 {
+                                    return "3";
+                                }
+                            case 4:
+                                {
+                                    return "4";
                                     //throw new NotImplementedException("check how A should be treated.");
-                                    return "0";//should be "A"
+                                    //return "0";//should be "A"
                                 }
                         }
                         break;
@@ -2184,8 +2121,12 @@ namespace NonVisuals
 
         private void SwapCockpitStandbyFrequencyUhf()
         {
+            Common.DebugP("Old _uhfBigFrequencyStandby = " + _uhfBigFrequencyStandby);
+            Common.DebugP("Old _uhfSmallFrequencyStandby = " + _uhfSmallFrequencyStandby);
             _uhfBigFrequencyStandby = _uhfSavedCockpitBigFrequency;
             _uhfSmallFrequencyStandby = _uhfSavedCockpitSmallFrequency;
+            Common.DebugP("New _uhfBigFrequencyStandby = " + _uhfBigFrequencyStandby);
+            Common.DebugP("New _uhfSmallFrequencyStandby = " + _uhfSmallFrequencyStandby);
         }
 
 
