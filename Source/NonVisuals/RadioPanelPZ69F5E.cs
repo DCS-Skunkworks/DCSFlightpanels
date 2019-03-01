@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -141,7 +142,6 @@ namespace NonVisuals
                 {
                     var tmp = _uhfCockpitFreq1DialPos;
                     _uhfCockpitFreq1DialPos = 4 - _uhfDcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                    Common.DebugP("_uhfCockpitFreq1DialPos NOW : " + _uhfCockpitFreq1DialPos);
                     if (tmp != _uhfCockpitFreq1DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -418,109 +418,45 @@ namespace NonVisuals
             freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
             freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
             freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
-            freqDial5 = int.Parse(frequencyAsString.Substring(5, 1));
+            
+            var tmp = int.Parse(frequencyAsString.Substring(5, 1));
+            switch (tmp)
+            {
+                case 0:
+                {
+                    freqDial5 = 0;
+                    break;
+                }
+                case 2:
+                {
+                    freqDial5 = 1;
+                    break;
+                }
+                case 5:
+                {
+                    freqDial5 = 2;
+                    break;
+                }
+                case 7:
+                {
+                    freqDial5 = 3;
+                    break;
+                }
+                default:
+                {
+                    //Safeguard in case it is in a invalid position
+                    freqDial5 = 0;
+                    break;
+                }
+            }
             Common.DebugP("freqDial1 =" + freqDial1);
             Common.DebugP("freqDial2 =" + freqDial2);
             Common.DebugP("freqDial3 =" + freqDial3);
             Common.DebugP("freqDial4 =" + freqDial4);
             Common.DebugP("freqDial5 =" + freqDial5);
 
-            /*
-             ATM A & T are disregarded as we don't exactly know how they should work.
-
-            //Special case! If Dial 1 = "A" then all digits can be disregarded once they are set to zero
-            switch (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture))
-            {
-                //0.075Mhz
-                case 1:
-                    {
-                        freqDial1 = -1; // ("A")
-                        freqDial2 = 0;
-                        freqDial3 = int.Parse(frequencyAsString.Substring(0, 1));
-                        freqDial4 = int.Parse(frequencyAsString.Substring(2, 1));
-                        freqDial5 = int.Parse(frequencyAsString.Substring(3, 1));
-                        break;
-                    }
-                //10.075Mhz
-                case 2:
-                    {
-                        freqDial1 = -1; // ("A")
-                        freqDial2 = int.Parse(frequencyAsString.Substring(0, 1));
-                        freqDial3 = int.Parse(frequencyAsString.Substring(1, 1));
-                        freqDial4 = int.Parse(frequencyAsString.Substring(3, 1));
-                        freqDial5 = int.Parse(frequencyAsString.Substring(4, 1));
-                        break;
-                    }
-                //100.075Mhz
-                case 3:
-                    {
-                        freqDial1 = int.Parse(frequencyAsString.Substring(0, 1));
-                        freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
-                        freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
-                        freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
-                        freqDial5 = int.Parse(frequencyAsString.Substring(5, 1));
-                        break;
-                    }
-            }*/
-            switch (freqDial5)
-            {
-                //Frequency selector 5
-                //      "00" "25" "50" "75", only "00" and "50" used.
-                //Pos     0    1    2    3
-                case 0:
-                    {
-                        break;
-                    }
-                case 2:
-                    {
-                        freqDial5 = 0;
-                        break;
-                    }
-                case 5:
-                    {
-                        freqDial5 = 2;
-                        break;
-                    }
-                case 7:
-                    {
-                        freqDial5 = 2;
-                        break;
-                    }
-            }
-            //Frequency selector 1     
-            //       "T" "2"  "3"  "A"/"-1"
-            //Pos     0   1    2    3
-
-            //Frequency selector 2      
-            //0 1 2 3 4 5 6 7 8 9
-
-            //Frequency selector 3
-            //0 1 2 3 4 5 6 7 8 9
-
-
-            //Frequency selector 4
-            //0 1 2 3 4 5 6 7 8 9
-
-            //Frequency selector 5
-            //      "00" "25" "50" "75", only "00" and "50" used.
-            //Pos     0    1    2    3
-
-            //Large dial 225-399 [step of 1]
-            //Small dial 0.00-0.95 [step of 0.05]
-
-            //#1
             _uhfSyncThread?.Abort();
-            /*if (freqDial1 == 3)
-            {
-                _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1 - 2, freqDial2, freqDial3, freqDial4, freqDial5));
-            }
-            else
-            {
-            //The first dial is set to "A", pos 3   (freqDial1 == -1)
             
-            _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(3, freqDial2, freqDial3, freqDial4, freqDial5));
-            */
-            //}
             _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
             _uhfSyncThread.Start();
         }
@@ -989,7 +925,7 @@ namespace NonVisuals
                                 //0 1 2 3 4 5 6 7 8 9
 
                                 //Frequency selector 5
-                                //      "00" "25" "50" "75", only "00" and "50" used.
+                                //      "00" "25" "50" "75", only 0 2 5 7 used.
                                 //Pos     0    1    2    3
 
                                 //251.75
@@ -1309,14 +1245,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                //Small dial 0.000 0.025 0.050 0.075 [only 0.00 and 0.05 are used]
-                                                if (_uhfSmallFrequencyStandby >= 0.95)
-                                                {
-                                                    //At max value
-                                                    _uhfSmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -1361,13 +1290,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                if (_uhfSmallFrequencyStandby <= 0.00)
-                                                {
-                                                    //At min value
-                                                    _uhfSmallFrequencyStandby = 0.95;
-                                                    break;
-                                                }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -1525,14 +1448,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                //Small dial 0.000 0.025 0.050 0.075 [only 0.00 and 0.05 are used]
-                                                if (_uhfSmallFrequencyStandby >= 0.95)
-                                                {
-                                                    //At max value
-                                                    _uhfSmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -1580,10 +1496,10 @@ namespace NonVisuals
                                                 if (_uhfSmallFrequencyStandby <= 0.00)
                                                 {
                                                     //At min value
-                                                    _uhfSmallFrequencyStandby = 0.95;
+                                                    _uhfSmallFrequencyStandby = 0.97;
                                                     break;
                                                 }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -1616,6 +1532,88 @@ namespace NonVisuals
                 }
             }
             ShowFrequenciesOnPanel();
+        }
+
+
+        private void UHFSmallFrequencyStandbyAdjust(bool increase)
+        {
+            var tmp = _uhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture);
+            if (increase)
+            {
+                /*
+                 * "0.1"
+                 * "0.12"
+                 * "0.15"
+                 * "0.17"
+                 * "0.97"
+                 */
+                if (tmp.Length == 4)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.02;
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.03;
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.02;
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.03;
+                    }
+                }
+                else
+                {
+                    /*
+                     * Zero assumed
+                     * e.g. 0.10
+                     *         ^
+                     */
+                    _uhfSmallFrequencyStandby += 0.02;
+                }
+            }
+            else
+            {
+                if (tmp.Length == 4)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.03;
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.02;
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.03;
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.02;
+                    }
+                }
+                else
+                {
+                    /*
+                     * Zero assumed
+                     * e.g. 0.10
+                     */
+                    _uhfSmallFrequencyStandby -= 0.03;
+                }
+            }
+
+            if (_uhfSmallFrequencyStandby < 0)
+            {
+                _uhfSmallFrequencyStandby = 0.97;
+            }else if (_uhfSmallFrequencyStandby > 0.97)
+            {
+                _uhfSmallFrequencyStandby = 0.0;
+            }
         }
 
         private void UHFBigFrequencyStandbyAdjust(bool increase)
@@ -2038,7 +2036,7 @@ namespace NonVisuals
                                 }
                             case 1:
                                 {
-                                    return "0";
+                                    return "2";
                                 }
                             case 2:
                                 {
@@ -2046,7 +2044,7 @@ namespace NonVisuals
                                 }
                             case 3:
                                 {
-                                    return "5";
+                                    return "7";
                                 }
                         }
                     }
