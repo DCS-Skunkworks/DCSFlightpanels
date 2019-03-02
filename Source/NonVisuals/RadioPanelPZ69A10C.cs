@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -20,7 +21,7 @@ namespace NonVisuals
 
         /*A-10C AN/ARC-186(V) VHF AM Radio 1*/
         //Large dial 116-151 [step of 1]
-        //Small dial 0.00-0.95 [step of 0.05]
+        //Small dial 0.00-0.97 [step of x.x[0 2 5 7]
         private double _vhfAmBigFrequencyStandby = 116;
         private double _vhfAmSmallFrequencyStandby;
         private double _vhfAmSavedCockpitBigFrequency;
@@ -66,7 +67,7 @@ namespace NonVisuals
 
         /*A-10C AN/ARC-164 UHF Radio 2*/
         //Large dial 225-399 [step of 1]
-        //Small dial 0.00-0.95 [step of 0.05]
+        //Small dial 0.00-0.97 [step of 0 2 5 7]
         private double _uhfBigFrequencyStandby = 299;
         private double _uhfSmallFrequencyStandby;
         private double _uhfSavedCockpitBigFrequency;
@@ -117,7 +118,7 @@ namespace NonVisuals
 
         /*A-10C AN/ARC-186(V) VHF FM Radio 3*/
         //Large dial 30-76 [step of 1]
-        //Small dial 0.00-0.95 [step of 0.05]
+        //Small dial 000 - 975 [0 2 5 7]
         private uint _vhfFmBigFrequencyStandby = 45;
         private uint _vhfFmSmallFrequencyStandby;
         private uint _vhfFmSavedCockpitBigFrequency;
@@ -738,6 +739,7 @@ namespace NonVisuals
             var desiredPositionDial2 = 0;
             var desiredPositionDial3 = 0;
             var desiredPositionDial4 = 0;
+            var tmp = 0;
 
             if (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture) == 2)
             {
@@ -749,7 +751,7 @@ namespace NonVisuals
                 desiredPositionDial1 = int.Parse(frequencyAsString.Substring(0, 1)) - 3;
                 desiredPositionDial2 = int.Parse(frequencyAsString.Substring(1, 1));
                 desiredPositionDial3 = int.Parse(frequencyAsString.Substring(3, 1));
-                desiredPositionDial4 = int.Parse(frequencyAsString.Substring(4, 1));
+                tmp = int.Parse(frequencyAsString.Substring(4, 1));
             }
             else
             {
@@ -761,7 +763,36 @@ namespace NonVisuals
                 desiredPositionDial1 = int.Parse(frequencyAsString.Substring(0, 2)) - 3;
                 desiredPositionDial2 = int.Parse(frequencyAsString.Substring(2, 1));
                 desiredPositionDial3 = int.Parse(frequencyAsString.Substring(4, 1));
-                desiredPositionDial4 = int.Parse(frequencyAsString.Substring(5, 1));
+                tmp = int.Parse(frequencyAsString.Substring(5, 1));
+            }
+            switch (tmp)
+            {
+                case 0:
+                    {
+                        desiredPositionDial4 = 0;
+                        break;
+                    }
+                case 2:
+                    {
+                        desiredPositionDial4 = 1;
+                        break;
+                    }
+                case 5:
+                    {
+                        desiredPositionDial4 = 2;
+                        break;
+                    }
+                case 7:
+                    {
+                        desiredPositionDial4 = 3;
+                        break;
+                    }
+                default:
+                    {
+                        //Safeguard in case it is in a invalid position
+                        desiredPositionDial4 = 0;
+                        break;
+                    }
             }
             //#1
             _vhfAmSyncThread?.Abort();
@@ -769,7 +800,7 @@ namespace NonVisuals
             _vhfAmSyncThread.Start();
         }
 
-        private void VhfAmSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int frequencyDial4)
+        private void VhfAmSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3, int desiredPositionDial4)
         {
             try
             {
@@ -883,28 +914,8 @@ namespace NonVisuals
                         {
                             dial3OkTime = DateTime.Now.Ticks;
                         }
-                        var desiredPositionDial4 = 0;
                         if (Interlocked.Read(ref _vhfAmDial4WaitingForFeedback) == 0)
                         {
-                            if (frequencyDial4 == 0)
-                            {
-                                desiredPositionDial4 = 0;
-                            }
-                            else if (frequencyDial4 == 2)
-                            {
-                                desiredPositionDial4 = 0;
-                            }
-                            else if (frequencyDial4 == 5)
-                            {
-                                desiredPositionDial4 = 2;
-                            }
-                            else if (frequencyDial4 == 7)
-                            {
-                                desiredPositionDial4 = 2;
-                            }
-                            //      "00" "25" "50" "75", only "00" and "50" used.
-                            //Pos     0    1    2    3
-
                             lock (_lockVhfAmDialsObject4)
                             {
                                 if (_vhfAmCockpitFreq4DialPos < desiredPositionDial4)
@@ -927,7 +938,6 @@ namespace NonVisuals
                                 }
                                 Reset(ref dial4Timeout);
                             }
-
                         }
                         else
                         {
@@ -1036,15 +1046,16 @@ namespace NonVisuals
             switch (freqDial5)
             {
                 //Frequency selector 5
-                //      "00" "25" "50" "75", only "00" and "50" used.
+                //      "00" "25" "50" "75", only 0 2 5 7 used.
                 //Pos     0    1    2    3
                 case 0:
                     {
+                        freqDial5 = 0;
                         break;
                     }
                 case 2:
                     {
-                        freqDial5 = 0;
+                        freqDial5 = 1;
                         break;
                     }
                 case 5:
@@ -1054,7 +1065,7 @@ namespace NonVisuals
                     }
                 case 7:
                     {
-                        freqDial5 = 2;
+                        freqDial5 = 3;
                         break;
                     }
             }
@@ -2678,13 +2689,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                if (_vhfAmSmallFrequencyStandby >= 0.95)
-                                                {
-                                                    //At max value
-                                                    _vhfAmSmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.05;
+                                                VHFAmSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -2700,14 +2705,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                //Small dial 0.000 0.025 0.050 0.075 [only 0.00 and 0.05 are used]
-                                                if (_uhfSmallFrequencyStandby >= 0.95)
-                                                {
-                                                    //At max value
-                                                    _uhfSmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -2729,7 +2727,8 @@ namespace NonVisuals
                                                     _vhfFmSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-                                                _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby + 25;
+
+                                                VHFFMSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -2835,13 +2834,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                if (_vhfAmSmallFrequencyStandby <= 0.00)
-                                                {
-                                                    //At min value
-                                                    _vhfAmSmallFrequencyStandby = 0.95;
-                                                    break;
-                                                }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.05;
+                                                VHFAmSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -2857,13 +2850,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                if (_uhfSmallFrequencyStandby <= 0.00)
-                                                {
-                                                    //At min value
-                                                    _uhfSmallFrequencyStandby = 0.95;
-                                                    break;
-                                                }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -2885,7 +2872,8 @@ namespace NonVisuals
                                                     _vhfFmSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-                                                _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby - 25;
+
+                                                VHFFMSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -3237,13 +3225,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                if (_vhfAmSmallFrequencyStandby >= 0.95)
-                                                {
-                                                    //At max value
-                                                    _vhfAmSmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby + 0.05;
+                                                VHFAmSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -3259,14 +3241,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                //Small dial 0.000 0.025 0.050 0.075 [only 0.00 and 0.05 are used]
-                                                if (_uhfSmallFrequencyStandby >= 0.95)
-                                                {
-                                                    //At max value
-                                                    _uhfSmallFrequencyStandby = 0;
-                                                    break;
-                                                }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -3288,8 +3263,7 @@ namespace NonVisuals
                                                     _vhfFmSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-
-                                                _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby + 25;
+                                                VHFFMSmallFrequencyStandbyAdjust(true);
                                             }
                                             break;
                                         }
@@ -3395,13 +3369,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                if (_vhfAmSmallFrequencyStandby <= 0.00)
-                                                {
-                                                    //At min value
-                                                    _vhfAmSmallFrequencyStandby = 0.95;
-                                                    break;
-                                                }
-                                                _vhfAmSmallFrequencyStandby = _vhfAmSmallFrequencyStandby - 0.05;
+                                                VHFAmSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -3417,13 +3385,7 @@ namespace NonVisuals
                                             }
                                             else
                                             {
-                                                if (_uhfSmallFrequencyStandby <= 0.00)
-                                                {
-                                                    //At min value
-                                                    _uhfSmallFrequencyStandby = 0.95;
-                                                    break;
-                                                }
-                                                _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 0.05;
+                                                UHFSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -3445,7 +3407,7 @@ namespace NonVisuals
                                                     _vhfFmSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-                                                _vhfFmSmallFrequencyStandby = _vhfFmSmallFrequencyStandby - 25;
+                                                VHFFMSmallFrequencyStandbyAdjust(false);
                                             }
                                             break;
                                         }
@@ -3538,6 +3500,189 @@ namespace NonVisuals
                 }
             }
             ShowFrequenciesOnPanel();
+        }
+
+        private void VHFFMSmallFrequencyStandbyAdjust(bool increase)
+        {
+            if (increase)
+            {
+                _vhfFmSmallFrequencyStandby += 25;
+            }
+            else
+            {
+                if ((int)(_vhfFmSmallFrequencyStandby - 25) < 0)
+                {
+                    _vhfFmSmallFrequencyStandby = 0;
+                }
+                else
+                {
+                    _vhfFmSmallFrequencyStandby -= 25;
+                }
+            }
+        }
+
+        private void VHFAmSmallFrequencyStandbyAdjust(bool increase)
+        {
+            var tmp = _vhfAmSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture);
+            if (increase)
+            {
+                /*
+                 * "0.1"
+                 * "0.12"
+                 * "0.15"
+                 * "0.17"
+                 * "0.97"
+                 */
+                if (tmp.Length == 4)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        _vhfAmSmallFrequencyStandby += 0.02;
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        _vhfAmSmallFrequencyStandby += 0.03;
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        _vhfAmSmallFrequencyStandby += 0.02;
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        _vhfAmSmallFrequencyStandby += 0.03;
+                    }
+                }
+                else
+                {
+                    /*
+                     * Zero assumed
+                     * e.g. 0.10
+                     *         ^
+                     */
+                    _vhfAmSmallFrequencyStandby += 0.02;
+                }
+            }
+            else
+            {
+                if (tmp.Length == 4)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        _vhfAmSmallFrequencyStandby -= 0.03;
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        _vhfAmSmallFrequencyStandby -= 0.02;
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        _vhfAmSmallFrequencyStandby -= 0.03;
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        _vhfAmSmallFrequencyStandby -= 0.02;
+                    }
+                }
+                else
+                {
+                    /*
+                     * Zero assumed
+                     * e.g. 0.10
+                     */
+                    _vhfAmSmallFrequencyStandby -= 0.03;
+                }
+            }
+
+            if (_vhfAmSmallFrequencyStandby < 0)
+            {
+                _vhfAmSmallFrequencyStandby = 0.97;
+            }
+            else if (_vhfAmSmallFrequencyStandby > 0.97)
+            {
+                _vhfAmSmallFrequencyStandby = 0.0;
+            }
+        }
+
+        private void UHFSmallFrequencyStandbyAdjust(bool increase)
+        {
+            var tmp = _uhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture);
+            if (increase)
+            {
+                /*
+                 * "0.1"
+                 * "0.12"
+                 * "0.15"
+                 * "0.17"
+                 * "0.97"
+                 */
+                if (tmp.Length == 4)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.02;
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.03;
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.02;
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        _uhfSmallFrequencyStandby += 0.03;
+                    }
+                }
+                else
+                {
+                    /*
+                     * Zero assumed
+                     * e.g. 0.10
+                     *         ^
+                     */
+                    _uhfSmallFrequencyStandby += 0.02;
+                }
+            }
+            else
+            {
+                if (tmp.Length == 4)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.03;
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.02;
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.03;
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        _uhfSmallFrequencyStandby -= 0.02;
+                    }
+                }
+                else
+                {
+                    /*
+                     * Zero assumed
+                     * e.g. 0.10
+                     */
+                    _uhfSmallFrequencyStandby -= 0.03;
+                }
+            }
+
+            if (_uhfSmallFrequencyStandby < 0)
+            {
+                _uhfSmallFrequencyStandby = 0.97;
+            }
+            else if (_uhfSmallFrequencyStandby > 0.97)
+            {
+                _uhfSmallFrequencyStandby = 0.0;
+            }
         }
 
         private void CheckFrequenciesForValidity()
@@ -3981,7 +4126,7 @@ namespace NonVisuals
             //0 1 2 3 4 5 6 7 8 9
 
             //Frequency selector 4      VHFAM_FREQ4
-            //      "00" "25" "50" "75", only "00" and "50" used.
+            //      "00" "25" "50" "75", only 0 2 5 7 used.
             //Pos     0    1    2    3
             switch (dial)
             {
@@ -4056,7 +4201,7 @@ namespace NonVisuals
                     {
                         switch (position)
                         {
-                            //      "00" "25" "50" "75", only "00" and "50" used.
+                            //      "00" "25" "50" "75", 0 2 5 7 used.
                             //Pos     0    1    2    3
                             case 0:
                                 {
@@ -4064,7 +4209,7 @@ namespace NonVisuals
                                 }
                             case 1:
                                 {
-                                    return "0";
+                                    return "2";
                                 }
                             case 2:
                                 {
@@ -4072,7 +4217,7 @@ namespace NonVisuals
                                 }
                             case 3:
                                 {
-                                    return "5";
+                                    return "7";
                                 }
                         }
                     }
@@ -4140,7 +4285,7 @@ namespace NonVisuals
                                 }
                             case 1:
                                 {
-                                    return "0";
+                                    return "2";
                                 }
                             case 2:
                                 {
@@ -4148,7 +4293,7 @@ namespace NonVisuals
                                 }
                             case 3:
                                 {
-                                    return "5";
+                                    return "7";
                                 }
                         }
                     }
@@ -4171,7 +4316,7 @@ namespace NonVisuals
             //0 1 2 3 4 5 6 7 8 9
 
             //Frequency selector 4      VHFFM_FREQ4
-            //      "00" "25" "50" "75", only "00" and "50" used.
+            //      "00" "25" "50" "75", 0 2 5 7 used.
             //Pos     0    1    2    3
             switch (dial)
             {
