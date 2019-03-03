@@ -185,7 +185,7 @@ namespace NonVisuals
         //public abstract void GetDcsBiosData(byte[] bytes);
         protected HIDSkeleton HIDSkeletonBase;
         private bool _closed;
-
+        public long ReportCounter = 0;
 
 
         protected void UpdateCounter(uint address, uint data)
