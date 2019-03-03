@@ -1193,7 +1193,7 @@ namespace NonVisuals
                                                 {
                                                     DCSBIOS.Send(UhfPresetDecrease);
                                                 }
-                                                else if (_uhfBigFrequencyStandby.Equals(225.00))
+                                                else if (_uhfBigFrequencyStandby.Equals(100.00))
                                                 {
                                                     //@ min value
                                                     break;
@@ -1396,7 +1396,7 @@ namespace NonVisuals
                                                 {
                                                     DCSBIOS.Send(UhfPresetDecrease);
                                                 }
-                                                else if (_uhfBigFrequencyStandby.Equals(225.00))
+                                                else if (_uhfBigFrequencyStandby.Equals(100.00))
                                                 {
                                                     //@ min value
                                                     break;
@@ -1649,9 +1649,9 @@ namespace NonVisuals
 
             //UHF
             //225.000 - 399.975 MHz
-            if (_uhfBigFrequencyStandby < 225)
+            if (_uhfBigFrequencyStandby < 100)
             {
-                _uhfBigFrequencyStandby = 225;
+                _uhfBigFrequencyStandby = 100;
             }
             if (_uhfBigFrequencyStandby > 399)
             {

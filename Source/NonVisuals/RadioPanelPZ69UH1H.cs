@@ -23,16 +23,16 @@ namespace NonVisuals
         //private volatile uint _intercommSavedCockpitDialPosition = 0;
         private DCSBIOSOutput _intercommDcsbiosOutputCockpitPos;
         private volatile uint _intercommCockpitDial1Pos;
-        private const string IntercommDialCommandInc = "INT_MODE INC\n";
-        private const string IntercommDialCommandDec = "INT_MODE DEC\n";
+        private const string INTERCOMM_DIAL_COMMAND_INC = "INT_MODE INC\n";
+        private const string INTERCOMM_DIAL_COMMAND_DEC = "INT_MODE DEC\n";
         private long _intercommThreadNowSynching;
         private long _intercommDialWaitingForFeedback;
-        private const string IntercommVolumeKnobCommandInc = "INT_VOL +2500\n";
-        private const string IntercommVolumeKnobCommandDec = "INT_VOL -2500\n";
+        private const string INTERCOMM_VOLUME_KNOB_COMMAND_INC = "INT_VOL +2500\n";
+        private const string INTERCOMM_VOLUME_KNOB_COMMAND_DEC = "INT_VOL -2500\n";
 
         /*UH-1H AN/ARC-134 VHF Comm Radio Set Left side of lower control panel */
         //Large dial 116-149 [step of 1]
-        //Small dial 0.00-0.95 [step of 0.05]
+        //Small dial 0.00-0.95 [step 0 2 5 7]
         private readonly object _lockVhfCommDialsObject1 = new object();
         private readonly object _lockVhfCommDialsObject2 = new object();
         private volatile uint _vhfCommBigFrequencyStandby = 116;
@@ -46,18 +46,18 @@ namespace NonVisuals
         private long _vhfCommDial1FreqWaitingForFeedback;
         private long _vhfCommDial2FreqWaitingForFeedback;
         private DCSBIOSOutput _vhfCommDcsbiosOutputCockpitFrequency;
-        private const string VhfCommFreq1DialCommand = "VHFCOMM_MHZ ";
-        private const string VhfCommFreq2DialCommand = "VHFCOMM_KHZ ";
+        private const string VHF_COMM_FREQ1_DIAL_COMMAND = "VHFCOMM_MHZ ";
+        private const string VHF_COMM_FREQ2_DIAL_COMMAND = "VHFCOMM_KHZ ";
         private Thread _vhfCommSyncThread;
 
 
         /*AN/ARC-51BX UHF radio set*/
         //Large dial 200-399 [step of 1]
-        //Small dial 0.00-0.95 [step of 0.05]
+        //Small dial 0.00-0.95 [step 0.05]
         private bool _uhfIncreasePresetChannel;
         private uint _uhfCockpitPresetChannel = 1;
-        private const string UhfPresetDialCommandInc = "UHF_PRESET INC\n";
-        private const string UhfPresetDialCommandDec = "UHF_PRESET DEC\n";
+        private const string UHF_PRESET_DIAL_COMMAND_INC = "UHF_PRESET INC\n";
+        private const string UHF_PRESET_DIAL_COMMAND_DEC = "UHF_PRESET DEC\n";
         private DCSBIOSOutput _uhfDcsbiosOutputCockpitPresetChannel;
         private readonly object _lockUhfPresetChannelObject = new object();
         //private Thread _uhfPresetChannelSyncThread;
@@ -76,9 +76,9 @@ namespace NonVisuals
         private volatile uint _uhfCockpitDial1Frequency = 22;
         private volatile uint _uhfCockpitDial2Frequency = 5;
         private volatile uint _uhfCockpitDial3Frequency;
-        private const string UhfFreq1DialCommand = "UHF_10MHZ "; // 20-39
-        private const string UhfFreq2DialCommand = "UHF_1MHZ "; //0 1 2 3 4 5 6 7 8 9
-        private const string UhfFreq3DialCommand = "UHF_50KHZ "; //00 - 95
+        private const string UHF_FREQ1_DIAL_COMMAND = "UHF_10MHZ "; // 20-39
+        private const string UHF_FREQ2_DIAL_COMMAND = "UHF_1MHZ "; //0 1 2 3 4 5 6 7 8 9
+        private const string UHF_FREQ3_DIAL_COMMAND = "UHF_50KHZ "; //00 - 95
         private Thread _uhfSyncThread;
         private long _uhfThreadNowSynching;
         private long _uhfDial1WaitingForFeedback;
@@ -98,8 +98,8 @@ namespace NonVisuals
         private double _vhfNavCockpitFrequency = 107.00;
         private volatile uint _vhfNavCockpitDial1Frequency = 107;
         private volatile uint _vhfNavCockpitDial2Frequency;
-        private const string VhfNavFreq1DialCommand = "VHFNAV_MHZ ";
-        private const string VhfNavFreq2DialCommand = "VHFNAV_KHZ ";
+        private const string VHF_NAV_FREQ1_DIAL_COMMAND = "VHFNAV_MHZ ";
+        private const string VHF_NAV_FREQ2_DIAL_COMMAND = "VHFNAV_KHZ ";
         private Thread _vhfNavSyncThread;
         private long _vhfNavThreadNowSynching;
         private long _vhfNavDial1WaitingForFeedback;
@@ -188,7 +188,7 @@ namespace NonVisuals
                     Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
-                
+
                 if (e.Address.Equals(_vhfCommDcsbiosOutputCockpitFrequency.Address))
                 {
                     /*UH-1H AN/ARC-134 VHF Comm Radio Set*/
@@ -351,7 +351,7 @@ namespace NonVisuals
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            
+
             //INTERCOMM
             if (e.Address == _intercommDcsbiosOutputCockpitPos.Address)
             {
@@ -807,7 +807,7 @@ namespace NonVisuals
                                 if (localVhfCommBigFrequencyStandby != _vhfCommCockpitDial1Frequency)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = VhfCommFreq1DialCommand + GetCommandDirectionForVhfCommDial1(localVhfCommBigFrequencyStandby, _vhfCommCockpitDial1Frequency);
+                                    str = VHF_COMM_FREQ1_DIAL_COMMAND + GetCommandDirectionForVhfCommDial1(localVhfCommBigFrequencyStandby, _vhfCommCockpitDial1Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -830,7 +830,7 @@ namespace NonVisuals
                                 if (localVhfCommSmallFrequencyStandby != _vhfCommCockpitDial2Frequency)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    str = VhfCommFreq2DialCommand + GetCommandDirectionForVhfCommDial2(localVhfCommSmallFrequencyStandby, _vhfCommCockpitDial2Frequency);
+                                    str = VHF_COMM_FREQ2_DIAL_COMMAND + GetCommandDirectionForVhfCommDial2(localVhfCommSmallFrequencyStandby, _vhfCommCockpitDial2Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -959,7 +959,7 @@ namespace NonVisuals
                                 if (dial1StandbyFrequency != _uhfCockpitDial1Frequency)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = UhfFreq1DialCommand + GetCommandDirectionForUhfDial1(dial1StandbyFrequency, _uhfCockpitDial1Frequency);
+                                    str = UHF_FREQ1_DIAL_COMMAND + GetCommandDirectionForUhfDial1(dial1StandbyFrequency, _uhfCockpitDial1Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -982,7 +982,7 @@ namespace NonVisuals
                                 if (dial2StandbyFrequency != _uhfCockpitDial2Frequency)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    str = UhfFreq2DialCommand + GetCommandDirectionForUhfDial2(dial2StandbyFrequency, _uhfCockpitDial2Frequency);
+                                    str = UHF_FREQ2_DIAL_COMMAND + GetCommandDirectionForUhfDial2(dial2StandbyFrequency, _uhfCockpitDial2Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1005,7 +1005,7 @@ namespace NonVisuals
                                 if (dial3StandbyFrequency != _uhfCockpitDial3Frequency)
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
-                                    str = UhfFreq3DialCommand + GetCommandDirectionForUhfDial3(dial3StandbyFrequency, _uhfCockpitDial3Frequency);
+                                    str = UHF_FREQ3_DIAL_COMMAND + GetCommandDirectionForUhfDial3(dial3StandbyFrequency, _uhfCockpitDial3Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
@@ -1113,7 +1113,7 @@ namespace NonVisuals
                                 if (dial1StandbyFrequency != _vhfNavCockpitDial1Frequency)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    str = VhfNavFreq1DialCommand + GetCommandDirectionForVhfNavDial1(dial1StandbyFrequency, _vhfNavCockpitDial1Frequency);
+                                    str = VHF_NAV_FREQ1_DIAL_COMMAND + GetCommandDirectionForVhfNavDial1(dial1StandbyFrequency, _vhfNavCockpitDial1Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1137,7 +1137,7 @@ namespace NonVisuals
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
                                     //Compatible : GetCommandDirectionForUhfDial3
-                                    str = VhfNavFreq2DialCommand + GetCommandDirectionForUhfDial3(dial2StandbyFrequency, _vhfNavCockpitDial2Frequency);
+                                    str = VHF_NAV_FREQ2_DIAL_COMMAND + GetCommandDirectionForUhfDial3(dial2StandbyFrequency, _vhfNavCockpitDial2Frequency);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1469,10 +1469,10 @@ namespace NonVisuals
                                 break;
                             }
                         case 1:
-                        {
-                            _adfStandbyFrequencyBand = _increaseAdfBand ? (uint) 2 : (uint) 0;
-                            break;
-                        }
+                            {
+                                _adfStandbyFrequencyBand = _increaseAdfBand ? (uint)2 : (uint)0;
+                                break;
+                            }
                         case 2:
                             {
                                 _increaseAdfBand = false;
@@ -1579,7 +1579,7 @@ namespace NonVisuals
                     }
                 }
 
-                DCSBIOS.Send(_uhfIncreasePresetChannel ? UhfPresetDialCommandInc : UhfPresetDialCommandDec);
+                DCSBIOS.Send(_uhfIncreasePresetChannel ? UHF_PRESET_DIAL_COMMAND_INC : UHF_PRESET_DIAL_COMMAND_DEC);
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
             }
             catch (Exception ex)
@@ -1910,7 +1910,7 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommVolumeKnobCommandDec);
+                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             }
                                             break;
                                         }
@@ -1973,7 +1973,7 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommVolumeKnobCommandInc);
+                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             }
                                             break;
                                         }
@@ -2035,20 +2035,13 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommDialCommandInc);
+                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
                                             }
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFCOMM:
                                         {
-                                            //Small dial 000 to 975 (x00 && x25 --> x00,     x50 && x75 --> 0x50)
-                                            if (_vhfCommSmallFrequencyStandby >= 95)
-                                            {
-                                                //At max value
-                                                _vhfCommSmallFrequencyStandby = 0;
-                                                break;
-                                            }
-                                            _vhfCommSmallFrequencyStandby += 5;
+                                            _vhfCommSmallFrequencyStandby = QuarterFrequencyStandbyAdjust(_vhfCommSmallFrequencyStandby, true);
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.UHF:
@@ -2060,7 +2053,7 @@ namespace NonVisuals
                                                 _uhfSmallFrequencyStandby = 0;
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5;
+                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5; 
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFFM:
@@ -2101,20 +2094,13 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommDialCommandDec);
+                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
                                             }
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFCOMM:
                                         {
-                                            //Small dial 000 to 975 (x00 x25 x50 x75)
-                                            if (_vhfCommSmallFrequencyStandby <= 0)
-                                            {
-                                                //At min value
-                                                _vhfCommSmallFrequencyStandby = 95;
-                                                break;
-                                            }
-                                            _vhfCommSmallFrequencyStandby -= 5;
+                                            _vhfCommSmallFrequencyStandby = QuarterFrequencyStandbyAdjust(_vhfCommSmallFrequencyStandby, false);
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.UHF:
@@ -2125,7 +2111,7 @@ namespace NonVisuals
                                                 _uhfSmallFrequencyStandby = 95;
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5;
+                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5; 
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFFM:
@@ -2166,7 +2152,7 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommVolumeKnobCommandDec);
+                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_DEC);
                                             }
                                             break;
                                         }
@@ -2229,7 +2215,7 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommVolumeKnobCommandInc);
+                                                DCSBIOS.Send(INTERCOMM_VOLUME_KNOB_COMMAND_INC);
                                             }
                                             break;
                                         }
@@ -2291,20 +2277,13 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommDialCommandInc);
+                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_INC);
                                             }
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFCOMM:
                                         {
-                                            //Small dial 000 to 975 (x00 x25 x50 x75)
-                                            if (_vhfCommSmallFrequencyStandby >= 95)
-                                            {
-                                                //At max value
-                                                _vhfCommSmallFrequencyStandby = 0;
-                                                break;
-                                            }
-                                            _vhfCommSmallFrequencyStandby += 5;
+                                            _vhfCommSmallFrequencyStandby = QuarterFrequencyStandbyAdjust(_vhfCommSmallFrequencyStandby, true);
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.UHF:
@@ -2316,7 +2295,7 @@ namespace NonVisuals
                                                 _uhfSmallFrequencyStandby = 0;
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5;
+                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby + 5; 
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFFM:
@@ -2357,20 +2336,13 @@ namespace NonVisuals
                                         {
                                             if (!SkipIntercomm())
                                             {
-                                                DCSBIOS.Send(IntercommDialCommandDec);
+                                                DCSBIOS.Send(INTERCOMM_DIAL_COMMAND_DEC);
                                             }
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFCOMM:
                                         {
-                                            //Small dial 000 to 975 (x00 x25 x50 x75)
-                                            if (_vhfCommSmallFrequencyStandby <= 0)
-                                            {
-                                                //At min value
-                                                _vhfCommSmallFrequencyStandby = 95;
-                                                break;
-                                            }
-                                            _vhfCommSmallFrequencyStandby -= 5;
+                                            _vhfCommSmallFrequencyStandby = QuarterFrequencyStandbyAdjust(_vhfCommSmallFrequencyStandby, true);
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.UHF:
@@ -2381,7 +2353,7 @@ namespace NonVisuals
                                                 _uhfSmallFrequencyStandby = 95;
                                                 break;
                                             }
-                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5;
+                                            _uhfSmallFrequencyStandby = _uhfSmallFrequencyStandby - 5; 
                                             break;
                                         }
                                     case CurrentUH1HRadioMode.VHFFM:
@@ -2419,6 +2391,172 @@ namespace NonVisuals
             }
             ShowFrequenciesOnPanel();
         }
+
+
+        private uint QuarterFrequencyStandbyAdjust(uint frequency, bool increase)
+        {
+            uint result = 0;
+            var tmp = frequency.ToString(CultureInfo.InvariantCulture);
+            if (increase)
+            {
+                /*
+                 * "1"
+                 * "12"
+                 * "15"
+                 * "17"
+                 * "97"
+                 */
+                if (tmp.Length == 1)
+                {
+                    switch (frequency)
+                    {
+                        case 0:
+                            {
+                                result = frequency + 2;
+                                break;
+                            }
+                        case 2:
+                            {
+                                result = frequency + 3;
+                                break;
+                            }
+                        case 5:
+                            {
+                                result = frequency + 2;
+                                break;
+                            }
+                        case 7:
+                            {
+                                result = frequency + 3;
+                                break;
+                            }
+                        default:
+                            {
+                                //In case it is an invalid position invalid
+                                result = 0;
+                                break;
+                            }
+                    }
+                }
+                else if (tmp.Length == 2)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        result = frequency + 2;
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        result = frequency + 3;
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        result = frequency + 2;
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        result = frequency + 3;
+                    }
+                    else
+                    {
+                        //In case it is in an invalid position
+                        result = 0;
+                    }
+                }
+            }
+            else
+            {
+                if (tmp.Length == 1)
+                {
+                    switch (frequency)
+                    {
+                        case 0:
+                            {
+                                result =  97;
+                                break;
+                            }
+                        case 2:
+                            {
+                                result = frequency - 2;
+                                break;
+                            }
+                        case 5:
+                            {
+                                result = frequency - 3;
+                                break;
+                            }
+                        case 7:
+                            {
+                                result = frequency - 2;
+                                break;
+                            }
+                        default:
+                            {
+                                //In case it is in an invalid position
+                                result = 0;
+                                break;
+                            }
+                    }
+                }
+                else if (tmp.Length == 2)
+                {
+                    if (tmp.EndsWith("0"))
+                    {
+                        if ((int)frequency - 3 < 0)
+                        {
+                            result = 97;
+                        }
+                        else
+                        {
+                            result = frequency - 3;
+                        }
+                    }
+                    else if (tmp.EndsWith("2"))
+                    {
+                        if ((int)frequency - 3 < 0)
+                        {
+                            result = 97;
+                        }
+                        else
+                        {
+                            result = frequency - 2;
+                        }
+                    }
+                    else if (tmp.EndsWith("5"))
+                    {
+                        if ((int)frequency - 3 < 0)
+                        {
+                            result = 97;
+                        }
+                        else
+                        {
+                            result = frequency - 3;
+                        }
+                    }
+                    else if (tmp.EndsWith("7"))
+                    {
+                        if ((int)frequency - 3 < 0)
+                        {
+                            result = 97;
+                        }
+                        else
+                        {
+                            result = frequency - 2;
+                        }
+                    }
+                    else
+                    {
+                        //In case it is in an invalid position
+                        result = 0;
+                    }
+                }
+            }
+            if (frequency > 97)
+            {
+                result = 0;
+            }
+            return result;
+        }
+
 
         private bool SkipIntercomm()
         {
@@ -2961,21 +3099,6 @@ namespace NonVisuals
             }
             throw new Exception("Should reach this code. GetCommandDirectionForVhfNavDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
         }
-
-        /*
-        private void SaveCockpitIntercomm()
-        {
-            lock (_lockIntercommDialObject)
-            {
-                _intercommSavedCockpitDialPosition = _intercommCockpitDial1Pos;
-            }
-        }
-
-        private void SwapCockpitIntercomm()
-        {
-            _intercommDialPosStandby = _intercommSavedCockpitDialPosition;
-        }
-        */
 
         private void SaveCockpitFrequencyVhfComm()
         {
