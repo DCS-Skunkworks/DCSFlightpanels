@@ -232,7 +232,7 @@ namespace NonVisuals
                     lock (_lockVORialObject)
                     {
                         var tmp = _vorOnesCockpitDialPos;
-                        _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data);
+                        _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data) - 1;
                         if (tmp != _vorOnesCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);

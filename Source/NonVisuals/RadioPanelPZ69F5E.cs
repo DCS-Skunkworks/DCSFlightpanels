@@ -21,7 +21,7 @@ namespace NonVisuals
 
         /*F-5E UHF Radio COM1*/
         //Large dial 225-399 [step of 1]
-        //Small dial 0.00-0.95 [step of 0.05]
+        //Small dial 0.00-0.97 [step of 0 2 5 7]
 
         /*
          * Note, because of lack of information the A & T of the UHF
