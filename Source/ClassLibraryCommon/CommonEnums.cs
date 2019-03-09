@@ -99,10 +99,12 @@ namespace ClassLibraryCommon
         MB339,
         [Description("Mi-8MT")]
         Mi8,
+        [Description("MiG-15Bis")]
+        Mig15Bis,
+        [Description("MiG-19P")]
+        Mig19P,
         [Description("MiG-21bis")]
         Mig21Bis,
-        [Description("MiG-15bis")]
-        Mig15Bis,
         [Description("NS430")]
         NS430,
         [Description("P-51D")]
