@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="DCSFlightpanels.RadioPanelPZ69UserControlF14"
+﻿<UserControl x:Class="DCSFlightpanels.RadioPanelPZ69UserControlF14B"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlA10C_OnLoaded">
+             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlF14B_OnLoaded">
     <Grid Name="PZ69Grid" >
         <Grid.RowDefinitions>
             <RowDefinition Height="240" />
@@ -66,13 +66,13 @@
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" >
             <StackPanel >
                 <TextBlock FontSize="10" FontWeight="Bold">
-                    COM 1 = AN/ARC-186(V) VHF AM* <LineBreak/>
-                    COM 2 = AN/ARC-164 UHF*<LineBreak/>
-                    NAV 1 = AN/ARC-186(V) VHF FM*<LineBreak/>
-                    NAV 2 = ILS<LineBreak/>
-                    ADF   = TACAN (TCN)<LineBreak/>
-                        x.0 -> X<LineBreak/>
-                        x.1 -> Y<LineBreak/>
+                    COM 1 = AN/ARC-159 UHF* <LineBreak/>
+                    COM 2 = AN/ARC-182 (V/UHF)*<LineBreak/>
+                    NAV 1 = TACAN (TCN)<LineBreak/>
+                    x.0 -> X<LineBreak/>
+                    x.1 -> Y<LineBreak/>
+                    NAV 2 = KY-28<LineBreak/>
+                    
                     *Hold ACT/STBY + Small Dial to switch Frequency mode.<LineBreak/>
                     Large dial changes selected Preset Channel.<LineBreak/>
                     *Hold ACT/STBY + Large Dial to <LineBreak/>switch Mode/Function, turn off radio.<LineBreak/>
@@ -107,21 +107,19 @@
         </GroupBox>
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
-            <Label Content="AN/ARC-186 VHF AM" FontWeight="Bold"/>
-            <Image Height="110" Source="/DCSFlightpanels;component/Images/A-10C_an_arc_186_vhf_am_radio1.png" />
-            <Label Content="AN/ARC-186 VHF FM" FontWeight="Bold"/>
-            <Image Height="110" Source="/DCSFlightpanels;component/Images/A10C_an_arc_186_VHF_FM_radio2.png" />
-            <Label Content="ILS" FontWeight="Bold"/>
-            <Image Height="80" Source="/DCSFlightpanels;component/Images/A-10C_ILS.png" />
+            <Label Content="AN/ARC-159 UHF" FontWeight="Bold"/>
+            <Image Height="160" Source="/DCSFlightpanels;component/Images/f14_arc_159.png" />
+            <Label Content="KY-28" FontWeight="Bold"/>
+            <Image Height="110" Source="/DCSFlightpanels;component/Images/f14_ky28.png" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="3">
-            <Label Name="LabelAirframe" Content="A-10C" FontSize="30" FontWeight="Bold"/>
-            <Label Content="AN/ARC-164 UHF" FontWeight="Bold"/>
-            <Image Height="160" Source="/DCSFlightpanels;component/Images/A-10C_an_arc_164_UHF_radio2.png" />
+            <Label Name="LabelAirframe" Content="F-14B Tomcat" FontSize="30" FontWeight="Bold"/>
+            <Label Content="AN/ARC-182 VHF/UHF" FontWeight="Bold"/>
+            <Image Height="160" Source="/DCSFlightpanels;component/Images/f14_arc_182.png" />
             <Label Content="TACAN" FontWeight="Bold"/>
-            <Image Height="110" Source="/DCSFlightpanels;component/Images/A-10C_TACAN.png" />
+            <Image Height="170" Source="/DCSFlightpanels;component/Images/f14_tacan.png" />
         </StackPanel>
-        <DockPanel Grid.Column="6" Grid.Row="2" Grid.RowSpan="5" LastChildFill="False">
+        <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" LastChildFill="False">
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">
                 <TextBox DockPanel.Dock="Bottom" x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" HorizontalAlignment="Stretch" Height="140"/>
             </GroupBox>

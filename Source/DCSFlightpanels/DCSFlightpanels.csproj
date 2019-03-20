@@ -142,8 +142,8 @@
     <Compile Include="LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlF14.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlF14.xaml</DependentUpon>
+    <Compile Include="RadioPanelPZ69UserControlF14B.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlF14B.xaml</DependentUpon>
     </Compile>
     <Compile Include="RadioPanelPZ69UserControlF5E.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF5E.xaml</DependentUpon>
@@ -301,7 +301,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlF14.xaml">
+    <Page Include="RadioPanelPZ69UserControlF14B.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -648,6 +648,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Bf109_FUG 16ZY.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\f14_arc_159.png" />
+    <Resource Include="Images\f14_arc_182.png" />
+    <Resource Include="Images\f14_ky28.png" />
+    <Resource Include="Images\f14_tacan.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

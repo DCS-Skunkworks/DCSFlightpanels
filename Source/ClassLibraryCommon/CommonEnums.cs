@@ -81,8 +81,8 @@ namespace ClassLibraryCommon
         ChristenEagle,
         [Description("F-5E-3")]
         F5E,
-        [Description("F-14 Tomcat")]
-        F14,
+        [Description("F-14B")]
+        F14B,
         [Description("FA-18C_hornet")]
         FA18C,
         [Description("F-86F Sabre")]
