@@ -22,6 +22,8 @@ Saitek / Logitech Panels Supported:
 - ***	Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
 - ****	BIP can be linked to PZ69 (keyemulator), PZ55, PZ70, TPM so that switching changes LEDs.
 
+* For Mods use FC3 Profile
+
 [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
 
 [Tutorial #2 (DCS-BIOS)](https://youtu.be/1CnmIdzqOJs): 
