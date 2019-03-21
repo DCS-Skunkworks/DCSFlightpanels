@@ -447,7 +447,6 @@ namespace NonVisuals
 
         protected bool IsTooShort(long dialOkTime)
         {
-
             if (DateTime.Now.Ticks - dialOkTime > _syncOKDelayTimeout)
             {
                 return false; //good!
