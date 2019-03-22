@@ -71,7 +71,6 @@
                     NAV 1 = TACAN (TCN)<LineBreak/>
                     x.0 -> X<LineBreak/>
                     x.1 -> Y<LineBreak/>
-                    NAV 2 = KY-28<LineBreak/>
                     
                     *Hold ACT/STBY + Small Dial to switch Frequency mode.<LineBreak/>
                     Large dial changes selected Preset Channel.<LineBreak/>
@@ -106,15 +105,13 @@
             </StackPanel>
         </GroupBox>
 
-        <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+        <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="6">
             <Label Content="AN/ARC-159 UHF" FontWeight="Bold"/>
-            <Image Height="160" Source="/DCSFlightpanels;component/Images/f14_arc_159.png" />
-            <Label Content="KY-28" FontWeight="Bold"/>
-            <Image Height="110" Source="/DCSFlightpanels;component/Images/f14_ky28.png" />
+            <Image Height="260" Source="/DCSFlightpanels;component/Images/f14_arc_159.png" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="3">
             <Label Name="LabelAirframe" Content="F-14B Tomcat" FontSize="30" FontWeight="Bold"/>
-            <Label Content="AN/ARC-182 VHF/UHF" FontWeight="Bold"/>
+            <Label Content="[RIO] AN/ARC-182 VHF/UHF" FontWeight="Bold"/>
             <Image Height="160" Source="/DCSFlightpanels;component/Images/f14_arc_182.png" />
             <Label Content="TACAN" FontWeight="Bold"/>
             <Image Height="170" Source="/DCSFlightpanels;component/Images/f14_tacan.png" />
