@@ -68,10 +68,10 @@
                 <TextBlock FontSize="10" FontWeight="Bold">
                     COM 1 = AN/ARC-159 UHF* <LineBreak/>
                     COM 2 = AN/ARC-182 (V/UHF)*<LineBreak/>
-                    NAV 1 = TACAN (TCN)<LineBreak/>
+                    NAV 1 = Pilot TACAN (TCN)<LineBreak/>
                     x.0 -> X<LineBreak/>
                     x.1 -> Y<LineBreak/>
-                    
+                    NAV 2 = RIO TACAN (TCN)<LineBreak/>
                     *Hold ACT/STBY + Small Dial to switch Frequency mode.<LineBreak/>
                     Large dial changes selected Preset Channel.<LineBreak/>
                     *Hold ACT/STBY + Large Dial to <LineBreak/>switch Mode/Function, turn off radio.<LineBreak/>
@@ -107,14 +107,14 @@
 
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="6">
             <Label Content="AN/ARC-159 UHF" FontWeight="Bold"/>
-            <Image Height="260" Source="/DCSFlightpanels;component/Images/f14_arc_159.png" />
+            <Image Height="260" Source="/DCSFlightpanels;component/Images/F-14 ANARC-159 Pilot.png" />
         </StackPanel>
-        <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="3">
+        <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="4">
             <Label Name="LabelAirframe" Content="F-14B Tomcat" FontSize="30" FontWeight="Bold"/>
             <Label Content="[RIO] AN/ARC-182 VHF/UHF" FontWeight="Bold"/>
-            <Image Height="160" Source="/DCSFlightpanels;component/Images/f14_arc_182.png" />
+            <Image Height="160" Source="/DCSFlightpanels;component/Images/F-14 ANARC-182 RIO.png" />
             <Label Content="TACAN" FontWeight="Bold"/>
-            <Image Height="170" Source="/DCSFlightpanels;component/Images/f14_tacan.png" />
+            <Image Height="170" Source="/DCSFlightpanels;component/Images/F-14 TACAN.png" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" LastChildFill="False">
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

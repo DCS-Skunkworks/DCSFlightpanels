@@ -101,33 +101,61 @@ namespace NonVisuals
         private readonly ClickSpeedDetector _vuhfModeClickSpeedDetector = new ClickSpeedDetector(8);
         private byte _skipVuhfSmallFreqChange = 0;
 
-        /*TACAN*/
+        /*PILOT TACAN*/
         //Tens dial 0-12 [step of 1]
         //Ones dial 0-9 [step of 1]
         //Last : X/Y [0,1]
-        private int _tacanTensFrequencyStandby = 6;
-        private int _tacanOnesFrequencyStandby = 5;
-        private int _tacanXYStandby;
-        private int _tacanSavedCockpitTensFrequency = 6;
-        private int _tacanSavedCockpitOnesFrequency = 5;
-        private int _tacanSavedCockpitXY;
-        private readonly object _lockTacanTensDialObject = new object();
-        private readonly object _lockTacanOnesObject = new object();
-        private readonly object _lockTacanXYDialObject = new object();
-        private DCSBIOSOutput _tacanDcsbiosOutputTensDial;
-        private DCSBIOSOutput _tacanDcsbiosOutputOnesDial;
-        private DCSBIOSOutput _tacanDcsbiosOutputXYDial;
-        private volatile uint _tacanCockpitTensDialPos = 1;
-        private volatile uint _tacanCockpitOnesDialPos = 1;
-        private volatile uint _tacanCockpitXYDialPos = 1;
-        private const string TACAN_TENS_DIAL_COMMAND = "PLT_TACAN_DIAL_TENS ";
-        private const string TACAN_ONES_DIAL_COMMAND = "PLT_TACAN_DIAL_ONES ";
-        private const string TACAN_XY_DIAL_COMMAND = "PLT_TACAN_CHANNEL "; //X = 0 | Y = 1
-        private Thread _tacanSyncThread;
-        private long _tacanThreadNowSynching;
-        private long _tacanTensWaitingForFeedback;
-        private long _tacanOnesWaitingForFeedback;
-        private long _tacanXYWaitingForFeedback;
+        private int _pilotTacanTensFrequencyStandby = 6;
+        private int _pilotTacanOnesFrequencyStandby = 5;
+        private int _pilotTacanXYStandby;
+        private int _pilotTacanSavedCockpitTensFrequency = 6;
+        private int _pilotTacanSavedCockpitOnesFrequency = 5;
+        private int _pilotTacanSavedCockpitXY;
+        private readonly object _lockPilotTacanTensDialObject = new object();
+        private readonly object _lockPilotTacanOnesObject = new object();
+        private readonly object _lockPilotTacanXYDialObject = new object();
+        private DCSBIOSOutput _pilotTacanDcsbiosOutputTensDial;
+        private DCSBIOSOutput _pilotTacanDcsbiosOutputOnesDial;
+        private DCSBIOSOutput _pilotTacanDcsbiosOutputXYDial;
+        private volatile uint _pilotTacanCockpitTensDialPos = 1;
+        private volatile uint _pilotTacanCockpitOnesDialPos = 1;
+        private volatile uint _pilotTacanCockpitXYDialPos = 1;
+        private const string PILOT_TACAN_TENS_DIAL_COMMAND = "PLT_TACAN_DIAL_TENS ";
+        private const string PILOT_TACAN_ONES_DIAL_COMMAND = "PLT_TACAN_DIAL_ONES ";
+        private const string PILOT_TACAN_XY_DIAL_COMMAND = "PLT_TACAN_CHANNEL "; //X = 0 | Y = 1
+        private Thread _pilotTacanSyncThread;
+        private long _pilotTacanThreadNowSynching;
+        private long _pilotTacanTensWaitingForFeedback;
+        private long _pilotTacanOnesWaitingForFeedback;
+        private long _pilotTacanXYWaitingForFeedback;
+
+        /*RIO TACAN DME*/
+        //Tens dial 0-12 [step of 1]
+        //Ones dial 0-9 [step of 1]
+        //Last : X/Y [0,1]
+        private int _rioTacanTensFrequencyStandby = 6;
+        private int _rioTacanOnesFrequencyStandby = 5;
+        private int _rioTacanXYStandby;
+        private int _rioTacanSavedCockpitTensFrequency = 6;
+        private int _rioTacanSavedCockpitOnesFrequency = 5;
+        private int _rioTacanSavedCockpitXY;
+        private readonly object _lockRioTacanTensDialObject = new object();
+        private readonly object _lockRioTacanOnesObject = new object();
+        private readonly object _lockRioTacanXYDialObject = new object();
+        private DCSBIOSOutput _rioTacanDcsbiosOutputTensDial;
+        private DCSBIOSOutput _rioTacanDcsbiosOutputOnesDial;
+        private DCSBIOSOutput _rioTacanDcsbiosOutputXYDial;
+        private volatile uint _rioTacanCockpitTensDialPos = 1;
+        private volatile uint _rioTacanCockpitOnesDialPos = 1;
+        private volatile uint _rioTacanCockpitXYDialPos = 1;
+        private const string RIO_TACAN_TENS_DIAL_COMMAND = "RIO_TACAN_DIAL_TENS ";
+        private const string RIO_TACAN_ONES_DIAL_COMMAND = "RIO_TACAN_DIAL_ONES ";
+        private const string RIO_TACAN_XY_DIAL_COMMAND = "RIO_TACAN_CHANNEL "; //X = 0 | Y = 1
+        private Thread _rioTacanSyncThread;
+        private long _rioTacanThreadNowSynching;
+        private long _rioTacanTensWaitingForFeedback;
+        private long _rioTacanOnesWaitingForFeedback;
+        private long _rioTacanXYWaitingForFeedback;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
 
@@ -143,7 +171,7 @@ namespace NonVisuals
 
         ~RadioPanelPZ69F14B()
         {
-            _tacanSyncThread?.Abort();
+            _pilotTacanSyncThread?.Abort();
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -288,35 +316,63 @@ namespace NonVisuals
                 }
             }
 
-            //TACAN
-            if (e.Address == _tacanDcsbiosOutputTensDial.Address)
+            //Pilot TACAN
+            if (e.Address == _pilotTacanDcsbiosOutputTensDial.Address)
             {
-                var tmp = _tacanCockpitTensDialPos;
-                _tacanCockpitTensDialPos = _tacanDcsbiosOutputTensDial.GetUIntValue(e.Data);
-                if (tmp != _tacanCockpitTensDialPos)
+                var tmp = _pilotTacanCockpitTensDialPos;
+                _pilotTacanCockpitTensDialPos = _pilotTacanDcsbiosOutputTensDial.GetUIntValue(e.Data);
+                if (tmp != _pilotTacanCockpitTensDialPos)
                 {
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
-            if (e.Address == _tacanDcsbiosOutputOnesDial.Address)
+            if (e.Address == _pilotTacanDcsbiosOutputOnesDial.Address)
             {
-                var tmp = _tacanCockpitOnesDialPos;
-                _tacanCockpitOnesDialPos = _tacanDcsbiosOutputOnesDial.GetUIntValue(e.Data);
-                if (tmp != _tacanCockpitOnesDialPos)
+                var tmp = _pilotTacanCockpitOnesDialPos;
+                _pilotTacanCockpitOnesDialPos = _pilotTacanDcsbiosOutputOnesDial.GetUIntValue(e.Data);
+                if (tmp != _pilotTacanCockpitOnesDialPos)
                 {
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
-            if (e.Address == _tacanDcsbiosOutputXYDial.Address)
+            if (e.Address == _pilotTacanDcsbiosOutputXYDial.Address)
             {
-                var tmp = _tacanCockpitXYDialPos;
-                _tacanCockpitXYDialPos = _tacanDcsbiosOutputXYDial.GetUIntValue(e.Data);
-                if (tmp != _tacanCockpitXYDialPos)
+                var tmp = _pilotTacanCockpitXYDialPos;
+                _pilotTacanCockpitXYDialPos = _pilotTacanDcsbiosOutputXYDial.GetUIntValue(e.Data);
+                if (tmp != _pilotTacanCockpitXYDialPos)
                 {
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
 
+            //RIO TACAN
+            if (e.Address == _rioTacanDcsbiosOutputTensDial.Address)
+            {
+                var tmp = _rioTacanCockpitTensDialPos;
+                _rioTacanCockpitTensDialPos = _rioTacanDcsbiosOutputTensDial.GetUIntValue(e.Data);
+                if (tmp != _rioTacanCockpitTensDialPos)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                }
+            }
+            if (e.Address == _rioTacanDcsbiosOutputOnesDial.Address)
+            {
+                var tmp = _rioTacanCockpitOnesDialPos;
+                _rioTacanCockpitOnesDialPos = _rioTacanDcsbiosOutputOnesDial.GetUIntValue(e.Data);
+                if (tmp != _rioTacanCockpitOnesDialPos)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                }
+            }
+            if (e.Address == _rioTacanDcsbiosOutputXYDial.Address)
+            {
+                var tmp = _rioTacanCockpitXYDialPos;
+                _rioTacanCockpitXYDialPos = _rioTacanDcsbiosOutputXYDial.GetUIntValue(e.Data);
+                if (tmp != _rioTacanCockpitXYDialPos)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                }
+            }
             //Set once
             DataHasBeenReceivedFromDCSBIOS = true;
             ShowFrequenciesOnPanel();
@@ -381,9 +437,14 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case CurrentF14RadioMode.TACAN:
+                            case CurrentF14RadioMode.PLT_TACAN:
                                 {
-                                    SendTacanToDCSBIOS();
+                                    SendPilotTacanToDCSBIOS();
+                                    break;
+                                }
+                            case CurrentF14RadioMode.RIO_TACAN:
+                                {
+                                    SendRioTacanToDCSBIOS();
                                     break;
                                 }
                         }
@@ -427,9 +488,14 @@ namespace NonVisuals
                                     }
                                     break;
                                 }
-                            case CurrentF14RadioMode.TACAN:
+                            case CurrentF14RadioMode.PLT_TACAN:
                                 {
-                                    SendTacanToDCSBIOS();
+                                    SendPilotTacanToDCSBIOS();
+                                    break;
+                                }
+                            case CurrentF14RadioMode.RIO_TACAN:
+                                {
+                                    SendRioTacanToDCSBIOS();
                                     break;
                                 }
                         }
@@ -439,13 +505,13 @@ namespace NonVisuals
         }
 
 
-        private void SendTacanToDCSBIOS()
+        private void SendPilotTacanToDCSBIOS()
         {
-            if (TacanNowSyncing())
+            if (PilotTacanNowSyncing())
             {
                 return;
             }
-            SaveCockpitFrequencyTacan();
+            SavePilotCockpitFrequencyTacan();
             //TACAN  00X/Y --> 129X/Y
             //
             //Frequency selector 1      LEFT
@@ -462,18 +528,18 @@ namespace NonVisuals
             //#2 = 0   (position = value)
             //#3 = 1   (position = value)
 
-            _tacanSyncThread?.Abort();
-            _tacanSyncThread = new Thread(() => TacanSynchThreadMethod(_tacanTensFrequencyStandby, _tacanOnesFrequencyStandby, _tacanXYStandby));
-            _tacanSyncThread.Start();
+            _pilotTacanSyncThread?.Abort();
+            _pilotTacanSyncThread = new Thread(() => PilotTacanSynchThreadMethod(_pilotTacanTensFrequencyStandby, _pilotTacanOnesFrequencyStandby, _pilotTacanXYStandby));
+            _pilotTacanSyncThread.Start();
         }
 
-        private void TacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
+        private void PilotTacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
         {
             try
             {
                 try
                 {
-                    Interlocked.Exchange(ref _tacanThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _pilotTacanThreadNowSynching, 1);
 
                     const string inc = "INC\n";
                     const string dec = "DEC\n";
@@ -494,38 +560,38 @@ namespace NonVisuals
                         if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
                         {
                             //Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanTensWaitingForFeedback, 0);
+                            Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 0);
                             Common.DebugP("Resetting SYNC for TACAN 1");
                         }
 
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
                         {
                             //Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanOnesWaitingForFeedback, 0);
+                            Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 0);
                             Common.DebugP("Resetting SYNC for TACAN 2");
                         }
 
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
                         {
                             //Lets do an ugly reset
-                            Interlocked.Exchange(ref _tacanXYWaitingForFeedback, 0);
+                            Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 0);
                             Common.DebugP("Resetting SYNC for TACAN 3");
                         }
 
-                        if (Interlocked.Read(ref _tacanTensWaitingForFeedback) == 0)
+                        if (Interlocked.Read(ref _pilotTacanTensWaitingForFeedback) == 0)
                         {
 
-                            lock (_lockTacanTensDialObject)
+                            lock (_lockPilotTacanTensDialObject)
                             {
-                                if (_tacanCockpitTensDialPos != desiredPositionDial1)
+                                if (_pilotTacanCockpitTensDialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    Common.DebugP("_tacanCockpitFreq1DialPos is " + _tacanCockpitTensDialPos + " and should be " + desiredPositionDial1);
-                                    var str = TACAN_TENS_DIAL_COMMAND + (_tacanCockpitTensDialPos < desiredPositionDial1 ? inc : dec);
+                                    Common.DebugP("_pilotTacanCockpitFreq1DialPos is " + _pilotTacanCockpitTensDialPos + " and should be " + desiredPositionDial1);
+                                    var str = PILOT_TACAN_TENS_DIAL_COMMAND + (_pilotTacanCockpitTensDialPos < desiredPositionDial1 ? inc : dec);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
-                                    Interlocked.Exchange(ref _tacanTensWaitingForFeedback, 1);
+                                    Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 1);
                                 }
                                 Reset(ref dial1Timeout);
                             }
@@ -535,20 +601,20 @@ namespace NonVisuals
                             dial1OkTime = DateTime.Now.Ticks;
                         }
 
-                        if (Interlocked.Read(ref _tacanOnesWaitingForFeedback) == 0)
+                        if (Interlocked.Read(ref _pilotTacanOnesWaitingForFeedback) == 0)
                         {
                             // Common.DebugP("b");
-                            lock (_lockTacanOnesObject)
+                            lock (_lockPilotTacanOnesObject)
                             {
-                                if (_tacanCockpitOnesDialPos != desiredPositionDial2)
+                                if (_pilotTacanCockpitOnesDialPos != desiredPositionDial2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_ONES_DIAL_COMMAND + (_tacanCockpitOnesDialPos < desiredPositionDial2 ? inc : dec);
+                                    var str = PILOT_TACAN_ONES_DIAL_COMMAND + (_pilotTacanCockpitOnesDialPos < desiredPositionDial2 ? inc : dec);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
-                                    Interlocked.Exchange(ref _tacanOnesWaitingForFeedback, 1);
+                                    Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 1);
                                 }
                                 Reset(ref dial2Timeout);
                             }
@@ -558,20 +624,20 @@ namespace NonVisuals
                             dial2OkTime = DateTime.Now.Ticks;
                         }
 
-                        if (Interlocked.Read(ref _tacanXYWaitingForFeedback) == 0)
+                        if (Interlocked.Read(ref _pilotTacanXYWaitingForFeedback) == 0)
                         {
 
-                            lock (_lockTacanXYDialObject)
+                            lock (_lockPilotTacanXYDialObject)
                             {
-                                if (_tacanCockpitXYDialPos != desiredPositionDial3)
+                                if (_pilotTacanCockpitXYDialPos != desiredPositionDial3)
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_XY_DIAL_COMMAND + (_tacanCockpitXYDialPos < desiredPositionDial3 ? inc : dec);
+                                    var str = PILOT_TACAN_XY_DIAL_COMMAND + (_pilotTacanCockpitXYDialPos < desiredPositionDial3 ? inc : dec);
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
-                                    Interlocked.Exchange(ref _tacanXYWaitingForFeedback, 1);
+                                    Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 1);
                                 }
                             }
                             Reset(ref dial3Timeout);
@@ -594,7 +660,7 @@ namespace NonVisuals
 
                     }
                     while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
-                    SwapCockpitStandbyFrequencyTacan();
+                    SwapPilotCockpitStandbyFrequencyTacan();
                     ShowFrequenciesOnPanel();
                 }
                 catch (ThreadAbortException)
@@ -606,7 +672,164 @@ namespace NonVisuals
             }
             finally
             {
-                Interlocked.Exchange(ref _tacanThreadNowSynching, 0);
+                Interlocked.Exchange(ref _pilotTacanThreadNowSynching, 0);
+            }
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+        }
+
+
+        private void SendRioTacanToDCSBIOS()
+        {
+            if (RioTacanNowSyncing())
+            {
+                return;
+            }
+            SaveRioCockpitFrequencyTacan();
+            _rioTacanSyncThread?.Abort();
+            _rioTacanSyncThread = new Thread(() => RioTacanSynchThreadMethod(_rioTacanTensFrequencyStandby, _rioTacanOnesFrequencyStandby, _rioTacanXYStandby));
+            _rioTacanSyncThread.Start();
+        }
+
+        private void RioTacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
+        {
+            try
+            {
+                try
+                {
+                    Interlocked.Exchange(ref _rioTacanThreadNowSynching, 1);
+
+                    const string inc = "INC\n";
+                    const string dec = "DEC\n";
+                    long dial1Timeout = DateTime.Now.Ticks;
+                    long dial2Timeout = DateTime.Now.Ticks;
+                    long dial3Timeout = DateTime.Now.Ticks;
+                    long dial1OkTime = 0;
+                    long dial2OkTime = 0;
+                    long dial3OkTime = 0;
+                    var dial1SendCount = 0;
+                    var dial2SendCount = 0;
+                    var dial3SendCount = 0;
+
+
+                    do
+                    {
+
+                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
+                        {
+                            //Lets do an ugly reset
+                            Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 0);
+                            Common.DebugP("Resetting SYNC for TACAN 1");
+                        }
+
+                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
+                        {
+                            //Lets do an ugly reset
+                            Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 0);
+                            Common.DebugP("Resetting SYNC for TACAN 2");
+                        }
+
+                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
+                        {
+                            //Lets do an ugly reset
+                            Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 0);
+                            Common.DebugP("Resetting SYNC for TACAN 3");
+                        }
+
+                        if (Interlocked.Read(ref _rioTacanTensWaitingForFeedback) == 0)
+                        {
+
+                            lock (_lockRioTacanTensDialObject)
+                            {
+                                if (_rioTacanCockpitTensDialPos != desiredPositionDial1)
+                                {
+                                    dial1OkTime = DateTime.Now.Ticks;
+                                    Common.DebugP("_rioTacanCockpitFreq1DialPos is " + _rioTacanCockpitTensDialPos + " and should be " + desiredPositionDial1);
+                                    var str = RIO_TACAN_TENS_DIAL_COMMAND + (_rioTacanCockpitTensDialPos < desiredPositionDial1 ? inc : dec);
+                                    Common.DebugP("Sending " + str);
+                                    DCSBIOS.Send(str);
+                                    dial1SendCount++;
+                                    Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 1);
+                                }
+                                Reset(ref dial1Timeout);
+                            }
+                        }
+                        else
+                        {
+                            dial1OkTime = DateTime.Now.Ticks;
+                        }
+
+                        if (Interlocked.Read(ref _rioTacanOnesWaitingForFeedback) == 0)
+                        {
+                            // Common.DebugP("b");
+                            lock (_lockRioTacanOnesObject)
+                            {
+                                if (_rioTacanCockpitOnesDialPos != desiredPositionDial2)
+                                {
+                                    dial2OkTime = DateTime.Now.Ticks;
+
+                                    var str = RIO_TACAN_ONES_DIAL_COMMAND + (_rioTacanCockpitOnesDialPos < desiredPositionDial2 ? inc : dec);
+                                    Common.DebugP("Sending " + str);
+                                    DCSBIOS.Send(str);
+                                    dial2SendCount++;
+                                    Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 1);
+                                }
+                                Reset(ref dial2Timeout);
+                            }
+                        }
+                        else
+                        {
+                            dial2OkTime = DateTime.Now.Ticks;
+                        }
+
+                        if (Interlocked.Read(ref _rioTacanXYWaitingForFeedback) == 0)
+                        {
+
+                            lock (_lockRioTacanXYDialObject)
+                            {
+                                if (_rioTacanCockpitXYDialPos != desiredPositionDial3)
+                                {
+                                    dial3OkTime = DateTime.Now.Ticks;
+
+                                    var str = RIO_TACAN_XY_DIAL_COMMAND + (_rioTacanCockpitXYDialPos < desiredPositionDial3 ? inc : dec);
+                                    Common.DebugP("Sending " + str);
+                                    DCSBIOS.Send(str);
+                                    dial3SendCount++;
+                                    Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 1);
+                                }
+                            }
+                            Reset(ref dial3Timeout);
+                        }
+                        else
+                        {
+                            dial3OkTime = DateTime.Now.Ticks;
+                        }
+
+                        if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 2)
+                        {
+                            //"Race" condition detected?
+                            dial1SendCount = 0;
+                            dial2SendCount = 0;
+                            dial3SendCount = 0;
+                            Thread.Sleep(5000);
+                        }
+                        Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
+
+
+                    }
+                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
+                    SwapRioCockpitStandbyFrequencyTacan();
+                    ShowFrequenciesOnPanel();
+                }
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
+                {
+                    Common.LogError(56873, ex);
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _rioTacanThreadNowSynching, 0);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
@@ -685,7 +908,7 @@ namespace NonVisuals
                             }
                             break;
                         }
-                    case CurrentF14RadioMode.TACAN:
+                    case CurrentF14RadioMode.PLT_TACAN:
                         {
                             //TACAN  00X/Y --> 129X/Y
                             //
@@ -698,23 +921,43 @@ namespace NonVisuals
                             //Frequency selector 3      RIGHT
                             //X=0 / Y=1
                             var frequencyAsString = "";
-                            lock (_lockTacanTensDialObject)
+                            lock (_lockPilotTacanTensDialObject)
                             {
-                                lock (_lockTacanOnesObject)
+                                lock (_lockPilotTacanOnesObject)
                                 {
-                                    frequencyAsString = _tacanCockpitTensDialPos.ToString() + _tacanCockpitOnesDialPos.ToString();
+                                    frequencyAsString = _pilotTacanCockpitTensDialPos.ToString() + _pilotTacanCockpitOnesDialPos.ToString();
                                 }
                             }
                             frequencyAsString = frequencyAsString + ".";
-                            lock (_lockTacanXYDialObject)
+                            lock (_lockPilotTacanXYDialObject)
                             {
-                                frequencyAsString = frequencyAsString + _tacanCockpitXYDialPos.ToString();
+                                frequencyAsString = frequencyAsString + _pilotTacanCockpitXYDialPos.ToString();
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanTensFrequencyStandby.ToString() + _tacanOnesFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_pilotTacanTensFrequencyStandby.ToString() + _pilotTacanOnesFrequencyStandby.ToString() + "." + _pilotTacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
+                    case CurrentF14RadioMode.RIO_TACAN:
+                    {
+                        var frequencyAsString = "";
+                        lock (_lockRioTacanTensDialObject)
+                        {
+                            lock (_lockRioTacanOnesObject)
+                            {
+                                frequencyAsString = _rioTacanCockpitTensDialPos.ToString() + _rioTacanCockpitOnesDialPos.ToString();
+                            }
+                        }
+                        frequencyAsString = frequencyAsString + ".";
+                        lock (_lockRioTacanXYDialObject)
+                        {
+                            frequencyAsString = frequencyAsString + _rioTacanCockpitXYDialPos.ToString();
+                        }
+
+                        SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                        SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby.ToString() + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                        break;
+                    }
                     case CurrentF14RadioMode.NOUSE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -780,24 +1023,44 @@ namespace NonVisuals
                             }
                             break;
                         }
-                    case CurrentF14RadioMode.TACAN:
+                    case CurrentF14RadioMode.PLT_TACAN:
                         {
                             var frequencyAsString = "";
-                            lock (_lockTacanTensDialObject)
+                            lock (_lockPilotTacanTensDialObject)
                             {
-                                lock (_lockTacanOnesObject)
+                                lock (_lockPilotTacanOnesObject)
                                 {
-                                    frequencyAsString = _tacanCockpitTensDialPos.ToString() + _tacanCockpitOnesDialPos.ToString();
+                                    frequencyAsString = _pilotTacanCockpitTensDialPos.ToString() + _pilotTacanCockpitOnesDialPos.ToString();
                                 }
                             }
                             frequencyAsString = frequencyAsString + ".";
-                            lock (_lockTacanXYDialObject)
+                            lock (_lockPilotTacanXYDialObject)
                             {
-                                frequencyAsString = frequencyAsString + _tacanCockpitXYDialPos.ToString();
+                                frequencyAsString = frequencyAsString + _pilotTacanCockpitXYDialPos.ToString();
                             }
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                            SetPZ69DisplayBytes(ref bytes, double.Parse(_tacanTensFrequencyStandby.ToString() + _tacanOnesFrequencyStandby.ToString() + "." + _tacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_pilotTacanTensFrequencyStandby.ToString() + _pilotTacanOnesFrequencyStandby.ToString() + "." + _pilotTacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            break;
+                        }
+                    case CurrentF14RadioMode.RIO_TACAN:
+                        {
+                            var frequencyAsString = "";
+                            lock (_lockRioTacanTensDialObject)
+                            {
+                                lock (_lockRioTacanOnesObject)
+                                {
+                                    frequencyAsString = _rioTacanCockpitTensDialPos.ToString() + _rioTacanCockpitOnesDialPos.ToString();
+                                }
+                            }
+                            frequencyAsString = frequencyAsString + ".";
+                            lock (_lockRioTacanXYDialObject)
+                            {
+                                frequencyAsString = frequencyAsString + _rioTacanCockpitXYDialPos.ToString();
+                            }
+
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby.ToString() + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
                     case CurrentF14RadioMode.NOUSE:
@@ -884,7 +1147,10 @@ namespace NonVisuals
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_PRESET_INCREASE);
+                                                    if (_uhfCockpitPresetChannel < 20)
+                                                    {
+                                                        DCSBIOS.Send(UHF_PRESET_INCREASE);
+                                                    }
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(399))
                                                 {
@@ -911,7 +1177,10 @@ namespace NonVisuals
                                             {
                                                 if (VuhfPresetSelected() && _vuhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_PRESET_INCREASE);
+                                                    if (_vuhfCockpitPresetChannel < 30)
+                                                    {
+                                                        DCSBIOS.Send(VUHF_PRESET_INCREASE);
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -920,7 +1189,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -933,12 +1202,22 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanTensFrequencyStandby >= 12)
+                                            if (_pilotTacanTensFrequencyStandby >= 12)
                                             {
-                                                _tacanTensFrequencyStandby = 12;
+                                                _pilotTacanTensFrequencyStandby = 12;
                                                 break;
                                             }
-                                            _tacanTensFrequencyStandby++;
+                                            _pilotTacanTensFrequencyStandby++;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanTensFrequencyStandby >= 12)
+                                            {
+                                                _rioTacanTensFrequencyStandby = 12;
+                                                break;
+                                            }
+                                            _rioTacanTensFrequencyStandby++;
                                             break;
                                         }
                                 }
@@ -962,7 +1241,7 @@ namespace NonVisuals
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    //DCSBIOS.Send(UhfPresetDecrease);
+                                                    DCSBIOS.Send(UHF_PRESET_DECREASE);
                                                 }
                                                 else if (_uhfBigFrequencyStandby.Equals(225))
                                                 {
@@ -998,7 +1277,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -1011,12 +1290,22 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanTensFrequencyStandby <= 0)
+                                            if (_pilotTacanTensFrequencyStandby <= 0)
                                             {
-                                                _tacanTensFrequencyStandby = 0;
+                                                _pilotTacanTensFrequencyStandby = 0;
                                                 break;
                                             }
-                                            _tacanTensFrequencyStandby--;
+                                            _pilotTacanTensFrequencyStandby--;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanTensFrequencyStandby <= 0)
+                                            {
+                                                _rioTacanTensFrequencyStandby = 0;
+                                                break;
+                                            }
+                                            _rioTacanTensFrequencyStandby--;
                                             break;
                                         }
                                 }
@@ -1058,7 +1347,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -1071,13 +1360,24 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanOnesFrequencyStandby >= 9)
+                                            if (_pilotTacanOnesFrequencyStandby >= 9)
                                             {
-                                                _tacanOnesFrequencyStandby = 9;
-                                                _tacanXYStandby = 1;
+                                                _pilotTacanOnesFrequencyStandby = 9;
+                                                _pilotTacanXYStandby = 1;
                                                 break;
                                             }
-                                            _tacanOnesFrequencyStandby++;
+                                            _pilotTacanOnesFrequencyStandby++;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanOnesFrequencyStandby >= 9)
+                                            {
+                                                _rioTacanOnesFrequencyStandby = 9;
+                                                _rioTacanXYStandby = 1;
+                                                break;
+                                            }
+                                            _rioTacanOnesFrequencyStandby++;
                                             break;
                                         }
                                 }
@@ -1119,7 +1419,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -1132,13 +1432,24 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanOnesFrequencyStandby <= 0)
+                                            if (_pilotTacanOnesFrequencyStandby <= 0)
                                             {
-                                                _tacanOnesFrequencyStandby = 0;
-                                                _tacanXYStandby = 0;
+                                                _pilotTacanOnesFrequencyStandby = 0;
+                                                _pilotTacanXYStandby = 0;
                                                 break;
                                             }
-                                            _tacanOnesFrequencyStandby--;
+                                            _pilotTacanOnesFrequencyStandby--;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanOnesFrequencyStandby <= 0)
+                                            {
+                                                _rioTacanOnesFrequencyStandby = 0;
+                                                _rioTacanXYStandby = 0;
+                                                break;
+                                            }
+                                            _rioTacanOnesFrequencyStandby--;
                                             break;
                                         }
                                 }
@@ -1162,7 +1473,10 @@ namespace NonVisuals
                                             {
                                                 if (UhfPresetSelected() && _uhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(UHF_PRESET_INCREASE);
+                                                    if (_uhfCockpitPresetChannel < 20)
+                                                    {
+                                                        DCSBIOS.Send(UHF_PRESET_INCREASE);
+                                                    }
                                                 }
                                                 else if (!_lowerButtonPressed && _uhfBigFrequencyStandby.Equals(399))
                                                 {
@@ -1189,7 +1503,10 @@ namespace NonVisuals
                                             {
                                                 if (VuhfPresetSelected() && _vuhfChannelClickSpeedDetector.ClickAndCheck())
                                                 {
-                                                    DCSBIOS.Send(VUHF_PRESET_INCREASE);
+                                                    if (_vuhfCockpitPresetChannel < 30)
+                                                    {
+                                                        DCSBIOS.Send(VUHF_PRESET_INCREASE);
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -1198,7 +1515,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -1211,12 +1528,22 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanTensFrequencyStandby >= 12)
+                                            if (_pilotTacanTensFrequencyStandby >= 12)
                                             {
-                                                _tacanTensFrequencyStandby = 12;
+                                                _pilotTacanTensFrequencyStandby = 12;
                                                 break;
                                             }
-                                            _tacanTensFrequencyStandby++;
+                                            _pilotTacanTensFrequencyStandby++;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanTensFrequencyStandby >= 12)
+                                            {
+                                                _rioTacanTensFrequencyStandby = 12;
+                                                break;
+                                            }
+                                            _rioTacanTensFrequencyStandby++;
                                             break;
                                         }
                                 }
@@ -1277,7 +1604,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -1290,12 +1617,22 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanTensFrequencyStandby <= 0)
+                                            if (_pilotTacanTensFrequencyStandby <= 0)
                                             {
-                                                _tacanTensFrequencyStandby = 0;
+                                                _pilotTacanTensFrequencyStandby = 0;
                                                 break;
                                             }
-                                            _tacanTensFrequencyStandby--;
+                                            _pilotTacanTensFrequencyStandby--;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanTensFrequencyStandby <= 0)
+                                            {
+                                                _rioTacanTensFrequencyStandby = 0;
+                                                break;
+                                            }
+                                            _rioTacanTensFrequencyStandby--;
                                             break;
                                         }
                                 }
@@ -1337,7 +1674,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -1350,13 +1687,24 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanOnesFrequencyStandby >= 9)
+                                            if (_pilotTacanOnesFrequencyStandby >= 9)
                                             {
-                                                _tacanOnesFrequencyStandby = 9;
-                                                _tacanXYStandby = 1;
+                                                _pilotTacanOnesFrequencyStandby = 9;
+                                                _pilotTacanXYStandby = 1;
                                                 break;
                                             }
-                                            _tacanOnesFrequencyStandby++;
+                                            _pilotTacanOnesFrequencyStandby++;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanOnesFrequencyStandby >= 9)
+                                            {
+                                                _rioTacanOnesFrequencyStandby = 9;
+                                                _rioTacanXYStandby = 1;
+                                                break;
+                                            }
+                                            _rioTacanOnesFrequencyStandby++;
                                             break;
                                         }
                                 }
@@ -1398,7 +1746,7 @@ namespace NonVisuals
                                             }
                                             break;
                                         }
-                                    case CurrentF14RadioMode.TACAN:
+                                    case CurrentF14RadioMode.PLT_TACAN:
                                         {
                                             //TACAN  00X/Y --> 129X/Y
                                             //
@@ -1411,13 +1759,24 @@ namespace NonVisuals
                                             //Frequency selector 3      RIGHT
                                             //X=0 / Y=1
 
-                                            if (_tacanOnesFrequencyStandby <= 0)
+                                            if (_pilotTacanOnesFrequencyStandby <= 0)
                                             {
-                                                _tacanOnesFrequencyStandby = 0;
-                                                _tacanXYStandby = 0;
+                                                _pilotTacanOnesFrequencyStandby = 0;
+                                                _pilotTacanXYStandby = 0;
                                                 break;
                                             }
-                                            _tacanOnesFrequencyStandby--;
+                                            _pilotTacanOnesFrequencyStandby--;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.RIO_TACAN:
+                                        {
+                                            if (_rioTacanOnesFrequencyStandby <= 0)
+                                            {
+                                                _rioTacanOnesFrequencyStandby = 0;
+                                                _rioTacanXYStandby = 0;
+                                                break;
+                                            }
+                                            _rioTacanOnesFrequencyStandby--;
                                             break;
                                         }
                                 }
@@ -1552,29 +1911,29 @@ namespace NonVisuals
 
             //TACAN
             //00X/Y - 129X/Y
-            if (_tacanTensFrequencyStandby < 0)
+            if (_pilotTacanTensFrequencyStandby < 0)
             {
-                _tacanTensFrequencyStandby = 0;
+                _pilotTacanTensFrequencyStandby = 0;
             }
-            if (_tacanTensFrequencyStandby > 12)
+            if (_pilotTacanTensFrequencyStandby > 12)
             {
-                _tacanTensFrequencyStandby = 12;
+                _pilotTacanTensFrequencyStandby = 12;
             }
-            if (_tacanOnesFrequencyStandby < 0)
+            if (_pilotTacanOnesFrequencyStandby < 0)
             {
-                _tacanOnesFrequencyStandby = 0;
+                _pilotTacanOnesFrequencyStandby = 0;
             }
-            if (_tacanOnesFrequencyStandby > 9)
+            if (_pilotTacanOnesFrequencyStandby > 9)
             {
-                _tacanOnesFrequencyStandby = 9;
+                _pilotTacanOnesFrequencyStandby = 9;
             }
-            if (_tacanXYStandby < 0)
+            if (_pilotTacanXYStandby < 0)
             {
-                _tacanXYStandby = 0;
+                _pilotTacanXYStandby = 0;
             }
-            if (_tacanXYStandby > 1)
+            if (_pilotTacanXYStandby > 1)
             {
-                _tacanXYStandby = 1;
+                _pilotTacanXYStandby = 1;
             }
         }
 
@@ -1605,18 +1964,25 @@ namespace NonVisuals
                                 }
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF14B.UPPER_TACAN:
+                        case RadioPanelPZ69KnobsF14B.UPPER_PLT_TACAN:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentF14RadioMode.TACAN;
+                                    _currentUpperRadioMode = CurrentF14RadioMode.PLT_TACAN;
                                 }
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF14B.UPPER_NOUSE:
-                        case RadioPanelPZ69KnobsF14B.UPPER_NOUSE2:
-                        case RadioPanelPZ69KnobsF14B.UPPER_NOUSE3:
-                        case RadioPanelPZ69KnobsF14B.UPPER_NOUSE4:
+                        case RadioPanelPZ69KnobsF14B.UPPER_RIO_TACAN:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    _currentUpperRadioMode = CurrentF14RadioMode.RIO_TACAN;
+                                }
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsF14B.UPPER_ADF:
+                        case RadioPanelPZ69KnobsF14B.UPPER_DME:
+                        case RadioPanelPZ69KnobsF14B.UPPER_XPDR:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
@@ -1640,22 +2006,29 @@ namespace NonVisuals
                                 }
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF14B.LOWER_TACAN:
+                        case RadioPanelPZ69KnobsF14B.LOWER_PLT_TACAN:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentLowerRadioMode = CurrentF14RadioMode.TACAN;
+                                    _currentLowerRadioMode = CurrentF14RadioMode.PLT_TACAN;
                                 }
                                 break;
                             }
-                        case RadioPanelPZ69KnobsF14B.LOWER_NOUSE:
-                        case RadioPanelPZ69KnobsF14B.LOWER_NOUSE2:
-                        case RadioPanelPZ69KnobsF14B.LOWER_NOUSE3:
-                        case RadioPanelPZ69KnobsF14B.LOWER_NOUSE4:
+                        case RadioPanelPZ69KnobsF14B.LOWER_RIO_TACAN:
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentF14RadioMode.NOUSE;
+                                    _currentLowerRadioMode = CurrentF14RadioMode.RIO_TACAN;
+                                }
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsF14B.LOWER_ADF:
+                        case RadioPanelPZ69KnobsF14B.LOWER_DME:
+                        case RadioPanelPZ69KnobsF14B.LOWER_XPDR:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    _currentLowerRadioMode = CurrentF14RadioMode.NOUSE;
                                 }
                                 break;
                             }
@@ -1752,9 +2125,12 @@ namespace NonVisuals
                 _vuhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_MODE");
 
                 //TACAN
-                _tacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_TENS");
-                _tacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_ONES");
-                _tacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_CHANNEL");
+                _pilotTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_TENS");
+                _pilotTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_ONES");
+                _pilotTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_CHANNEL");
+                _rioTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_DIAL_TENS");
+                _rioTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_DIAL_ONES");
+                _rioTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_CHANNEL");
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
@@ -1941,31 +2317,58 @@ namespace NonVisuals
         }
 
 
-        private void SaveCockpitFrequencyTacan()
+        private void SavePilotCockpitFrequencyTacan()
         {
             /*TACAN*/
             //Large dial 0-12 [step of 1]
             //Small dial 0-9 [step of 1]
             //Last : X/Y [0,1]
-            lock (_lockTacanTensDialObject)
+            lock (_lockPilotTacanTensDialObject)
             {
-                lock (_lockTacanOnesObject)
+                lock (_lockPilotTacanOnesObject)
                 {
-                    lock (_lockTacanXYDialObject)
+                    lock (_lockPilotTacanXYDialObject)
                     {
-                        _tacanSavedCockpitTensFrequency = Convert.ToInt32(_tacanCockpitTensDialPos);
-                        _tacanSavedCockpitOnesFrequency = Convert.ToInt32(_tacanCockpitOnesDialPos);
-                        _tacanSavedCockpitXY = Convert.ToInt32(_tacanCockpitXYDialPos);
+                        _pilotTacanSavedCockpitTensFrequency = Convert.ToInt32(_pilotTacanCockpitTensDialPos);
+                        _pilotTacanSavedCockpitOnesFrequency = Convert.ToInt32(_pilotTacanCockpitOnesDialPos);
+                        _pilotTacanSavedCockpitXY = Convert.ToInt32(_pilotTacanCockpitXYDialPos);
                     }
                 }
             }
         }
 
-        private void SwapCockpitStandbyFrequencyTacan()
+        private void SwapPilotCockpitStandbyFrequencyTacan()
         {
-            _tacanTensFrequencyStandby = _tacanSavedCockpitTensFrequency;
-            _tacanOnesFrequencyStandby = _tacanSavedCockpitOnesFrequency;
-            _tacanXYStandby = _tacanSavedCockpitXY;
+            _pilotTacanTensFrequencyStandby = _pilotTacanSavedCockpitTensFrequency;
+            _pilotTacanOnesFrequencyStandby = _pilotTacanSavedCockpitOnesFrequency;
+            _pilotTacanXYStandby = _pilotTacanSavedCockpitXY;
+        }
+
+        private void SaveRioCockpitFrequencyTacan()
+        {
+            /*TACAN*/
+            //Large dial 0-12 [step of 1]
+            //Small dial 0-9 [step of 1]
+            //Last : X/Y [0,1]
+            lock (_lockRioTacanTensDialObject)
+            {
+                lock (_lockRioTacanOnesObject)
+                {
+                    lock (_lockRioTacanXYDialObject)
+                    {
+                        _rioTacanSavedCockpitTensFrequency = Convert.ToInt32(_rioTacanCockpitTensDialPos);
+                        _rioTacanSavedCockpitOnesFrequency = Convert.ToInt32(_rioTacanCockpitOnesDialPos);
+                        _rioTacanSavedCockpitXY = Convert.ToInt32(_rioTacanCockpitXYDialPos);
+                    }
+                }
+            }
+        }
+
+        private void SwapRioCockpitStandbyFrequencyTacan()
+        {
+            _rioTacanTensFrequencyStandby = _rioTacanSavedCockpitTensFrequency;
+            _rioTacanOnesFrequencyStandby = _rioTacanSavedCockpitOnesFrequency;
+            _rioTacanXYStandby = _rioTacanSavedCockpitXY;
         }
 
         private bool UhfPresetSelected()
@@ -1978,9 +2381,14 @@ namespace NonVisuals
             return _vuhfCockpitFreqMode == 3;
         }
 
-        private bool TacanNowSyncing()
+        private bool PilotTacanNowSyncing()
         {
-            return Interlocked.Read(ref _tacanThreadNowSynching) > 0;
+            return Interlocked.Read(ref _pilotTacanThreadNowSynching) > 0;
+        }
+
+        private bool RioTacanNowSyncing()
+        {
+            return Interlocked.Read(ref _rioTacanThreadNowSynching) > 0;
         }
 
         public override string SettingsVersion()

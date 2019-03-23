@@ -650,10 +650,9 @@
     <Resource Include="Images\Bf109_FUG 16ZY.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\f14_arc_159.png" />
-    <Resource Include="Images\f14_arc_182.png" />
-    <Resource Include="Images\f14_ky28.png" />
-    <Resource Include="Images\f14_tacan.png" />
+    <Resource Include="Images\F-14 ANARC-159 Pilot.png" />
+    <Resource Include="Images\F-14 ANARC-182 RIO.png" />
+    <Resource Include="Images\F-14 TACAN.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
