@@ -10,7 +10,7 @@ namespace NonVisuals
         UPPER_PLT_TACAN = 4,
         UPPER_RIO_TACAN = 8,
         UPPER_ADF = 16,
-        UPPER_DME = 32,
+        UPPER_LINK4 = 32,
         UPPER_XPDR = 64,
         UPPER_SMALL_FREQ_WHEEL_INC = 128,
         UPPER_SMALL_FREQ_WHEEL_DEC = 256,
@@ -22,7 +22,7 @@ namespace NonVisuals
         LOWER_PLT_TACAN = 16384,
         LOWER_RIO_TACAN = 32768,
         LOWER_ADF = 65536,
-        LOWER_DME = 131072,
+        LOWER_LINK4 = 131072,
         LOWER_XPDR = 262144,
         LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
         LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
@@ -37,7 +37,8 @@ namespace NonVisuals
         VUHF = 2,
         PLT_TACAN = 4,
         RIO_TACAN = 8,
-        NOUSE
+        LINK4 = 16,
+        NOUSE = 32
     }
 
     public class RadioPanelKnobF14B
@@ -100,7 +101,7 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsF14B.LOWER_PLT_TACAN));
             result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsF14B.LOWER_RIO_TACAN));
             result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsF14B.LOWER_ADF));
-            result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsF14B.LOWER_DME));
+            result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsF14B.LOWER_LINK4));
             result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsF14B.LOWER_XPDR));
             result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsF14B.UPPER_FREQ_SWITCH));
             result.Add(new RadioPanelKnobF14B(1, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsF14B.LOWER_FREQ_SWITCH));
@@ -111,7 +112,7 @@ namespace NonVisuals
             result.Add(new RadioPanelKnobF14B(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsF14B.UPPER_PLT_TACAN)); //UPPER NAV 1
             result.Add(new RadioPanelKnobF14B(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsF14B.UPPER_RIO_TACAN)); //UPPER NAV 2
             result.Add(new RadioPanelKnobF14B(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsF14B.UPPER_ADF)); //UPPER ADF
-            result.Add(new RadioPanelKnobF14B(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsF14B.UPPER_DME)); //UPPER DME
+            result.Add(new RadioPanelKnobF14B(0, Convert.ToInt32("100000", 2), true, RadioPanelPZ69KnobsF14B.UPPER_LINK4)); //UPPER DME
             result.Add(new RadioPanelKnobF14B(0, Convert.ToInt32("1000000", 2), true, RadioPanelPZ69KnobsF14B.UPPER_XPDR)); //UPPER XPDR
             result.Add(new RadioPanelKnobF14B(0, Convert.ToInt32("10000000", 2), true, RadioPanelPZ69KnobsF14B.LOWER_UHF)); //LOWER COM 1 
             return result;

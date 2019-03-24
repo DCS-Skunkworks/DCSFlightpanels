@@ -72,6 +72,7 @@
                     x.0 -> X<LineBreak/>
                     x.1 -> Y<LineBreak/>
                     NAV 2 = RIO TACAN (TCN)<LineBreak/>
+                    DME   = RIO Link 4 + Power On/Off/Aux<LineBreak/>
                     *Hold ACT/STBY + Small Dial to switch Frequency mode.<LineBreak/>
                     Large dial changes selected Preset Channel.<LineBreak/>
                     *Hold ACT/STBY + Large Dial to <LineBreak/>switch Mode/Function, turn off radio.<LineBreak/>
@@ -108,6 +109,8 @@
         <StackPanel Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="6">
             <Label Content="AN/ARC-159 UHF" FontWeight="Bold"/>
             <Image Height="260" Source="/DCSFlightpanels;component/Images/F-14 ANARC-159 Pilot.png" />
+            <Label Content="[RIO] Link 4" FontWeight="Bold"/>
+            <Image Height="100" Source="/DCSFlightpanels;component/Images/F-14 RIO Datalink.png" />
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.RowSpan="4">
             <Label Name="LabelAirframe" Content="F-14B Tomcat" FontSize="30" FontWeight="Bold"/>

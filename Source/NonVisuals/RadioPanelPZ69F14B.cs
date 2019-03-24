@@ -101,7 +101,7 @@ namespace NonVisuals
         private readonly ClickSpeedDetector _vuhfModeClickSpeedDetector = new ClickSpeedDetector(8);
         private byte _skipVuhfSmallFreqChange = 0;
 
-        /*PILOT TACAN*/
+        /*PILOT TACAN NAV1*/
         //Tens dial 0-12 [step of 1]
         //Ones dial 0-9 [step of 1]
         //Last : X/Y [0,1]
@@ -129,7 +129,7 @@ namespace NonVisuals
         private long _pilotTacanOnesWaitingForFeedback;
         private long _pilotTacanXYWaitingForFeedback;
 
-        /*RIO TACAN DME*/
+        /*RIO TACAN NAV2*/
         //Tens dial 0-12 [step of 1]
         //Ones dial 0-9 [step of 1]
         //Last : X/Y [0,1]
@@ -156,6 +156,36 @@ namespace NonVisuals
         private long _rioTacanTensWaitingForFeedback;
         private long _rioTacanOnesWaitingForFeedback;
         private long _rioTacanXYWaitingForFeedback;
+
+        /*RIO Link 4*/
+        //Large Dial Hundreds 0 - 9  [step of 1]
+        //Small Dial Tens     0 - 99 [step of 1]
+        //Button Pressed + Large => ON/OFF/AUX
+        private int _rioLink4HundredsFrequencyStandby = 0;
+        private int _rioLink4TensAndOnesFrequencyStandby = 0;
+        private readonly object _lockRioLink4HundredsDial = new object();
+        private readonly object _lockRioLink4TensDial = new object();
+        private readonly object _lockRioLink4OnesDial = new object();
+        private DCSBIOSOutput _rioLink4DcsbiosOutputHundredsDial;
+        private DCSBIOSOutput _rioLink4DcsbiosOutputTensDial;
+        private DCSBIOSOutput _rioLink4DcsbiosOutputOnesDial;
+        private DCSBIOSOutput _rioLink4DcsbiosOutputPowerSwitch;//RIO_DATALINK_PW
+        private volatile uint _rioLink4HundredsCockpitFrequency = 0;
+        private volatile uint _rioLink4TensCockpitFrequency = 0;
+        private volatile uint _rioLink4OnesCockpitFrequency = 0;
+        private volatile uint _rioLink4CockpitPowerSwitch = 0;
+        private const string RIO_LINK4_HUNDREDS_DIAL_COMMAND = "RIO_DATALINK_FREQ_10 ";
+        private const string RIO_LINK4_TENS_DIAL_COMMAND = "RIO_DATALINK_FREQ_1 ";
+        private const string RIO_LINK4_ONES_DIAL_COMMAND = "RIO_DATALINK_FREQ_100 ";
+        private const string RIO_LINK4_POWER_COMMAND_INC = "RIO_DATALINK_PW INC\n";
+        private const string RIO_LINK4_POWER_COMMAND_DEC = "RIO_DATALINK_PW DEC\n";
+        private Thread _rioLink4SyncThread;
+        private long _rioLink4ThreadNowSynching;
+        private long _rioLinkHundredsWaitingForFeedback;
+        private long _rioLinkTensWaitingForFeedback;
+        private long _rioLinkOnesWaitingForFeedback;
+        private readonly ClickSpeedDetector _rioLink4TensAndOnesClickSpeedDetector = new ClickSpeedDetector(20);
+        private byte _skipRioLink4TensAndOnesFreqChange = 0;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
 
@@ -373,6 +403,45 @@ namespace NonVisuals
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
+
+            //RIO Link 4
+            if (e.Address == _rioLink4DcsbiosOutputHundredsDial.Address)
+            {
+                var tmp = _rioLink4HundredsCockpitFrequency;
+                _rioLink4HundredsCockpitFrequency = _rioLink4DcsbiosOutputHundredsDial.GetUIntValue(e.Data);
+                if (tmp != _rioLink4HundredsCockpitFrequency)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                }
+            }
+            if (e.Address == _rioLink4DcsbiosOutputTensDial.Address)
+            {
+                var tmp = _rioLink4TensCockpitFrequency;
+                _rioLink4TensCockpitFrequency = _rioLink4DcsbiosOutputTensDial.GetUIntValue(e.Data);
+                if (tmp != _rioLink4TensCockpitFrequency)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                }
+            }
+            if (e.Address == _rioLink4DcsbiosOutputOnesDial.Address)
+            {
+                var tmp = _rioLink4OnesCockpitFrequency;
+                _rioLink4OnesCockpitFrequency = _rioLink4DcsbiosOutputOnesDial.GetUIntValue(e.Data);
+                if (tmp != _rioLink4OnesCockpitFrequency)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                }
+            }
+            if (e.Address == _rioLink4DcsbiosOutputPowerSwitch.Address)
+            {
+                var tmp = _rioLink4CockpitPowerSwitch;
+                _rioLink4CockpitPowerSwitch = _rioLink4DcsbiosOutputPowerSwitch.GetUIntValue(e.Data);
+                if (tmp != _rioLink4CockpitPowerSwitch)
+                {
+                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                }
+            }
+
             //Set once
             DataHasBeenReceivedFromDCSBIOS = true;
             ShowFrequenciesOnPanel();
@@ -939,25 +1008,58 @@ namespace NonVisuals
                             break;
                         }
                     case CurrentF14RadioMode.RIO_TACAN:
-                    {
-                        var frequencyAsString = "";
-                        lock (_lockRioTacanTensDialObject)
                         {
-                            lock (_lockRioTacanOnesObject)
+                            var frequencyAsString = "";
+                            lock (_lockRioTacanTensDialObject)
                             {
-                                frequencyAsString = _rioTacanCockpitTensDialPos.ToString() + _rioTacanCockpitOnesDialPos.ToString();
+                                lock (_lockRioTacanOnesObject)
+                                {
+                                    frequencyAsString = _rioTacanCockpitTensDialPos.ToString() + _rioTacanCockpitOnesDialPos.ToString();
+                                }
                             }
-                        }
-                        frequencyAsString = frequencyAsString + ".";
-                        lock (_lockRioTacanXYDialObject)
-                        {
-                            frequencyAsString = frequencyAsString + _rioTacanCockpitXYDialPos.ToString();
-                        }
+                            frequencyAsString = frequencyAsString + ".";
+                            lock (_lockRioTacanXYDialObject)
+                            {
+                                frequencyAsString = frequencyAsString + _rioTacanCockpitXYDialPos.ToString();
+                            }
 
-                        SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                        SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby.ToString() + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                        break;
-                    }
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby.ToString() + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            break;
+                        }
+                    case CurrentF14RadioMode.LINK4:
+                        {
+                            if (_rioLink4CockpitPowerSwitch == 0) // OFF
+                            {
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            }
+                            else if (_upperButtonPressedAndDialRotated)
+                            {
+                                SetPZ69DisplayBytesInteger(ref bytes, (int)_rioLink4CockpitPowerSwitch, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            }
+                            else
+                            {
+                                var frequencyAsString = "";
+                                lock (_lockRioLink4HundredsDial)
+                                {
+                                    lock (_lockRioLink4TensDial)
+                                    {
+                                        lock (_lockRioLink4OnesDial)
+                                        {
+                                            frequencyAsString =
+                                                _rioLink4HundredsCockpitFrequency.ToString() +
+                                                _rioLink4TensCockpitFrequency.ToString() +
+                                                _rioLink4OnesCockpitFrequency;
+                                        }
+                                    }
+                                }
+                                SetPZ69DisplayBytesString(ref bytes, frequencyAsString.ToString(), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesString(ref bytes, _rioLink4HundredsFrequencyStandby.ToString() + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                            }
+                            break;
+                        }
                     case CurrentF14RadioMode.NOUSE:
                         {
                             SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
@@ -1220,6 +1322,25 @@ namespace NonVisuals
                                             _rioTacanTensFrequencyStandby++;
                                             break;
                                         }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            if (_upperButtonPressed)
+                                            {
+                                                _upperButtonPressedAndDialRotated = true;
+                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_INC);
+                                            }
+                                            else
+                                            {
+                                                if (_rioLink4HundredsFrequencyStandby >= 9)
+                                                {
+                                                    _rioLink4HundredsFrequencyStandby = 0;
+                                                    break;
+                                                }
+
+                                                _rioLink4HundredsFrequencyStandby++;
+                                            }
+                                            break;
+                                        }
                                 }
                                 break;
                             }
@@ -1308,6 +1429,25 @@ namespace NonVisuals
                                             _rioTacanTensFrequencyStandby--;
                                             break;
                                         }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            if (_upperButtonPressed)
+                                            {
+                                                _upperButtonPressedAndDialRotated = true;
+                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_DEC);
+                                            }
+                                            else
+                                            {
+                                                if (_rioLink4HundredsFrequencyStandby <= 0)
+                                                {
+                                                    _rioLink4HundredsFrequencyStandby = 9;
+                                                    break;
+                                                }
+
+                                                _rioLink4HundredsFrequencyStandby--;
+                                            }
+                                            break;
+                                        }
                                 }
                                 break;
                             }
@@ -1380,6 +1520,11 @@ namespace NonVisuals
                                             _rioTacanOnesFrequencyStandby++;
                                             break;
                                         }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            Link4TensAndOnesFrequencyStandbyAdjust(true);
+                                            break;
+                                        }
                                 }
                                 break;
                             }
@@ -1450,6 +1595,11 @@ namespace NonVisuals
                                                 break;
                                             }
                                             _rioTacanOnesFrequencyStandby--;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            Link4TensAndOnesFrequencyStandbyAdjust(false);
                                             break;
                                         }
                                 }
@@ -1546,6 +1696,24 @@ namespace NonVisuals
                                             _rioTacanTensFrequencyStandby++;
                                             break;
                                         }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            if (_lowerButtonPressed)
+                                            {
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_INC);
+                                            }
+                                            else
+                                            {
+                                                if (_rioLink4HundredsFrequencyStandby >= 9)
+                                                {
+                                                    _rioLink4HundredsFrequencyStandby = 0;
+                                                    break;
+                                                }
+                                                _rioLink4HundredsFrequencyStandby++;
+                                            }
+                                            break;
+                                        }
                                 }
                                 break;
                             }
@@ -1635,6 +1803,25 @@ namespace NonVisuals
                                             _rioTacanTensFrequencyStandby--;
                                             break;
                                         }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            if (_lowerButtonPressed)
+                                            {
+                                                _lowerButtonPressedAndDialRotated = true;
+                                                DCSBIOS.Send(RIO_LINK4_POWER_COMMAND_DEC);
+                                            }
+                                            else
+                                            {
+                                                if (_rioLink4HundredsFrequencyStandby <= 0)
+                                                {
+                                                    _rioLink4HundredsFrequencyStandby = 9;
+                                                    break;
+                                                }
+
+                                                _rioLink4HundredsFrequencyStandby--;
+                                            }
+                                            break;
+                                        }
                                 }
                                 break;
                             }
@@ -1705,6 +1892,11 @@ namespace NonVisuals
                                                 break;
                                             }
                                             _rioTacanOnesFrequencyStandby++;
+                                            break;
+                                        }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            Link4TensAndOnesFrequencyStandbyAdjust(true);
                                             break;
                                         }
                                 }
@@ -1779,6 +1971,11 @@ namespace NonVisuals
                                             _rioTacanOnesFrequencyStandby--;
                                             break;
                                         }
+                                    case CurrentF14RadioMode.LINK4:
+                                        {
+                                            Link4TensAndOnesFrequencyStandbyAdjust(false);
+                                            break;
+                                        }
                                 }
                                 break;
                             }
@@ -1789,6 +1986,40 @@ namespace NonVisuals
             ShowFrequenciesOnPanel();
         }
 
+
+        private void Link4TensAndOnesFrequencyStandbyAdjust(bool increase)
+        {
+            var changeValue = 1;
+            _skipRioLink4TensAndOnesFreqChange++;
+            if (_skipRioLink4TensAndOnesFreqChange < 2)
+            {
+                _rioLink4TensAndOnesClickSpeedDetector.Click();
+                return;
+            }
+            _skipRioLink4TensAndOnesFreqChange = 0;
+            if (_rioLink4TensAndOnesClickSpeedDetector.ClickAndCheck())
+            {
+                changeValue = 5;
+            }
+            if (increase)
+            {
+                _rioLink4TensAndOnesFrequencyStandby += changeValue;
+            }
+            else
+            {
+                _rioLink4TensAndOnesFrequencyStandby -= changeValue;
+            }
+
+            if (_rioLink4TensAndOnesFrequencyStandby > 99)
+            {
+                _rioLink4TensAndOnesFrequencyStandby = 0;
+            }
+            else if (_rioLink4TensAndOnesFrequencyStandby < 0)
+            {
+                _rioLink4TensAndOnesFrequencyStandby = 99;
+            }
+        }
+
         private void UHFSmallFrequencyStandbyAdjust(bool increase)
         {
             _skipUhfSmallFreqChange++;
@@ -1797,7 +2028,7 @@ namespace NonVisuals
                 return;
             }
             _skipUhfSmallFreqChange = 0;
-            var tmp = _uhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadRight(3, '0');
+
             if (increase)
             {
                 _uhfSmallFrequencyStandby += 25;
@@ -1828,7 +2059,7 @@ namespace NonVisuals
                 return;
             }
             _skipVuhfSmallFreqChange = 0;
-            var tmp = _vuhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadRight(3, '0');
+
             if (increase)
             {
                 _vuhfSmallFrequencyStandby += 25;
@@ -1980,8 +2211,15 @@ namespace NonVisuals
                                 }
                                 break;
                             }
+                        case RadioPanelPZ69KnobsF14B.UPPER_LINK4:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    _currentUpperRadioMode = CurrentF14RadioMode.LINK4;
+                                }
+                                break;
+                            }
                         case RadioPanelPZ69KnobsF14B.UPPER_ADF:
-                        case RadioPanelPZ69KnobsF14B.UPPER_DME:
                         case RadioPanelPZ69KnobsF14B.UPPER_XPDR:
                             {
                                 if (radioPanelKnob.IsOn)
@@ -2022,8 +2260,15 @@ namespace NonVisuals
                                 }
                                 break;
                             }
+                        case RadioPanelPZ69KnobsF14B.LOWER_LINK4:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    _currentUpperRadioMode = CurrentF14RadioMode.LINK4;
+                                }
+                                break;
+                            }
                         case RadioPanelPZ69KnobsF14B.LOWER_ADF:
-                        case RadioPanelPZ69KnobsF14B.LOWER_DME:
                         case RadioPanelPZ69KnobsF14B.LOWER_XPDR:
                             {
                                 if (radioPanelKnob.IsOn)
@@ -2124,13 +2369,19 @@ namespace NonVisuals
                 _vuhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL4_FREQ");
                 _vuhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_MODE");
 
-                //TACAN
+                //Pilot & RIO TACAN
                 _pilotTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_TENS");
                 _pilotTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_DIAL_ONES");
                 _pilotTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_TACAN_CHANNEL");
                 _rioTacanDcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_DIAL_TENS");
                 _rioTacanDcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_DIAL_ONES");
                 _rioTacanDcsbiosOutputXYDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_TACAN_CHANNEL");
+
+                //RIO Link 4
+                _rioLink4DcsbiosOutputHundredsDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_FREQ_10");
+                _rioLink4DcsbiosOutputTensDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_FREQ_1");
+                _rioLink4DcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_FREQ_100");
+                _rioLink4DcsbiosOutputPowerSwitch = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_PW");
 
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {

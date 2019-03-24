@@ -192,6 +192,82 @@ namespace NonVisuals
             } while (i < bytesToBeInjected.Length && i < 5);
         }
 
+        protected void SetPZ69DisplayBytesString(ref byte[] bytes, string digitString, PZ69LCDPosition pz69LCDPosition)
+        {
+
+            var arrayPosition = GetArrayPosition(pz69LCDPosition);
+            var maxArrayPosition = GetArrayPosition(pz69LCDPosition) + 4;
+            var i = 0;
+            var digits = "";
+            if (digitString.Length > 5)
+            {
+                if (digitString.Contains("."))
+                {
+                    digits = digitString.Substring(0, 6);
+                }
+                else
+                {
+                    digits = digitString.Substring(0, 5);
+                }
+            }
+            else if (digitString.Length < 5)
+            {
+                if (digitString.Contains("."))
+                {
+                    digits = digitString.PadLeft(6, ' ');
+                }
+                else
+                {
+                    digits = digitString.PadLeft(5, ' ');
+                }
+            }
+            else if (digitString.Length == 5)
+            {
+                if (digitString.Contains("."))
+                {
+                    digits = digitString.PadLeft(1, ' ');
+                }
+                else
+                {
+                    digits = digitString;
+                }
+            }
+
+            do
+            {
+                if (digits[i] == '.')
+                {
+                    //skip to next position, this has already been dealt with
+                    i++;
+                }
+
+                try
+                {
+                    if (digits[i] == ' ')
+                    {
+                        bytes[arrayPosition] = 0xff;
+                    }
+                    else
+                    {
+                        var b = byte.Parse(digits[i].ToString());
+                        bytes[arrayPosition] = b;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Common.LogError(38410, e, "SetPZ69DisplayBytesDefault()");
+                }
+                if (digits.Length > i + 1 && digits[i + 1] == '.')
+                {
+                    //Add decimal marker
+                    bytes[arrayPosition] = (byte)(bytes[arrayPosition] + 0xd0);
+                }
+
+                arrayPosition++;
+                i++;
+            } while (i < digits.Length && arrayPosition < maxArrayPosition + 1);
+        }
+
         protected void SetPZ69DisplayBytesDefault(ref byte[] bytes, string digits, PZ69LCDPosition pz69LCDPosition)
         {
 
