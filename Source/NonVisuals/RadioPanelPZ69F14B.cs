@@ -163,6 +163,8 @@ namespace NonVisuals
         //Button Pressed + Large => ON/OFF/AUX
         private int _rioLink4HundredsFrequencyStandby = 0;
         private int _rioLink4TensAndOnesFrequencyStandby = 0;
+        private int _rioLink4SavedCockpitHundredsFrequency = 0;
+        private int _rioLink4SavedCockpitTensAndOnesFrequency = 0;
         private readonly object _lockRioLink4HundredsDial = new object();
         private readonly object _lockRioLink4TensDial = new object();
         private readonly object _lockRioLink4OnesDial = new object();
@@ -353,6 +355,7 @@ namespace NonVisuals
                 _pilotTacanCockpitTensDialPos = _pilotTacanDcsbiosOutputTensDial.GetUIntValue(e.Data);
                 if (tmp != _pilotTacanCockpitTensDialPos)
                 {
+                    Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -362,6 +365,7 @@ namespace NonVisuals
                 _pilotTacanCockpitOnesDialPos = _pilotTacanDcsbiosOutputOnesDial.GetUIntValue(e.Data);
                 if (tmp != _pilotTacanCockpitOnesDialPos)
                 {
+                    Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -371,6 +375,7 @@ namespace NonVisuals
                 _pilotTacanCockpitXYDialPos = _pilotTacanDcsbiosOutputXYDial.GetUIntValue(e.Data);
                 if (tmp != _pilotTacanCockpitXYDialPos)
                 {
+                    Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -382,6 +387,7 @@ namespace NonVisuals
                 _rioTacanCockpitTensDialPos = _rioTacanDcsbiosOutputTensDial.GetUIntValue(e.Data);
                 if (tmp != _rioTacanCockpitTensDialPos)
                 {
+                    Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -391,6 +397,7 @@ namespace NonVisuals
                 _rioTacanCockpitOnesDialPos = _rioTacanDcsbiosOutputOnesDial.GetUIntValue(e.Data);
                 if (tmp != _rioTacanCockpitOnesDialPos)
                 {
+                    Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -400,6 +407,7 @@ namespace NonVisuals
                 _rioTacanCockpitXYDialPos = _rioTacanDcsbiosOutputXYDial.GetUIntValue(e.Data);
                 if (tmp != _rioTacanCockpitXYDialPos)
                 {
+                    Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -411,6 +419,7 @@ namespace NonVisuals
                 _rioLink4HundredsCockpitFrequency = _rioLink4DcsbiosOutputHundredsDial.GetUIntValue(e.Data);
                 if (tmp != _rioLink4HundredsCockpitFrequency)
                 {
+                    Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -420,6 +429,7 @@ namespace NonVisuals
                 _rioLink4TensCockpitFrequency = _rioLink4DcsbiosOutputTensDial.GetUIntValue(e.Data);
                 if (tmp != _rioLink4TensCockpitFrequency)
                 {
+                    Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -429,6 +439,7 @@ namespace NonVisuals
                 _rioLink4OnesCockpitFrequency = _rioLink4DcsbiosOutputOnesDial.GetUIntValue(e.Data);
                 if (tmp != _rioLink4OnesCockpitFrequency)
                 {
+                    Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 0);
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
@@ -516,6 +527,11 @@ namespace NonVisuals
                                     SendRioTacanToDCSBIOS();
                                     break;
                                 }
+                            case CurrentF14RadioMode.LINK4:
+                                {
+                                    SendLink4ToDCSBIOS();
+                                    break;
+                                }
                         }
                         break;
                     }
@@ -567,11 +583,173 @@ namespace NonVisuals
                                     SendRioTacanToDCSBIOS();
                                     break;
                                 }
+                            case CurrentF14RadioMode.LINK4:
+                                {
+                                    SendLink4ToDCSBIOS();
+                                    break;
+                                }
                         }
                         break;
                     }
             }
         }
+
+        private void SendLink4ToDCSBIOS()
+        {
+            if (Link4NowSyncing())
+            {
+                return;
+            }
+            SaveLink4Frequency();
+            var dial2 = int.Parse(_rioLink4TensAndOnesFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2,'0').Substring(0, 1));
+            var dial3 = int.Parse(_rioLink4TensAndOnesFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0').Substring(1, 1));
+            _rioLink4SyncThread?.Abort();
+            _rioLink4SyncThread = new Thread(() => RioDatalink4SynchThreadMethod(_rioLink4HundredsFrequencyStandby, dial2, dial3));
+            _rioLink4SyncThread.Start();
+        }
+
+
+        private void RioDatalink4SynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2, int desiredPositionDial3)
+        {
+            try
+            {
+                try
+                {
+                    Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 1);
+
+                    const string inc = "INC\n";
+                    const string dec = "DEC\n";
+                    long dial1Timeout = DateTime.Now.Ticks;
+                    long dial2Timeout = DateTime.Now.Ticks;
+                    long dial3Timeout = DateTime.Now.Ticks;
+                    long dial1OkTime = 0;
+                    long dial2OkTime = 0;
+                    long dial3OkTime = 0;
+                    var dial1SendCount = 0;
+                    var dial2SendCount = 0;
+                    var dial3SendCount = 0;
+
+
+                    do
+                    {
+
+                        if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "TACAN dial1Timeout"))
+                        {
+                            //Lets do an ugly reset
+                            Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 0);
+                            Common.DebugP("Resetting SYNC for TACAN 1");
+                        }
+
+                        if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
+                        {
+                            //Lets do an ugly reset
+                            Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 0);
+                            Common.DebugP("Resetting SYNC for TACAN 2");
+                        }
+
+                        if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
+                        {
+                            //Lets do an ugly reset
+                            Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 0);
+                            Common.DebugP("Resetting SYNC for TACAN 3");
+                        }
+
+                        if (Interlocked.Read(ref _rioLinkHundredsWaitingForFeedback) == 0)
+                        {
+                            lock (_lockRioLink4HundredsDial)
+                            {
+                                if (_rioLink4HundredsCockpitFrequency != desiredPositionDial1)
+                                {
+                                    dial1OkTime = DateTime.Now.Ticks;
+                                    Common.DebugP("_rioLink4HundredsCockpitFrequency is " + _rioLink4HundredsCockpitFrequency + " and should be " + desiredPositionDial1);
+                                    var str = RIO_LINK4_HUNDREDS_DIAL_COMMAND + (_rioLink4HundredsCockpitFrequency < desiredPositionDial1 ? inc : dec);
+                                    Common.DebugP("Sending " + str);
+                                    DCSBIOS.Send(str);
+                                    dial1SendCount++;
+                                    Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 1);
+                                }
+                                Reset(ref dial1Timeout);
+                            }
+                        }
+                        else
+                        {
+                            dial1OkTime = DateTime.Now.Ticks;
+                        }
+
+                        if (Interlocked.Read(ref _rioLinkTensWaitingForFeedback) == 0)
+                        {
+                            lock (_lockRioLink4TensDial)
+                            {
+                                if (_rioLink4TensCockpitFrequency != desiredPositionDial2)
+                                {
+                                    dial1OkTime = DateTime.Now.Ticks;
+                                    Common.DebugP("_rioLink4TensCockpitFrequency is " + _rioLink4TensCockpitFrequency + " and should be " + desiredPositionDial2);
+                                    var str = RIO_LINK4_TENS_DIAL_COMMAND + (_rioLink4TensCockpitFrequency < desiredPositionDial2 ? inc : dec);
+                                    Common.DebugP("Sending " + str);
+                                    DCSBIOS.Send(str);
+                                    dial1SendCount++;
+                                    Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 1);
+                                }
+                                Reset(ref dial1Timeout);
+                            }
+                        }
+                        else
+                        {
+                            dial2OkTime = DateTime.Now.Ticks;
+                        }
+
+                        if (Interlocked.Read(ref _rioLinkOnesWaitingForFeedback) == 0)
+                        {
+                            lock (_lockRioLink4OnesDial)
+                            {
+                                if (_rioLink4OnesCockpitFrequency != desiredPositionDial3)
+                                {
+                                    dial1OkTime = DateTime.Now.Ticks;
+                                    Common.DebugP("_rioLink4OnesCockpitFrequency is " + _rioLink4OnesCockpitFrequency + " and should be " + desiredPositionDial3);
+                                    var str = RIO_LINK4_ONES_DIAL_COMMAND + (_rioLink4OnesCockpitFrequency < desiredPositionDial3 ? inc : dec);
+                                    Common.DebugP("Sending " + str);
+                                    DCSBIOS.Send(str);
+                                    dial1SendCount++;
+                                    Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 1);
+                                }
+                                Reset(ref dial1Timeout);
+                            }
+                        }
+                        else
+                        {
+                            dial3OkTime = DateTime.Now.Ticks;
+                        }
+
+                        if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 2)
+                        {
+                            //"Race" condition detected?
+                            dial1SendCount = 0;
+                            dial2SendCount = 0;
+                            dial3SendCount = 0;
+                            Thread.Sleep(5000);
+                        }
+                        Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
+
+
+                    }
+                    while (IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime));
+                    SwapCockpitStandbyFrequencyDataLink4();
+                    ShowFrequenciesOnPanel();
+                }
+                catch (ThreadAbortException)
+                { }
+                catch (Exception ex)
+                {
+                    Common.LogError(56873, ex);
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _rioLink4ThreadNowSynching, 0);
+            }
+            Interlocked.Add(ref _doUpdatePanelLCD, 1);
+        }
+
 
 
         private void SendPilotTacanToDCSBIOS()
@@ -1034,7 +1212,7 @@ namespace NonVisuals
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-                            else if (_upperButtonPressedAndDialRotated)
+                            else if (_upperButtonPressed)
                             {
                                 SetPZ69DisplayBytesInteger(ref bytes, (int)_rioLink4CockpitPowerSwitch, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -1163,6 +1341,39 @@ namespace NonVisuals
 
                             SetPZ69DisplayBytes(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBytes(ref bytes, double.Parse(_rioTacanTensFrequencyStandby.ToString() + _rioTacanOnesFrequencyStandby.ToString() + "." + _rioTacanXYStandby.ToString(), NumberFormatInfoFullDisplay), 1, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            break;
+                        }
+                    case CurrentF14RadioMode.LINK4:
+                        {
+                            if (_rioLink4CockpitPowerSwitch == 0) // OFF
+                            {
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            }
+                            else if (_lowerButtonPressed)
+                            {
+                                SetPZ69DisplayBytesInteger(ref bytes, (int)_rioLink4CockpitPowerSwitch, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            }
+                            else
+                            {
+                                var frequencyAsString = "";
+                                lock (_lockRioLink4HundredsDial)
+                                {
+                                    lock (_lockRioLink4TensDial)
+                                    {
+                                        lock (_lockRioLink4OnesDial)
+                                        {
+                                            frequencyAsString =
+                                                _rioLink4HundredsCockpitFrequency.ToString() +
+                                                _rioLink4TensCockpitFrequency.ToString() +
+                                                _rioLink4OnesCockpitFrequency;
+                                        }
+                                    }
+                                }
+                                SetPZ69DisplayBytesString(ref bytes, frequencyAsString.ToString(), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesString(ref bytes, _rioLink4HundredsFrequencyStandby.ToString() + _rioLink4TensAndOnesFrequencyStandby.ToString().PadLeft(2, '0'), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                            }
                             break;
                         }
                     case CurrentF14RadioMode.NOUSE:
@@ -2264,7 +2475,7 @@ namespace NonVisuals
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    _currentUpperRadioMode = CurrentF14RadioMode.LINK4;
+                                    _currentLowerRadioMode = CurrentF14RadioMode.LINK4;
                                 }
                                 break;
                             }
@@ -2567,6 +2778,35 @@ namespace NonVisuals
             }
         }
 
+        private void SwapCockpitStandbyFrequencyDataLink4()
+        {
+            lock (_lockRioLink4HundredsDial)
+            {
+                lock (_lockRioLink4TensDial)
+                {
+                    lock (_lockRioLink4OnesDial)
+                    {
+                        _rioLink4HundredsFrequencyStandby = _rioLink4SavedCockpitHundredsFrequency;
+                        _rioLink4TensAndOnesFrequencyStandby = _rioLink4SavedCockpitTensAndOnesFrequency;
+                    }
+                }
+            }
+        }
+
+        private void SaveLink4Frequency()
+        {
+            lock (_lockRioLink4HundredsDial)
+            {
+                lock (_lockRioLink4TensDial)
+                {
+                    lock (_lockRioLink4OnesDial)
+                    {
+                        _rioLink4SavedCockpitHundredsFrequency = (int)_rioLink4HundredsCockpitFrequency;
+                        _rioLink4SavedCockpitTensAndOnesFrequency = int.Parse(_rioLink4TensCockpitFrequency.ToString(CultureInfo.InvariantCulture) + _rioLink4OnesCockpitFrequency.ToString(CultureInfo.InvariantCulture));
+                    }
+                }
+            }
+        }
 
         private void SavePilotCockpitFrequencyTacan()
         {
@@ -2635,6 +2875,11 @@ namespace NonVisuals
         private bool PilotTacanNowSyncing()
         {
             return Interlocked.Read(ref _pilotTacanThreadNowSynching) > 0;
+        }
+
+        private bool Link4NowSyncing()
+        {
+            return Interlocked.Read(ref _rioLink4ThreadNowSynching) > 0;
         }
 
         private bool RioTacanNowSyncing()
