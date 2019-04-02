@@ -102,10 +102,10 @@ namespace ClassLibraryCommon
         [Description("Mi-8MT")]
         Mi8,
         [Description("MiG-15bis")]
-        Mig15Bis,
+        Mig15bis,
         [Description("MiG-19P")]
         Mig19P,
-        [Description("MiG-21bis")]
+        [Description("MiG-21Bis")]
         Mig21Bis,
         [Description("NS430")]
         NS430,
