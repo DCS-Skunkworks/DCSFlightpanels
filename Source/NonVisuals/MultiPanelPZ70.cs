@@ -91,6 +91,10 @@ namespace NonVisuals
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
+            if (SettingsLoading)
+            {
+                return;
+            }
             UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
             {
@@ -127,6 +131,7 @@ namespace NonVisuals
 
         public override void ImportSettings(List<string> settings)
         {
+            SettingsLoading = true;
             //Clear current bindings
             ClearSettings();
             if (settings == null || settings.Count == 0)
@@ -164,6 +169,7 @@ namespace NonVisuals
                     }
                 }
             }
+            SettingsLoading = false;
             OnSettingsApplied();
         }
 

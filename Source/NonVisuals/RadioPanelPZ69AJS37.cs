@@ -10,6 +10,7 @@ namespace NonVisuals
 {
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
+        //TODO Check again how to retrieve frequencies (SRS)
         private HashSet<RadioPanelKnobAJS37> _radioPanelKnobs = new HashSet<RadioPanelKnobAJS37>();
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
         private CurrentAJS37RadioMode _currentLowerRadioMode = CurrentAJS37RadioMode.FR22;
