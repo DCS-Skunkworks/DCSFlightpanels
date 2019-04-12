@@ -77,6 +77,8 @@ namespace ClassLibraryCommon
         AV8BNA,
         [Description("Bf-109K-4")]
         Bf109,
+        [Description("C-101CC")]
+        C101CC,
         [Description("Christen Eagle I")]
         ChristenEagle,
         [Description("F-5E-3")]
