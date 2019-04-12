@@ -14,6 +14,7 @@ namespace DCS_BIOS
         private static DCSAirframe _airframe;
         private static string _jsonDirectory;
         private static List<DCSBIOSControl> _dcsbiosControls = new List<DCSBIOSControl>();
+        private static bool _listOnce = true;
 
         public static void Reset()
         {
@@ -32,7 +33,26 @@ namespace DCS_BIOS
                 try
                 {
                     LoadControls();
+                    if (_listOnce)
+                    {
+                        /*_listOnce = false;
+                        foreach (var dcsbiosControl in _dcsbiosControls)
+                        {
+                            if (dcsbiosControl.outputs.Count > 0)
+                            {
+                                Console.WriteLine(dcsbiosControl.identifier + " " + dcsbiosControl.outputs[0].address);
+                            }
+                            else
+                            {
+                                Console.WriteLine(dcsbiosControl.identifier);
+                            }
+                        }*/
+                    }
                     //PrintDuplicateControlIdentifiers(_dcsbiosControls, true);
+                    if (!_dcsbiosControls.Exists(controlObject => controlObject.identifier.Equals(controlId)))
+                    {
+                        throw new Exception("Error, control " + controlId + " does not exist. (" + Airframe.GetDescription() + ".json");
+                    }
                     return _dcsbiosControls.Single(controlObject => controlObject.identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
@@ -195,6 +215,7 @@ namespace DCS_BIOS
                         }
 
                         var jsonData = DCSBIOSJsonFormatterVersion1.Format(text);
+//Console.WriteLine(jsonData);
                         //Debug.Print("\n--------------------------\n" + jsonData);
                         /*var newfile = File.CreateText(@"e:\temp\regexp_debug_output.txt.txt");
                         newfile.Write(jsonData);

@@ -654,6 +654,9 @@
     <Resource Include="Images\F-14 ANARC-182 RIO.png" />
     <Resource Include="Images\F-14 TACAN.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\F-14 RIO Datalink.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

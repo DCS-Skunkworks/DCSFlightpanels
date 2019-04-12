@@ -151,6 +151,7 @@ namespace NonVisuals
         private bool _forwardPanelEvent;
         private static readonly object _lockObject = new object();
         private static readonly List<SaitekPanel> _saitekPanels = new List<SaitekPanel>();
+        private bool _settingsLoading = false;
         /*
          * IMPORTANT STUFF
          */
@@ -332,6 +333,12 @@ namespace NonVisuals
         {
             get => _isDirty;
             set => _isDirty = value;
+        }
+
+        public bool SettingsLoading
+        {
+            get => _settingsLoading;
+            set => _settingsLoading = value;
         }
 
         public SaitekPanelsEnum TypeOfSaitekPanel
