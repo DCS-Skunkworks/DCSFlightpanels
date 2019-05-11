@@ -1115,7 +1115,7 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69M2000C.StartUp() : " + ex.Message);
-                SetLastException(ex);
+                Common.LogError(321654, ex);
             }
         }
 

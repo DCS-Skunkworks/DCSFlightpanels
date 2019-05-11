@@ -43,7 +43,7 @@ namespace NonVisuals
         private volatile uint _hfRadioChannelCCockpitButton = 0;
         private volatile uint _hfRadioChannelDCockpitButton = 0;
         private int _hfRadioChannelPresetDialSkipper;
-        private const string _hfRadioLightSwitchCommand = "RCTRL_DIM TOGGLE\n";
+        private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
         private readonly object _lockHFRadioModeDialObject1 = new object();
         private volatile uint _hfRadio1ModeCockpitDialPosition = 1;
         private volatile uint _hfRadio2ModeCockpitDialPosition = 1;
@@ -332,7 +332,7 @@ namespace NonVisuals
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.Send(_hfRadioLightSwitchCommand);
+                                            DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
                                     break;
@@ -343,7 +343,7 @@ namespace NonVisuals
                                     {
                                         if (radioPanelKnob.IsOn)
                                         {
-                                            DCSBIOS.Send(_hfRadioLightSwitchCommand);
+                                            DCSBIOS.Send(HF_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
                                     }
                                     break;
@@ -419,7 +419,7 @@ namespace NonVisuals
                                                 //MODE
                                                 if (!SkipHFRadioModeDialChange())
                                                 {
-                                                    var s = GetHFRadioModeStringCommand(true);
+                                                    var s = GetHFRadioModeStringCommand(false);
                                                     if (!string.IsNullOrEmpty(s))
                                                     {
                                                         DCSBIOS.Send(s);
@@ -914,7 +914,6 @@ namespace NonVisuals
                 _hfRadioChannelDPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_D");
                 _hfRadioMode1DialPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_T_MODE1");
                 _hfRadioMode2DialPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_T_MODE2");
-
                 //COM2
                 _iffBIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_B");
                 _iffDIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
@@ -929,7 +928,7 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69SpitfireLFMkIX.StartUp() : " + ex.Message);
-                SetLastException(ex);
+                Common.LogError(321654, ex);
             }
         }
 

@@ -1923,7 +1923,7 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69Ka50.StartUp() : " + ex.Message);
-                SetLastException(ex);
+                Common.LogError(321654, ex);
             }
         }
 

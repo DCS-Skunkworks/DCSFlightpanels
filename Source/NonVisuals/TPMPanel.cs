@@ -53,7 +53,7 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 Common.DebugP("TPMPanel.StartUp() : " + ex.Message);
-                SetLastException(ex);
+                Common.LogError(321654, ex);
             }
         }
 
