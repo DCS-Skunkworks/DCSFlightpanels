@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Threading;
@@ -589,6 +590,15 @@ namespace NonVisuals
         {
             try
             {
+
+                if (IgnoreSwitchButtonOnce)
+                {
+                    //Don't do anything on the very first button press as the panel sends ALL
+                    //switches when it is manipulated the first time
+                    //This would cause unintended sync.
+                    IgnoreSwitchButtonOnce = false;
+                    return;
+                }
                 Common.DebugP("Entering Mi-8 Radio SendFrequencyToDCSBIOS()");
                 if (!DataHasBeenReceivedFromDCSBIOS)
                 {
@@ -766,7 +776,10 @@ namespace NonVisuals
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 1));
-
+/*Debug.Write("Desired position Dial 1 : " + desiredPositionDial1X);
+Debug.Write("Desired position Dial 2 : " + desiredPositionDial2X);
+Debug.Write("Desired position Dial 3 : " + desiredPositionDial3X);
+Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                         do
                         {
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
@@ -835,7 +848,7 @@ namespace NonVisuals
                                     if (_r863ManualCockpitFreq2DialPos != desiredPositionDial2X)
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
-                                        str = R863ManualFreq2DialCommand + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
+                                        str = R863ManualFreq2DialCommand + "DEC\n";// + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial2SendCount++;
@@ -856,7 +869,7 @@ namespace NonVisuals
                                     if (_r863ManualCockpitFreq3DialPos != desiredPositionDial3X)
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
-                                        str = R863ManualFreq3DialCommand + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
+                                        str = R863ManualFreq3DialCommand + "DEC\n";// + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial3SendCount++;

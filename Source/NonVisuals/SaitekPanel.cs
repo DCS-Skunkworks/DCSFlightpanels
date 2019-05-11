@@ -143,6 +143,7 @@ namespace NonVisuals
 
         private int _vendorId;
         private int _productId;
+        private bool _ignoreSwitchButtonOnce = true;
         private Exception _lastException;
         private readonly object _exceptionLockObject = new object();
         private SaitekPanelsEnum _typeOfSaitekPanel;
@@ -254,6 +255,12 @@ namespace NonVisuals
         {
             get => HIDSkeletonBase.InstanceId;
             set => HIDSkeletonBase.InstanceId = value;
+        }
+
+        protected bool IgnoreSwitchButtonOnce
+        {
+            get => _ignoreSwitchButtonOnce;
+            set => _ignoreSwitchButtonOnce = value;
         }
 
         public string Hash => _hash;

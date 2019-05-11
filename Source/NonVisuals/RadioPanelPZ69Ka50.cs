@@ -332,6 +332,15 @@ namespace NonVisuals
         {
             try
             {
+
+                if (IgnoreSwitchButtonOnce)
+                {
+                    //Don't do anything on the very first button press as the panel sends ALL
+                    //switches when it is manipulated the first time
+                    //This would cause unintended sync.
+                    IgnoreSwitchButtonOnce = false;
+                    return;
+                }
                 Common.DebugP("Entering Ka-50 Radio SendFrequencyToDCSBIOS()");
                 if (!DataHasBeenReceivedFromDCSBIOS)
                 {

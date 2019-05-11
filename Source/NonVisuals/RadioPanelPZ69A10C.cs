@@ -18,8 +18,6 @@ namespace NonVisuals
         private bool _lowerButtonPressed = false;
         private bool _upperButtonPressedAndDialRotated = false;
         private bool _lowerButtonPressedAndDialRotated = false;
-        private bool _ignoreUpperButtonOnce = true;
-        private bool _ignoreLowerButtonOnce = true;
 
         /*A-10C AN/ARC-186(V) VHF AM Radio 1*/
         //Large dial 116-151 [step of 1]
@@ -576,23 +574,25 @@ namespace NonVisuals
 
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsA10C knob)
         {
+            if (IgnoreSwitchButtonOnce)
+            {
+                //Don't do anything on the very first button press as the panel sends ALL
+                //switches when it is manipulated the first time
+                //This would cause unintended sync.
+                IgnoreSwitchButtonOnce = false;
+                return;
+            }
+
             if (!DataHasBeenReceivedFromDCSBIOS)
             {
                 //Don't start communication with DCS-BIOS before we have had a first contact from "them"
                 return;
             }
+
             switch (knob)
             {
                 case RadioPanelPZ69KnobsA10C.UPPER_FREQ_SWITCH:
                     {
-                        if (_ignoreUpperButtonOnce)
-                        {
-                            //Don't do anything on the very first button press as the panel sends ALL
-                            //switches when it is manipulated the first time
-                            //This would cause unintended sync.
-                            _ignoreUpperButtonOnce = false;
-                            return;
-                        }
                         switch (_currentUpperRadioMode)
                         {
                             case CurrentA10RadioMode.VHFAM:
@@ -646,14 +646,6 @@ namespace NonVisuals
                     }
                 case RadioPanelPZ69KnobsA10C.LOWER_FREQ_SWITCH:
                     {
-                        if (_ignoreLowerButtonOnce)
-                        {
-                            //Don't do anything on the very first button press as the panel sends ALL
-                            //switches when it is manipulated the first time
-                            //This would cause unintended sync.
-                            _ignoreLowerButtonOnce = false;
-                            return;
-                        }
                         switch (_currentLowerRadioMode)
                         {
                             case CurrentA10RadioMode.VHFAM:

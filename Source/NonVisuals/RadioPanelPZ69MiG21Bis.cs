@@ -182,6 +182,15 @@ namespace NonVisuals
 
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis knob)
         {
+
+            if (IgnoreSwitchButtonOnce)
+            {
+                //Don't do anything on the very first button press as the panel sends ALL
+                //switches when it is manipulated the first time
+                //This would cause unintended sync.
+                IgnoreSwitchButtonOnce = false;
+                return;
+            }
             if (!DataHasBeenReceivedFromDCSBIOS)
             {
                 //Don't start communication with DCS-BIOS before we have had a first contact from "them"
