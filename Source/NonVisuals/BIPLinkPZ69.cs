@@ -9,6 +9,7 @@ namespace NonVisuals
         /*
          This class binds a physical switch on the PZ55 with a BIP LED
          */
+        public PZ70DialPosition DialPosition { get; set; }
         private RadioPanelPZ69KnobsEmulator _panelPZ69Knob;
 
         public override void ImportSettings(string settings)

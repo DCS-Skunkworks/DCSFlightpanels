@@ -1467,7 +1467,7 @@ namespace DCSFlightpanels
                 foreach (var keyBinding in _radioPanelPZ69.KeyBindingsHashSet)
                 {
                     var textBox = GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
-                    if (keyBinding.OSKeyPress != null)
+                    if (keyBinding.OSKeyPress != null && (keyBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || keyBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
                     {
                         ((TagDataClassPZ69Full)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
                     }

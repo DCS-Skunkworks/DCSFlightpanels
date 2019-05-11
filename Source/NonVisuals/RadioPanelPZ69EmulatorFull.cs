@@ -335,20 +335,38 @@ namespace NonVisuals
 
                     foreach (var keyBinding in _keyBindings)
                     {
-                        if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
+                        if (keyBinding.DialPosition == _pz69UpperDialPosition || keyBinding.DialPosition == _pz69LowerDialPosition)
                         {
-                            keyBinding.OSKeyPress.Execute();
-                            break;
+                            if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
+                            {
+                                keyBinding.OSKeyPress.Execute();
+                                break;
+                            }
                         }
                     }
                     foreach (var bipLinkPZ55 in _bipLinks)
                     {
-                        if (bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && bipLinkPZ55.WhenTurnedOn == radioPanelKey.IsOn)
+                        //if (bipLinkPZ55.DialPosition == _pz69UpperDialPosition || keyBinding.DialPosition == _pz69LowerDialPosition)
+                        //{
+                            if (bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && bipLinkPZ55.WhenTurnedOn == radioPanelKey.IsOn)
+                            {
+                                bipLinkPZ55.Execute();
+                                break;
+                            }
+                        //}
+                    }
+                    foreach (var dcsBiosBinding in _dcsBiosBindings)
+                    {
+                        if (dcsBiosBinding.DialPosition == _pz69UpperDialPosition || dcsBiosBinding.DialPosition == _pz69LowerDialPosition)
                         {
-                            bipLinkPZ55.Execute();
-                            break;
+                            if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && dcsBiosBinding.WhenTurnedOn == radioPanelKey.IsOn)
+                            {
+                                dcsBiosBinding.SendDCSBIOSCommands();
+                                break;
+                            }
                         }
                     }
+
                 }
             }
 
