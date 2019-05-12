@@ -222,12 +222,11 @@ namespace NonVisuals
             try
             {
 
-                if (IgnoreSwitchButtonOnce)
+                if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH))
                 {
                     //Don't do anything on the very first button press as the panel sends ALL
                     //switches when it is manipulated the first time
                     //This would cause unintended sync.
-                    IgnoreSwitchButtonOnce = false;
                     return;
                 }
                 Common.DebugP("Entering F-86F Radio SendFrequencyToDCSBIOS()");

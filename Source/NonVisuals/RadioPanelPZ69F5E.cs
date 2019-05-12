@@ -324,12 +324,11 @@ namespace NonVisuals
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF5E knob)
         {
 
-            if (IgnoreSwitchButtonOnce)
+            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsF5E.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsF5E.LOWER_FREQ_SWITCH))
             {
                 //Don't do anything on the very first button press as the panel sends ALL
                 //switches when it is manipulated the first time
                 //This would cause unintended sync.
-                IgnoreSwitchButtonOnce = false;
                 return;
             }
             if (!DataHasBeenReceivedFromDCSBIOS)

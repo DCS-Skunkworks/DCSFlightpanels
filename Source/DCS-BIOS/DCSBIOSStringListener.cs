@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using ClassLibraryCommon;
 // ReSharper disable All
@@ -74,33 +75,62 @@ namespace DCS_BIOS
 
         public void Add(uint address, string str1, string str2)
         {
-            // when an update is received:
-            //
-            //if (_receivedAddresses.Contains(address))
+            //Debug.WriteLine("_address : " + _address + " _length : " + _length);
+            //Debug.WriteLine("address : " + address + " str1 : " + str1 + " str2 : " + str2);
+
             if (address >= _address && address < _address + _length)
             {
-                //Common.DebugP("DCSBIOSString Add()" + address + ", string1 = " + str1 + ", string2 = " + str2);
                 _receivedAddresses.Remove(address);
 
-                uint offset;
-                if (_address == address)
+                uint offset = address - _address;
+                //Debug.WriteLine("offset is : " + offset);
+                for (int i = 0; i < _internalBuffer.Length; i++)
                 {
-                    offset = 0;
+                    //Debug.WriteLine("_internalBuffer[" + i + "] = " + _internalBuffer[i]);
                 }
-                else
+                if (!string.IsNullOrEmpty(str1))
                 {
-                    offset = address - _address;
+                    _internalBuffer[offset] = str1;
+                    //Debug.WriteLine("str1 : " + str1 + " added to buffer[" + offset + "]");
                 }
 
-                _internalBuffer[offset] = str1;
-                if (_internalBuffer.Length - 1 >= offset + 1)
+                //Debug.WriteLine("_internalBuffer.Length : " + _internalBuffer.Length + " offset : " + (offset));
+                if (offset + 1 < _internalBuffer.Length && str2 != null)
                 {
+                    // index = 5, length = 6
                     //For example odd length strings. Only first endian byte should then be read.
                     _internalBuffer[offset + 1] = str2;
+                    //Debug.WriteLine("str2 : " + str2 + " added to buffer[" + (offset) + "]");
                 }
-                //Common.DebugP("DCSBIOSString Add() Internal buffer now " + string.Join("", _internalBuffer));
+                //Debug.WriteLine("DCSBIOSString Add() Internal buffer now " + string.Join("", _internalBuffer));
+                //Debug.WriteLine("*******************************************************");
             }
+        }
 
+        public void Add(uint address, string str2)
+        {
+            //Debug.WriteLine("_address : " + _address + " _length : " + _length);
+
+            if (address >= _address && address < _address + _length)
+            {
+                _receivedAddresses.Remove(address);
+
+                uint offset = address - _address;
+                //Debug.WriteLine("offset is : " + offset);
+                for (int i = 0; i < _internalBuffer.Length; i++)
+                {
+                    //Debug.WriteLine("_internalBuffer[" + i + "] = " + _internalBuffer[i]);
+                }
+                if (!string.IsNullOrEmpty(str2))
+                {
+                    _internalBuffer[offset] = str2;
+                    //Debug.WriteLine("str2 : " + str2 + " added to buffer[" + offset + "]");
+                }
+
+                //Debug.WriteLine("_internalBuffer.Length : " + _internalBuffer.Length + " offset : " + (offset));
+                //Debug.WriteLine("DCSBIOSString Add() Internal buffer now " + string.Join("", _internalBuffer));
+                //Debug.WriteLine("*******************************************************");
+            }
         }
 
         public bool IsComplete
@@ -230,8 +260,8 @@ namespace DCS_BIOS
                             //kvp.Value.Address == start address for the string
                             if (kvp.Value.IsComplete)
                             {
+                                //Once it is "complete" then just send it each time, do not reset it as there will be no updates from DCS-BIOS unless cockpit value changes.
                                 OnDCSBIOSStringReceived(this, new DCSBIOSStringDataEventArgs() { Address = kvp.Value.Address, StringData = kvp.Value.StringValue });
-                                //kvp.Value.Reset();
                             }
                         }
                     }
@@ -249,7 +279,7 @@ namespace DCS_BIOS
                                 //41 = A
                                 //42 = B
                                 var hex = Convert.ToString(data, 16);
-
+                                //Debug.WriteLine("hex : " + hex);
 
                                 /*
                                 25.7.2018
@@ -274,7 +304,15 @@ namespace DCS_BIOS
                                 var secondChar = _iso8859_1.GetString(secondByte);
                                 //Common.DebugP("**********Received (0x" + data.ToString("x") + ") ****************");
                                 //Common.DebugP("**********Received data:(0x" + data.ToString("x") + ") following from DCS : 1st : " + firstChar + "(0x" + firstByte[0].ToString("x") + "), 2nd " + secondChar + "(0x" + secondByte[0].ToString("x") + ") ****************");
-                                kvp.Value.Add(address, firstChar, secondChar);
+                                if (!string.IsNullOrEmpty(firstChar))
+                                {
+                                    kvp.Value.Add(address, firstChar, secondChar);
+                                }
+                                else
+                                {
+                                    kvp.Value.Add(address, secondChar);
+                                }
+                                ////Debug.WriteLine("firstChar : " + firstChar + " secondChar : " + secondChar);
                             }
                             catch (Exception ex)
                             {
@@ -284,6 +322,11 @@ namespace DCS_BIOS
                     }
                 }
             }
+
+            /*foreach (var dcsBiosString in _dcsBiosStrings)
+            {
+                //Debug.WriteLine("Key : " + dcsBiosString.Key + " Value : " + dcsBiosString.Value.StringValue);
+            }*/
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)

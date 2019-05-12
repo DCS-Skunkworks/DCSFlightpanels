@@ -172,12 +172,11 @@ namespace NonVisuals
             try
             {
 
-                if (IgnoreSwitchButtonOnce)
+                if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsAJS37.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsAJS37.LOWER_FREQ_SWITCH))
                 {
                     //Don't do anything on the very first button press as the panel sends ALL
                     //switches when it is manipulated the first time
                     //This would cause unintended sync.
-                    IgnoreSwitchButtonOnce = false;
                     return;
                 }
                 Common.DebugP("Entering AJS-37 Radio SendFrequencyToDCSBIOS()");

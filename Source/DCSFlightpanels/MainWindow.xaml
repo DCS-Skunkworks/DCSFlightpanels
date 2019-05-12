@@ -28,8 +28,12 @@
                 <MenuItem Name ="MenuItemErrorLog" Header="Open error log" Click="MenuItemErrorLog_OnClick" />
                 <MenuItem Name ="MenuItemDebugLog" Header="Open debug log" Click="MenuItemDebugLog_OnClick" />
                 <MenuItem Name ="MenuItemFormulaSandbox" Header="Formula sandbox" Click="MenuItemFormulaSandbox_OnClick" />
-                <MenuItem Name ="MenuItemSettings" Header="Settings" Click="MenuItemSettings_OnClick" />
+                <Separator/>
                 <MenuItem Name ="MenuItemUSBPowerManagement" Header="Disable USB Power Management" Click="MenuItemUSBPowerManagement_OnClick" />
+                <Separator/>
+                <MenuItem Name ="MenuItemReportBug" Header="Report Bug" Click="MenuItemReportBug_OnClick" />
+                <Separator/>
+                <MenuItem Name ="MenuItemSettings" Header="Settings" Click="MenuItemSettings_OnClick" />
             </MenuItem>
             <MenuItem Header="Extras">
                 <MenuItem Name ="MenuItemUseNS430" Header="Load NS 430" Click="MenuItemUseNS430_OnClick" IsChecked="false"/>

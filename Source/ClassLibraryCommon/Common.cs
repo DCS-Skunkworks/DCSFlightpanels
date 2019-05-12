@@ -33,6 +33,9 @@ namespace ClassLibraryCommon
 
         private static int _operationLevelFlag = 0;
 
+
+        public static  bool UseGenericRadio = false;
+
         public static void ValidateFlag()
         {
             if (IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
@@ -189,7 +192,7 @@ namespace ClassLibraryCommon
                 }
                 else
                 {
-                    Console.WriteLine(str);
+                    Debug.WriteLine(str);
                 }
             }
         }

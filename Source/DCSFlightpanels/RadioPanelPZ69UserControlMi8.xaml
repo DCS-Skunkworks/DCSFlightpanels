@@ -118,8 +118,8 @@
         </StackPanel>
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="8">
             <Label Name="LabelAirframe" Content="Mi-8TV" FontSize="30" FontWeight="Bold" Grid.Column="6" Grid.Row="0"/>
-            <Label Content="R836" FontWeight="Bold"/>
-            <Image Height="200" Source="/DCSFlightpanels;component/Images/Mi8_r836.png" />
+            <Label Content="R863" FontWeight="Bold"/>
+            <Image Height="200" Source="/DCSFlightpanels;component/Images/mi8_r863_freq_panel.png" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="8" Grid.RowSpan="6" >
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

@@ -206,6 +206,9 @@
     <Compile Include="BIPLinkWindow.xaml.cs">
       <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReportBugWindow.xaml.cs">
+      <DependentUpon>ReportBugWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SequenceWindow.xaml.cs">
       <DependentUpon>SequenceWindow.xaml</DependentUpon>
     </Compile>
@@ -384,6 +387,10 @@
     <Page Include="BIPLinkWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ReportBugWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SequenceWindow.xaml">
       <SubType>Designer</SubType>
@@ -656,6 +663,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\F-14 RIO Datalink.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mi8_r863_freq_panel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icons8-bug-26.png" />
+    <Resource Include="Images\icons8-bug-52.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

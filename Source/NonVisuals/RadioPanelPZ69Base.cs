@@ -16,6 +16,7 @@ namespace NonVisuals
 
     public abstract class RadioPanelPZ69Base : SaitekPanel
     {
+        private byte _ignoreSwitchButtonCounter = 3;
         protected bool FirstReportHasBeenRead = false;
         protected byte[] OldRadioPanelValue = { 0, 0, 0 };
         protected byte[] NewRadioPanelValue = { 0, 0, 0 };
@@ -559,6 +560,15 @@ namespace NonVisuals
             set => _frequencyKnobSensitivity = value;
         }
 
+        protected bool IgnoreSwitchButtonOnce()
+        {
+            //Counter for both upper ACT/STBY and lower
+            if (_ignoreSwitchButtonCounter > 0)
+            {
+                _ignoreSwitchButtonCounter--;
+            }
 
+            return _ignoreSwitchButtonCounter > 0;
+        }
     }
 }

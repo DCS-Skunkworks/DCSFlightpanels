@@ -9,15 +9,18 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.RowSpan="3">
+        <StackPanel Grid.Row="0" >
             <Label Content="Module:" Margin="5,0,0,0"/>
-            <ComboBox Name="ComboBoxAirframe" ToolTip="Cockpit controls from DCS-BIOS will be loaded based on the selected airframe" HorizontalAlignment="Left" Margin="10,0,10,0" Width="150" SelectedIndex="0" SelectionChanged="ComboBoxAirframe_OnSelectionChanged">
-            </ComboBox>
+            <ComboBox Name="ComboBoxAirframe" ToolTip="Cockpit controls from DCS-BIOS will be loaded based on the selected airframe" HorizontalAlignment="Left" Margin="10,0,10,0" Width="150" SelectedIndex="0" SelectionChanged="ComboBoxAirframe_OnSelectionChanged"/>
+        </StackPanel>
+        <StackPanel Name="StackPanelUseGenericRadio" Grid.Row="1" Visibility="Collapsed">
+            <CheckBox Name="CheckBoxUseGenericRadio" IsChecked="False" Content="Use Generic Radio Panel" Margin="10,10,0,0" Checked="CheckBoxUseGenericRadio_OnChecked" Unchecked="CheckBoxUseGenericRadio_OnUnchecked" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" >
             <Label Margin="0,15,0,0">
                 <TextBlock TextWrapping="Wrap">
-            For keyboard emulation only (Switchpanel PZ55, Multipanel PZ70, TPM) choose "KeyEmulator".
+                    For keyboard emulation only (Switchpanel PZ55, Multipanel PZ70, TPM) choose "KeyEmulator".
                 </TextBlock>
-
             </Label>
         </StackPanel>
         <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />

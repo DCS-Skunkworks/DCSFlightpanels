@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
@@ -356,7 +357,7 @@ namespace NonVisuals
                         // "100.000" - "399.9*75*"
                         //Read only the first char
                         var tmp = _r863ManualCockpitFreq4DialPos;
-                        _r863ManualCockpitFreq4DialPos = uint.Parse(e.StringData.Substring(5, 1));
+                        _r863ManualCockpitFreq4DialPos = uint.Parse(e.StringData.Substring(5, 2));
                         Common.DebugP("Just read R-863 dial 4 position: " + _r863ManualCockpitFreq4DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq4DialPos)
                         {
@@ -590,13 +591,11 @@ namespace NonVisuals
         {
             try
             {
-
-                if (IgnoreSwitchButtonOnce)
+                if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH)) 
                 {
                     //Don't do anything on the very first button press as the panel sends ALL
                     //switches when it is manipulated the first time
                     //This would cause unintended sync.
-                    IgnoreSwitchButtonOnce = false;
                     return;
                 }
                 Common.DebugP("Entering Mi-8 Radio SendFrequencyToDCSBIOS()");
@@ -626,10 +625,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentMi8RadioMode.R828_PRESETS:
-                                {
-                                    DCSBIOS.Send(knobIsOn ? R828GainControlCommandOn : R828GainControlCommandOff);
-                                    break;
-                                }
+                                    {
+                                        DCSBIOS.Send(knobIsOn ? R828GainControlCommandOn : R828GainControlCommandOff);
+                                        break;
+                                    }
                                 case CurrentMi8RadioMode.ADF_ARK9:
                                     {
                                         break;
@@ -664,10 +663,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentMi8RadioMode.R828_PRESETS:
-                                {
-                                    DCSBIOS.Send(knobIsOn ? R828GainControlCommandOn : R828GainControlCommandOff);
-                                    break;
-                                }
+                                    {
+                                        DCSBIOS.Send(knobIsOn ? R828GainControlCommandOn : R828GainControlCommandOff);
+                                        break;
+                                    }
                                 case CurrentMi8RadioMode.ADF_ARK9:
                                     {
                                         break;
@@ -742,7 +741,7 @@ namespace NonVisuals
                         var dial3SendCount = 0;
                         var dial4SendCount = 0;
 
-                        var frequencyAsString = _r863ManualBigFrequencyStandby.ToString() + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(2, '0');
+                        var frequencyAsString = _r863ManualBigFrequencyStandby.ToString() + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
                         frequencyAsString = frequencyAsString.PadRight(6, '0');
                         Common.DebugP("Standby frequencyAsString is " + frequencyAsString);
                         //Frequency selector 1      R863_FREQ1
@@ -772,14 +771,15 @@ namespace NonVisuals
                         //#2 = 1   (position = value)
                         //#3 = 9   (position = value)
                         //#4 = 5
-                        desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));//Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(frequencyAsString.Substring(0, 2)));
+                        desiredPositionDial1X = int.Parse(frequencyAsString.Substring(0, 2));//Array.IndexOf(_r863ManualFreq1DialValues, int.Parse(xfrequencyAsString.Substring(0, 2)));
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
-                        desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 1));
-/*Debug.Write("Desired position Dial 1 : " + desiredPositionDial1X);
-Debug.Write("Desired position Dial 2 : " + desiredPositionDial2X);
-Debug.Write("Desired position Dial 3 : " + desiredPositionDial3X);
-Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
+                        desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
+Debug.WriteLine(" frequencyAsString : " + frequencyAsString);
+Debug.WriteLine("Desired position Dial 1 : " + desiredPositionDial1X);
+Debug.WriteLine("Desired position Dial 2 : " + desiredPositionDial2X);
+Debug.WriteLine("Desired position Dial 3 : " + desiredPositionDial3X);
+Debug.WriteLine("Desired position Dial 4 : " + desiredPositionDial4X);
                         do
                         {
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
@@ -848,7 +848,7 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                     if (_r863ManualCockpitFreq2DialPos != desiredPositionDial2X)
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
-                                        str = R863ManualFreq2DialCommand + "DEC\n";// + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
+                                        str = R863ManualFreq2DialCommand + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial2SendCount++;
@@ -869,7 +869,7 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                     if (_r863ManualCockpitFreq3DialPos != desiredPositionDial3X)
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
-                                        str = R863ManualFreq3DialCommand + "DEC\n";// + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
+                                        str = R863ManualFreq3DialCommand + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial3SendCount++;
@@ -882,32 +882,15 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                             {
                                 dial3OkTime = DateTime.Now.Ticks;
                             }
-                            var desiredPositionDial4 = 0;
+
                             if (Interlocked.Read(ref _r863ManualDial4WaitingForFeedback) == 0)
                             {
-                                if (desiredPositionDial4X == 0)
-                                {
-                                    desiredPositionDial4 = 0;
-                                }
-                                else if (desiredPositionDial4X == 2)
-                                {
-                                    desiredPositionDial4 = 5;
-                                }
-                                else if (desiredPositionDial4X == 5)
-                                {
-                                    desiredPositionDial4 = 5;
-                                }
-                                else if (desiredPositionDial4X == 7)
-                                {
-                                    desiredPositionDial4 = 0;
-                                }
-                                //      "00" "25" "50" "75", only "00" and "50" used.
-                                //Pos     0    1    2    3
 
                                 lock (_lockR863ManualDialsObject4)
                                 {
-                                    Common.DebugP("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4);
-                                    if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4)
+                                    Common.DebugP("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
+Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
+                                    if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R863ManualFreq4DialCommand + "INC\n";
@@ -916,7 +899,7 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
                                     }
-                                    else if (_r863ManualCockpitFreq4DialPos > desiredPositionDial4)
+                                    else if (_r863ManualCockpitFreq4DialPos > desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R863ManualFreq4DialCommand + "DEC\n";
@@ -933,7 +916,13 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                             {
                                 dial4OkTime = DateTime.Now.Ticks;
                             }
-                            if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 10 || dial4SendCount > 5)
+                            //if (dial1SendCount > 12 || dial2SendCount > 10 || dial3SendCount > 10 || dial4SendCount > 5)
+                            /* ATTN ! 12.05.2019
+                             * This radio is problematic, sometimes it goes bonkers, DCS-BIOS doesn't see the update from DCS
+                             * and everything goes wrong after that. Been like this from start.
+                             * Added big send counts here just to make sure it has time to find the correct position.
+                             */
+                            if (dial1SendCount > 40 || dial2SendCount > 20 || dial3SendCount > 20 || dial4SendCount > 10)
                             {
                                 //"Race" condition detected?
                                 dial1SendCount = 0;
@@ -979,7 +968,7 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                 Common.DebugP("Entering Mi-8 Radio SwapCockpitStandbyFrequencyR863Manual()");
                 Common.DebugP("_r863ManualBigFrequencyStandby  " + _r863ManualBigFrequencyStandby);
                 Common.DebugP("_r863ManualSavedCockpitBigFrequency  " + _r863ManualSavedCockpitBigFrequency);
-                Common.DebugP("_r863ManualSmallFrequencyStandby  " + _r863ManualSmallFrequencyStandby);
+                Common.DebugP("x_r863ManualSmallFrequencyStandby  " + _r863ManualSmallFrequencyStandby);
                 Common.DebugP("_r863ManualSavedCockpitSmallFrequency  " + _r863ManualSavedCockpitSmallFrequency);
                 _r863ManualBigFrequencyStandby = _r863ManualSavedCockpitBigFrequency;
                 _r863ManualSmallFrequencyStandby = _r863ManualSavedCockpitSmallFrequency;
@@ -1662,13 +1651,13 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                     {
                                         case CurrentMi8RadioMode.R863_MANUAL:
                                             {
-                                                if (_r863ManualSmallFrequencyStandby >= 95)
+                                                if (_r863ManualSmallFrequencyStandby >= 975)
                                                 {
                                                     //At max value
                                                     _r863ManualSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby + 5;
+                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby + 25;
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.R863_PRESET:
@@ -1729,10 +1718,10 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                                 if (_r863ManualSmallFrequencyStandby <= 0)
                                                 {
                                                     //At min value
-                                                    _r863ManualSmallFrequencyStandby = 95;
+                                                    _r863ManualSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 5;
+                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 25;
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.R863_PRESET:
@@ -1994,13 +1983,13 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                     {
                                         case CurrentMi8RadioMode.R863_MANUAL:
                                             {
-                                                if (_r863ManualSmallFrequencyStandby >= 95)
+                                                if (_r863ManualSmallFrequencyStandby >= 975)
                                                 {
                                                     //At max value
                                                     _r863ManualSmallFrequencyStandby = 0;
                                                     break;
                                                 }
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby + 5;
+                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby + 25;
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.R863_PRESET:
@@ -2061,10 +2050,10 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                                 if (_r863ManualSmallFrequencyStandby <= 0)
                                                 {
                                                     //At min value
-                                                    _r863ManualSmallFrequencyStandby = 95;
+                                                    _r863ManualSmallFrequencyStandby = 975;
                                                     break;
                                                 }
-                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 5;
+                                                _r863ManualSmallFrequencyStandby = _r863ManualSmallFrequencyStandby - 25;
                                                 break;
                                             }
                                         case CurrentMi8RadioMode.R863_PRESET:
@@ -2207,10 +2196,11 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                 }
                                 lock (_lockR863ManualDialsObject4)
                                 {
-                                    frequencyAsString = frequencyAsString + GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
+                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2, '0');
+                                    //GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
                                 }
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentMi8RadioMode.R863_PRESET:
@@ -2384,10 +2374,10 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                                 lock (_lockR863ManualDialsObject4)
                                 {
 
-                                    frequencyAsString = frequencyAsString + GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
+                                    frequencyAsString = frequencyAsString + _r863ManualCockpitFreq4DialPos.ToString().PadLeft(2, '0');//GetR863ManualDialFrequencyForPosition(_r863ManualCockpitFreq4DialPos);
                                 }
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r863ManualBigFrequencyStandby + "." + _r863ManualSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentMi8RadioMode.R863_PRESET:
@@ -2943,339 +2933,51 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
                 Common.DebugP("Entering Mi-8 Radio GetCommandDirectionFor0To9Dials()");
                 const string inc = "INC\n";
                 const string dec = "DEC\n";
-                switch (desiredDialPosition)
+
+                var tmpActualDialPositionUp = actualDialPosition;
+                var upCount = actualDialPosition;
+                do
                 {
-                    case 0:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 1:
-                                case 2:
-                                case 3:
-                                case 4:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //-4 DEC
-                                        return dec;
-                                    }
-                                case 5:
-                                case 6:
-                                case 7:
-                                case 8:
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //5 INC
-                                        return inc;
-                                    }
-                            }
-                            break;
-                        }
-                    case 1:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 1:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 6:
-                                case 7:
-                                case 8:
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                            }
-                            break;
-                        }
-                    case 2:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                case 1:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 2:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 3:
-                                case 4:
-                                case 5:
-                                case 6:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 7:
-                                case 8:
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                            }
-                            break;
-                        }
-                    case 3:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                case 1:
-                                case 2:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 3:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 4:
-                                case 5:
-                                case 6:
-                                case 7:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 8:
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                            }
-                            break;
-                        }
-                    case 4:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                case 1:
-                                case 2:
-                                case 3:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 4:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 5:
-                                case 6:
-                                case 7:
-                                case 8:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                            }
-                            break;
-                        }
-                    case 5:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                case 1:
-                                case 2:
-                                case 3:
-                                case 4:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 5:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 6:
-                                case 7:
-                                case 8:
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                            }
-                            break;
-                        }
-                    case 6:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 1:
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 6:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 7:
-                                case 8:
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                            }
-                            break;
-                        }
-                    case 7:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                case 1:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                case 6:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 7:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 8:
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                            }
-                            break;
-                        }
-                    case 8:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                case 1:
-                                case 2:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 3:
-                                case 4:
-                                case 5:
-                                case 6:
-                                case 7:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 8:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                            }
-                            break;
-                        }
-                    case 9:
-                        {
-                            switch (actualDialPosition)
-                            {
-                                case 0:
-                                case 1:
-                                case 2:
-                                case 3:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return dec;
-                                    }
-                                case 4:
-                                case 5:
-                                case 6:
-                                case 7:
-                                case 8:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        return inc;
-                                    }
-                                case 9:
-                                    {
-                                        Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionFor0To9Dials()");
-                                        //Do nothing
-                                        return null;
-                                    }
-                            }
-                            break;
-                        }
+                    Common.DebugP("tmpActualDialPositionUp " + tmpActualDialPositionUp + " desiredDialPosition " + desiredDialPosition);
+
+                    if (tmpActualDialPositionUp == 9)
+                    {
+                        tmpActualDialPositionUp = 0;
+                    }
+                    else
+                    {
+                        tmpActualDialPositionUp++;
+                    }
+
+                    upCount++;
+                } while (tmpActualDialPositionUp != desiredDialPosition);
+
+                tmpActualDialPositionUp = actualDialPosition;
+                var downCount = actualDialPosition;
+                do
+                {
+                    Common.DebugP("tmpActualDialPositionUp " + tmpActualDialPositionUp + " desiredDialPosition " + desiredDialPosition);
+                    
+                    if (tmpActualDialPositionUp == 0)
+                    {
+                        tmpActualDialPositionUp = 9;
+                    }
+                    else
+                    {
+                        tmpActualDialPositionUp--;
+                    }
+
+                    downCount++;
+                } while (tmpActualDialPositionUp != desiredDialPosition);
+
+
+                Common.DebugP("GetCommandDirectionFor0To9Dials()");
+                if (upCount < downCount)
+                {
+                    return inc;
                 }
+
+                return dec;
             }
             catch (Exception ex)
             {
@@ -3283,7 +2985,7 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
             }
             throw new Exception("Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
-
+        /*
         private string GetR863ManualDialFrequencyForPosition(uint position)
         {
             try
@@ -3322,7 +3024,7 @@ Debug.Write("Desired position Dial 4 : " + desiredPositionDial4X);*/
             }
             return "0";
         }
-
+        */
         private bool SkipR863PresetDialChange()
         {
             try

@@ -79,6 +79,7 @@
     <Compile Include="DCSBIOSBindingPZ70.cs" />
     <Compile Include="DCSBIOSBindingPZ55.cs" />
     <Compile Include="DcsOutputAndColorBinding.cs" />
+    <Compile Include="GenericRadioPanelKnob.cs" />
     <Compile Include="HIDHandler.cs" />
     <Compile Include="IGlobalHandler.cs" />
     <Compile Include="IProfileHandlerListener.cs" />

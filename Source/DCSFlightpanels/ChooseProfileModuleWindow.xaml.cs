@@ -13,6 +13,7 @@ namespace DCSFlightpanels
     public partial class ChooseProfileModuleWindow : Window
     {
         private DCSAirframe _dcsAirframe = DCSAirframe.A10C;
+        private bool _useGenericRadio = false;
 
         public ChooseProfileModuleWindow()
         {
@@ -85,6 +86,13 @@ namespace DCSFlightpanels
             try
             {
                 SetAirframe();
+                if (_dcsAirframe != DCSAirframe.FC3_CD_SRS &&
+                    _dcsAirframe != DCSAirframe.KEYEMULATOR &&
+                    _dcsAirframe != DCSAirframe.KEYEMULATOR_SRS)
+                {
+                    //User has chosen a DCS-BIOS compatible module
+                    StackPanelUseGenericRadio.Visibility = Visibility.Visible;
+                }
             }
             catch (Exception ex)
             {
@@ -97,6 +105,30 @@ namespace DCSFlightpanels
             get { return _dcsAirframe; }
         }
 
+        public bool UseGenericRadio => _useGenericRadio;
 
+        private void CheckBoxUseGenericRadio_OnChecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _useGenericRadio = true;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2060, ex);
+            }
+        }
+
+        private void CheckBoxUseGenericRadio_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _useGenericRadio = false;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2060, ex);
+            }
+        }
     }
 }

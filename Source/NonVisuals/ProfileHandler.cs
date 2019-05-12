@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -151,6 +152,7 @@ namespace NonVisuals
             _isNewProfile = true;
             ClearAll();
             Airframe = DCSAirframe.NOFRAMELOADEDYET;//Just a default that doesn't remove non emulation panels from the GUI
+            Common.UseGenericRadio = false;
             //This sends info to all to clear their settings
             OnClearPanelSettings?.Invoke(this);
         }
@@ -268,9 +270,14 @@ namespace NonVisuals
                         }
                         DCSBIOSControlLocator.Airframe = _airframe;
                         DCSBIOSControlLocator.JSONDirectory = _jsonDirectory;
-                    }else if (fileLine.StartsWith("OperationLevelFlag="))
+                    }
+                    else if (fileLine.StartsWith("OperationLevelFlag="))
                     {
                         Common.SetOperationModeFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", "").Trim()));
+                    }
+                    else if (fileLine.StartsWith("UseGenericRadio="))
+                    {
+                        Common.UseGenericRadio = (bool.Parse(fileLine.Replace("UseGenericRadio=", "").Trim()));
                     }
                     else if (!fileLine.StartsWith("#") && fileLine.Length > 2)
                     {
@@ -529,6 +536,8 @@ namespace NonVisuals
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
                 stringBuilder.AppendLine("Airframe=" + _airframe);
                 stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
+                stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio);
+                
                 foreach (var s in _listPanelSettingsData)
                 {
                     stringBuilder.AppendLine(s);
@@ -625,6 +634,7 @@ namespace NonVisuals
                 _isDirty = true;
             }
         }
+
     }
 
     public class AirframeEventArgs : EventArgs

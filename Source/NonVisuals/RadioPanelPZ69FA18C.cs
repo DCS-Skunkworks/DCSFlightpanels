@@ -24,8 +24,8 @@ namespace NonVisuals
         /*FA-18C COMM1 radio*/
         //
         //
-        private const string COMM1ChannelInc = "UFC_COMM1_CHANNEL_SELECT INC\n";
-        private const string COMM1ChannelDec = "UFC_COMM1_CHANNEL_SELECT DEC\n";
+        private const string COMM1ChannelInc = "UFC_COMM1_CHANNEL_SELECT +3200\n";
+        private const string COMM1ChannelDec = "UFC_COMM1_CHANNEL_SELECT -3200\n";
         private const string COMM1VolInc = "UFC_COMM1_VOL +4000\n";
         private const string COMM1VolDec = "UFC_COMM1_VOL -4000\n";
         private const string COMM1PullPress = "UFC_COMM1_PULL INC\n";
@@ -46,8 +46,8 @@ namespace NonVisuals
         /*FA-18C COMM2 radio*/
         //
         //
-        private const string COMM2ChannelInc = "UFC_COMM2_CHANNEL_SELECT INC\n";
-        private const string COMM2ChannelDec = "UFC_COMM2_CHANNEL_SELECT DEC\n";
+        private const string COMM2ChannelInc = "UFC_COMM2_CHANNEL_SELECT +3200\n";
+        private const string COMM2ChannelDec = "UFC_COMM2_CHANNEL_SELECT -3200\n";
         private const string COMM2VolInc = "UFC_COMM2_VOL +4000\n";
         private const string COMM2VolDec = "UFC_COMM2_VOL -4000\n";
         private const string COMM2PullPress = "UFC_COMM2_PULL INC\n";
@@ -220,12 +220,11 @@ namespace NonVisuals
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsFA18C knob)   // Send changes to DCSbios when press the UPPER_FREQ_SWITCH or LOWER_FREQ_SWITCH
         {
 
-            if (IgnoreSwitchButtonOnce)
+            if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsFA18C.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsFA18C.LOWER_FREQ_SWITCH))
             {
                 //Don't do anything on the very first button press as the panel sends ALL
                 //switches when it is manipulated the first time
                 //This would cause unintended sync.
-                IgnoreSwitchButtonOnce = false;
                 return;
             }
             if (!DataHasBeenReceivedFromDCSBIOS)
