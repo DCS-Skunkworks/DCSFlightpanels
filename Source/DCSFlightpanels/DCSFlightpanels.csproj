@@ -206,8 +206,8 @@
     <Compile Include="BIPLinkWindow.xaml.cs">
       <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReportBugWindow.xaml.cs">
-      <DependentUpon>ReportBugWindow.xaml</DependentUpon>
+    <Compile Include="BugReportWindow.xaml.cs">
+      <DependentUpon>BugReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SequenceWindow.xaml.cs">
       <DependentUpon>SequenceWindow.xaml</DependentUpon>
@@ -388,7 +388,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ReportBugWindow.xaml">
+    <Page Include="BugReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

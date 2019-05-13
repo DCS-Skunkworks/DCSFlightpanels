@@ -1,4 +1,4 @@
-﻿<Window x:Class="DCSFlightpanels.ReportBugWindow"
+﻿<Window x:Class="DCSFlightpanels.BugReportWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,7 +10,8 @@
         Width="1000"
         Icon="Images/icons8-bug-26.png"
         WindowStartupLocation="CenterScreen"
-        Loaded="ReportBugWindow_OnLoaded">
+        Loaded="ReportBugWindow_OnLoaded"
+        Closing="BugReportWindow_OnClosing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="12*" />
@@ -27,14 +28,17 @@
                 <LineBreak/>
                 <Run Text="It will help speed up the process and lessen the risk "/>
                 <LineBreak/>
-                <Run Text="that the developers need to ask followup questions"/>
+                <Run Text="that the developers need to ask follow-up questions"/>
                 <LineBreak/>
                 <LineBreak/>
-                <Run Text="Once you have everything filled out,"/>
+                <Run Text="Click [Copy] and post in either the ED forum or on Discord"/>
                 <LineBreak/>
-                <Run Text="click [Copy] and post the clipboard in the "/>
                 <Hyperlink RequestNavigate="Hyperlink_OnRequestNavigate" NavigateUri="https://forums.eagle.ru/showthread.php?t=137670&amp;page=999">
-                    support thread
+                    ED Forum support thread
+                </Hyperlink>
+                <LineBreak/>
+                <Hyperlink RequestNavigate="Hyperlink_OnRequestNavigate" NavigateUri="https://discord.gg/spcgpEA">
+                    Discord support channel
                 </Hyperlink>
             </TextBlock>
             <Image Source="Images/icons8-bug-52.png" Height="60"></Image>
@@ -42,7 +46,7 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <StackPanel Margin="10,0,10,0">
                 <Label Content="DCS World Installed"></Label>
-                <ComboBox Name="ComboBoxDCSInstallation" SelectedValuePath="Content" Width="200" IsReadOnly="False" SelectionChanged="ComboBoxDCSInstallation_OnSelectionChanged">
+                <ComboBox Name="ComboBoxDCSInstallation" SelectedValuePath="Content" Width="200" IsReadOnly="False" >
                     <ComboBoxItem>DCS World</ComboBoxItem>
                     <ComboBoxItem>DCS World OpenBeta</ComboBoxItem>
                     <ComboBoxItem>Both</ComboBoxItem>
@@ -51,11 +55,11 @@
             </StackPanel>
             <StackPanel Margin="10,0,10,0">
                 <Label Content="DCS Module"></Label>
-                <ComboBox Name="ComboBoxDCSModule" Width="200" IsReadOnly="False" SelectionChanged="ComboBoxDCSModule_OnSelectionChanged"/>
+                <ComboBox Name="ComboBoxDCSModule" Width="200" IsReadOnly="False" />
             </StackPanel>
             <StackPanel Margin="10,0,10,0">
                 <Label Content="Saitek Panel"></Label>
-                <ComboBox Name="ComboBoxSaitekPanel" SelectedValuePath="Content" Width="200" IsReadOnly="False" SelectionChanged="ComboBoxSaitekPanel_OnSelectionChanged">
+                <ComboBox Name="ComboBoxSaitekPanel" SelectedValuePath="Content" Width="200" IsReadOnly="False" >
                     <ComboBoxItem>PZ55 Switch Panel</ComboBoxItem>
                     <ComboBoxItem>PZ70 Multi Panel</ComboBoxItem>
                     <ComboBoxItem>PZ69 Radio Panel</ComboBoxItem>
@@ -65,7 +69,7 @@
             </StackPanel>
             <StackPanel Margin="10,0,10,0">
                 <Label Content="Has it worked before?"></Label>
-                <ComboBox Name="ComboBoxOldProblem" SelectedValuePath="Content" Width="200" IsReadOnly="False" SelectionChanged="ComboBoxOldProblem_OnSelectionChanged">
+                <ComboBox Name="ComboBoxOldProblem" SelectedValuePath="Content" Width="200" IsReadOnly="False" >
                     <ComboBoxItem>Yes</ComboBoxItem>
                     <ComboBoxItem>No</ComboBoxItem>
                     <ComboBoxItem>Don't Know</ComboBoxItem>
@@ -75,7 +79,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <StackPanel Margin="10,0,10,0">
                 <Label Content="DCS-BIOS Status"></Label>
-                <ComboBox Name="ComboBoxDCSBIOSStatus" SelectedValuePath="Content" Width="200" IsReadOnly="False" SelectionChanged="ComboBoxDCSBIOSStatus_OnSelectionChanged">
+                <ComboBox Name="ComboBoxDCSBIOSStatus" SelectedValuePath="Content" Width="200" IsReadOnly="False" >
                     <ComboBoxItem>Works fine</ComboBoxItem>
                     <ComboBoxItem>Doesn't work</ComboBoxItem>
                     <ComboBoxItem>I don't use DCS-BIOS</ComboBoxItem>
@@ -116,8 +120,19 @@
                            MaxLines="100" 
                            VerticalAlignment="Stretch" 
                            HorizontalAlignment="Stretch" 
-                           Name="TextBlockErrorlog" 
+                           Name="TextBlockErrorLog" 
                            Margin="10,10,10,10"/>
+                <GroupBox.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock>
+                                <Run Text="Only copy contents from the error log"/>
+                                <LineBreak/>
+                                <Run Text="that is related to this particular problem"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </ToolTip>
+                </GroupBox.ToolTip>
             </GroupBox>
         </DockPanel>
         <DockPanel  Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" LastChildFill="True">
@@ -132,13 +147,23 @@
                        Margin="10,10,10,10"/>
             </GroupBox>
         </DockPanel>
+
         <StackPanel Grid.Row="5" HorizontalAlignment="Right" Orientation="Horizontal">
-            <StackPanel VerticalAlignment="Center" Margin="5,5,5,5">
-                <Button Width="180" Name="ButtonCopy" Height="24" Content="Copy to Clipboard" Click="ButtonCopy_OnClick"/>
-            </StackPanel>
-            <StackPanel VerticalAlignment="Center" Margin="25,5,5,5">
-                <Button Width="80" Name="ButtonClose" Height="24" Content="Close" Click="ButtonClose_OnClick"/>
-            </StackPanel>
+            <GroupBox Header="Formatted for ED forum" Margin="5,5,5,5">
+                <StackPanel VerticalAlignment="Center" >
+                    <Button Width="180" Name="ButtonForumFormatCopy" Height="24" Content="Copy to Clipboard" Click="ButtonForumFormatCopy_OnClick"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Formatted for Discord" Margin="5,5,5,5">
+                <StackPanel VerticalAlignment="Center" >
+                    <Button Width="180" Name="ButtonDiscordFormatCopy" Height="24" Content="Copy to Clipboard" Click="ButtonDiscordFormatCopy_OnClick"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="" Margin="75,5,5,5">
+                <StackPanel VerticalAlignment="Center" >
+                    <Button Width="80" Name="ButtonClose" Height="24" Content="Close"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </Grid>
 </Window>

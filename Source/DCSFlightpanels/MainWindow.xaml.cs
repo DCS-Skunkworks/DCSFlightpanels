@@ -1793,7 +1793,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var bugWindow = new ReportBugWindow();
+                var bugWindow = new BugReportWindow();
                 bugWindow.ShowDialog();
             }
             catch (Exception ex)

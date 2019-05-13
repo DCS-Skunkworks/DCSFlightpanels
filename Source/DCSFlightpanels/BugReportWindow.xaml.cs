@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
@@ -10,14 +11,14 @@ using CommonClassLibraryJD;
 namespace DCSFlightpanels
 {
     /// <summary>
-    /// Interaction logic for ReportBugWindow.xaml
+    /// Interaction logic for BugReportWindow.xaml
     /// </summary>
-    public partial class ReportBugWindow : Window
+    public partial class BugReportWindow : Window
     {
         private string _isThisDCSBIOSRelated = "";
         private string _relatedCockpitControl = "";
 
-        public ReportBugWindow()
+        public BugReportWindow()
         {
             InitializeComponent();
         }
@@ -101,7 +102,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private string GatherData()
+        private string GatherDataForForum()
         {
             try
             {
@@ -114,16 +115,55 @@ namespace DCSFlightpanels
                 result.AppendLine("Has it worked before? : " + (string)ComboBoxOldProblem.SelectedValue);
                 result.AppendLine("DCS-BIOS Status? : " + (string)ComboBoxDCSBIOSStatus.SelectedValue);
                 result.AppendLine("Is this DCS-BIOS related? : " + _isThisDCSBIOSRelated);
+                result.AppendLine(TextBoxProblemDCSBIOS.Text);
                 result.AppendLine("Related cockpit control/device/gauge? : " + _relatedCockpitControl);
+                result.AppendLine(TextBoxProblemControl.Text);
                 result.AppendLine("[/CODE]");
                 result.AppendLine("\n");
                 result.AppendLine("[CODE]");
-                result.AppendLine(TextBlockErrorlog.Text);
+                result.AppendLine(TextBlockErrorLog.Text);
                 result.AppendLine("[/CODE]");
                 result.AppendLine("\n");
                 result.AppendLine("[CODE]");
                 result.AppendLine(TextBlockExplanation.Text);
                 result.AppendLine("[/CODE]");
+                return result.ToString();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20297, ex);
+            }
+            return null;
+        }
+
+
+        private string GatherDataForDiscord()
+        {
+            try
+            {
+                var result = new StringBuilder();
+                result.AppendLine("**Bug Report from DCSFP**");
+                result.AppendLine("```**DCS Installation : **" + (string)ComboBoxDCSInstallation.SelectedValue);
+                result.AppendLine("**DCS Module : **" + (string)ComboBoxDCSModule.SelectedValue);
+                result.AppendLine("**Saitek Panel : **" + (string)ComboBoxSaitekPanel.SelectedValue);
+                result.AppendLine("**Has it worked before? : **" + (string)ComboBoxOldProblem.SelectedValue);
+                result.AppendLine("**DCS-BIOS Status? : **" + (string)ComboBoxDCSBIOSStatus.SelectedValue);
+                result.AppendLine("**Is this DCS-BIOS related? : **" + _isThisDCSBIOSRelated);
+                if (!string.IsNullOrEmpty(TextBoxProblemDCSBIOS.Text))
+                {
+                    result.AppendLine(TextBoxProblemDCSBIOS.Text);
+                }
+                result.AppendLine("**Related cockpit control/device/gauge? : **" + _relatedCockpitControl);
+                if (!string.IsNullOrEmpty(TextBoxProblemControl.Text))
+                {
+                    result.AppendLine(TextBoxProblemControl.Text);
+                }
+                result.AppendLine("```\n");
+                result.AppendLine("**Error log**");
+                result.AppendLine("```cs" + TextBlockErrorLog.Text + "```");
+                result.AppendLine("\n");
+                result.AppendLine("**Description**");
+                result.AppendLine("```cs" + TextBlockExplanation.Text + "```");
                 return result.ToString();
             }
             catch (Exception ex)
@@ -139,7 +179,6 @@ namespace DCSFlightpanels
             {
                 return;
             }
-            ComboBoxDCSModule.SelectionChanged -= ComboBoxDCSModule_OnSelectionChanged;
             ComboBoxDCSModule.Items.Clear();
             foreach (DCSAirframe airframe in Enum.GetValues(typeof(DCSAirframe)))
             {
@@ -148,10 +187,7 @@ namespace DCSFlightpanels
                     ComboBoxDCSModule.Items.Add(EnumEx.GetDescription(airframe));
                 }
             }
-
-            ComboBoxDCSModule.Items.Add("Not applicable");
-            ComboBoxDCSModule.SelectedIndex = 0;
-            ComboBoxDCSModule.SelectionChanged += ComboBoxDCSModule_OnSelectionChanged;
+            ComboBoxDCSModule.Items.Insert(0,"Not applicable");
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -159,34 +195,14 @@ namespace DCSFlightpanels
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
-
-        private void ComboBoxDCSModule_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void ComboBoxSaitekPanel_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void ComboBoxOldProblem_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void ComboBoxDCSInstallation_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void ButtonCopy_OnClick(object sender, RoutedEventArgs e)
+        
+        private void ButtonForumFormatCopy_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (CheckDataIsOk())
                 {
-                    var bugReport = GatherData();
+                    var bugReport = GatherDataForForum();
                     if (!string.IsNullOrEmpty(bugReport))
                     {
                         Clipboard.SetText(bugReport);
@@ -205,27 +221,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(20297, ex);
             }
         }
-
-        private void ButtonClose_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Close Bug Report?", "Close", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.Yes)
-                {
-                    Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(20297, ex);
-            }
-        }
-
-        private void ComboBoxDCSBIOSStatus_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
+        
         private void RadioButtonDCSBIOSRelatedYes_OnChecked(object sender, RoutedEventArgs e)
         {
             _isThisDCSBIOSRelated = "Yes";
@@ -254,6 +250,53 @@ namespace DCSFlightpanels
         private void RadioButtonCockpitControlDontKnow_OnChecked(object sender, RoutedEventArgs e)
         {
             _relatedCockpitControl = "I don't know";
+        }
+
+        private void ButtonDiscordFormatCopy_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CheckDataIsOk())
+                {
+                    var bugReport = GatherDataForDiscord();
+                    if (!string.IsNullOrEmpty(bugReport) && bugReport.Length >= 2000)
+                    {
+                        MessageBox.Show("Report is too long. Discord has a size limit of 2000 characters.\nPlease modify your text.\nCurrent length is " + bugReport.Length + " characters.", "Report too large", MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                        return;
+                    }
+                    if (!string.IsNullOrEmpty(bugReport))
+                    {
+                        Clipboard.SetText(bugReport);
+                        MessageBox.Show("Bug report copied to Clipboard.\n\nHead on over to the Discord server paste the contents in the bug channel.", "Bug Report OK", MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Bug report creation failed", "Bug Report Failed", MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20297, ex);
+            }
+        }
+
+        private void BugReportWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Close Bug Report?", "Close", MessageBoxButton.YesNo, MessageBoxImage.Exclamation) == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20297, ex);
+            }
         }
     }
 }
