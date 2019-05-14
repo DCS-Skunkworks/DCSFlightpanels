@@ -38,7 +38,7 @@ namespace NonVisuals
         ARC = 4
     }
 
-    public class RadioPanelKnobMiG21Bis
+    public class RadioPanelKnobMiG21Bis : ISaitekPanelKnob
     {
         public RadioPanelKnobMiG21Bis(int group, int mask, bool isOn, RadioPanelPZ69KnobsMiG21Bis radioPanelPZ69Knob)
         {
@@ -56,33 +56,10 @@ namespace NonVisuals
 
         public RadioPanelPZ69KnobsMiG21Bis RadioPanelPZ69Knob { get; set; }
 
-        public string ExportString()
-        {
-            return "RadioPanelKnob{" + Enum.GetName(typeof(RadioPanelPZ69KnobsMiG21Bis), RadioPanelPZ69Knob) + "}";
-        }
-
-        public void ImportString(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (RadioPanelKnob)");
-            }
-            if (!str.StartsWith("RadioPanelKnob{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (RadioPanelKnob) >" + str + "<");
-            }
-            //RadioPanelKnob{SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
-            RadioPanelPZ69Knob = (RadioPanelPZ69KnobsMiG21Bis)Enum.Parse(typeof(RadioPanelPZ69KnobsMiG21Bis), dataString.Trim());
-        }
-
-        public static HashSet<RadioPanelKnobMiG21Bis> GetRadioPanelKnobs()
+        public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
             //true means clockwise turn
-            var result = new HashSet<RadioPanelKnobMiG21Bis>();
+            var result = new HashSet<ISaitekPanelKnob>();
             //Group 0
             result.Add(new RadioPanelKnobMiG21Bis(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelInc));
             result.Add(new RadioPanelKnobMiG21Bis(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsMiG21Bis.UpperSmallFreqWheelDec));

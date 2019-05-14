@@ -10,7 +10,6 @@ namespace NonVisuals
 {
     public class RadioPanelPZ69SpitfireLFMkIX : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
-        private HashSet<RadioPanelKnobSpitfireLFMkIX> _radioPanelKnobs = new HashSet<RadioPanelKnobSpitfireLFMkIX>();
         private CurrentSpitfireLFMkIXRadioMode _currentUpperRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
         private CurrentSpitfireLFMkIXRadioMode _currentLowerRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
 
@@ -94,7 +93,7 @@ namespace NonVisuals
         {
             try
             {
-                
+
                 UpdateCounter(e.Address, e.Data);
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
@@ -804,103 +803,12 @@ namespace NonVisuals
         }
 
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            try
-            {
-                try
-                {
-                    Common.DebugP("Entering Spitfire LF Mk. IX Radio OnReport()");
-                    //if (IsAttached == false) { return; }
-
-                    if (report.Data.Length == 3)
-                    {
-                        Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                        Array.Copy(report.Data, NewRadioPanelValue, 3);
-                        var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                        PZ69KnobChanged(hashSet);
-                        OnSwitchesChanged(hashSet);
-                        FirstReportHasBeenRead = true;
-                        if (1 == 2 && Common.DebugOn)
-                        {
-                            var stringBuilder = new StringBuilder();
-                            for (var i = 0; i < report.Data.Length; i++)
-                            {
-                                stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                            }
-                            Common.DebugP(stringBuilder.ToString());
-                            if (hashSet.Count > 0)
-                            {
-                                Common.DebugP("\nFollowing knobs has been changed:\n");
-                                foreach (var radioPanelKnob in hashSet)
-                                {
-                                    var knob = (RadioPanelKnobSpitfireLFMkIX)radioPanelKnob;
-                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobSpitfireLFMkIX)radioPanelKnob));
-                                }
-                            }
-                        }
-                        Common.DebugP("\r\nDone!\r\n");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-                try
-                {
-                    if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                    {
-                        Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                        HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(83012, ex);
-            }
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio OnReport()");
+            PZ69KnobChanged(hashSet);
         }
 
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-            try
-            {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio GetHashSetOfChangedKnobs()");
-
-
-                for (var i = 0; i < 3; i++)
-                {
-                    var oldByte = oldValue[i];
-                    var newByte = newValue[i];
-
-                    foreach (var radioPanelKnob in _radioPanelKnobs)
-                    {
-                        if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                        {
-                            radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                            result.Add(radioPanelKnob);
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(83013, ex);
-            }
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio GetHashSetOfChangedKnobs()");
-            return result;
-        }
-
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {
@@ -919,10 +827,7 @@ namespace NonVisuals
                 _iffDIFFDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
 
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -963,7 +868,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobSpitfireLFMkIX.GetRadioPanelKnobs();
+            _saitekPanelKnobs = RadioPanelKnobSpitfireLFMkIX.GetRadioPanelKnobs();
         }
 
         private static bool FlagValue(byte[] currentValue, RadioPanelKnobSpitfireLFMkIX radioPanelKnob)

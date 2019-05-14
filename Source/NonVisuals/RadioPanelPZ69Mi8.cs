@@ -13,7 +13,6 @@ namespace NonVisuals
 {
     public class RadioPanelPZ69Mi8 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
-        private HashSet<RadioPanelKnobMi8> _radioPanelKnobs = new HashSet<RadioPanelKnobMi8>();
         private CurrentMi8RadioMode _currentUpperRadioMode = CurrentMi8RadioMode.R863_MANUAL;
         private CurrentMi8RadioMode _currentLowerRadioMode = CurrentMi8RadioMode.R863_MANUAL;
 
@@ -591,7 +590,7 @@ namespace NonVisuals
         {
             try
             {
-                if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH)) 
+                if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsMi8.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsMi8.LOWER_FREQ_SWITCH))
                 {
                     //Don't do anything on the very first button press as the panel sends ALL
                     //switches when it is manipulated the first time
@@ -775,11 +774,11 @@ namespace NonVisuals
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
-Debug.WriteLine(" frequencyAsString : " + frequencyAsString);
-Debug.WriteLine("Desired position Dial 1 : " + desiredPositionDial1X);
-Debug.WriteLine("Desired position Dial 2 : " + desiredPositionDial2X);
-Debug.WriteLine("Desired position Dial 3 : " + desiredPositionDial3X);
-Debug.WriteLine("Desired position Dial 4 : " + desiredPositionDial4X);
+                        Debug.WriteLine(" frequencyAsString : " + frequencyAsString);
+                        Debug.WriteLine("Desired position Dial 1 : " + desiredPositionDial1X);
+                        Debug.WriteLine("Desired position Dial 2 : " + desiredPositionDial2X);
+                        Debug.WriteLine("Desired position Dial 3 : " + desiredPositionDial3X);
+                        Debug.WriteLine("Desired position Dial 4 : " + desiredPositionDial4X);
                         do
                         {
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
@@ -889,7 +888,7 @@ Debug.WriteLine("Desired position Dial 4 : " + desiredPositionDial4X);
                                 lock (_lockR863ManualDialsObject4)
                                 {
                                     Common.DebugP("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
-Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
+                                    Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
                                     if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
@@ -2539,100 +2538,9 @@ Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4Di
         }
 
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            try
-            {
-                try
-                {
-                    Common.DebugP("Entering Mi-8 Radio OnReport()");
-                    //if (IsAttached == false) { return; }
-
-                    if (report.Data.Length == 3)
-                    {
-                        Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                        Array.Copy(report.Data, NewRadioPanelValue, 3);
-                        var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                        PZ69KnobChanged(hashSet);
-                        OnSwitchesChanged(hashSet);
-                        FirstReportHasBeenRead = true;
-                        if (1 == 2 && Common.DebugOn)
-                        {
-                            var stringBuilder = new StringBuilder();
-                            for (var i = 0; i < report.Data.Length; i++)
-                            {
-                                stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                            }
-                            Common.DebugP(stringBuilder.ToString());
-                            if (hashSet.Count > 0)
-                            {
-                                Common.DebugP("\nFollowing knobs has been changed:\n");
-                                foreach (var radioPanelKnob in hashSet)
-                                {
-                                    var knob = (RadioPanelKnobMi8)radioPanelKnob;
-                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobMi8)radioPanelKnob));
-                                }
-                            }
-                        }
-                        Common.DebugP("\r\nDone!\r\n");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-                try
-                {
-                    if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                    {
-                        Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                        HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(78012, ex);
-            }
-            Common.DebugP("Leaving Mi-8 Radio OnReport()");
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-            try
-            {
-                Common.DebugP("Entering Mi-8 Radio GetHashSetOfChangedKnobs()");
-
-
-                for (var i = 0; i < 3; i++)
-                {
-                    var oldByte = oldValue[i];
-                    var newByte = newValue[i];
-
-                    foreach (var radioPanelKnob in _radioPanelKnobs)
-                    {
-                        if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                        {
-                            radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                            result.Add(radioPanelKnob);
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(78013, ex);
-            }
-            Common.DebugP("Leaving Mi-8 Radio GetHashSetOfChangedKnobs()");
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         public override sealed void Startup()
@@ -2673,10 +2581,7 @@ Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4Di
                 _spu7ICSSwitchDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("SPU7_L_ICS");
 
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -2717,12 +2622,7 @@ Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4Di
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobMi8.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobMi8 radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
+            _saitekPanelKnobs = RadioPanelKnobMi8.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentMi8RadioMode currentMi8RadioMode)
@@ -2957,7 +2857,7 @@ Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4Di
                 do
                 {
                     Common.DebugP("tmpActualDialPositionUp " + tmpActualDialPositionUp + " desiredDialPosition " + desiredDialPosition);
-                    
+
                     if (tmpActualDialPositionUp == 0)
                     {
                         tmpActualDialPositionUp = 9;

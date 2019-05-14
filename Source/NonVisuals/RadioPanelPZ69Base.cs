@@ -17,11 +17,6 @@ namespace NonVisuals
     public abstract class RadioPanelPZ69Base : SaitekPanel
     {
         private byte _ignoreSwitchButtonCounter = 3;
-        protected bool FirstReportHasBeenRead = false;
-        protected byte[] OldRadioPanelValue = { 0, 0, 0 };
-        protected byte[] NewRadioPanelValue = { 0, 0, 0 };
-        //protected HidDevice HidReadDevice;
-        //protected HidDevice HidWriteDevice;
         protected NumberFormatInfo NumberFormatInfoFullDisplay;
         protected NumberFormatInfo NumberFormatInfoEmpty;
         private int _frequencyKnobSensitivity;

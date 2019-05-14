@@ -16,11 +16,7 @@ namespace NonVisuals
         private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
         private HashSet<DCSBIOSBindingLCDPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ70>();
         private HashSet<KnobBindingPZ70> _knobBindings = new HashSet<KnobBindingPZ70>();
-        private HashSet<MultiPanelKnob> _multiPanelKnobs = new HashSet<MultiPanelKnob>();
         private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
-        private bool _isFirstNotification = true;
-        private readonly byte[] _oldMultiPanelValue = { 0, 0, 0 };
-        private readonly byte[] _newMultiPanelValue = { 0, 0, 0 };
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
 
         private readonly object _lcdLockObject = new object();
@@ -65,10 +61,7 @@ namespace NonVisuals
         {
             try
             {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
             }
             catch (Exception ex)
             {
@@ -238,55 +231,11 @@ namespace NonVisuals
             _bipLinks.Clear();
         }
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            //if (IsAttached == false) { return; }
-
-            if (report.Data.Length == 3)
-            {
-                Array.Copy(_newMultiPanelValue, _oldMultiPanelValue, 3);
-                Array.Copy(report.Data, _newMultiPanelValue, 3);
-                var hashSet = GetHashSetOfChangedKnobs(_oldMultiPanelValue, _newMultiPanelValue);
-
-                //Set _selectedMode and LCD button statuses
-                //and performs the actual actions for key presses
-                PZ70SwitchChanged(hashSet);
-                //Sends event
-                OnSwitchesChanged(hashSet);
-
-
-                _isFirstNotification = false;
-                if (Common.DebugOn)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing knobs has been changed:\n");
-                        foreach (var multiPanelKnob in hashSet)
-                        {
-                            Common.DebugP(((MultiPanelKnob)multiPanelKnob).MultiPanelPZ70Knob + ", value is " + FlagValue(_newMultiPanelValue, ((MultiPanelKnob)multiPanelKnob)));
-                        }
-                    }
-                }
-                Common.DebugP("\r\nDone!\r\n");
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
+            //Set _selectedMode and LCD button statuses
+            //and performs the actual actions for key presses
+            PZ70SwitchChanged(hashSet);
         }
 
         public void AddOrUpdateSingleKeyBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
@@ -536,7 +485,7 @@ namespace NonVisuals
                 IsDirtyMethod();
             }
         }
-        
+
         private void PZ70SwitchChanged(IEnumerable<object> hashSet)
         {
             foreach (var o in hashSet)
@@ -1148,53 +1097,6 @@ namespace NonVisuals
             }
         }
 
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-            for (var i = 0; i < 3; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var multiPanelKnob in _multiPanelKnobs)
-                {
-                    if (multiPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, multiPanelKnob.Mask) || _isFirstNotification))
-                    {
-                        multiPanelKnob.IsOn = FlagValue(newValue, multiPanelKnob);
-                        //Do not add OFF signals for LCD buttons. They are not used. The OFF value is a TOGGLE value and respective button's bool value must be read instead.
-                        if (!multiPanelKnob.IsOn)
-                        {
-                            switch (multiPanelKnob.MultiPanelPZ70Knob)
-                            {
-                                case MultiPanelPZ70Knobs.AP_BUTTON:
-                                case MultiPanelPZ70Knobs.HDG_BUTTON:
-                                case MultiPanelPZ70Knobs.NAV_BUTTON:
-                                case MultiPanelPZ70Knobs.IAS_BUTTON:
-                                case MultiPanelPZ70Knobs.ALT_BUTTON:
-                                case MultiPanelPZ70Knobs.VS_BUTTON:
-                                case MultiPanelPZ70Knobs.APR_BUTTON:
-                                case MultiPanelPZ70Knobs.REV_BUTTON:
-                                    {
-                                        //Do not add OFF values for these buttons! Read comment above.
-                                        break;
-                                    }
-                                default:
-                                    {
-                                        result.Add(multiPanelKnob);
-                                        break;
-                                    }
-                            }
-                        }
-                        else
-                        {
-                            result.Add(multiPanelKnob);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
         private void IsDirtyMethod()
         {
             OnSettingsChanged();
@@ -1203,14 +1105,9 @@ namespace NonVisuals
 
         private void CreateMultiKnobs()
         {
-            _multiPanelKnobs = MultiPanelKnob.GetMultiPanelKnobs();
+            _saitekPanelKnobs = MultiPanelKnob.GetMultiPanelKnobs();
         }
-
-        private static bool FlagValue(byte[] currentValue, MultiPanelKnob multiPanelKnob)
-        {
-            return (currentValue[multiPanelKnob.Group] & multiPanelKnob.Mask) > 0;
-        }
-
+        
         private void DeviceAttachedHandler()
         {
             Startup();
@@ -1244,12 +1141,6 @@ namespace NonVisuals
         {
             get => _bipLinks;
             set => _bipLinks = value;
-        }
-
-        public HashSet<MultiPanelKnob> MultiPanelKnobs
-        {
-            get => _multiPanelKnobs;
-            set => _multiPanelKnobs = value;
         }
 
         public HashSet<KnobBindingPZ70> KeyBindingsHashSet
@@ -1288,17 +1179,17 @@ namespace NonVisuals
     public class PZ70LCDButtonByteList
     {
         /*
-LCD Button Byte
-00000000
-||||||||_ AP_BUTTON
-|||||||_ HDG_BUTTON
-||||||_ NAV_BUTTON
-|||||_ IAS_BUTTON
-||||_ ALT_BUTTON
-|||_ VS_BUTTON
-||_ APR_BUTTON
-|_ REV_BUTTON
- */
+            LCD Button Byte
+            00000000
+            ||||||||_ AP_BUTTON
+            |||||||_ HDG_BUTTON
+            ||||||_ NAV_BUTTON
+            |||||_ IAS_BUTTON
+            ||||_ ALT_BUTTON
+            |||_ VS_BUTTON
+            ||_ APR_BUTTON
+            |_ REV_BUTTON
+        */
         private const byte ApMask = 1;
         private const byte HDGMask = 2;
         private const byte NAVMask = 4;

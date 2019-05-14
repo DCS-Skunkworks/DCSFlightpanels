@@ -41,7 +41,7 @@ namespace NonVisuals
         NOUSE = 32
     }
 
-    public class RadioPanelKnobKa50
+    public class RadioPanelKnobKa50 : ISaitekPanelKnob
     {
         public RadioPanelKnobKa50(int group, int mask, bool isOn, RadioPanelPZ69KnobsKa50 radioPanelPZ69Knob)
         {
@@ -58,34 +58,11 @@ namespace NonVisuals
         public bool IsOn { get; set; }
 
         public RadioPanelPZ69KnobsKa50 RadioPanelPZ69Knob { get; set; }
-
-        public string ExportString()
-        {
-            return "RadioPanelKnob{" + Enum.GetName(typeof(RadioPanelPZ69KnobsKa50), RadioPanelPZ69Knob) + "}";
-        }
-
-        public void ImportString(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (RadioPanelKnob)");
-            }
-            if (!str.StartsWith("RadioPanelKnob{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (RadioPanelKnob) >" + str + "<");
-            }
-            //RadioPanelKnob{SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
-            RadioPanelPZ69Knob = (RadioPanelPZ69KnobsKa50)Enum.Parse(typeof(RadioPanelPZ69KnobsKa50), dataString.Trim());
-        }
-
-        public static HashSet<RadioPanelKnobKa50> GetRadioPanelKnobs()
+        
+        public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
             //true means clockwise turn
-            var result = new HashSet<RadioPanelKnobKa50>();
+            var result = new HashSet<ISaitekPanelKnob>();
             //Group 0
             result.Add(new RadioPanelKnobKa50(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsKa50.UPPER_SMALL_FREQ_WHEEL_INC));
             result.Add(new RadioPanelKnobKa50(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsKa50.UPPER_SMALL_FREQ_WHEEL_DEC));

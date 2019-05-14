@@ -10,7 +10,6 @@ namespace NonVisuals
 {
     public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
-        private HashSet<RadioPanelKnobF86F> _radioPanelKnobs = new HashSet<RadioPanelKnobF86F>();
         private CurrentF86FRadioMode _currentUpperRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
         private CurrentF86FRadioMode _currentLowerRadioMode = CurrentF86FRadioMode.ARC27_PRESET;
 
@@ -1061,100 +1060,9 @@ namespace NonVisuals
         }
 
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            try
-            {
-                try
-                {
-                    Common.DebugP("Entering F-86F Radio OnReport()");
-                    //if (IsAttached == false) { return; }
-
-                    if (report.Data.Length == 3)
-                    {
-                        Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                        Array.Copy(report.Data, NewRadioPanelValue, 3);
-                        var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                        PZ69KnobChanged(hashSet);
-                        OnSwitchesChanged(hashSet);
-                        FirstReportHasBeenRead = true;
-                        if (1 == 2 && Common.DebugOn)
-                        {
-                            var stringBuilder = new StringBuilder();
-                            for (var i = 0; i < report.Data.Length; i++)
-                            {
-                                stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                            }
-                            Common.DebugP(stringBuilder.ToString());
-                            if (hashSet.Count > 0)
-                            {
-                                Common.DebugP("\nFollowing knobs has been changed:\n");
-                                foreach (var radioPanelKnob in hashSet)
-                                {
-                                    var knob = (RadioPanelKnobF86F)radioPanelKnob;
-                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobF86F)radioPanelKnob));
-                                }
-                            }
-                        }
-                        Common.DebugP("\r\nDone!\r\n");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-                try
-                {
-                    if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                    {
-                        Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                        HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(78012, ex);
-            }
-            Common.DebugP("Leaving F-86F Radio OnReport()");
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-            try
-            {
-                Common.DebugP("Entering F-86F Radio GetHashSetOfChangedKnobs()");
-
-
-                for (var i = 0; i < 3; i++)
-                {
-                    var oldByte = oldValue[i];
-                    var newByte = newValue[i];
-
-                    foreach (var radioPanelKnob in _radioPanelKnobs)
-                    {
-                        if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                        {
-                            radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                            result.Add(radioPanelKnob);
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(78013, ex);
-            }
-            Common.DebugP("Leaving F-86F Radio GetHashSetOfChangedKnobs()");
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         public override sealed void Startup()
@@ -1181,10 +1089,7 @@ namespace NonVisuals
                 _apx6ModeDcsbiosOutputCockpit = DCSBIOSControlLocator.GetDCSBIOSOutput("APX6_MASTER");
 
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -1225,12 +1130,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobF86F.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobF86F radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
+            _saitekPanelKnobs = RadioPanelKnobF86F.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentF86FRadioMode currentF86FRadioMode)

@@ -27,7 +27,7 @@ namespace NonVisuals
         REV_BUTTON = 524288
     }
 
-    public class MultiPanelKnob
+    public class MultiPanelKnob : ISaitekPanelKnob
     {
 
         public MultiPanelKnob(int group, int mask, bool isOn, MultiPanelPZ70Knobs multiPanelPZ70Knob)
@@ -69,10 +69,10 @@ namespace NonVisuals
             MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), dataString.Trim());
         }
 
-        public static HashSet<MultiPanelKnob> GetMultiPanelKnobs()
+        public static HashSet<ISaitekPanelKnob> GetMultiPanelKnobs()
         {
             //true means clockwise turn
-            var result = new HashSet<MultiPanelKnob>();
+            var result = new HashSet<ISaitekPanelKnob>();
             //Group 0
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("1", 2), true, MultiPanelPZ70Knobs.KNOB_ALT));
             result.Add(new MultiPanelKnob(0, Convert.ToInt32("10", 2), false, MultiPanelPZ70Knobs.KNOB_VS));

@@ -10,7 +10,6 @@ namespace NonVisuals
 {
     public class RadioPanelPZ69F5E : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
-        private HashSet<RadioPanelKnobF5E> _radioPanelKnobs = new HashSet<RadioPanelKnobF5E>();
         private CurrentF5ERadioMode _currentUpperRadioMode = CurrentF5ERadioMode.UHF;
         private CurrentF5ERadioMode _currentLowerRadioMode = CurrentF5ERadioMode.UHF;
 
@@ -426,36 +425,36 @@ namespace NonVisuals
             freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
             freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
             freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
-            
+
             var tmp = int.Parse(frequencyAsString.Substring(5, 1));
             switch (tmp)
             {
                 case 0:
-                {
-                    freqDial5 = 0;
-                    break;
-                }
+                    {
+                        freqDial5 = 0;
+                        break;
+                    }
                 case 2:
-                {
-                    freqDial5 = 1;
-                    break;
-                }
+                    {
+                        freqDial5 = 1;
+                        break;
+                    }
                 case 5:
-                {
-                    freqDial5 = 2;
-                    break;
-                }
+                    {
+                        freqDial5 = 2;
+                        break;
+                    }
                 case 7:
-                {
-                    freqDial5 = 3;
-                    break;
-                }
+                    {
+                        freqDial5 = 3;
+                        break;
+                    }
                 default:
-                {
-                    //Safeguard in case it is in a invalid position
-                    freqDial5 = 0;
-                    break;
-                }
+                    {
+                        //Safeguard in case it is in a invalid position
+                        freqDial5 = 0;
+                        break;
+                    }
             }
             Common.DebugP("freqDial1 =" + freqDial1);
             Common.DebugP("freqDial2 =" + freqDial2);
@@ -464,7 +463,7 @@ namespace NonVisuals
             Common.DebugP("freqDial5 =" + freqDial5);
 
             _uhfSyncThread?.Abort();
-            
+
             _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
             _uhfSyncThread.Start();
         }
@@ -1618,7 +1617,8 @@ namespace NonVisuals
             if (_uhfSmallFrequencyStandby < 0)
             {
                 _uhfSmallFrequencyStandby = 0.97;
-            }else if (_uhfSmallFrequencyStandby > 0.97)
+            }
+            else if (_uhfSmallFrequencyStandby > 0.97)
             {
                 _uhfSmallFrequencyStandby = 0.0;
             }
@@ -1861,10 +1861,7 @@ namespace NonVisuals
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
                 DCSBIOSStringListenerHandler.AddAddress(_tacanDcsbiosOutputFreqChannel.Address, 4, this); //_tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -1901,83 +1898,14 @@ namespace NonVisuals
             return dcsOutputAndColorBinding;
         }
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            //if (IsAttached == false) { return; }
-            ReportCounter++;
-            if (report.Data.Length == 3)
-            {
-                Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                Array.Copy(report.Data, NewRadioPanelValue, 3);
-                var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                PZ69KnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                FirstReportHasBeenRead = true;
-                /*if (Common.Debug && 1 == 2)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing knobs has been changed:\n");
-                        foreach (var radioPanelKnob in hashSet)
-                        {
-                            var knob = (RadioPanelKnobF5E)radioPanelKnob;
-
-                        }
-                    }
-                }
-                Common.DebugP("\r\nDone!\r\n");*/
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-
-
-            for (var i = 0; i < 3; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var radioPanelKnob in _radioPanelKnobs)
-                {
-                    if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                    {
-                        radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                        result.Add(radioPanelKnob);
-
-                    }
-                }
-            }
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobF5E.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobF5E radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
+            _saitekPanelKnobs = RadioPanelKnobF5E.GetRadioPanelKnobs();
         }
 
         private string GetUhfDialFrequencyForPosition(int dial, uint position)

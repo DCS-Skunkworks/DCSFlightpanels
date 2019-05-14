@@ -40,7 +40,7 @@ namespace NonVisuals
         NOUSE = 32
     }
 
-    public class RadioPanelKnobM2000C
+    public class RadioPanelKnobM2000C : ISaitekPanelKnob
     {
         public RadioPanelKnobM2000C(int group, int mask, bool isOn, RadioPanelPZ69KnobsM2000C radioPanelPZ69Knob)
         {
@@ -57,34 +57,11 @@ namespace NonVisuals
         public bool IsOn { get; set; }
 
         public RadioPanelPZ69KnobsM2000C RadioPanelPZ69Knob { get; set; }
-
-        public string ExportString()
-        {
-            return "RadioPanelKnob{" + Enum.GetName(typeof(RadioPanelPZ69KnobsM2000C), RadioPanelPZ69Knob) + "}";
-        }
-
-        public void ImportString(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (RadioPanelKnob)");
-            }
-            if (!str.StartsWith("RadioPanelKnob{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (RadioPanelKnob) >" + str + "<");
-            }
-            //RadioPanelKnob{SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
-            RadioPanelPZ69Knob = (RadioPanelPZ69KnobsM2000C)Enum.Parse(typeof(RadioPanelPZ69KnobsM2000C), dataString.Trim());
-        }
-
-        public static HashSet<RadioPanelKnobM2000C> GetRadioPanelKnobs()
+        
+        public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
             //true means clockwise turn
-            var result = new HashSet<RadioPanelKnobM2000C>();
+            var result = new HashSet<ISaitekPanelKnob>();
             //Group 0
             result.Add(new RadioPanelKnobM2000C(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsM2000C.UPPER_SMALL_FREQ_WHEEL_INC));
             result.Add(new RadioPanelKnobM2000C(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsM2000C.UPPER_SMALL_FREQ_WHEEL_DEC));

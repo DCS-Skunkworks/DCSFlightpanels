@@ -13,17 +13,12 @@ namespace NonVisuals
         /*
          * For a switch the TPM can have :
          * - single key binding
-         * - seqenced key binding
+         * - sequenced key binding
          * - DCS-BIOS control
          */
         private HashSet<DCSBIOSBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
-        private HashSet<TPMPanelSwitch> _tpmPanelSwitches = new HashSet<TPMPanelSwitch>();
-        private bool _isFirstNotification = true;
-        private readonly byte[] _oldTPMPanelValue = { 0, 0, 0, 0, 0 };
-        private readonly byte[] _newTPMPanelValue = { 0, 0, 0, 0, 0 };
-        //private HidDevice _hidReadDevice;
         private readonly object _dcsBiosDataReceivedLock = new object();
 
         public TPMPanel(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.TPM, hidSkeleton)
@@ -43,12 +38,7 @@ namespace NonVisuals
         {
             try
             {
-
-
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
             }
             catch (Exception ex)
             {
@@ -410,7 +400,7 @@ namespace NonVisuals
             }
             IsDirtyMethod();
         }
-        
+
         public void RemoveTPMPanelSwitchFromList(ControlListTPM controlListTPM, TPMPanelSwitches tpmPanelSwitch, bool whenTurnedOn)
         {
             var found = false;
@@ -472,49 +462,9 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            //if (IsAttached == false) { return; }
-
-            if (report.Data.Length == 5)
-            {
-                Array.Copy(_newTPMPanelValue, _oldTPMPanelValue, 5);
-                Array.Copy(report.Data, _newTPMPanelValue, 5);
-                var hashSet = GetHashSetOfChangedSwitches(_oldTPMPanelValue, _newTPMPanelValue);
-                TPMSwitchChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                _isFirstNotification = false;
-                /*if (Common.Debug)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(report.Data[i] + " ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing switches has been changed:\n");
-                        foreach (var tpmPanelSwitch in hashSet)
-                        {
-                            Common.DebugP(((TPMPanelSwitch)tpmPanelSwitch).TPMSwitch + ", value is " + FlagValue(_newTPMPanelValue, ((TPMPanelSwitch)tpmPanelSwitch)));
-                        }
-                    }
-                }*/
-                Common.DebugP("\r\nDone!\r\n");
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
+            TPMSwitchChanged(hashSet);
         }
 
         private void DeviceAttachedHandler()
@@ -529,37 +479,9 @@ namespace NonVisuals
             OnDeviceDetached();
         }
 
-        private HashSet<object> GetHashSetOfChangedSwitches(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-
-
-
-            for (var i = 0; i < 5; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var tpmPanelSwitch in _tpmPanelSwitches)
-                {
-                    if (tpmPanelSwitch.Group == i && (FlagHasChanged(oldByte, newByte, tpmPanelSwitch.Mask) || _isFirstNotification))
-                    {
-                        tpmPanelSwitch.IsOn = FlagValue(newValue, tpmPanelSwitch);
-                        result.Add(tpmPanelSwitch);
-                    }
-                }
-            }
-            return result;
-        }
-
-        private static bool FlagValue(byte[] currentValue, TPMPanelSwitch tpmPanelSwitch)
-        {
-            return (currentValue[tpmPanelSwitch.Group] & tpmPanelSwitch.Mask) > 0;
-        }
-
         private void CreateSwitchKeys()
         {
-            _tpmPanelSwitches = TPMPanelSwitch.GetTPMPanelSwitches();
+            _saitekPanelKnobs = TPMPanelSwitch.GetTPMPanelSwitches();
         }
 
         public HashSet<DCSBIOSBindingTPM> DCSBiosBindings

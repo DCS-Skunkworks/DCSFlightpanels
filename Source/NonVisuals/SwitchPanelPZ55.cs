@@ -28,13 +28,6 @@ namespace NonVisuals
         private HashSet<DCSBIOSBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
         private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
-        //public static SwitchPanelPZ55 SwitchPanelPZ55SO;
-        private HashSet<SwitchPanelKey> _switchPanelKeys = new HashSet<SwitchPanelKey>();
-        private bool _isFirstNotification = true;
-        private readonly byte[] _oldSwitchPanelValue = { 0, 0, 0 };
-        private readonly byte[] _newSwitchPanelValue = { 0, 0, 0 };
-        //private HidDevice _hidReadDevice;
-        //private HidDevice _hidWriteDevice;
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledRightColor = SwitchPanelPZ55LEDs.ALL_DARK;
@@ -61,10 +54,7 @@ namespace NonVisuals
         {
             try
             {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
             }
             catch (Exception ex)
             {
@@ -203,22 +193,7 @@ namespace NonVisuals
             get => _bipLinks;
             set => _bipLinks = value;
         }
-
-        private void PZ55SwitchChanged(SwitchPanelKey switchPanelKey)
-        {
-            if (!ForwardPanelEvent)
-            {
-                return;
-            }
-            foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
-                {
-                    keyBinding.OSKeyPress.Execute();
-                }
-            }
-        }
-
+        
         private void SetLandingGearLedsManually(PanelLEDColor panelLEDColor)
         {
             try
@@ -441,7 +416,7 @@ namespace NonVisuals
             Common.DebugP("SwitchPanelPZ55 _keyBindings : " + _keyBindings.Count);
             IsDirtyMethod();
         }
-        
+
         public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
         {
             if (sortedList.Count == 0)
@@ -550,7 +525,7 @@ namespace NonVisuals
             }
             IsDirtyMethod();
         }
-        
+
         public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn)
         {
             bool found = false;
@@ -599,7 +574,7 @@ namespace NonVisuals
             OnSettingsChanged();
             IsDirty = true;
         }
-        
+
         public bool LedIsConfigured(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition)
         {
             return _listColorOutputBinding.Any(colorOutputBinding => (SwitchPanelPZ55LEDPosition)colorOutputBinding.SaitekLEDPosition.GetPosition() == switchPanelPZ55LEDPosition);
@@ -633,49 +608,10 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        private void OnReport(HidReport report)
-        {
-            //if (IsAttached == false) { return; }
 
-            if (report.Data.Length == 3)
-            {
-                Array.Copy(_newSwitchPanelValue, _oldSwitchPanelValue, 3);
-                Array.Copy(report.Data, _newSwitchPanelValue, 3);
-                var hashSet = GetHashSetOfSwitchedKeys(_oldSwitchPanelValue, _newSwitchPanelValue);
-                PZ55SwitchChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                _isFirstNotification = false;
-                /*if (Common.Debug)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(report.Data[i] + " ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing switches has been changed:\n");
-                        foreach (var switchPanelKey in hashSet)
-                        {
-                            Common.DebugP(((SwitchPanelKey)switchPanelKey).SwitchPanelPZ55Key + ", value is " + FlagValue(_newSwitchPanelValue, ((SwitchPanelKey)switchPanelKey)));
-                        }
-                    }
-                }
-                Common.DebugP("\r\nDone!\r\n");*/
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        {
+            PZ55SwitchChanged(hashSet);
         }
 
         private void DeviceAttachedHandler()
@@ -852,47 +788,10 @@ namespace NonVisuals
             return result;
         }
 
-        private HashSet<object> GetHashSetOfSwitchedKeys(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-
-
-
-
-            for (var i = 0; i < 3; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var switchPanelKey in _switchPanelKeys)
-                {
-                    if (switchPanelKey.Group == i && (FlagHasChanged(oldByte, newByte, switchPanelKey.Mask) || _isFirstNotification))
-                    {
-                        if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL)
-                        {
-                            //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
-                            //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
-                            switchPanelKey.IsOn = !FlagValue(newValue, switchPanelKey);
-                        }
-                        else
-                        {
-                            switchPanelKey.IsOn = FlagValue(newValue, switchPanelKey);
-                        }
-                        result.Add(switchPanelKey);
-                    }
-                }
-            }
-            return result;
-        }
-
-        private static bool FlagValue(byte[] currentValue, SwitchPanelKey switchPanelKey)
-        {
-            return (currentValue[switchPanelKey.Group] & switchPanelKey.Mask) > 0;
-        }
-
         private void CreateSwitchKeys()
         {
-            _switchPanelKeys = SwitchPanelKey.GetPanelSwitchKeys();
+            //_switchPanelKeys = SwitchPanelKey.GetPanelSwitchKeys();
+            _saitekPanelKnobs = SwitchPanelKey.GetPanelSwitchKeys();
         }
 
         public HashSet<DCSBIOSBindingPZ55> DCSBiosBindings
@@ -927,3 +826,4 @@ namespace NonVisuals
         BIPS
     }
 }
+

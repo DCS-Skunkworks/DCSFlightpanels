@@ -70,31 +70,7 @@ namespace NonVisuals
         public bool IsOn { get; set; }
 
         public GenericRadioPanelKnobs RadioPanelPZ69Knob { get; set; }
-
-        public string ExportString()
-        {
-            return "GenericRadioPanelKnob{" + Enum.GetName(typeof(GenericRadioPanelKnobs), RadioPanelPZ69Knob) + "}";
-        }
-
-        public void ImportString(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (RadioPanelKnob)");
-            }
-            if (!str.StartsWith("GenericRadioPanelKnob{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (RadioPanelKnob) >" + str + "<");
-            }
-            //GenericRadioPanelKnob{SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
-            RadioPanelPZ69Knob = (GenericRadioPanelKnobs)Enum.Parse(typeof(GenericRadioPanelKnobs), dataString.Trim());
-        }
-
-
+        
         public static HashSet<RadioPanelKnobMi8> GetRadioPanelKnobs()
         {
             //true means clockwise turn

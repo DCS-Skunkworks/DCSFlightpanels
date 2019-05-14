@@ -11,7 +11,6 @@ namespace NonVisuals
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
         //TODO Check again how to retrieve frequencies (SRS)
-        private HashSet<RadioPanelKnobAJS37> _radioPanelKnobs = new HashSet<RadioPanelKnobAJS37>();
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
         private CurrentAJS37RadioMode _currentLowerRadioMode = CurrentAJS37RadioMode.FR22;
 
@@ -411,10 +410,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -439,10 +438,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -467,10 +466,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -495,10 +494,10 @@ namespace NonVisuals
                                     switch (_currentUpperRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -523,10 +522,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
 
@@ -552,10 +551,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
 
@@ -581,10 +580,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -609,10 +608,10 @@ namespace NonVisuals
                                     switch (_currentLowerRadioMode)
                                     {
                                         case CurrentAJS37RadioMode.FR22:
-                                        {
-                                            DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
-                                            break;
-                                        }
+                                            {
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
+                                                break;
+                                            }
                                         case CurrentAJS37RadioMode.FR24:
                                             {
                                                 break;
@@ -782,100 +781,9 @@ namespace NonVisuals
         }
 
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            try
-            {
-                try
-                {
-                    Common.DebugP("Entering AJS-37 Radio OnReport()");
-                    //if (IsAttached == false) { return; }
-
-                    if (report.Data.Length == 3)
-                    {
-                        Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                        Array.Copy(report.Data, NewRadioPanelValue, 3);
-                        var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                        PZ69KnobChanged(hashSet);
-                        OnSwitchesChanged(hashSet);
-                        FirstReportHasBeenRead = true;
-                        if (1 == 2 && Common.DebugOn)
-                        {
-                            var stringBuilder = new StringBuilder();
-                            for (var i = 0; i < report.Data.Length; i++)
-                            {
-                                stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                            }
-                            Common.DebugP(stringBuilder.ToString());
-                            if (hashSet.Count > 0)
-                            {
-                                Common.DebugP("\nFollowing knobs has been changed:\n");
-                                foreach (var radioPanelKnob in hashSet)
-                                {
-                                    var knob = (RadioPanelKnobAJS37)radioPanelKnob;
-                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobAJS37)radioPanelKnob));
-                                }
-                            }
-                        }
-                        Common.DebugP("\r\nDone!\r\n");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-                try
-                {
-                    if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                    {
-                        Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                        HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(78012, ex);
-            }
-            Common.DebugP("Leaving AJS-37 Radio OnReport()");
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-            try
-            {
-                Common.DebugP("Entering AJS-37 Radio GetHashSetOfChangedKnobs()");
-
-
-                for (var i = 0; i < 3; i++)
-                {
-                    var oldByte = oldValue[i];
-                    var newByte = newValue[i];
-
-                    foreach (var radioPanelKnob in _radioPanelKnobs)
-                    {
-                        if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                        {
-                            radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                            result.Add(radioPanelKnob);
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(78013, ex);
-            }
-            Common.DebugP("Leaving AJS-37 Radio GetHashSetOfChangedKnobs()");
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         public override sealed void Startup()
@@ -904,10 +812,7 @@ namespace NonVisuals
 
                 //XPDR
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -948,12 +853,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobAJS37.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobAJS37 radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
+            _saitekPanelKnobs = RadioPanelKnobAJS37.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentAJS37RadioMode currentAJS37RadioMode)
