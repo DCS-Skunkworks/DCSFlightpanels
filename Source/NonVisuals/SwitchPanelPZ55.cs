@@ -791,7 +791,7 @@ namespace NonVisuals
         private void CreateSwitchKeys()
         {
             //_switchPanelKeys = SwitchPanelKey.GetPanelSwitchKeys();
-            _saitekPanelKnobs = SwitchPanelKey.GetPanelSwitchKeys();
+            SaitekPanelKnobs = SwitchPanelKey.GetPanelSwitchKeys();
         }
 
         public HashSet<DCSBIOSBindingPZ55> DCSBiosBindings

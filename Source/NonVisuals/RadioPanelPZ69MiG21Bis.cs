@@ -741,7 +741,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobMiG21Bis.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobMiG21Bis.GetRadioPanelKnobs();
         }
 
         private byte[] GetARCSectorBytesForDisplay()

@@ -2856,7 +2856,7 @@ namespace NonVisuals
         
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobUH1H.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobUH1H.GetRadioPanelKnobs();
         }
 
         private string GetCommandDirectionForVhfCommDial1(uint desiredFreq, uint actualFreq)

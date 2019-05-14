@@ -818,7 +818,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobFw190.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobFw190.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentFw190RadioMode currentFw190RadioMode)

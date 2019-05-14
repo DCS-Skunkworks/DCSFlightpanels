@@ -1055,7 +1055,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobM2000C.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobM2000C.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentM2000CRadioMode currentM2000CRadioMode)

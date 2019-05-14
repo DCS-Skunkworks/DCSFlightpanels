@@ -1130,7 +1130,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobF86F.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobF86F.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentF86FRadioMode currentF86FRadioMode)

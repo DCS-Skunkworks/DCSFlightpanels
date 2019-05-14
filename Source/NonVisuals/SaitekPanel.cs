@@ -191,7 +191,7 @@ namespace NonVisuals
 
 
         protected bool FirstReportHasBeenRead = false;
-        protected HashSet<ISaitekPanelKnob> _saitekPanelKnobs = new HashSet<ISaitekPanelKnob>();
+        protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new HashSet<ISaitekPanelKnob>();
         protected byte[] OldSaitekPanelValue = { 0, 0, 0 };
         protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
         protected abstract void SaitekPanelKnobChanged(IEnumerable<object> hashSet);
@@ -236,7 +236,7 @@ namespace NonVisuals
                 var oldByte = oldValue[i];
                 var newByte = newValue[i];
 
-                foreach (var saitekPanelKnob in _saitekPanelKnobs)
+                foreach (var saitekPanelKnob in SaitekPanelKnobs)
                 {
                     if (saitekPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, saitekPanelKnob.Mask) || !FirstReportHasBeenRead))
                     {

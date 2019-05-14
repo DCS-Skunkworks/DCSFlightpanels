@@ -1105,7 +1105,7 @@ namespace NonVisuals
 
         private void CreateMultiKnobs()
         {
-            _saitekPanelKnobs = MultiPanelKnob.GetMultiPanelKnobs();
+            SaitekPanelKnobs = MultiPanelKnob.GetMultiPanelKnobs();
         }
         
         private void DeviceAttachedHandler()

@@ -2932,7 +2932,7 @@ namespace NonVisuals
         
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
         }
 
         private string GetVhfAmDialFrequencyForPosition(int dial, uint position)

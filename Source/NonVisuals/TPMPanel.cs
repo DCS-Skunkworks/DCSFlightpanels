@@ -481,7 +481,7 @@ namespace NonVisuals
 
         private void CreateSwitchKeys()
         {
-            _saitekPanelKnobs = TPMPanelSwitch.GetTPMPanelSwitches();
+            SaitekPanelKnobs = TPMPanelSwitch.GetTPMPanelSwitches();
         }
 
         public HashSet<DCSBIOSBindingTPM> DCSBiosBindings

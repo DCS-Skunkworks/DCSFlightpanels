@@ -554,7 +554,7 @@ namespace NonVisuals
         
         private void CreateSwitchKeys()
         {
-            _saitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
         }
 
         /*public HashSet<DCSBIOSBindingPZ69> DCSBiosBindings

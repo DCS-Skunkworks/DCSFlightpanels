@@ -636,7 +636,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobP51D.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobP51D.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentP51DRadioMode currentP51DRadioMode)

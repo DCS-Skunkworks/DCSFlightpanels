@@ -868,7 +868,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobSpitfireLFMkIX.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobSpitfireLFMkIX.GetRadioPanelKnobs();
         }
 
         private static bool FlagValue(byte[] currentValue, RadioPanelKnobSpitfireLFMkIX radioPanelKnob)

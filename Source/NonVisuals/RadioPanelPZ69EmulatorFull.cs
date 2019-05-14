@@ -943,7 +943,7 @@ namespace NonVisuals
         
         private void CreateSwitchKeys()
         {
-            _saitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
         }
         
         public override string SettingsVersion()

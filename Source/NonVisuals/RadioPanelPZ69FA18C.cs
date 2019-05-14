@@ -1348,7 +1348,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();
         }
 
         private void SaveCockpitFrequencyVhfAm()

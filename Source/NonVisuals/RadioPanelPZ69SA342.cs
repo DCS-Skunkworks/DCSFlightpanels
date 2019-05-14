@@ -1658,7 +1658,7 @@ namespace NonVisuals
         
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobSA342.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobSA342.GetRadioPanelKnobs();
         }
 
         private string GetVhfAmDialFrequencyFromRawValue(int dial, uint position)

@@ -2622,7 +2622,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobMi8.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobMi8.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentMi8RadioMode currentMi8RadioMode)

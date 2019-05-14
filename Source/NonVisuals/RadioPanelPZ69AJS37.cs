@@ -853,7 +853,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobAJS37.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobAJS37.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentAJS37RadioMode currentAJS37RadioMode)

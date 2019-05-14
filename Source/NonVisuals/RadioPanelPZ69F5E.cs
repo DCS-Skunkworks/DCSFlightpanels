@@ -1905,7 +1905,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _saitekPanelKnobs = RadioPanelKnobF5E.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobF5E.GetRadioPanelKnobs();
         }
 
         private string GetUhfDialFrequencyForPosition(int dial, uint position)
