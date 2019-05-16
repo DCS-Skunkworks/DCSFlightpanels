@@ -75,51 +75,51 @@ namespace NonVisuals
             OnSettingsChangedA -= iProfileHandlerListener.PanelSettingsChanged;
         }
 
-        //Used by descendants that wants to raise the event
+        //Used by any but descendants that wants to see buttons that have changed, UI for example
         protected virtual void OnSwitchesChanged(HashSet<object> hashSet)
         {
             OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Switches = hashSet });
         }
 
-        //Used by descendants that wants to raise the event
+        //Used by any but descendants that wants to see buttons that have changed, UI for example
         protected virtual void OnPanelDataAvailable(string stringData)
         {
             OnPanelDataAvailableA?.Invoke(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnDeviceAttached()
         {
             //IsAttached = true;
             OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnDeviceDetached()
         {
             //IsAttached = false;
             OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnSettingsChanged()
         {
             OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnSettingsApplied()
         {
             OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnSettingsCleared()
         {
             OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
             OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });

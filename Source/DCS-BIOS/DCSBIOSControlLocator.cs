@@ -148,7 +148,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
