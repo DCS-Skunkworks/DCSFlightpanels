@@ -15,7 +15,7 @@ namespace DCS_BIOS
         private static string _jsonDirectory;
         private static List<DCSBIOSControl> _dcsbiosControls = new List<DCSBIOSControl>();
         private static bool _listOnce = true;
-
+        public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
         public static void Reset()
         {
             DCSBIOSProfileLoadStatus.Clear();
@@ -148,7 +148,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -172,7 +172,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -239,7 +239,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -309,7 +309,7 @@ namespace DCS_BIOS
             }
             catch (Exception e)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + e.Message);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + _jsonDirectory + "]<==" + e.Message);
             }
         }
 

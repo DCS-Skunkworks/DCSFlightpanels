@@ -1,0 +1,60 @@
+﻿<Window x:Class="DCSFlightpanels.DCSBIOSNotFoundWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCSFlightpanels"
+        mc:Ignorable="d"
+        Title="DCS- BIOS Not Found" 
+        Height="400" 
+        Width="1000" 
+        WindowStartupLocation="CenterScreen"
+        Loaded="DCSBIOSNotFoundWindow_OnLoaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock TextAlignment="Center" Margin="10,10,10,0" TextWrapping="Wrap">
+                <Run FontSize="30" FontWeight="Bold" BaselineAlignment="Center">
+                    DCS-BIOS Not Found
+                </Run>
+            </TextBlock>
+            <TextBlock Margin="10,10,10,0" TextWrapping="Wrap">
+                <Run FontSize="20" BaselineAlignment="Center" >
+                    You see this error message because the error log contains the specific message relating to this.
+                </Run>
+                <LineBreak/>
+                <Run FontSize="20" BaselineAlignment="Center">
+                    Your DCS-BIOS location setting is currently pointing to :
+                </Run>
+            </TextBlock>
+            <TextBlock Name="TextBlockLocation" Margin="10,10,10,0" TextWrapping="Wrap">
+                <Run FontSize="20" BaselineAlignment="Center"></Run>
+                <LineBreak/>
+            </TextBlock>
+            <TextBlock Margin="10,10,10,0" TextWrapping="Wrap">
+                <Run FontSize="20" BaselineAlignment="Center">
+                    Verify that this is where you have installed DCS-BIOS.
+                </Run>
+                <LineBreak/>
+                <Run FontSize="20" BaselineAlignment="Center">
+                    If you are using both the official DCS release and DCS OpenBeta then make sure it is pointing to the version you want to use.
+                </Run>
+                <LineBreak/>
+                <LineBreak/>
+                </TextBlock>
+            <TextBlock Margin="10,10,10,0" TextAlignment="Center" TextWrapping="Wrap">
+                <Run FontSize="20" FontWeight="Bold" BaselineAlignment="Center">
+                    Do remove this error message, delete or move the error log.
+                </Run>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Stretch" Orientation="Horizontal" >
+                <Button Content="  Close  " Name="ButtonClose" Click="ButtonClose_OnClick" Margin="0,0,10,0"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
