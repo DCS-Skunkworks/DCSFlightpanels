@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using DCS_BIOS;
-using HidLibrary;
 using System.Threading;
 using ClassLibraryCommon;
 

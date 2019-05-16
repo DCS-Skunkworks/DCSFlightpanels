@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {

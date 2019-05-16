@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Security.AccessControl;
-using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {

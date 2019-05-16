@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {

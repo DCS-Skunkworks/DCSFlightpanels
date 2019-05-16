@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {

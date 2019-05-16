@@ -2,8 +2,6 @@
 using System.Windows;
 using System.Windows.Documents;
 using ClassLibraryCommon;
-using DCS_BIOS;
-using DCSFlightpanels.Properties;
 
 namespace DCSFlightpanels
 {
