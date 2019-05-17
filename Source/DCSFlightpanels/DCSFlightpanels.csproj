@@ -678,6 +678,9 @@
     <Resource Include="Images\icons8-bug-26.png" />
     <Resource Include="Images\icons8-bug-52.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

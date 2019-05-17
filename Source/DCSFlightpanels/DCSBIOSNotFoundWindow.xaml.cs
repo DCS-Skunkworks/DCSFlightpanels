@@ -34,13 +34,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var italics = new Italic();
-                var run = new Run(_dcsbiosLocation);
-                run.BaselineAlignment = BaselineAlignment.Center;
-                run.FontSize = 20;
-                run.Text = _dcsbiosLocation;
-                italics.Inlines.Add(run);
-                TextBlockLocation.Inlines.Add(italics);
+                RunSetting.Text = _dcsbiosLocation;
             }
             catch (Exception ex)
             {
