@@ -1131,7 +1131,7 @@ namespace DCSFlightpanels
                                     {
                                         //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
                                         //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
-                                        ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Collapsed : Visibility.Visible;
                                     });
                                 break;
                             }

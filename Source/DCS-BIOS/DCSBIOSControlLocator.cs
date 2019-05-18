@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ClassLibraryCommon;
@@ -216,14 +217,14 @@ namespace DCS_BIOS
 
                         var jsonData = DCSBIOSJsonFormatterVersion1.Format(text);
 //Console.WriteLine(jsonData);
-                        //Debug.Print("\n--------------------------\n" + jsonData);
+                        Debug.Print("\n--------------------------\n" + jsonData);
                         /*var newfile = File.CreateText(@"e:\temp\regexp_debug_output.txt.txt");
                         newfile.Write(jsonData);
                         newfile.Close();*/
                         var dcsBiosControlList = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(jsonData);
                         /*foreach (var control in dcsBiosControlList.DCSBIOSControls)
                         {
-                            Debug.Print(control.description);
+                            Debug.Print(control.identifier);
                         }*/
                         //Debug.Print("\n--------------------------\n" + jsonData);
                         _dcsbiosControls.AddRange(dcsBiosControlList.DCSBIOSControls);
