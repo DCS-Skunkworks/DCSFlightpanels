@@ -4,13 +4,11 @@ using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {
     public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
-        private HashSet<RadioPanelKnobF14B> _radioPanelKnobs = new HashSet<RadioPanelKnobF14B>();
         private CurrentF14RadioMode _currentUpperRadioMode = CurrentF14RadioMode.UHF;
         private CurrentF14RadioMode _currentLowerRadioMode = CurrentF14RadioMode.UHF;
 
@@ -609,7 +607,7 @@ namespace NonVisuals
                 return;
             }
             SaveLink4Frequency();
-            var dial2 = int.Parse(_rioLink4TensAndOnesFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2,'0').Substring(0, 1));
+            var dial2 = int.Parse(_rioLink4TensAndOnesFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0').Substring(0, 1));
             var dial3 = int.Parse(_rioLink4TensAndOnesFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0').Substring(1, 1));
             _rioLink4SyncThread?.Abort();
             _rioLink4SyncThread = new Thread(() => RioDatalink4SynchThreadMethod(_rioLink4HundredsFrequencyStandby, dial2, dial3));
@@ -2602,10 +2600,7 @@ namespace NonVisuals
                 _rioLink4DcsbiosOutputOnesDial = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_FREQ_100");
                 _rioLink4DcsbiosOutputPowerSwitch = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_DATALINK_PW");
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -2642,86 +2637,15 @@ namespace NonVisuals
             return dcsOutputAndColorBinding;
         }
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            //if (IsAttached == false) { return; }
-
-            if (report.Data.Length == 3)
-            {
-                Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                Array.Copy(report.Data, NewRadioPanelValue, 3);
-                var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                PZ69KnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                FirstReportHasBeenRead = true;
-                /*if (Common.Debug && 1 == 2)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing knobs has been changed:\n");
-                        foreach (var radioPanelKnob in hashSet)
-                        {
-                            var knob = (RadioPanelKnobF14)radioPanelKnob;
-
-                        }
-                    }
-                }
-                Common.DebugP("\r\nDone!\r\n");*/
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-
-
-            for (var i = 0; i < 3; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var radioPanelKnob in _radioPanelKnobs)
-                {
-                    if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                    {
-                        radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                        result.Add(radioPanelKnob);
-
-                    }
-                }
-            }
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobF14B.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobF14B.GetRadioPanelKnobs();
         }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobF14B radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
-        }
-
-
 
         private void SaveCockpitFrequencyUhf()
         {

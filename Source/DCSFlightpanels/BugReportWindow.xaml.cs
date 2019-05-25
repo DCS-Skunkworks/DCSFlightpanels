@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using CommonClassLibraryJD;

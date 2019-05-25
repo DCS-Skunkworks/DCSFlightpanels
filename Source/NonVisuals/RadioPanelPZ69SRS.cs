@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {
@@ -19,10 +17,9 @@ namespace NonVisuals
 
     public class RadioPanelPZ69SRS : RadioPanelPZ69Base, IRadioPanel, ISRSDataListener
     {
-        private HashSet<RadioPanelKnobSRS> _radioPanelKnobs = new HashSet<RadioPanelKnobSRS>();
         private CurrentSRSRadioMode _currentUpperRadioMode = CurrentSRSRadioMode.COM1;
         private CurrentSRSRadioMode _currentLowerRadioMode = CurrentSRSRadioMode.COM1;
-        
+
         //private List<double> _listMainFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
         //private List<double> _listGuardFrequencies = new List<double>(7) { 0, 0, 0, 0, 0, 0, 0 };
         private readonly object _freqListLockObject = new object();
@@ -71,10 +68,7 @@ namespace NonVisuals
             try
             {
                 StartupBase("SRS");
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
             }
             catch (Exception ex)
             {
@@ -598,40 +592,40 @@ namespace NonVisuals
             switch (currentSRSRadioMode)
             {
                 case CurrentSRSRadioMode.COM1:
-                {
-                    radioId = 1;
-                    break;
-                }
+                    {
+                        radioId = 1;
+                        break;
+                    }
                 case CurrentSRSRadioMode.COM2:
-                {
-                    radioId = 2;
-                    break;
-                }
+                    {
+                        radioId = 2;
+                        break;
+                    }
                 case CurrentSRSRadioMode.NAV1:
-                {
-                    radioId = 3;
-                    break;
-                }
+                    {
+                        radioId = 3;
+                        break;
+                    }
                 case CurrentSRSRadioMode.NAV2:
-                {
-                    radioId = 4;
-                    break;
-                }
+                    {
+                        radioId = 4;
+                        break;
+                    }
                 case CurrentSRSRadioMode.ADF:
-                {
-                    radioId = 5;
-                    break;
-                }
+                    {
+                        radioId = 5;
+                        break;
+                    }
                 case CurrentSRSRadioMode.DME:
-                {
-                    radioId = 6;
-                    break;
-                }
+                    {
+                        radioId = 6;
+                        break;
+                    }
                 case CurrentSRSRadioMode.XPDR:
-                {
-                    radioId = 7;
-                    break;
-                }
+                    {
+                        radioId = 7;
+                        break;
+                    }
             }
             /*{ "Command": 3,"RadioId":1}
             --channel up(if channels have been configured)
@@ -772,100 +766,9 @@ namespace NonVisuals
         }
 
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            try
-            {
-                try
-                {
-                    Common.DebugP("Entering SRS Radio OnReport()");
-                    //if (IsAttached == false) { return; }
-
-                    if (report.Data.Length == 3)
-                    {
-                        Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                        Array.Copy(report.Data, NewRadioPanelValue, 3);
-                        var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                        PZ69KnobChanged(hashSet);
-                        OnSwitchesChanged(hashSet);
-                        FirstReportHasBeenRead = true;
-                        if (1 == 2 && Common.DebugOn)
-                        {
-                            var stringBuilder = new StringBuilder();
-                            for (var i = 0; i < report.Data.Length; i++)
-                            {
-                                stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                            }
-                            Common.DebugP(stringBuilder.ToString());
-                            if (hashSet.Count > 0)
-                            {
-                                Common.DebugP("\nFollowing knobs has been changed:\n");
-                                foreach (var radioPanelKnob in hashSet)
-                                {
-                                    var knob = (RadioPanelKnobSRS)radioPanelKnob;
-                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobSRS)radioPanelKnob));
-                                }
-                            }
-                        }
-                        Common.DebugP("\r\nDone!\r\n");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-                try
-                {
-                    if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                    {
-                        Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                        HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(82012, ex);
-            }
-            Common.DebugP("Leaving SRS Radio OnReport()");
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-            try
-            {
-                Common.DebugP("Entering SRS Radio GetHashSetOfChangedKnobs()");
-
-
-                for (var i = 0; i < 3; i++)
-                {
-                    var oldByte = oldValue[i];
-                    var newByte = newValue[i];
-
-                    foreach (var radioPanelKnob in _radioPanelKnobs)
-                    {
-                        if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                        {
-                            radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                            result.Add(radioPanelKnob);
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(82013, ex);
-            }
-            Common.DebugP("Leaving SRS Radio GetHashSetOfChangedKnobs()");
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         public override void ClearSettings()
@@ -883,12 +786,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobSRS.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobSRS radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
+            SaitekPanelKnobs = RadioPanelKnobSRS.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentSRSRadioMode currentBf109RadioMode)

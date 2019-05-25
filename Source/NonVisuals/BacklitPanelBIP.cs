@@ -243,6 +243,11 @@ namespace NonVisuals
             }
         }
 
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        {
+            //Nothing needs to be done here
+        }
+
         public PanelLEDColor GetColor(BIPLedPositionEnum bipLedPositionEnum)
         {
             try

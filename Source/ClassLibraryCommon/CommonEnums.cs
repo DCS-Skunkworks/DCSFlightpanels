@@ -79,7 +79,7 @@ namespace ClassLibraryCommon
         Bf109,
         [Description("C-101CC")]
         C101CC,
-        [Description("Christen Eagle I")]
+        [Description("Christen Eagle II")]
         ChristenEagle,
         [Description("F-5E-3")]
         F5E,

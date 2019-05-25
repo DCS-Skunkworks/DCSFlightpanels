@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base, IRadioPanel
     {
-        private HashSet<RadioPanelKnobKa50> _radioPanelKnobs = new HashSet<RadioPanelKnobKa50>();
         private CurrentKa50RadioMode _currentUpperRadioMode = CurrentKa50RadioMode.VHF1_R828;
         private CurrentKa50RadioMode _currentLowerRadioMode = CurrentKa50RadioMode.VHF1_R828;
 
@@ -161,7 +158,7 @@ namespace NonVisuals
             try
             {
                 UpdateCounter(e.Address, e.Data);
-                
+
                 /*
                  * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
                  * Once a dial has been deemed to be "off" position and needs to be changed
@@ -365,10 +362,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ABRIS:
-                                {
-                                    DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
-                                    break;
-                                }
+                                    {
+                                        DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
+                                        break;
+                                    }
                                 case CurrentKa50RadioMode.ADF_ARK22:
                                     {
                                         break;
@@ -393,10 +390,10 @@ namespace NonVisuals
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ABRIS:
-                                {
-                                    DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
-                                    break;
-                                }
+                                    {
+                                        DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
+                                        break;
+                                    }
                                 case CurrentKa50RadioMode.ADF_ARK22:
                                     {
                                         break;
@@ -1803,97 +1800,9 @@ namespace NonVisuals
         }
 
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            try
-            {
-                try
-                {
-                    Common.DebugP("Entering Ka-50 Radio OnReport()");
-                    //if (IsAttached == false) { return; }
-
-                    if (report.Data.Length == 3)
-                    {
-                        Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                        Array.Copy(report.Data, NewRadioPanelValue, 3);
-                        var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                        PZ69KnobChanged(hashSet);
-                        OnSwitchesChanged(hashSet);
-                        FirstReportHasBeenRead = true;
-                        if (1 == 2 && Common.DebugOn)
-                        {
-                            var stringBuilder = new StringBuilder();
-                            for (var i = 0; i < report.Data.Length; i++)
-                            {
-                                stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                            }
-                            Common.DebugP(stringBuilder.ToString());
-                            if (hashSet.Count > 0)
-                            {
-                                Common.DebugP("\nFollowing knobs has been changed:\n");
-                                foreach (var radioPanelKnob in hashSet)
-                                {
-                                    var knob = (RadioPanelKnobKa50)radioPanelKnob;
-                                    Common.DebugP(knob.RadioPanelPZ69Knob + ", value is " + FlagValue(NewRadioPanelValue, (RadioPanelKnobKa50)radioPanelKnob));
-                                }
-                            }
-                        }
-                        Common.DebugP("\r\nDone!\r\n");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-                try
-                {
-                    if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                    {
-                        Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                        HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-                    SetLastException(ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(77012, ex);
-            }
-            Common.DebugP("Leaving Ka-50 Radio OnReport()");
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-            try
-            {
-                Common.DebugP("Entering Ka-50 Radio GetHashSetOfChangedKnobs()");
-                for (var i = 0; i < 3; i++)
-                {
-                    var oldByte = oldValue[i];
-                    var newByte = newValue[i];
-
-                    foreach (var radioPanelKnob in _radioPanelKnobs)
-                    {
-                        if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                        {
-                            radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                            result.Add(radioPanelKnob);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(77013, ex);
-            }
-            Common.DebugP("Leaving Ka-50 Radio GetHashSetOfChangedKnobs()");
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         public override sealed void Startup()
@@ -1922,10 +1831,7 @@ namespace NonVisuals
 
 
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -1966,12 +1872,7 @@ namespace NonVisuals
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobKa50.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobKa50 radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
+            SaitekPanelKnobs = RadioPanelKnobKa50.GetRadioPanelKnobs();
         }
 
         private void SetUpperRadioMode(CurrentKa50RadioMode currentKa50RadioMode)

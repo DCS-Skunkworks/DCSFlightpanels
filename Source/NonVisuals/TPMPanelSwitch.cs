@@ -16,7 +16,7 @@ namespace NonVisuals
         G9 = 256
     }
 
-    public class TPMPanelSwitch
+    public class TPMPanelSwitch : ISaitekPanelKnob
     {
         public TPMPanelSwitch()
         {
@@ -61,9 +61,9 @@ namespace NonVisuals
             TPMSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), dataString.Trim());
         }
 
-        public static HashSet<TPMPanelSwitch> GetTPMPanelSwitches()
+        public static HashSet<ISaitekPanelKnob> GetTPMPanelSwitches()
         {
-            var result = new HashSet<TPMPanelSwitch>();
+            var result = new HashSet<ISaitekPanelKnob>();
             //Group 1
             result.Add(new TPMPanelSwitch(3, Convert.ToInt32("00001000", 2), false, TPMPanelSwitches.G1));
             result.Add(new TPMPanelSwitch(3, Convert.ToInt32("00010000", 2), false, TPMPanelSwitches.G2));

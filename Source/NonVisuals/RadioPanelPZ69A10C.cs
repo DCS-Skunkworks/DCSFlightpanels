@@ -4,13 +4,11 @@ using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {
     public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
-        private HashSet<RadioPanelKnobA10C> _radioPanelKnobs = new HashSet<RadioPanelKnobA10C>();
         private CurrentA10RadioMode _currentUpperRadioMode = CurrentA10RadioMode.UHF;
         private CurrentA10RadioMode _currentLowerRadioMode = CurrentA10RadioMode.UHF;
 
@@ -2889,10 +2887,7 @@ namespace NonVisuals
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
                 DCSBIOSStringListenerHandler.AddAddress(_tacanDcsbiosOutputFreqChannel.Address, 4, this); //_tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -2929,83 +2924,14 @@ namespace NonVisuals
             return dcsOutputAndColorBinding;
         }
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            //if (IsAttached == false) { return; }
-
-            if (report.Data.Length == 3)
-            {
-                Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                Array.Copy(report.Data, NewRadioPanelValue, 3);
-                var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                PZ69KnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                FirstReportHasBeenRead = true;
-                /*if (Common.Debug && 1 == 2)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing knobs has been changed:\n");
-                        foreach (var radioPanelKnob in hashSet)
-                        {
-                            var knob = (RadioPanelKnobA10C)radioPanelKnob;
-
-                        }
-                    }
-                }
-                Common.DebugP("\r\nDone!\r\n");*/
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
+            PZ69KnobChanged(hashSet);
         }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-
-
-            for (var i = 0; i < 3; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var radioPanelKnob in _radioPanelKnobs)
-                {
-                    if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                    {
-                        radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                        result.Add(radioPanelKnob);
-
-                    }
-                }
-            }
-            return result;
-        }
-
+        
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobA10C radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
+            SaitekPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
         }
 
         private string GetVhfAmDialFrequencyForPosition(int dial, uint position)

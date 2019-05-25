@@ -7,13 +7,11 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {
     public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
-        private HashSet<RadioPanelKnobFA18C> _radioPanelKnobs = new HashSet<RadioPanelKnobFA18C>();
         private CurrentFA18CRadioMode _currentUpperRadioMode = CurrentFA18CRadioMode.COMM1;
         private CurrentFA18CRadioMode _currentLowerRadioMode = CurrentFA18CRadioMode.COMM2;
         private bool _upperButtonPressed = false;
@@ -31,7 +29,7 @@ namespace NonVisuals
         private const string COMM1PullPress = "UFC_COMM1_PULL INC\n";
         private const string COMM1PullRelease = "UFC_COMM1_PULL DEC\n";
         private double _comm1BigFrequencyStandby = 225;
-        private double _comm1SmallFrequencyStandby= 0;
+        private double _comm1SmallFrequencyStandby = 0;
         private double _comm1SavedCockpitBigFrequency;
         private readonly object _lockCOMM1DialsObject = new object();
         private DCSBIOSOutput _comm1DcsbiosOutputFreq;  // comm1 frequency from DCSbios
@@ -41,7 +39,7 @@ namespace NonVisuals
         private long _comm1ThreadNowSynching;
         private long _comm1DialWaitingForFeedback;
         private readonly ClickSpeedDetector _comm1ChannelClickSpeedDetector = new ClickSpeedDetector(8);
-        
+
 
         /*FA-18C COMM2 radio*/
         //
@@ -70,18 +68,18 @@ namespace NonVisuals
         /*FA-18C ILS*/
         //
         //
-        private uint  _ilsChannelStandby = 10;
+        private uint _ilsChannelStandby = 10;
         private uint _ilsSavedCockpitChannel = 1;
         private readonly object _lockIlsDialsObject = new object();
         private DCSBIOSOutput _ilsDcsbiosOutputChannel;
-        private volatile uint  _ilsCockpitChannel = 1;
+        private volatile uint _ilsCockpitChannel = 1;
         private const string ILSChannelInc = "COM_ILS_CHANNEL_SW INC\n";
         private const string ILSChannelDec = "COM_ILS_CHANNEL_SW DEC\n";
         private const string ILSChannelCommand = "COM_ILS_CHANNEL_SW ";
         private Thread _ilsSyncThread;
         private long _ilsThreadNowSynching;
         private long _ilsDialWaitingForFeedback;
-        
+
 
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
@@ -100,7 +98,7 @@ namespace NonVisuals
         ~RadioPanelPZ69FA18C()
         {
             _ilsSyncThread?.Abort();
-           
+
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)   // -------------------------   Get the data from DCSbios
@@ -130,18 +128,18 @@ namespace NonVisuals
                     }
                 }
             }
-           
-            
+
+
             if (e.Address == _comm1DcsbiosOutputChannel.Address)
             {
                 var tmp = _comm1CockpitChannel;
-                _comm1CockpitChannel = _comm1DcsbiosOutputChannel.GetUIntValue(e.Data) ;
+                _comm1CockpitChannel = _comm1DcsbiosOutputChannel.GetUIntValue(e.Data);
                 if (tmp != _comm1CockpitChannel)
                 {
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 }
             }
-            
+
 
 
             //COMM2
@@ -159,7 +157,7 @@ namespace NonVisuals
                     }
                 }
             }
-  
+
             if (e.Address == _comm2DcsbiosOutputChannel.Address)
             {
                 var tmp = _comm2CockpitChannel;
@@ -169,29 +167,29 @@ namespace NonVisuals
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 }
             }
-           
+
 
 
 
             //VHF FM
-           
-          
+
+
 
             //ILS
             if (e.Address == _ilsDcsbiosOutputChannel.Address)
             {
                 lock (_lockIlsDialsObject)
                 {
-                    var tmp =  _ilsCockpitChannel;
-                     _ilsCockpitChannel = _ilsDcsbiosOutputChannel.GetUIntValue(e.Data) +1 ;
-                    if (tmp !=  _ilsCockpitChannel)
+                    var tmp = _ilsCockpitChannel;
+                    _ilsCockpitChannel = _ilsDcsbiosOutputChannel.GetUIntValue(e.Data) + 1;
+                    if (tmp != _ilsCockpitChannel)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 0);
                     }
                 }
             }
-           
+
             //TACAN is set via String listener
 
             //Set once
@@ -209,7 +207,7 @@ namespace NonVisuals
                     //Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -245,12 +243,12 @@ namespace NonVisuals
                                 }
                             case CurrentFA18CRadioMode.COMM2:
                                 {
-                                  
+
                                     break;
                                 }
                             case CurrentFA18CRadioMode.VHFFM:
                                 {
-                                   
+
                                     break;
                                 }
                             case CurrentFA18CRadioMode.ILS:
@@ -260,7 +258,7 @@ namespace NonVisuals
                                 }
                             case CurrentFA18CRadioMode.TACAN:
                                 {
-                                   
+
                                     break;
                                 }
                         }
@@ -272,17 +270,17 @@ namespace NonVisuals
                         {
                             case CurrentFA18CRadioMode.COMM1:
                                 {
-                                   
+
                                     break;
                                 }
                             case CurrentFA18CRadioMode.COMM2:
                                 {
-                                  
+
                                     break;
                                 }
                             case CurrentFA18CRadioMode.VHFFM:
                                 {
-                                   
+
                                     break;
                                 }
                             case CurrentFA18CRadioMode.ILS:
@@ -292,7 +290,7 @@ namespace NonVisuals
                                 }
                             case CurrentFA18CRadioMode.TACAN:
                                 {
-                                    
+
                                     break;
                                 }
                         }
@@ -316,10 +314,10 @@ namespace NonVisuals
             SwapCockpitStandbyFrequencyVhfAm();
             ShowFrequenciesOnPanel();
 
-            
+
         }
 
-       
+
 
         private void SendUhfToDCSBIOS()
         {
@@ -328,10 +326,10 @@ namespace NonVisuals
                 return;
             }
             SaveCockpitFrequencyUhf();
-            
+
             var frequency = _comm2BigFrequencyStandby + _comm2SmallFrequencyStandby;
             var frequencyAsString = frequency.ToString("0.00", NumberFormatInfoFullDisplay);
-            
+
             // send frequency to dcsbios here 
 
 
@@ -340,7 +338,7 @@ namespace NonVisuals
 
         }
 
-       
+
 
 
         private void SendILSToDCSBIOS()
@@ -350,12 +348,12 @@ namespace NonVisuals
                 return;
             }
             SaveCockpitFrequencyIls();
-           
+
             _ilsSyncThread?.Abort();
             _ilsSyncThread = new Thread(() => ILSSynchThreadMethod(_ilsChannelStandby));
             _ilsSyncThread.Start();
 
-           
+
         }
 
         private void ILSSynchThreadMethod(uint standbyPosition)
@@ -368,9 +366,9 @@ namespace NonVisuals
 
                     long dialTimeout = DateTime.Now.Ticks;
                     long dialOkTime = 0;
-                    
+
                     var dialSendCount = 0;
-                  
+
 
                     do
                     {
@@ -380,12 +378,12 @@ namespace NonVisuals
                             Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 0);
                             Common.DebugP("Resetting SYNC for ILS 1");
                         }
-                       
+
                         if (Interlocked.Read(ref _ilsDialWaitingForFeedback) == 0)
                         {
                             lock (_lockIlsDialsObject)
                             {
-                                if ( _ilsCockpitChannel < standbyPosition)
+                                if (_ilsCockpitChannel < standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
                                     const string str = ILSChannelCommand + "INC\n";
@@ -394,7 +392,7 @@ namespace NonVisuals
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
                                 }
-                                else if ( _ilsCockpitChannel > standbyPosition)
+                                else if (_ilsCockpitChannel > standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
                                     const string str = ILSChannelCommand + "DEC\n";
@@ -411,16 +409,16 @@ namespace NonVisuals
                             dialOkTime = DateTime.Now.Ticks;
                         }
 
-                       
-                        if (dialSendCount > 12 )
+
+                        if (dialSendCount > 12)
                         {
                             //"Race" condition detected?
                             dialSendCount = 0;
-                           
+
                             Thread.Sleep(5000);
                         }
                         Thread.Sleep(SynchSleepTime); //Should be enough to get an update cycle from DCS-BIOS
-                    } while (IsTooShort(dialOkTime) );
+                    } while (IsTooShort(dialOkTime));
                     SwapCockpitStandbyFrequencyIls();
                     ShowFrequenciesOnPanel();
                 }
@@ -438,9 +436,9 @@ namespace NonVisuals
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
         }
 
-        
 
-        
+
+
 
         private void ShowFrequenciesOnPanel()
         {
@@ -462,7 +460,7 @@ namespace NonVisuals
                 //                                                          UPPER PANEL
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-               
+
 
 
                 switch (_currentUpperRadioMode)
@@ -470,26 +468,26 @@ namespace NonVisuals
                     case CurrentFA18CRadioMode.COMM1:    // show comm1 frequencies in upper panel
                         {
                             var frequencyAsString = "";
-                            
+
                             uint integer_comm1 = _comm1CockpitFreq / 100;
                             uint decimal_comm1 = _comm1CockpitFreq - (integer_comm1 * 100);
                             frequencyAsString = "" + integer_comm1;
                             frequencyAsString = frequencyAsString + ".";
                             frequencyAsString = frequencyAsString + decimal_comm1;
-                           
+
                             if (_upperButtonPressed)
                             {
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT); 
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
-                            
+
                             else
                             {
 
-                                    SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                    //SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                    //SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
-                                    SetPZ69DisplayBytesInteger(ref bytes, (int)_comm1CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                //SetPZ69DisplayBytesDefault(ref bytes, _COMM1BigFrequencyStandby + _COMM1SmallFrequencyStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                //SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesInteger(ref bytes, (int)_comm1CockpitChannel, PZ69LCDPosition.UPPER_STBY_RIGHT);
 
                             }
                             break;
@@ -525,18 +523,18 @@ namespace NonVisuals
 
                             }
                             break;
-                            
+
                         }
 
 
 
-                    
+
                     case CurrentFA18CRadioMode.VHFFM:  // clear displays
                         {
 
                             if (_upperButtonPressed)
                             {
-                               
+
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             }
@@ -554,7 +552,7 @@ namespace NonVisuals
 
                     case CurrentFA18CRadioMode.ILS:
                         {
-                                                        
+
                             uint ILSChannel = 1;
                             lock (_lockIlsDialsObject)
                             {
@@ -587,14 +585,14 @@ namespace NonVisuals
                 {
 
 
-                    
+
 
 
                     //                                                          LOWER PANEL
 
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                   
-                    
+
+
 
 
                     case CurrentFA18CRadioMode.COMM1:     //  show comm1 frequencies in lower panel
@@ -625,7 +623,7 @@ namespace NonVisuals
                             break;
                         }
 
-                        
+
 
 
                     case CurrentFA18CRadioMode.COMM2:     //  show comm2 frequencies in lower panel
@@ -653,7 +651,7 @@ namespace NonVisuals
 
                             }
                             break;
-                           
+
                         }
 
 
@@ -685,9 +683,9 @@ namespace NonVisuals
                         }
                     case CurrentFA18CRadioMode.TACAN:  // clear displays
                         {
-                         
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
 
                             break;
                         }
@@ -731,23 +729,23 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.VHFFM:
                                         {
-                                          
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
                                             // ils channels 1 to 20
-                                            if ( _ilsChannelStandby >= 20)
+                                            if (_ilsChannelStandby >= 20)
                                             {
-                                                 _ilsChannelStandby = 20;
+                                                _ilsChannelStandby = 20;
                                                 break;
                                             }
-                                             _ilsChannelStandby++;
+                                            _ilsChannelStandby++;
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                           
+
                                             break;
                                         }
                                 }
@@ -759,9 +757,9 @@ namespace NonVisuals
                                 {
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
-                                            
-                                               DCSBIOS.Send(COMM1ChannelDec);
-                                               break;
+
+                                            DCSBIOS.Send(COMM1ChannelDec);
+                                            break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
@@ -773,23 +771,23 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.VHFFM:
                                         {
-                                          
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
                                             // ils channels 1 to 20
-                                            if ( _ilsChannelStandby <= 1)
+                                            if (_ilsChannelStandby <= 1)
                                             {
-                                                 _ilsChannelStandby = 1;
+                                                _ilsChannelStandby = 1;
                                                 break;
                                             }
-                                             _ilsChannelStandby--;
+                                            _ilsChannelStandby--;
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                          
+
                                             break;
                                         }
                                 }
@@ -815,17 +813,17 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.VHFFM:
                                         {
-                                          
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
-                                            
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                          
+
                                             break;
                                         }
                                 }
@@ -851,17 +849,17 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.VHFFM:
                                         {
-                                            
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
-                                           
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                          
+
                                             break;
                                         }
                                 }
@@ -887,23 +885,23 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.VHFFM:
                                         {
-                                          
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
                                             // ils channels 1 to 20
-                                            if ( _ilsChannelStandby >= 20)
+                                            if (_ilsChannelStandby >= 20)
                                             {
-                                                 _ilsChannelStandby = 20;
+                                                _ilsChannelStandby = 20;
                                                 break;
                                             }
-                                             _ilsChannelStandby++;
+                                            _ilsChannelStandby++;
                                             break; ;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                           
+
                                             break;
                                         }
                                 }
@@ -929,23 +927,23 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.VHFFM:
                                         {
-                                           
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
                                             // ils channels 1 to 20
-                                            if ( _ilsChannelStandby <= 1)
+                                            if (_ilsChannelStandby <= 1)
                                             {
-                                                 _ilsChannelStandby = 1;
+                                                _ilsChannelStandby = 1;
                                                 break;
                                             }
-                                             _ilsChannelStandby--;
+                                            _ilsChannelStandby--;
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                           
+
                                             break;
                                         }
                                 }
@@ -971,17 +969,17 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.VHFFM:
                                         {
-                                          
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
-                                           
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                           
+
                                             break;
                                         }
                                 }
@@ -1011,12 +1009,12 @@ namespace NonVisuals
                                         }
                                     case CurrentFA18CRadioMode.ILS:
                                         {
-                                            
+
                                             break;
                                         }
                                     case CurrentFA18CRadioMode.TACAN:
                                         {
-                                          
+
                                             break;
                                         }
                                 }
@@ -1045,7 +1043,7 @@ namespace NonVisuals
 
             //VHF FM
             //30.000 - 76.000Mhz
-            
+
             //COMM2
             //225.000 - 399.975 MHz
             if (_comm2BigFrequencyStandby < 225)
@@ -1059,18 +1057,18 @@ namespace NonVisuals
 
             //ILS
             // ils channels 1 to 20
-            if ( _ilsChannelStandby < 1)
+            if (_ilsChannelStandby < 1)
             {
-                 _ilsChannelStandby = 1;
+                _ilsChannelStandby = 1;
             }
-            if ( _ilsChannelStandby > 20)
+            if (_ilsChannelStandby > 20)
             {
-                 _ilsChannelStandby = 20;
+                _ilsChannelStandby = 20;
             }
 
             //TACAN
             //00X/Y - 129X/Y
-           
+
         }
 
         public void PZ69KnobChanged(IEnumerable<object> hashSet)
@@ -1299,16 +1297,13 @@ namespace NonVisuals
 
                 //ILS
                 _ilsDcsbiosOutputChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("COM_ILS_CHANNEL_SW");
-                
+
 
                 //TACAN
-               
-                
 
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+
+
+                StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
@@ -1345,117 +1340,45 @@ namespace NonVisuals
             return dcsOutputAndColorBinding;
         }
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            //if (IsAttached == false) { return; }
-
-            if (report.Data.Length == 3)
-            {
-                Array.Copy(NewRadioPanelValue, OldRadioPanelValue, 3);
-                Array.Copy(report.Data, NewRadioPanelValue, 3);
-                var hashSet = GetHashSetOfChangedKnobs(OldRadioPanelValue, NewRadioPanelValue);
-                PZ69KnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                FirstReportHasBeenRead = true;
-                /*if (Common.Debug && 1 == 2)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(Convert.ToString(report.Data[i], 2).PadLeft(8, '0') + "  ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing knobs has been changed:\n");
-                        foreach (var radioPanelKnob in hashSet)
-                        {
-                            var knob = (RadioPanelKnobFA18C)radioPanelKnob;
-
-                        }
-                    }
-                }
-                Common.DebugP("\r\nDone!\r\n");*/
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
-        }
-
-        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-
-
-            for (var i = 0; i < 3; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var radioPanelKnob in _radioPanelKnobs)
-                {
-                    if (radioPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKnob.Mask) || !FirstReportHasBeenRead))
-                    {
-                        radioPanelKnob.IsOn = FlagValue(newValue, radioPanelKnob);
-                        result.Add(radioPanelKnob);
-
-                    }
-                }
-            }
-            return result;
+            PZ69KnobChanged(hashSet);
         }
 
         private void CreateRadioKnobs()
         {
-            _radioPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelKnobFA18C.GetRadioPanelKnobs();
         }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelKnobFA18C radioPanelKnob)
-        {
-            return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
-        }
-
- 
-      
 
         private void SaveCockpitFrequencyVhfAm()
         {
-            
+
             lock (_lockCOMM1DialsObject)
             {
-                
-               _comm1SavedCockpitBigFrequency = double.Parse((_comm1CockpitFreq + 3).ToString() , NumberFormatInfoFullDisplay);
-             
-                
+
+                _comm1SavedCockpitBigFrequency = double.Parse((_comm1CockpitFreq + 3).ToString(), NumberFormatInfoFullDisplay);
+
+
             }
         }
 
         private void SwapCockpitStandbyFrequencyVhfAm()
         {
             _comm1BigFrequencyStandby = _comm1SavedCockpitBigFrequency;
-           
+
         }
 
         private void SaveCockpitFrequencyUhf()
         {
-            
+
             try
             {
                 var bigFrequencyAsString = "";
-              
-               
+
+
 
                 _comm2SavedCockpitBigFrequency = double.Parse(bigFrequencyAsString, NumberFormatInfoFullDisplay);
-              
+
 
             }
             catch (Exception ex)
@@ -1468,30 +1391,30 @@ namespace NonVisuals
         private void SwapCockpitStandbyFrequencyUhf()
         {
             _comm2BigFrequencyStandby = _comm2SavedCockpitBigFrequency;
-         
+
         }
 
-       
+
         private void SaveCockpitFrequencyIls()
         {
-           
+
             lock (_lockIlsDialsObject)
             {
-                
-                    _ilsSavedCockpitChannel =  _ilsCockpitChannel;
-                   
-               
+
+                _ilsSavedCockpitChannel = _ilsCockpitChannel;
+
+
             }
         }
 
         private void SwapCockpitStandbyFrequencyIls()
         {
-             _ilsChannelStandby = _ilsSavedCockpitChannel;
-           
+            _ilsChannelStandby = _ilsSavedCockpitChannel;
+
         }
 
-       
-        
+
+
         private bool VhfAmNowSyncing()
         {
             return Interlocked.Read(ref _comm1ThreadNowSynching) > 0;
@@ -1502,14 +1425,14 @@ namespace NonVisuals
             return Interlocked.Read(ref _comm2ThreadNowSynching) > 0;
         }
 
-       
+
 
         private bool IlsNowSyncing()
         {
             return Interlocked.Read(ref _ilsThreadNowSynching) > 0;
         }
 
-       
+
 
         public override string SettingsVersion()
         {

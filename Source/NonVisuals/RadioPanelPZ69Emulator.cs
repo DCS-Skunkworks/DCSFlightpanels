@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 
 namespace NonVisuals
 {
@@ -20,8 +19,6 @@ namespace NonVisuals
         private readonly HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
-        private HashSet<RadioPanelPZ69KnobEmulator> _radioPanelKnobs = new HashSet<RadioPanelPZ69KnobEmulator>();
-        private bool _isFirstNotification = true;
         private readonly byte[] _oldRadioPanelValue = { 0, 0, 0 };
         private readonly byte[] _newRadioPanelValue = { 0, 0, 0 };
         private readonly object _dcsBiosDataReceivedLock = new object();
@@ -45,10 +42,7 @@ namespace NonVisuals
         {
             try
             {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
+                StartListeningForPanelChanges();
             }
             catch (Exception ex)
             {
@@ -543,52 +537,10 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        private void OnReport(HidReport report)
+        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
-            //if (IsAttached == false) { return; }
-
-            if (report.Data.Length == 3)
-            {
-                Array.Copy(_newRadioPanelValue, _oldRadioPanelValue, 3);
-                Array.Copy(report.Data, _newRadioPanelValue, 3);
-                var hashSet = GetHashSetOfSwitchedKeys(_oldRadioPanelValue, _newRadioPanelValue);
-                PZ69KnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                _isFirstNotification = false;
-                /*if (Common.Debug)
-                {
-                    var stringBuilder = new StringBuilder();
-                    for (var i = 0; i < report.Data.Length; i++)
-                    {
-                        stringBuilder.Append(report.Data[i] + " ");
-                    }
-                    Common.DebugP(stringBuilder.ToString());
-                    if (hashSet.Count > 0)
-                    {
-                        Common.DebugP("\nFollowing switches has been changed:\n");
-                        foreach (var radioPanelKey in hashSet)
-                        {
-                            Common.DebugP(((RadioPanelKey)radioPanelKey).RadioPanelPZ69EmulatorKey + ", value is " + FlagValue(_newRadioPanelValue, ((RadioPanelKey)radioPanelKey)));
-                        }
-                    }
-                }
-                Common.DebugP("\r\nDone!\r\n");*/
-            }
-            try
-            {
-                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
-                {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
-                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
+            PZ69KnobChanged(hashSet);
         }
-
-
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
@@ -598,40 +550,10 @@ namespace NonVisuals
             dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
             return dcsOutputAndColorBinding;
         }
-
-
-        private HashSet<object> GetHashSetOfSwitchedKeys(byte[] oldValue, byte[] newValue)
-        {
-            var result = new HashSet<object>();
-
-
-
-
-            for (var i = 0; i < 3; i++)
-            {
-                var oldByte = oldValue[i];
-                var newByte = newValue[i];
-
-                foreach (var radioPanelKey in _radioPanelKnobs)
-                {
-                    if (radioPanelKey.Group == i && (FlagHasChanged(oldByte, newByte, radioPanelKey.Mask) || _isFirstNotification))
-                    {
-                        radioPanelKey.IsOn = FlagValue(newValue, radioPanelKey);
-                        result.Add(radioPanelKey);
-                    }
-                }
-            }
-            return result;
-        }
-
-        private static bool FlagValue(byte[] currentValue, RadioPanelPZ69KnobEmulator radioPanelKey)
-        {
-            return (currentValue[radioPanelKey.Group] & radioPanelKey.Mask) > 0;
-        }
-
+        
         private void CreateSwitchKeys()
         {
-            _radioPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
+            SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
         }
 
         /*public HashSet<DCSBIOSBindingPZ69> DCSBiosBindings
@@ -647,7 +569,7 @@ namespace NonVisuals
 
 
     }
-    
+
     public enum ControlListPZ69 : byte
     {
         ALL,

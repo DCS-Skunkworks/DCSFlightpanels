@@ -88,6 +88,7 @@ namespace DCSFlightpanels
                 Common.SetErrorLog(_errorLogFile);
                 Common.SetDebugLog(_debugLogFile);
 
+                CheckErrorLogAndDCSBIOSLocation();
                 /*******************************************************************************************/
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
@@ -163,6 +164,24 @@ namespace DCSFlightpanels
             try
             {
                 Dispatcher.BeginInvoke((Action)(() => MessageBox.Show(e.UserMessage, "Information")));
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(19909017, ex);
+            }
+        }
+
+        private void CheckErrorLogAndDCSBIOSLocation()
+        {
+            //FUGLY, I know but something quick to help the users
+            try
+            {
+                var loggerText = File.ReadAllText(_errorLogFile);
+                if (loggerText.Contains(DCSBIOSControlLocator.DCSBIOSNotFoundErrorMessage))
+                {
+                    var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosJSONLocation);
+                    window.ShowDialog();
+                }
             }
             catch (Exception ex)
             {

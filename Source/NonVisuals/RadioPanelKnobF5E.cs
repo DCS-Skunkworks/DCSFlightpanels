@@ -38,7 +38,7 @@ namespace NonVisuals
         NO_USE = 16
     }
 
-    public class RadioPanelKnobF5E
+    public class RadioPanelKnobF5E : ISaitekPanelKnob
     {
         public RadioPanelKnobF5E(int group, int mask, bool isOn, RadioPanelPZ69KnobsF5E radioPanelPZ69Knob)
         {
@@ -56,33 +56,10 @@ namespace NonVisuals
 
         public RadioPanelPZ69KnobsF5E RadioPanelPZ69Knob { get; set; }
 
-        public string ExportString()
-        {
-            return "RadioPanelKnob{" + Enum.GetName(typeof(RadioPanelPZ69KnobsF5E), RadioPanelPZ69Knob) + "}";
-        }
-
-        public void ImportString(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (RadioPanelKnob)");
-            }
-            if (!str.StartsWith("RadioPanelKnob{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (RadioPanelKnob) >" + str + "<");
-            }
-            //RadioPanelKnob{SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
-            RadioPanelPZ69Knob = (RadioPanelPZ69KnobsF5E)Enum.Parse(typeof(RadioPanelPZ69KnobsF5E), dataString.Trim());
-        }
-
-        public static HashSet<RadioPanelKnobF5E> GetRadioPanelKnobs()
+        public static HashSet<ISaitekPanelKnob> GetRadioPanelKnobs()
         {
             //true means clockwise turn
-            var result = new HashSet<RadioPanelKnobF5E>();
+            var result = new HashSet<ISaitekPanelKnob>();
             //Group 0
             result.Add(new RadioPanelKnobF5E(2, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsF5E.UPPER_SMALL_FREQ_WHEEL_INC));
             result.Add(new RadioPanelKnobF5E(2, Convert.ToInt32("10", 2), false, RadioPanelPZ69KnobsF5E.UPPER_SMALL_FREQ_WHEEL_DEC));

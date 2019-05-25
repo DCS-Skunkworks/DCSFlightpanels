@@ -937,5 +937,10 @@ namespace NonVisuals
         /// Clear key
         /// </summary>
         OEM_CLEAR = 0xFE,
+
+        /// <summary>
+        /// NULL key
+        /// </summary>
+        VK_NULL = 0xFF
     }
 }

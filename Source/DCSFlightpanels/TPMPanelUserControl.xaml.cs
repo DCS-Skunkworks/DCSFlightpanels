@@ -256,34 +256,34 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                SequenceWindow sequenceWindow;
+                KeySequenceWindow keySequenceWindow;
                 if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence())
                 {
-                    sequenceWindow = new SequenceWindow(textBox.Text, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
+                    keySequenceWindow = new KeySequenceWindow(textBox.Text, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
                 }
                 else
                 {
-                    sequenceWindow = new SequenceWindow();
+                    keySequenceWindow = new KeySequenceWindow();
                 }
-                sequenceWindow.ShowDialog();
-                if (sequenceWindow.DialogResult.HasValue && sequenceWindow.DialogResult.Value)
+                keySequenceWindow.ShowDialog();
+                if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
                 {
                     //Clicked OK
                     //If the user added only a single key stroke combo then let's not treat this as a sequence
-                    if (!sequenceWindow.IsDirty)
+                    if (!keySequenceWindow.IsDirty)
                     {
                         //User made no changes
                         return;
                     }
-                    var sequenceList = sequenceWindow.GetSequence;
+                    var sequenceList = keySequenceWindow.GetSequence;
                     if (sequenceList.Count > 1)
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassTPM)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassTPM)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
-                        if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        ((TagDataClassTPM)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
-                            textBox.Text = sequenceWindow.GetInformation;
+                            textBox.Text = keySequenceWindow.GetInformation;
                         }
                         UpdateKeyBindingProfileSequencedKeyStrokesTPM(textBox);
                     }
@@ -293,7 +293,7 @@ namespace DCSFlightpanels
                         ((TagDataClassTPM)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassTPM)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassTPM)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        ((TagDataClassTPM)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }

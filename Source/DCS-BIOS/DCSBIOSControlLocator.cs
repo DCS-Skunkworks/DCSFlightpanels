@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ClassLibraryCommon;
@@ -15,7 +16,7 @@ namespace DCS_BIOS
         private static string _jsonDirectory;
         private static List<DCSBIOSControl> _dcsbiosControls = new List<DCSBIOSControl>();
         private static bool _listOnce = true;
-
+        public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
         public static void Reset()
         {
             DCSBIOSProfileLoadStatus.Clear();
@@ -148,7 +149,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -172,7 +173,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -216,14 +217,14 @@ namespace DCS_BIOS
 
                         var jsonData = DCSBIOSJsonFormatterVersion1.Format(text);
 //Console.WriteLine(jsonData);
-                        //Debug.Print("\n--------------------------\n" + jsonData);
+                        Debug.Print("\n--------------------------\n" + jsonData);
                         /*var newfile = File.CreateText(@"e:\temp\regexp_debug_output.txt.txt");
                         newfile.Write(jsonData);
                         newfile.Close();*/
                         var dcsBiosControlList = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(jsonData);
                         /*foreach (var control in dcsBiosControlList.DCSBIOSControls)
                         {
-                            Debug.Print(control.description);
+                            Debug.Print(control.identifier);
                         }*/
                         //Debug.Print("\n--------------------------\n" + jsonData);
                         _dcsbiosControls.AddRange(dcsBiosControlList.DCSBIOSControls);
@@ -239,7 +240,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -309,7 +310,7 @@ namespace DCS_BIOS
             }
             catch (Exception e)
             {
-                throw new Exception("Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory. " + e.Message);
+                throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + _jsonDirectory + "]<==" + e.Message);
             }
         }
 

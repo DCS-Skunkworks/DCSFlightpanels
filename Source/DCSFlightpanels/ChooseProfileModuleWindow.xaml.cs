@@ -18,6 +18,7 @@ namespace DCSFlightpanels
         public ChooseProfileModuleWindow()
         {
             InitializeComponent();
+            
         }
 
         private void ChooseProfileModuleWindow_OnLoaded(object sender, RoutedEventArgs e)

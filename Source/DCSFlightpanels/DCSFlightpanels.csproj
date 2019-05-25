@@ -114,6 +114,9 @@
     <Compile Include="DCSBiosInputWindow.xaml.cs">
       <DependentUpon>DCSBiosInputWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DCSBIOSNotFoundWindow.xaml.cs">
+      <DependentUpon>DCSBIOSNotFoundWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
     </Compile>
@@ -209,8 +212,8 @@
     <Compile Include="BugReportWindow.xaml.cs">
       <DependentUpon>BugReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SequenceWindow.xaml.cs">
-      <DependentUpon>SequenceWindow.xaml</DependentUpon>
+    <Compile Include="KeySequenceWindow.xaml.cs">
+      <DependentUpon>KeySequenceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -253,6 +256,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="DCSBiosInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DCSBIOSNotFoundWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -392,7 +399,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SequenceWindow.xaml">
+    <Page Include="KeySequenceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -670,6 +677,9 @@
   <ItemGroup>
     <Resource Include="Images\icons8-bug-26.png" />
     <Resource Include="Images\icons8-bug-52.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

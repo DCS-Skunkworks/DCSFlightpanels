@@ -84,6 +84,7 @@
     <Compile Include="IGlobalHandler.cs" />
     <Compile Include="IProfileHandlerListener.cs" />
     <Compile Include="IRadioPanel.cs" />
+    <Compile Include="ISaitekPanelKnob.cs" />
     <Compile Include="ISaitekPanelListener.cs" />
     <Compile Include="IUserMessageHandler.cs" />
     <Compile Include="KeyBindingPZ69DialPosition.cs" />

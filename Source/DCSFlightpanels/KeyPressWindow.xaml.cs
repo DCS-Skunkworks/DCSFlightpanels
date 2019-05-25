@@ -156,5 +156,18 @@ namespace DCSFlightpanels
                 Close();
             }
         }
+
+        private void ButtonAddNullKey_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TextBoxKeyPress.Text = "VK_NULL";
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

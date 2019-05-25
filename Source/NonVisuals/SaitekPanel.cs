@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using HidLibrary;
 
 namespace NonVisuals
 {
@@ -74,51 +75,51 @@ namespace NonVisuals
             OnSettingsChangedA -= iProfileHandlerListener.PanelSettingsChanged;
         }
 
-        //Used by descendants that wants to raise the event
+        //Used by any but descendants that wants to see buttons that have changed, UI for example
         protected virtual void OnSwitchesChanged(HashSet<object> hashSet)
         {
             OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Switches = hashSet });
         }
 
-        //Used by descendants that wants to raise the event
+        //Used by any but descendants that wants to see buttons that have changed, UI for example
         protected virtual void OnPanelDataAvailable(string stringData)
         {
             OnPanelDataAvailableA?.Invoke(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnDeviceAttached()
         {
             //IsAttached = true;
             OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnDeviceDetached()
         {
             //IsAttached = false;
             OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnSettingsChanged()
         {
             OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnSettingsApplied()
         {
             OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnSettingsCleared()
         {
             OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        //Used by descendants that wants to raise the event
+        
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
             OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
@@ -188,6 +189,70 @@ namespace NonVisuals
         private bool _closed;
         public long ReportCounter = 0;
 
+
+        protected bool FirstReportHasBeenRead = false;
+        protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new HashSet<ISaitekPanelKnob>();
+        protected byte[] OldSaitekPanelValue = { 0, 0, 0 };
+        protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
+        protected abstract void SaitekPanelKnobChanged(IEnumerable<object> hashSet);
+
+        protected void StartListeningForPanelChanges()
+        {
+            try
+            {
+                if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
+                {
+                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
+                    HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
+            }
+        }
+
+        private void OnReport(HidReport report)
+        {
+            if (report.Data.Length == 3)
+            {
+                Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
+                Array.Copy(report.Data, NewSaitekPanelValue, 3);
+                var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
+                SaitekPanelKnobChanged(hashSet);
+                OnSwitchesChanged(hashSet);
+                FirstReportHasBeenRead = true;
+            }
+            StartListeningForPanelChanges();
+        }
+
+        private HashSet<object> GetHashSetOfChangedKnobs(byte[] oldValue, byte[] newValue)
+        {
+            var result = new HashSet<object>();
+
+
+            for (var i = 0; i < 3; i++)
+            {
+                var oldByte = oldValue[i];
+                var newByte = newValue[i];
+
+                foreach (var saitekPanelKnob in SaitekPanelKnobs)
+                {
+                    if (saitekPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, saitekPanelKnob.Mask) || !FirstReportHasBeenRead))
+                    {
+                        saitekPanelKnob.IsOn = FlagValue(newValue, saitekPanelKnob);
+                        result.Add(saitekPanelKnob);
+
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static bool FlagValue(byte[] currentValue, ISaitekPanelKnob saitekPanelKnob)
+        {
+            return (currentValue[saitekPanelKnob.Group] & saitekPanelKnob.Mask) > 0;
+        }
 
         protected void UpdateCounter(uint address, uint data)
         {

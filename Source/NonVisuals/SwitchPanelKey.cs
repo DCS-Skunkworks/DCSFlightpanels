@@ -72,7 +72,7 @@ namespace NonVisuals
         LEVER_GEAR_DOWN = 524288
     }
 
-    public class SwitchPanelKey
+    public class SwitchPanelKey : ISaitekPanelKnob
     {
 
         public SwitchPanelKey(int group, int mask, bool isOn, SwitchPanelPZ55Keys switchPanelPZ55Key)
@@ -90,33 +90,10 @@ namespace NonVisuals
         public bool IsOn { get; set; }
 
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key { get; set; }
-        /*
-        public string ExportString()
-        {
-            return "SwitchPanelKey{" + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}";
-        }
 
-        public void ImportString(string str)
+        public static HashSet<ISaitekPanelKnob> GetPanelSwitchKeys()
         {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (PanelSwitchKey)");
-            }
-            if (!str.StartsWith("SwitchPanelKey{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (PanelSwitchKey) >" + str + "<");
-            }
-            //SwitchPanelKey{SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //SWITCHKEY_MASTER_ALT
-            SwitchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), dataString.Trim());
-        }
-        */
-        public static HashSet<SwitchPanelKey> GetPanelSwitchKeys()
-        {
-            var result = new HashSet<SwitchPanelKey>();
+            var result = new HashSet<ISaitekPanelKnob>();
             //Group 0
             result.Add(new SwitchPanelKey(0, Convert.ToInt32("1", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT));
             result.Add(new SwitchPanelKey(0, Convert.ToInt32("10", 2), false, SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT));
@@ -144,44 +121,5 @@ namespace NonVisuals
             result.Add(new SwitchPanelKey(2, Convert.ToInt32("1000", 2), false, SwitchPanelPZ55Keys.LEVER_GEAR_DOWN));
             return result;
         }
-
-
-
-
-
-
-
-
-
-
-
-        /*
-         * public String ExportString()
-        {
-            return "SwitchPanelKey{" + Group + "," + Mask + "," + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}";
-        }
-
-        public void ImportString(String str)
-        {
-            if (String.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (PanelSwitchKey)");
-            }
-            if (!str.StartsWith("SwitchPanelKey{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (PanelSwitchKey) >" + str + "<");
-            }
-            //SwitchPanelKey{1,255,SWITCHKEY_MASTER_ALT}
-            var dataString = str.Remove(0, 15);
-            //1,255,SWITCHKEY_MASTER_ALT}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //1,255,SWITCHKEY_MASTER_ALT
-            Group = int.Parse(dataString.Substring(0, 1));
-            dataString = dataString.Substring(2);
-            //255,SWITCHKEY_MASTER_ALT
-            Mask = int.Parse(dataString.Substring(0,dataString.IndexOf(",", StringComparison.Ordinal)));
-            SwitchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), dataString.Substring(dataString.IndexOf(",", StringComparison.Ordinal) +1 ));
-        }
-         */
     }
 }

@@ -340,34 +340,34 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                SequenceWindow sequenceWindow;
+                KeySequenceWindow keySequenceWindow;
                 if (((TagDataClassPZ55)textBox.Tag).ContainsKeySequence())
                 {
-                    sequenceWindow = new SequenceWindow(textBox.Text, ((TagDataClassPZ55)textBox.Tag).GetKeySequence());
+                    keySequenceWindow = new KeySequenceWindow(textBox.Text, ((TagDataClassPZ55)textBox.Tag).GetKeySequence());
                 }
                 else
                 {
-                    sequenceWindow = new SequenceWindow();
+                    keySequenceWindow = new KeySequenceWindow();
                 }
-                sequenceWindow.ShowDialog();
-                if (sequenceWindow.DialogResult.HasValue && sequenceWindow.DialogResult.Value)
+                keySequenceWindow.ShowDialog();
+                if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
                 {
                     //Clicked OK
                     //If the user added only a single key stroke combo then let's not treat this as a sequence
-                    if (!sequenceWindow.IsDirty)
+                    if (!keySequenceWindow.IsDirty)
                     {
                         //User made no changes
                         return;
                     }
-                    var sequenceList = sequenceWindow.GetSequence;
+                    var sequenceList = keySequenceWindow.GetSequence;
                     if (sequenceList.Count > 1)
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassPZ55)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
-                        if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        ((TagDataClassPZ55)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
-                            textBox.Text = sequenceWindow.GetInformation;
+                            textBox.Text = keySequenceWindow.GetInformation;
                         }
                         UpdateKeyBindingProfileSequencedKeyStrokesPZ55(textBox);
                     }
@@ -377,7 +377,7 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ55)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassPZ55)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        ((TagDataClassPZ55)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
@@ -1131,7 +1131,7 @@ namespace DCSFlightpanels
                                     {
                                         //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
                                         //The button is considered OFF by the program when it is upwards which is opposite to the other buttons which all are considered ON when upwards.
-                                        ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageCowlClosed.Visibility = !key.IsOn ? Visibility.Collapsed : Visibility.Visible;
                                     });
                                 break;
                             }
