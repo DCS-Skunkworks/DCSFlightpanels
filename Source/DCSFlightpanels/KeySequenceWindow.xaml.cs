@@ -12,19 +12,19 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml
     /// </summary>
-    public partial class SequenceWindow : Window
+    public partial class KeySequenceWindow : Window
     {
 
         private readonly SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
         private bool _isDirty;
 
-        public SequenceWindow()
+        public KeySequenceWindow()
         {
             InitializeComponent();
             SetFormState();
         }
 
-        public SequenceWindow(string information, SortedList<int, KeyPressInfo> sortedList)
+        public KeySequenceWindow(string information, SortedList<int, KeyPressInfo> sortedList)
         {
             InitializeComponent();
             _sortedList = sortedList;

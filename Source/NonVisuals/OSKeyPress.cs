@@ -240,7 +240,7 @@ namespace NonVisuals
             for (var i = 0; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (!CommonVK.IsModifierKey(virtualKeyCode))
+                if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
                 {
                     NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
                 }
@@ -636,7 +636,7 @@ namespace NonVisuals
             for (var i = modifierCount; i < virtualKeyCodes.Count(); i++)
             {
                 var virtualKeyCode = virtualKeyCodes[i];
-                if (!CommonVK.IsModifierKey(virtualKeyCode))
+                if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
                 {
                     Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
                     inputs[i].type = NativeMethods.INPUT_KEYBOARD;

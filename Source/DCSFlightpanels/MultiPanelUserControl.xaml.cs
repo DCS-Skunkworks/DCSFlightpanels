@@ -1014,39 +1014,39 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                SequenceWindow sequenceWindow;
+                KeySequenceWindow keySequenceWindow;
                 if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence())
                 {
-                    sequenceWindow = new SequenceWindow(textBox.Text, ((TagDataClassPZ70)textBox.Tag).GetKeySequence());
+                    keySequenceWindow = new KeySequenceWindow(textBox.Text, ((TagDataClassPZ70)textBox.Tag).GetKeySequence());
                 }
                 else
                 {
-                    sequenceWindow = new SequenceWindow();
+                    keySequenceWindow = new KeySequenceWindow();
                 }
-                sequenceWindow.ShowDialog();
-                if (sequenceWindow.DialogResult.HasValue && sequenceWindow.DialogResult.Value)
+                keySequenceWindow.ShowDialog();
+                if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
                 {
                     //Clicked OK
                     //If the user added only a single key stroke combo then let's not treat this as a sequence
-                    if (!sequenceWindow.IsDirty)
+                    if (!keySequenceWindow.IsDirty)
                     {
                         //User made no changes
                         return;
                     }
-                    var sequenceList = sequenceWindow.GetSequence;
+                    var sequenceList = keySequenceWindow.GetSequence;
                     if (sequenceList.Count > 1)
                     {
                         var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
                         ((TagDataClassPZ70)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
-                        if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
-                            textBox.Text = sequenceWindow.GetInformation;
+                            textBox.Text = keySequenceWindow.GetInformation;
                         }
-                        //textBox.Text = string.IsNullOrEmpty(sequenceWindow.GetInformation) ? "Key press sequence" : sequenceWindow.GetInformation;
-                        /*if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        //textBox.Text = string.IsNullOrEmpty(keySequenceWindow.GetInformation) ? "Key press sequence" : keySequenceWindow.GetInformation;
+                        /*if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
-                            var toolTip = new ToolTip { Content = sequenceWindow.GetInformation };
+                            var toolTip = new ToolTip { Content = keySequenceWindow.GetInformation };
                             textBox.ToolTipa = toolTip;
                         }*/
                         UpdateKeyBindingProfileSequencedKeyStrokesPZ70(textBox);
@@ -1057,12 +1057,12 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ70)textBox.Tag).ClearAll();
                         var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassPZ70)textBox.Tag).KeyPress = osKeyPress;
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = sequenceWindow.GetInformation;
+                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         /*textBox.Text = sequenceList.Values[0].VirtualKeyCodesAsString;
-                        if (!string.IsNullOrEmpty(sequenceWindow.GetInformation))
+                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
-                            var toolTip = new ToolTip { Content = sequenceWindow.GetInformation };
+                            var toolTip = new ToolTip { Content = keySequenceWindow.GetInformation };
                             textBox.ToolTipa = toolTip;
                         }*/
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);

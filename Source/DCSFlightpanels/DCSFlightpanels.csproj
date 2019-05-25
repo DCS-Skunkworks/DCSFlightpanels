@@ -212,8 +212,8 @@
     <Compile Include="BugReportWindow.xaml.cs">
       <DependentUpon>BugReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SequenceWindow.xaml.cs">
-      <DependentUpon>SequenceWindow.xaml</DependentUpon>
+    <Compile Include="KeySequenceWindow.xaml.cs">
+      <DependentUpon>KeySequenceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -399,7 +399,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SequenceWindow.xaml">
+    <Page Include="KeySequenceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
