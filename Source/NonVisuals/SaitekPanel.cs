@@ -87,39 +87,39 @@ namespace NonVisuals
             OnPanelDataAvailableA?.Invoke(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
         }
 
-        
+
         protected virtual void OnDeviceAttached()
         {
             //IsAttached = true;
             OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        
+
         protected virtual void OnDeviceDetached()
         {
             //IsAttached = false;
             OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        
+
         protected virtual void OnSettingsChanged()
         {
             OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        
+
         protected virtual void OnSettingsApplied()
         {
             OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        
+
         protected virtual void OnSettingsCleared()
         {
             OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
         }
 
-        
+
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
             OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
@@ -162,7 +162,7 @@ namespace NonVisuals
         private bool _synchedOnce;
         private readonly Guid _guid = Guid.NewGuid();
         private readonly string _hash;
-        
+
         protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton)
         {
             _typeOfSaitekPanel = typeOfSaitekPanel;
@@ -240,8 +240,43 @@ namespace NonVisuals
                 {
                     if (saitekPanelKnob.Group == i && (FlagHasChanged(oldByte, newByte, saitekPanelKnob.Mask) || !FirstReportHasBeenRead))
                     {
+                        var addKnob = true;
+
                         saitekPanelKnob.IsOn = FlagValue(newValue, saitekPanelKnob);
-                        result.Add(saitekPanelKnob);
+                        if (saitekPanelKnob.GetType() == typeof(MultiPanelKnob) && !saitekPanelKnob.IsOn)
+                        {
+
+                            var multiPanelKnob = (MultiPanelKnob)saitekPanelKnob;
+                            switch (multiPanelKnob.MultiPanelPZ70Knob)
+                            {
+                                case MultiPanelPZ70Knobs.AP_BUTTON:
+                                case MultiPanelPZ70Knobs.HDG_BUTTON:
+                                case MultiPanelPZ70Knobs.NAV_BUTTON:
+                                case MultiPanelPZ70Knobs.IAS_BUTTON:
+                                case MultiPanelPZ70Knobs.ALT_BUTTON:
+                                case MultiPanelPZ70Knobs.VS_BUTTON:
+                                case MultiPanelPZ70Knobs.APR_BUTTON:
+                                case MultiPanelPZ70Knobs.REV_BUTTON:
+                                    {
+                                        /*
+                                         * IMPORTANT
+                                         * ---------
+                                         * The LCD buttons toggle between on and off. It is the toggle value that defines if the button is OFF, not the fact that the user releases the button.
+                                         * Therefore the fore-mentioned buttons cannot be used as usual in a loop with knobBinding.WhenTurnedOn
+                                         * Instead the buttons global bool value must be used!
+                                         * 
+                                         */
+                                        //Do not add OFF values for these buttons! Read comment above.
+                                        addKnob = false;
+                                        break;
+                                    }
+                            }
+                        }
+
+                        if (addKnob)
+                        {
+                            result.Add(saitekPanelKnob);
+                        }
 
                     }
                 }
@@ -288,7 +323,7 @@ namespace NonVisuals
 
         public void SelectedAirframe(object sender, AirframeEventArgs e)
         {
-            
+
         }
 
         //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.

@@ -592,7 +592,7 @@ namespace NonVisuals
                  * IMPORTANT
                  * ---------
                  * The LCD buttons toggle between on and off. It is the toggle value that defines if the button is OFF, not the fact that the user releases the button.
-                 * Therefore the forementioned buttons cannot be used as usual in a loop with knobBinding.WhenTurnedOn
+                 * Therefore the fore-mentioned buttons cannot be used as usual in a loop with knobBinding.WhenTurnedOn
                  * Instead the buttons global bool value must be used!
                  * 
                  */

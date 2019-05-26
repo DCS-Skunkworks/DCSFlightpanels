@@ -771,11 +771,6 @@ namespace NonVisuals
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 2));
-                        Debug.WriteLine(" frequencyAsString : " + frequencyAsString);
-                        Debug.WriteLine("Desired position Dial 1 : " + desiredPositionDial1X);
-                        Debug.WriteLine("Desired position Dial 2 : " + desiredPositionDial2X);
-                        Debug.WriteLine("Desired position Dial 3 : " + desiredPositionDial3X);
-                        Debug.WriteLine("Desired position Dial 4 : " + desiredPositionDial4X);
                         do
                         {
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-863 dial1Timeout"))
@@ -885,7 +880,6 @@ namespace NonVisuals
                                 lock (_lockR863ManualDialsObject4)
                                 {
                                     Common.DebugP("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
-                                    Debug.WriteLine("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
                                     if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;

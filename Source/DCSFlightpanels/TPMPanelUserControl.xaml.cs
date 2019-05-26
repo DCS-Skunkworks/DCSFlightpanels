@@ -45,10 +45,8 @@ namespace DCSFlightpanels
                 _once = true;
             }
             var now = DateTime.Now.Ticks;
-            Debug.WriteLine("Start TPMPanelUserControl_OnLoaded");
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
-            Debug.WriteLine("End TPMPanelUserControl_OnLoaded" + new TimeSpan(DateTime.Now.Ticks - now).Milliseconds);
             _controlLoaded = true;
             ShowGraphicConfiguration();
         }

@@ -60,10 +60,8 @@ namespace DCSFlightpanels
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
             var now = DateTime.Now.Ticks;
-            Debug.WriteLine("Start BipPanelRegisterEvent");
             RemoveContextMenuClickHandlers();
             SetContextMenuClickHandlers();
-            Debug.WriteLine("End BipPanelRegisterEvent" + new TimeSpan(DateTime.Now.Ticks - now).Milliseconds);
         }
 
         public SaitekPanel GetSaitekPanel()

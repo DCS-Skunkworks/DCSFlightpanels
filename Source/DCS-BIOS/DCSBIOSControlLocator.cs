@@ -217,7 +217,6 @@ namespace DCS_BIOS
 
                         var jsonData = DCSBIOSJsonFormatterVersion1.Format(text);
 //Console.WriteLine(jsonData);
-                        Debug.Print("\n--------------------------\n" + jsonData);
                         /*var newfile = File.CreateText(@"e:\temp\regexp_debug_output.txt.txt");
                         newfile.Write(jsonData);
                         newfile.Close();*/

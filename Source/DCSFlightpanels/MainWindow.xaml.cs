@@ -62,6 +62,9 @@ namespace DCSFlightpanels
         public MainWindow()
         {
             InitializeComponent();
+
+            // Stop annoying "Cannot find source for binding with reference .... " from being shown
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
