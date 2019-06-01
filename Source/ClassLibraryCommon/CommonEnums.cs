@@ -16,7 +16,7 @@ namespace ClassLibraryCommon
     public enum KeyPressLength
     {
         //Zero = 0, <-- DCS & keybd_event does not work without delay between key press & release
-        //Indefinite = 0,
+        Indefinite = 999999999,
         FiftyMilliSec = 50,
         HalfSecond = 500,
         Second = 1000,

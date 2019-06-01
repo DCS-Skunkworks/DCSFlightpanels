@@ -16,7 +16,7 @@ namespace NonVisuals
          * - DCS-BIOS control
          */
         //private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
-        private readonly HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
+        private HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
         private readonly byte[] _oldRadioPanelValue = { 0, 0, 0 };
@@ -95,6 +95,8 @@ namespace NonVisuals
                     }
                 }
             }
+
+            _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
             OnSettingsApplied();
         }
 
@@ -384,6 +386,7 @@ namespace NonVisuals
                 _keyBindings.Add(keyBinding);
             }
             Common.DebugP("RadioPanelPZ69Emulator _keyBindings : " + _keyBindings.Count);
+            _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 
@@ -449,6 +452,7 @@ namespace NonVisuals
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
+            _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 

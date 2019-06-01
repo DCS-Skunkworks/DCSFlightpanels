@@ -117,6 +117,7 @@ namespace NonVisuals
                 }
             }
             OnSettingsApplied();
+            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
         public override List<string> ExportSettings()
@@ -412,6 +413,8 @@ namespace NonVisuals
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
+
+            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
             Common.DebugP("SwitchPanelPZ55 _keyBindings : " + _keyBindings.Count);
             IsDirtyMethod();
         }
@@ -454,6 +457,8 @@ namespace NonVisuals
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
+
+            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 

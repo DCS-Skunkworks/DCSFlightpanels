@@ -161,6 +161,7 @@ namespace NonVisuals
                 }
             }
             SettingsLoading = false;
+            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
             OnSettingsApplied();
         }
 
@@ -272,6 +273,7 @@ namespace NonVisuals
                 _knobBindings.Add(knobBinding);
             }
             Common.DebugP("MultiPanelPZ70 _knobBindings : " + _knobBindings.Count);
+            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
             IsDirtyMethod();
         }
 
@@ -311,6 +313,7 @@ namespace NonVisuals
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _knobBindings.Add(knobBinding);
             }
+            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
             IsDirtyMethod();
         }
 

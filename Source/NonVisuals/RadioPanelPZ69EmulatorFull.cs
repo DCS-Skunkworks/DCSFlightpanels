@@ -21,7 +21,7 @@ namespace NonVisuals
          * - BIP Link.
          */
         //private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
-        private readonly HashSet<KeyBindingPZ69DialPosition> _keyBindings = new HashSet<KeyBindingPZ69DialPosition>();
+        private HashSet<KeyBindingPZ69DialPosition> _keyBindings = new HashSet<KeyBindingPZ69DialPosition>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private HashSet<DCSBIOSBindingLCDPZ69> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ69>();
         private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
@@ -117,6 +117,8 @@ namespace NonVisuals
                     }
                 }
             }
+
+            _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
             OnSettingsApplied();
         }
 
@@ -600,6 +602,7 @@ namespace NonVisuals
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
+            _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
             Common.DebugP("RadioPanelPZ69FullEmulator _keyBindings : " + _keyBindings.Count);
             IsDirtyMethod();
         }
@@ -670,6 +673,7 @@ namespace NonVisuals
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
+            _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 

@@ -1,5 +1,7 @@
 # DCSFlightpanels
 
+[![](http://i63.tinypic.com/2s8jx9x.png)](https://www.paypal.me/jerkerdahlblom)
+
 DCSFlightpanels primary use is for using Saitek/Logitech panels in DCS World.
 Together with DCS-BIOS you can manage every control for the aircraft and use
 the Radio Panel to operate cockpit radio equipment and also show data from the
@@ -44,4 +46,4 @@ Here you find our [DCSFlightpanels Discord Server](https://discord.gg/5svGwKX)
 
 (28.12.2018 My poor Git skills led to a reset in the repo with all old commits and contributors to be erased)
 
-[![](http://i63.tinypic.com/2s8jx9x.png)](https://www.paypal.me/jerkerdahlblom)
+

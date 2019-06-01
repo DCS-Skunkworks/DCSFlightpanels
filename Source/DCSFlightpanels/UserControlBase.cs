@@ -18,7 +18,11 @@ namespace DCSFlightpanels
 
                 foreach (MenuItem item in contextMenu.Items)
                 {
-                    if (item.Name == "contextMenuItemFiftyMilliSec" && keyPressLength == KeyPressLength.FiftyMilliSec)
+                    if (item.Name == "contextMenuItemKeepPressed" && keyPressLength == KeyPressLength.Indefinite)
+                    {
+                        item.IsChecked = true;
+                    }
+                    else if (item.Name == "contextMenuItemFiftyMilliSec" && keyPressLength == KeyPressLength.FiftyMilliSec)
                     {
                         item.IsChecked = true;
                     }
@@ -86,12 +90,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (textBox == null)
+                if (contextMenuItem.Name == "contextMenuItemKeepPressed")
                 {
-                    throw new Exception("Failed to locate which textbox is focused.");
+                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
-
-                if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
+                else if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
                 {
                     ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
                 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using ClassLibraryCommon;
 
 namespace NonVisuals
@@ -70,7 +72,27 @@ namespace NonVisuals
         }
 
 
+        public static HashSet<KeyBindingTPM> SetNegators(HashSet<KeyBindingTPM> knobBindings)
+        {
+            if (knobBindings == null)
+            {
+                return knobBindings;
+            }
+            foreach (var keyBindingTPM in knobBindings)
+            {
+                //Clear all negators
+                keyBindingTPM.OSKeyPress.NegatorOSKeyPresses.Clear();
 
+                foreach (var keyBinding in knobBindings)
+                {
+                    if (keyBinding != keyBindingTPM && keyBinding.TPMSwitch == keyBindingTPM.TPMSwitch && keyBinding.WhenTurnedOn != keyBindingTPM.WhenTurnedOn)
+                    {
+                        keyBindingTPM.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                    }
+                }
+            }
 
+            return knobBindings;
+        }
     }
 }

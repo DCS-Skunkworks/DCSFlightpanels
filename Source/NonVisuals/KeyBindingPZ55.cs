@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Documents;
 using ClassLibraryCommon;
 
 namespace NonVisuals
@@ -69,8 +72,105 @@ namespace NonVisuals
             set => _whenOnTurnedOn = value;
         }
 
+        public static HashSet<KeyBindingPZ55> SetNegators(HashSet<KeyBindingPZ55> knobBindings)
+        {
+            if (knobBindings == null)
+            {
+                return knobBindings;
+            }
+            foreach (var keyBindingPZ55 in knobBindings)
+            {
+                //Clear all negators
+                keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Clear();
 
+                if (keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF)
+                {
+                    //We have to deal with them separately
+                    continue;
+                }
 
+                foreach (var keyBinding in knobBindings)
+                {
+                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == keyBindingPZ55.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn != keyBindingPZ55.WhenTurnedOn)
+                    {
+                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                    }
+                }
+            }
 
+            foreach (var keyBindingPZ55 in knobBindings)
+            {
+                if (keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF)
+                {
+                    switch (keyBindingPZ55.SwitchPanelPZ55Key)
+                    {
+                        case SwitchPanelPZ55Keys.KNOB_ENGINE_OFF:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT)
+                                    {
+                                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+                                break;
+                            }
+                        case SwitchPanelPZ55Keys.KNOB_ENGINE_START:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH)
+                                    {
+                                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+                                break;
+                            }
+                        case SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT || keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START)
+                                    {
+                                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+                                break;
+                            }
+                        case SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT || keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF)
+                                    {
+                                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+                                break;
+                            }
+                        case SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT || keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH)
+                                    {
+                                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+                                break;
+                            }
+                    }
+                }
+            }
+            return knobBindings;
+        }
     }
 }
