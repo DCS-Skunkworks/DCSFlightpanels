@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
@@ -516,6 +517,7 @@ namespace NonVisuals
                                     {
                                         SaveCockpitFrequencyVuhf();
                                         var freq = _vuhfBigFrequencyStandby * 1000 + _vuhfSmallFrequencyStandby;
+//Debug.WriteLine("Setting freg = > " + "SET_VUHF_FREQ " + freq);
                                         DCSBIOS.Send("SET_VUHF_FREQ " + freq + "\n");
                                         SwapCockpitStandbyFrequencyVuhf();
                                         Interlocked.Add(ref _doUpdatePanelLCD, 2);
@@ -572,6 +574,7 @@ namespace NonVisuals
                                     {
                                         SaveCockpitFrequencyVuhf();
                                         var freq = _vuhfBigFrequencyStandby * 1000 + _vuhfSmallFrequencyStandby;
+//Debug.WriteLine("Setting freg = > " + "SET_VUHF_FREQ " + freq);
                                         DCSBIOS.Send("SET_VUHF_FREQ " + freq + "\n");
                                         SwapCockpitStandbyFrequencyVuhf();
                                         Interlocked.Add(ref _doUpdatePanelLCD, 2);
@@ -1423,7 +1426,7 @@ namespace NonVisuals
                 {
                     lock (_lockVuhfDial4FreqObject2)
                     {
-                        frequencyAsString = _vuhfCockpitBigFrequency.ToString(CultureInfo.InvariantCulture).PadRight(3, '0');
+                        frequencyAsString = _vuhfCockpitBigFrequency.ToString(CultureInfo.InvariantCulture);
                         frequencyAsString = frequencyAsString + ".";
                         frequencyAsString = frequencyAsString + _vuhfCockpitDial3Frequency.ToString(CultureInfo.InvariantCulture);
                         frequencyAsString = frequencyAsString + _vuhfCockpitDial4Frequency.ToString(CultureInfo.InvariantCulture).PadRight(2, '0');
