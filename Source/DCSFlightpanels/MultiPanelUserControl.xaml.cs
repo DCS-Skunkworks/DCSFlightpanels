@@ -966,7 +966,6 @@ namespace DCSFlightpanels
                 }
                 var keyPressLength = ((TagDataClassPZ70)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 CheckContextMenuItems(keyPressLength, contextMenu);
-                TextBoxLogPZ70.Focus();
             }
             catch (Exception ex)
             {

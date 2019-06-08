@@ -200,7 +200,7 @@ namespace DCS_BIOS
                     _udpReceiveClient.Close();
                     _udpReceiveClient = null;
                 }
-                if (_udpSendClient != null && _udpSendClient.Client.Connected)
+                if (_udpSendClient != null && _udpSendClient.Client  != null && _udpSendClient.Client.Connected)
                 {
                     _udpSendClient.Close();
                     _udpSendClient = null;

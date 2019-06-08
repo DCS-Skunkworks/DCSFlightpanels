@@ -202,7 +202,7 @@ namespace NonVisuals
             {
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
-                    Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
+                    //Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }

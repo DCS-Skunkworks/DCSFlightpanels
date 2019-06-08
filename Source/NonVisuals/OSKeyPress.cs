@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -60,6 +61,13 @@ namespace NonVisuals
         private Thread _executingThread;
         private long _abortCurrentSequence;
         private long _threadHasFinished = 1;
+        /*
+         * When this OSKeyPress Executes it should cancel any execution _negatorOSKeyPress does.
+         * No need for constructor of this. It is not know at startup whether there are negators,
+         * depends on what the user has configured.
+         * It is the binding class that must make sure to set these.
+         */
+        private List<OSKeyPress> _negatorOSKeyPresses = new List<OSKeyPress>(); 
 
         public OSKeyPress() { }
 
@@ -84,6 +92,12 @@ namespace NonVisuals
             _executingThread?.Abort();
         }
 
+        public List<OSKeyPress> NegatorOSKeyPresses
+        {
+            get => _negatorOSKeyPresses;
+            set => _negatorOSKeyPresses = value;
+        }
+
         private void SetAbortThreadState()
         {
             Interlocked.Exchange(ref _abortCurrentSequence, 1);
@@ -94,12 +108,12 @@ namespace NonVisuals
             Interlocked.Exchange(ref _abortCurrentSequence, 0);
         }
 
-        private bool AbortThread()
+        private bool DoAbortThread()
         {
             return Interlocked.Read(ref _abortCurrentSequence) == 1;
         }
 
-        private bool ThreadHasFinished()
+        private bool HasThreadHasFinished()
         {
             return Interlocked.Read(ref _threadHasFinished) == 1;
         }
@@ -118,24 +132,27 @@ namespace NonVisuals
         {
             try
             {
+                foreach (var negatorOSKeyPress in _negatorOSKeyPresses)
+                {
+                    negatorOSKeyPress?.SetAbortThreadState();
+                }
                 //PrintInterlockedVars(0);
                 //Check for already executing key sequence which may use long timings and breaks
-                if (!ThreadHasFinished() && _executingThread != null)
+                if (!HasThreadHasFinished() && _executingThread != null)
                 {
                     SetAbortThreadState();
-                    //PrintInterlockedVars(1);
-                    while (!ThreadHasFinished())
+                    while (!HasThreadHasFinished())
                     {
                         Thread.Sleep(50);
                     }
                     ResetAbortThreadState();
                     ResetThreadHasFinishedState();
-                    //PrintInterlockedVars(2);
                     _executingThread = new Thread(() => ExecuteThreaded(_sortedKeyPressInfoList));
                     _executingThread.Start();
                 }
                 else
                 {
+                    ResetAbortThreadState();
                     ResetThreadHasFinishedState();
                     _executingThread = new Thread(() => ExecuteThreaded(_sortedKeyPressInfoList));
                     _executingThread.Start();
@@ -151,7 +168,6 @@ namespace NonVisuals
         {
             try
             {
-
                 try
                 {
                     if (sortedList == null)
@@ -182,7 +198,7 @@ namespace NonVisuals
                             SendKeys(keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
                             //Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
                         }
-                        if (AbortThread())
+                        if (DoAbortThread())
                         {
                             Common.DebugP("Aborting key pressing routine (AbortThread)");
                             break;
@@ -212,82 +228,93 @@ namespace NonVisuals
             {
                 Thread.Sleep(50);
                 breakLengthConsumed += 50;
-                if (AbortThread())
+                if (DoAbortThread())
                 {
+                    ResetAbortThreadState();
                     return;
                 }
             }
-            //Press modifiers
-            for (var i = 0; i < virtualKeyCodes.Count(); i++)
+
+            while (keyPressLengthTimeConsumed < (int)keyPressLength)
             {
-                var virtualKeyCode = virtualKeyCodes[i];
-                if (CommonVK.IsModifierKey(virtualKeyCode))
+//Debug.WriteLine("VK = " + virtualKeyCodes[1] + " length = " + keyPressLength);
+                //Press modifiers
+                for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
-                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
-                    if (CommonVK.IsExtendedKey(virtualKeyCode))
+                    var virtualKeyCode = virtualKeyCodes[i];
+                    if (CommonVK.IsModifierKey(virtualKeyCode))
                     {
-                        NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_EXTENDEDKEY | 0, 0);
-                        //keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
+                        Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
+                        if (CommonVK.IsExtendedKey(virtualKeyCode))
+                        {
+                            NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_EXTENDEDKEY | 0, 0);
+                            //keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, 0);
+                        }
+                        else
+                        {
+                            NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
+                        }
                     }
-                    else
+                }
+
+                //Press normal keys
+                for (var i = 0; i < virtualKeyCodes.Count(); i++)
+                {
+                    var virtualKeyCode = virtualKeyCodes[i];
+                    if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
                     {
                         NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
                     }
                 }
-            }
 
-            //Press normal keys
-            for (var i = 0; i < virtualKeyCodes.Count(); i++)
-            {
-                var virtualKeyCode = virtualKeyCodes[i];
-                if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
+
+                
+                if (keyPressLength != KeyPressLength.Indefinite)
                 {
-                    NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), 0, 0);
+                    Thread.Sleep(50);
+                    keyPressLengthTimeConsumed += 50;
                 }
-            }
-
-            /*if (keyPressLength == KeyPressLength.Indefinite)
-            {
-                return;
-            }*/
-
-            while (keyPressLengthTimeConsumed < (int)keyPressLength)
-            {
-                Thread.Sleep(50);
-                keyPressLengthTimeConsumed += 50;
-                if (AbortThread())
+                else
                 {
-                    //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
-                    break;
+                    Thread.Sleep(20);
                 }
-            }
-            //Release normal keys
-            for (var i = 0; i < virtualKeyCodes.Count(); i++)
-            {
-                var virtualKeyCode = virtualKeyCodes[i];
-                if (!CommonVK.IsModifierKey(virtualKeyCode))
-                {
-                    NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_KEYUP, 0);
-                }
-            }
 
-            //Release modifiers
-            for (var i = 0; i < virtualKeyCodes.Count(); i++)
-            {
-                var virtualKeyCode = virtualKeyCodes[i];
-                if (CommonVK.IsModifierKey(virtualKeyCode))
+                //Release normal keys
+                for (var i = 0; i < virtualKeyCodes.Count(); i++)
                 {
-                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
-                    if (CommonVK.IsExtendedKey(virtualKeyCode))
-                    {
-                        NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)(NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP), 0);
-                    }
-                    else
+                    var virtualKeyCode = virtualKeyCodes[i];
+                    if (!CommonVK.IsModifierKey(virtualKeyCode))
                     {
                         NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_KEYUP, 0);
                     }
                 }
+
+                //Release modifiers
+                for (var i = 0; i < virtualKeyCodes.Count(); i++)
+                {
+                    var virtualKeyCode = virtualKeyCodes[i];
+                    if (CommonVK.IsModifierKey(virtualKeyCode))
+                    {
+                        Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
+                        if (CommonVK.IsExtendedKey(virtualKeyCode))
+                        {
+                            NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)(NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP), 0);
+                        }
+                        else
+                        {
+                            NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_KEYUP, 0);
+                        }
+                    }
+                }
+
+                if (DoAbortThread())
+                {
+                    ResetAbortThreadState();
+                    //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
+                    break;
+                }
             }
+
         }
 
         public string GetVirtualKeyCodesAsString(KeyPressInfo keyPressInfo)
@@ -561,24 +588,7 @@ namespace NonVisuals
             return _sortedKeyPressInfoList.Keys.Max() + 1;
         }
 
-        /*
-         * DO NOT USE BAD CODING /JERKER
-        private static void WaiatMilliSeconds(KeyPressLength keyPressLength)
-        {
-            var once = true;
-            var startMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            var nowMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            while (nowMilliseconds - startMilliseconds < (int)keyPressLength)
-            {
-                if (Common.Debug && once)
-                {
-                    Common.DebugP("Waiting " + keyPressLength + " ms.");
-                    once = false;
-                }
-                nowMilliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            }
-        }
-        */
+
         /*
              * SendInput är den korrekta funktionen att använda idag (13.1.2014) då keybd_event inte längre ska användas.
              * DCS dock fungerar inte med SendInput, LCONTROL,RCONTROL,LSHIFT,LALT,RSHIFT,RALT tas inte emot på korrekt sätt.
@@ -593,80 +603,86 @@ namespace NonVisuals
             {
                 Thread.Sleep(50);
                 breakLengthConsumed += 50;
-                if (AbortThread())
+                if (DoAbortThread())
                 {
+                    ResetAbortThreadState();
                     return;
                 }
             }
             var inputs = new NativeMethods.INPUT[virtualKeyCodes.Count()];
 
-            var modifierCount = 0;
-            foreach (var virtualKeyCode in virtualKeyCodes)
-            {
-                if (CommonVK.IsModifierKey(virtualKeyCode))
-                {
-                    modifierCount++;
-                }
-            }
-            //Add modifiers
-            for (var i = 0; i < virtualKeyCodes.Count(); i++)
-            {
-                var virtualKeyCode = virtualKeyCodes[i];
-                if (CommonVK.IsModifierKey(virtualKeyCode))
-                {
-                    Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
-                    inputs[i].type = NativeMethods.INPUT_KEYBOARD;
-                    inputs[i].InputUnion.ki.time = 0;
-                    inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
-                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
-                    if (CommonVK.IsExtendedKey(virtualKeyCode))
-                    {
-                        inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_EXTENDEDKEY;
-                    }
-                    inputs[i].InputUnion.ki.wVk = 0;
-                    Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
-                    inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
-                    inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
-                }
-            }
-            //[x][x] [] []
-            // 0  1  2  3
-            // 1  2  3  4
-            //Add normal keys
-            for (var i = modifierCount; i < virtualKeyCodes.Count(); i++)
-            {
-                var virtualKeyCode = virtualKeyCodes[i];
-                if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
-                {
-                    Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
-                    inputs[i].type = NativeMethods.INPUT_KEYBOARD;
-                    inputs[i].InputUnion.ki.time = 0;
-                    inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
-
-                    inputs[i].InputUnion.ki.wVk = 0;
-                    Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
-                    inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
-                    inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
-                }
-            }
-
-            NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
-
-            /*if (keyPressLength == KeyPressLength.Indefinite)
-            {
-                return;
-            }*/
-
             while (keyPressLengthTimeConsumed < (int)keyPressLength)
             {
-                Thread.Sleep(50);
-                keyPressLengthTimeConsumed += 50;
-                if (AbortThread())
+                var modifierCount = 0;
+                foreach (var virtualKeyCode in virtualKeyCodes)
+                {
+                    if (CommonVK.IsModifierKey(virtualKeyCode))
+                    {
+                        modifierCount++;
+                    }
+                }
+                //Add modifiers
+                for (var i = 0; i < virtualKeyCodes.Count(); i++)
+                {
+                    var virtualKeyCode = virtualKeyCodes[i];
+                    if (CommonVK.IsModifierKey(virtualKeyCode))
+                    {
+                        Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
+                        inputs[i].type = NativeMethods.INPUT_KEYBOARD;
+                        inputs[i].InputUnion.ki.time = 0;
+                        inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
+                        Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
+                        if (CommonVK.IsExtendedKey(virtualKeyCode))
+                        {
+                            inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_EXTENDEDKEY;
+                        }
+                        inputs[i].InputUnion.ki.wVk = 0;
+                        Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
+                        inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
+                        inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
+                    }
+                }
+                //[x][x] [] []
+                // 0  1  2  3
+                // 1  2  3  4
+                //Add normal keys
+                for (var i = modifierCount; i < virtualKeyCodes.Count(); i++)
+                {
+                    var virtualKeyCode = virtualKeyCodes[i];
+                    if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
+                    {
+                        Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
+                        inputs[i].type = NativeMethods.INPUT_KEYBOARD;
+                        inputs[i].InputUnion.ki.time = 0;
+                        inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
+
+                        inputs[i].InputUnion.ki.wVk = 0;
+                        Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
+                        inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
+                        inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
+                    }
+                }
+
+                NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
+
+                if (keyPressLength != KeyPressLength.Indefinite)
+                {
+                    Thread.Sleep(50);
+                    keyPressLengthTimeConsumed += 50;
+                }
+                else
+                {
+                    Thread.Sleep(20);
+                }
+
+                if (DoAbortThread())
                 {
                     //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
+                    ResetAbortThreadState();
                     break;
                 }
             }
+
             for (var i = 0; i < inputs.Count(); i++)
             {
                 inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_KEYUP;

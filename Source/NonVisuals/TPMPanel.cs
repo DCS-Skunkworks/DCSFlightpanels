@@ -90,6 +90,8 @@ namespace NonVisuals
                     }
                 }
             }
+
+            _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             OnSettingsApplied();
         }
 
@@ -266,6 +268,7 @@ namespace NonVisuals
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
+            _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             Common.DebugP("TPMPanel _keyBindings : " + _keyBindings.Count);
             IsDirtyMethod();
         }
@@ -327,6 +330,7 @@ namespace NonVisuals
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
+            _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 

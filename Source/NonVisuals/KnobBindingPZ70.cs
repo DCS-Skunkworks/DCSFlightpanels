@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ClassLibraryCommon;
 
 namespace NonVisuals
@@ -78,5 +79,206 @@ namespace NonVisuals
             set => _whenOnTurnedOn = value;
         }
 
+
+        public static HashSet<KnobBindingPZ70> SetNegators(HashSet<KnobBindingPZ70> knobBindings)
+        {
+            if (knobBindings == null)
+            {
+                return knobBindings;
+            }
+            foreach (var keyBindingPZ70 in knobBindings)
+            {
+                //Clear all negators
+                keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Clear();
+
+                if (keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_CRS ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN
+                )
+                {
+                    //We have to deal with them separately
+                    continue;
+                }
+
+                foreach (var keyBinding in knobBindings)
+                {
+                    if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == keyBindingPZ70.MultiPanelPZ70Knob && keyBinding.WhenTurnedOn != keyBindingPZ70.WhenTurnedOn)
+                    {
+                        keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                    }
+                }
+            }
+
+            foreach (var keyBindingPZ70 in knobBindings)
+            {
+                if (keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_CRS ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP ||
+                    keyBindingPZ70.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN
+                )
+                    switch (keyBindingPZ70.MultiPanelPZ70Knob)
+                    {
+                        case MultiPanelPZ70Knobs.KNOB_ALT:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS)
+                                    {
+                                        keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+
+                                break;
+                            }
+
+                        case MultiPanelPZ70Knobs.KNOB_CRS:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG)
+                                    {
+                                        keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+
+                                break;
+                            }
+
+                        case MultiPanelPZ70Knobs.KNOB_VS:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS || keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_ALT)
+                                    {
+                                        keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+
+                                break;
+                            }
+
+                        case MultiPanelPZ70Knobs.KNOB_IAS:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_VS || keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_HDG)
+                                    {
+                                        keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+
+                                break;
+                            }
+
+                        case MultiPanelPZ70Knobs.KNOB_HDG:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_IAS || keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.KNOB_CRS)
+                                    {
+                                        keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+
+                                break;
+                            }
+
+                        case MultiPanelPZ70Knobs.LCD_WHEEL_INC:
+                        {
+                            foreach (var keyBinding in knobBindings)
+                            {
+                                if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
+                                {
+                                    keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                }
+                            }
+
+                            break;
+                        }
+
+                        case MultiPanelPZ70Knobs.LCD_WHEEL_DEC:
+                        {
+                            foreach (var keyBinding in knobBindings)
+                            {
+                                if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC)
+                                {
+                                    keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                }
+                            }
+
+                            break;
+                        }
+
+                        case MultiPanelPZ70Knobs.FLAPS_LEVER_UP:
+                        {
+                            foreach (var keyBinding in knobBindings)
+                            {
+                                if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN)
+                                {
+                                    keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                }
+                            }
+
+                            break;
+                        }
+
+                        case MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN:
+                        {
+                            foreach (var keyBinding in knobBindings)
+                            {
+                                if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP)
+                                {
+                                    keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                }
+                            }
+
+                            break;
+                        }
+
+                        case MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP:
+                        {
+                            foreach (var keyBinding in knobBindings)
+                            {
+                                if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN)
+                                {
+                                    keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                }
+                            }
+
+                            break;
+                        }
+
+                        case MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN:
+                        {
+                            foreach (var keyBinding in knobBindings)
+                            {
+                                if (keyBinding != keyBindingPZ70 && keyBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP)
+                                {
+                                    keyBindingPZ70.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+            }
+            return knobBindings;
+        }
     }
 }
