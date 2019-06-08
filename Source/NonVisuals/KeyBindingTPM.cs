@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using ClassLibraryCommon;
 
 namespace NonVisuals
 {
-    public class KeyBindingTPM
+    public class KeyBindingTPM : KeyBinding
     {
         /*
          This class binds a physical switch on the TPM with a user made virtual keypress in Windows.
          */
         private TPMPanelSwitches _tpmPanelSwitch;
-        private OSKeyPress _osKeyPress;
-        private bool _whenOnTurnedOn = true;
-        private const string SeparatorChars = "\\o/";
 
-        internal void ImportSettings(string settings)
+        internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
             {
@@ -31,13 +27,13 @@ namespace NonVisuals
                 //1KNOB_ENGINE_LEFT}
                 param0 = param0.Remove(param0.Length - 1, 1);
                 //1KNOB_ENGINE_LEFT
-                _whenOnTurnedOn = (param0.Substring(0, 1) == "1");
+                WhenTurnedOn = (param0.Substring(0, 1) == "1");
                 param0 = param0.Substring(1);
                 _tpmPanelSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), param0);
 
                 //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                _osKeyPress = new OSKeyPress();
-                _osKeyPress.ImportString(parameters[1]);
+                OSKeyPress = new OSKeyPress();
+                OSKeyPress.ImportString(parameters[1]);
             }
         }
 
@@ -47,30 +43,16 @@ namespace NonVisuals
             set => _tpmPanelSwitch = value;
         }
 
-        public OSKeyPress OSKeyPress
-        {
-            get => _osKeyPress;
-            set => _osKeyPress = value;
-        }
-
-
-        public string ExportSettings()
+        public override string ExportSettings()
         {
             if (OSKeyPress == null || OSKeyPress.IsEmpty())
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "      " + _whenOnTurnedOn);
-            var onStr = _whenOnTurnedOn ? "1" : "0";
-            return "TPMPanelSwitch{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + SeparatorChars + _osKeyPress.ExportString();
+            Common.DebugP(Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "      " + WhenTurnedOn);
+            var onStr = WhenTurnedOn ? "1" : "0";
+            return "TPMPanelSwitch{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + SeparatorChars + OSKeyPress.ExportString();
         }
-
-        public bool WhenTurnedOn
-        {
-            get => _whenOnTurnedOn;
-            set => _whenOnTurnedOn = value;
-        }
-
 
         public static HashSet<KeyBindingTPM> SetNegators(HashSet<KeyBindingTPM> knobBindings)
         {

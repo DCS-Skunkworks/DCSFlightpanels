@@ -8,8 +8,7 @@
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="SwitchPanelPZ55UserControl_OnLoaded">
     <UserControl.Resources>
         <ContextMenu x:Key="TextBoxContextMenuPZ55" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged" >
-            <!--<MenuItem Header="Zero" Name="contextMenuItemZero" Click="MenuContextTextBoxClick"/>-->
-            <!--<MenuItem Header="Indefinite" Name="contextMenuItemIndefinite" Click="TextBoxContextMenuClick"/>-->
+            
             <MenuItem Header="Keep pressed" Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="FiftyMilliSec" Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="HalfSecond" Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
@@ -25,6 +24,7 @@
             <MenuItem Header="ThirtySecs" Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="FortySecs" Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="SixtySecs" Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Edit OS command" Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
             <MenuItem Header="Edit sequence" Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
             <MenuItem Header="Edit DCS-BIOS Control" Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick"/>
             <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick" />

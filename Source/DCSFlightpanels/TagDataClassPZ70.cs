@@ -15,7 +15,7 @@ namespace DCSFlightpanels
 
         public TagDataClassPZ70(TextBox textBox, MultiPanelPZ70KnobOnOff key)
         {
-            _textBox = textBox;
+            TextBox = textBox;
             _key = key;
         }
 
@@ -31,7 +31,7 @@ namespace DCSFlightpanels
 
         public override bool IsEmpty()
         {
-            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
+            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0);
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -58,16 +58,16 @@ namespace DCSFlightpanels
                 {
                     if (string.IsNullOrEmpty(_dcsbiosBindingPZ70.Description))
                     {
-                        _textBox.Text = "DCS-BIOS";
+                        TextBox.Text = "DCS-BIOS";
                     }
                     else
                     {
-                        _textBox.Text = _dcsbiosBindingPZ70.Description;
+                        TextBox.Text = _dcsbiosBindingPZ70.Description;
                     }
                 }
                 else
                 {
-                    _textBox.Text = "";
+                    TextBox.Text = "";
                 }
             }
         }
@@ -80,11 +80,11 @@ namespace DCSFlightpanels
                 _bipLinkPZ70 = value;
                 if (_bipLinkPZ70 != null)
                 {
-                    _textBox.Background = Brushes.Bisque;
+                    TextBox.Background = Brushes.Bisque;
                 }
                 else
                 {
-                    _textBox.Background = Brushes.White;
+                    TextBox.Background = Brushes.White;
                 }
             }
         }
@@ -99,9 +99,9 @@ namespace DCSFlightpanels
         {
             _dcsbiosBindingPZ70 = null;
             _bipLinkPZ70 = null;
-            _osKeyPress = null;
-            _textBox.Background = Brushes.White;
-            _textBox.Text = "";
+            OSKeyPress = null;
+            TextBox.Background = Brushes.White;
+            TextBox.Text = "";
         }
     }
 }

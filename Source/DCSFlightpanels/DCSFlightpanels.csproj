@@ -235,6 +235,9 @@
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControlBase.cs" />
+    <Compile Include="OSCommandWindow.xaml.cs">
+      <DependentUpon>OSCommandWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="AboutFPWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -416,6 +419,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TPMPanelUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OSCommandWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

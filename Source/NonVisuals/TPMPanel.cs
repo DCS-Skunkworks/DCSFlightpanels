@@ -17,6 +17,7 @@ namespace NonVisuals
          */
         private HashSet<DCSBIOSBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
+        private HashSet<OSCommandBindingTPM> _osCommandBindings = new HashSet<OSCommandBindingTPM>();
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
@@ -76,6 +77,12 @@ namespace NonVisuals
                         keyBinding.ImportSettings(setting);
                         _keyBindings.Add(keyBinding);
                     }
+                    else if (setting.StartsWith("TPMPanelOSCommand"))
+                    {
+                        var osCommand = new OSCommandBindingTPM();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
                     else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
                     {
                         var dcsBIOSBindingTPM = new DCSBIOSBindingTPM();
@@ -108,6 +115,13 @@ namespace NonVisuals
                 if (keyBinding.OSKeyPress != null)
                 {
                     result.Add(keyBinding.ExportSettings());
+                }
+            }
+            foreach (var osCommand in _osCommandBindings)
+            {
+                if (!osCommand.OSCommandObject.IsEmpty)
+                {
+                    result.Add(osCommand.ExportSettings());
                 }
             }
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -150,6 +164,7 @@ namespace NonVisuals
         public override void ClearSettings()
         {
             _keyBindings.Clear();
+            _osCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _bipLinks.Clear();
         }
@@ -158,6 +173,12 @@ namespace NonVisuals
         {
             get => _keyBindings;
             set => _keyBindings = value;
+        }
+
+        public HashSet<OSCommandBindingTPM> OSCommandHashSet
+        {
+            get => _osCommandBindings;
+            set => _osCommandBindings = value;
         }
 
         public HashSet<BIPLinkTPM> BipLinkHashSet
@@ -196,6 +217,15 @@ namespace NonVisuals
                     if (keyBinding.OSKeyPress != null && keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
                         keyBinding.OSKeyPress.Execute();
+                        found = true;
+                        break;
+                    }
+                }
+                foreach (var osCommand in _osCommandBindings)
+                {
+                    if (osCommand.OSCommandObject != null && osCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && osCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
+                    {
+                        osCommand.OSCommandObject.Execute();
                         found = true;
                         break;
                     }
@@ -270,6 +300,31 @@ namespace NonVisuals
             }
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             Common.DebugP("TPMPanel _keyBindings : " + _keyBindings.Count);
+            IsDirtyMethod();
+        }
+
+        public void AddOrUpdateOSCommandBinding(TPMPanelSwitches tpmPanelSwitch, OSCommand osCommand, bool whenTurnedOn)
+        {
+            //This must accept lists
+            var found = false;
+
+            foreach (var osCommandBinding in _osCommandBindings)
+            {
+                if (osCommandBinding.TPMSwitch == tpmPanelSwitch && osCommandBinding.WhenTurnedOn == whenTurnedOn)
+                {
+                    osCommandBinding.OSCommandObject = osCommand;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                var osCommandBindingTPM = new OSCommandBindingTPM();
+                osCommandBindingTPM.TPMSwitch = tpmPanelSwitch;
+                osCommandBindingTPM.OSCommandObject = osCommand;
+                osCommandBindingTPM.WhenTurnedOn = whenTurnedOn;
+                _osCommandBindings.Add(osCommandBindingTPM);
+            }
             IsDirtyMethod();
         }
 
