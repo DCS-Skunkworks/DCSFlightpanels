@@ -1,0 +1,1 @@
+github.com/DCSFlightpanels/DCSFlightpanels/compare/<commit1>...<commit2>
