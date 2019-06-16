@@ -4,7 +4,7 @@ using ClassLibraryCommon;
 
 namespace NonVisuals
 {
-    public class KeyBindingPZ69DialPosition
+    public class KeyBindingPZ69DialPosition : KeyBinding
     {
         /*
          This class binds a physical switch on the PZ69 with a user made virtual keypress in Windows.
@@ -13,11 +13,8 @@ namespace NonVisuals
          */
         private PZ69DialPosition _pz69DialPosition;
         private RadioPanelPZ69KnobsEmulator _panelPZ69Knob;
-        private OSKeyPress _osKeyPress;
-        private bool _whenOnTurnedOn = true;
-        private const string SeparatorChars = "\\o/";
 
-        internal void ImportSettings(string settings)
+        internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
             {
@@ -29,11 +26,11 @@ namespace NonVisuals
                 var param0 = parameters[0].Replace("RadioPanelKeyDialPos{", "").Replace("}", "");
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
                 var param1 = parameters[1].Replace("{", "").Replace("}", "");
-                _whenOnTurnedOn = param1.Substring(0, 1) == "1";
+                WhenTurnedOn = param1.Substring(0, 1) == "1";
                 param1 = param1.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param1);
-                _osKeyPress = new OSKeyPress();
-                _osKeyPress.ImportString(parameters[2]);
+                OSKeyPress = new OSKeyPress();
+                OSKeyPress.ImportString(parameters[2]);
             }
         }
 
@@ -49,14 +46,7 @@ namespace NonVisuals
             set => _panelPZ69Knob = value;
         }
 
-        public OSKeyPress OSKeyPress
-        {
-            get => _osKeyPress;
-            set => _osKeyPress = value;
-        }
-
-
-        public string ExportSettings()
+        public override string ExportSettings()
         {
             if (_pz69DialPosition == PZ69DialPosition.Unknown)
             {
@@ -66,17 +56,10 @@ namespace NonVisuals
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "      " + _whenOnTurnedOn);
-            var onStr = _whenOnTurnedOn ? "1" : "0";
-            return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SeparatorChars + _osKeyPress.ExportString();
+            Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "      " + WhenTurnedOn);
+            var onStr = WhenTurnedOn ? "1" : "0";
+            return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SeparatorChars + OSKeyPress.ExportString();
         }
-
-        public bool WhenTurnedOn
-        {
-            get => _whenOnTurnedOn;
-            set => _whenOnTurnedOn = value;
-        }
-
 
         public static HashSet<KeyBindingPZ69DialPosition> SetNegators(HashSet<KeyBindingPZ69DialPosition> knobBindings)
         {

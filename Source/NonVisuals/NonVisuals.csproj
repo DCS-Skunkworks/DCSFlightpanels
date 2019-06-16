@@ -87,6 +87,7 @@
     <Compile Include="ISaitekPanelKnob.cs" />
     <Compile Include="ISaitekPanelListener.cs" />
     <Compile Include="IUserMessageHandler.cs" />
+    <Compile Include="KeyBinding.cs" />
     <Compile Include="KeyBindingPZ69DialPosition.cs" />
     <Compile Include="KeyBindingPZ69.cs" />
     <Compile Include="KeyBindingTPM.cs" />
@@ -155,6 +156,13 @@
     <Compile Include="SwitchPanelPZ55.cs" />
     <Compile Include="VirtualKeyCode.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="OSCommand.cs" />
+    <Compile Include="OSCommandBinding.cs" />
+    <Compile Include="OSCommandBindingPZ55.cs" />
+    <Compile Include="OSCommandBindingPZ69Emulator.cs" />
+    <Compile Include="OSCommandBindingPZ69FullEmulator.cs" />
+    <Compile Include="OSCommandBindingPZ70.cs" />
+    <Compile Include="OSCommandBindingTPM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="flightpanels02_8Rc_icon.ico" />

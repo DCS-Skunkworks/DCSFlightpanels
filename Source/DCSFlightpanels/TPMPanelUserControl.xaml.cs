@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -574,6 +573,10 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
+                        else if (item.Name.Contains("EditOSCommand"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
                         else
                         {
                             item.Visibility = Visibility.Collapsed;
@@ -615,6 +618,16 @@ namespace DCSFlightpanels
                             item.Visibility = Visibility.Visible;
                         }
                         if (item.Name.Contains("EditSequence"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+                else if (((TagDataClassTPM)textBox.Tag).ContainsOSCommand())
+                {
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        if (item.Name.Contains("EditOSCommand"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -1079,6 +1092,19 @@ namespace DCSFlightpanels
             }
         }
 
+        private void UpdateOSCommandBindingsPZ55(TextBox textBox)
+        {
+            try
+            {
+                var tag = (TagDataClassTPM)textBox.Tag;
+                _tpmPanel.AddOrUpdateOSCommandBinding(tag.Key.TPMSwitch, tag.OSCommandObject, tag.Key.ButtonState);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3011, ex);
+            }
+        }
+
         private void UpdateDCSBIOSBinding(TextBox textBox)
         {
             try
@@ -1107,6 +1133,15 @@ namespace DCSFlightpanels
                     if (keyBinding.OSKeyPress != null)
                     {
                         ((TagDataClassTPM)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
+                    }
+                }
+
+                foreach (var osCommand in _tpmPanel.OSCommandHashSet)
+                {
+                    var textBox = GetTextBox(osCommand.TPMSwitch, osCommand.WhenTurnedOn);
+                    if (osCommand.OSCommandObject != null)
+                    {
+                        ((TagDataClassTPM)textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
                     }
                 }
 
@@ -1317,6 +1352,46 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(345012, ex);
             }
             throw new Exception("Failed to find TextBox for TPM switch : " + key);
+        }
+
+        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+                OSCommandWindow osCommandWindow;
+                if (((TagDataClassTPM)textBox.Tag).ContainsOSCommand())
+                {
+                    osCommandWindow = new OSCommandWindow(((TagDataClassTPM)textBox.Tag).OSCommandObject);
+                }
+                else
+                {
+                    osCommandWindow = new OSCommandWindow();
+                }
+                osCommandWindow.ShowDialog();
+                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
+                {
+                    //Clicked OK
+                    if (!osCommandWindow.IsDirty)
+                    {
+                        //User made no changes
+                        return;
+                    }
+                    var osCommand = osCommandWindow.OSCommandObject;
+                    ((TagDataClassTPM)textBox.Tag).OSCommandObject = osCommand;
+                    UpdateOSCommandBindingsPZ55(textBox);
+                    textBox.Text = osCommand.Name;
+                }
+                TextBoxLogTPM.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2044, ex);
+            }
         }
     }
 }

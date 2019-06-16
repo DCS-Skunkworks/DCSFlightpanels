@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -393,6 +392,19 @@ namespace DCSFlightpanels
             }
         }
 
+        private void UpdateOSCommandBindingsPZ55(TextBox textBox)
+        {
+            try
+            {
+                var tag = (TagDataClassPZ69)textBox.Tag;
+                _radioPanelPZ69.AddOrUpdateOSCommandBinding(tag.Knob.RadioPanelPZ69Key, tag.OSCommandObject, tag.Knob.ButtonState);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3011, ex);
+            }
+        }
+
         private void UpdateDisplayValues(TextBox textBox)
         {
             try
@@ -673,6 +685,10 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
+                        else if (item.Name.Contains("EditOSCommand"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
                         else
                         {
                             item.Visibility = Visibility.Collapsed;
@@ -710,6 +726,16 @@ namespace DCSFlightpanels
                             item.Visibility = Visibility.Visible;
                         }
                         if (item.Name.Contains("EditSequence"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+                else if (((TagDataClassPZ55)textBox.Tag).ContainsOSCommand())
+                {
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        if (item.Name.Contains("EditOSCommand"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -1349,7 +1375,16 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ69)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
                     }
                 }
-                
+
+                foreach (var osCommand in _radioPanelPZ69.OSCommandHashSet)
+                {
+                    var textBox = GetTextBox(osCommand.RadioPanelPZ69Key, osCommand.WhenTurnedOn);
+                    if (osCommand.OSCommandObject != null)
+                    {
+                        ((TagDataClassPZ69)textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
+                    }
+                }
+
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
@@ -1911,6 +1946,46 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(345012, ex);
             }
             throw new Exception("Failed to find TextBox for Radiopanel knob " + knob);
+        }
+
+        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+                OSCommandWindow osCommandWindow;
+                if (((TagDataClassPZ69)textBox.Tag).ContainsOSCommand())
+                {
+                    osCommandWindow = new OSCommandWindow(((TagDataClassPZ69)textBox.Tag).OSCommandObject);
+                }
+                else
+                {
+                    osCommandWindow = new OSCommandWindow();
+                }
+                osCommandWindow.ShowDialog();
+                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
+                {
+                    //Clicked OK
+                    if (!osCommandWindow.IsDirty)
+                    {
+                        //User made no changes
+                        return;
+                    }
+                    var osCommand = osCommandWindow.OSCommandObject;
+                    ((TagDataClassPZ69)textBox.Tag).OSCommandObject = osCommand;
+                    textBox.Text = osCommand.Name;
+                    UpdateOSCommandBindingsPZ55(textBox);
+                }
+                TextBoxLogPZ69.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2044, ex);
+            }
         }
     }
 }

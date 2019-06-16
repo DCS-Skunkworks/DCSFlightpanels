@@ -26,6 +26,7 @@ namespace NonVisuals
          */
         private HashSet<DCSBIOSBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
+        private HashSet<OSCommandBindingPZ55> _osCommandBindings = new HashSet<OSCommandBindingPZ55>();
         private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
@@ -92,6 +93,12 @@ namespace NonVisuals
                         keyBinding.ImportSettings(setting);
                         _keyBindings.Add(keyBinding);
                     }
+                    else if (setting.StartsWith("SwitchPanelOSPZ55"))
+                    {
+                        var osCommand = new OSCommandBindingPZ55();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
                     else if (setting.StartsWith("SwitchPanelLed"))
                     {
                         var colorOutput = new DcsOutputAndColorBindingPZ55();
@@ -133,6 +140,13 @@ namespace NonVisuals
                 if (keyBinding.OSKeyPress != null)
                 {
                     result.Add(keyBinding.ExportSettings());
+                }
+            }
+            foreach (var osCommand in _osCommandBindings)
+            {
+                if (!osCommand.OSCommandObject.IsEmpty)
+                {
+                    result.Add(osCommand.ExportSettings());
                 }
             }
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -177,6 +191,7 @@ namespace NonVisuals
         public override void ClearSettings()
         {
             _keyBindings.Clear();
+            _osCommandBindings.Clear();
             _listColorOutputBinding.Clear();
             _dcsBiosBindings.Clear();
             _bipLinks.Clear();
@@ -193,7 +208,13 @@ namespace NonVisuals
             get => _bipLinks;
             set => _bipLinks = value;
         }
-        
+
+        public HashSet<OSCommandBindingPZ55> OSCommandHashSet
+        {
+            get => _osCommandBindings;
+            set => _osCommandBindings = value;
+        }
+
         private void SetLandingGearLedsManually(PanelLEDColor panelLEDColor)
         {
             try
@@ -287,6 +308,15 @@ namespace NonVisuals
                     if (keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
                     {
                         keyBinding.OSKeyPress.Execute();
+                        found = true;
+                        break;
+                    }
+                }
+                foreach (var osCommand in _osCommandBindings)
+                {
+                    if (osCommand.OSCommandObject != null && osCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && osCommand.WhenTurnedOn == switchPanelKey.IsOn)
+                    {
+                        osCommand.OSCommandObject.Execute();
                         found = true;
                         break;
                     }
@@ -461,6 +491,33 @@ namespace NonVisuals
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
+
+
+        public void AddOrUpdateOSCommandBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, OSCommand osCommand, bool whenTurnedOn)
+        {
+            //This must accept lists
+            var found = false;
+
+            foreach (var osCommandBinding in _osCommandBindings)
+            {
+                if (osCommandBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && osCommandBinding.WhenTurnedOn == whenTurnedOn)
+                {
+                    osCommandBinding.OSCommandObject = osCommand;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                var osCommandBindingPZ55 = new OSCommandBindingPZ55();
+                osCommandBindingPZ55.SwitchPanelPZ55Key = switchPanelPZ55Key;
+                osCommandBindingPZ55.OSCommandObject = osCommand;
+                osCommandBindingPZ55.WhenTurnedOn = whenTurnedOn;
+                _osCommandBindings.Add(osCommandBindingPZ55);
+            }
+            IsDirtyMethod();
+        }
+
 
         public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
         {

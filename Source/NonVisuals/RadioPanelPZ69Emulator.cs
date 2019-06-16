@@ -17,6 +17,7 @@ namespace NonVisuals
          */
         //private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
         private HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
+        private HashSet<OSCommandBindingPZ69Emulator> _osCommandBindings = new HashSet<OSCommandBindingPZ69Emulator>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
         private readonly byte[] _oldRadioPanelValue = { 0, 0, 0 };
@@ -81,6 +82,12 @@ namespace NonVisuals
                         keyBinding.ImportSettings(setting);
                         _keyBindings.Add(keyBinding);
                     }
+                    else if (setting.StartsWith("RadioPanelOSPZ69"))
+                    {
+                        var osCommand = new OSCommandBindingPZ69Emulator();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
                     else if (setting.StartsWith("PZ69DisplayValue{"))
                     {
                         var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
@@ -113,6 +120,13 @@ namespace NonVisuals
                 if (keyBinding.OSKeyPress != null)
                 {
                     result.Add(keyBinding.ExportSettings());
+                }
+            }
+            foreach (var osCommand in _osCommandBindings)
+            {
+                if (!osCommand.OSCommandObject.IsEmpty)
+                {
+                    result.Add(osCommand.ExportSettings());
                 }
             }
             foreach (var displayValue in _displayValues)
@@ -152,11 +166,18 @@ namespace NonVisuals
         public override void ClearSettings()
         {
             _keyBindings.Clear();
+            _osCommandBindings.Clear();
             _displayValues.Clear();
             _bipLinks.Clear();
         }
 
         public HashSet<KeyBindingPZ69> KeyBindingsHashSet => _keyBindings;
+
+        public HashSet<OSCommandBindingPZ69Emulator> OSCommandHashSet
+        {
+            get => _osCommandBindings;
+            set => _osCommandBindings = value;
+        }
 
         public HashSet<BIPLinkPZ69> BipLinkHashSet => _bipLinks;
 
@@ -205,6 +226,14 @@ namespace NonVisuals
                         if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
                         {
                             keyBinding.OSKeyPress.Execute();
+                            break;
+                        }
+                    }
+                    foreach (var osCommand in _osCommandBindings)
+                    {
+                        if (osCommand.OSCommandObject != null && osCommand.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && osCommand.WhenTurnedOn == radioPanelKey.IsOn)
+                        {
+                            osCommand.OSCommandObject.Execute();
                             break;
                         }
                     }
@@ -390,6 +419,31 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
+        public void AddOrUpdateOSCommandBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, OSCommand osCommand, bool whenTurnedOn)
+        {
+            //This must accept lists
+            var found = false;
+
+            foreach (var osCommandBinding in _osCommandBindings)
+            {
+                if (osCommandBinding.RadioPanelPZ69Key == radioPanelPZ69Knob && osCommandBinding.WhenTurnedOn == whenTurnedOn)
+                {
+                    osCommandBinding.OSCommandObject = osCommand;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                var osCommandBindingPZ69 = new OSCommandBindingPZ69Emulator();
+                osCommandBindingPZ69.RadioPanelPZ69Key = radioPanelPZ69Knob;
+                osCommandBindingPZ69.OSCommandObject = osCommand;
+                osCommandBindingPZ69.WhenTurnedOn = whenTurnedOn;
+                _osCommandBindings.Add(osCommandBindingPZ69);
+            }
+            IsDirtyMethod();
+        }
+
         public void ClearAllBindings(RadioPanelPZ69KeyOnOff radioPanelPZ69KnobOnOff)
         {
             //This must accept lists
@@ -554,7 +608,7 @@ namespace NonVisuals
             dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
             return dcsOutputAndColorBinding;
         }
-        
+
         private void CreateSwitchKeys()
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();

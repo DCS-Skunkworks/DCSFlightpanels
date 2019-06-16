@@ -47,7 +47,6 @@ namespace NonVisuals
          */
     }
 
-
     public enum SwitchPanelPZ55Keys
     {
         SWITCHKEY_MASTER_BAT = 0,

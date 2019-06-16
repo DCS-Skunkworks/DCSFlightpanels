@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Documents;
 using ClassLibraryCommon;
 
 namespace DCSFlightpanels

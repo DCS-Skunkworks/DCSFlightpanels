@@ -14,6 +14,7 @@ namespace NonVisuals
         private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
         private HashSet<DCSBIOSBindingLCDPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ70>();
         private HashSet<KnobBindingPZ70> _knobBindings = new HashSet<KnobBindingPZ70>();
+        private HashSet<OSCommandBindingPZ70> _osCommandBindings = new HashSet<OSCommandBindingPZ70>();
         private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
 
@@ -140,6 +141,12 @@ namespace NonVisuals
                         knobBinding.ImportSettings(setting);
                         _knobBindings.Add(knobBinding);
                     }
+                    else if (setting.StartsWith("MultiPanelOSPZ70"))
+                    {
+                        var osCommand = new OSCommandBindingPZ70();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
                     else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
                     {
                         var dcsBIOSBindingPZ70 = new DCSBIOSBindingPZ70();
@@ -178,6 +185,13 @@ namespace NonVisuals
                 if (knobBinding.OSKeyPress != null)
                 {
                     result.Add(knobBinding.ExportSettings());
+                }
+            }
+            foreach (var osCommand in _osCommandBindings)
+            {
+                if (!osCommand.OSCommandObject.IsEmpty)
+                {
+                    result.Add(osCommand.ExportSettings());
                 }
             }
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -225,6 +239,7 @@ namespace NonVisuals
         public override void ClearSettings()
         {
             _knobBindings.Clear();
+            _osCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _dcsBiosLcdBindings.Clear();
             _bipLinks.Clear();
@@ -274,6 +289,31 @@ namespace NonVisuals
             }
             Common.DebugP("MultiPanelPZ70 _knobBindings : " + _knobBindings.Count);
             _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
+            IsDirtyMethod();
+        }
+
+        public void AddOrUpdateOSCommandBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, OSCommand osCommand, bool whenTurnedOn)
+        {
+            //This must accept lists
+            var found = false;
+
+            foreach (var osCommandBinding in _osCommandBindings)
+            {
+                if (osCommandBinding.DialPosition == _pz70DialPosition && osCommandBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && osCommandBinding.WhenTurnedOn == whenTurnedOn)
+                {
+                    osCommandBinding.OSCommandObject = osCommand;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                var osCommandBindingPZ70 = new OSCommandBindingPZ70();
+                osCommandBindingPZ70.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                osCommandBindingPZ70.OSCommandObject = osCommand;
+                osCommandBindingPZ70.WhenTurnedOn = whenTurnedOn;
+                _osCommandBindings.Add(osCommandBindingPZ70);
+            }
             IsDirtyMethod();
         }
 
@@ -636,6 +676,15 @@ namespace NonVisuals
                             dcsBiosBinding.SendDCSBIOSCommands();
                             break;
                         }
+                    }
+                }
+                foreach (var osCommand in _osCommandBindings)
+                {
+                    if (osCommand.DialPosition == _pz70DialPosition && osCommand.OSCommandObject != null && osCommand.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && osCommand.WhenTurnedOn == multiPanelKnob.IsOn)
+                    {
+                        osCommand.OSCommandObject.Execute();
+                        found = true;
+                        break;
                     }
                 }
                 foreach (var bipLinkPZ70 in _bipLinks)
@@ -1148,6 +1197,12 @@ namespace NonVisuals
         {
             get => _knobBindings;
             set => _knobBindings = value;
+        }
+
+        public HashSet<OSCommandBindingPZ70> OSCommandHashSet
+        {
+            get => _osCommandBindings;
+            set => _osCommandBindings = value;
         }
 
         public HashSet<DCSBIOSBindingLCDPZ70> LCDBindings

@@ -14,7 +14,7 @@ namespace DCSFlightpanels
 
         public TagDataClassPZ69Full(TextBox textBox)
         {
-            _textBox = textBox;
+            TextBox = textBox;
         }
 
         public override bool ContainsDCSBIOS()
@@ -44,7 +44,7 @@ namespace DCSFlightpanels
 
         public override bool IsEmpty()
         {
-            return (_bipLinkPZ69 == null || _bipLinkPZ69.BIPLights.Count == 0) && (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
+            return (_bipLinkPZ69 == null || _bipLinkPZ69.BIPLights.Count == 0) && (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0);
         }
 
         public BIPLinkPZ69 BIPLink
@@ -55,11 +55,11 @@ namespace DCSFlightpanels
                 _bipLinkPZ69 = value;
                 if (_bipLinkPZ69 != null)
                 {
-                    _textBox.Background = Brushes.Bisque;
+                    TextBox.Background = Brushes.Bisque;
                 }
                 else
                 {
-                    _textBox.Background = Brushes.White;
+                    TextBox.Background = Brushes.White;
                 }
             }
         }
@@ -78,16 +78,16 @@ namespace DCSFlightpanels
                 {
                     if (string.IsNullOrEmpty(_dcsbiosBindingPZ69.Description))
                     {
-                        _textBox.Text = "DCS-BIOS";
+                        TextBox.Text = "DCS-BIOS";
                     }
                     else
                     {
-                        _textBox.Text = _dcsbiosBindingPZ69.Description;
+                        TextBox.Text = _dcsbiosBindingPZ69.Description;
                     }
                 }
                 else
                 {
-                    _textBox.Text = "";
+                    TextBox.Text = "";
                 }
             }
         }
@@ -95,10 +95,10 @@ namespace DCSFlightpanels
         public override void ClearAll()
         {
             _bipLinkPZ69 = null;
-            _osKeyPress = null;
+            OSKeyPress = null;
             _dcsbiosBindingPZ69 = null;
-            _textBox.Background = Brushes.White;
-            _textBox.Text = "";
+            TextBox.Background = Brushes.White;
+            TextBox.Text = "";
         }
     }
 }

@@ -14,7 +14,7 @@ namespace DCSFlightpanels
 
         public TagDataClassPZ69(TextBox textBox, RadioPanelPZ69KeyOnOff knob)
         {
-            _textBox = textBox;
+            TextBox = textBox;
             _knob = knob;
         }
 
@@ -36,7 +36,7 @@ namespace DCSFlightpanels
         
         public override bool IsEmpty()
         {
-            return _bipLinkPZ69 == null && (_osKeyPress == null || _osKeyPress.KeySequence.Count == 0);
+            return _bipLinkPZ69 == null && (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0);
         }
         
         public BIPLinkPZ69 BIPLink
@@ -47,11 +47,11 @@ namespace DCSFlightpanels
                 _bipLinkPZ69 = value;
                 if (_bipLinkPZ69 != null)
                 {
-                    _textBox.Background = Brushes.Bisque;
+                    TextBox.Background = Brushes.Bisque;
                 }
                 else
                 {
-                    _textBox.Background = Brushes.White;
+                    TextBox.Background = Brushes.White;
                 }
             }
         }
@@ -61,9 +61,9 @@ namespace DCSFlightpanels
         public override void ClearAll()
         {
             _bipLinkPZ69 = null;
-            _osKeyPress = null;
-            _textBox.Background = Brushes.White;
-            _textBox.Text = "";
+            OSKeyPress = null;
+            TextBox.Background = Brushes.White;
+            TextBox.Text = "";
         }
     }
 }

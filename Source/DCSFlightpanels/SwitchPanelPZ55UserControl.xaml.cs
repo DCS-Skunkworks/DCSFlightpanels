@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -678,6 +677,10 @@ namespace DCSFlightpanels
                         {
                             item.Visibility = Visibility.Visible;
                         }
+                        else if (item.Name.Contains("EditOSCommand"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
                         else
                         {
                             item.Visibility = Visibility.Collapsed;
@@ -724,6 +727,16 @@ namespace DCSFlightpanels
                         }
                     }
                 }
+                else if (((TagDataClassPZ55)textBox.Tag).ContainsOSCommand())
+                {
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        if (item.Name.Contains("EditOSCommand"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -749,8 +762,8 @@ namespace DCSFlightpanels
             try
             {
                 var textBox = GetTextBoxInFocus();//OK
-                SetKeyPressLength(textBox, (MenuItem) sender);
-                
+                SetKeyPressLength(textBox, (MenuItem)sender);
+
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
             catch (Exception ex)
@@ -1316,6 +1329,18 @@ namespace DCSFlightpanels
             }
         }
 
+        private void UpdateOSCommandBindingsPZ55(TextBox textBox)
+        {
+            try
+            {
+                var tag = (TagDataClassPZ55)textBox.Tag;
+                _switchPanelPZ55.AddOrUpdateOSCommandBinding(tag.Key.SwitchPanelPZ55Key, tag.OSCommandObject, tag.Key.ButtonState);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3011, ex);
+            }
+        }
 
         private void UpdateKeyBindingProfileSimpleKeyStrokes(TextBox textBox)
         {
@@ -1370,6 +1395,15 @@ namespace DCSFlightpanels
                     if (keyBinding.OSKeyPress != null)
                     {
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
+                    }
+                }
+                
+                foreach (var osCommand in _switchPanelPZ55.OSCommandHashSet)
+                {
+                    var textBox = GetTextBox(osCommand.SwitchPanelPZ55Key, osCommand.WhenTurnedOn);
+                    if (osCommand.OSCommandObject != null)
+                    {
+                        ((TagDataClassPZ55) textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
                     }
                 }
 
@@ -1760,6 +1794,46 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(345012, ex);
             }
             throw new Exception("Failed to find text box based on key (SwitchPanelPZ55UserControl)" + key);
+        }
+
+        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+                OSCommandWindow osCommandWindow;
+                if (((TagDataClassPZ55)textBox.Tag).ContainsOSCommand())
+                {
+                    osCommandWindow = new OSCommandWindow(((TagDataClassPZ55)textBox.Tag).OSCommandObject);
+                }
+                else
+                {
+                    osCommandWindow = new OSCommandWindow();
+                }
+                osCommandWindow.ShowDialog();
+                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
+                {
+                    //Clicked OK
+                    if (!osCommandWindow.IsDirty)
+                    {
+                        //User made no changes
+                        return;
+                    }
+                    var osCommand = osCommandWindow.OSCommandObject;
+                    ((TagDataClassPZ55)textBox.Tag).OSCommandObject = osCommand;
+                    textBox.Text = osCommand.Name;
+                    UpdateOSCommandBindingsPZ55(textBox);
+                }
+                TextBoxLogPZ55.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2044, ex);
+            }
         }
     }
 }
