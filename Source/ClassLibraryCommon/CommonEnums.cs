@@ -91,8 +91,10 @@ namespace ClassLibraryCommon
         F86F,
         [Description("FC3-CD-SRS")]
         FC3_CD_SRS,
+        [Description("FW-190A8")]
+        Fw190a8,
         [Description("FW-190D9")]
-        Fw190,
+        Fw190d9,
         [Description("I-16")]
         I16,
         [Description("Ka-50")]

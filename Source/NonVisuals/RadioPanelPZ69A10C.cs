@@ -234,7 +234,6 @@ namespace NonVisuals
         {
             UpdateCounter(e.Address, e.Data);
 
-
             /*
              * IMPORTANT INFORMATION REGARDING THE _*WaitingForFeedback variables
              * Once a dial has been deemed to be "off" position and needs to be changed
@@ -1006,9 +1005,9 @@ namespace NonVisuals
 
             //Large dial 225-399 [step of 1]
             //Small dial 0.00-0.95 [step of 0.05]
-            var frequencyAsString = (_uhfBigFrequencyStandby + (_uhfSmallFrequencyStandby / 1000)).ToString(CultureInfo.InvariantCulture);
+            var frequencyAsString = _uhfBigFrequencyStandby.ToString(CultureInfo.InvariantCulture) + "." + _uhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadRight(7,'0');
 
-
+            Common.DebugP("frequencyAsString " + frequencyAsString);
             var freqDial1 = 0;
             var freqDial2 = 0;
             var freqDial3 = 0;
@@ -1016,12 +1015,13 @@ namespace NonVisuals
             var freqDial5 = 0;
 
             //Special case! If Dial 1 = "A" then all digits can be disregarded once they are set to zero
-            switch (frequencyAsString.IndexOf(".", StringComparison.InvariantCulture))
+            var index = frequencyAsString.IndexOf(".", StringComparison.InvariantCulture);
+            switch (index)
             {
                 //0.075Mhz
                 case 1:
                     {
-                        freqDial1 = -1; // ("A")
+                        freqDial1 = 2; // ("A")
                         freqDial2 = 0;
                         freqDial3 = int.Parse(frequencyAsString.Substring(0, 1));
                         freqDial4 = int.Parse(frequencyAsString.Substring(2, 1));
@@ -1031,7 +1031,7 @@ namespace NonVisuals
                 //10.075Mhz
                 case 2:
                     {
-                        freqDial1 = -1; // ("A")
+                        freqDial1 = 2; // ("A")
                         freqDial2 = int.Parse(frequencyAsString.Substring(0, 1));
                         freqDial3 = int.Parse(frequencyAsString.Substring(1, 1));
                         freqDial4 = int.Parse(frequencyAsString.Substring(3, 1));
@@ -1042,12 +1042,29 @@ namespace NonVisuals
                 case 3:
                     {
                         freqDial1 = int.Parse(frequencyAsString.Substring(0, 1));
+                        switch (freqDial1)
+                        {
+                            case 2:
+                                {
+                                    freqDial1 = 0;
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    freqDial1 = 1;
+                                    break;
+                                }
+                        }
                         freqDial2 = int.Parse(frequencyAsString.Substring(1, 1));
                         freqDial3 = int.Parse(frequencyAsString.Substring(2, 1));
                         freqDial4 = int.Parse(frequencyAsString.Substring(4, 1));
                         freqDial5 = int.Parse(frequencyAsString.Substring(5, 1));
                         break;
                     }
+                default:
+                {
+                        throw  new Exception("Failed to find separator in frequency string " + frequencyAsString);
+                }
             }
             switch (freqDial5)
             {
@@ -1098,15 +1115,7 @@ namespace NonVisuals
 
             //#1
             _uhfSyncThread?.Abort();
-            if (freqDial1 >= 2 && freqDial1 <= 3)
-            {
-                _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1 - 2, freqDial2, freqDial3, freqDial4, freqDial5));
-            }
-            else
-            {
-                //The first dial is set to "A", pos 2   (freqDial1 == -1)
-                _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(2, freqDial2, freqDial3, freqDial4, freqDial5));
-            }
+            _uhfSyncThread = new Thread(() => UhfSynchThreadMethod(freqDial1, freqDial2, freqDial3, freqDial4, freqDial5));
             _uhfSyncThread.Start();
         }
 
@@ -1175,6 +1184,7 @@ namespace NonVisuals
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
                                 }
+                                Common.DebugP("_uhfCockpitFreq1DialPos: " + _uhfCockpitFreq1DialPos + "  desiredPosition1: " + desiredPosition1);
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
                                     const string str = UHF_FREQ_1DIAL_COMMAND + "INC\n";
@@ -3868,7 +3878,7 @@ namespace NonVisuals
         {
             SaitekPanelKnobs = RadioPanelKnobA10C.GetRadioPanelKnobs();
         }
-        
+
         private static bool FlagValue(byte[] currentValue, RadioPanelKnobA10C radioPanelKnob)
         {
             return (currentValue[radioPanelKnob.Group] & radioPanelKnob.Mask) > 0;
@@ -4042,21 +4052,21 @@ namespace NonVisuals
                             //      "00" "25" "50" "75", only "00" and "50" used.
                             //Pos     0    1    2    3
                             case 0:
-                            {
-                                return "00";
-                            }
+                                {
+                                    return "00";
+                                }
                             case 1:
-                            {
-                                return "25";
-                            }
+                                {
+                                    return "25";
+                                }
                             case 2:
-                            {
-                                return "50";
-                            }
+                                {
+                                    return "50";
+                                }
                             case 3:
-                            {
-                                return "75";
-                            }
+                                {
+                                    return "75";
+                                }
                         }
                     }
                     break;
