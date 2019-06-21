@@ -725,7 +725,7 @@ namespace NonVisuals
                 return;
             }
             SaveCockpitFrequencyVhfAm();
-            var frequencyAsString = (_vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby / 1000).ToString(CultureInfo.InvariantCulture);
+            var frequencyAsString = _vhfAmBigFrequencyStandby + "." + _vhfAmSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0');
             //Frequency selector 1      VHFAM_FREQ1
             //      " 3" " 4" " 5" " 6" " 7" " 8" " 9" "10" "11" "12" "13" "14" "15"
             //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
@@ -1005,7 +1005,7 @@ namespace NonVisuals
 
             //Large dial 225-399 [step of 1]
             //Small dial 0.00-0.95 [step of 0.05]
-            var frequencyAsString = _uhfBigFrequencyStandby.ToString(CultureInfo.InvariantCulture) + "." + _uhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadRight(7,'0');
+            var frequencyAsString = _uhfBigFrequencyStandby.ToString(CultureInfo.InvariantCulture) + "." + _uhfSmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(3,'0');
 
             Common.DebugP("frequencyAsString " + frequencyAsString);
             var freqDial1 = 0;
@@ -1372,7 +1372,7 @@ namespace NonVisuals
                 return;
             }
             SaveCockpitFrequencyVhfFm();
-            var frequencyAsString = (_vhfFmBigFrequencyStandby + "." + _vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'));
+            var frequencyAsString = _vhfFmBigFrequencyStandby + "." + (_vhfFmSmallFrequencyStandby.ToString().PadLeft(3, '0'));
             //Frequency selector 1      VHFFM_FREQ1
             //      " 3" " 4" " 5" " 6" " 7" THESE ARE NOT USED IN FM RANGE ----> " 8" " 9" "10" "11" "12" "13" "14" "15"
             //Pos     0    1    2    3    4                                         5    6    7    8    9   10   11   12
