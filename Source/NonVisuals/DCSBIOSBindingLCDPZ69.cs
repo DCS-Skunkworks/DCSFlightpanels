@@ -1,5 +1,6 @@
 ﻿using System;
 using DCS_BIOS;
+using NonVisuals.Radio;
 
 namespace NonVisuals
 {
