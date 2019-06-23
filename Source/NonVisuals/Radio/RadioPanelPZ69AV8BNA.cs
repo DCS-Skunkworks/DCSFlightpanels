@@ -307,11 +307,11 @@ namespace NonVisuals.Radio
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 //No need for turbo
-                                                DCSBIOS.Send(COMM1_CHANNEL_DEC);
+                                                DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM2_CHANNEL_DEC);
+                                                DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             }
                                             break;
                                         }
@@ -440,11 +440,11 @@ namespace NonVisuals.Radio
                                             if (_comm2ChannelClickSpeedDetector.ClickAndCheck())
                                             {
                                                 //No need for turbo
-                                                DCSBIOS.Send(COMM1_CHANNEL_DEC);
+                                                DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             }
                                             else
                                             {
-                                                DCSBIOS.Send(COMM1_CHANNEL_DEC);
+                                                DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             }
                                             break;
                                         }
