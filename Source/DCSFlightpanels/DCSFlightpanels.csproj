@@ -145,64 +145,67 @@
     <Compile Include="LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlF14B.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlF14B.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF14B.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlF5E.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlF5E.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF5E.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlEmulatorFull.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlEmulatorFull.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlEmulatorFull.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlEmulator.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlEmulator.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlA10C.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlM2000C.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlAV8BNA.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlAV8BNA.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Radio\RadioPanelPZ69UserControlM2000C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlM2000C.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlFA18C.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlFA18C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlFA18C.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlSA342.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlSA342.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSA342.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlAJS37.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlAJS37.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlAJS37.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlBf109.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlBf109.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlBf109.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlF86F.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlF86F.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF86F.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlFw190.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlFw190.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlFw190.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlKa50.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlKa50.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlKa50.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlMi8.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlMi8.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlMi8.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlMiG21bis.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlMiG21bis.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlMiG21bis.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlP51D.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlP51D.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlP51D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSpitfireLFMkIX.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlNotImplemented.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlNotImplemented.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlNotImplemented.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlSRS.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlSRS.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RadioPanelPZ69UserControlUH1H.xaml.cs">
+    <Compile Include="Radio\RadioPanelPZ69UserControlUH1H.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
     </Compile>
@@ -314,83 +317,87 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlF14B.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlF14B.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlF5E.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlF5E.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlEmulatorFull.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlEmulatorFull.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlEmulator.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlEmulator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlA10C.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlA10C.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlM2000C.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlFA18C.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlAV8BNA.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlSA342.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlAJS37.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlM2000C.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlBf109.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlF86F.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlFw190.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlKa50.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlMi8.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlMiG21bis.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlP51D.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlSpitfireLFMkIX.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RadioPanelPZ69UserControlNotImplemented.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlFA18C.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlSRS.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlSA342.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RadioPanelPZ69UserControlUH1H.xaml">
+    <Page Include="Radio\RadioPanelPZ69UserControlAJS37.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlBf109.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlF86F.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlFw190.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlKa50.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlMi8.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlMiG21bis.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlP51D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlNotImplemented.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlSRS.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Radio\RadioPanelPZ69UserControlUH1H.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -687,6 +694,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\dcs_screenshot_by_derbysieger.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\av8bna_comm1_comm2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -13,8 +13,10 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
+using DCSFlightpanels.Radio;
 using Microsoft.Win32;
 using NonVisuals;
+using NonVisuals.Radio;
 using Octokit;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
@@ -513,6 +515,14 @@ namespace DCSFlightpanels
                                     else if (_panelProfileHandler.Airframe == DCSAirframe.F14B && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.AV8BNA && !Common.UseGenericRadio)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton, tabItem, this);
                                         _saitekUserControls.Add(radioPanelPZ69UserControl);
                                         _panelProfileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
