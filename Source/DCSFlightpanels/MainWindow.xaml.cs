@@ -520,6 +520,14 @@ namespace DCSFlightpanels
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
+                                    else if (_panelProfileHandler.Airframe == DCSAirframe.AV8BNA && !Common.UseGenericRadio)
+                                    {
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton, tabItem, this);
+                                        _saitekUserControls.Add(radioPanelPZ69UserControl);
+                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        tabItem.Content = radioPanelPZ69UserControl;
+                                        TabControlPanels.Items.Add(tabItem);
+                                    }
                                     else
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulatorFull(hidSkeleton, tabItem, this);
