@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using NonVisuals.Radios;
+
+namespace NonVisuals
 {
     public class PanelKeyOnOff
     {
