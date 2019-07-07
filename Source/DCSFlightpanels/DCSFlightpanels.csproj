@@ -145,6 +145,9 @@
     <Compile Include="LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Radios\RadioPanelPZ69UserControlAV8BNA.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlAV8BNA.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Radios\RadioPanelPZ69UserControlF14B.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF14B.xaml</DependentUpon>
     </Compile>
@@ -203,7 +206,6 @@
       <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
     </Compile>
     <Compile Include="Radios\RadioPanelPZ69UserControlUH1H.xaml.cs">
-
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
     </Compile>
@@ -315,6 +317,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Radios\RadioPanelPZ69UserControlAV8BNA.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Radios\RadioPanelPZ69UserControlF14B.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -392,7 +398,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Radios\RadioPanelPZ69UserControlUH1H.xaml">
-
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

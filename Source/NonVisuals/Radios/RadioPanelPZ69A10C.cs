@@ -4,8 +4,6 @@ using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
-using NonVisuals;
 
 namespace NonVisuals.Radios
 {

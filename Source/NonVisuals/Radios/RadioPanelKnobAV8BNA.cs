@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NonVisuals.Radio
+namespace NonVisuals.Radios
 {
     public enum RadioPanelPZ69KnobsAV8BNA
     {

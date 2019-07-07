@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
-using NonVisuals;
-
 namespace NonVisuals.Radios
 {
 

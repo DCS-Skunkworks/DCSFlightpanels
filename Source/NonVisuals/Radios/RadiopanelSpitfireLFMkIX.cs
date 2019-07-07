@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using NonVisuals;
 
 
 namespace NonVisuals.Radios

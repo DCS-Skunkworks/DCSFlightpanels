@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
-namespace NonVisuals.Radio
+namespace NonVisuals.Radios
 {
     public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {

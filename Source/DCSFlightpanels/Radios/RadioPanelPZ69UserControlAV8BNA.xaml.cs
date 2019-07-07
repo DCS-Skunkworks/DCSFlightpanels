@@ -1,36 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
 using DCSFlightpanels.Properties;
-using NonVisuals.Radio;
+using NonVisuals.Radios;
 
-namespace DCSFlightpanels.Radio
+namespace DCSFlightpanels.Radios
 {
     /// <summary>
-    /// Interaction logic for RadioPanelPZ69UserControlSRS.xaml
+    /// Interaction logic for RadioPanelPZ69UserControlA10C.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlSRS : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class RadioPanelPZ69UserControlAV8BNA : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
-        private readonly RadioPanelPZ69SRS _radioPanelPZ69;
+        private readonly RadioPanelPZ69AV8BNA _radioPanelPZ69;
         private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
         private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
 
-        public RadioPanelPZ69UserControlSRS(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlAV8BNA(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             HideAllImages();
-
-            _radioPanelPZ69 = new RadioPanelPZ69SRS(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo, hidSkeleton);
-            _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            _radioPanelPZ69.SmallFreqStepping = Settings.Default.SRSSmallFreqStepping;
+            _radioPanelPZ69 = new RadioPanelPZ69AV8BNA(hidSkeleton);
+            _radioPanelPZ69.FrequencyKnobSensitivity = -1;//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.Attach((ISaitekPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             _globalHandler = globalHandler;
@@ -56,6 +54,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -91,6 +90,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -102,6 +102,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -113,6 +114,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -124,6 +126,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -135,6 +138,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -146,6 +150,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -157,6 +162,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo nada?
             }
             catch (Exception ex)
             {
@@ -168,6 +174,7 @@ namespace DCSFlightpanels.Radio
         {
             try
             {
+                //todo
             }
             catch (Exception ex)
             {
@@ -181,17 +188,17 @@ namespace DCSFlightpanels.Radio
             {
                 foreach (var radioKnobO in knobs)
                 {
-                    var radioKnob = (RadioPanelKnobSRS)radioKnobO;
+                    var radioKnob = (RadioPanelKnobAV8BNA)radioKnobO;
                     Dispatcher.BeginInvoke((Action)delegate
-                   {
+                    {
                         /*if (radioKnob.IsOn)
                         {
                             SetGroupboxVisibility(radioKnob.RadioPanelPZ69Knob);
                         }*/
-                   });
+                    });
                     switch (radioKnob.RadioPanelPZ69Knob)
                     {
-                        case RadioPanelPZ69KnobsSRS.UPPER_COM1:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_COMM1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -201,7 +208,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_COM2:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_COMM2:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -211,7 +218,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_NAV1:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -221,7 +228,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_NAV2:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_NAV2:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -231,7 +238,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_ADF:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_ADF:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -241,7 +248,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_DME:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_DME:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -251,7 +258,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_XPDR:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_XPDR:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -261,7 +268,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_COM1:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -271,7 +278,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_COM2:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_COMM2:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -281,7 +288,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_NAV1:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV1:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -291,7 +298,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_NAV2:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_NAV2:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -301,7 +308,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_ADF:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_ADF:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -311,7 +318,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_DME:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_DME:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -321,7 +328,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_XPDR:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_XPDR:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -331,7 +338,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -341,7 +348,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -351,7 +358,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -361,7 +368,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -371,7 +378,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -381,7 +388,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_SMALL_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -391,7 +398,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_INC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -401,7 +408,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_LARGE_FREQ_WHEEL_DEC:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -411,7 +418,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.UPPER_FREQ_SWITCH:
+                        case RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -421,7 +428,7 @@ namespace DCSFlightpanels.Radio
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsSRS.LOWER_FREQ_SWITCH:
+                        case RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH:
                             {
                                 var key = radioKnob;
                                 Dispatcher.BeginInvoke(
@@ -439,7 +446,7 @@ namespace DCSFlightpanels.Radio
                 Common.ShowErrorMessageBox(2019, ex);
             }
         }
-        
+
         private void HideAllImages()
         {
             TopLeftCom1.Visibility = Visibility.Collapsed;
@@ -468,7 +475,43 @@ namespace DCSFlightpanels.Radio
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
 
-        
+        private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
+        {
+
+
+        }
+
+        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+
+        }
+
+        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+
+
+        }
+
+
+        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
 
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
@@ -493,8 +536,8 @@ namespace DCSFlightpanels.Radio
             {
                 if (_userControlLoaded)
                 {
-                    Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
-                    _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
+                    Settings.Default.RadioFrequencyKnobSensitivity = -1;//doesn't work properly with 0 value int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
+                    _radioPanelPZ69.FrequencyKnobSensitivity = -1;//int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     Settings.Default.Save();
                 }
             }
@@ -504,33 +547,17 @@ namespace DCSFlightpanels.Radio
             }
         }
 
-        private void ComboBoxSmallFreqStepping_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RadioPanelPZ69UserControlAV8BNA_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (_userControlLoaded)
-                {
-                    var numberFormat = new NumberFormatInfo();
-                    numberFormat.NumberDecimalSeparator = ".";
-                    numberFormat.NumberDecimalDigits = 3;
-                    numberFormat.NumberGroupSeparator = "";
-                    Settings.Default.SRSSmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
-                    _radioPanelPZ69.SmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
-                    Settings.Default.Save();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(204330, ex);
-            }
-        }
+                //ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
 
-        private void RadioPanelPZ69UserControlSRS_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
-                ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
+                //ComboBoxSyncOKDelayTimeout.SelectedValue = Settings.Default.SyncOKDelayTimeout;
+                /*ComboBoxSynchSleepTime.SelectedValue = Settings.Default.BAKDialSynchSleepTime;
+                ComboBoxSynchResetTimeout.SelectedValue = Settings.Default.BAKDialResetSyncTimeout;
+                _radioPanelPZ69.ResetSyncTimeout = Settings.Default.BAKDialResetSyncTimeout;
+                _radioPanelPZ69.SynchSleepTime = Settings.Default.BAKDialSynchSleepTime;*/
                 _userControlLoaded = true;
             }
             catch (Exception ex)
@@ -539,7 +566,56 @@ namespace DCSFlightpanels.Radio
             }
         }
 
+        private void ComboBoxSynchSleepTime_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (_userControlLoaded)
+                {
+                    /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
+                    _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
+                    Settings.Default.Save();*/
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(244331, ex);
+            }
+        }
 
+        private void ComboBoxSynchResetTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (_userControlLoaded)
+                {
+                    /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
+                    _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
+                    Settings.Default.Save();*/
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(244331, ex);
+            }
+        }
+
+        private void ComboBoxSyncOKDelayTimeout_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (_userControlLoaded)
+                {
+                    Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                    _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
+                    Settings.Default.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(244331, ex);
+            }
+        }
 
     }
 }

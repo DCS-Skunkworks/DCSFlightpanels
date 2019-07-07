@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NonVisuals;
 
 namespace NonVisuals.Radios
 {
