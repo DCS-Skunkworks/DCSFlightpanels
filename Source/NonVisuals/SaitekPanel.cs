@@ -245,7 +245,6 @@ namespace NonVisuals
                         saitekPanelKnob.IsOn = FlagValue(newValue, saitekPanelKnob);
                         if (saitekPanelKnob.GetType() == typeof(MultiPanelKnob) && !saitekPanelKnob.IsOn)
                         {
-
                             var multiPanelKnob = (MultiPanelKnob)saitekPanelKnob;
                             switch (multiPanelKnob.MultiPanelPZ70Knob)
                             {

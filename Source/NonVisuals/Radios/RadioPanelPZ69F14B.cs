@@ -47,7 +47,7 @@ namespace NonVisuals.Radios
         private const string UHF_PRESET_INCREASE = "PLT_UHF1_PRESETS INC\n";
         private const string UHF_PRESET_DECREASE = "PLT_UHF1_PRESETS DEC\n";
         private const string UHF_FREQ_MODE_INCREASE = "PLT_UHF1_FREQ_MODE INC\n";
-        private const string UHF_FREQ_MODE_DECREASE = "PLT_UHF1_FREQ_MODEDEC\n";
+        private const string UHF_FREQ_MODE_DECREASE = "PLT_UHF1_FREQ_MODE DEC\n";
 
         private const string UHF_MODE_INCREASE = "PLT_UHF1_FUNCTION INC\n";
         private const string UHF_MODE_DECREASE = "PLT_UHF1_FUNCTION DEC\n";

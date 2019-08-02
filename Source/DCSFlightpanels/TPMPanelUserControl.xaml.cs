@@ -167,7 +167,7 @@ namespace DCSFlightpanels
             {
                 if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
-                    //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
@@ -194,7 +194,7 @@ namespace DCSFlightpanels
             {
                 if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
-                    //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)
@@ -209,8 +209,8 @@ namespace DCSFlightpanels
             {
                 if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.TPM)
                 {
-                    Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher.BeginInvoke((Action)(() => TextBoxLogTPM.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = ""));
                 }
             }
             catch (Exception ex)
@@ -223,7 +223,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -890,7 +890,7 @@ namespace DCSFlightpanels
             try
             {
                 //Set focus to this so that virtual keypresses won't affect settings
-                Dispatcher.BeginInvoke((Action)(() => TextBoxLogTPM.Focus()));
+                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Focus()));
                 foreach (var tpmPanelSwitch in switches)
                 {
                     var key = (TPMPanelSwitch)tpmPanelSwitch;
@@ -899,7 +899,7 @@ namespace DCSFlightpanels
                     {
                         if (!string.IsNullOrEmpty(_tpmPanel.GetKeyPressForLoggingPurposes(key)))
                         {
-                            Dispatcher.BeginInvoke(
+                            Dispatcher?.BeginInvoke(
                                 (Action)
                                 (() =>
                                  TextBoxLogTPM.Text =
@@ -908,7 +908,7 @@ namespace DCSFlightpanels
                     }
                     else
                     {
-                        Dispatcher.BeginInvoke(
+                        Dispatcher?.BeginInvoke(
                             (Action)
                             (() =>
                              TextBoxLogTPM.Text =
@@ -919,7 +919,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Dispatcher.BeginInvoke(
+                Dispatcher?.BeginInvoke(
                     (Action)
                     (() =>
                      TextBoxLogTPM.Text = TextBoxLogTPM.Text.Insert(0, "0x16" + ex.Message + ".\n")));
@@ -939,8 +939,8 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G1:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
-                                    (Action)delegate
+                                Dispatcher?.BeginInvoke(
+                                    (Action) delegate
                                     {
                                         ImageG1On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
                                         ImageG1Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
@@ -950,7 +950,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G2:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG2On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -961,7 +961,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G3:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG3On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -972,7 +972,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G4:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG4On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -983,7 +983,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G5:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG5On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -994,7 +994,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G6:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG6On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1005,7 +1005,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G7:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG7On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1016,7 +1016,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G8:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG8On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1027,7 +1027,7 @@ namespace DCSFlightpanels
                         case TPMPanelSwitches.G9:
                             {
                                 var key = tpmPanelSwitch;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageG9On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
