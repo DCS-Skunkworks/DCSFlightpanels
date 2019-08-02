@@ -259,6 +259,8 @@ namespace DCSFlightpanels
             {
                 if (_multiPanelPZ70 != null)
                 {
+                    TextBoxLogPZ70.Text = "";
+                    TextBoxLogPZ70.Text = _multiPanelPZ70.InstanceId;
                     Clipboard.SetText(_multiPanelPZ70.InstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }

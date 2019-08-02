@@ -1175,6 +1175,8 @@ namespace DCSFlightpanels
             {
                 if (_tpmPanel != null)
                 {
+                    TextBoxLogTPM.Text = "";
+                    TextBoxLogTPM.Text = _tpmPanel.InstanceId;
                     Clipboard.SetText(_tpmPanel.InstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }

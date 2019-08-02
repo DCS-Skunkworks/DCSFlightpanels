@@ -481,6 +481,8 @@ namespace DCSFlightpanels.Radios
             {
                 if (_radioPanelPZ69 != null)
                 {
+                    TextBoxLogPZ69.Text = "";
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.InstanceId;
                     Clipboard.SetText(_radioPanelPZ69.InstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }

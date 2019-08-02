@@ -690,6 +690,8 @@ namespace DCSFlightpanels
             {
                 if (_backlitPanelBIP != null)
                 {
+                    TextBoxLogBIP.Text = "";
+                    TextBoxLogBIP.Text = _backlitPanelBIP.InstanceId;
                     Clipboard.SetText(_backlitPanelBIP.InstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }

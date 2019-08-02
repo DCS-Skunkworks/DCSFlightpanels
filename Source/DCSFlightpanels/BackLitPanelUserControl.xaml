@@ -92,6 +92,11 @@
                 <Button Name="LEDIncrease" Content="LED +" Click="LEDIncrease_OnClick"/>
             </StackPanel>
         </StackPanel>
+        <StackPanel Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" >
+            <GroupBox Header="Log"  FontSize="10"  Margin="0,30,0,0" Height="200">
+                <TextBox Name="TextBoxLogBIP" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
+            </GroupBox>
+        </StackPanel>
         <TextBlock HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" FontSize="18" FontWeight="Bold" TextWrapping="Wrap" Text="Upper row   : Position_1_1 -> Position_1_8&#x0a;Middle row  : Position_2_1 -> Position_2_8&#x0a;Bottom row : Position_3_1 -> Position_3_8" VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>

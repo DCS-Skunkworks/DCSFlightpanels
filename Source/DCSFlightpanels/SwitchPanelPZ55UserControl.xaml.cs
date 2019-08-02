@@ -1476,6 +1476,8 @@ namespace DCSFlightpanels
             {
                 if (_switchPanelPZ55 != null)
                 {
+                    TextBoxLogPZ55.Text = "";
+                    TextBoxLogPZ55.Text = _switchPanelPZ55.InstanceId;
                     Clipboard.SetText(_switchPanelPZ55.InstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
