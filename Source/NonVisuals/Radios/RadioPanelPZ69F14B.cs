@@ -1294,7 +1294,7 @@ namespace NonVisuals.Radios
                             else if (_vuhfCockpitMode != 0 && VuhfPresetSelected())
                             {
                                 SetPZ69DisplayBytesInteger(ref bytes, (int)_vuhfCockpitPresetChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             }
                             else
                             {

@@ -216,29 +216,23 @@ namespace NonVisuals
 
         private void OnReport(HidReport report)
         {
-            if(_typeOfSaitekPanel == SaitekPanelsEnum.TPM)
+            if (_typeOfSaitekPanel == SaitekPanelsEnum.TPM && report.Data.Length == 5)
             {
-                if (report.Data.Length == 5)
-                {
-                    Array.Copy(NewSaitekPanelValueTPM, OldSaitekPanelValueTPM, 5);
-                    Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
-                    var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValueTPM, NewSaitekPanelValueTPM);
-                    SaitekPanelKnobChanged(hashSet);
-                    OnSwitchesChanged(hashSet);
-                    FirstReportHasBeenRead = true;
-                }
+                Array.Copy(NewSaitekPanelValueTPM, OldSaitekPanelValueTPM, 5);
+                Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
+                var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValueTPM, NewSaitekPanelValueTPM);
+                SaitekPanelKnobChanged(hashSet);
+                OnSwitchesChanged(hashSet);
+                FirstReportHasBeenRead = true;
             }
-            else
+            else if (report.Data.Length == 3)
             {
-                if (report.Data.Length == 3)
-                {
-                    Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
-                    Array.Copy(report.Data, NewSaitekPanelValue, 3);
-                    var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
-                    SaitekPanelKnobChanged(hashSet);
-                    OnSwitchesChanged(hashSet);
-                    FirstReportHasBeenRead = true;
-                }
+                Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
+                Array.Copy(report.Data, NewSaitekPanelValue, 3);
+                var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
+                SaitekPanelKnobChanged(hashSet);
+                OnSwitchesChanged(hashSet);
+                FirstReportHasBeenRead = true;
             }
             
             StartListeningForPanelChanges();
