@@ -194,6 +194,8 @@ namespace NonVisuals
         protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new HashSet<ISaitekPanelKnob>();
         protected byte[] OldSaitekPanelValue = { 0, 0, 0 };
         protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
+        protected byte[] OldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
+        protected byte[] NewSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
         protected abstract void SaitekPanelKnobChanged(IEnumerable<object> hashSet);
 
         protected void StartListeningForPanelChanges()
@@ -214,15 +216,31 @@ namespace NonVisuals
 
         private void OnReport(HidReport report)
         {
-            if (report.Data.Length == 3)
+            if(_typeOfSaitekPanel == SaitekPanelsEnum.TPM)
             {
-                Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
-                Array.Copy(report.Data, NewSaitekPanelValue, 3);
-                var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
-                SaitekPanelKnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
-                FirstReportHasBeenRead = true;
+                if (report.Data.Length == 5)
+                {
+                    Array.Copy(NewSaitekPanelValueTPM, OldSaitekPanelValueTPM, 5);
+                    Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
+                    var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValueTPM, NewSaitekPanelValueTPM);
+                    SaitekPanelKnobChanged(hashSet);
+                    OnSwitchesChanged(hashSet);
+                    FirstReportHasBeenRead = true;
+                }
             }
+            else
+            {
+                if (report.Data.Length == 3)
+                {
+                    Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
+                    Array.Copy(report.Data, NewSaitekPanelValue, 3);
+                    var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
+                    SaitekPanelKnobChanged(hashSet);
+                    OnSwitchesChanged(hashSet);
+                    FirstReportHasBeenRead = true;
+                }
+            }
+            
             StartListeningForPanelChanges();
         }
 
@@ -230,8 +248,13 @@ namespace NonVisuals
         {
             var result = new HashSet<object>();
 
+            var endValue = 3;
+            if(_typeOfSaitekPanel == SaitekPanelsEnum.TPM)
+            {
+                endValue = 5;
+            }
 
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < endValue; i++)
             {
                 var oldByte = oldValue[i];
                 var newByte = newValue[i];
