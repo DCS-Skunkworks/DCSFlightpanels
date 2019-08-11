@@ -94,6 +94,7 @@
     <Compile Include="KnobBindingPZ70.cs" />
     <Compile Include="KeyBindingPZ55.cs" />
     <Compile Include="ClickSpeedDetector.cs" />
+    <Compile Include="StreamDeck35Button.cs" />
     <Compile Include="MultiPanelKnob.cs" />
     <Compile Include="MultiPanelPZ70.cs" />
     <Compile Include="OSKeyPress.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Radios\SRSListener.cs" />
     <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
     <Compile Include="Radios\SRSRadioInformation.cs" />
+    <Compile Include="StreamDeck35.cs" />
     <Compile Include="TPMPanelSwitch.cs" />
     <Compile Include="SwitchPanelKey.cs" />
     <Compile Include="TPMPanel.cs" />

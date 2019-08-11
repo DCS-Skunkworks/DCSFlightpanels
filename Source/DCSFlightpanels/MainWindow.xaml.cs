@@ -576,6 +576,15 @@ namespace DCSFlightpanels
                     } //for each
                 }
 
+                
+                var tabItemSD = new TabItem();
+                tabItemSD.Header = "StreamDeck35";
+                var streamDeckUserControl = new StreamDeck35UserControl();
+                _saitekUserControls.Add(streamDeckUserControl);
+                //_panelProfileHandler.Attach(tpmPanelUserControl);
+                tabItemSD.Content = streamDeckUserControl;
+                TabControlPanels.Items.Add(tabItemSD);
+
                 SortTabs();
                 if (TabControlPanels.Items.Count > 0)
                 {
