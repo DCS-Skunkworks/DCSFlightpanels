@@ -579,7 +579,7 @@ namespace DCSFlightpanels
                 
                 var tabItemSD = new TabItem();
                 tabItemSD.Header = "StreamDeck35";
-                var streamDeckUserControl = new StreamDeck35UserControl();
+                var streamDeckUserControl = new StreamDeck35UserControl(null, tabItemSD, this);
                 _saitekUserControls.Add(streamDeckUserControl);
                 //_panelProfileHandler.Attach(tpmPanelUserControl);
                 tabItemSD.Content = streamDeckUserControl;
