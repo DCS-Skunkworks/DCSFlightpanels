@@ -36,9 +36,9 @@ namespace NonVisuals
         private bool _manualLandingGearLeds;
         private Thread _manualLandingGearThread;
 
-        public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ55SwitchPanel, hidSkeleton)
+        public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ55SwitchPanel)
+            if (hidSkeleton.PanelType != GamingPanelEnum.PZ55SwitchPanel)
             {
                 throw new ArgumentException();
             }

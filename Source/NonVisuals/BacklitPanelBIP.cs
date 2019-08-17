@@ -137,9 +137,9 @@ namespace NonVisuals
          * 00000000
          *
          */
-        public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.BackLitPanel, hidSkeleton)
+        public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != SaitekPanelsEnum.BackLitPanel)
+            if (hidSkeleton.PanelType != GamingPanelEnum.BackLitPanel)
             {
                 throw new ArgumentException();
             }

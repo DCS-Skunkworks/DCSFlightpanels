@@ -39,14 +39,17 @@ namespace ClassLibraryCommon
         SendInput = 1
     }
 
-    public enum SaitekPanelsEnum
+    public enum GamingPanelEnum
     {
         Unknown = 0,
         PZ55SwitchPanel = 2,
         PZ69RadioPanel = 4,
         PZ70MultiPanel = 8,
         BackLitPanel = 16,
-        TPM = 32
+        TPM = 32,
+        StreamDeck23,
+        StreamDeck35,
+        StreamDeck48
     }
 
     /*

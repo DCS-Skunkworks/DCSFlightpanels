@@ -21,9 +21,9 @@ namespace NonVisuals
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
-        public TPMPanel(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.TPM, hidSkeleton)
+        public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != SaitekPanelsEnum.TPM)
+            if (hidSkeleton.PanelType != GamingPanelEnum.TPM)
             {
                 throw new ArgumentException();
             }

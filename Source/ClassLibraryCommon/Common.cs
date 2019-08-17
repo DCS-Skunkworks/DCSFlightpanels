@@ -26,7 +26,7 @@ namespace ClassLibraryCommon
 
     public static class Common
     {
-        public static readonly List<SaitekPanelSkeleton> SaitekPanelSkeletons = new List<SaitekPanelSkeleton> { new SaitekPanelSkeleton(SaitekPanelsEnum.PZ55SwitchPanel, 0x6A3, 0xD67), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ69RadioPanel, 0x6A3, 0xD05), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ70MultiPanel, 0x6A3, 0xD06), new SaitekPanelSkeleton(SaitekPanelsEnum.BackLitPanel, 0x6A3, 0xB4E), new SaitekPanelSkeleton(SaitekPanelsEnum.TPM, 0x6A3, 0xB4D) };
+        public static readonly List<SaitekPanelSkeleton> SaitekPanelSkeletons = new List<SaitekPanelSkeleton> { new SaitekPanelSkeleton(GamingPanelEnum.PZ55SwitchPanel, 0x6A3, 0xD67), new SaitekPanelSkeleton(GamingPanelEnum.PZ69RadioPanel, 0x6A3, 0xD05), new SaitekPanelSkeleton(GamingPanelEnum.PZ70MultiPanel, 0x6A3, 0xD06), new SaitekPanelSkeleton(GamingPanelEnum.BackLitPanel, 0x6A3, 0xB4E), new SaitekPanelSkeleton(GamingPanelEnum.TPM, 0x6A3, 0xB4D) };
 
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
         private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
@@ -349,19 +349,19 @@ namespace ClassLibraryCommon
 
     public class SaitekPanelSkeleton
     {
-        private SaitekPanelsEnum _saitekPanelsEnum = SaitekPanelsEnum.Unknown;
+        private GamingPanelEnum _saitekPanelsEnum = GamingPanelEnum.Unknown;
         private int _vendorId;
         private int _productId;
         private string _serialNumber;
 
-        public SaitekPanelSkeleton(SaitekPanelsEnum saitekPanelsEnum, int vendorId, int productId)
+        public SaitekPanelSkeleton(GamingPanelEnum saitekPanelsEnum, int vendorId, int productId)
         {
             _saitekPanelsEnum = saitekPanelsEnum;
             _vendorId = vendorId;
             _productId = productId;
         }
 
-        public SaitekPanelSkeleton(SaitekPanelsEnum saitekPanelsEnum, int vendorId, int productId, string serialNumber)
+        public SaitekPanelSkeleton(GamingPanelEnum saitekPanelsEnum, int vendorId, int productId, string serialNumber)
         {
             _saitekPanelsEnum = saitekPanelsEnum;
             _vendorId = vendorId;
@@ -374,7 +374,7 @@ namespace ClassLibraryCommon
             return !string.IsNullOrEmpty(_serialNumber) && !_serialNumber.Equals("0");
         }
 
-        public SaitekPanelsEnum SaitekPanelsType
+        public GamingPanelEnum SaitekPanelsType
         {
             get { return _saitekPanelsEnum; }
             set { _saitekPanelsEnum = value; }

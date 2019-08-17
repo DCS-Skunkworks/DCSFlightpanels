@@ -85,7 +85,7 @@
     <Compile Include="IProfileHandlerListener.cs" />
     <Compile Include="IRadioPanel.cs" />
     <Compile Include="ISaitekPanelKnob.cs" />
-    <Compile Include="ISaitekPanelListener.cs" />
+    <Compile Include="IGamingPanelListener.cs" />
     <Compile Include="IUserMessageHandler.cs" />
     <Compile Include="KeyBinding.cs" />
     <Compile Include="KeyBindingPZ69DialPosition.cs" />
@@ -94,6 +94,7 @@
     <Compile Include="KnobBindingPZ70.cs" />
     <Compile Include="KeyBindingPZ55.cs" />
     <Compile Include="ClickSpeedDetector.cs" />
+    <Compile Include="GamingPanel.cs" />
     <Compile Include="StreamDeck35Button.cs" />
     <Compile Include="MultiPanelKnob.cs" />
     <Compile Include="MultiPanelPZ70.cs" />

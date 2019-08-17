@@ -17,7 +17,7 @@ namespace DCSFlightpanels.Radios
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlEmulator.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlEmulatorFull : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class RadioPanelPZ69UserControlEmulatorFull : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly RadioPanelPZ69EmulatorFull _radioPanelPZ69;
         private readonly TabItem _parentTabItem;
@@ -39,7 +39,7 @@ namespace DCSFlightpanels.Radios
 
             _radioPanelPZ69 = new RadioPanelPZ69EmulatorFull(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-            _radioPanelPZ69.Attach((ISaitekPanelListener)this);
+            _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             _globalHandler = globalHandler;
 
@@ -108,7 +108,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ69RadioPanel && e.UniqueId.Equals(_radioPanelPZ69.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel && e.UniqueId.Equals(_radioPanelPZ69.InstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -195,7 +195,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (e.UniqueId.Equals(_radioPanelPZ69.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.PZ69RadioPanel)
+                if (e.UniqueId.Equals(_radioPanelPZ69.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel)
                 {
                     Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = ""));

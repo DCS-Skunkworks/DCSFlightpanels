@@ -10,8 +10,11 @@ using DCS_BIOS;
 
 namespace NonVisuals
 {
-    public class StreamDeck35
+    public class StreamDeck35 : IProfileHandlerListener, IDcsBiosDataListener
     {
+        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
+        public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
+
         private int _lcdKnobSensitivity;
         private volatile byte _knobSensitivitySkipper;
         private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
@@ -20,16 +23,23 @@ namespace NonVisuals
         private HashSet<OSCommandBindingPZ70> _osCommandBindings = new HashSet<OSCommandBindingPZ70>();
         private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
+        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
+        private static readonly object _updateCounterLockObject = new object();
+        private uint _count;
+        private bool _synchedOnce;
+        private string _instanceId;
+        private bool _closed = false;
 
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
 
+        private bool _settingsLoading = false;
 
         private long _doUpdatePanelLCD;
 
         public StreamDeck35()
         {
-            /*if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ70MultiPanel)
+            /*if (hidSkeleton.PanelType != GamingPanelEnum.PZ70MultiPanel)
             {
                 throw new ArgumentException();
             }
@@ -39,9 +49,9 @@ namespace NonVisuals
             Startup();
         }
 
-        public sealed override void Startup()
+        public void Startup()
         {
-            try
+            /*try
             {
                 StartListeningForPanelChanges();
             }
@@ -49,22 +59,22 @@ namespace NonVisuals
             {
                 Common.DebugP("MultiPanelPZ70.StartUp() : " + ex.Message);
                 SetLastException(ex);
-            }
+            }*/
         }
 
-        public override void Shutdown()
+        public void Shutdown()
         {
-            try
+            /*try
             {
                 Closed = true;
             }
             catch (Exception e)
             {
                 SetLastException(e);
-            }
+            }*/
         }
 
-        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             if (SettingsLoading)
             {
@@ -104,7 +114,7 @@ namespace NonVisuals
             UpdateLCD();
         }
 
-        public override void ImportSettings(List<string> settings)
+        public void ImportSettings(List<string> settings)
         {
             SettingsLoading = true;
             //Clear current bindings
@@ -155,7 +165,7 @@ namespace NonVisuals
             OnSettingsApplied();
         }
 
-        public override List<string> ExportSettings()
+        public List<string> ExportSettings()
         {
             if (Closed)
             {
@@ -214,12 +224,12 @@ namespace NonVisuals
             return result;
         }
 
-        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
+        public void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
             e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
-        public override void ClearSettings()
+        public void ClearSettings()
         {
             _knobBindings.Clear();
             _osCommandBindings.Clear();
@@ -228,7 +238,7 @@ namespace NonVisuals
             _bipLinks.Clear();
         }
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
         {
             //Set _selectedMode and LCD button statuses
             //and performs the actual actions for key presses
@@ -1153,7 +1163,7 @@ namespace NonVisuals
             //IsAttached = false;
         }
 
-        public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
+        public DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
             return null;
         }
@@ -1206,299 +1216,113 @@ namespace NonVisuals
             set => _pz70DialPosition = value;
         }
 
-        public override string SettingsVersion()
+        public string SettingsVersion()
         {
             return "2X";
         }
 
-        public PZ70LCDButtonByteList LCDButtonByteListHandler => _lcdButtonByteListHandler;
-    }
 
 
-    public class PZ70LCDButtonByteList
-    {
-        /*
-            LCD Button Byte
-            00000000
-            ||||||||_ AP_BUTTON
-            |||||||_ HDG_BUTTON
-            ||||||_ NAV_BUTTON
-            |||||_ IAS_BUTTON
-            ||||_ ALT_BUTTON
-            |||_ VS_BUTTON
-            ||_ APR_BUTTON
-            |_ REV_BUTTON
-        */
-        private const byte ApMask = 1;
-        private const byte HDGMask = 2;
-        private const byte NAVMask = 4;
-        private const byte IASMask = 8;
-        private const byte ALTMask = 16;
-        private const byte VSMask = 32;
-        private const byte APRMask = 64;
-        private const byte REVMask = 128;
-        private const int DialAltMask = 256;
-        private const int DialVsMask = 512;
-        private const int DialIasMask = 1024;
-        private const int DialHdgMask = 2048;
-        private const int DialCrsMask = 4096;
-        private const int ButtonIsOnMask = 8192;
-
-        //bool isSet = (b & mask) != 0
-        //Set to 1" b |= mask
-        //Set to zero
-        //b &= ~mask
-        //Toggle
-        //b ^= mask
-        private readonly byte[] _buttonBytes = new byte[8];
-        private readonly int[] _buttonDialPosition = new int[8];
-
-        public PZ70LCDButtonByteList()
+        public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
-            _buttonDialPosition[0] |= DialAltMask;
-            _buttonDialPosition[1] |= DialVsMask;
-            _buttonDialPosition[2] |= DialIasMask;
-            _buttonDialPosition[3] |= DialHdgMask;
-            _buttonDialPosition[4] |= DialCrsMask;
+            //do nada
         }
 
-        public bool FlipButton(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knob)
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
-            try
-            {
-                return FlipButton(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob));
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e, "Flipbutton()");
-                throw;
-            }
+            ClearPanelSettings(this);
+            ImportSettings(e.Settings);
         }
 
-        public bool IsOn(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knobs)
+        public void ClearPanelSettings(object sender)
         {
-            try
+            ClearSettings();
+        }
+
+
+        protected void UpdateCounter(uint address, uint data)
+        {
+            lock (_updateCounterLockObject)
             {
-                var dialMask = GetMaskForDialPosition(pz70DialPosition);
-                var buttonMask = GetMaskForButton(multiPanelPZ70Knobs);
-                for (int i = 0; i < _buttonDialPosition.Length; i++)
+                if (_updateCounterDCSBIOSOutput.Address == address)
                 {
-                    if ((_buttonDialPosition[i] & dialMask) != 0)
+                    var newCount = _updateCounterDCSBIOSOutput.GetUIntValue(data);
+                    if (!_synchedOnce)
                     {
-                        return (_buttonBytes[i] & buttonMask) != 0;
+                        _count = newCount;
+                        _synchedOnce = true;
+                        return;
+                    }
+                    //Max is 255
+                    if ((newCount == 0 && _count == 255) || newCount - _count == 1)
+                    {
+                        //All is well
+                        _count = newCount;
+                    }
+                    else if (newCount - _count != 1)
+                    {
+                        //Not good
+                        if (OnUpdatesHasBeenMissed != null)
+                        {
+                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
+                            _count = newCount;
+                        }
                     }
                 }
-                throw new Exception("Multipanel IsOn : Failed to find Mask for dial position " + pz70DialPosition + " knob " + multiPanelPZ70Knobs);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e, "IsOn()");
-                throw;
             }
         }
 
-        public int GetMaskForDialPosition(PZ70DialPosition pz70DialPosition)
+        public void SelectedAirframe(object sender, AirframeEventArgs e)
         {
-            try
-            {
 
-                switch (pz70DialPosition)
-                {
-                    case PZ70DialPosition.ALT:
-                        {
-                            return DialAltMask;
-                        }
-                    case PZ70DialPosition.VS:
-                        {
-                            return DialVsMask;
-                        }
-                    case PZ70DialPosition.IAS:
-                        {
-                            return DialIasMask;
-                        }
-                    case PZ70DialPosition.HDG:
-                        {
-                            return DialHdgMask;
-                        }
-                    case PZ70DialPosition.CRS:
-                        {
-                            return DialCrsMask;
-                        }
-                }
-                throw new Exception("Multipanel : Failed to find Mask for dial position " + pz70DialPosition);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e);
-                throw;
-            }
         }
 
-        public byte GetMaskForButton(MultiPanelPZ70Knobs multiPanelPZ70Knob)
+        public bool SettingsLoading
         {
-            try
-            {
-                switch (multiPanelPZ70Knob)
-                {
-                    case MultiPanelPZ70Knobs.AP_BUTTON:
-                        {
-                            return ApMask;
-                        }
-                    case MultiPanelPZ70Knobs.HDG_BUTTON:
-                        {
-                            return HDGMask;
-                        }
-                    case MultiPanelPZ70Knobs.NAV_BUTTON:
-                        {
-                            return NAVMask;
-                        }
-                    case MultiPanelPZ70Knobs.IAS_BUTTON:
-                        {
-                            return IASMask;
-                        }
-                    case MultiPanelPZ70Knobs.ALT_BUTTON:
-                        {
-                            return ALTMask;
-                        }
-                    case MultiPanelPZ70Knobs.VS_BUTTON:
-                        {
-                            return VSMask;
-                        }
-                    case MultiPanelPZ70Knobs.APR_BUTTON:
-                        {
-                            return APRMask;
-                        }
-                    case MultiPanelPZ70Knobs.REV_BUTTON:
-                        {
-                            return REVMask;
-                        }
-                }
-                throw new Exception("Multipanel : Failed to find Mask for button " + multiPanelPZ70Knob);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e);
-                throw;
-            }
+            get => _settingsLoading;
+            set => _settingsLoading = value;
         }
 
-        public bool FlipButton(int buttonDialMask, byte buttonMask)
+        public string InstanceId
         {
-            try
-            {
-                for (int i = 0; i < _buttonDialPosition.Length; i++)
-                {
-                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
-                    {
-                        _buttonBytes[i] ^= buttonMask;
-                        return (_buttonBytes[i] & buttonMask) != 0;
-                    }
-                }
-                throw new Exception("Multipanel FlipButton : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e);
-                throw;
-            }
+            get => _instanceId;
+            set => _instanceId = value;
         }
 
-        public bool SetButtonOnOrOff(int buttonDialMask, byte buttonMask, bool on)
+        public bool Closed
         {
-            if (on)
-            {
-                return SetButtonOn(buttonDialMask, buttonMask);
-            }
-            return SetButtonOff(buttonDialMask, buttonMask);
+            get => _closed;
+            set => _closed = value;
         }
 
-        public bool SetButtonOff(int buttonDialMask, byte buttonMask)
+        protected virtual void OnSettingsApplied()
         {
-            try
-            {
-                for (int i = 0; i < _buttonDialPosition.Length; i++)
-                {
-                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
-                    {
-                        _buttonBytes[i] &= buttonMask;
-                        return (_buttonBytes[i] & buttonMask) != 0;
-                    }
-                }
-                throw new Exception("Multipanel ButtonOff : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e);
-                throw;
-            }
+            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
         }
 
-        public bool SetButtonOn(int buttonDialMask, byte buttonMask)
+        public void Attach(IGamingPanelListener iGamingPanelListener)
         {
-            try
-            {
-                for (int i = 0; i < _buttonDialPosition.Length; i++)
-                {
-                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
-                    {
-                        _buttonBytes[i] |= buttonMask;
-                        return (_buttonBytes[i] & buttonMask) != 0;
-                    }
-                }
-                throw new Exception("Multipanel ButtonOn : Failed to find Mask for dial " + buttonDialMask + " button " + buttonMask);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e);
-                throw;
-            }
+            /*OnDeviceAttachedA += iGamingPanelListener.DeviceAttached;
+            OnSwitchesChangedA += iGamingPanelListener.SwitchesChanged;
+            OnPanelDataAvailableA += iGamingPanelListener.PanelDataAvailable;*/
+            OnSettingsAppliedA += iGamingPanelListener.SettingsApplied;
+            /*OnLedLightChangedA += iGamingPanelListener.LedLightChanged;
+            OnSettingsClearedA += iGamingPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed += iGamingPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA += iGamingPanelListener.PanelSettingsChanged;*/
         }
 
-        public byte GetButtonByte(PZ70DialPosition pz70DialPosition)
+        //For those that wants to listen to this panel
+        public void Detach(IGamingPanelListener iGamingPanelListener)
         {
-            try
-            {
-                var mask = GetMaskForDialPosition(pz70DialPosition);
-                for (int i = 0; i < _buttonDialPosition.Length; i++)
-                {
-                    //(b & mask) != 0
-                    if ((_buttonDialPosition[i] & mask) != 0)
-                    {
-                        return _buttonBytes[i];
-                    }
-                }
-                throw new Exception("Multipanel : Failed to find button byte for " + pz70DialPosition);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e);
-                throw;
-            }
-        }
-
-        public byte GetButtonByte(int buttonDialMask)
-        {
-            try
-            {
-                for (int i = 0; i < _buttonDialPosition.Length; i++)
-                {
-                    if ((_buttonDialPosition[i] & buttonDialMask) != 0)
-                    {
-                        return _buttonBytes[i];
-                    }
-                }
-                throw new Exception("Multipanel GetButtonByte : Failed to find Mask for dial " + buttonDialMask);
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e);
-                throw;
-            }
-        }
-
-        public bool SetButtonByte(PZ70DialPosition pz70DialPosition, MultiPanelKnob multiPanelPZ70Knob)
-        {
-            return SetButtonOnOrOff(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob.MultiPanelPZ70Knob), multiPanelPZ70Knob.IsOn);
+            /*OnDeviceAttachedA -= iGamingPanelListener.DeviceAttached;
+            OnSwitchesChangedA -= iGamingPanelListener.SwitchesChanged;
+            OnPanelDataAvailableA -= iGamingPanelListener.PanelDataAvailable;*/
+            OnSettingsAppliedA -= iGamingPanelListener.SettingsApplied;
+            /*OnLedLightChangedA -= iGamingPanelListener.LedLightChanged;
+            OnSettingsClearedA -= iGamingPanelListener.SettingsCleared;
+            OnUpdatesHasBeenMissed -= iGamingPanelListener.UpdatesHasBeenMissed;
+            OnSettingsChangedA -= iGamingPanelListener.PanelSettingsChanged;*/
         }
     }
 }

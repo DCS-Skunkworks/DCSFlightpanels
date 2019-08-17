@@ -7,146 +7,19 @@ using HidLibrary;
 namespace NonVisuals
 {
 
-    public abstract class SaitekPanel : IProfileHandlerListener, IDcsBiosDataListener
+    public abstract class SaitekPanel : GamingPanel, IProfileHandlerListener, IDcsBiosDataListener
     {
-        //These events can be raised by the descendants of this class.
-        public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
-        public event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
-
-        public delegate void PanelDataToDcsAvailableEventHandler(object sender, PanelDataToDCSBIOSEventEventArgs e);
-        public event PanelDataToDcsAvailableEventHandler OnPanelDataAvailableA;
-
-        public delegate void DeviceAttachedEventHandler(object sender, PanelEventArgs e);
-        public event DeviceAttachedEventHandler OnDeviceAttachedA;
-
-        public delegate void DeviceDetachedEventHandler(object sender, PanelEventArgs e);
-        public event DeviceDetachedEventHandler OnDeviceDetachedA;
-
-        public delegate void SettingsHasChangedEventHandler(object sender, PanelEventArgs e);
-        public event SettingsHasChangedEventHandler OnSettingsChangedA;
-
-        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
-        public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
-
-        public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
-        public event SettingsClearedEventHandler OnSettingsClearedA;
-
-        public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
-        public event LedLightChangedEventHandler OnLedLightChangedA;
-
-        public delegate void UpdatesHasBeenMissedEventHandler(object sender, DCSBIOSUpdatesMissedEventArgs e);
-        public event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
-
-        //For those that wants to listen to this panel
-        public void Attach(ISaitekPanelListener iSaitekPanelListener)
-        {
-            OnDeviceAttachedA += iSaitekPanelListener.DeviceAttached;
-            OnSwitchesChangedA += iSaitekPanelListener.SwitchesChanged;
-            OnPanelDataAvailableA += iSaitekPanelListener.PanelDataAvailable;
-            OnSettingsAppliedA += iSaitekPanelListener.SettingsApplied;
-            OnLedLightChangedA += iSaitekPanelListener.LedLightChanged;
-            OnSettingsClearedA += iSaitekPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed += iSaitekPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA += iSaitekPanelListener.PanelSettingsChanged;
-        }
-
-        //For those that wants to listen to this panel
-        public void Detach(ISaitekPanelListener iSaitekPanelListener)
-        {
-            OnDeviceAttachedA -= iSaitekPanelListener.DeviceAttached;
-            OnSwitchesChangedA -= iSaitekPanelListener.SwitchesChanged;
-            OnPanelDataAvailableA -= iSaitekPanelListener.PanelDataAvailable;
-            OnSettingsAppliedA -= iSaitekPanelListener.SettingsApplied;
-            OnLedLightChangedA -= iSaitekPanelListener.LedLightChanged;
-            OnSettingsClearedA -= iSaitekPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed -= iSaitekPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA -= iSaitekPanelListener.PanelSettingsChanged;
-        }
-
-        //For those that wants to listen to this panel when it's settings change
-        public void Attach(IProfileHandlerListener iProfileHandlerListener)
-        {
-            OnSettingsChangedA += iProfileHandlerListener.PanelSettingsChanged;
-        }
-
-        //For those that wants to listen to this panel
-        public void Detach(IProfileHandlerListener iProfileHandlerListener)
-        {
-            OnSettingsChangedA -= iProfileHandlerListener.PanelSettingsChanged;
-        }
-
-        //Used by any but descendants that wants to see buttons that have changed, UI for example
-        protected virtual void OnSwitchesChanged(HashSet<object> hashSet)
-        {
-            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Switches = hashSet });
-        }
-
-        //Used by any but descendants that wants to see buttons that have changed, UI for example
-        protected virtual void OnPanelDataAvailable(string stringData)
-        {
-            OnPanelDataAvailableA?.Invoke(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
-        }
-
-
-        protected virtual void OnDeviceAttached()
-        {
-            //IsAttached = true;
-            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-        }
-
-
-        protected virtual void OnDeviceDetached()
-        {
-            //IsAttached = false;
-            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-        }
-
-
-        protected virtual void OnSettingsChanged()
-        {
-            OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-        }
-
-
-        protected virtual void OnSettingsApplied()
-        {
-            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-        }
-
-
-        protected virtual void OnSettingsCleared()
-        {
-            OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, SaitekPanelEnum = _typeOfSaitekPanel });
-        }
-
-
+        
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
             OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
-        }
-
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
-        {
-            //do nada
-        }
-
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
-        {
-            ClearPanelSettings(this);
-            ImportSettings(e.Settings);
-        }
-
-        public void ClearPanelSettings(object sender)
-        {
-            ClearSettings();
-            OnSettingsCleared();
         }
 
         private int _vendorId;
         private int _productId;
         private Exception _lastException;
         private readonly object _exceptionLockObject = new object();
-        private SaitekPanelsEnum _typeOfSaitekPanel;
+        private GamingPanelEnum _typeOfGamingPanel;
         private bool _isDirty;
         //private bool _isAttached;
         private bool _forwardPanelEvent;
@@ -163,9 +36,9 @@ namespace NonVisuals
         private readonly Guid _guid = Guid.NewGuid();
         private readonly string _hash;
 
-        protected SaitekPanel(SaitekPanelsEnum typeOfSaitekPanel, HIDSkeleton hidSkeleton)
+        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
-            _typeOfSaitekPanel = typeOfSaitekPanel;
+            _typeOfGamingPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
             {
@@ -216,7 +89,7 @@ namespace NonVisuals
 
         private void OnReport(HidReport report)
         {
-            if (_typeOfSaitekPanel == SaitekPanelsEnum.TPM && report.Data.Length == 5)
+            if (_typeOfGamingPanel == GamingPanelEnum.TPM && report.Data.Length == 5)
             {
                 Array.Copy(NewSaitekPanelValueTPM, OldSaitekPanelValueTPM, 5);
                 Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
@@ -243,7 +116,7 @@ namespace NonVisuals
             var result = new HashSet<object>();
 
             var endValue = 3;
-            if(_typeOfSaitekPanel == SaitekPanelsEnum.TPM)
+            if(_typeOfGamingPanel == GamingPanelEnum.TPM)
             {
                 endValue = 5;
             }
@@ -329,7 +202,7 @@ namespace NonVisuals
                         //Not good
                         if (OnUpdatesHasBeenMissed != null)
                         {
-                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, SaitekPanelEnum = _typeOfSaitekPanel, Count = (int)(newCount - _count) });
+                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
                             _count = newCount;
                         }
                     }
@@ -457,10 +330,10 @@ namespace NonVisuals
             set => _settingsLoading = value;
         }
 
-        public SaitekPanelsEnum TypeOfSaitekPanel
+        public GamingPanelEnum TypeOfSaitekPanel
         {
-            get => _typeOfSaitekPanel;
-            set => _typeOfSaitekPanel = value;
+            get => _typeOfGamingPanel;
+            set => _typeOfGamingPanel = value;
         }
         //TODO fixa att man kan koppla in/ur panelerna?
         /*
@@ -478,47 +351,7 @@ namespace NonVisuals
             get => _closed;
             set => _closed = value;
         }
-
-        protected static bool FlagHasChanged(byte oldValue, byte newValue, int bitMask)
-        {
-            /*  --------------------------------------- 
-             *  Example #1
-             *  Old value 10110101
-             *  New value 10110001
-             *  Bit mask  00000100  <- This is the one we are interested in to see whether it has changed
-             *  ---------------------------------------
-             *  
-             *  XOR       10110101
-             *  ^         10110001
-             *            --------
-             *            00000100   <- Here are the bit(s) that has changed between old & new value
-             *            
-             *  AND       00000100
-             *  &         00000100
-             *            --------
-             *            00000100   <- This shows that the value for this mask has changed since last time. Now get what is it (ON/OFF) using FlagValue function
-             */
-
-            /*  --------------------------------------- 
-             *  Example #2
-             *  Old value 10110101
-             *  New value 10100101
-             *  Bit mask  00000100  <- This is the one we are interested in to see whether it has changed
-             *  ---------------------------------------
-             *  
-             *  XOR       10110101
-             *  ^         10100101
-             *            --------
-             *            00010000   <- Here are the bit(s) that has changed between old & new value
-             *            
-             *  AND       00010000
-             *  &         00000100
-             *            --------
-             *            00000000   <- This shows that the value for this mask has NOT changed since last time.
-             */
-            return ((oldValue ^ newValue) & bitMask) > 0;
-        }
-
+        
     }
 
     public class LedLightChangeEventArgs : EventArgs
@@ -528,40 +361,4 @@ namespace NonVisuals
         public PanelLEDColor LEDColor { get; set; }
     }
 
-    public class DCSBIOSUpdatesMissedEventArgs : EventArgs
-    {
-        public string UniqueId { get; set; }
-        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
-        public int Count { get; set; }
-    }
-
-    public class PanelEventArgs : EventArgs
-    {
-        public string UniqueId { get; set; }
-        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
-    }
-
-    public class PanelDataToDCSBIOSEventEventArgs : EventArgs
-    {
-        public string StringData { get; set; }
-    }
-
-    public class SwitchesChangedEventArgs : EventArgs
-    {
-        public string UniqueId { get; set; }
-        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
-        public HashSet<object> Switches { get; set; }
-    }
-
-    public class SwitchesChangedEventArgsdd : EventArgs
-    {
-        public string UniqueId { get; set; }
-        public SaitekPanelsEnum SaitekPanelEnum { get; set; }
-        public HashSet<object> Switches { get; set; }
-    }
-
-    public class ForwardPanelEventArgs : EventArgs
-    {
-        public bool Forward { get; set; }
-    }
 }

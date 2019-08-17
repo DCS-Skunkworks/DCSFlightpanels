@@ -44,9 +44,9 @@ namespace NonVisuals
 
         private long _doUpdatePanelLCD;
 
-        public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ70MultiPanel, hidSkeleton)
+        public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ70MultiPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ70MultiPanel)
+            if (hidSkeleton.PanelType != GamingPanelEnum.PZ70MultiPanel)
             {
                 throw new ArgumentException();
             }

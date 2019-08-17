@@ -13,7 +13,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>
-    public partial class BackLitPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class BackLitPanelUserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
         private readonly BacklitPanelBIP _backlitPanelBIP;
@@ -36,7 +36,7 @@ namespace DCSFlightpanels
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
 
-            _backlitPanelBIP.Attach((ISaitekPanelListener)this);
+            _backlitPanelBIP.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);
             _globalHandler = globalHandler;
         }
@@ -188,7 +188,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -203,7 +203,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }

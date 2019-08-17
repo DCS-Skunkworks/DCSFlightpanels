@@ -14,7 +14,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class SwitchPanelPZ55UserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
@@ -34,7 +34,7 @@ namespace DCSFlightpanels
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
-            _switchPanelPZ55.Attach((ISaitekPanelListener)this);
+            _switchPanelPZ55.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_switchPanelPZ55);
             _globalHandler = globalHandler;
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
@@ -121,7 +121,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -262,7 +262,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -277,7 +277,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
                     //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -292,7 +292,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.PZ55SwitchPanel)
+                if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel)
                 {
                     Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = ""));

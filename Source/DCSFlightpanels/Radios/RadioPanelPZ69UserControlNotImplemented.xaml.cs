@@ -13,7 +13,7 @@ namespace DCSFlightpanels.Radios
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlNotImplemented.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlNotImplemented : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class RadioPanelPZ69UserControlNotImplemented : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         public RadioPanelPZ69UserControlNotImplemented(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {

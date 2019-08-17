@@ -7,12 +7,12 @@ namespace NonVisuals
 {
     public class HIDSkeleton
     {
-        private SaitekPanelsEnum _panelType;
+        private GamingPanelEnum _panelType;
         private string _instanceId;
         private HidDevice _hidReadDevice;
         private HidDevice _hidWriteDevice;
 
-        public HIDSkeleton(SaitekPanelsEnum panelType, string instanceId)
+        public HIDSkeleton(GamingPanelEnum panelType, string instanceId)
         {
             _panelType = panelType;
             _instanceId = instanceId;
@@ -41,7 +41,7 @@ namespace NonVisuals
             }
         }
 
-        public SaitekPanelsEnum PanelType
+        public GamingPanelEnum PanelType
         {
             get => _panelType;
             set => _panelType = value;

@@ -38,7 +38,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : ISaitekPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable
     {
         public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardPanelEventArgs e);
 
@@ -313,7 +313,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                var str = "DCS-BIOS UPDATES MISSED = " + e.SaitekPanelEnum + "  " + e.Count;
+                var str = "DCS-BIOS UPDATES MISSED = " + e.GamingPanelEnum + "  " + e.Count;
                 ShowStatusBarMessage(str);
                 Common.LogError(471072, str);
             }
@@ -356,11 +356,11 @@ namespace DCSFlightpanels
 
                         switch (hidSkeleton.PanelType)
                         {
-                            case SaitekPanelsEnum.Unknown:
+                            case GamingPanelEnum.Unknown:
                                 {
                                     continue;
                                 }
-                            case SaitekPanelsEnum.PZ55SwitchPanel:
+                            case GamingPanelEnum.PZ55SwitchPanel:
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ55";
@@ -371,7 +371,7 @@ namespace DCSFlightpanels
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
                                 }
-                            case SaitekPanelsEnum.PZ69RadioPanel:
+                            case GamingPanelEnum.PZ69RadioPanel:
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ69";
@@ -539,7 +539,7 @@ namespace DCSFlightpanels
 
                                     break;
                                 }
-                            case SaitekPanelsEnum.PZ70MultiPanel:
+                            case GamingPanelEnum.PZ70MultiPanel:
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ70";
@@ -550,7 +550,7 @@ namespace DCSFlightpanels
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
                                 }
-                            case SaitekPanelsEnum.BackLitPanel:
+                            case GamingPanelEnum.BackLitPanel:
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "B.I.P.";
@@ -561,7 +561,7 @@ namespace DCSFlightpanels
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
                                 }
-                            case SaitekPanelsEnum.TPM:
+                            case GamingPanelEnum.TPM:
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "TPM";
@@ -1447,12 +1447,12 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceAttached(GamingPanelEnum saitekPanelsEnum)
         {
             //todo
         }
 
-        public void DeviceDetached(SaitekPanelsEnum saitekPanelsEnum)
+        public void DeviceDetached(GamingPanelEnum saitekPanelsEnum)
         {
             //todo
         }

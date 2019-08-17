@@ -41,14 +41,14 @@ namespace NonVisuals
             return BIPEventHandlerManager;
         }
 
-        public static void AddBipListener(ISaitekPanelListener iSaitekPanelListener)
+        public static void AddBipListener(IGamingPanelListener iGamingPanelListener)
         {
-            BIPEventHandlerManager.AddBipListener(iSaitekPanelListener);
+            BIPEventHandlerManager.AddBipListener(iGamingPanelListener);
         }
 
-        public static void RemoveBipListener(ISaitekPanelListener iSaitekPanelListener)
+        public static void RemoveBipListener(IGamingPanelListener iGamingPanelListener)
         {
-            BIPEventHandlerManager.RemoveBipListener(iSaitekPanelListener);
+            BIPEventHandlerManager.RemoveBipListener(iGamingPanelListener);
         }
 
         public static void LightUpGreen(string hash)
@@ -136,14 +136,14 @@ namespace NonVisuals
             }
         }
 
-        public void AddBipListener(ISaitekPanelListener iSaitekPanelListener)
+        public void AddBipListener(IGamingPanelListener iGamingPanelListener)
         {
-            OnBipPanelRegistered += iSaitekPanelListener.BipPanelRegisterEvent;
+            OnBipPanelRegistered += iGamingPanelListener.BipPanelRegisterEvent;
         }
 
-        public void RemoveBipListener(ISaitekPanelListener iSaitekPanelListener)
+        public void RemoveBipListener(IGamingPanelListener iGamingPanelListener)
         {
-            OnBipPanelRegistered -= iSaitekPanelListener.BipPanelRegisterEvent;
+            OnBipPanelRegistered -= iGamingPanelListener.BipPanelRegisterEvent;
         }
 
         public void BroadcastRegisteredBips()

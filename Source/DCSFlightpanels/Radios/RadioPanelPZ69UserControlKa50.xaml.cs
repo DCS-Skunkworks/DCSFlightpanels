@@ -13,7 +13,7 @@ namespace DCSFlightpanels.Radios
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlKa50.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlKa50 : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class RadioPanelPZ69UserControlKa50 : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly RadioPanelPZ69Ka50 _radioPanelPZ69;
         private readonly TabItem _parentTabItem;
@@ -29,7 +29,7 @@ namespace DCSFlightpanels.Radios
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69Ka50(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
-            _radioPanelPZ69.Attach((ISaitekPanelListener)this);
+            _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             _globalHandler = globalHandler;
 

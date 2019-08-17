@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -13,7 +14,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-    public partial class TPMPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class TPMPanelUserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
         private readonly TPMPanel _tpmPanel;
@@ -31,7 +32,7 @@ namespace DCSFlightpanels
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             _tpmPanel = new TPMPanel(hidSkeleton);
 
-            _tpmPanel.Attach((ISaitekPanelListener)this);
+            _tpmPanel.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_tpmPanel);
             _globalHandler = globalHandler;
         }
@@ -113,7 +114,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -165,7 +166,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -192,7 +193,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -207,7 +208,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.TPM)
+                if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.TPM)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = ""));

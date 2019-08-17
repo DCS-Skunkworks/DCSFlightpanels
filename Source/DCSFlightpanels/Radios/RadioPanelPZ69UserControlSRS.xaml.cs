@@ -14,7 +14,7 @@ namespace DCSFlightpanels.Radios
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlSRS.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlSRS : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class RadioPanelPZ69UserControlSRS : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly RadioPanelPZ69SRS _radioPanelPZ69;
         private readonly TabItem _parentTabItem;
@@ -32,7 +32,7 @@ namespace DCSFlightpanels.Radios
             _radioPanelPZ69 = new RadioPanelPZ69SRS(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo, hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.SmallFreqStepping = Settings.Default.SRSSmallFreqStepping;
-            _radioPanelPZ69.Attach((ISaitekPanelListener)this);
+            _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             _globalHandler = globalHandler;
 

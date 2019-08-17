@@ -33,9 +33,9 @@ namespace NonVisuals.Radios
         private long _syncOKDelayTimeout = 50000000; //5s
 
 
-        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton)
+        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ69RadioPanel)
+            if (hidSkeleton.PanelType != GamingPanelEnum.PZ69RadioPanel)
             {
                 throw new ArgumentException();
             }

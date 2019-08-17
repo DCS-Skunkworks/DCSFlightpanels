@@ -15,7 +15,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for StreamDeck35UserControl.xaml
     /// </summary>
-    public partial class StreamDeck35UserControl : UserControl, ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class StreamDeck35UserControl : UserControl, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly StreamDeck35 _streamDeck35;
         private readonly TabItem _parentTabItem;
@@ -30,7 +30,7 @@ namespace DCSFlightpanels
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             _streamDeck35 = new StreamDeck35();
-            //_streamDeck35.Attach((ISaitekPanelListener)this);
+            //_streamDeck35.Attach((IGamingPanelListener)this);
             //globalHandler.Attach(_streamDeck35);
             _globalHandler = globalHandler;
 
@@ -206,7 +206,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                /*if (e.UniqueId.Equals(_streamDeck35.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.PZ70MultiPanel)
+                /*if (e.UniqueId.Equals(_streamDeck35.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck35.Text = ""));
@@ -1271,7 +1271,7 @@ namespace DCSFlightpanels
                 {
                     var multiPanelKnob = (MultiPanelKnob)knob;
 
-                    if (_streamDeck35.ForwardPanelEvent)
+                    /*if (_streamDeck35.ForwardPanelEvent)
                     {
                         if (!string.IsNullOrEmpty(_streamDeck35.GetKeyPressForLoggingPurposes(multiPanelKnob)))
                         {
@@ -1287,7 +1287,7 @@ namespace DCSFlightpanels
                             (Action)
                             (() =>
                              TextBoxLogStreamDeck35.Text = TextBoxLogStreamDeck35.Text.Insert(0, "No action taken, panel events Disabled.\n")));
-                    }
+                    }*/
                 }
                 SetGraphicsState(knobs);
             }

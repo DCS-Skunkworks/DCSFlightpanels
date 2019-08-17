@@ -16,7 +16,7 @@ namespace DCSFlightpanels
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
 
-    public partial class MultiPanelUserControl : ISaitekPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class MultiPanelUserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
         private readonly TabItem _parentTabItem;
@@ -31,7 +31,7 @@ namespace DCSFlightpanels
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
-            _multiPanelPZ70.Attach((ISaitekPanelListener)this);
+            _multiPanelPZ70.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_multiPanelPZ70);
             _globalHandler = globalHandler;
 
@@ -106,7 +106,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.SaitekPanelEnum == SaitekPanelsEnum.PZ70MultiPanel && e.UniqueId.Equals(_multiPanelPZ70.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel && e.UniqueId.Equals(_multiPanelPZ70.InstanceId))
                 {
                     NotifyKnobChanges(e.Switches);
                 }
@@ -217,7 +217,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (e.UniqueId.Equals(_multiPanelPZ70.InstanceId) && e.SaitekPanelEnum == SaitekPanelsEnum.PZ70MultiPanel)
+                if (e.UniqueId.Equals(_multiPanelPZ70.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = ""));

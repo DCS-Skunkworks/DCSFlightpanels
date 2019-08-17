@@ -81,7 +81,7 @@ namespace NonVisuals
         private const string OpenFileDialogFilter = "DCSFlightpanels (.bindings)|*.bindings";
         private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
 
-        private readonly List<KeyValuePair<string, SaitekPanelsEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, SaitekPanelsEnum>>();
+        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private bool _profileLoaded;
 
         public ProfileHandler(string jsonDirectory)
@@ -133,7 +133,7 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("Settings changed for " + e.SaitekPanelEnum + "   " + e.UniqueId);
+                Common.DebugP("Settings changed for " + e.GamingPanelEnum + "   " + e.UniqueId);
                 IsDirty = true;
             }
             catch (Exception ex)
@@ -231,7 +231,7 @@ namespace NonVisuals
                  */
                 _profileLoaded = true;
                 var fileLines = File.ReadAllLines(_filename);
-                SaitekPanelsEnum currentPanelType = SaitekPanelsEnum.Unknown;
+                GamingPanelEnum currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;
                 string currentPanelSettingsVersion = null;
                 var insidePanel = false;
@@ -283,12 +283,12 @@ namespace NonVisuals
                         //Process all these lines.
                         if (fileLine.StartsWith("PanelType="))
                         {
-                            currentPanelType = (SaitekPanelsEnum)Enum.Parse(typeof(SaitekPanelsEnum), fileLine.Replace("PanelType=", "").Trim());
+                            currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", "").Trim());
                         }
                         else if (fileLine.StartsWith("PanelInstanceID="))
                         {
                             currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
-                            _profileFileInstanceIDs.Add(new KeyValuePair<string, SaitekPanelsEnum>(currentPanelInstanceID, currentPanelType));
+                            _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstanceID, currentPanelType));
                         }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
                         {
