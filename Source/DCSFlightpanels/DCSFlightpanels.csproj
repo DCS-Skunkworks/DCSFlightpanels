@@ -230,6 +230,7 @@
     <Compile Include="TagDataClassBase.cs" />
     <Compile Include="TagDataClassPZ69Button.cs" />
     <Compile Include="TagDataClassPZ69Full.cs" />
+    <Compile Include="TagDataClassStreamDeck.cs" />
     <Compile Include="TagDataClassTPM.cs" />
     <Compile Include="TagDataClassPZ69.cs" />
     <Compile Include="TagDataClassPZ70.cs" />

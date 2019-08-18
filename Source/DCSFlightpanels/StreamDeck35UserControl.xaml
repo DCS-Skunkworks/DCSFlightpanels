@@ -76,7 +76,7 @@
                     <Border BorderThickness="3" BorderBrush="BurlyWood" Grid.Column="2" Grid.Row="0"/>
                     <Border BorderThickness="3" BorderBrush="BurlyWood" Grid.Column="3" Grid.Row="0"/>
                     <Border BorderThickness="3" BorderBrush="BurlyWood" Grid.Column="4" Grid.Row="0"/>
-                    
+
                     <Border BorderThickness="3" BorderBrush="BurlyWood" Grid.Column="0" Grid.Row="1"/>
                     <Border BorderThickness="3" BorderBrush="BurlyWood" Grid.Column="1" Grid.Row="1"/>
                     <Border BorderThickness="3" BorderBrush="BurlyWood" Grid.Column="2" Grid.Row="1"/>
@@ -115,7 +115,7 @@
                         <Image Height="76" Name="DotImage34" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="135" />
                         <Image Height="76" Name="DotImage35" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="135" />
 
-                        
+
                     </Canvas>
                 </Grid>
 
@@ -139,66 +139,131 @@
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="1">
-                        <Label Content="Button 11" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton11"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 21" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton21" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 31" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton31"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 41" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton41"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 51" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton51"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" >
+                        <Label Content="Button 11 On" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton11On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 21 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton21On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 31 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton31On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 41 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton41On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 51 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton51On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
                     </StackPanel>
-                    <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="1">
-                        <Label Content="Button 12" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton12"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 22" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton22" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 32" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton32"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 42" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton42"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 52" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton52"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" >
+                        <Label Content="Button 11 Off" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton11Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 21 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton21Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 31 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton31Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 41 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton41Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 51 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton51Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
                     </StackPanel>
-                    <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="1">
-                        <Label Content="Button 13" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton13"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 23" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton23" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 33" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton33"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 43" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton43"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 53" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton53"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 12 On" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton12On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 22 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton22On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 32 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton32On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 42 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton42On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 52 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton52On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
                     </StackPanel>
-                    <StackPanel Grid.Column="3" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="1">
-                        <Label Content="Button 14" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton14"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 24" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton24" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 34" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton34"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 44" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton44"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 54" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton54"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    <StackPanel Grid.Column="3" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 12 Off" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton12Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 22 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton22Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 32 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton32Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 42 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton42Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 52 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton52Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
                     </StackPanel>
-                    <StackPanel Grid.Column="4" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="1">
-                        <Label Content="Button 15" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton15"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 25" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton25" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 35" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton35"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 45" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton45"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 55" FontSize="10" Height="23"  />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton55"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    <StackPanel Grid.Column="4" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 13 On" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton13On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 23 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton23On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 33 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton33On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 43 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton43On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 53 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton53On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    </StackPanel>
+                    <StackPanel Grid.Column="5" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 13 Off" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton13Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 23 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton23Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 33 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton33Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 43 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton43Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 53 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton53Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    </StackPanel>
+                    <StackPanel Grid.Column="6" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 14 On" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton14On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 24 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton24On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 34 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton34On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 44 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton44On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 54 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton54On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    </StackPanel>
+                    <StackPanel Grid.Column="7" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 14 Off" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton14Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 24 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton24Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 34 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton34Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 44 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton44Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 54 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton54Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    </StackPanel>
+                    <StackPanel Grid.Column="8" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 15 On" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton15On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 25 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton25On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 35 On" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton35On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 45 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton45On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 55 On" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton55On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    </StackPanel>
+                    <StackPanel Grid.Column="9" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="Button 15 Off" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton15Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 25 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton25Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Button 35 Off" FontSize="10" Height="23" />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton35Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 45 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton45Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Label Content="Button 55 Off" FontSize="10" Height="23"  />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton55Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
                     </StackPanel>
                 </Grid>
             </GroupBox>

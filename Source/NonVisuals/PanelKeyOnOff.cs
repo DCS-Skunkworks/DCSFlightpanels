@@ -72,4 +72,21 @@ namespace NonVisuals
 
         public bool ButtonState => _buttonState;
     }
+
+
+    public class StreamDeckKeyOnOff : PanelKeyOnOff
+    {
+        private readonly StreamDeck35Buttons _streamDeckButton;
+        private readonly bool _buttonState;
+
+        public StreamDeckKeyOnOff(StreamDeck35Buttons streamDeck35Button, bool buttonState)
+        {
+            _streamDeckButton = streamDeck35Button;
+            _buttonState = buttonState;
+        }
+
+        public StreamDeck35Buttons StreamDeckButton => _streamDeckButton;
+
+        public bool ButtonState => _buttonState;
+    }
 }
