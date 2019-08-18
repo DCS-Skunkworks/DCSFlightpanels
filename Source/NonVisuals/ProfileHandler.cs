@@ -30,32 +30,32 @@ namespace NonVisuals
         public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
         public event UserMessageEventHandler OnUserMessageEventHandler;
 
-        public void Attach(SaitekPanel saitekPanel)
+        public void Attach(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile += saitekPanel.PanelSettingsReadFromFile;
-            OnSavePanelSettings += saitekPanel.SavePanelSettings;
-            OnClearPanelSettings += saitekPanel.ClearPanelSettings;
-            OnAirframeSelected += saitekPanel.SelectedAirframe;
+            OnSettingsReadFromFile += gamingPanel.PanelSettingsReadFromFile;
+            OnSavePanelSettings += gamingPanel.SavePanelSettings;
+            OnClearPanelSettings += gamingPanel.ClearPanelSettings;
+            OnAirframeSelected += gamingPanel.SelectedAirframe;
         }
 
-        public void Detach(SaitekPanel saitekPanel)
+        public void Detach(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile -= saitekPanel.PanelSettingsReadFromFile;
-            OnSavePanelSettings -= saitekPanel.SavePanelSettings;
-            OnClearPanelSettings -= saitekPanel.ClearPanelSettings;
-            OnAirframeSelected -= saitekPanel.SelectedAirframe;
+            OnSettingsReadFromFile -= gamingPanel.PanelSettingsReadFromFile;
+            OnSavePanelSettings -= gamingPanel.SavePanelSettings;
+            OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
+            OnAirframeSelected -= gamingPanel.SelectedAirframe;
         }
 
-        public void Attach(IProfileHandlerListener saitekPanelSettingsListener)
+        public void Attach(IProfileHandlerListener gamingPanelSettingsListener)
         {
-            OnSettingsReadFromFile += saitekPanelSettingsListener.PanelSettingsReadFromFile;
-            OnAirframeSelected += saitekPanelSettingsListener.SelectedAirframe;
+            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnAirframeSelected += gamingPanelSettingsListener.SelectedAirframe;
         }
 
-        public void Detach(IProfileHandlerListener saitekPanelSettingsListener)
+        public void Detach(IProfileHandlerListener gamingPanelSettingsListener)
         {
-            OnSettingsReadFromFile -= saitekPanelSettingsListener.PanelSettingsReadFromFile;
-            OnAirframeSelected -= saitekPanelSettingsListener.SelectedAirframe;
+            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnAirframeSelected -= gamingPanelSettingsListener.SelectedAirframe;
         }
 
         public void AttachUserMessageHandler(IUserMessageHandler userMessageHandler)
@@ -69,7 +69,7 @@ namespace NonVisuals
         }
 
         //Both directory and filename
-        private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "Saitek_DCS_Profile.bindings";
+        private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         private string _lastProfileUsed = "";
         private string _jsonDirectory = "";
         private bool _isDirty;
@@ -164,7 +164,7 @@ namespace NonVisuals
 
         public string DefaultFile()
         {
-            return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "Saitek_DCS_Profile.bindings";
+            return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         }
 
         public string MyDocumentsPath()
@@ -434,7 +434,7 @@ namespace NonVisuals
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.RestoreDirectory = true;
             saveFileDialog.InitialDirectory = MyDocumentsPath();
-            saveFileDialog.FileName = "Saitek_DCS_Profile.bindings";
+            saveFileDialog.FileName = "dcsfp_profile.bindings";
             saveFileDialog.DefaultExt = OpenFileDialogDefaultExt;
             saveFileDialog.Filter = OpenFileDialogFilter;
             saveFileDialog.OverwritePrompt = true;
@@ -462,7 +462,7 @@ namespace NonVisuals
             set => _filename = value;
         }
 
-        public void RegisterProfileData(SaitekPanel saitekPanel, List<string> strings)
+        public void RegisterProfileData(GamingPanel gamingPanel, List<string> strings)
         {
             try
             {
@@ -487,9 +487,9 @@ namespace NonVisuals
                      * 
                      */
                     _listPanelSettingsData.Add(Environment.NewLine);
-                    _listPanelSettingsData.Add("PanelType=" + saitekPanel.TypeOfSaitekPanel);
-                    _listPanelSettingsData.Add("PanelInstanceID=" + saitekPanel.InstanceId);
-                    _listPanelSettingsData.Add("PanelSettingsVersion=" + saitekPanel.SettingsVersion());
+                    _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
+                    _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
+                    _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanel");
                     foreach (var s in strings)
                     {

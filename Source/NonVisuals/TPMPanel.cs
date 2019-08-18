@@ -520,7 +520,7 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             TPMSwitchChanged(hashSet);
         }

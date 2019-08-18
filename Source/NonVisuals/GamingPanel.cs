@@ -31,33 +31,28 @@ namespace NonVisuals
         public delegate void SettingsClearedEventHandler(object sender, PanelEventArgs e);
         public event SettingsClearedEventHandler OnSettingsClearedA;
 
-        public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
-        public event LedLightChangedEventHandler OnLedLightChangedA;
-
         public delegate void UpdatesHasBeenMissedEventHandler(object sender, DCSBIOSUpdatesMissedEventArgs e);
         public event UpdatesHasBeenMissedEventHandler OnUpdatesHasBeenMissed;
 
         //For those that wants to listen to this panel
-        public void Attach(IGamingPanelListener iGamingPanelListener)
+        public virtual void Attach(IGamingPanelListener iGamingPanelListener)
         {
             OnDeviceAttachedA += iGamingPanelListener.DeviceAttached;
             OnSwitchesChangedA += iGamingPanelListener.SwitchesChanged;
             OnPanelDataAvailableA += iGamingPanelListener.PanelDataAvailable;
             OnSettingsAppliedA += iGamingPanelListener.SettingsApplied;
-            OnLedLightChangedA += iGamingPanelListener.LedLightChanged;
             OnSettingsClearedA += iGamingPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed += iGamingPanelListener.UpdatesHasBeenMissed;
             OnSettingsChangedA += iGamingPanelListener.PanelSettingsChanged;
         }
 
         //For those that wants to listen to this panel
-        public void Detach(IGamingPanelListener iGamingPanelListener)
+        public virtual void Detach(IGamingPanelListener iGamingPanelListener)
         {
             OnDeviceAttachedA -= iGamingPanelListener.DeviceAttached;
             OnSwitchesChangedA -= iGamingPanelListener.SwitchesChanged;
             OnPanelDataAvailableA -= iGamingPanelListener.PanelDataAvailable;
             OnSettingsAppliedA -= iGamingPanelListener.SettingsApplied;
-            OnLedLightChangedA -= iGamingPanelListener.LedLightChanged;
             OnSettingsClearedA -= iGamingPanelListener.SettingsCleared;
             OnUpdatesHasBeenMissed -= iGamingPanelListener.UpdatesHasBeenMissed;
             OnSettingsChangedA -= iGamingPanelListener.PanelSettingsChanged;
@@ -156,6 +151,24 @@ namespace NonVisuals
         private bool _synchedOnce;
         private readonly Guid _guid = Guid.NewGuid();
         private readonly string _hash;
+        public abstract string SettingsVersion();
+        public abstract void Startup();
+        public abstract void Shutdown();
+        public abstract void ClearSettings();
+        public abstract void ImportSettings(List<string> settings);
+        public abstract List<string> ExportSettings();
+        public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
+        public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
+        protected HIDSkeleton HIDSkeletonBase;
+        private bool _closed;
+        public long ReportCounter = 0;
+        
+        protected bool FirstReportHasBeenRead = false;
+        protected abstract void GamingPanelKnobChanged(IEnumerable<object> hashSet);
+
+        protected abstract void StartListeningForPanelChanges();
+
+
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
@@ -168,24 +181,6 @@ namespace NonVisuals
             _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
         }
 
-        public abstract string SettingsVersion();
-        public abstract void Startup();
-        public abstract void Shutdown();
-        public abstract void ClearSettings();
-        public abstract void ImportSettings(List<string> settings);
-        public abstract List<string> ExportSettings();
-        public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
-        public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
-        //public abstract void DcsBiosDataReceived(byte[] array);
-        //public abstract void GetDcsBiosData(byte[] bytes);
-        protected HIDSkeleton HIDSkeletonBase;
-        private bool _closed;
-        public long ReportCounter = 0;
-        
-        protected bool FirstReportHasBeenRead = false;
-        protected abstract void GamingPanelKnobChanged(IEnumerable<object> hashSet);
-
-        protected abstract void StartListeningForPanelChanges();
 
         protected void UpdateCounter(uint address, uint data)
         {
@@ -277,42 +272,6 @@ namespace NonVisuals
             }
         }
 
-
-        /*         
-         * These are used for static handling, the OnReport method must be static and to access the object that the OnReport belongs to must go via these methods.
-         * If a static object would be kept inside the class it would go nuts considering there can be many panels of same type
-         */
-        public static void AddGamingPanelObject(GamingPanel gamingPanel)
-        {
-            lock (_lockObject)
-            {
-                GamingPanels.Add(gamingPanel);
-            }
-        }
-
-        public static void RemoveGamingPanelObject(GamingPanel gamingPanel)
-        {
-            lock (_lockObject)
-            {
-                GamingPanels.Remove(gamingPanel);
-            }
-        }
-
-        public static GamingPanel GetGamingPanelObject(string instanceId)
-        {
-            lock (_lockObject)
-            {
-                foreach (var gamingPanel in GamingPanels)
-                {
-                    if (gamingPanel.InstanceId.Equals(instanceId))
-                    {
-                        return gamingPanel;
-                    }
-                }
-            }
-            return null;
-        }
-
         public Exception GetLastException(bool resetException = false)
         {
             Exception result;
@@ -339,7 +298,7 @@ namespace NonVisuals
             set => _settingsLoading = value;
         }
 
-        public GamingPanelEnum TypeOfGamingPanel
+        public GamingPanelEnum TypeOfPanel
         {
             get => _typeOfGamingPanel;
             set => _typeOfGamingPanel = value;
@@ -361,45 +320,6 @@ namespace NonVisuals
             set => _closed = value;
         }
 
-        protected static bool FlagHasChanged(byte oldValue, byte newValue, int bitMask)
-        {
-            /*  --------------------------------------- 
-             *  Example #1
-             *  Old value 10110101
-             *  New value 10110001
-             *  Bit mask  00000100  <- This is the one we are interested in to see whether it has changed
-             *  ---------------------------------------
-             *  
-             *  XOR       10110101
-             *  ^         10110001
-             *            --------
-             *            00000100   <- Here are the bit(s) that has changed between old & new value
-             *            
-             *  AND       00000100
-             *  &         00000100
-             *            --------
-             *            00000100   <- This shows that the value for this mask has changed since last time. Now get what is it (ON/OFF) using FlagValue function
-             */
-
-            /*  --------------------------------------- 
-             *  Example #2
-             *  Old value 10110101
-             *  New value 10100101
-             *  Bit mask  00000100  <- This is the one we are interested in to see whether it has changed
-             *  ---------------------------------------
-             *  
-             *  XOR       10110101
-             *  ^         10100101
-             *            --------
-             *            00010000   <- Here are the bit(s) that has changed between old & new value
-             *            
-             *  AND       00010000
-             *  &         00000100
-             *            --------
-             *            00000000   <- This shows that the value for this mask has NOT changed since last time.
-             */
-            return ((oldValue ^ newValue) & bitMask) > 0;
-        }
 
     }
     

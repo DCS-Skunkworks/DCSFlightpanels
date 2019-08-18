@@ -50,7 +50,7 @@ namespace NonVisuals
             Startup();
         }
 
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {
@@ -670,7 +670,7 @@ namespace NonVisuals
         }
 
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             PZ55SwitchChanged(hashSet);
         }

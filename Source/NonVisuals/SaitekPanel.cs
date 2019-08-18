@@ -7,71 +7,44 @@ using HidLibrary;
 namespace NonVisuals
 {
 
-    public abstract class SaitekPanel : GamingPanel, IProfileHandlerListener, IDcsBiosDataListener
+    public abstract class SaitekPanel : GamingPanel
     {
-        
+
+        public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
+        public event LedLightChangedEventHandler OnLedLightChangedA;
+
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
             OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
 
-        private int _vendorId;
-        private int _productId;
-        private Exception _lastException;
-        private readonly object _exceptionLockObject = new object();
-        private GamingPanelEnum _typeOfGamingPanel;
-        private bool _isDirty;
-        //private bool _isAttached;
-        private bool _forwardPanelEvent;
-        private static readonly object _lockObject = new object();
-        private static readonly List<SaitekPanel> _saitekPanels = new List<SaitekPanel>();
-        private bool _settingsLoading = false;
-        /*
-         * IMPORTANT STUFF
-         */
-        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
-        private static readonly object _updateCounterLockObject = new object();
-        private uint _count;
-        private bool _synchedOnce;
-        private readonly Guid _guid = Guid.NewGuid();
-        private readonly string _hash;
-
-        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
+        //For those that wants to listen to this panel
+        public override void Attach(IGamingPanelListener iGamingPanelListener)
         {
-            _typeOfGamingPanel = typeOfGamingPanel;
-            HIDSkeletonBase = hidSkeleton;
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
-            {
-                _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
-            }
-            _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
+            OnLedLightChangedA += iGamingPanelListener.LedLightChanged;
+            base.Attach(iGamingPanelListener);
         }
 
-        public abstract string SettingsVersion();
-        public abstract void Startup();
-        public abstract void Shutdown();
-        public abstract void ClearSettings();
-        public abstract void ImportSettings(List<string> settings);
-        public abstract List<string> ExportSettings();
-        public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
+        //For those that wants to listen to this panel
+        public override void Detach(IGamingPanelListener iGamingPanelListener)
+        {
+            OnLedLightChangedA -= iGamingPanelListener.LedLightChanged;
+            base.Detach(iGamingPanelListener);
+        }
+        
         public abstract DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput);
-        public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
-        //public abstract void DcsBiosDataReceived(byte[] array);
-        //public abstract void GetDcsBiosData(byte[] bytes);
-        protected HIDSkeleton HIDSkeletonBase;
-        private bool _closed;
-        public long ReportCounter = 0;
 
-
-        protected bool FirstReportHasBeenRead = false;
         protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new HashSet<ISaitekPanelKnob>();
         protected byte[] OldSaitekPanelValue = { 0, 0, 0 };
         protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
         protected byte[] OldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
         protected byte[] NewSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
-        protected abstract void SaitekPanelKnobChanged(IEnumerable<object> hashSet);
+        
+        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton):base(typeOfGamingPanel, hidSkeleton)
+        {
+        }
 
-        protected void StartListeningForPanelChanges()
+        protected override void StartListeningForPanelChanges()
         {
             try
             {
@@ -89,12 +62,12 @@ namespace NonVisuals
 
         private void OnReport(HidReport report)
         {
-            if (_typeOfGamingPanel == GamingPanelEnum.TPM && report.Data.Length == 5)
+            if (TypeOfPanel == GamingPanelEnum.TPM && report.Data.Length == 5)
             {
                 Array.Copy(NewSaitekPanelValueTPM, OldSaitekPanelValueTPM, 5);
                 Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
                 var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValueTPM, NewSaitekPanelValueTPM);
-                SaitekPanelKnobChanged(hashSet);
+                GamingPanelKnobChanged(hashSet);
                 OnSwitchesChanged(hashSet);
                 FirstReportHasBeenRead = true;
             }
@@ -103,7 +76,7 @@ namespace NonVisuals
                 Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
                 Array.Copy(report.Data, NewSaitekPanelValue, 3);
                 var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
-                SaitekPanelKnobChanged(hashSet);
+                GamingPanelKnobChanged(hashSet);
                 OnSwitchesChanged(hashSet);
                 FirstReportHasBeenRead = true;
             }
@@ -116,7 +89,7 @@ namespace NonVisuals
             var result = new HashSet<object>();
 
             var endValue = 3;
-            if(_typeOfGamingPanel == GamingPanelEnum.TPM)
+            if(TypeOfPanel == GamingPanelEnum.TPM)
             {
                 endValue = 5;
             }
@@ -173,185 +146,51 @@ namespace NonVisuals
             return result;
         }
 
+
+        protected static bool FlagHasChanged(byte oldValue, byte newValue, int bitMask)
+        {
+            /*  --------------------------------------- 
+             *  Example #1
+             *  Old value 10110101
+             *  New value 10110001
+             *  Bit mask  00000100  <- This is the one we are interested in to see whether it has changed
+             *  ---------------------------------------
+             *  
+             *  XOR       10110101
+             *  ^         10110001
+             *            --------
+             *            00000100   <- Here are the bit(s) that has changed between old & new value
+             *            
+             *  AND       00000100
+             *  &         00000100
+             *            --------
+             *            00000100   <- This shows that the value for this mask has changed since last time. Now get what is it (ON/OFF) using FlagValue function
+             */
+
+            /*  --------------------------------------- 
+             *  Example #2
+             *  Old value 10110101
+             *  New value 10100101
+             *  Bit mask  00000100  <- This is the one we are interested in to see whether it has changed
+             *  ---------------------------------------
+             *  
+             *  XOR       10110101
+             *  ^         10100101
+             *            --------
+             *            00010000   <- Here are the bit(s) that has changed between old & new value
+             *            
+             *  AND       00010000
+             *  &         00000100
+             *            --------
+             *            00000000   <- This shows that the value for this mask has NOT changed since last time.
+             */
+            return ((oldValue ^ newValue) & bitMask) > 0;
+        }
+
         private static bool FlagValue(byte[] currentValue, ISaitekPanelKnob saitekPanelKnob)
         {
             return (currentValue[saitekPanelKnob.Group] & saitekPanelKnob.Mask) > 0;
         }
-
-        protected void UpdateCounter(uint address, uint data)
-        {
-            lock (_updateCounterLockObject)
-            {
-                if (_updateCounterDCSBIOSOutput.Address == address)
-                {
-                    var newCount = _updateCounterDCSBIOSOutput.GetUIntValue(data);
-                    if (!_synchedOnce)
-                    {
-                        _count = newCount;
-                        _synchedOnce = true;
-                        return;
-                    }
-                    //Max is 255
-                    if ((newCount == 0 && _count == 255) || newCount - _count == 1)
-                    {
-                        //All is well
-                        _count = newCount;
-                    }
-                    else if (newCount - _count != 1)
-                    {
-                        //Not good
-                        if (OnUpdatesHasBeenMissed != null)
-                        {
-                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
-                            _count = newCount;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
-        {
-
-        }
-
-        //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
-        public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)
-        {
-            _forwardPanelEvent = e.Forward;
-        }
-
-        public bool ForwardPanelEvent
-        {
-            get => _forwardPanelEvent;
-            set => _forwardPanelEvent = value;
-        }
-
-        public int VendorId
-        {
-            get => _vendorId;
-            set => _vendorId = value;
-        }
-
-        public int ProductId
-        {
-            get => _productId;
-            set => _productId = value;
-        }
-
-        public string InstanceId
-        {
-            get => HIDSkeletonBase.InstanceId;
-            set => HIDSkeletonBase.InstanceId = value;
-        }
-
-        public string Hash => _hash;
-
-        public string GuidString => _guid.ToString();
-
-        public void SetLastException(Exception ex)
-        {
-            try
-            {
-                if (ex == null)
-                {
-                    return;
-                }
-                Common.LogError(666, ex, "Via SaitekPanel.SetLastException()");
-                lock (_exceptionLockObject)
-                {
-                    _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-
-        /*         
-         * These are used for static handling, the OnReport method must be static and to access the object that the OnReport belongs to must go via these methods.
-         * If a static object would be kept inside the class it would go nuts considering there can be many panels of same type
-         */
-        public static void AddSaitekPanelObject(SaitekPanel saitekPanel)
-        {
-            lock (_lockObject)
-            {
-                _saitekPanels.Add(saitekPanel);
-            }
-        }
-
-        public static void RemoveSaitekPanelObject(SaitekPanel saitekPanel)
-        {
-            lock (_lockObject)
-            {
-                _saitekPanels.Remove(saitekPanel);
-            }
-        }
-
-        public static SaitekPanel GetSaitekPanelObject(string instanceId)
-        {
-            lock (_lockObject)
-            {
-                foreach (var saitekPanel in _saitekPanels)
-                {
-                    if (saitekPanel.InstanceId.Equals(instanceId))
-                    {
-                        return saitekPanel;
-                    }
-                }
-            }
-            return null;
-        }
-
-        public Exception GetLastException(bool resetException = false)
-        {
-            Exception result;
-            lock (_exceptionLockObject)
-            {
-                result = _lastException;
-                if (resetException)
-                {
-                    _lastException = null;
-                }
-            }
-            return result;
-        }
-
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set => _isDirty = value;
-        }
-
-        public bool SettingsLoading
-        {
-            get => _settingsLoading;
-            set => _settingsLoading = value;
-        }
-
-        public GamingPanelEnum TypeOfSaitekPanel
-        {
-            get => _typeOfGamingPanel;
-            set => _typeOfGamingPanel = value;
-        }
-        //TODO fixa att man kan koppla in/ur panelerna?
-        /*
-         * 
-        
-        public bool IsAttached
-        {
-            get { return _isAttached; }
-            set { _isAttached = value; }
-        }
-        */
-
-        public bool Closed
-        {
-            get => _closed;
-            set => _closed = value;
-        }
-        
     }
 
     public class LedLightChangeEventArgs : EventArgs

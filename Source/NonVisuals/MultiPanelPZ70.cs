@@ -13,7 +13,7 @@ namespace NonVisuals
         private volatile byte _knobSensitivitySkipper;
         private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
         private HashSet<DCSBIOSBindingLCDPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ70>();
-        private HashSet<KnobBindingPZ70> _knobBindings = new HashSet<KnobBindingPZ70>();
+        private HashSet<KeyBindingPZ70> _knobBindings = new HashSet<KeyBindingPZ70>();
         private HashSet<OSCommandBindingPZ70> _osCommandBindings = new HashSet<OSCommandBindingPZ70>();
         private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
@@ -137,7 +137,7 @@ namespace NonVisuals
                 {
                     if (setting.StartsWith("MultiPanelKnob{"))
                     {
-                        var knobBinding = new KnobBindingPZ70();
+                        var knobBinding = new KeyBindingPZ70();
                         knobBinding.ImportSettings(setting);
                         _knobBindings.Add(knobBinding);
                     }
@@ -168,7 +168,7 @@ namespace NonVisuals
                 }
             }
             SettingsLoading = false;
-            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
+            _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             OnSettingsApplied();
         }
 
@@ -245,7 +245,7 @@ namespace NonVisuals
             _bipLinks.Clear();
         }
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             //Set _selectedMode and LCD button statuses
             //and performs the actual actions for key presses
@@ -280,7 +280,7 @@ namespace NonVisuals
             }
             if (!found && !string.IsNullOrEmpty(keys))
             {
-                var knobBinding = new KnobBindingPZ70();
+                var knobBinding = new KeyBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
                 knobBinding.DialPosition = _pz70DialPosition;
                 knobBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
@@ -288,7 +288,7 @@ namespace NonVisuals
                 _knobBindings.Add(knobBinding);
             }
             Common.DebugP("MultiPanelPZ70 _knobBindings : " + _knobBindings.Count);
-            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
+            _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             IsDirtyMethod();
         }
 
@@ -346,14 +346,14 @@ namespace NonVisuals
             }
             if (!found && sortedList.Count > 0)
             {
-                var knobBinding = new KnobBindingPZ70();
+                var knobBinding = new KeyBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
                 knobBinding.DialPosition = _pz70DialPosition;
                 knobBinding.OSKeyPress = new OSKeyPress(information, sortedList);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _knobBindings.Add(knobBinding);
             }
-            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
+            _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             IsDirtyMethod();
         }
 
@@ -1181,7 +1181,7 @@ namespace NonVisuals
             set => _dcsBiosBindings = value;
         }
 
-        public HashSet<KnobBindingPZ70> KeyBindings
+        public HashSet<KeyBindingPZ70> KeyBindings
         {
             get => _knobBindings;
             set => _knobBindings = value;
@@ -1193,7 +1193,7 @@ namespace NonVisuals
             set => _bipLinks = value;
         }
 
-        public HashSet<KnobBindingPZ70> KeyBindingsHashSet
+        public HashSet<KeyBindingPZ70> KeyBindingsHashSet
         {
             get => _knobBindings;
             set => _knobBindings = value;

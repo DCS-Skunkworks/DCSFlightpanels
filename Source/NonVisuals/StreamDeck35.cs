@@ -10,34 +10,22 @@ using DCS_BIOS;
 
 namespace NonVisuals
 {
-    public class StreamDeck35 : IProfileHandlerListener, IDcsBiosDataListener
+    public class StreamDeck35 : GamingPanel
     {
-        public delegate void SettingsHasBeenAppliedEventHandler(object sender, PanelEventArgs e);
-        public event SettingsHasBeenAppliedEventHandler OnSettingsAppliedA;
-
         private int _lcdKnobSensitivity;
         private volatile byte _knobSensitivitySkipper;
-        private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
-        private HashSet<DCSBIOSBindingLCDPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ70>();
-        private HashSet<KnobBindingPZ70> _knobBindings = new HashSet<KnobBindingPZ70>();
-        private HashSet<OSCommandBindingPZ70> _osCommandBindings = new HashSet<OSCommandBindingPZ70>();
-        private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
-        private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
-        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
-        private static readonly object _updateCounterLockObject = new object();
-        private uint _count;
-        private bool _synchedOnce;
-        private string _instanceId;
-        private bool _closed = false;
+        private HashSet<DCSBIOSBindingStreamDeck> _dcsBiosBindings = new HashSet<DCSBIOSBindingStreamDeck>();
+        private HashSet<DCSBIOSBindingLCDStreamDeck> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDStreamDeck>();
+        private HashSet<KeyBindingStreamDeck> _keyBindings = new HashSet<KeyBindingStreamDeck>();
+        private HashSet<OSCommandBindingStreamDeck> _osCommandBindings = new HashSet<OSCommandBindingStreamDeck>();
+        private HashSet<BIPLinkStreamDeck> _bipLinks = new HashSet<BIPLinkStreamDeck>();
 
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
-
-        private bool _settingsLoading = false;
-
+        
         private long _doUpdatePanelLCD;
 
-        public StreamDeck35()
+        public StreamDeck35():base(GamingPanelEnum.StreamDeck35, new HIDSkeleton(GamingPanelEnum.StreamDeck35, "TOBEDONECORRECTLYLATER"))
         {
             /*if (hidSkeleton.PanelType != GamingPanelEnum.PZ70MultiPanel)
             {
@@ -49,61 +37,73 @@ namespace NonVisuals
             Startup();
         }
 
-        public void Startup()
+        public sealed override void Startup()
         {
-            /*try
+            try
             {
                 StartListeningForPanelChanges();
             }
             catch (Exception ex)
             {
-                Common.DebugP("MultiPanelPZ70.StartUp() : " + ex.Message);
-                SetLastException(ex);
-            }*/
+                Common.DebugP("StreamDeck35.StartUp() : " + ex.Message);
+                Common.LogError(321654, ex);
+            }
         }
 
-        public void Shutdown()
+        public override void Shutdown()
         {
-            /*try
+            try
             {
                 Closed = true;
             }
             catch (Exception e)
             {
                 SetLastException(e);
-            }*/
+            }
         }
 
-        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
+        protected override void StartListeningForPanelChanges()
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
+            }
+        }
+
+        public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             if (SettingsLoading)
             {
                 return;
             }
             UpdateCounter(e.Address, e.Data);
-            foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
+            foreach (var dcsbiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (!dcsbiosBindingLCDPZ70.UseFormula && dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && e.Address == dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.Address)
+                if (!dcsbiosBindingLCD.UseFormula && e.Address == dcsbiosBindingLCD.DCSBIOSOutputObject.Address)
                 {
                     lock (_lcdDataVariablesLockObject)
                     {
-                        var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
-                        dcsbiosBindingLCDPZ70.CurrentValue = (int)dcsbiosBindingLCDPZ70.DCSBIOSOutputObject.GetUIntValue(e.Data);
-                        if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                        var tmp = dcsbiosBindingLCD.CurrentValue;
+                        dcsbiosBindingLCD.CurrentValue = (int)dcsbiosBindingLCD.DCSBIOSOutputObject.GetUIntValue(e.Data);
+                        if (tmp != dcsbiosBindingLCD.CurrentValue)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
                     }
                 }
-                else if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.UseFormula)
+                else if (dcsbiosBindingLCD.UseFormula)
                 {
-                    if (dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
+                    if (dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.CheckForMatch(e.Address, e.Data))
                     {
                         lock (_lcdDataVariablesLockObject)
                         {
-                            var tmp = dcsbiosBindingLCDPZ70.CurrentValue;
-                            dcsbiosBindingLCDPZ70.CurrentValue = dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject.Evaluate();
-                            if (tmp != dcsbiosBindingLCDPZ70.CurrentValue)
+                            var tmp = dcsbiosBindingLCD.CurrentValue;
+                            dcsbiosBindingLCD.CurrentValue = dcsbiosBindingLCD.DCSBIOSOutputFormulaObject.Evaluate();
+                            if (tmp != dcsbiosBindingLCD.CurrentValue)
                             {
                                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                             }
@@ -114,7 +114,7 @@ namespace NonVisuals
             UpdateLCD();
         }
 
-        public void ImportSettings(List<string> settings)
+        public override void ImportSettings(List<string> settings)
         {
             SettingsLoading = true;
             //Clear current bindings
@@ -128,44 +128,44 @@ namespace NonVisuals
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.Contains(SettingsVersion()))
                 {
-                    if (setting.StartsWith("MultiPanelKnob{"))
+                    if (setting.StartsWith("StreamDeckButton{"))
                     {
-                        var knobBinding = new KnobBindingPZ70();
+                        var knobBinding = new KeyBindingStreamDeck();
                         knobBinding.ImportSettings(setting);
-                        _knobBindings.Add(knobBinding);
+                        _keyBindings.Add(knobBinding);
                     }
-                    else if (setting.StartsWith("MultiPanelOSPZ70"))
+                    else if (setting.StartsWith("StreamDeckOS"))
                     {
-                        var osCommand = new OSCommandBindingPZ70();
+                        var osCommand = new OSCommandBindingStreamDeck();
                         osCommand.ImportSettings(setting);
                         _osCommandBindings.Add(osCommand);
                     }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
+                    else if (setting.StartsWith("StreamDeckDCSBIOSControl{"))
                     {
-                        var dcsBIOSBindingPZ70 = new DCSBIOSBindingPZ70();
-                        dcsBIOSBindingPZ70.ImportSettings(setting);
-                        _dcsBiosBindings.Add(dcsBIOSBindingPZ70);
+                        var dcsBIOSBindingStreamDeck = new DCSBIOSBindingStreamDeck();
+                        dcsBIOSBindingStreamDeck.ImportSettings(setting);
+                        _dcsBiosBindings.Add(dcsBIOSBindingStreamDeck);
                     }
-                    else if (setting.StartsWith("MultipanelBIPLink{"))
+                    else if (setting.StartsWith("StreamDeckBIPLink{"))
                     {
-                        var bipLinkPZ70 = new BIPLinkPZ70();
-                        bipLinkPZ70.ImportSettings(setting);
-                        _bipLinks.Add(bipLinkPZ70);
+                        var bipLinkStreamDeck = new BIPLinkStreamDeck();
+                        bipLinkStreamDeck.ImportSettings(setting);
+                        _bipLinks.Add(bipLinkStreamDeck);
                     }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
+                    else if (setting.StartsWith("StreamDeckDCSBIOSControlLCD{"))
                     {
-                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSBindingLCDPZ70();
-                        dcsBIOSBindingLCDPZ70.ImportSettings(setting);
-                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
+                        var dcsBIOSBindingLCDStreamDeck = new DCSBIOSBindingLCDStreamDeck();
+                        dcsBIOSBindingLCDStreamDeck.ImportSettings(setting);
+                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDStreamDeck);
                     }
                 }
             }
             SettingsLoading = false;
-            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
+            _keyBindings = KeyBindingStreamDeck.SetNegators(_keyBindings);
             OnSettingsApplied();
         }
 
-        public List<string> ExportSettings()
+        public override List<string> ExportSettings()
         {
             if (Closed)
             {
@@ -173,7 +173,7 @@ namespace NonVisuals
             }
             var result = new List<string>();
 
-            foreach (var knobBinding in _knobBindings)
+            foreach (var knobBinding in _keyBindings)
             {
                 if (knobBinding.OSKeyPress != null)
                 {
@@ -211,12 +211,12 @@ namespace NonVisuals
             return result;
         }
 
-        public string GetKeyPressForLoggingPurposes(MultiPanelKnob multiPanelKnob)
+        public string GetKeyPressForLoggingPurposes(StreamDeck35Button streamDeckButton)
         {
             var result = "";
-            foreach (var knobBinding in _knobBindings)
+            foreach (var knobBinding in _keyBindings)
             {
-                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
+                if (knobBinding.OSKeyPress != null && knobBinding.StreamDeckButton == streamDeckButton.Button && knobBinding.WhenTurnedOn == streamDeckButton.IsPressed)
                 {
                     result = knobBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
@@ -224,25 +224,25 @@ namespace NonVisuals
             return result;
         }
 
-        public void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
             e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
-        public void ClearSettings()
+        public override void ClearSettings()
         {
-            _knobBindings.Clear();
+            _keyBindings.Clear();
             _osCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _dcsBiosLcdBindings.Clear();
             _bipLinks.Clear();
         }
 
-        protected void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             //Set _selectedMode and LCD button statuses
             //and performs the actual actions for key presses
-            PZ70SwitchChanged(hashSet);
+            // ADD METHOD ?
         }
 
         public void AddOrUpdateSingleKeyBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
@@ -255,7 +255,7 @@ namespace NonVisuals
             }
             //This must accept lists
             var found = false;
-            foreach (var knobBinding in _knobBindings)
+            foreach (var knobBinding in _keyBindings)
             {
                 if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
                 {
@@ -273,15 +273,15 @@ namespace NonVisuals
             }
             if (!found && !string.IsNullOrEmpty(keys))
             {
-                var knobBinding = new KnobBindingPZ70();
+                var knobBinding = new KeyBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
                 knobBinding.DialPosition = _pz70DialPosition;
                 knobBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
-                _knobBindings.Add(knobBinding);
+                _keyBindings.Add(knobBinding);
             }
-            Common.DebugP("MultiPanelPZ70 _knobBindings : " + _knobBindings.Count);
-            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
+            Common.DebugP("MultiPanelPZ70 _knobBindings : " + _keyBindings.Count);
+            _keyBindings = KeyBindingPZ70.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 
@@ -320,7 +320,7 @@ namespace NonVisuals
             }
             //This must accept lists
             var found = false;
-            foreach (var knobBinding in _knobBindings)
+            foreach (var knobBinding in _keyBindings)
             {
                 if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
                 {
@@ -339,14 +339,14 @@ namespace NonVisuals
             }
             if (!found && sortedList.Count > 0)
             {
-                var knobBinding = new KnobBindingPZ70();
+                var knobBinding = new KeyBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
                 knobBinding.DialPosition = _pz70DialPosition;
                 knobBinding.OSKeyPress = new OSKeyPress(information, sortedList);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
-                _knobBindings.Add(knobBinding);
+                _keyBindings.Add(knobBinding);
             }
-            _knobBindings = KnobBindingPZ70.SetNegators(_knobBindings);
+            _keyBindings = KeyBindingPZ70.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 
@@ -445,9 +445,9 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateBIPLinkKnobBinding(MultiPanelPZ70Knobs multiPanelKnob, BIPLinkPZ70 bipLinkPZ70, bool whenTurnedOn)
+        public void AddOrUpdateBIPLinkKnobBinding(MultiPanelPZ70Knobs multiPanelKnob, BIPLinkPZ70 bipLinkStreamDeck, bool whenTurnedOn)
         {
-            if (bipLinkPZ70.BIPLights.Count == 0)
+            if (bipLinkStreamDeck.BIPLights.Count == 0)
             {
                 RemoveMultiPanelKnobFromList(ControlListPZ70.BIPS, multiPanelKnob, whenTurnedOn);
                 IsDirtyMethod();
@@ -460,19 +460,19 @@ namespace NonVisuals
             {
                 if (bipLink.MultiPanelPZ70Knob == multiPanelKnob && bipLink.WhenTurnedOn == whenTurnedOn)
                 {
-                    bipLink.BIPLights = bipLinkPZ70.BIPLights;
-                    bipLink.Description = bipLinkPZ70.Description;
+                    bipLink.BIPLights = bipLinkStreamDeck.BIPLights;
+                    bipLink.Description = bipLinkStreamDeck.Description;
                     bipLink.MultiPanelPZ70Knob = multiPanelKnob;
                     bipLink.WhenTurnedOn = whenTurnedOn;
                     found = true;
                     break;
                 }
             }
-            if (!found && bipLinkPZ70.BIPLights.Count > 0)
+            if (!found && bipLinkStreamDeck.BIPLights.Count > 0)
             {
-                bipLinkPZ70.MultiPanelPZ70Knob = multiPanelKnob;
-                bipLinkPZ70.WhenTurnedOn = whenTurnedOn;
-                _bipLinks.Add(bipLinkPZ70);
+                bipLinkStreamDeck.MultiPanelPZ70Knob = multiPanelKnob;
+                bipLinkStreamDeck.WhenTurnedOn = whenTurnedOn;
+                _bipLinks.Add(bipLinkStreamDeck);
             }
             IsDirtyMethod();
         }
@@ -482,7 +482,7 @@ namespace NonVisuals
             var found = false;
             if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
             {
-                foreach (var knobBindingPZ70 in _knobBindings)
+                foreach (var knobBindingPZ70 in _keyBindings)
                 {
                     if (knobBindingPZ70.DialPosition == _pz70DialPosition && knobBindingPZ70.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBindingPZ70.WhenTurnedOn == whenTurnedOn)
                     {
@@ -520,102 +520,8 @@ namespace NonVisuals
             }
         }
 
-        private void PZ70SwitchChanged(IEnumerable<object> hashSet)
+        private void StreamDeckButtonChanged(IEnumerable<object> hashSet)
         {
-            foreach (var o in hashSet)
-            {
-                var multiPanelKnob = (MultiPanelKnob)o;
-                if (multiPanelKnob.IsOn)
-                {
-                    switch (multiPanelKnob.MultiPanelPZ70Knob)
-                    {
-                        case MultiPanelPZ70Knobs.KNOB_ALT:
-                            {
-                                _pz70DialPosition = PZ70DialPosition.ALT;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                UpdateLCD();
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_VS:
-                            {
-                                _pz70DialPosition = PZ70DialPosition.VS;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                UpdateLCD();
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_IAS:
-                            {
-                                _pz70DialPosition = PZ70DialPosition.IAS;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                UpdateLCD();
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_HDG:
-                            {
-                                _pz70DialPosition = PZ70DialPosition.HDG;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                UpdateLCD();
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.KNOB_CRS:
-                            {
-                                _pz70DialPosition = PZ70DialPosition.CRS;
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                UpdateLCD();
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.AP_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.AP_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.HDG_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.NAV_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.IAS_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.ALT_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.VS_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.VS_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.APR_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.APR_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                        case MultiPanelPZ70Knobs.REV_BUTTON:
-                            {
-                                multiPanelKnob.IsOn = _lcdButtonByteListHandler.FlipButton(PZ70_DialPosition, MultiPanelPZ70Knobs.REV_BUTTON);
-                                Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                                break;
-                            }
-                    }
-                }
-            }
-            UpdateLCD();
             if (!ForwardPanelEvent)
             {
                 return;
@@ -623,24 +529,10 @@ namespace NonVisuals
 
             foreach (var o in hashSet)
             {
-                var multiPanelKnob = (MultiPanelKnob)o;
-                /*
-                 * IMPORTANT
-                 * ---------
-                 * The LCD buttons toggle between on and off. It is the toggle value that defines if the button is OFF, not the fact that the user releases the button.
-                 * Therefore the fore-mentioned buttons cannot be used as usual in a loop with knobBinding.WhenTurnedOn
-                 * Instead the buttons global bool value must be used!
-                 * 
-                 */
-                if (Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly) && multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
-                {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                    LCDDialChangesHandle(multiPanelKnob);
-                    UpdateLCD();
-                }
+                var streamDeck35Button = (StreamDeck35Button)o;
 
                 var found = false;
-                foreach (var knobBinding in _knobBindings)
+                foreach (var knobBinding in _keyBindings)
                 {
                     if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                     {
@@ -680,11 +572,11 @@ namespace NonVisuals
                         break;
                     }
                 }
-                foreach (var bipLinkPZ70 in _bipLinks)
+                foreach (var bipLinkStreamDeck in _bipLinks)
                 {
-                    if (bipLinkPZ70.BIPLights.Count > 0 && bipLinkPZ70.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && bipLinkPZ70.WhenTurnedOn == multiPanelKnob.IsOn)
+                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && bipLinkStreamDeck.WhenTurnedOn == multiPanelKnob.IsOn)
                     {
-                        bipLinkPZ70.Execute();
+                        bipLinkStreamDeck.Execute();
                         break;
                     }
                 }
@@ -1050,18 +942,18 @@ namespace NonVisuals
                 }
                 else
                 {
-                    foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
+                    foreach (var dcsbiosBindingLCD in _dcsBiosLcdBindings)
                     {
-                        if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
+                        if (dcsbiosBindingLCD.DialPosition == _pz70DialPosition && dcsbiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
                         {
                             foundUpperValue = true;
-                            upperValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                            upperValue = dcsbiosBindingLCD.CurrentValue;
                         }
 
-                        if (dcsbiosBindingLCDPZ70.DialPosition == _pz70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
+                        if (dcsbiosBindingLCD.DialPosition == _pz70DialPosition && dcsbiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
                         {
                             foundLowerValue = true;
-                            lowerValue = dcsbiosBindingLCDPZ70.CurrentValue;
+                            lowerValue = dcsbiosBindingLCD.CurrentValue;
                         }
                     }
                 }
@@ -1174,10 +1066,10 @@ namespace NonVisuals
             set => _dcsBiosBindings = value;
         }
 
-        public HashSet<KnobBindingPZ70> KeyBindings
+        public HashSet<KeyBindingPZ70> KeyBindings
         {
-            get => _knobBindings;
-            set => _knobBindings = value;
+            get => _keyBindings;
+            set => _keyBindings = value;
         }
 
         public HashSet<BIPLinkPZ70> BIPLinkHashSet
@@ -1186,10 +1078,10 @@ namespace NonVisuals
             set => _bipLinks = value;
         }
 
-        public HashSet<KnobBindingPZ70> KeyBindingsHashSet
+        public HashSet<KeyBindingPZ70> KeyBindingsHashSet
         {
-            get => _knobBindings;
-            set => _knobBindings = value;
+            get => _keyBindings;
+            set => _keyBindings = value;
         }
 
         public HashSet<OSCommandBindingPZ70> OSCommandHashSet
@@ -1216,113 +1108,9 @@ namespace NonVisuals
             set => _pz70DialPosition = value;
         }
 
-        public string SettingsVersion()
+        public override string SettingsVersion()
         {
             return "2X";
-        }
-
-
-
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
-        {
-            //do nada
-        }
-
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
-        {
-            ClearPanelSettings(this);
-            ImportSettings(e.Settings);
-        }
-
-        public void ClearPanelSettings(object sender)
-        {
-            ClearSettings();
-        }
-
-
-        protected void UpdateCounter(uint address, uint data)
-        {
-            lock (_updateCounterLockObject)
-            {
-                if (_updateCounterDCSBIOSOutput.Address == address)
-                {
-                    var newCount = _updateCounterDCSBIOSOutput.GetUIntValue(data);
-                    if (!_synchedOnce)
-                    {
-                        _count = newCount;
-                        _synchedOnce = true;
-                        return;
-                    }
-                    //Max is 255
-                    if ((newCount == 0 && _count == 255) || newCount - _count == 1)
-                    {
-                        //All is well
-                        _count = newCount;
-                    }
-                    else if (newCount - _count != 1)
-                    {
-                        //Not good
-                        if (OnUpdatesHasBeenMissed != null)
-                        {
-                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
-                            _count = newCount;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
-        {
-
-        }
-
-        public bool SettingsLoading
-        {
-            get => _settingsLoading;
-            set => _settingsLoading = value;
-        }
-
-        public string InstanceId
-        {
-            get => _instanceId;
-            set => _instanceId = value;
-        }
-
-        public bool Closed
-        {
-            get => _closed;
-            set => _closed = value;
-        }
-
-        protected virtual void OnSettingsApplied()
-        {
-            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
-        }
-
-        public void Attach(IGamingPanelListener iGamingPanelListener)
-        {
-            /*OnDeviceAttachedA += iGamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA += iGamingPanelListener.SwitchesChanged;
-            OnPanelDataAvailableA += iGamingPanelListener.PanelDataAvailable;*/
-            OnSettingsAppliedA += iGamingPanelListener.SettingsApplied;
-            /*OnLedLightChangedA += iGamingPanelListener.LedLightChanged;
-            OnSettingsClearedA += iGamingPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed += iGamingPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA += iGamingPanelListener.PanelSettingsChanged;*/
-        }
-
-        //For those that wants to listen to this panel
-        public void Detach(IGamingPanelListener iGamingPanelListener)
-        {
-            /*OnDeviceAttachedA -= iGamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA -= iGamingPanelListener.SwitchesChanged;
-            OnPanelDataAvailableA -= iGamingPanelListener.PanelDataAvailable;*/
-            OnSettingsAppliedA -= iGamingPanelListener.SettingsApplied;
-            /*OnLedLightChangedA -= iGamingPanelListener.LedLightChanged;
-            OnSettingsClearedA -= iGamingPanelListener.SettingsCleared;
-            OnUpdatesHasBeenMissed -= iGamingPanelListener.UpdatesHasBeenMissed;
-            OnSettingsChangedA -= iGamingPanelListener.PanelSettingsChanged;*/
         }
     }
 }
