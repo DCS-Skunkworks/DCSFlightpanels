@@ -27,13 +27,6 @@ namespace NonVisuals
 
         public StreamDeck35():base(GamingPanelEnum.StreamDeck35, new HIDSkeleton(GamingPanelEnum.StreamDeck35, "TOBEDONECORRECTLYLATER"))
         {
-            /*if (hidSkeleton.PanelType != GamingPanelEnum.PZ70MultiPanel)
-            {
-                throw new ArgumentException();
-            }
-            VendorId = 0x6A3;
-            ProductId = 0xD06;*/
-            CreateMultiKnobs();
             Startup();
         }
 
@@ -111,7 +104,6 @@ namespace NonVisuals
                     }
                 }
             }
-            UpdateLCD();
         }
 
         public override void ImportSettings(List<string> settings)
@@ -245,54 +237,53 @@ namespace NonVisuals
             // ADD METHOD ?
         }
 
-        public void AddOrUpdateSingleKeyBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
+        public void AddOrUpdateSingleKeyBinding(StreamDeck35Buttons streamDeckButton, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
         {
             if (string.IsNullOrEmpty(keys))
             {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
+                RemoveMultiPanelKnobFromList(ControlListStreamDeck.KEYS, streamDeckButton, whenTurnedOn);
                 IsDirtyMethod();
                 return;
             }
             //This must accept lists
             var found = false;
-            foreach (var knobBinding in _keyBindings)
+            foreach (var keyBinding in _keyBindings)
             {
-                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.StreamDeckButton == streamDeckButton && keyBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     if (string.IsNullOrEmpty(keys))
                     {
-                        knobBinding.OSKeyPress = null;
+                        keyBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        knobBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
-                        knobBinding.WhenTurnedOn = whenTurnedOn;
+                        keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                 }
             }
             if (!found && !string.IsNullOrEmpty(keys))
             {
-                var knobBinding = new KeyBindingPZ70();
-                knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
-                knobBinding.DialPosition = _pz70DialPosition;
-                knobBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
-                knobBinding.WhenTurnedOn = whenTurnedOn;
-                _keyBindings.Add(knobBinding);
+                var keyBinding = new KeyBindingStreamDeck();;
+                keyBinding.StreamDeckButton = streamDeckButton;
+                keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                keyBinding.WhenTurnedOn = whenTurnedOn;
+                _keyBindings.Add(keyBinding);
             }
-            Common.DebugP("MultiPanelPZ70 _knobBindings : " + _keyBindings.Count);
-            _keyBindings = KeyBindingPZ70.SetNegators(_keyBindings);
+            Common.DebugP("Stream Deck _keybindings : " + _keyBindings.Count);
+            _keyBindings = KeyBindingStreamDeck.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateOSCommandBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, OSCommand osCommand, bool whenTurnedOn)
+        public void AddOrUpdateOSCommandBinding(StreamDeck35Buttons streamDeckButton, OSCommand osCommand, bool whenTurnedOn)
         {
             //This must accept lists
             var found = false;
 
             foreach (var osCommandBinding in _osCommandBindings)
             {
-                if (osCommandBinding.DialPosition == _pz70DialPosition && osCommandBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && osCommandBinding.WhenTurnedOn == whenTurnedOn)
+                if (osCommandBinding.StreamDeckButton == streamDeckButton && osCommandBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     osCommandBinding.OSCommandObject = osCommand;
                     found = true;
@@ -301,8 +292,8 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var osCommandBindingPZ70 = new OSCommandBindingPZ70();
-                osCommandBindingPZ70.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                var osCommandBindingPZ70 = new OSCommandBindingStreamDeck();
+                osCommandBindingPZ70.StreamDeckButton = streamDeckButton;
                 osCommandBindingPZ70.OSCommandObject = osCommand;
                 osCommandBindingPZ70.WhenTurnedOn = whenTurnedOn;
                 _osCommandBindings.Add(osCommandBindingPZ70);
@@ -310,28 +301,28 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateSequencedKeyBinding(string information, MultiPanelPZ70Knobs multiPanelPZ70Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
+        public void AddOrUpdateSequencedKeyBinding(string information, StreamDeck35Buttons streamDeckButton, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
         {
             if (sortedList.Count == 0)
             {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
+                RemoveMultiPanelKnobFromList(ControlListStreamDeck.KEYS, streamDeckButton, whenTurnedOn);
                 IsDirtyMethod();
                 return;
             }
             //This must accept lists
             var found = false;
-            foreach (var knobBinding in _keyBindings)
+            foreach (var keyBinding in _keyBindings)
             {
-                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.StreamDeckButton == streamDeckButton && keyBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     if (sortedList.Count == 0)
                     {
-                        knobBinding.OSKeyPress = null;
+                        keyBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        knobBinding.OSKeyPress = new OSKeyPress(information, sortedList);
-                        knobBinding.WhenTurnedOn = whenTurnedOn;
+                        keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                     break;
@@ -339,22 +330,21 @@ namespace NonVisuals
             }
             if (!found && sortedList.Count > 0)
             {
-                var knobBinding = new KeyBindingPZ70();
-                knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
-                knobBinding.DialPosition = _pz70DialPosition;
+                var knobBinding = new KeyBindingStreamDeck();
+                knobBinding.StreamDeckButton = streamDeckButton;
                 knobBinding.OSKeyPress = new OSKeyPress(information, sortedList);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(knobBinding);
             }
-            _keyBindings = KeyBindingPZ70.SetNegators(_keyBindings);
+            _keyBindings = KeyBindingStreamDeck.SetNegators(_keyBindings);
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
+        public void AddOrUpdateDCSBIOSBinding(StreamDeck35Buttons streamDeckButton, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
         {
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.DCSBIOS, multiPanelPZ70Knob, whenTurnedOn);
+                RemoveMultiPanelKnobFromList(ControlListStreamDeck.DCSBIOS, streamDeckButton, whenTurnedOn);
                 IsDirtyMethod();
                 return;
             }
@@ -362,7 +352,7 @@ namespace NonVisuals
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                if (dcsBiosBinding.StreamDeckButton == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
@@ -373,9 +363,8 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSBindingPZ70();
-                dcsBiosBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
-                dcsBiosBinding.DialPosition = _pz70DialPosition;
+                var dcsBiosBinding = new DCSBIOSBindingStreamDeck();
+                dcsBiosBinding.StreamDeckButton = streamDeckButton;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                 dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
                 dcsBiosBinding.Description = description;
@@ -384,12 +373,12 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, StreamDeck35Buttons streamDeckButton)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
+                if (dcsBiosBindingLCD.StreamDeckButton == streamDeckButton)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                     found = true;
@@ -398,21 +387,19 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ70();
-                dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
+                var dcsBiosBindingLCD = new DCSBIOSBindingLCDStreamDeck();
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
-                dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, StreamDeck35Buttons streamDeckButton)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
+                if (dcsBiosBindingLCD.StreamDeckButton == streamDeckButton)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                     Debug.Print("3 found");
@@ -422,21 +409,20 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ70();
-                dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
+                var dcsBiosBindingLCD = new DCSBIOSBindingLCDStreamDeck();
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
-                dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
+                dcsBiosBindingLCD.StreamDeckButton = streamDeckButton;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition pz70LCDPosition)
+        public void AddOrUpdateDCSBIOSLcdBinding(StreamDeck35Buttons streamDeckButton)
         {
             //Removes config
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
+                if (dcsBiosBindingLCD.StreamDeckButton == streamDeckButton)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = null;
                     break;
@@ -445,11 +431,11 @@ namespace NonVisuals
             IsDirtyMethod();
         }
 
-        public void AddOrUpdateBIPLinkKnobBinding(MultiPanelPZ70Knobs multiPanelKnob, BIPLinkPZ70 bipLinkStreamDeck, bool whenTurnedOn)
+        public void AddOrUpdateBIPLinkKnobBinding(StreamDeck35Buttons streamDeckButton, BIPLinkStreamDeck bipLinkStreamDeck, bool whenTurnedOn)
         {
             if (bipLinkStreamDeck.BIPLights.Count == 0)
             {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.BIPS, multiPanelKnob, whenTurnedOn);
+                RemoveMultiPanelKnobFromList(ControlListStreamDeck.BIPS, streamDeckButton, whenTurnedOn);
                 IsDirtyMethod();
                 return;
             }
@@ -458,11 +444,11 @@ namespace NonVisuals
 
             foreach (var bipLink in _bipLinks)
             {
-                if (bipLink.MultiPanelPZ70Knob == multiPanelKnob && bipLink.WhenTurnedOn == whenTurnedOn)
+                if (bipLink.StreamDeckButton == streamDeckButton && bipLink.WhenTurnedOn == whenTurnedOn)
                 {
                     bipLink.BIPLights = bipLinkStreamDeck.BIPLights;
                     bipLink.Description = bipLinkStreamDeck.Description;
-                    bipLink.MultiPanelPZ70Knob = multiPanelKnob;
+                    bipLink.StreamDeckButton = streamDeckButton;
                     bipLink.WhenTurnedOn = whenTurnedOn;
                     found = true;
                     break;
@@ -470,43 +456,43 @@ namespace NonVisuals
             }
             if (!found && bipLinkStreamDeck.BIPLights.Count > 0)
             {
-                bipLinkStreamDeck.MultiPanelPZ70Knob = multiPanelKnob;
+                bipLinkStreamDeck.StreamDeckButton = streamDeckButton;
                 bipLinkStreamDeck.WhenTurnedOn = whenTurnedOn;
                 _bipLinks.Add(bipLinkStreamDeck);
             }
             IsDirtyMethod();
         }
 
-        public void RemoveMultiPanelKnobFromList(ControlListPZ70 controlListPZ70, MultiPanelPZ70Knobs multiPanelPZ70Knob, bool whenTurnedOn)
+        public void RemoveMultiPanelKnobFromList(ControlListStreamDeck controlListStreamDeck, StreamDeck35Buttons streamDeckButton, bool whenTurnedOn)
         {
             var found = false;
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
+            if (controlListStreamDeck == ControlListStreamDeck.ALL || controlListStreamDeck == ControlListStreamDeck.KEYS)
             {
                 foreach (var knobBindingPZ70 in _keyBindings)
                 {
-                    if (knobBindingPZ70.DialPosition == _pz70DialPosition && knobBindingPZ70.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBindingPZ70.WhenTurnedOn == whenTurnedOn)
+                    if (knobBindingPZ70.StreamDeckButton == streamDeckButton && knobBindingPZ70.WhenTurnedOn == whenTurnedOn)
                     {
                         knobBindingPZ70.OSKeyPress = null;
                         found = true;
                     }
                 }
             }
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.DCSBIOS)
+            if (controlListStreamDeck == ControlListStreamDeck.ALL || controlListStreamDeck == ControlListStreamDeck.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                    if (dcsBiosBinding.StreamDeckButton == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                         found = true;
                     }
                 }
             }
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.BIPS)
+            if (controlListStreamDeck == ControlListStreamDeck.ALL || controlListStreamDeck == ControlListStreamDeck.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
                 {
-                    if (bipLink.DialPosition == _pz70DialPosition && bipLink.MultiPanelPZ70Knob == multiPanelPZ70Knob && bipLink.WhenTurnedOn == whenTurnedOn)
+                    if (bipLink.StreamDeckButton == streamDeckButton && bipLink.WhenTurnedOn == whenTurnedOn)
                     {
                         bipLink.BIPLights.Clear();
                         found = true;
@@ -532,23 +518,12 @@ namespace NonVisuals
                 var streamDeck35Button = (StreamDeck35Button)o;
 
                 var found = false;
-                foreach (var knobBinding in _keyBindings)
+                foreach (var keyBinding in _keyBindings)
                 {
-                    if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
+                    if (keyBinding.OSKeyPress != null && keyBinding.StreamDeckButton == streamDeck35Button.Button && keyBinding.WhenTurnedOn == streamDeck35Button.IsPressed)
                     {
-                        if (knobBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || knobBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
-                        {
-                            if (!SkipCurrentLcdKnobChange())
-                            {
-                                knobBinding.OSKeyPress.Execute();
-                            }
-                            found = true;
-                        }
-                        else
-                        {
-                            knobBinding.OSKeyPress.Execute();
-                            found = true;
-                        }
+                        keyBinding.OSKeyPress.Execute();
+                        found = true;
                         break;
                     }
                 }
@@ -556,7 +531,7 @@ namespace NonVisuals
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
                     {
-                        if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == multiPanelKnob.IsOn)
+                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.StreamDeckButton == streamDeck35Button.Button && dcsBiosBinding.WhenTurnedOn == streamDeck35Button.IsPressed)
                         {
                             dcsBiosBinding.SendDCSBIOSCommands();
                             break;
@@ -565,7 +540,7 @@ namespace NonVisuals
                 }
                 foreach (var osCommand in _osCommandBindings)
                 {
-                    if (osCommand.DialPosition == _pz70DialPosition && osCommand.OSCommandObject != null && osCommand.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && osCommand.WhenTurnedOn == multiPanelKnob.IsOn)
+                    if (osCommand.OSCommandObject != null && osCommand.StreamDeckButton == streamDeck35Button.Button && osCommand.WhenTurnedOn == streamDeck35Button.IsPressed)
                     {
                         osCommand.OSCommandObject.Execute();
                         found = true;
@@ -574,7 +549,7 @@ namespace NonVisuals
                 }
                 foreach (var bipLinkStreamDeck in _bipLinks)
                 {
-                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && bipLinkStreamDeck.WhenTurnedOn == multiPanelKnob.IsOn)
+                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.StreamDeckButton == streamDeck35Button.Button && bipLinkStreamDeck.WhenTurnedOn == streamDeck35Button.IsPressed)
                     {
                         bipLinkStreamDeck.Execute();
                         break;
@@ -583,466 +558,12 @@ namespace NonVisuals
             }
         }
 
-        private void LCDDialChangesHandle(MultiPanelKnob multiPanelKnob)
-        {
-            if (SkipCurrentLcdKnobChangeLCD(true))
-            {
-                return;
-            }
-
-            bool increase = multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC;
-            switch (_pz70DialPosition)
-            {
-                case PZ70DialPosition.ALT:
-                    {
-                        _altLCDKeyEmulatorValueChangeMonitor.Click();
-                        if (_altLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
-                        {
-                            if (increase)
-                            {
-                                ChangeAltLCDValue(500);
-                            }
-                            else
-                            {
-                                ChangeAltLCDValue(-500);
-                            }
-                        }
-                        else
-                        {
-                            if (increase)
-                            {
-                                ChangeAltLCDValue(100);
-                            }
-                            else
-                            {
-                                ChangeAltLCDValue(-100);
-                            }
-                        }
-                        break;
-                    }
-                case PZ70DialPosition.VS:
-                    {
-                        _vsLCDKeyEmulatorValueChangeMonitor.Click();
-                        if (_vsLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
-                        {
-                            if (increase)
-                            {
-                                ChangeVsLCDValue(100);
-                            }
-                            else
-                            {
-                                ChangeVsLCDValue(-100);
-                            }
-                        }
-                        else
-                        {
-                            if (increase)
-                            {
-                                ChangeVsLCDValue(10);
-                            }
-                            else
-                            {
-                                ChangeVsLCDValue(-10);
-                            }
-                        }
-                        break;
-                    }
-                case PZ70DialPosition.IAS:
-                    {
-                        _iasLCDKeyEmulatorValueChangeMonitor.Click();
-                        if (_iasLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
-                        {
-                            if (increase)
-                            {
-                                ChangeIasLCDValue(50);
-                            }
-                            else
-                            {
-                                ChangeIasLCDValue(-50);
-                            }
-                        }
-                        else
-                        {
-                            if (increase)
-                            {
-                                ChangeIasLCDValue(5);
-                            }
-                            else
-                            {
-                                ChangeIasLCDValue(-5);
-                            }
-                        }
-                        break;
-                    }
-                case PZ70DialPosition.HDG:
-                    {
-                        _hdgLCDKeyEmulatorValueChangeMonitor.Click();
-                        if (_hdgLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
-                        {
-                            if (increase)
-                            {
-                                ChangeHdgLCDValue(5);
-                            }
-                            else
-                            {
-                                ChangeHdgLCDValue(-5);
-                            }
-                        }
-                        else
-                        {
-                            if (increase)
-                            {
-                                ChangeHdgLCDValue(1);
-                            }
-                            else
-                            {
-                                ChangeHdgLCDValue(-1);
-                            }
-                        }
-                        break;
-                    }
-                case PZ70DialPosition.CRS:
-                    {
-                        _crsLCDKeyEmulatorValueChangeMonitor.Click();
-                        if (_crsLCDKeyEmulatorValueChangeMonitor.ClickThresholdReached())
-                        {
-                            if (increase)
-                            {
-                                ChangeCrsLCDValue(5);
-                            }
-                            else
-                            {
-                                ChangeCrsLCDValue(-5);
-                            }
-                        }
-                        else
-                        {
-                            if (increase)
-                            {
-                                ChangeCrsLCDValue(1);
-                            }
-                            else
-                            {
-                                ChangeCrsLCDValue(-1);
-                            }
-                        }
-                        break;
-                    }
-            }
-        }
-
-        private void ChangeAltLCDValue(int value)
-        {
-            if (_altLCDKeyEmulatorValue + value > 40000)
-            {
-                _altLCDKeyEmulatorValue = 40000;
-            }
-            else if (_altLCDKeyEmulatorValue + value < 0)
-            {
-                _altLCDKeyEmulatorValue = 0;
-            }
-            else
-            {
-                _altLCDKeyEmulatorValue = _altLCDKeyEmulatorValue + value;
-            }
-        }
-
-        private void ChangeVsLCDValue(int value)
-        {
-            if (_vsLCDKeyEmulatorValue + value > 6000)
-            {
-                _vsLCDKeyEmulatorValue = 6000;
-            }
-            else if (_vsLCDKeyEmulatorValue + value < -6000)
-            {
-                _vsLCDKeyEmulatorValue = -6000;
-            }
-            else
-            {
-                _vsLCDKeyEmulatorValue = _vsLCDKeyEmulatorValue + value;
-            }
-        }
-
-        private void ChangeIasLCDValue(int value)
-        {
-            if (_iasLCDKeyEmulatorValue + value > 600)
-            {
-                _iasLCDKeyEmulatorValue = 600;
-            }
-            else if (_iasLCDKeyEmulatorValue + value < 0)
-            {
-                _iasLCDKeyEmulatorValue = 0;
-            }
-            else
-            {
-                _iasLCDKeyEmulatorValue = _iasLCDKeyEmulatorValue + value;
-            }
-        }
-
-        private void ChangeHdgLCDValue(int value)
-        {
-            if (_hdgLCDKeyEmulatorValue + value > 360)
-            {
-                _hdgLCDKeyEmulatorValue = 0;
-            }
-            else if (_hdgLCDKeyEmulatorValue + value < 0)
-            {
-                _hdgLCDKeyEmulatorValue = 360;
-            }
-            else
-            {
-                _hdgLCDKeyEmulatorValue = _hdgLCDKeyEmulatorValue + value;
-            }
-        }
-
-        private void ChangeCrsLCDValue(int value)
-        {
-            if (_crsLCDKeyEmulatorValue + value > 360)
-            {
-                _crsLCDKeyEmulatorValue = 0;
-            }
-            else if (_crsLCDKeyEmulatorValue + value < 0)
-            {
-                _crsLCDKeyEmulatorValue = 360;
-            }
-            else
-            {
-                _crsLCDKeyEmulatorValue = _crsLCDKeyEmulatorValue + value;
-            }
-        }
-
-        protected bool SkipCurrentLcdKnobChange(bool change = true)
-        {
-            switch (_lcdKnobSensitivity)
-            {
-                case 0:
-                    {
-                        //Do nothing all manipulation is let through
-                        break;
-                    }
-                case -1:
-                    {
-                        //Skip every 2 manipulations
-                        if (change)
-                        {
-                            _knobSensitivitySkipper++;
-                        }
-
-                        if (_knobSensitivitySkipper <= 2)
-                        {
-                            return true;
-                        }
-                        _knobSensitivitySkipper = 0;
-                        break;
-                    }
-                case -2:
-                    {
-                        //Skip every 4 manipulations
-                        if (change)
-                        {
-                            _knobSensitivitySkipper++;
-                        }
-                        if (_knobSensitivitySkipper <= 4)
-                        {
-                            return true;
-                        }
-                        _knobSensitivitySkipper = 0;
-                        break;
-                    }
-            }
-            return false;
-        }
-
-        protected bool SkipCurrentLcdKnobChangeLCD(bool change = true)
-        {
-            //Skip every 3 manipulations
-            if (change)
-            {
-                _knobSensitivitySkipper++;
-            }
-
-            if (_knobSensitivitySkipper <= 3)
-            {
-                return true;
-            }
-            _knobSensitivitySkipper = 0;
-            return false;
-        }
-
-        private void UpdateLCD()
-        {
-            //345
-            //15600
-            //
-            //[0x0]
-            //[1] [2] [3] [4] [5]
-            //[6] [7] [8] [9] [10]
-            //[11 BUTTONS]
-
-
-            if (Interlocked.Read(ref _doUpdatePanelLCD) == 0)
-            {
-                return;
-            }
-            var bytes = new byte[12];
-            bytes[0] = 0x0;
-            for (var ii = 1; ii < bytes.Length - 1; ii++)
-            {
-                bytes[ii] = 0xFF;
-            }
-
-            bytes[11] = _lcdButtonByteListHandler.GetButtonByte(PZ70_DialPosition);
-
-            var foundUpperValue = false;
-            var foundLowerValue = false;
-
-            var upperValue = 0;
-            var lowerValue = 0;
-            lock (_lcdDataVariablesLockObject)
-            {
-                if (Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
-                {
-                    switch (_pz70DialPosition)
-                    {
-                        case PZ70DialPosition.ALT:
-                            {
-                                upperValue = _altLCDKeyEmulatorValue;
-                                lowerValue = _vsLCDKeyEmulatorValue;
-                                foundUpperValue = true;
-                                foundLowerValue = true;
-                                break;
-                            }
-                        case PZ70DialPosition.VS:
-                            {
-                                upperValue = _altLCDKeyEmulatorValue;
-                                lowerValue = _vsLCDKeyEmulatorValue;
-                                foundUpperValue = true;
-                                foundLowerValue = true;
-                                break;
-                            }
-                        case PZ70DialPosition.IAS:
-                            {
-                                upperValue = _iasLCDKeyEmulatorValue;
-                                foundUpperValue = true;
-                                break;
-                            }
-                        case PZ70DialPosition.HDG:
-                            {
-                                upperValue = _hdgLCDKeyEmulatorValue;
-                                foundUpperValue = true;
-                                break;
-                            }
-                        case PZ70DialPosition.CRS:
-                            {
-                                upperValue = _crsLCDKeyEmulatorValue;
-                                foundUpperValue = true;
-                                break;
-                            }
-                    }
-                }
-                else
-                {
-                    foreach (var dcsbiosBindingLCD in _dcsBiosLcdBindings)
-                    {
-                        if (dcsbiosBindingLCD.DialPosition == _pz70DialPosition && dcsbiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD)
-                        {
-                            foundUpperValue = true;
-                            upperValue = dcsbiosBindingLCD.CurrentValue;
-                        }
-
-                        if (dcsbiosBindingLCD.DialPosition == _pz70DialPosition && dcsbiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.LowerLCD)
-                        {
-                            foundLowerValue = true;
-                            lowerValue = dcsbiosBindingLCD.CurrentValue;
-                        }
-                    }
-                }
-            }
-
-            if (foundUpperValue)
-            {
-                if (upperValue < 0)
-                {
-                    upperValue = Math.Abs(upperValue);
-                }
-                var dataAsString = upperValue.ToString();
-
-                var i = dataAsString.Length;
-                var arrayPosition = 5;
-                do
-                {
-                    //    3 0 0
-                    //1 5 6 0 0
-                    //1 2 3 4 5    
-                    bytes[arrayPosition] = (byte)dataAsString[i - 1];
-                    arrayPosition--;
-                    i--;
-                } while (i > 0);
-            }
-            if (foundLowerValue)
-            {
-                //Important!
-                //Lower LCD will show a dash "-" for 0xEE.
-                //Smallest negative value that can be shown is -9999
-                //Largest positive value that can be shown is 99999
-                if (lowerValue < -9999)
-                {
-                    lowerValue = -9999;
-                }
-                var dataAsString = lowerValue.ToString();
-
-                var i = dataAsString.Length;
-                var arrayPosition = 10;
-                do
-                {
-                    //    3 0 0
-                    //1 5 6 0 0
-                    //1 2 3 4 5    
-                    var s = dataAsString[i - 1];
-                    if (s == '-')
-                    {
-                        bytes[arrayPosition] = 0xEE;
-                    }
-                    else
-                    {
-                        bytes[arrayPosition] = (byte)s;
-                    }
-                    arrayPosition--;
-                    i--;
-                } while (i > 0);
-            }
-            lock (_lcdLockObject)
-            {
-                SendLEDData(bytes);
-            }
-            Interlocked.Add(ref _doUpdatePanelLCD, -1);
-        }
-
-        public void SendLEDData(byte[] array)
-        {
-            try
-            {
-                //Common.DebugP("HIDWriteDevice writing feature data " + TypeOfSaitekPanel + " " + GuidString);
-                HIDSkeletonBase.HIDWriteDevice?.WriteFeatureData(array);
-            }
-            catch (Exception e)
-            {
-                Common.DebugP("SendLEDData() :\n" + e.Message + e.StackTrace);
-                SetLastException(e);
-            }
-        }
-
         private void IsDirtyMethod()
         {
             OnSettingsChanged();
             IsDirty = true;
         }
-
-        private void CreateMultiKnobs()
-        {
-            SaitekPanelKnobs = MultiPanelKnob.GetMultiPanelKnobs();
-        }
-
+        
         private void DeviceAttachedHandler()
         {
             Startup();
@@ -1060,37 +581,37 @@ namespace NonVisuals
             return null;
         }
 
-        public HashSet<DCSBIOSBindingPZ70> DCSBiosBindings
+        public HashSet<DCSBIOSBindingStreamDeck> DCSBiosBindings
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;
         }
 
-        public HashSet<KeyBindingPZ70> KeyBindings
+        public HashSet<KeyBindingStreamDeck> KeyBindings
         {
             get => _keyBindings;
             set => _keyBindings = value;
         }
 
-        public HashSet<BIPLinkPZ70> BIPLinkHashSet
+        public HashSet<BIPLinkStreamDeck> BIPLinkHashSet
         {
             get => _bipLinks;
             set => _bipLinks = value;
         }
 
-        public HashSet<KeyBindingPZ70> KeyBindingsHashSet
+        public HashSet<KeyBindingStreamDeck> KeyBindingsHashSet
         {
             get => _keyBindings;
             set => _keyBindings = value;
         }
 
-        public HashSet<OSCommandBindingPZ70> OSCommandHashSet
+        public HashSet<OSCommandBindingStreamDeck> OSCommandHashSet
         {
             get => _osCommandBindings;
             set => _osCommandBindings = value;
         }
 
-        public HashSet<DCSBIOSBindingLCDPZ70> LCDBindings
+        public HashSet<DCSBIOSBindingLCDStreamDeck> LCDBindings
         {
             get => _dcsBiosLcdBindings;
             set => _dcsBiosLcdBindings = value;
@@ -1101,16 +622,19 @@ namespace NonVisuals
             get => _lcdKnobSensitivity;
             set => _lcdKnobSensitivity = value;
         }
-
-        public PZ70DialPosition PZ70_DialPosition
-        {
-            get => _pz70DialPosition;
-            set => _pz70DialPosition = value;
-        }
-
+        
         public override string SettingsVersion()
         {
             return "2X";
         }
+    }
+
+
+    public enum ControlListStreamDeck : byte
+    {
+        ALL,
+        DCSBIOS,
+        KEYS,
+        BIPS
     }
 }

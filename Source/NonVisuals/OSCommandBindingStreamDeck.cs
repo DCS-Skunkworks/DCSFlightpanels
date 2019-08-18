@@ -34,7 +34,7 @@ namespace NonVisuals
             }
         }
 
-        public StreamDeck35Buttons StreamDeck35Button
+        public StreamDeck35Buttons StreamDeckButton
         {
             get => _streamDeck35Button;
             set => _streamDeck35Button = value;
@@ -46,9 +46,9 @@ namespace NonVisuals
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeck35Button) + "      " + WhenTurnedOn);
+            Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "StreamDeckOS{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeck35Button) + "}" + SeparatorChars + OSCommandObject.ExportString();
+            return "StreamDeckOS{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}" + SeparatorChars + OSCommandObject.ExportString();
         }
     }
 }

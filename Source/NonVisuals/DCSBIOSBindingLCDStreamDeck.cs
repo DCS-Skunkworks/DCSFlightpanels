@@ -57,7 +57,7 @@ namespace NonVisuals
             }
         }
 
-        public StreamDeck35Buttons StreamDeck35Button
+        public StreamDeck35Buttons StreamDeckButton
         {
             get => _streamDeck35Button;
             set => _streamDeck35Button = value;

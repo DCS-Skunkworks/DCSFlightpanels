@@ -69,7 +69,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeck35Button) + "      " + WhenOnTurnedOn);
+            Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "      " + WhenOnTurnedOn);
             var onStr = WhenOnTurnedOn ? "1" : "0";
 
             //\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}
@@ -80,12 +80,12 @@ namespace NonVisuals
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeck35Button) + "|" + Description + "}" + SeparatorChars + stringBuilder.ToString();
+                return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "|" + Description + "}" + SeparatorChars + stringBuilder.ToString();
             }
-            return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeck35Button) + "}" + SeparatorChars + stringBuilder.ToString();
+            return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}" + SeparatorChars + stringBuilder.ToString();
         }
         
-        public StreamDeck35Buttons StreamDeck35Button
+        public StreamDeck35Buttons StreamDeckButton
         {
             get => _streamDeck35Button;
             set => _streamDeck35Button = value;
