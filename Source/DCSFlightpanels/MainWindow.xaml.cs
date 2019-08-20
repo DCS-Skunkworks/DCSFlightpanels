@@ -323,21 +323,21 @@ namespace DCSFlightpanels
             }
         }
 
-        public void Attach(SaitekPanel saitekPanel)
+        public void Attach(GamingPanel gamingPanel)
         {
-            OnForwardKeyPressesChanged += saitekPanel.SetForwardKeyPresses;
-            _panelProfileHandler.Attach(saitekPanel);
-            saitekPanel.Attach(_panelProfileHandler);
-            saitekPanel.Attach((IProfileHandlerListener)this);
-            _dcsBios?.AttachDataReceivedListener(saitekPanel);
+            OnForwardKeyPressesChanged += gamingPanel.SetForwardKeyPresses;
+            _panelProfileHandler.Attach(gamingPanel);
+            gamingPanel.Attach(_panelProfileHandler);
+            gamingPanel.Attach((IProfileHandlerListener)this);
+            _dcsBios?.AttachDataReceivedListener(gamingPanel);
         }
 
-        public void Detach(SaitekPanel saitekPanel)
+        public void Detach(GamingPanel gamingPanel)
         {
-            OnForwardKeyPressesChanged -= saitekPanel.SetForwardKeyPresses;
-            _panelProfileHandler.Detach(saitekPanel);
-            saitekPanel.Detach(_panelProfileHandler);
-            saitekPanel.Detach((IProfileHandlerListener)this);
+            OnForwardKeyPressesChanged -= gamingPanel.SetForwardKeyPresses;
+            _panelProfileHandler.Detach(gamingPanel);
+            gamingPanel.Detach(_panelProfileHandler);
+            gamingPanel.Detach((IProfileHandlerListener)this);
         }
 
         public DCSAirframe GetAirframe()
@@ -577,13 +577,13 @@ namespace DCSFlightpanels
                 }
 
                 
-                var tabItemSD = new TabItem();
-                tabItemSD.Header = "StreamDeck35";
-                var streamDeckUserControl = new StreamDeck35UserControl(null, tabItemSD, this);
+                var tabItemStreamDeck = new TabItem();
+                tabItemStreamDeck.Header = "StreamDeck35";
+                var streamDeckUserControl = new StreamDeck35UserControl(null, tabItemStreamDeck, this);
                 _saitekUserControls.Add(streamDeckUserControl);
-                //_panelProfileHandler.Attach(tpmPanelUserControl);
-                tabItemSD.Content = streamDeckUserControl;
-                TabControlPanels.Items.Add(tabItemSD);
+                _panelProfileHandler.Attach(streamDeckUserControl);
+                tabItemStreamDeck.Content = streamDeckUserControl;
+                TabControlPanels.Items.Add(tabItemStreamDeck);
 
                 SortTabs();
                 if (TabControlPanels.Items.Count > 0)

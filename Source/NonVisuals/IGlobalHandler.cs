@@ -4,8 +4,8 @@ namespace NonVisuals
 {
     public interface IGlobalHandler
     {
-        void Attach(SaitekPanel saitekPanel);
-        void Detach(SaitekPanel saitekPanel);
+        void Attach(GamingPanel gamingPanel);
+        void Detach(GamingPanel gamingPanel);
         DCSAirframe GetAirframe();
     }
 }

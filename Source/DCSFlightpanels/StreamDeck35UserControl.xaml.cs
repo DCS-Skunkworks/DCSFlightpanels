@@ -30,19 +30,14 @@ namespace DCSFlightpanels
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
             _streamDeck35 = new StreamDeck35();
-            //_streamDeck35.Attach((IGamingPanelListener)this);
-            //globalHandler.Attach(_streamDeck35);
+            _streamDeck35.Attach((IGamingPanelListener)this);
+            globalHandler.Attach(_streamDeck35);
             _globalHandler = globalHandler;
 
             HideAllImages();
         }
 
         private void StreamDeck35UserControl_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
@@ -1137,115 +1132,122 @@ namespace DCSFlightpanels
                     return;
                 }
 
-                foreach (MenuItem item in contextMenu.Items)
+                if (contextMenu != null)
                 {
-                    item.Visibility = Visibility.Collapsed;
-                }
+                    foreach (MenuItem item in contextMenu.Items)
+                    {
+                        item.Visibility = Visibility.Collapsed;
+                    }
 
-                if (((TagDataClassStreamDeck)textBox.Tag).ContainsDCSBIOS())
-                {
-                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
-                    foreach (MenuItem item in contextMenu.Items)
+                    if (((TagDataClassStreamDeck) textBox.Tag).ContainsDCSBIOS())
                     {
-                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
+                        // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
+                        foreach (MenuItem item in contextMenu.Items)
                         {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (((TagDataClassStreamDeck)textBox.Tag).ContainsKeySequence())
-                {
-                    // 2) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (((TagDataClassStreamDeck)textBox.Tag).IsEmpty())
-                {
-                    // 4) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                else if (((TagDataClassStreamDeck)textBox.Tag).ContainsSingleKey())
-                {
-                    // 5) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
-                        {
-                            if (item.Name.Contains("EditBIP"))
+                            if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
                             {
-                                if (BipFactory.HasBips())
-                                {
-                                    item.Visibility = Visibility.Visible;
-                                }
+                                item.Visibility = Visibility.Visible;
                             }
-                            else
+
+                            if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
                             {
                                 item.Visibility = Visibility.Visible;
                             }
                         }
                     }
-                }
-                else if (((TagDataClassStreamDeck)textBox.Tag).ContainsBIPLink())
-                {
-                    // 3) 
-                    foreach (MenuItem item in contextMenu.Items)
+                    else if (((TagDataClassStreamDeck) textBox.Tag).ContainsKeySequence())
                     {
-                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
+                        // 2) 
+                        foreach (MenuItem item in contextMenu.Items)
                         {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
+                            if (item.Name.Contains("EditSequence"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+
+                            if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
                         }
                     }
-                }
-                else if (((TagDataClassPZ55)textBox.Tag).ContainsOSCommand())
-                {
-                    foreach (MenuItem item in contextMenu.Items)
+                    else if (((TagDataClassStreamDeck) textBox.Tag).IsEmpty())
                     {
-                        if (item.Name.Contains("EditOSCommand"))
+                        // 4) 
+                        foreach (MenuItem item in contextMenu.Items)
                         {
-                            item.Visibility = Visibility.Visible;
+                            if (item.Name.Contains("EditSequence"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+                            else if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+                            else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+                            else if (item.Name.Contains("EditOSCommand"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                item.Visibility = Visibility.Collapsed;
+                            }
+                        }
+                    }
+                    else if (((TagDataClassStreamDeck) textBox.Tag).ContainsSingleKey())
+                    {
+                        // 5) 
+                        foreach (MenuItem item in contextMenu.Items)
+                        {
+                            if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
+                            {
+                                if (item.Name.Contains("EditBIP"))
+                                {
+                                    if (BipFactory.HasBips())
+                                    {
+                                        item.Visibility = Visibility.Visible;
+                                    }
+                                }
+                                else
+                                {
+                                    item.Visibility = Visibility.Visible;
+                                }
+                            }
+                        }
+                    }
+                    else if (((TagDataClassStreamDeck) textBox.Tag).ContainsBIPLink())
+                    {
+                        // 3) 
+                        foreach (MenuItem item in contextMenu.Items)
+                        {
+                            if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+
+                            if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+
+                            if (item.Name.Contains("EditSequence"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
+                        }
+                    }
+                    else if (((TagDataClassStreamDeck) textBox.Tag).ContainsOSCommand())
+                    {
+                        foreach (MenuItem item in contextMenu.Items)
+                        {
+                            if (item.Name.Contains("EditOSCommand"))
+                            {
+                                item.Visibility = Visibility.Visible;
+                            }
                         }
                     }
                 }
@@ -1334,225 +1336,268 @@ namespace DCSFlightpanels
 
         private StreamDeckKeyOnOff GetStreamDeckKey(TextBox textBox)
         {
-            return null;
-            /*
             try
             {
-                if (textBox.Equals(TextBoxLcdKnobDecrease))
+                if (textBox.Equals(TextBoxButton11On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON11, true);
                 }
-                if (textBox.Equals(TextBoxLcdKnobIncrease))
+                if (textBox.Equals(TextBoxButton11Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_INC, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON11, false);
                 }
-                if (textBox.Equals(TextBoxAutoThrottleOff))
+                if (textBox.Equals(TextBoxButton12On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON12, true);
                 }
-                if (textBox.Equals(TextBoxAutoThrottleOn))
+                if (textBox.Equals(TextBoxButton12Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON12, false);
                 }
-                if (textBox.Equals(TextBoxFlapsUp))
+                if (textBox.Equals(TextBoxButton13On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON13, true);
                 }
-                if (textBox.Equals(TextBoxFlapsDown))
+                if (textBox.Equals(TextBoxButton13Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON13, false);
                 }
-                if (textBox.Equals(TextBoxPitchTrimUp))
+                if (textBox.Equals(TextBoxButton14On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON14, true);
                 }
-                if (textBox.Equals(TextBoxPitchTrimDown))
+                if (textBox.Equals(TextBoxButton14Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON14, false);
                 }
-                if (textBox.Equals(TextBoxApButtonOn))
+                if (textBox.Equals(TextBoxButton15On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AP_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON15, true);
                 }
-                if (textBox.Equals(TextBoxApButtonOff))
+                if (textBox.Equals(TextBoxButton15Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AP_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON15, false);
                 }
-                if (textBox.Equals(TextBoxHdgButtonOn))
+                if (textBox.Equals(TextBoxButton21On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON21, true);
                 }
-                if (textBox.Equals(TextBoxHdgButtonOff))
+                if (textBox.Equals(TextBoxButton21Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON21, false);
                 }
-                if (textBox.Equals(TextBoxNavButtonOn))
+                if (textBox.Equals(TextBoxButton22On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON22, true);
                 }
-                if (textBox.Equals(TextBoxNavButtonOff))
+                if (textBox.Equals(TextBoxButton22Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON22, false);
                 }
-                if (textBox.Equals(TextBoxIasButtonOn))
+                if (textBox.Equals(TextBoxButton23On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON23, true);
                 }
-                if (textBox.Equals(TextBoxIasButtonOff))
+                if (textBox.Equals(TextBoxButton23Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON23, false);
                 }
-                if (textBox.Equals(TextBoxAltButtonOn))
+                if (textBox.Equals(TextBoxButton24On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON24, true);
                 }
-                if (textBox.Equals(TextBoxAltButtonOff))
+                if (textBox.Equals(TextBoxButton24Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON24, false);
                 }
-                if (textBox.Equals(TextBoxVsButtonOn))
+                if (textBox.Equals(TextBoxButton25On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.VS_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON25, true);
                 }
-                if (textBox.Equals(TextBoxVsButtonOff))
+                if (textBox.Equals(TextBoxButton25Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.VS_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON25, false);
                 }
-                if (textBox.Equals(TextBoxAprButtonOn))
+                if (textBox.Equals(TextBoxButton31On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.APR_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON31, true);
                 }
-                if (textBox.Equals(TextBoxAprButtonOff))
+                if (textBox.Equals(TextBoxButton31Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.APR_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON31, false);
                 }
-                if (textBox.Equals(TextBoxRevButtonOn))
+                if (textBox.Equals(TextBoxButton32On))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.REV_BUTTON, true);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON32, true);
                 }
-                if (textBox.Equals(TextBoxRevButtonOff))
+                if (textBox.Equals(TextBoxButton32Off))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.REV_BUTTON, false);
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON32, false);
+                }
+                if (textBox.Equals(TextBoxButton33On))
+                {
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON33, true);
+                }
+                if (textBox.Equals(TextBoxButton33Off))
+                {
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON33, false);
+                }
+                if (textBox.Equals(TextBoxButton34On))
+                {
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON34, true);
+                }
+                if (textBox.Equals(TextBoxButton34Off))
+                {
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON34, false);
+                }
+                if (textBox.Equals(TextBoxButton35On))
+                {
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON35, true);
+                }
+                if (textBox.Equals(TextBoxButton35Off))
+                {
+                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON35, false);
                 }
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(3012, ex);
             }
-            throw new Exception("Failed to find MultiPanel knob for TextBox " + textBox.Name);
-            */
+            throw new Exception("Failed to find Stream Deck key for TextBox " + textBox.Name);
+            
         }
 
 
         private TextBox GetTextBox(StreamDeck35Buttons knob, bool whenTurnedOn)
         {
-            return null;
-            /*
             try
             {
-                if (knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON11 && whenTurnedOn)
                 {
-                    return TextBoxLcdKnobDecrease;
+                    return TextBoxButton11On;
                 }
-                if (knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON11 && !whenTurnedOn)
                 {
-                    return TextBoxLcdKnobIncrease;
+                    return TextBoxButton11Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.AUTO_THROTTLE && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON12 && whenTurnedOn)
                 {
-                    return TextBoxAutoThrottleOff;
+                    return TextBoxButton12On;
                 }
-                if (knob == MultiPanelPZ70Knobs.AUTO_THROTTLE && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON12 && !whenTurnedOn)
                 {
-                    return TextBoxAutoThrottleOn;
+                    return TextBoxButton12Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.FLAPS_LEVER_UP && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON13 && whenTurnedOn)
                 {
-                    return TextBoxFlapsUp;
+                    return TextBoxButton13On;
                 }
-                if (knob == MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON13 && !whenTurnedOn)
                 {
-                    return TextBoxFlapsDown;
+                    return TextBoxButton13Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON14 && whenTurnedOn)
                 {
-                    return TextBoxPitchTrimUp;
+                    return TextBoxButton14On;
                 }
-                if (knob == MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON14 && !whenTurnedOn)
                 {
-                    return TextBoxPitchTrimDown;
+                    return TextBoxButton14Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.AP_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON15 && whenTurnedOn)
                 {
-                    return TextBoxApButtonOn;
+                    return TextBoxButton15On;
                 }
-                if (knob == MultiPanelPZ70Knobs.AP_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON15 && !whenTurnedOn)
                 {
-                    return TextBoxApButtonOff;
+                    return TextBoxButton15Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.HDG_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON21 && whenTurnedOn)
                 {
-                    return TextBoxHdgButtonOn;
+                    return TextBoxButton21On;
                 }
-                if (knob == MultiPanelPZ70Knobs.HDG_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON21 && !whenTurnedOn)
                 {
-                    return TextBoxHdgButtonOff;
+                    return TextBoxButton21Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.NAV_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON22 && whenTurnedOn)
                 {
-                    return TextBoxNavButtonOn;
+                    return TextBoxButton22On;
                 }
-                if (knob == MultiPanelPZ70Knobs.NAV_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON22 && !whenTurnedOn)
                 {
-                    return TextBoxNavButtonOff;
+                    return TextBoxButton22Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.IAS_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON23 && whenTurnedOn)
                 {
-                    return TextBoxIasButtonOn;
+                    return TextBoxButton23On;
                 }
-                if (knob == MultiPanelPZ70Knobs.IAS_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON23 && !whenTurnedOn)
                 {
-                    return TextBoxIasButtonOff;
+                    return TextBoxButton23Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.ALT_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON24 && whenTurnedOn)
                 {
-                    return TextBoxAltButtonOn;
+                    return TextBoxButton24On;
                 }
-                if (knob == MultiPanelPZ70Knobs.ALT_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON24 && !whenTurnedOn)
                 {
-                    return TextBoxAltButtonOff;
+                    return TextBoxButton24Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.VS_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON25 && whenTurnedOn)
                 {
-                    return TextBoxVsButtonOn;
+                    return TextBoxButton25On;
                 }
-                if (knob == MultiPanelPZ70Knobs.VS_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON25 && !whenTurnedOn)
                 {
-                    return TextBoxVsButtonOff;
+                    return TextBoxButton25Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.APR_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON31 && whenTurnedOn)
                 {
-                    return TextBoxAprButtonOn;
+                    return TextBoxButton31On;
                 }
-                if (knob == MultiPanelPZ70Knobs.APR_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON31 && !whenTurnedOn)
                 {
-                    return TextBoxAprButtonOff;
+                    return TextBoxButton31Off;
                 }
-                if (knob == MultiPanelPZ70Knobs.REV_BUTTON && whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON32 && whenTurnedOn)
                 {
-                    return TextBoxRevButtonOn;
+                    return TextBoxButton32On;
                 }
-                if (knob == MultiPanelPZ70Knobs.REV_BUTTON && !whenTurnedOn)
+                if (knob == StreamDeck35Buttons.BUTTON32 && !whenTurnedOn)
                 {
-                    return TextBoxRevButtonOff;
+                    return TextBoxButton32Off;
+                }
+                if (knob == StreamDeck35Buttons.BUTTON33 && whenTurnedOn)
+                {
+                    return TextBoxButton33On;
+                }
+                if (knob == StreamDeck35Buttons.BUTTON33 && !whenTurnedOn)
+                {
+                    return TextBoxButton33Off;
+                }
+                if (knob == StreamDeck35Buttons.BUTTON34 && whenTurnedOn)
+                {
+                    return TextBoxButton34On;
+                }
+                if (knob == StreamDeck35Buttons.BUTTON34 && !whenTurnedOn)
+                {
+                    return TextBoxButton34Off;
+                }
+                if (knob == StreamDeck35Buttons.BUTTON35 && whenTurnedOn)
+                {
+                    return TextBoxButton35On;
+                }
+                if (knob == StreamDeck35Buttons.BUTTON35 && !whenTurnedOn)
+                {
+                    return TextBoxButton35Off;
                 }
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(3012, ex);
             }
-            throw new Exception("Failed to find TextBox from MultiPanel Knob : " + knob);
-            */
+            throw new Exception("Failed to find TextBox from Stream Deck key : " + knob);
         }
 
         private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
