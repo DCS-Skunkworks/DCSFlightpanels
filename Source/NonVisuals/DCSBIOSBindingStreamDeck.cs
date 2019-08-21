@@ -27,20 +27,18 @@ namespace NonVisuals
             }
             if (settings.StartsWith("StreamDeckDCSBIOSControl{"))
             {
-                //StreamDeckDCSBIOSControl{1KNOB_ENGINE_OFF}\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                //StreamDeckDCSBIOSControl{1BUTTON12|DCS-BIOS}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
-                //StreamDeckDCSBIOSControl{1KNOB_ENGINE_LEFT}
-                var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
-                //1KNOB_ENGINE_LEFT}
-                param0 = param0.Remove(param0.Length - 1, 1);
-                //1KNOB_ENGINE_LEFT
+                //StreamDeckDCSBIOSControl{1BUTTON12|DCS-BIOS}
+                var param0 = parameters[0].Replace("StreamDeckDCSBIOSControl{", "").Replace("}","");
+                //1BUTTON12|DCS-BIOS
                 WhenOnTurnedOn = (param0.Substring(0, 1) == "1");
                 if (param0.Contains("|"))
                 {
-                    //1KNOB_ALT|Landing gear up and blablabla description
+                    //1BUTTON12|DCS-BIOS
                     param0 = param0.Substring(1);
-                    //KNOB_ALT|Landing gear up and blablabla description
+                    //BUTTON12|DCS-BIOS
                     var stringArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                     _streamDeck35Button = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), stringArray[0]);
                     Description = stringArray[1];
@@ -51,13 +49,16 @@ namespace NonVisuals
                     _streamDeck35Button = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
                 }
                 //The rest of the array besides last entry are DCSBIOSInput
-                //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
+                //DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
                 DCSBIOSInputs = new List<DCSBIOSInput>();
                 for (int i = 1; i < parameters.Length - 1; i++)
                 {
-                    var dcsbiosInput = new DCSBIOSInput();
-                    dcsbiosInput.ImportString(parameters[i]);
-                    DCSBIOSInputs.Add(dcsbiosInput);
+                    if (parameters[i].StartsWith("DCSBIOSInput"))
+                    {
+                        var dcsbiosInput = new DCSBIOSInput();
+                        dcsbiosInput.ImportString(parameters[i]);
+                        DCSBIOSInputs.Add(dcsbiosInput);
+                    }
                 }
 
             }
@@ -72,7 +73,6 @@ namespace NonVisuals
             Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "      " + WhenOnTurnedOn);
             var onStr = WhenOnTurnedOn ? "1" : "0";
 
-            //\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
@@ -80,9 +80,9 @@ namespace NonVisuals
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "|" + Description + "}" + SeparatorChars + stringBuilder.ToString();
+                return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
             }
-            return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}" + SeparatorChars + stringBuilder.ToString();
+            return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}" + stringBuilder.ToString();
         }
         
         public StreamDeck35Buttons StreamDeckButton

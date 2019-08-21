@@ -5,8 +5,15 @@ using HidLibrary;
 
 namespace NonVisuals
 {
+
+    public static class HIDSkeletonIgnore
+    {
+        public static readonly string HidSkeletonIgnore = "IGNORED_DEVICE_INSTANCE";
+    }
+
     public class HIDSkeleton
     {
+
         private GamingPanelEnum _panelType;
         private string _instanceId;
         private HidDevice _hidReadDevice;

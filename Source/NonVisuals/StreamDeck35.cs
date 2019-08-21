@@ -25,7 +25,7 @@ namespace NonVisuals
         
         private long _doUpdatePanelLCD;
 
-        public StreamDeck35():base(GamingPanelEnum.StreamDeck35, new HIDSkeleton(GamingPanelEnum.StreamDeck35, "TOBEDONECORRECTLYLATER"))
+        public StreamDeck35():base(GamingPanelEnum.StreamDeck35, new HIDSkeleton(GamingPanelEnum.StreamDeck35, HIDSkeletonIgnore.HidSkeletonIgnore))
         {
             Startup();
         }

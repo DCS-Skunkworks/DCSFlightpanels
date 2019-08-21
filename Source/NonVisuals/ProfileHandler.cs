@@ -396,7 +396,16 @@ namespace NonVisuals
                 {
                     foreach (var profileFileInstanceID in _profileFileInstanceIDs)
                     {
-                        OnUserMessageEventHandler(this, new UserMessageEventArgs(){UserMessage = "The " + profileFileInstanceID.Value + " panel with USB Instance ID :" + Environment.NewLine + profileFileInstanceID.Key + Environment.NewLine + "cannot be found. Have you rearranged your panels (USB ports) or have you copied someone elses profile?" + Environment.NewLine + "Use the ID button to copy current Instance ID and replace the faulty one in the profile file."});
+                        if (profileFileInstanceID.Key != HIDSkeletonIgnore.HidSkeletonIgnore)
+                        {
+                            OnUserMessageEventHandler(this,
+                                new UserMessageEventArgs()
+                                {
+                                    UserMessage = "The " + profileFileInstanceID.Value + " panel with USB Instance ID :" + Environment.NewLine + profileFileInstanceID.Key + Environment.NewLine +
+                                                  "cannot be found. Have you rearranged your panels (USB ports) or have you copied someone else's profile?" + Environment.NewLine +
+                                                  "Use the ID button to copy current Instance ID and replace the faulty one in the profile file."
+                                });
+                        }
                     }
                 }
             }
