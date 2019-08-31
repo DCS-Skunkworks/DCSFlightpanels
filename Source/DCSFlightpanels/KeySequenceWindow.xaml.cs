@@ -83,7 +83,7 @@ namespace DCSFlightpanels
                     //Clicked OK
                     var keyPressInfo = new KeyPressInfo();
                     keyPressInfo.LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
-                    keyPressInfo.VirtualKeyCodes = OSKeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
+                    keyPressInfo.VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
                     keyPressInfo.LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
                     _sortedList.Add(GetNewKeyValue(), keyPressInfo);
 
@@ -140,7 +140,7 @@ namespace DCSFlightpanels
                         return;
                     }
                     _sortedList[keyValuePair.Key].LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
-                    _sortedList[keyValuePair.Key].VirtualKeyCodes = OSKeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
+                    _sortedList[keyValuePair.Key].VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
                     _sortedList[keyValuePair.Key].LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
                     DataGridSequences.DataContext = _sortedList;
                     DataGridSequences.ItemsSource = _sortedList;

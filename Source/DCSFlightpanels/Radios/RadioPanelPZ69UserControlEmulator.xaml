@@ -24,6 +24,7 @@
             <MenuItem Header="ThirtySecs" Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="FortySecs" Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="SixtySecs" Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Add VK_NULL key" Name="contextMenuItemAddNullKey" Click="MenuItemAddNullKey_OnClick"/>
             <MenuItem Header="Edit OS command" Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
             <MenuItem Header="Edit sequence" Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
             <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick"/>

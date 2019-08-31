@@ -32,7 +32,7 @@ namespace NonVisuals
                 _tpmPanelSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), param0);
 
                 //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                OSKeyPress = new OSKeyPress();
+                OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[1]);
             }
         }

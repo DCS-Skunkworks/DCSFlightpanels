@@ -272,7 +272,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        knobBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                        knobBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                         knobBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -283,7 +283,7 @@ namespace NonVisuals
                 var knobBinding = new KeyBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
                 knobBinding.DialPosition = _pz70DialPosition;
-                knobBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                knobBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _knobBindings.Add(knobBinding);
             }
@@ -337,7 +337,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        knobBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                        knobBinding.OSKeyPress = new KeyPress(information, sortedList);
                         knobBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -349,7 +349,7 @@ namespace NonVisuals
                 var knobBinding = new KeyBindingPZ70();
                 knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
                 knobBinding.DialPosition = _pz70DialPosition;
-                knobBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                knobBinding.OSKeyPress = new KeyPress(information, sortedList);
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _knobBindings.Add(knobBinding);
             }

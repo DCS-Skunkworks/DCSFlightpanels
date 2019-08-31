@@ -576,7 +576,7 @@ namespace DCSFlightpanels
                     } //for each
                 }
 
-                
+                /*
                 var tabItemStreamDeck = new TabItem();
                 tabItemStreamDeck.Header = "StreamDeck35";
                 var streamDeckUserControl = new StreamDeck35UserControl(null, tabItemStreamDeck, this);
@@ -584,7 +584,7 @@ namespace DCSFlightpanels
                 _panelProfileHandler.Attach(streamDeckUserControl);
                 tabItemStreamDeck.Content = streamDeckUserControl;
                 TabControlPanels.Items.Add(tabItemStreamDeck);
-
+                */
                 SortTabs();
                 if (TabControlPanels.Items.Count > 0)
                 {

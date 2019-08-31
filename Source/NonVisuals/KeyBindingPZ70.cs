@@ -35,7 +35,7 @@ namespace NonVisuals
                 _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), param1);
 
                 //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                OSKeyPress = new OSKeyPress();
+                OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[2]);
             }
         }

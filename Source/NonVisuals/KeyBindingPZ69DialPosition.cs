@@ -32,7 +32,7 @@ namespace NonVisuals
                 WhenTurnedOn = param1.Substring(0, 1) == "1";
                 param1 = param1.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param1);
-                OSKeyPress = new OSKeyPress();
+                OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[2]);
             }
         }

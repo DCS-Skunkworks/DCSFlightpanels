@@ -8,7 +8,7 @@ namespace DCSFlightpanels
 {
     public abstract class TagDataClassBase
     {
-        private OSKeyPress _osKeyPress;
+        private KeyPress _osKeyPress;
         private OSCommand _osCommand;
         private TextBox _textBox;
 
@@ -39,7 +39,7 @@ namespace DCSFlightpanels
             return _osKeyPress != null && !_osKeyPress.IsMultiSequenced() && _osKeyPress.KeySequence.Count > 0;
         }
 
-        public OSKeyPress KeyPress
+        public KeyPress KeyPress
         {
             get => _osKeyPress;
             set
@@ -75,7 +75,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public OSKeyPress OSKeyPress
+        public KeyPress OSKeyPress
         {
             get => _osKeyPress;
             set => _osKeyPress = value;

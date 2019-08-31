@@ -31,7 +31,7 @@ namespace NonVisuals
                 _streamDeckButton = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
 
                 //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                OSKeyPress = new OSKeyPress();
+                OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[1]);
             }
         }

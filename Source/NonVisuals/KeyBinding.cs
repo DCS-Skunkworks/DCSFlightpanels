@@ -7,13 +7,13 @@
          that binds a physical switch to a user made virtual 
          keypress in Windows or other functionality.
          */
-        private OSKeyPress _osKeyPress;
+        private KeyPress _osKeyPress;
         private bool _whenOnTurnedOn = true;
         protected const string SeparatorChars = "\\o/";
 
         internal abstract void ImportSettings(string settings);
 
-        public OSKeyPress OSKeyPress
+        public KeyPress OSKeyPress
         {
             get => _osKeyPress;
             set => _osKeyPress = value;

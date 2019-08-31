@@ -429,7 +429,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                        keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -439,7 +439,7 @@ namespace NonVisuals
             {
                 var keyBinding = new KeyBindingPZ55();
                 keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
@@ -470,7 +470,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        var osKeyPress = new OSKeyPress(information, sortedList);
+                        var osKeyPress = new KeyPress(information, sortedList);
                         keyBinding.OSKeyPress = osKeyPress;
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
@@ -482,7 +482,7 @@ namespace NonVisuals
             {
                 var keyBinding = new KeyBindingPZ55();
                 keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                var osKeyPress = new OSKeyPress(information, sortedList);
+                var osKeyPress = new KeyPress(information, sortedList);
                 keyBinding.OSKeyPress = osKeyPress;
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);

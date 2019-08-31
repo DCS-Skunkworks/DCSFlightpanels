@@ -103,7 +103,7 @@
     <Compile Include="StreamDeck35Button.cs" />
     <Compile Include="MultiPanelKnob.cs" />
     <Compile Include="MultiPanelPZ70.cs" />
-    <Compile Include="OSKeyPress.cs" />
+    <Compile Include="KeyPress.cs" />
     <Compile Include="BIPLight.cs" />
     <Compile Include="PanelKeyOnOff.cs" />
     <Compile Include="PerformanceTimer.cs" />

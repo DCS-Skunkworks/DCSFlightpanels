@@ -627,7 +627,7 @@ namespace DCSFlightpanels
                     }
                 }
                 textBox.Text = result;
-                ((TagDataClassStreamDeck)textBox.Tag).KeyPress = new OSKeyPress(result);
+                ((TagDataClassStreamDeck)textBox.Tag).KeyPress = new KeyPress(result);
                 UpdateKeyBindingProfileSequencedKeyStrokesPZ70(textBox);
             }
             catch (Exception ex)
@@ -749,7 +749,7 @@ namespace DCSFlightpanels
                     }
                 }
                 textBox.Text = result;
-                ((TagDataClassStreamDeck)textBox.Tag).KeyPress = new OSKeyPress(result);
+                ((TagDataClassStreamDeck)textBox.Tag).KeyPress = new KeyPress(result);
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
             catch (Exception ex)
@@ -887,7 +887,7 @@ namespace DCSFlightpanels
                     var sequenceList = keySequenceWindow.GetSequence;
                     if (sequenceList.Count > 1)
                     {
-                        var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
+                        var osKeyPress = new KeyPress("Key press sequence", sequenceList);
                         ((TagDataClassStreamDeck)textBox.Tag).KeyPress = osKeyPress;
                         ((TagDataClassStreamDeck)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
@@ -906,7 +906,7 @@ namespace DCSFlightpanels
                     {
                         //If only one press was created treat it as a simple keypress
                         ((TagDataClassStreamDeck)textBox.Tag).ClearAll();
-                        var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
+                        var osKeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassStreamDeck)textBox.Tag).KeyPress = osKeyPress;
                         ((TagDataClassStreamDeck)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;

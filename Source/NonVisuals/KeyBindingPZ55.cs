@@ -32,7 +32,7 @@ namespace NonVisuals
                 _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), param0);
 
                 //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
-                OSKeyPress = new OSKeyPress();
+                OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[1]);
             }
         }

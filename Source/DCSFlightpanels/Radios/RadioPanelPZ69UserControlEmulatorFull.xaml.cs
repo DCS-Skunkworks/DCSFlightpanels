@@ -296,7 +296,7 @@ namespace DCSFlightpanels.Radios
                     textBox.ToolTip = null;
                     if (sequenceList.Count > 1)
                     {
-                        var osKeyPress = new OSKeyPress("Key press sequence", sequenceList);
+                        var osKeyPress = new KeyPress("Key press sequence", sequenceList);
                         ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
                         ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
@@ -309,7 +309,7 @@ namespace DCSFlightpanels.Radios
                     {
                         //If only one press was created treat it as a simple keypress
                         ((TagDataClassPZ69Full)textBox.Tag).ClearAll();
-                        var osKeyPress = new OSKeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
+                        var osKeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
                         ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
@@ -739,6 +739,10 @@ namespace DCSFlightpanels.Radios
                             item.Visibility = Visibility.Visible;
                         }
                         else if (item.Name.Contains("EditOSCommand"))
+                        {
+                            item.Visibility = Visibility.Visible;
+                        }
+                        else if (item.Name.Contains("AddNullKey"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -2470,6 +2474,34 @@ namespace DCSFlightpanels.Radios
             }
         }
 
+        private void MenuItemAddNullKey_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+
+                ((TagDataClassPZ69Full)textBox.Tag).ClearAll();
+                var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
+                if (string.IsNullOrEmpty(vkNull))
+                {
+                    return;
+                }
+                var osKeyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
+                ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
+                ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = "VK_NULL";
+                textBox.Text = vkNull;
+                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2039, ex);
+            }
+        }
+
         private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -2509,5 +2541,6 @@ namespace DCSFlightpanels.Radios
                 Common.ShowErrorMessageBox(2044, ex);
             }
         }
+
     }
 }

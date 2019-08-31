@@ -622,7 +622,7 @@ namespace NonVisuals.Radios
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                        keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -633,7 +633,7 @@ namespace NonVisuals.Radios
                 var keyBinding = new KeyBindingPZ69DialPosition();
                 keyBinding.RadioPanelPZ69Key = radioPanelPZ69Knob;
                 keyBinding.DialPosition = pz69DialPosition;
-                keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
@@ -719,7 +719,7 @@ namespace NonVisuals.Radios
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                        keyBinding.OSKeyPress = new KeyPress(information, sortedList);
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -731,7 +731,7 @@ namespace NonVisuals.Radios
                 var keyBinding = new KeyBindingPZ69DialPosition();
                 keyBinding.RadioPanelPZ69Key = radioPanelPZ69Knob;
                 keyBinding.DialPosition = pz69DialPosition;
-                keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                keyBinding.OSKeyPress = new KeyPress(information, sortedList);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }

@@ -284,7 +284,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                        keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -294,7 +294,7 @@ namespace NonVisuals
             {
                 var keyBinding = new KeyBindingTPM();
                 keyBinding.TPMSwitch = tpmPanelSwitch;
-                keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
@@ -370,7 +370,7 @@ namespace NonVisuals
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                        keyBinding.OSKeyPress = new KeyPress(information, sortedList);
                         keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
@@ -381,7 +381,7 @@ namespace NonVisuals
             {
                 var keyBinding = new KeyBindingTPM();
                 keyBinding.TPMSwitch = tpmPanelSwitch;
-                keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                keyBinding.OSKeyPress = new KeyPress(information, sortedList);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
