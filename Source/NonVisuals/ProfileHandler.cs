@@ -373,7 +373,7 @@ namespace NonVisuals
 
         private void CheckAllProfileInstanceIDsAgainstAttachedHardware()
         {
-            foreach (var saitekPanelSkeleton in Common.SaitekPanelSkeletons)
+            foreach (var saitekPanelSkeleton in Common.GamingPanelSkeletons)
             {
                 foreach (var hidDevice in HidDevices.Enumerate(saitekPanelSkeleton.VendorId, saitekPanelSkeleton.ProductId))
                 {

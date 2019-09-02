@@ -139,7 +139,7 @@ namespace NonVisuals
          */
         public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != GamingPanelEnum.BackLitPanel)
+            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {
                 throw new ArgumentException();
             }

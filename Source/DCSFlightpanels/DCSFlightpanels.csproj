@@ -74,6 +74,12 @@
     <Reference Include="Octokit, Version=0.32.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.32.0\lib\net45\Octokit.dll</HintPath>
     </Reference>
+    <Reference Include="OpenMacroBoard.SDK">
+      <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\OpenMacroBoard.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="StreamDeckSharp">
+      <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\StreamDeckSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />

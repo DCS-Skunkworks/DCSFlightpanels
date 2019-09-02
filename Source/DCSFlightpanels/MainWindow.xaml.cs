@@ -354,7 +354,7 @@ namespace DCSFlightpanels
                     foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
                     {
 
-                        switch (hidSkeleton.PanelType)
+                        switch (hidSkeleton.PanelInfo.GamingPanelType)
                         {
                             case GamingPanelEnum.Unknown:
                                 {

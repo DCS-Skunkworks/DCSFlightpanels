@@ -23,7 +23,7 @@ namespace NonVisuals
 
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != GamingPanelEnum.TPM)
+            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.TPM)
             {
                 throw new ArgumentException();
             }

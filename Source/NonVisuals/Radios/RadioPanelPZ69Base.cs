@@ -35,7 +35,7 @@ namespace NonVisuals.Radios
 
         protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != GamingPanelEnum.PZ69RadioPanel)
+            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
             {
                 throw new ArgumentException();
             }

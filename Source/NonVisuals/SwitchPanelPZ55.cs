@@ -38,7 +38,7 @@ namespace NonVisuals
 
         public SwitchPanelPZ55(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ55SwitchPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != GamingPanelEnum.PZ55SwitchPanel)
+            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ55SwitchPanel)
             {
                 throw new ArgumentException();
             }

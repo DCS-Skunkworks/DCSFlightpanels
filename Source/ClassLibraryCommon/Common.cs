@@ -26,7 +26,17 @@ namespace ClassLibraryCommon
 
     public static class Common
     {
-        public static readonly List<SaitekPanelSkeleton> SaitekPanelSkeletons = new List<SaitekPanelSkeleton> { new SaitekPanelSkeleton(GamingPanelEnum.PZ55SwitchPanel, 0x6A3, 0xD67), new SaitekPanelSkeleton(GamingPanelEnum.PZ69RadioPanel, 0x6A3, 0xD05), new SaitekPanelSkeleton(GamingPanelEnum.PZ70MultiPanel, 0x6A3, 0xD06), new SaitekPanelSkeleton(GamingPanelEnum.BackLitPanel, 0x6A3, 0xB4E), new SaitekPanelSkeleton(GamingPanelEnum.TPM, 0x6A3, 0xB4D) };
+        public static readonly List<GamingPanelSkeleton> GamingPanelSkeletons = new List<GamingPanelSkeleton>
+        {
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel),
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.PZ69RadioPanel),
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.PZ70MultiPanel),
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.BackLitPanel),
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.TPM),
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Elgato, GamingPanelEnum.StreamDeck23),
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Elgato, GamingPanelEnum.StreamDeck35),
+            new GamingPanelSkeleton(GamingPanelVendorsEnum.Elgato, GamingPanelEnum.StreamDeck48),
+        };
 
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
         private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
@@ -347,25 +357,25 @@ namespace ClassLibraryCommon
     }
 
 
-    public class SaitekPanelSkeleton
+    public class GamingPanelSkeleton
     {
-        private GamingPanelEnum _saitekPanelsEnum = GamingPanelEnum.Unknown;
+        private GamingPanelEnum _gamingPanelsEnum = GamingPanelEnum.Unknown;
         private int _vendorId;
         private int _productId;
         private string _serialNumber;
 
-        public SaitekPanelSkeleton(GamingPanelEnum saitekPanelsEnum, int vendorId, int productId)
+        public GamingPanelSkeleton(GamingPanelVendorsEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum)
         {
-            _saitekPanelsEnum = saitekPanelsEnum;
-            _vendorId = vendorId;
-            _productId = productId;
+            _gamingPanelsEnum = gamingPanelsEnum;
+            _vendorId = (int)gamingPanelVendor;
+            _productId = (int)gamingPanelVendor;
         }
 
-        public SaitekPanelSkeleton(GamingPanelEnum saitekPanelsEnum, int vendorId, int productId, string serialNumber)
+        public GamingPanelSkeleton(GamingPanelVendorsEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum, string serialNumber)
         {
-            _saitekPanelsEnum = saitekPanelsEnum;
-            _vendorId = vendorId;
-            _productId = productId;
+            _gamingPanelsEnum = gamingPanelsEnum;
+            _vendorId = (int)gamingPanelVendor;
+            _productId = (int)gamingPanelVendor;
             _serialNumber = serialNumber;
         }
 
@@ -374,10 +384,10 @@ namespace ClassLibraryCommon
             return !string.IsNullOrEmpty(_serialNumber) && !_serialNumber.Equals("0");
         }
 
-        public GamingPanelEnum SaitekPanelsType
+        public GamingPanelEnum GamingPanelType
         {
-            get { return _saitekPanelsEnum; }
-            set { _saitekPanelsEnum = value; }
+            get { return _gamingPanelsEnum; }
+            set { _gamingPanelsEnum = value; }
         }
 
         public int VendorId
