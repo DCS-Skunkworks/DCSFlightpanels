@@ -13,31 +13,31 @@ using NonVisuals;
 namespace DCSFlightpanels
 {
     /// <summary>
-    /// Interaction logic for StreamDeck35UserControl.xaml
+    /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class StreamDeck35UserControl : UserControl, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class StreamDeckUserControl : UserControl, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
-        private readonly StreamDeck35 _streamDeck35;
+        private readonly StreamDeckPanel _streamDeck;
         private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
         private bool _textBoxTagsSet;
 
-        public StreamDeck35UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public StreamDeckUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _streamDeck35 = new StreamDeck35();
-            _streamDeck35.Attach((IGamingPanelListener)this);
-            globalHandler.Attach(_streamDeck35);
+            _streamDeck = new StreamDeckPanel();
+            _streamDeck.Attach((IGamingPanelListener)this);
+            globalHandler.Attach(_streamDeck);
             _globalHandler = globalHandler;
 
             HideAllImages();
         }
 
-        private void StreamDeck35UserControl_OnLoaded(object sender, RoutedEventArgs e)
+        private void StreamDeckUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
@@ -54,7 +54,7 @@ namespace DCSFlightpanels
 
         public SaitekPanel GetSaitekPanel()
         {
-            return null; //_streamDeck35;
+            return null; //_streamDeck;
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
@@ -130,7 +130,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogStreamDeck35))
+                if (textBox.Equals(TextBoxLogStreamDeck))
                 {
                     continue;
                 }
@@ -140,7 +140,7 @@ namespace DCSFlightpanels
             }
             if (clearAlsoProfile)
             {
-                //_streamDeck35.ClearSettings();
+                //_streamDeck.ClearSettings();
             }
         }
 
@@ -153,7 +153,7 @@ namespace DCSFlightpanels
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
-                if (!textBox.Equals(TextBoxLogStreamDeck35))
+                if (!textBox.Equals(TextBoxLogStreamDeck))
                 {
                     textBox.Tag = new TagDataClassStreamDeck(textBox, GetStreamDeckKey(textBox));
                 }
@@ -201,10 +201,10 @@ namespace DCSFlightpanels
         {
             try
             {
-                /*if (e.UniqueId.Equals(_streamDeck35.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel)
+                /*if (e.UniqueId.Equals(_streamDeck.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck35.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck.Text = ""));
                 }*/
             }
             catch (Exception ex)
@@ -241,11 +241,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                /*if (_streamDeck35 != null)
+                /*if (_streamDeck != null)
                 {
-                    TextBoxLogStreamDeck35.Text = "";
-                    TextBoxLogStreamDeck35.Text = _streamDeck35.InstanceId;
-                    Clipboard.SetText(_streamDeck35.InstanceId);
+                    TextBoxLogStreamDeck.Text = "";
+                    TextBoxLogStreamDeck.Text = _streamDeck.InstanceId;
+                    Clipboard.SetText(_streamDeck.InstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }*/
             }
@@ -261,10 +261,10 @@ namespace DCSFlightpanels
             {
                 foreach (var streamDeckButton35 in knobs)
                 {
-                    var streamDeckButton = (StreamDeck35Button)streamDeckButton35;
+                    var streamDeckButton = (StreamDeckButton)streamDeckButton35;
                     switch (streamDeckButton.Button)
                     {
-                        case StreamDeck35Buttons.BUTTON11:
+                        case StreamDeckButtons.BUTTON11:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -279,7 +279,7 @@ namespace DCSFlightpanels
                                    });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON12:
+                        case StreamDeckButtons.BUTTON12:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -294,7 +294,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON13:
+                        case StreamDeckButtons.BUTTON13:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -309,7 +309,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON14:
+                        case StreamDeckButtons.BUTTON14:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -324,7 +324,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON15:
+                        case StreamDeckButtons.BUTTON15:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -339,7 +339,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON21:
+                        case StreamDeckButtons.BUTTON21:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -354,7 +354,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON22:
+                        case StreamDeckButtons.BUTTON22:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -369,7 +369,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON23:
+                        case StreamDeckButtons.BUTTON23:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -384,7 +384,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON24:
+                        case StreamDeckButtons.BUTTON24:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -399,7 +399,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON25:
+                        case StreamDeckButtons.BUTTON25:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -414,7 +414,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON31:
+                        case StreamDeckButtons.BUTTON31:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -429,7 +429,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON32:
+                        case StreamDeckButtons.BUTTON32:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -444,7 +444,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON33:
+                        case StreamDeckButtons.BUTTON33:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -459,7 +459,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON34:
+                        case StreamDeckButtons.BUTTON34:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -474,7 +474,7 @@ namespace DCSFlightpanels
                                     });
                                 break;
                             }
-                        case StreamDeck35Buttons.BUTTON35:
+                        case StreamDeckButtons.BUTTON35:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -549,7 +549,7 @@ namespace DCSFlightpanels
 
                 SetApplicationMode();
 
-                foreach (var keyBinding in _streamDeck35.KeyBindingsHashSet)
+                foreach (var keyBinding in _streamDeck.KeyBindingsHashSet)
                 {
                     var textBox = GetTextBox(keyBinding.StreamDeckButton, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
@@ -558,7 +558,7 @@ namespace DCSFlightpanels
                     }
                 }
 
-                foreach (var osCommand in _streamDeck35.OSCommandHashSet)
+                foreach (var osCommand in _streamDeck.OSCommandHashSet)
                 {
                     var textBox = GetTextBox(osCommand.StreamDeckButton, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)
@@ -567,7 +567,7 @@ namespace DCSFlightpanels
                     }
                 }
 
-                foreach (var dcsBiosBinding in _streamDeck35.DCSBiosBindings)
+                foreach (var dcsBiosBinding in _streamDeck.DCSBiosBindings)
                 {
                     var textBox = GetTextBox(dcsBiosBinding.StreamDeckButton, dcsBiosBinding.WhenTurnedOn);
 
@@ -576,7 +576,7 @@ namespace DCSFlightpanels
                 }
 
 
-                foreach (var bipLink in _streamDeck35.BIPLinkHashSet)
+                foreach (var bipLink in _streamDeck.BIPLinkHashSet)
                 {
                     var textBox = GetTextBox(bipLink.StreamDeckButton, bipLink.WhenTurnedOn);
                     if (bipLink.BIPLights.Count > 0)
@@ -653,7 +653,7 @@ namespace DCSFlightpanels
                             return;
                         }
                         textBox.Text = "";
-                        _streamDeck35.RemoveMultiPanelKnobFromList(ControlListStreamDeck.DCSBIOS, GetStreamDeckKey(textBox).StreamDeckButton, GetStreamDeckKey(textBox).ButtonState);
+                        _streamDeck.RemoveMultiPanelKnobFromList(ControlListStreamDeck.DCSBIOS, GetStreamDeckKey(textBox).StreamDeckButton, GetStreamDeckKey(textBox).ButtonState);
                         ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding = null;
                     }
                     else if (((TagDataClassStreamDeck)textBox.Tag).ContainsKeySequence())
@@ -685,7 +685,7 @@ namespace DCSFlightpanels
                         UpdateBIPLinkBindings(textBox);
                     }
                 }
-                TextBoxLogStreamDeck35.Focus();
+                TextBoxLogStreamDeck.Focus();
             }
             catch (Exception ex)
             {
@@ -783,7 +783,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                TextBoxLogStreamDeck35.Focus();
+                TextBoxLogStreamDeck.Focus();
             }
             catch (Exception ex)
             {
@@ -847,7 +847,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (!textBox.Equals(TextBoxLogStreamDeck35) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
+                if (!textBox.Equals(TextBoxLogStreamDeck) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
                     return textBox;
                 }
@@ -919,7 +919,7 @@ namespace DCSFlightpanels
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
                 }
-                TextBoxLogStreamDeck35.Focus();
+                TextBoxLogStreamDeck.Focus();
             }
             catch (Exception ex)
             {
@@ -971,7 +971,7 @@ namespace DCSFlightpanels
                     ((TagDataClassStreamDeck)textBox.Tag).Consume(dcsBiosInputs);
                     UpdateDCSBIOSBinding(textBox);
                 }
-                TextBoxLogStreamDeck35.Focus();
+                TextBoxLogStreamDeck.Focus();
             }
             catch (Exception ex)
             {
@@ -1005,7 +1005,7 @@ namespace DCSFlightpanels
                     ((TagDataClassStreamDeck)textBox.Tag).BIPLink = (BIPLinkStreamDeck)bipLinkWindow.BIPLink;
                     UpdateBIPLinkBindings(textBox);
                 }
-                TextBoxLogStreamDeck35.Focus();
+                TextBoxLogStreamDeck.Focus();
             }
             catch (Exception ex)
             {
@@ -1019,7 +1019,7 @@ namespace DCSFlightpanels
             try
             {
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck35.AddOrUpdateBIPLinkKnobBinding(key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).BIPLink, key.ButtonState);
+                _streamDeck.AddOrUpdateBIPLinkKnobBinding(key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).BIPLink, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1032,7 +1032,7 @@ namespace DCSFlightpanels
             try
             {
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck35.AddOrUpdateSequencedKeyBinding(textBox.Text, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence(), key.ButtonState);
+                _streamDeck.AddOrUpdateSequencedKeyBinding(textBox.Text, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence(), key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1055,7 +1055,7 @@ namespace DCSFlightpanels
                     keyPressLength = ((TagDataClassStreamDeck)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck35.AddOrUpdateSingleKeyBinding(key.StreamDeckButton, textBox.Text, keyPressLength, key.ButtonState);
+                _streamDeck.AddOrUpdateSingleKeyBinding(key.StreamDeckButton, textBox.Text, keyPressLength, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1068,7 +1068,7 @@ namespace DCSFlightpanels
             try
             {
                 var tag = (TagDataClassStreamDeck)textBox.Tag;
-                _streamDeck35.AddOrUpdateOSCommandBinding(tag.Key.StreamDeckButton, tag.OSCommandObject, tag.Key.ButtonState);
+                _streamDeck.AddOrUpdateOSCommandBinding(tag.Key.StreamDeckButton, tag.OSCommandObject, tag.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1081,7 +1081,7 @@ namespace DCSFlightpanels
             try
             {
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck35.AddOrUpdateDCSBIOSBinding(key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
+                _streamDeck.AddOrUpdateDCSBIOSBinding(key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1094,7 +1094,7 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (!Equals(textBox, TextBoxLogStreamDeck35))
+                if (!Equals(textBox, TextBoxLogStreamDeck))
                 {
                     textBox.ContextMenu = null;
                     textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
@@ -1106,9 +1106,9 @@ namespace DCSFlightpanels
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
-                if (!Equals(textBox, TextBoxLogStreamDeck35))
+                if (!Equals(textBox, TextBoxLogStreamDeck))
                 {
-                    var contextMenu = (ContextMenu)Resources["TextBoxContextMenuStreamDeck35"];
+                    var contextMenu = (ContextMenu)Resources["TextBoxContextMenuStreamDeck"];
 
                     textBox.ContextMenu = contextMenu;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
@@ -1263,19 +1263,19 @@ namespace DCSFlightpanels
             try
             {
                 //Set focus to this so that virtual keypresses won't affect settings
-                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck35.Focus()));
+                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck.Focus()));
                 foreach (var knob in knobs)
                 {
                     var multiPanelKnob = (MultiPanelKnob)knob;
 
-                    /*if (_streamDeck35.ForwardPanelEvent)
+                    /*if (_streamDeck.ForwardPanelEvent)
                     {
-                        if (!string.IsNullOrEmpty(_streamDeck35.GetKeyPressForLoggingPurposes(multiPanelKnob)))
+                        if (!string.IsNullOrEmpty(_streamDeck.GetKeyPressForLoggingPurposes(multiPanelKnob)))
                         {
                             Dispatcher?.BeginInvoke(
                                 (Action)
                                 (() =>
-                                 TextBoxLogStreamDeck35.Text = TextBoxLogStreamDeck35.Text.Insert(0, _streamDeck35.GetKeyPressForLoggingPurposes(multiPanelKnob) + "\n")));
+                                 TextBoxLogStreamDeck.Text = TextBoxLogStreamDeck.Text.Insert(0, _streamDeck.GetKeyPressForLoggingPurposes(multiPanelKnob) + "\n")));
                         }
                     }
                     else
@@ -1283,7 +1283,7 @@ namespace DCSFlightpanels
                         Dispatcher?.BeginInvoke(
                             (Action)
                             (() =>
-                             TextBoxLogStreamDeck35.Text = TextBoxLogStreamDeck35.Text.Insert(0, "No action taken, panel events Disabled.\n")));
+                             TextBoxLogStreamDeck.Text = TextBoxLogStreamDeck.Text.Insert(0, "No action taken, panel events Disabled.\n")));
                     }*/
                 }
                 SetGraphicsState(knobs);
@@ -1293,7 +1293,7 @@ namespace DCSFlightpanels
                 Dispatcher?.BeginInvoke(
                     (Action)
                     (() =>
-                     TextBoxLogStreamDeck35.Text = TextBoxLogStreamDeck35.Text.Insert(0, "0x16" + ex.Message + ".\n")));
+                     TextBoxLogStreamDeck.Text = TextBoxLogStreamDeck.Text.Insert(0, "0x16" + ex.Message + ".\n")));
                 Common.ShowErrorMessageBox(3009, ex);
             }
         }
@@ -1340,123 +1340,123 @@ namespace DCSFlightpanels
             {
                 if (textBox.Equals(TextBoxButton11On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON11, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON11, true);
                 }
                 if (textBox.Equals(TextBoxButton11Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON11, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON11, false);
                 }
                 if (textBox.Equals(TextBoxButton12On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON12, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON12, true);
                 }
                 if (textBox.Equals(TextBoxButton12Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON12, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON12, false);
                 }
                 if (textBox.Equals(TextBoxButton13On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON13, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON13, true);
                 }
                 if (textBox.Equals(TextBoxButton13Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON13, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON13, false);
                 }
                 if (textBox.Equals(TextBoxButton14On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON14, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON14, true);
                 }
                 if (textBox.Equals(TextBoxButton14Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON14, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON14, false);
                 }
                 if (textBox.Equals(TextBoxButton15On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON15, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON15, true);
                 }
                 if (textBox.Equals(TextBoxButton15Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON15, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON15, false);
                 }
                 if (textBox.Equals(TextBoxButton21On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON21, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON21, true);
                 }
                 if (textBox.Equals(TextBoxButton21Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON21, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON21, false);
                 }
                 if (textBox.Equals(TextBoxButton22On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON22, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON22, true);
                 }
                 if (textBox.Equals(TextBoxButton22Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON22, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON22, false);
                 }
                 if (textBox.Equals(TextBoxButton23On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON23, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON23, true);
                 }
                 if (textBox.Equals(TextBoxButton23Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON23, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON23, false);
                 }
                 if (textBox.Equals(TextBoxButton24On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON24, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON24, true);
                 }
                 if (textBox.Equals(TextBoxButton24Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON24, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON24, false);
                 }
                 if (textBox.Equals(TextBoxButton25On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON25, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON25, true);
                 }
                 if (textBox.Equals(TextBoxButton25Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON25, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON25, false);
                 }
                 if (textBox.Equals(TextBoxButton31On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON31, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON31, true);
                 }
                 if (textBox.Equals(TextBoxButton31Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON31, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON31, false);
                 }
                 if (textBox.Equals(TextBoxButton32On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON32, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON32, true);
                 }
                 if (textBox.Equals(TextBoxButton32Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON32, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON32, false);
                 }
                 if (textBox.Equals(TextBoxButton33On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON33, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON33, true);
                 }
                 if (textBox.Equals(TextBoxButton33Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON33, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON33, false);
                 }
                 if (textBox.Equals(TextBoxButton34On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON34, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON34, true);
                 }
                 if (textBox.Equals(TextBoxButton34Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON34, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON34, false);
                 }
                 if (textBox.Equals(TextBoxButton35On))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON35, true);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON35, true);
                 }
                 if (textBox.Equals(TextBoxButton35Off))
                 {
-                    return new StreamDeckKeyOnOff(StreamDeck35Buttons.BUTTON35, false);
+                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON35, false);
                 }
             }
             catch (Exception ex)
@@ -1468,127 +1468,127 @@ namespace DCSFlightpanels
         }
 
 
-        private TextBox GetTextBox(StreamDeck35Buttons knob, bool whenTurnedOn)
+        private TextBox GetTextBox(StreamDeckButtons knob, bool whenTurnedOn)
         {
             try
             {
-                if (knob == StreamDeck35Buttons.BUTTON11 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON11 && whenTurnedOn)
                 {
                     return TextBoxButton11On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON11 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON11 && !whenTurnedOn)
                 {
                     return TextBoxButton11Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON12 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON12 && whenTurnedOn)
                 {
                     return TextBoxButton12On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON12 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON12 && !whenTurnedOn)
                 {
                     return TextBoxButton12Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON13 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON13 && whenTurnedOn)
                 {
                     return TextBoxButton13On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON13 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON13 && !whenTurnedOn)
                 {
                     return TextBoxButton13Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON14 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON14 && whenTurnedOn)
                 {
                     return TextBoxButton14On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON14 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON14 && !whenTurnedOn)
                 {
                     return TextBoxButton14Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON15 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON15 && whenTurnedOn)
                 {
                     return TextBoxButton15On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON15 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON15 && !whenTurnedOn)
                 {
                     return TextBoxButton15Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON21 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON21 && whenTurnedOn)
                 {
                     return TextBoxButton21On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON21 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON21 && !whenTurnedOn)
                 {
                     return TextBoxButton21Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON22 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON22 && whenTurnedOn)
                 {
                     return TextBoxButton22On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON22 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON22 && !whenTurnedOn)
                 {
                     return TextBoxButton22Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON23 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON23 && whenTurnedOn)
                 {
                     return TextBoxButton23On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON23 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON23 && !whenTurnedOn)
                 {
                     return TextBoxButton23Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON24 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON24 && whenTurnedOn)
                 {
                     return TextBoxButton24On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON24 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON24 && !whenTurnedOn)
                 {
                     return TextBoxButton24Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON25 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON25 && whenTurnedOn)
                 {
                     return TextBoxButton25On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON25 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON25 && !whenTurnedOn)
                 {
                     return TextBoxButton25Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON31 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON31 && whenTurnedOn)
                 {
                     return TextBoxButton31On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON31 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON31 && !whenTurnedOn)
                 {
                     return TextBoxButton31Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON32 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON32 && whenTurnedOn)
                 {
                     return TextBoxButton32On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON32 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON32 && !whenTurnedOn)
                 {
                     return TextBoxButton32Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON33 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON33 && whenTurnedOn)
                 {
                     return TextBoxButton33On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON33 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON33 && !whenTurnedOn)
                 {
                     return TextBoxButton33Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON34 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON34 && whenTurnedOn)
                 {
                     return TextBoxButton34On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON34 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON34 && !whenTurnedOn)
                 {
                     return TextBoxButton34Off;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON35 && whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON35 && whenTurnedOn)
                 {
                     return TextBoxButton35On;
                 }
-                if (knob == StreamDeck35Buttons.BUTTON35 && !whenTurnedOn)
+                if (knob == StreamDeckButtons.BUTTON35 && !whenTurnedOn)
                 {
                     return TextBoxButton35Off;
                 }
@@ -1632,7 +1632,7 @@ namespace DCSFlightpanels
                     textBox.Text = osCommand.Name;
                     UpdateOSCommandBindingsPZ55(textBox);
                 }
-                TextBoxLogStreamDeck35.Focus();
+                TextBoxLogStreamDeck.Focus();
             }
             catch (Exception ex)
             {

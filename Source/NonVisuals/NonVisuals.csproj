@@ -100,7 +100,7 @@
     <Compile Include="ClickSpeedDetector.cs" />
     <Compile Include="GamingPanel.cs" />
     <Compile Include="OSCommandBindingStreamDeck.cs" />
-    <Compile Include="StreamDeck35Button.cs" />
+    <Compile Include="StreamDeckButton.cs" />
     <Compile Include="MultiPanelKnob.cs" />
     <Compile Include="MultiPanelPZ70.cs" />
     <Compile Include="KeyPress.cs" />
@@ -159,7 +159,7 @@
     <Compile Include="Radios\SRSListener.cs" />
     <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
     <Compile Include="Radios\SRSRadioInformation.cs" />
-    <Compile Include="StreamDeck35.cs" />
+    <Compile Include="StreamDeckPanel.cs" />
     <Compile Include="TPMPanelSwitch.cs" />
     <Compile Include="SwitchPanelKey.cs" />
     <Compile Include="TPMPanel.cs" />

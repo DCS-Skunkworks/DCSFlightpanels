@@ -8,7 +8,7 @@ namespace NonVisuals
         /*
          This class binds a physical key on the Stream Deck with a Windows OS command.
          */
-        private StreamDeck35Buttons _streamDeck35Button;
+        private StreamDeckButtons _streamDeckButton;
         
         internal override void ImportSettings(string settings)
         {
@@ -26,7 +26,7 @@ namespace NonVisuals
                 //1KNOB_ENGINE_LEFT
                 WhenTurnedOn = (param0.Substring(0, 1) == "1");
                 param0 = param0.Substring(1);
-                _streamDeck35Button = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
+                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
 
                 //OSCommand{FILE\o/ARGUMENTS\o/NAME}
                 OSCommandObject = new OSCommand();
@@ -34,10 +34,10 @@ namespace NonVisuals
             }
         }
 
-        public StreamDeck35Buttons StreamDeckButton
+        public StreamDeckButtons StreamDeckButton
         {
-            get => _streamDeck35Button;
-            set => _streamDeck35Button = value;
+            get => _streamDeckButton;
+            set => _streamDeckButton = value;
         }
 
         public override string ExportSettings()
@@ -46,9 +46,9 @@ namespace NonVisuals
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "      " + WhenTurnedOn);
+            Common.DebugP(Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "StreamDeckOS{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}" + SeparatorChars + OSCommandObject.ExportString();
+            return "StreamDeckOS{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + SeparatorChars + OSCommandObject.ExportString();
         }
     }
 }

@@ -360,6 +360,8 @@ namespace DCSFlightpanels
                                 {
                                     continue;
                                 }
+                            case GamingPanelEnum.StreamDeckMini:
+                            case GamingPanelEnum.StreamDeckXL:
                             case GamingPanelEnum.PZ55SwitchPanel:
                                 {
                                     var tabItem = new TabItem();
@@ -578,8 +580,8 @@ namespace DCSFlightpanels
 
                 /*
                 var tabItemStreamDeck = new TabItem();
-                tabItemStreamDeck.Header = "StreamDeck35";
-                var streamDeckUserControl = new StreamDeck35UserControl(null, tabItemStreamDeck, this);
+                tabItemStreamDeck.Header = "StreamDeck";
+                var streamDeckUserControl = new StreamDeckUserControl(null, tabItemStreamDeck, this);
                 _saitekUserControls.Add(streamDeckUserControl);
                 _panelProfileHandler.Attach(streamDeckUserControl);
                 tabItemStreamDeck.Content = streamDeckUserControl;

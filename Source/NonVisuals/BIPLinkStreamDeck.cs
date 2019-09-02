@@ -9,7 +9,7 @@ namespace NonVisuals
         /*
          This class binds a physical key on a Stream Deck with a BIP LED
          */
-        private StreamDeck35Buttons _streamDeck35Buttons;
+        private StreamDeckButtons _streamDeckButtons;
         
         public override void ImportSettings(string settings)
         {
@@ -28,7 +28,7 @@ namespace NonVisuals
                 //1KNOB_ENGINE_LEFT
                 _whenOnTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
-                _streamDeck35Buttons = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
+                _streamDeckButtons = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
 
                 for (int i = 1; i < parameters.Length - 1; i++)
                 {
@@ -56,7 +56,7 @@ namespace NonVisuals
             }
             var onStr = _whenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("StreamDeckBIPLink{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}");
+            stringBuilder.Append("StreamDeckBIPLink{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}");
             foreach (var bipLight in _bipLights)
             {
                 stringBuilder.Append(SeparatorChars + bipLight.Value.ExportSettings());
@@ -78,10 +78,10 @@ namespace NonVisuals
             return _bipLights.Keys.Max() + 1;
         }
         
-        public StreamDeck35Buttons StreamDeckButton
+        public StreamDeckButtons StreamDeckButton
         {
-            get => _streamDeck35Buttons;
-            set => _streamDeck35Buttons = value;
+            get => _streamDeckButtons;
+            set => _streamDeckButtons = value;
         }
     }
 }

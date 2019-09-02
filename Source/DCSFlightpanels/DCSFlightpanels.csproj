@@ -227,8 +227,8 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StreamDeck35UserControl.xaml.cs">
-      <DependentUpon>StreamDeck35UserControl.xaml</DependentUpon>
+    <Compile Include="StreamDeckUserControl.xaml.cs">
+      <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
@@ -427,7 +427,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StreamDeck35UserControl.xaml">
+    <Page Include="StreamDeckUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

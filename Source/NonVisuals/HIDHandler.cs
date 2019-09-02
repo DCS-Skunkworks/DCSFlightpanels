@@ -17,7 +17,7 @@ namespace NonVisuals
         private string _instanceId;
         private HidDevice _hidReadDevice;
         private HidDevice _hidWriteDevice;
-        private GamingPanelSkeleton _gamingPanelSkeleton;
+        private readonly GamingPanelSkeleton _gamingPanelSkeleton;
 
         public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string instanceId)
         {
@@ -99,7 +99,7 @@ namespace NonVisuals
 
                 foreach (var hidSkeleton in _hidSkeletons)
                 {
-                    if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorsEnum.Saitek)
+                    if (hidSkeleton.PanelInfo.VendorId == (int) GamingPanelVendorEnum.Saitek)
                     {
 
                         //Creating read devices
@@ -129,6 +129,10 @@ namespace NonVisuals
                                 Common.DebugP(hidSkeleton.PanelInfo.GamingPanelType + " [Saitek]HIDWriteDevice has entered the building...");
                             }
                         }
+                    }
+                    else if (hidSkeleton.PanelInfo.VendorId == (int) GamingPanelVendorEnum.Elgato)
+                    {
+                        var asd = 1;
                     }
                 }
             }

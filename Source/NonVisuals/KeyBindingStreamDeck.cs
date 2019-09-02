@@ -9,7 +9,7 @@ namespace NonVisuals
         /*
          This class binds a physical button on a Stream Deck with a user made virtual keypress in Windows.
          */
-        private StreamDeck35Buttons _streamDeckButton;
+        private StreamDeckButtons _streamDeckButton;
 
         internal override void ImportSettings(string settings)
         {
@@ -28,7 +28,7 @@ namespace NonVisuals
                 //1KNOB_ENGINE_LEFT
                 WhenTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
-                _streamDeckButton = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
+                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
 
                 //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
                 OSKeyPress = new KeyPress();
@@ -36,7 +36,7 @@ namespace NonVisuals
             }
         }
         
-        public StreamDeck35Buttons StreamDeckButton
+        public StreamDeckButtons StreamDeckButton
         {
             get => _streamDeckButton;
             set => _streamDeckButton = value;
@@ -48,9 +48,9 @@ namespace NonVisuals
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "      " + WhenTurnedOn);
+            Common.DebugP(Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "StreamDeckButton{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}" + SeparatorChars + OSKeyPress.ExportString();
+            return "StreamDeckButton{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + SeparatorChars + OSKeyPress.ExportString();
         }
 
         public static HashSet<KeyBindingStreamDeck> SetNegators(HashSet<KeyBindingStreamDeck> keyBindings)

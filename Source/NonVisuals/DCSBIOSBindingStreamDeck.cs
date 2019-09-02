@@ -11,7 +11,7 @@ namespace NonVisuals
         /*
          This class binds a physical key on the Stream Deck with a DCSBIOSInput
          */
-        private StreamDeck35Buttons _streamDeck35Button;
+        private StreamDeckButtons _streamDeckButton;
         
         ~DCSBIOSBindingStreamDeck()
         {
@@ -40,13 +40,13 @@ namespace NonVisuals
                     param0 = param0.Substring(1);
                     //BUTTON12|DCS-BIOS
                     var stringArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                    _streamDeck35Button = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), stringArray[0]);
+                    _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), stringArray[0]);
                     Description = stringArray[1];
                 }
                 else
                 {
                     param0 = param0.Substring(1);
-                    _streamDeck35Button = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
+                    _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
                 }
                 //The rest of the array besides last entry are DCSBIOSInput
                 //DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
@@ -70,7 +70,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "      " + WhenOnTurnedOn);
+            Common.DebugP(Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "      " + WhenOnTurnedOn);
             var onStr = WhenOnTurnedOn ? "1" : "0";
 
             var stringBuilder = new StringBuilder();
@@ -80,15 +80,15 @@ namespace NonVisuals
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
+                return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
             }
-            return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeck35Buttons), StreamDeckButton) + "}" + stringBuilder.ToString();
+            return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + stringBuilder.ToString();
         }
         
-        public StreamDeck35Buttons StreamDeckButton
+        public StreamDeckButtons StreamDeckButton
         {
-            get => _streamDeck35Button;
-            set => _streamDeck35Button = value;
+            get => _streamDeckButton;
+            set => _streamDeckButton = value;
         }
     }
 }

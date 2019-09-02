@@ -28,14 +28,14 @@ namespace ClassLibraryCommon
     {
         public static readonly List<GamingPanelSkeleton> GamingPanelSkeletons = new List<GamingPanelSkeleton>
         {
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel),
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.PZ69RadioPanel),
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.PZ70MultiPanel),
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.BackLitPanel),
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Saitek, GamingPanelEnum.TPM),
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Elgato, GamingPanelEnum.StreamDeck23),
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Elgato, GamingPanelEnum.StreamDeck35),
-            new GamingPanelSkeleton(GamingPanelVendorsEnum.Elgato, GamingPanelEnum.StreamDeck48),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ69RadioPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.BackLitPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.TPM),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckMini),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeck),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXL),
         };
 
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
@@ -364,18 +364,18 @@ namespace ClassLibraryCommon
         private int _productId;
         private string _serialNumber;
 
-        public GamingPanelSkeleton(GamingPanelVendorsEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum)
+        public GamingPanelSkeleton(GamingPanelVendorEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum)
         {
             _gamingPanelsEnum = gamingPanelsEnum;
             _vendorId = (int)gamingPanelVendor;
-            _productId = (int)gamingPanelVendor;
+            _productId = (int)gamingPanelsEnum;
         }
 
-        public GamingPanelSkeleton(GamingPanelVendorsEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum, string serialNumber)
+        public GamingPanelSkeleton(GamingPanelVendorEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum, string serialNumber)
         {
             _gamingPanelsEnum = gamingPanelsEnum;
             _vendorId = (int)gamingPanelVendor;
-            _productId = (int)gamingPanelVendor;
+            _productId = (int)gamingPanelsEnum;
             _serialNumber = serialNumber;
         }
 

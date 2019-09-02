@@ -11,7 +11,7 @@ namespace NonVisuals
          * 
          * The comparison part of the DCSBIOSOutput is ignored for DCSBIOSBindingLCDStreamDeck, all data will be shown
          */
-        private StreamDeck35Buttons _streamDeck35Button;
+        private StreamDeckButtons _streamDeckButton;
         private int _currentValue = 0;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
@@ -32,7 +32,7 @@ namespace NonVisuals
                 //StreamDeckDCSBIOSControlLCD{Button11}
                 var param0 = parameters[0].Replace("StreamDeckDCSBIOSControlLCD{", "").Replace("}", "");
                 //Button11
-                _streamDeck35Button = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
+                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
 
                 //[1]
                 //DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
@@ -48,7 +48,7 @@ namespace NonVisuals
                 //StreamDeckDCSBIOSControlLCD{Button11}
                 var param0 = parameters[0].Replace("StreamDeckDCSBIOSControlLCD{", "").Replace("}", "");
                 //Button11
-                _streamDeck35Button = (StreamDeck35Buttons)Enum.Parse(typeof(StreamDeck35Buttons), param0);
+                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
 
                 //[1]
                 //DCSBiosOutputFormula{ANT_EGIHQTOD+10}
@@ -57,10 +57,10 @@ namespace NonVisuals
             }
         }
 
-        public StreamDeck35Buttons StreamDeckButton
+        public StreamDeckButtons StreamDeckButton
         {
-            get => _streamDeck35Button;
-            set => _streamDeck35Button = value;
+            get => _streamDeckButton;
+            set => _streamDeckButton = value;
         }
         
         public int CurrentValue
@@ -99,9 +99,9 @@ namespace NonVisuals
             if (_dcsbiosOutputFormula != null)
             {
                 //StreamDeckDCSBIOSControlLCD{ALT}\o/{Button11Left}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "StreamDeckDCSBIOSControlLCD{" + Enum.GetName(typeof(StreamDeck35Buttons), _streamDeck35Button) + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
+                return "StreamDeckDCSBIOSControlLCD{" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
             }
-            return "StreamDeckDCSBIOSControlLCD{" + Enum.GetName(typeof(StreamDeck35Buttons), _streamDeck35Button) + "}" + SeparatorChars + _dcsbiosOutput.ToString();
+            return "StreamDeckDCSBIOSControlLCD{" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutput.ToString();
         }
         
         public bool HasBinding => _dcsbiosOutput != null || _dcsbiosOutputFormula != null;
