@@ -105,7 +105,7 @@
     <Compile Include="AboutFPWindow.xaml.cs">
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BackLitPanelUserControl.xaml.cs">
+    <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ChooseProfileModuleWindow.xaml.cs">
@@ -139,7 +139,7 @@
     <Compile Include="JaceSandboxWindow.xaml.cs">
       <DependentUpon>JaceSandboxWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MultiPanelUserControl.xaml.cs">
+    <Compile Include="PanelUserControls\MultiPanelUserControl.xaml.cs">
       <DependentUpon>MultiPanelUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DCSBiosOutputTriggerWindow.xaml.cs">
@@ -230,24 +230,24 @@
     <Compile Include="StreamDeckUserControl.xaml.cs">
       <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
+    <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagDataClassBase.cs" />
-    <Compile Include="TagDataClassPZ69Button.cs" />
-    <Compile Include="TagDataClassPZ69Full.cs" />
-    <Compile Include="TagDataClassStreamDeck.cs" />
-    <Compile Include="TagDataClassTPM.cs" />
-    <Compile Include="TagDataClassPZ69.cs" />
-    <Compile Include="TagDataClassPZ70.cs" />
+    <Compile Include="TagDataClasses\TagDataClassBase.cs" />
+    <Compile Include="TagDataClasses\TagDataClassPZ69Button.cs" />
+    <Compile Include="TagDataClasses\TagDataClassPZ69Full.cs" />
+    <Compile Include="TagDataClasses\TagDataClassStreamDeck.cs" />
+    <Compile Include="TagDataClasses\TagDataClassTPM.cs" />
+    <Compile Include="TagDataClasses\TagDataClassPZ69.cs" />
+    <Compile Include="TagDataClasses\TagDataClassPZ70.cs" />
     <Compile Include="TextBlockDialogWindow.xaml.cs">
       <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagDataClassPZ55.cs" />
-    <Compile Include="TPMPanelUserControl.xaml.cs">
+    <Compile Include="TagDataClasses\TagDataClassPZ55.cs" />
+    <Compile Include="PanelUserControls\TPMPanelUserControl.xaml.cs">
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControlBase.cs" />
+    <Compile Include="PanelUserControls\UserControlBase.cs" />
     <Compile Include="OSCommandWindow.xaml.cs">
       <DependentUpon>OSCommandWindow.xaml</DependentUpon>
     </Compile>
@@ -255,7 +255,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BackLitPanelUserControl.xaml">
+    <Page Include="PanelUserControls\BackLitPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -323,7 +323,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MultiPanelUserControl.xaml">
+    <Page Include="PanelUserControls\MultiPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -431,7 +431,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SwitchPanelPZ55UserControl.xaml">
+    <Page Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -439,7 +439,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TPMPanelUserControl.xaml">
+    <Page Include="PanelUserControls\TPMPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -727,6 +727,7 @@
   <ItemGroup>
     <Resource Include="Images\default_image_streamdeck_button.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

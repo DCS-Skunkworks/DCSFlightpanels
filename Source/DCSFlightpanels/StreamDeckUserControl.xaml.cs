@@ -29,7 +29,7 @@ namespace DCSFlightpanels
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _streamDeck = new StreamDeckPanel();
+            _streamDeck = new StreamDeckPanel(hidSkeleton);
             _streamDeck.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_streamDeck);
             _globalHandler = globalHandler;

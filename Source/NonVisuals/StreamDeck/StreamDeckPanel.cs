@@ -7,11 +7,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using OpenMacroBoard.SDK;
+using StreamDeckSharp;
 
 namespace NonVisuals
 {
     public class StreamDeckPanel : GamingPanel
     {
+        private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
         private volatile byte _knobSensitivitySkipper;
         private HashSet<DCSBIOSBindingStreamDeck> _dcsBiosBindings = new HashSet<DCSBIOSBindingStreamDeck>();
@@ -19,15 +22,16 @@ namespace NonVisuals
         private HashSet<KeyBindingStreamDeck> _keyBindings = new HashSet<KeyBindingStreamDeck>();
         private HashSet<OSCommandBindingStreamDeck> _osCommandBindings = new HashSet<OSCommandBindingStreamDeck>();
         private HashSet<BIPLinkStreamDeck> _bipLinks = new HashSet<BIPLinkStreamDeck>();
-
+        
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
         
         private long _doUpdatePanelLCD;
 
-        public StreamDeckPanel():base(GamingPanelEnum.StreamDeck, new HIDSkeleton(null, HIDSkeletonIgnore.HidSkeletonIgnore))
+        public StreamDeckPanel(HIDSkeleton hidSkeleton):base(GamingPanelEnum.StreamDeck, hidSkeleton)
         {
             Startup();
+            _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
         }
 
         public sealed override void Startup()
@@ -53,6 +57,52 @@ namespace NonVisuals
             {
                 SetLastException(e);
             }
+        }
+
+        private void StreamDeckKeyHandler(object sender, KeyEventArgs e)
+        {
+            if (!(sender is IMacroBoard))
+            {
+                return;
+            }
+
+            var keyId = e.Key;
+            if (e.IsDown)
+            {
+                switch (keyId)
+                {
+                    /*case 0:
+                        //tens up
+                        SetFreqArray(Eagle.CurrentFreq + 100, Eagle);
+                        SendSrsInput(Xbox360Buttons.A);
+                        break;
+                    case 1:
+                        SetFreqArray(Eagle.CurrentFreq + 10, Eagle);
+                        SendSrsInput(Xbox360Buttons.X);
+                        break;
+                    case 2:
+                        //first decimal up
+                        SetFreqArray(Eagle.CurrentFreq + 1, Eagle);
+                        SendSrsInput(Xbox360Buttons.Up);
+                        break;
+                    case 10:
+                        //tens down
+                        SetFreqArray(Eagle.CurrentFreq - 100, Eagle);
+                        SendSrsInput(Xbox360Buttons.B);
+                        break;
+                    case 11:
+                        //ones down
+                        SetFreqArray(Eagle.CurrentFreq - 10, Eagle);
+                        SendSrsInput(Xbox360Buttons.Y);
+                        break;
+                    case 12:
+                        //first decimal down
+                        SetFreqArray(Eagle.CurrentFreq - 1, Eagle);
+                        SendSrsInput(Xbox360Buttons.Down);
+                        break;*/
+                }
+            }
+            //SetKeys(Eagle.FreqArray);
         }
 
         protected override void StartListeningForPanelChanges()

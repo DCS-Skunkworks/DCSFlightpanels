@@ -47,8 +47,14 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OpenMacroBoard.SDK">
+      <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\OpenMacroBoard.SDK.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="StreamDeckSharp">
+      <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\StreamDeckSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -63,49 +69,52 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BacklitPanelBIP.cs" />
-    <Compile Include="BIPFactory.cs" />
-    <Compile Include="BIPLink.cs" />
-    <Compile Include="BIPLinkStreamDeck.cs" />
-    <Compile Include="BIPLinkPZ55.cs" />
-    <Compile Include="BIPLinkPZ69.cs" />
-    <Compile Include="BIPLinkPZ70.cs" />
-    <Compile Include="BIPLinkTPM.cs" />
+    <Compile Include="Saitek\BacklitPanelBIP.cs" />
+    <Compile Include="Saitek\BIPFactory.cs" />
+    <Compile Include="Saitek\BIPLink.cs" />
+    <Compile Include="Saitek\BIPLinkStreamDeck.cs" />
+    <Compile Include="Saitek\BIPLinkPZ55.cs" />
+    <Compile Include="Saitek\BIPLinkPZ69.cs" />
+    <Compile Include="Saitek\BIPLinkPZ70.cs" />
+    <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
-    <Compile Include="DCSBIOSBindingLCDStreamDeck.cs" />
-    <Compile Include="DCSBIOSBindingStreamDeck.cs" />
-    <Compile Include="DCSBIOSBindingPZ69.cs" />
-    <Compile Include="DCSBIOSBindingLCDPZ69.cs" />
-    <Compile Include="DCSBIOSBindingLCDPZ70.cs" />
-    <Compile Include="DCSBIOSBindingBase.cs" />
-    <Compile Include="DCSBIOSBindingTPM.cs" />
-    <Compile Include="DCSBIOSBindingPZ70.cs" />
-    <Compile Include="DCSBIOSBindingPZ55.cs" />
-    <Compile Include="DcsOutputAndColorBinding.cs" />
-    <Compile Include="GenericRadioPanelKnob.cs" />
+    <Compile Include="StreamDeck\DCSBIOSBindingLCDStreamDeck.cs" />
+    <Compile Include="StreamDeck\DCSBIOSBindingStreamDeck.cs" />
+    <Compile Include="DCSBIOS\DCSBIOSBindingPZ69.cs" />
+    <Compile Include="DCSBIOS\DCSBIOSBindingLCDPZ69.cs" />
+    <Compile Include="DCSBIOS\DCSBIOSBindingLCDPZ70.cs" />
+    <Compile Include="DCSBIOS\DCSBIOSBindingBase.cs" />
+    <Compile Include="DCSBIOS\DCSBIOSBindingTPM.cs" />
+    <Compile Include="DCSBIOS\DCSBIOSBindingPZ70.cs" />
+    <Compile Include="DCSBIOS\DCSBIOSBindingPZ55.cs" />
+    <Compile Include="Saitek\DcsOutputAndColorBinding.cs" />
+    <Compile Include="Saitek\GenericRadioPanelKnob.cs" />
     <Compile Include="HIDHandler.cs" />
-    <Compile Include="IGlobalHandler.cs" />
-    <Compile Include="IProfileHandlerListener.cs" />
-    <Compile Include="IRadioPanel.cs" />
-    <Compile Include="ISaitekPanelKnob.cs" />
-    <Compile Include="IGamingPanelListener.cs" />
-    <Compile Include="IUserMessageHandler.cs" />
-    <Compile Include="KeyBinding.cs" />
-    <Compile Include="KeyBindingPZ69DialPosition.cs" />
-    <Compile Include="KeyBindingPZ69.cs" />
-    <Compile Include="KeyBindingTPM.cs" />
-    <Compile Include="KeyBindingStreamDeck.cs" />
-    <Compile Include="KeyBindingPZ70.cs" />
-    <Compile Include="KeyBindingPZ55.cs" />
+    <Compile Include="HIDSkeleton.cs" />
+    <Compile Include="Interfaces\IGlobalHandler.cs" />
+    <Compile Include="Interfaces\IProfileHandlerListener.cs" />
+    <Compile Include="Interfaces\IRadioPanel.cs" />
+    <Compile Include="Interfaces\ISaitekPanelKnob.cs" />
+    <Compile Include="Interfaces\IGamingPanelListener.cs" />
+    <Compile Include="Interfaces\IUserMessageHandler.cs" />
+    <Compile Include="Saitek\KeyBinding.cs" />
+    <Compile Include="Saitek\KeyBindingPZ69DialPosition.cs" />
+    <Compile Include="Saitek\KeyBindingPZ69.cs" />
+    <Compile Include="Saitek\KeyBindingTPM.cs" />
+    <Compile Include="StreamDeck\KeyBindingStreamDeck.cs" />
+    <Compile Include="Saitek\KeyBindingPZ70.cs" />
+    <Compile Include="Saitek\KeyBindingPZ55.cs" />
     <Compile Include="ClickSpeedDetector.cs" />
     <Compile Include="GamingPanel.cs" />
     <Compile Include="OSCommandBindingStreamDeck.cs" />
-    <Compile Include="StreamDeckButton.cs" />
-    <Compile Include="MultiPanelKnob.cs" />
-    <Compile Include="MultiPanelPZ70.cs" />
+    <Compile Include="StreamDeck\IStreamDeckButtonAction.cs" />
+    <Compile Include="StreamDeck\IStreamDeckButtonFace.cs" />
+    <Compile Include="StreamDeck\StreamDeckButton.cs" />
+    <Compile Include="Saitek\MultiPanelKnob.cs" />
+    <Compile Include="Saitek\MultiPanelPZ70.cs" />
     <Compile Include="KeyPress.cs" />
-    <Compile Include="BIPLight.cs" />
-    <Compile Include="PanelKeyOnOff.cs" />
+    <Compile Include="Saitek\BIPLight.cs" />
+    <Compile Include="Saitek\PanelKeyOnOff.cs" />
     <Compile Include="PerformanceTimer.cs" />
     <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -154,25 +163,27 @@
     <Compile Include="Radios\RadioPanelPZ69SRS.cs" />
     <Compile Include="Radios\RadioPanelPZ69UH1H.cs" />
     <Compile Include="Radios\RadiopanelSpitfireLFMkIX.cs" />
-    <Compile Include="SaitekPanel.cs" />
+    <Compile Include="Saitek\SaitekPanel.cs" />
     <Compile Include="Radios\RadioPanelPZ69Emulator.cs" />
     <Compile Include="Radios\SRSListener.cs" />
     <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
     <Compile Include="Radios\SRSRadioInformation.cs" />
-    <Compile Include="StreamDeckPanel.cs" />
-    <Compile Include="TPMPanelSwitch.cs" />
-    <Compile Include="SwitchPanelKey.cs" />
-    <Compile Include="TPMPanel.cs" />
-    <Compile Include="SwitchPanelPZ55.cs" />
+    <Compile Include="StreamDeck\StreamDeckLayout.cs" />
+    <Compile Include="StreamDeck\StreamDeckLayoutHandler.cs" />
+    <Compile Include="StreamDeck\StreamDeckPanel.cs" />
+    <Compile Include="Saitek\TPMPanelSwitch.cs" />
+    <Compile Include="Saitek\SwitchPanelKey.cs" />
+    <Compile Include="Saitek\TPMPanel.cs" />
+    <Compile Include="Saitek\SwitchPanelPZ55.cs" />
     <Compile Include="VirtualKeyCode.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="OSCommand.cs" />
     <Compile Include="OSCommandBinding.cs" />
-    <Compile Include="OSCommandBindingPZ55.cs" />
-    <Compile Include="OSCommandBindingPZ69Emulator.cs" />
-    <Compile Include="OSCommandBindingPZ69FullEmulator.cs" />
-    <Compile Include="OSCommandBindingPZ70.cs" />
-    <Compile Include="OSCommandBindingTPM.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ55.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ69Emulator.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ69FullEmulator.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ70.cs" />
+    <Compile Include="Saitek\OSCommandBindingTPM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="flightpanels02_8Rc_icon.ico" />
@@ -196,6 +207,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

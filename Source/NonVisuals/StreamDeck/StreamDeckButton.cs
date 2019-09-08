@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals
 {
@@ -26,6 +27,8 @@ namespace NonVisuals
     {
         private StreamDeckButtons _streamDeckButton;
         private bool _isPressed = false;
+        private IStreamDeckButtonFace _streamDeckButtonFace = null;
+        private IStreamDeckButtonAction _streamDeckButtonAction = null;
 
         public StreamDeckButton(bool isPressed, StreamDeckButtons streamDeckButton)
         {
