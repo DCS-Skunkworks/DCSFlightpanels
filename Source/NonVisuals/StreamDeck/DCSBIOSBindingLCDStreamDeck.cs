@@ -16,6 +16,7 @@ namespace NonVisuals
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
         private const string SeparatorChars = "\\o/";
+        private string _layer = "";
 
         internal void ImportSettings(string settings)
         {
@@ -25,14 +26,16 @@ namespace NonVisuals
             }
             if (settings.StartsWith("StreamDeckDCSBIOSControlLCD{") && settings.Contains("DCSBiosOutput{"))
             {
-                //StreamDeckDCSBIOSControlLCD{Button11}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
+                //StreamDeckDCSBIOSControlLCD{Home Layer|Button1}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
-                //StreamDeckDCSBIOSControlLCD{Button11}
+                //StreamDeckDCSBIOSControlLCD{Home Layer|Button1}
                 var param0 = parameters[0].Replace("StreamDeckDCSBIOSControlLCD{", "").Replace("}", "");
-                //Button11
-                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
+                //Home Layer|Button1
+                var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                Layer = param0Split[0];
+                StreamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
 
                 //[1]
                 //DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
@@ -41,20 +44,28 @@ namespace NonVisuals
             }
             if (settings.StartsWith("StreamDeckDCSBIOSControlLCD{") && settings.Contains("DCSBiosOutputFormula{"))
             {
-                //StreamDeckDCSBIOSControlLCD{Button11}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
+                //StreamDeckDCSBIOSControlLCD{Home Layer|Button1}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
-                //StreamDeckDCSBIOSControlLCD{Button11}
+                //StreamDeckDCSBIOSControlLCD{Home Layer|Button1}
                 var param0 = parameters[0].Replace("StreamDeckDCSBIOSControlLCD{", "").Replace("}", "");
-                //Button11
-                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
+                //Home Layer|Button1
+                var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                Layer = param0Split[0];
+                StreamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
 
                 //[1]
                 //DCSBiosOutputFormula{ANT_EGIHQTOD+10}
                 _dcsbiosOutputFormula = new DCSBIOSOutputFormula();
                 _dcsbiosOutputFormula.ImportString(parameters[1]);
             }
+        }
+
+        public string Layer
+        {
+            get => _layer;
+            set => _layer = value;
         }
 
         public StreamDeckButtons StreamDeckButton
@@ -98,10 +109,10 @@ namespace NonVisuals
             }
             if (_dcsbiosOutputFormula != null)
             {
-                //StreamDeckDCSBIOSControlLCD{ALT}\o/{Button11Left}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "StreamDeckDCSBIOSControlLCD{" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
+                //StreamDeckDCSBIOSControlLCD{Home Layer|ALT}\o/{Button11Left}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
+                return "StreamDeckDCSBIOSControlLCD{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
             }
-            return "StreamDeckDCSBIOSControlLCD{" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutput.ToString();
+            return "StreamDeckDCSBIOSControlLCD{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutput.ToString();
         }
         
         public bool HasBinding => _dcsbiosOutput != null || _dcsbiosOutputFormula != null;

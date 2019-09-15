@@ -9,8 +9,9 @@ namespace NonVisuals
         /*
          This class binds a physical key on a Stream Deck with a BIP LED
          */
-        private StreamDeckButtons _streamDeckButtons;
-        
+        private StreamDeckButtons _streamDeckButton;
+        private string _layer = "";
+
         public override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))
@@ -19,17 +20,20 @@ namespace NonVisuals
             }
             if (settings.StartsWith("StreamDeckBIPLink{"))
             {
-                //StreamDeckBIPLink{1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                //StreamDeckBIPLink{Home Layer|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 // 0 1 2 3
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
-                //StreamDeckBIPLink{1KNOB_ENGINE_LEFT}
+                //StreamDeckBIPLink{Home Layer|1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Replace("StreamDeckBIPLink{", "").Replace("}", "").Trim();
-                //1KNOB_ENGINE_LEFT
-                _whenOnTurnedOn = param0.Substring(0, 1) == "1";
-                param0 = param0.Substring(1);
-                _streamDeckButtons = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
+                //Home Layer|1KNOB_ENGINE_LEFT
+                var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                Layer = param0Split[0];
 
+                _whenOnTurnedOn = param0Split[1].Substring(0, 1) == "1";
+                param0Split[1] = param0Split[1].Substring(1);
+                StreamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
+                
                 for (int i = 1; i < parameters.Length - 1; i++)
                 {
                     if (parameters[i].StartsWith("BIPLight"))
@@ -49,14 +53,14 @@ namespace NonVisuals
 
         public override string ExportSettings()
         {
-            //StreamDeckBIPLink{1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+            //StreamDeckBIPLink{Home Layer|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
             if (_bipLights == null || _bipLights.Count == 0)
             {
                 return null;
             }
             var onStr = _whenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("StreamDeckBIPLink{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}");
+            stringBuilder.Append("StreamDeckBIPLink{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}");
             foreach (var bipLight in _bipLights)
             {
                 stringBuilder.Append(SeparatorChars + bipLight.Value.ExportSettings());
@@ -80,8 +84,14 @@ namespace NonVisuals
         
         public StreamDeckButtons StreamDeckButton
         {
-            get => _streamDeckButtons;
-            set => _streamDeckButtons = value;
+            get => _streamDeckButton;
+            set => _streamDeckButton = value;
+        }
+
+        public string Layer
+        {
+            get => _layer;
+            set => _layer = value;
         }
     }
 }

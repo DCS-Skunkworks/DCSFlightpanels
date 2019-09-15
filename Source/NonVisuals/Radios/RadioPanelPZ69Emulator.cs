@@ -401,7 +401,6 @@ namespace NonVisuals.Radios
                     else
                     {
                         keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                 }
@@ -492,7 +491,6 @@ namespace NonVisuals.Radios
                     else
                     {
                         keyBinding.OSKeyPress = new KeyPress(information, sortedList);
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                     break;
@@ -529,7 +527,6 @@ namespace NonVisuals.Radios
                     bipLink.BIPLights = bipLinkPZ69.BIPLights;
                     bipLink.Description = bipLinkPZ69.Description;
                     bipLink.RadioPanelPZ69Knob = radioPanelPZ69Knob;
-                    bipLink.WhenTurnedOn = whenTurnedOn;
                     found = true;
                     break;
                 }

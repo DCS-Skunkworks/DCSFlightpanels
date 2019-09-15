@@ -12,7 +12,8 @@ namespace NonVisuals
          This class binds a physical key on the Stream Deck with a DCSBIOSInput
          */
         private StreamDeckButtons _streamDeckButton;
-        
+        private string _layer = "";
+
         ~DCSBIOSBindingStreamDeck()
         {
             CancelSendDCSBIOSCommands = true;
@@ -27,27 +28,24 @@ namespace NonVisuals
             }
             if (settings.StartsWith("StreamDeckDCSBIOSControl{"))
             {
-                //StreamDeckDCSBIOSControl{1BUTTON12|DCS-BIOS}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
+                //StreamDeckDCSBIOSControl{Home Layer|1BUTTON12|DCS-BIOS}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
-                //StreamDeckDCSBIOSControl{1BUTTON12|DCS-BIOS}
+                //StreamDeckDCSBIOSControl{Home Layer|1BUTTON12|DCS-BIOS}
                 var param0 = parameters[0].Replace("StreamDeckDCSBIOSControl{", "").Replace("}","");
-                //1BUTTON12|DCS-BIOS
-                WhenOnTurnedOn = (param0.Substring(0, 1) == "1");
-                if (param0.Contains("|"))
+                //Home Layer|1BUTTON12|DCS-BIOS
+                var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+
+                Layer = param0Split[0];
+                WhenOnTurnedOn = (param0Split[1].Substring(0, 1) == "1");
+                param0Split[1] = param0Split[1].Substring(1);
+                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
+
+                if (param0Split.Length > 2)
                 {
-                    //1BUTTON12|DCS-BIOS
-                    param0 = param0.Substring(1);
-                    //BUTTON12|DCS-BIOS
-                    var stringArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                    _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), stringArray[0]);
-                    Description = stringArray[1];
+                    Description = param0Split[2];
                 }
-                else
-                {
-                    param0 = param0.Substring(1);
-                    _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
-                }
+                
                 //The rest of the array besides last entry are DCSBIOSInput
                 //DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
                 DCSBIOSInputs = new List<DCSBIOSInput>();
@@ -80,15 +78,21 @@ namespace NonVisuals
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
+                return "StreamDeckDCSBIOSControl{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
             }
-            return "StreamDeckDCSBIOSControl{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + stringBuilder.ToString();
+            return "StreamDeckDCSBIOSControl{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + stringBuilder.ToString();
         }
         
         public StreamDeckButtons StreamDeckButton
         {
             get => _streamDeckButton;
             set => _streamDeckButton = value;
+        }
+
+        public string Layer
+        {
+            get => _layer;
+            set => _layer = value;
         }
     }
 }

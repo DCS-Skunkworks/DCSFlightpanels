@@ -72,7 +72,7 @@
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
     <Compile Include="Saitek\BIPLink.cs" />
-    <Compile Include="Saitek\BIPLinkStreamDeck.cs" />
+    <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="Saitek\BIPLinkPZ55.cs" />
     <Compile Include="Saitek\BIPLinkPZ69.cs" />
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
@@ -168,8 +168,8 @@
     <Compile Include="Radios\SRSListener.cs" />
     <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
     <Compile Include="Radios\SRSRadioInformation.cs" />
-    <Compile Include="StreamDeck\StreamDeckLayout.cs" />
-    <Compile Include="StreamDeck\StreamDeckLayoutHandler.cs" />
+    <Compile Include="StreamDeck\StreamDeckLayer.cs" />
+    <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
     <Compile Include="StreamDeck\StreamDeckPanel.cs" />
     <Compile Include="Saitek\TPMPanelSwitch.cs" />
     <Compile Include="Saitek\SwitchPanelKey.cs" />

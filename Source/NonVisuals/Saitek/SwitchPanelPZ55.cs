@@ -430,7 +430,6 @@ namespace NonVisuals
                     else
                     {
                         keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                 }
@@ -472,7 +471,6 @@ namespace NonVisuals
                     {
                         var osKeyPress = new KeyPress(information, sortedList);
                         keyBinding.OSKeyPress = osKeyPress;
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                     break;
@@ -537,7 +535,6 @@ namespace NonVisuals
                 if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                    dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
                     dcsBiosBinding.Description = description;
                     found = true;
                     break;
@@ -572,8 +569,6 @@ namespace NonVisuals
                 {
                     bipLink.BIPLights = bipLinkPZ55.BIPLights;
                     bipLink.Description = bipLinkPZ55.Description;
-                    bipLink.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                    bipLink.WhenTurnedOn = whenTurnedOn;
                     found = true;
                     break;
                 }

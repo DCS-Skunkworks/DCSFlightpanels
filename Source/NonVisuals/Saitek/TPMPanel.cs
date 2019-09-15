@@ -285,7 +285,6 @@ namespace NonVisuals
                     else
                     {
                         keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                 }
@@ -371,7 +370,6 @@ namespace NonVisuals
                     else
                     {
                         keyBinding.OSKeyPress = new KeyPress(information, sortedList);
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                     break;
@@ -407,8 +405,6 @@ namespace NonVisuals
                 {
                     bipLink.BIPLights = bipLinkTPM.BIPLights;
                     bipLink.Description = bipLinkTPM.Description;
-                    bipLink.TPMSwitch = tpmPanelSwitch;
-                    bipLink.WhenTurnedOn = whenTurnedOn;
                     found = true;
                     break;
                 }
@@ -441,7 +437,6 @@ namespace NonVisuals
                 if (dcsBiosBinding.TPMSwitch == tpmPanelSwitch && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                    dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
                     dcsBiosBinding.Description = description;
                     found = true;
                     break;

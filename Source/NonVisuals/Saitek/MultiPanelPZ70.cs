@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
@@ -273,7 +272,6 @@ namespace NonVisuals
                     else
                     {
                         knobBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
-                        knobBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                 }
@@ -338,7 +336,6 @@ namespace NonVisuals
                     else
                     {
                         knobBinding.OSKeyPress = new KeyPress(information, sortedList);
-                        knobBinding.WhenTurnedOn = whenTurnedOn;
                     }
                     found = true;
                     break;
@@ -372,7 +369,6 @@ namespace NonVisuals
                 if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                    dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
                     dcsBiosBinding.Description = description;
                     found = true;
                     break;
@@ -422,7 +418,6 @@ namespace NonVisuals
                 if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
-                    Debug.Print("3 found");
                     found = true;
                     break;
                 }
@@ -470,7 +465,6 @@ namespace NonVisuals
                     bipLink.BIPLights = bipLinkPZ70.BIPLights;
                     bipLink.Description = bipLinkPZ70.Description;
                     bipLink.MultiPanelPZ70Knob = multiPanelKnob;
-                    bipLink.WhenTurnedOn = whenTurnedOn;
                     found = true;
                     break;
                 }

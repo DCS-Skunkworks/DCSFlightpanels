@@ -227,6 +227,9 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StreamDeckLayerWindow.xaml.cs">
+      <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StreamDeckUserControl.xaml.cs">
       <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
     </Compile>
@@ -424,6 +427,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StreamDeckLayerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
