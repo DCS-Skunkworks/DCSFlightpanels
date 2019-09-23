@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels
 {
@@ -11,12 +12,12 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class StreamDeckLayerWindow : Window
     {
-        private List<string> _existingLayers = new List<string>();
+        private List<StreamDeckLayer> _existingLayers = new List<StreamDeckLayer>();
         private bool _loaded = false;
-        private string _layerName = "";
         private const int _minimumLength = 3;
+        private StreamDeckLayer _newLayer = new StreamDeckLayer();
 
-        public StreamDeckLayerWindow(List<string> existingLayers)
+        public StreamDeckLayerWindow(List<StreamDeckLayer> existingLayers)
         {
             InitializeComponent();
             if (existingLayers != null)
@@ -81,7 +82,7 @@ namespace DCSFlightpanels
             {
                 foreach (var existingLayer in _existingLayers)
                 {
-                    if (existingLayer == TextBoxLayerName.Text)
+                    if (existingLayer.Name == TextBoxLayerName.Text)
                     {
                         throw new Exception("Layer with name " + TextBoxLayerName.Text + " already exists.");
                     }
@@ -91,6 +92,8 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Layer name " + TextBoxLayerName.Text + " too short. Minimum length is " + _minimumLength + ".");
                 }
+
+                _newLayer.Name = TextBoxLayerName.Text;
                 DialogResult = true;
                 Close();
             }
@@ -100,6 +103,6 @@ namespace DCSFlightpanels
             }
         }
 
-        public string LayerName => _layerName;
+        public StreamDeckLayer NewLayer => _newLayer;
     }
 }

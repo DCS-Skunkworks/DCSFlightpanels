@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
 using NonVisuals;
+using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels
 {
@@ -88,7 +89,8 @@ namespace DCSFlightpanels
         {
             try
             {
-                
+
+                SetTextBoxesVisibleStatus(ComboBoxLayers.SelectionBoxItem != null);
             }
             catch (Exception ex)
             {
@@ -274,7 +276,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                SetTextBoxesVisibleStatus(string.IsNullOrEmpty(GetStreamDeckLayer()));
+                SetTextBoxesVisibleStatus(GetSelectedStreamDeckLayer() != null);
 
                 foreach (var streamDeckButton35 in buttons)
                 {
@@ -559,6 +561,14 @@ namespace DCSFlightpanels
         {
             try
             {
+
+                LoadComboBoxLayers("");
+
+                if (GetSelectedStreamDeckLayer() == null)
+                {
+                    return;
+                }
+
                 if (!_userControlLoaded || !_textBoxTagsSet)
                 {
                     return;
@@ -569,7 +579,7 @@ namespace DCSFlightpanels
                 foreach (var keyBinding in _streamDeck.KeyBindingsHashSet)
                 {
                     var textBox = GetTextBox(keyBinding.StreamDeckButton, keyBinding.WhenTurnedOn);
-                    if (keyBinding.OSKeyPress != null && keyBinding.Layer == GetStreamDeckLayer())
+                    if (keyBinding.OSKeyPress != null && keyBinding.Layer == GetSelectedStreamDeckLayer().Name)
                     {
                         ((TagDataClassStreamDeck)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
                     }
@@ -587,7 +597,7 @@ namespace DCSFlightpanels
                 foreach (var dcsBiosBinding in _streamDeck.DCSBiosBindings)
                 {
                     var textBox = GetTextBox(dcsBiosBinding.StreamDeckButton, dcsBiosBinding.WhenTurnedOn);
-                    if (dcsBiosBinding.Layer == GetStreamDeckLayer())
+                    if (dcsBiosBinding.Layer == GetSelectedStreamDeckLayer().Name)
                     {
                         ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding = dcsBiosBinding;
                     }
@@ -597,14 +607,12 @@ namespace DCSFlightpanels
                 foreach (var bipLink in _streamDeck.BIPLinkHashSet)
                 {
                     var textBox = GetTextBox(bipLink.StreamDeckButton, bipLink.WhenTurnedOn);
-                    if (bipLink.BIPLights.Count > 0 && bipLink.Layer == GetStreamDeckLayer())
+                    if (bipLink.BIPLights.Count > 0 && bipLink.Layer == GetSelectedStreamDeckLayer().Name)
                     {
                         ((TagDataClassStreamDeck)textBox.Tag).BIPLink = bipLink;
                     }
                 }
-
-                LoadComboBoxLayers(null);
-
+                
             }
             catch (Exception ex)
             {
@@ -673,7 +681,7 @@ namespace DCSFlightpanels
                             return;
                         }
                         textBox.Text = "";
-                        _streamDeck.RemoveButtonFromList(GetStreamDeckLayer(), ControlListStreamDeck.DCSBIOS, GetStreamDeckKey(textBox).StreamDeckButton, GetStreamDeckKey(textBox).ButtonState);
+                        _streamDeck.RemoveButtonFromList(GetSelectedStreamDeckLayer().Name, ControlListStreamDeck.DCSBIOS, GetStreamDeckKey(textBox).StreamDeckButton, GetStreamDeckKey(textBox).ButtonState);
                         ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding = null;
                     }
                     else if (((TagDataClassStreamDeck)textBox.Tag).ContainsKeySequence())
@@ -1039,7 +1047,7 @@ namespace DCSFlightpanels
             try
             {
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateBIPLinkKeyBinding(GetStreamDeckLayer(), key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).BIPLink, key.ButtonState);
+                _streamDeck.AddOrUpdateBIPLinkKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).BIPLink, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1052,7 +1060,7 @@ namespace DCSFlightpanels
             try
             {
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateSequencedKeyBinding(GetStreamDeckLayer(), textBox.Text, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence(), key.ButtonState);
+                _streamDeck.AddOrUpdateSequencedKeyBinding(GetSelectedStreamDeckLayer().Name, textBox.Text, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence(), key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1075,7 +1083,7 @@ namespace DCSFlightpanels
                     keyPressLength = ((TagDataClassStreamDeck)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateSingleKeyBinding(GetStreamDeckLayer(), key.StreamDeckButton, textBox.Text, keyPressLength, key.ButtonState);
+                _streamDeck.AddOrUpdateSingleKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, textBox.Text, keyPressLength, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1088,7 +1096,7 @@ namespace DCSFlightpanels
             try
             {
                 var tag = (TagDataClassStreamDeck)textBox.Tag;
-                _streamDeck.AddOrUpdateOSCommandBinding(GetStreamDeckLayer(), tag.Key.StreamDeckButton, tag.OSCommandObject, tag.Key.ButtonState);
+                _streamDeck.AddOrUpdateOSCommandBinding(GetSelectedStreamDeckLayer().Name, tag.Key.StreamDeckButton, tag.OSCommandObject, tag.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1101,7 +1109,7 @@ namespace DCSFlightpanels
             try
             {
                 var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateDCSBIOSBinding(GetStreamDeckLayer(), key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
+                _streamDeck.AddOrUpdateDCSBIOSBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1677,9 +1685,10 @@ namespace DCSFlightpanels
                 layerWindow.ShowDialog();
                 if (layerWindow.DialogResult == true)
                 {
-                    _streamDeck.AddLayer(layerWindow.LayerName);
+                    _streamDeck.AddLayer(layerWindow.NewLayer);
                 }
-                LoadComboBoxLayers(layerWindow.LayerName);
+                LoadComboBoxLayers(layerWindow.NewLayer);
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -1691,11 +1700,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (MessageBox.Show("Delete layer " + GetStreamDeckLayer() + "?", "Can not be undone!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Delete layer " + GetSelectedStreamDeckLayer() + "?", "Can not be undone!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    _streamDeck.DeleteLayer(GetStreamDeckLayer());
+                    _streamDeck.DeleteLayer(GetSelectedStreamDeckLayer());
                 }
-                LoadComboBoxLayers(null);
+                LoadComboBoxLayers("");
             }
             catch (Exception ex)
             {
@@ -1703,11 +1712,11 @@ namespace DCSFlightpanels
             }
         }
 
-        private string GetStreamDeckLayer()
+        private StreamDeckLayer GetSelectedStreamDeckLayer()
         {
             try
             {
-                return ComboBoxLayers.SelectionBoxItem.ToString();
+                return (StreamDeckLayer)ComboBoxLayers.SelectedItem;
             }
             catch (Exception ex)
             {
@@ -1722,11 +1731,10 @@ namespace DCSFlightpanels
             try
             {
                 ClearAll(false);
-                SetTextBoxesVisibleStatus(!string.IsNullOrEmpty(GetStreamDeckLayer()));
-
-                CheckBoxMarkHomeLayer.Checked -= CheckBoxMarkHomeLayer_OnChecked;
-                CheckBoxMarkHomeLayer.IsChecked = GetStreamDeckLayer() == _streamDeck.HomeLayer;
-                CheckBoxMarkHomeLayer.Checked += CheckBoxMarkHomeLayer_OnChecked;
+                
+                SetTextBoxesVisibleStatus(ComboBoxLayers.SelectionBoxItem != null);
+                
+                SetCheckboxHomeLayer();
 
                 SetFormState();
             }
@@ -1736,27 +1744,47 @@ namespace DCSFlightpanels
             }
         }
 
+        private void LoadComboBoxLayers(StreamDeckLayer selectedLayer)
+        {
+            LoadComboBoxLayers(selectedLayer.Name);
+        }
+
         private void LoadComboBoxLayers(string selectedLayer)
         {
-            var selectedValue = (string)ComboBoxLayers.SelectedValue;
+            var selectedIndex = ComboBoxLayers.SelectedIndex;
+
             ComboBoxLayers.SelectionChanged -= ComboBoxLayers_OnSelectionChanged;
             ComboBoxLayers.ItemsSource = _streamDeck.LayerList;
+            ComboBoxLayers.Items.Refresh();
+
             if (!string.IsNullOrEmpty(selectedLayer))
             {
-                ComboBoxLayers.SelectedValue = selectedLayer;
+                ComboBoxLayers.SelectedItem = selectedLayer;
             }
-            else if (!string.IsNullOrEmpty(selectedValue))
+            else if (selectedIndex >= 0 && selectedIndex < _streamDeck.LayerList.Count)
             {
-                ComboBoxLayers.SelectedValue = selectedLayer;
+                ComboBoxLayers.SelectedIndex = selectedIndex;
+            }
+            else if(_streamDeck.LayerList.Count > 0)
+            {
+                ComboBoxLayers.SelectedIndex = 0;
             }
             ComboBoxLayers.SelectionChanged += ComboBoxLayers_OnSelectionChanged;
+            SetCheckboxHomeLayer();
+        }
+
+        private void SetCheckboxHomeLayer()
+        {
+            CheckBoxMarkHomeLayer.Checked -= CheckBoxMarkHomeLayer_OnChecked;
+            CheckBoxMarkHomeLayer.IsChecked = GetSelectedStreamDeckLayer() == _streamDeck.HomeLayer;
+            CheckBoxMarkHomeLayer.Checked += CheckBoxMarkHomeLayer_OnChecked;
         }
 
         private void CheckBoxMarkHomeLayer_OnChecked(object sender, RoutedEventArgs e)
         {
             try
             {
-                _streamDeck.HomeLayer = GetStreamDeckLayer();
+                _streamDeck.SetHomeLayer(GetSelectedStreamDeckLayer());
                 SetFormState();
             }
             catch (Exception ex)

@@ -256,7 +256,7 @@ namespace NonVisuals
             if (string.IsNullOrEmpty(keys))
             {
                 RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -287,7 +287,7 @@ namespace NonVisuals
             }
             Common.DebugP("MultiPanelPZ70 _knobBindings : " + _knobBindings.Count);
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateOSCommandBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, OSCommand osCommand, bool whenTurnedOn)
@@ -312,7 +312,7 @@ namespace NonVisuals
                 osCommandBindingPZ70.WhenTurnedOn = whenTurnedOn;
                 _osCommandBindings.Add(osCommandBindingPZ70);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateSequencedKeyBinding(string information, MultiPanelPZ70Knobs multiPanelPZ70Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
@@ -320,7 +320,7 @@ namespace NonVisuals
             if (sortedList.Count == 0)
             {
                 RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -351,7 +351,7 @@ namespace NonVisuals
                 _knobBindings.Add(knobBinding);
             }
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateDCSBIOSBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
@@ -359,7 +359,7 @@ namespace NonVisuals
             if (dcsbiosInputs.Count == 0)
             {
                 RemoveMultiPanelKnobFromList(ControlListPZ70.DCSBIOS, multiPanelPZ70Knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -384,7 +384,7 @@ namespace NonVisuals
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateLCDBinding(DCSBIOSOutput dcsbiosOutput, PZ70LCDPosition pz70LCDPosition)
@@ -407,7 +407,7 @@ namespace NonVisuals
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ70LCDPosition pz70LCDPosition)
@@ -430,7 +430,7 @@ namespace NonVisuals
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition pz70LCDPosition)
@@ -444,7 +444,7 @@ namespace NonVisuals
                     break;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateBIPLinkKnobBinding(MultiPanelPZ70Knobs multiPanelKnob, BIPLinkPZ70 bipLinkPZ70, bool whenTurnedOn)
@@ -452,7 +452,7 @@ namespace NonVisuals
             if (bipLinkPZ70.BIPLights.Count == 0)
             {
                 RemoveMultiPanelKnobFromList(ControlListPZ70.BIPS, multiPanelKnob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -475,7 +475,7 @@ namespace NonVisuals
                 bipLinkPZ70.WhenTurnedOn = whenTurnedOn;
                 _bipLinks.Add(bipLinkPZ70);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void RemoveMultiPanelKnobFromList(ControlListPZ70 controlListPZ70, MultiPanelPZ70Knobs multiPanelPZ70Knob, bool whenTurnedOn)
@@ -517,7 +517,7 @@ namespace NonVisuals
 
             if (found)
             {
-                IsDirtyMethod();
+                SetIsDirty();
             }
         }
 
@@ -1139,12 +1139,6 @@ namespace NonVisuals
                 Common.DebugP("SendLEDData() :\n" + e.Message + e.StackTrace);
                 SetLastException(e);
             }
-        }
-
-        private void IsDirtyMethod()
-        {
-            OnSettingsChanged();
-            IsDirty = true;
         }
 
         private void CreateMultiKnobs()

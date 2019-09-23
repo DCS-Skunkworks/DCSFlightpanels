@@ -212,6 +212,12 @@ namespace NonVisuals
                 }
             }
         }
+        
+        public void SetIsDirty()
+        {
+            OnSettingsChanged();
+            IsDirty = true;
+        }
 
         public void SelectedAirframe(object sender, AirframeEventArgs e)
         {

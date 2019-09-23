@@ -297,7 +297,7 @@ namespace NonVisuals
             if (string.IsNullOrEmpty(keys))
             {
                 RemoveButtonFromList(layer, ControlListStreamDeck.KEYS, streamDeckButton, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -328,7 +328,7 @@ namespace NonVisuals
             }
             Common.DebugP("Stream Deck _keybindings : " + _keyBindings.Count);
             _keyBindings = KeyBindingStreamDeck.SetNegators(_keyBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateOSCommandBinding(string layer, StreamDeckButtons streamDeckButton, OSCommand osCommand, bool whenTurnedOn)
@@ -353,7 +353,7 @@ namespace NonVisuals
                 osCommandBindingPZ70.WhenTurnedOn = whenTurnedOn;
                 _osCommandBindings.Add(osCommandBindingPZ70);
             }
-            IsDirtyMethod();*/
+            SetIsDirty();*/
         }
 
         public void AddOrUpdateSequencedKeyBinding(string layer, string information, StreamDeckButtons streamDeckButton, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
@@ -361,7 +361,7 @@ namespace NonVisuals
             if (sortedList.Count == 0)
             {
                 RemoveButtonFromList(layer, ControlListStreamDeck.KEYS, streamDeckButton, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -392,7 +392,7 @@ namespace NonVisuals
                 _keyBindings.Add(keyBinding);
             }
             _keyBindings = KeyBindingStreamDeck.SetNegators(_keyBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateDCSBIOSBinding(string layer, StreamDeckButtons streamDeckButton, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
@@ -400,7 +400,7 @@ namespace NonVisuals
             if (dcsbiosInputs.Count == 0)
             {
                 RemoveButtonFromList(layer, ControlListStreamDeck.DCSBIOS, streamDeckButton, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -425,7 +425,7 @@ namespace NonVisuals
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateLCDBinding(string layer, DCSBIOSOutput dcsbiosOutput, StreamDeckButtons streamDeckButton)
@@ -447,7 +447,7 @@ namespace NonVisuals
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateLCDBinding(string layer, DCSBIOSOutputFormula dcsbiosOutputFormula, StreamDeckButtons streamDeckButton)
@@ -470,7 +470,7 @@ namespace NonVisuals
                 dcsBiosBindingLCD.Layer = layer;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateDCSBIOSLcdBinding(string layer, StreamDeckButtons streamDeckButton)
@@ -484,7 +484,7 @@ namespace NonVisuals
                     break;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateBIPLinkKeyBinding(string layer, StreamDeckButtons streamDeckButton, BIPLinkStreamDeck bipLinkStreamDeck, bool whenTurnedOn)
@@ -492,7 +492,7 @@ namespace NonVisuals
             if (bipLinkStreamDeck.BIPLights.Count == 0)
             {
                 RemoveButtonFromList(layer, ControlListStreamDeck.BIPS, streamDeckButton, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -516,7 +516,7 @@ namespace NonVisuals
                 bipLinkStreamDeck.Layer = layer;
                 _bipLinks.Add(bipLinkStreamDeck);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void RemoveButtonFromList(string layer, ControlListStreamDeck controlListStreamDeck, StreamDeckButtons streamDeckButton, bool whenTurnedOn)
@@ -558,7 +558,7 @@ namespace NonVisuals
 
             if (found)
             {
-                IsDirtyMethod();
+                SetIsDirty();
             }
         }
 
@@ -612,12 +612,6 @@ namespace NonVisuals
                     }
                 }
             }
-        }
-
-        private void IsDirtyMethod()
-        {
-            OnSettingsChanged();
-            IsDirty = true;
         }
         
         private void DeviceAttachedHandler()
@@ -684,7 +678,7 @@ namespace NonVisuals
             return "2X";
         }
 
-        public List<string> LayerList
+        public List<StreamDeckLayer> LayerList
         {
             get => _streamDeckLayerHandler.LayerList;
         }
@@ -692,17 +686,44 @@ namespace NonVisuals
         public void AddLayer(string layerName)
         {
             _streamDeckLayerHandler.AddLayer(layerName);
+            SetIsDirty();
         }
-        
+
+        public void AddLayer(StreamDeckLayer streamDeckLayer)
+        {
+            _streamDeckLayerHandler.AddLayer(streamDeckLayer);
+            SetIsDirty();
+        }
+
+        public void DeleteLayer(StreamDeckLayer streamDeckLayer)
+        {
+            _streamDeckLayerHandler.DeleteLayer(streamDeckLayer.Name);
+            SetIsDirty();
+        }
+
         public void DeleteLayer(string layerName)
         {
             _streamDeckLayerHandler.DeleteLayer(layerName);
+            SetIsDirty();
         }
 
-        public string HomeLayer
+        public StreamDeckLayer HomeLayer
         {
             get => _streamDeckLayerHandler.HomeLayer;
-            set => _streamDeckLayerHandler.HomeLayer = value;
+        }
+
+        public void SetHomeLayer(string layerName)
+        {
+            foreach (var deckLayer in _streamDeckLayerHandler.LayerList)
+            {
+                deckLayer.IsHomeLayer = layerName == deckLayer.Name;
+            }
+            SetIsDirty();
+        }
+
+        public void SetHomeLayer(StreamDeckLayer streamDeckLayer)
+        {
+            SetHomeLayer(streamDeckLayer.Name);
         }
     }
 

@@ -299,7 +299,7 @@ namespace NonVisuals
             }
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             Common.DebugP("TPMPanel _keyBindings : " + _keyBindings.Count);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateOSCommandBinding(TPMPanelSwitches tpmPanelSwitch, OSCommand osCommand, bool whenTurnedOn)
@@ -324,7 +324,7 @@ namespace NonVisuals
                 osCommandBindingTPM.WhenTurnedOn = whenTurnedOn;
                 _osCommandBindings.Add(osCommandBindingTPM);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void ClearAllBindings(TPMPanelSwitchOnOff tpmPanelSwitchOnOff)
@@ -346,7 +346,7 @@ namespace NonVisuals
             }
             Common.DebugP("TPMPanel _keyBindings : " + _keyBindings.Count);
             Common.DebugP("TPMPanel _dcsBiosBindings : " + _dcsBiosBindings.Count);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateSequencedKeyBinding(string information, TPMPanelSwitches tpmPanelSwitch, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
@@ -354,7 +354,7 @@ namespace NonVisuals
             if (sortedList.Count == 0)
             {
                 RemoveTPMPanelSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitch, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -384,7 +384,7 @@ namespace NonVisuals
                 _keyBindings.Add(keyBinding);
             }
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -393,7 +393,7 @@ namespace NonVisuals
             if (bipLinkTPM.BIPLights.Count == 0)
             {
                 RemoveTPMPanelSwitchFromList(ControlListTPM.BIPS, tpmPanelSwitch, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -415,7 +415,7 @@ namespace NonVisuals
                 bipLinkTPM.WhenTurnedOn = whenTurnedOn;
                 _bipLinks.Add(bipLinkTPM);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -424,7 +424,7 @@ namespace NonVisuals
             if (dcsbiosInputs.Count == 0)
             {
                 RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, tpmPanelSwitch, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //!!!!!!!
@@ -451,7 +451,7 @@ namespace NonVisuals
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void RemoveTPMPanelSwitchFromList(ControlListTPM controlListTPM, TPMPanelSwitches tpmPanelSwitch, bool whenTurnedOn)
@@ -493,14 +493,8 @@ namespace NonVisuals
 
             if (found)
             {
-                IsDirtyMethod();
+                SetIsDirty();
             }
-        }
-
-        private void IsDirtyMethod()
-        {
-            OnSettingsChanged();
-            IsDirty = true;
         }
 
         public void Clear(TPMPanelSwitches tpmPanelSwitch)
@@ -512,7 +506,7 @@ namespace NonVisuals
                     keyBinding.OSKeyPress = null;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)

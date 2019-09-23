@@ -220,15 +220,9 @@ namespace NonVisuals
             {
                 _listColorOutputBinding.Add((DcsOutputAndColorBindingBIP)dcsOutputAndColorBinding);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
-
-        private void IsDirtyMethod()
-        {
-            OnSettingsChanged();
-            IsDirty = true;
-        }
-
+        
         internal void CheckDcsDataForColorChangeHook(uint address, uint data)
         {
             foreach (var cavb in _listColorOutputBinding)

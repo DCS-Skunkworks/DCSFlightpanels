@@ -415,7 +415,7 @@ namespace NonVisuals
             if (string.IsNullOrEmpty(keys))
             {
                 RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             var found = false;
@@ -445,7 +445,7 @@ namespace NonVisuals
 
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
             Common.DebugP("SwitchPanelPZ55 _keyBindings : " + _keyBindings.Count);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
@@ -453,7 +453,7 @@ namespace NonVisuals
             if (sortedList.Count == 0)
             {
                 RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -487,7 +487,7 @@ namespace NonVisuals
             }
 
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -513,7 +513,7 @@ namespace NonVisuals
                 osCommandBindingPZ55.WhenTurnedOn = whenTurnedOn;
                 _osCommandBindings.Add(osCommandBindingPZ55);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -522,7 +522,7 @@ namespace NonVisuals
             if (dcsbiosInputs.Count == 0)
             {
                 RemoveSwitchPanelSwitchFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55Key, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //!!!!!!!
@@ -549,7 +549,7 @@ namespace NonVisuals
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn)
@@ -557,7 +557,7 @@ namespace NonVisuals
             if (bipLinkPZ55.BIPLights.Count == 0)
             {
                 RemoveSwitchPanelSwitchFromList(ControlListPZ55.BIPS, switchPanelPZ55Key, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -579,7 +579,7 @@ namespace NonVisuals
                 bipLinkPZ55.WhenTurnedOn = whenTurnedOn;
                 _bipLinks.Add(bipLinkPZ55);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn)
@@ -621,14 +621,8 @@ namespace NonVisuals
 
             if (found)
             {
-                IsDirtyMethod();
+                SetIsDirty();
             }
-        }
-
-        private void IsDirtyMethod()
-        {
-            OnSettingsChanged();
-            IsDirty = true;
         }
 
         public bool LedIsConfigured(SwitchPanelPZ55LEDPosition switchPanelPZ55LEDPosition)
@@ -661,7 +655,7 @@ namespace NonVisuals
             {
                 _listColorOutputBinding.Add((DcsOutputAndColorBindingPZ55)dcsOutputAndColorBinding);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -862,7 +856,7 @@ namespace NonVisuals
             set
             {
                 _manualLandingGearLeds = value;
-                IsDirtyMethod();
+                SetIsDirty();
             }
         }
 

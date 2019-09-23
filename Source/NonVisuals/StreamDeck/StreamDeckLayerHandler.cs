@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace NonVisuals.StreamDeck
 {
     public class StreamDeckLayerHandler
     {
-        private List<string> _layerList = new List<string>();
+        private List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string SEPARATOR_CHARS = "\\o/";
-        private string _homeLayer = "";
-        private const string HOME_LAYER_ID = "*home_layer";
+        private const string HOME_LAYER_ID = "*";
 
+        public StreamDeckLayerHandler()
+        {
+        }
 
         public string ExportLayers()
         {
@@ -18,9 +21,9 @@ namespace NonVisuals.StreamDeck
             var layers = "Layers{";
             foreach (var layer in _layerList)
             {
-                if (_homeLayer == layer)
+                if (layer.IsHomeLayer)
                 {
-                    layers = layers + "|" + layer + "*home_layer";
+                    layers = layers + "|*" + layer;
                 }
                 else
                 {
@@ -31,13 +34,13 @@ namespace NonVisuals.StreamDeck
             return layers;
         }
 
-        private void Add(string layerName)
+        private void Add(bool isActive, bool isHomeLayer, string layerName)
         {
             var found = false;
             
             foreach (var layer in _layerList)
             {
-                if (layer == layerName)
+                if (layer.Name == layerName)
                 {
                     found = true;
                 }
@@ -45,43 +48,54 @@ namespace NonVisuals.StreamDeck
 
             if (!found)
             {
-                _layerList.Add(layerName);
+                var layer = new StreamDeckLayer();
+                layer.Name = layerName;
+                layer.IsHomeLayer = isHomeLayer;
+                layer.IsActive = isActive;
+                _layerList.Add(layer);
             }
         }
 
-        public void AddLayer(string layer)
+        public void AddLayer(string layerName)
         {
-            if (layer.Contains(SEPARATOR_CHARS))
+            if (layerName.Contains(SEPARATOR_CHARS))
             {
                 //Setting loaded, includes HID Instance and may contain many layers separated by |
-                var layers = layer.Split(new[] {SEPARATOR_CHARS}, StringSplitOptions.RemoveEmptyEntries)[0];
+                var layers = layerName.Split(new[] {SEPARATOR_CHARS}, StringSplitOptions.RemoveEmptyEntries)[0];
                 layers = layers.Replace("Layers{", "").Replace("}", "");
                 var layerArray = layers.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var s in layerArray)
                 {
                     if (s.Contains(HOME_LAYER_ID))
                     {
-                        Add(s.Replace(HOME_LAYER_ID,""));
-                        _homeLayer = s;
+                        Add(false, true, s.Replace(HOME_LAYER_ID,""));
                     }
                     else
                     {
-                        Add(s);
+                        Add(false, false, s);
                     }
                 }
             }
             else
             {
-                Add(layer);
+                Add(false, false, layerName);
+            }
+        }
+
+        public void AddLayer(StreamDeckLayer streamDeckLayer)
+        {
+            if (LayerList.Contains(streamDeckLayer) && streamDeckLayer != null)
+            {
+                LayerList.Add(streamDeckLayer);
             }
         }
 
         public void DeleteLayer(string layerName)
         {
-            _layerList.Remove(layerName);
+            _layerList.RemoveAll(x => x.Name == layerName);
         }
 
-        public List<string> LayerList
+        public List<StreamDeckLayer> LayerList
         {
             get => _layerList;
             set => _layerList = value;
@@ -93,10 +107,13 @@ namespace NonVisuals.StreamDeck
         }
 
 
-        public string HomeLayer
+        public StreamDeckLayer HomeLayer
         {
-            get => _homeLayer;
-            set => _homeLayer = value;
+            get
+            {
+                System.InvalidOperationException
+                return (_layerList.First(x => x.IsHomeLayer == true) == null ? null : _layerList.First(x => x.IsHomeLayer == true));
+            }
         }
     }
 }

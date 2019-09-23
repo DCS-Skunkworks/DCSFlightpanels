@@ -599,7 +599,7 @@ namespace NonVisuals.Radios
                 displayValue.Value = valueAsString;
                 _displayValues.Add(displayValue);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateSingleKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
@@ -638,7 +638,7 @@ namespace NonVisuals.Radios
             }
             _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
             Common.DebugP("RadioPanelPZ69FullEmulator _keyBindings : " + _keyBindings.Count);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateOSCommandBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, OSCommand osCommand, bool whenTurnedOn)
@@ -665,7 +665,7 @@ namespace NonVisuals.Radios
                 osCommandBindingPZ69Full.WhenTurnedOn = whenTurnedOn;
                 _osCommandBindings.Add(osCommandBindingPZ69Full);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -679,7 +679,7 @@ namespace NonVisuals.Radios
                     keyBinding.OSKeyPress = null;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void ClearDisplayValue(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, RadioPanelPZ69Display radioPanelPZ69Display)
@@ -693,7 +693,7 @@ namespace NonVisuals.Radios
                 }
             }*/
             _displayValues.RemoveWhere(x => x.RadioPanelPZ69Knob == radioPanelPZ69Knob && x.RadioPanelDisplay == radioPanelPZ69Display);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateSequencedKeyBinding(string information, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
@@ -703,7 +703,7 @@ namespace NonVisuals.Radios
             if (sortedList.Count == 0)
             {
                 RemoveRadioPanelKnobFromList(ControlListPZ69.KEYS, radioPanelPZ69Knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -734,7 +734,7 @@ namespace NonVisuals.Radios
                 _keyBindings.Add(keyBinding);
             }
             _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -743,7 +743,7 @@ namespace NonVisuals.Radios
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
                 RemoveRadioPanelKnobFromList(ControlListPZ69.BIPS, radioPanelPZ69Knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -766,7 +766,7 @@ namespace NonVisuals.Radios
                 bipLinkPZ69.WhenTurnedOn = whenTurnedOn;
                 _bipLinks.Add(bipLinkPZ69);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -795,7 +795,7 @@ namespace NonVisuals.Radios
                 dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateLCDBinding(DCSBIOSOutputFormula dcsbiosOutputFormula, PZ69LCDPosition pz69LCDPosition)
@@ -824,7 +824,7 @@ namespace NonVisuals.Radios
                 dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void DeleteDCSBIOSLcdBinding(PZ69LCDPosition pz69LCDPosition)
@@ -843,7 +843,7 @@ namespace NonVisuals.Radios
                     break;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
@@ -851,7 +851,7 @@ namespace NonVisuals.Radios
             if (dcsbiosInputs.Count == 0)
             {
                 RemoveRadioPanelKnobFromList(ControlListPZ69.DCSBIOS, knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -877,7 +877,7 @@ namespace NonVisuals.Radios
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void DeleteDCSBIOSBinding(RadioPanelPZ69KnobsEmulator knob, bool whenTurnedOn)
@@ -892,7 +892,7 @@ namespace NonVisuals.Radios
                     break;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn)
@@ -926,7 +926,7 @@ namespace NonVisuals.Radios
 
             if (found)
             {
-                IsDirtyMethod();
+                SetIsDirty();
             }
         }
 
@@ -968,11 +968,6 @@ namespace NonVisuals.Radios
             return false;
         }
         */
-        private void IsDirtyMethod()
-        {
-            OnSettingsChanged();
-            IsDirty = true;
-        }
 
         public void Clear(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob)
         {
@@ -983,7 +978,7 @@ namespace NonVisuals.Radios
                     keyBinding.OSKeyPress = null;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
