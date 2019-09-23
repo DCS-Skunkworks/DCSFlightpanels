@@ -23,11 +23,11 @@ namespace NonVisuals.StreamDeck
             {
                 if (layer.IsHomeLayer)
                 {
-                    layers = layers + "|*" + layer;
+                    layers = layers + "|*" + layer.Name;
                 }
                 else
                 {
-                    layers = layers + "|" + layer;
+                    layers = layers + "|" + layer.Name;
                 }
             }
             layers += "}";
@@ -84,7 +84,7 @@ namespace NonVisuals.StreamDeck
 
         public void AddLayer(StreamDeckLayer streamDeckLayer)
         {
-            if (LayerList.Contains(streamDeckLayer) && streamDeckLayer != null)
+            if (!LayerList.Contains(streamDeckLayer) && streamDeckLayer != null)
             {
                 LayerList.Add(streamDeckLayer);
             }
@@ -111,8 +111,15 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                System.InvalidOperationException
-                return (_layerList.First(x => x.IsHomeLayer == true) == null ? null : _layerList.First(x => x.IsHomeLayer == true));
+                foreach (var streamDeckLayer in _layerList)
+                {
+                    if (streamDeckLayer.IsHomeLayer)
+                    {
+                        return streamDeckLayer;
+                    }
+                }
+
+                return null;
             }
         }
     }

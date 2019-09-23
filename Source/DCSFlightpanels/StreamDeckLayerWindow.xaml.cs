@@ -32,6 +32,7 @@ namespace DCSFlightpanels
             {
                 _loaded = true;
                 TextBoxLayerName.Focus();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -43,7 +44,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                TextBoxLayerName.Text = TextBoxLayerName.Text.Replace("|", "").Replace("{", "").Replace("}", "");
+                TextBoxLayerName.Text = TextBoxLayerName.Text.Replace("|", "").Replace("{", "").Replace("}", "").Replace("*", "");
                 ButtonOk.IsEnabled = TextBoxLayerName.Text.Length >= _minimumLength;
             }
             catch (Exception ex)
@@ -80,22 +81,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                foreach (var existingLayer in _existingLayers)
-                {
-                    if (existingLayer.Name == TextBoxLayerName.Text)
-                    {
-                        throw new Exception("Layer with name " + TextBoxLayerName.Text + " already exists.");
-                    }
-                }
-
-                if (TextBoxLayerName.Text.Length < _minimumLength)
-                {
-                    throw new Exception("Layer name " + TextBoxLayerName.Text + " too short. Minimum length is " + _minimumLength + ".");
-                }
-
-                _newLayer.Name = TextBoxLayerName.Text;
-                DialogResult = true;
-                Close();
+                ButtonOkChecks();
             }
             catch (Exception ex)
             {
@@ -103,6 +89,50 @@ namespace DCSFlightpanels
             }
         }
 
+        private void ButtonOkChecks()
+        {
+            foreach (var existingLayer in _existingLayers)
+            {
+                if (existingLayer.Name == TextBoxLayerName.Text)
+                {
+                    throw new Exception("Layer with name " + TextBoxLayerName.Text + " already exists.");
+                }
+            }
+
+            if (TextBoxLayerName.Text.Length < _minimumLength)
+            {
+                throw new Exception("Layer name " + TextBoxLayerName.Text + " too short. Minimum length is " + _minimumLength + ".");
+            }
+
+            _newLayer.Name = TextBoxLayerName.Text;
+            DialogResult = true;
+            Close();
+        }
+
         public StreamDeckLayer NewLayer => _newLayer;
+
+
+        private void StreamDeckLayerWindow_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
+                {
+                    DialogResult = false;
+                    e.Handled = true;
+                    Close();
+                }
+
+                if (ButtonOk.IsEnabled && e.Key == Key.Enter)
+                {
+                    ButtonOkChecks();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(565, ex);
+            }
+
+        }
     }
 }

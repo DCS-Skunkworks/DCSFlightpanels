@@ -1749,7 +1749,7 @@ namespace DCSFlightpanels
             LoadComboBoxLayers(selectedLayer.Name);
         }
 
-        private void LoadComboBoxLayers(string selectedLayer)
+        private void LoadComboBoxLayers(string selectedLayerNane)
         {
             var selectedIndex = ComboBoxLayers.SelectedIndex;
 
@@ -1757,9 +1757,17 @@ namespace DCSFlightpanels
             ComboBoxLayers.ItemsSource = _streamDeck.LayerList;
             ComboBoxLayers.Items.Refresh();
 
-            if (!string.IsNullOrEmpty(selectedLayer))
+            if (!string.IsNullOrEmpty(selectedLayerNane))
             {
-                ComboBoxLayers.SelectedItem = selectedLayer;
+                foreach (StreamDeckLayer layer in ComboBoxLayers.Items)
+                {
+                    if (layer.Name == selectedLayerNane)
+                    {
+                        ComboBoxLayers.SelectedItem = layer;
+                        break;
+                    }
+                }
+                ComboBoxLayers.SelectedItem = selectedLayerNane;
             }
             else if (selectedIndex >= 0 && selectedIndex < _streamDeck.LayerList.Count)
             {
