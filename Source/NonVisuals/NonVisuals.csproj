@@ -78,6 +78,7 @@
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\DCSBIOSBindingLCDStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSBindingStreamDeck.cs" />
     <Compile Include="DCSBIOS\DCSBIOSBindingPZ69.cs" />

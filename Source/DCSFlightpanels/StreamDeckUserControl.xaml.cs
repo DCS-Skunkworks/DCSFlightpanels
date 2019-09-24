@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using ClassLibraryCommon;
 using NonVisuals;
 using NonVisuals.StreamDeck;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace DCSFlightpanels
 {
@@ -38,9 +39,14 @@ namespace DCSFlightpanels
 
         private void StreamDeckUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (_userControlLoaded)
+            {
+                return;
+            }
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
             _userControlLoaded = true;
+            GenerateButtonImages();
             ShowGraphicConfiguration();
         }
 
@@ -65,6 +71,32 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(471073, ex);
+            }
+        }
+
+        private void GenerateButtonImages()
+        {
+            var height = 50;
+            var width = 50;
+            var fontSize = 60;
+
+            foreach (var image in Common.FindVisualChildren<System.Windows.Controls.Image>(GridButtons))
+            {
+                try
+                {
+                    if (!image.Name.Contains("ImageButton"))
+                    {
+                        continue;
+                    }
+                    //ImageButton1
+                    //ImageButton13
+                    var number = image.Name.Replace("ImageButton", "");
+                    image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width));
+                }
+                catch(Exception)
+                {
+                    
+                }
             }
         }
 
@@ -289,7 +321,7 @@ namespace DCSFlightpanels
                                 Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                    {
-                                       Image1.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
+                                       DotImage1.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
                                        if (key.IsPressed)
                                        {
                                            ClearAll(false);
