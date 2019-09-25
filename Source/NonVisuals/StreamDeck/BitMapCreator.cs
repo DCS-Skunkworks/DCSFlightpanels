@@ -15,7 +15,7 @@ namespace NonVisuals.StreamDeck
 {
     public static class BitMapCreator
     {
-        public static Bitmap CreateBitmapImage(string text, int fontsize, int height, int width)
+        public static Bitmap CreateBitmapImage(string text, int fontSize, int height, int width, Color fontColor, Color backgroundColor)
         {
             var createdBitmap = new Bitmap(2, 2);
 
@@ -23,18 +23,22 @@ namespace NonVisuals.StreamDeck
             var intHeight = height;
 
             // Create the Font object for the image text drawing.
-            System.Drawing.Font font = new System.Drawing.Font("Consolas", fontsize, FontStyle.Regular, GraphicsUnit.Pixel);
+            var font = new Font("Consolas", fontSize, FontStyle.Regular, GraphicsUnit.Pixel);
 
             // Create a graphics object to measure the text's width and height.
             var graphicsObject = Graphics.FromImage(createdBitmap);
 
-            if (height > 0 && width > 0)
+            if (height == 0)
             {
                 // This is where the bitmap size is determined.
-                intWidth = (int)graphicsObject.MeasureString(text, font).Width;
                 intHeight = (int)graphicsObject.MeasureString(text, font).Height;
             }
 
+            if (width == 0)
+            {
+                // This is where the bitmap size is determined.
+                intWidth = (int)graphicsObject.MeasureString(text, font).Width;
+            }
             // Create the bmpImage again with the correct size for the text and font.
             createdBitmap = new Bitmap(createdBitmap, new Size(intWidth, intHeight));
 
@@ -43,13 +47,13 @@ namespace NonVisuals.StreamDeck
             graphicsObject = Graphics.FromImage(createdBitmap);
 
             // Set Background color
-            graphicsObject.Clear(Color.White);
+            graphicsObject.Clear(backgroundColor);
             graphicsObject.SmoothingMode = SmoothingMode.HighQuality;
 
 
 
             graphicsObject.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
-            graphicsObject.DrawString(text, font, new SolidBrush(Color.Black), 0, 0, StringFormat.GenericDefault);
+            graphicsObject.DrawString(text, font, new SolidBrush(fontColor), 0, 0, StringFormat.GenericDefault);
 
             graphicsObject.Flush();
 

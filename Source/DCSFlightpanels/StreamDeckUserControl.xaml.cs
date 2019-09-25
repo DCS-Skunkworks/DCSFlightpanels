@@ -9,6 +9,7 @@ using ClassLibraryCommon;
 using NonVisuals;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;
+using Image = System.Windows.Controls.Image;
 
 namespace DCSFlightpanels
 {
@@ -46,7 +47,7 @@ namespace DCSFlightpanels
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
             _userControlLoaded = true;
-            GenerateButtonImages();
+            GenerateButtonImages(0);
             ShowGraphicConfiguration();
         }
 
@@ -74,31 +75,78 @@ namespace DCSFlightpanels
             }
         }
 
-        private void GenerateButtonImages()
+        private void GenerateButtonImages(int selectedButton)
         {
             var height = 50;
             var width = 50;
-            var fontSize = 60;
+            var fontSize = 30;
 
             foreach (var image in Common.FindVisualChildren<System.Windows.Controls.Image>(GridButtons))
             {
                 try
                 {
-                    if (!image.Name.Contains("ImageButton"))
+                    if (!image.Name.Contains("ButtonImage"))
                     {
                         continue;
                     }
-                    //ImageButton1
-                    //ImageButton13
-                    var number = image.Name.Replace("ImageButton", "");
-                    image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width));
+
+                    var number = image.Name.Replace("ButtonImage", "");
+                    if (selectedButton == 0)
+                    {
+                        //No image selected, load all
+                        image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.White));
+                        image.Tag = new TagDataButtonImage();
+                    }
+                    else
+                    {
+                        if (selectedButton == int.Parse(number))
+                        {
+                            if (((TagDataButtonImage)image.Tag).IsSelected)
+                            {
+                                image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.White));
+                                ((TagDataButtonImage)image.Tag).IsSelected = false;
+                            }
+                            else
+                            {
+                                image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.CadetBlue));
+                                ((TagDataButtonImage)image.Tag).IsSelected = true;
+                            }
+                        }
+                        else
+                        {
+                            image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.White));
+                            ((TagDataButtonImage)image.Tag).IsSelected = false;
+                        }
+                    }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-                    
+
                 }
             }
         }
+        
+        private int GetSelectedButton()
+        {
+
+            foreach (var image in Common.FindVisualChildren<System.Windows.Controls.Image>(GridButtons))
+            {
+                    if (!image.Name.Contains("ButtonImage"))
+                    {
+                        continue;
+                    }
+
+                    var number = image.Name.Replace("ButtonImage", "");
+                    if (((TagDataButtonImage) image.Tag).IsSelected == true)
+                    {
+                        return int.Parse(number);
+                    }
+            }
+
+            //none selected
+            return 0;
+        }
+
 
         public string GetName()
         {
@@ -644,7 +692,7 @@ namespace DCSFlightpanels
                         ((TagDataClassStreamDeck)textBox.Tag).BIPLink = bipLink;
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -1763,9 +1811,9 @@ namespace DCSFlightpanels
             try
             {
                 ClearAll(false);
-                
+
                 SetTextBoxesVisibleStatus(ComboBoxLayers.SelectionBoxItem != null);
-                
+
                 SetCheckboxHomeLayer();
 
                 SetFormState();
@@ -1805,7 +1853,7 @@ namespace DCSFlightpanels
             {
                 ComboBoxLayers.SelectedIndex = selectedIndex;
             }
-            else if(_streamDeck.LayerList.Count > 0)
+            else if (_streamDeck.LayerList.Count > 0)
             {
                 ComboBoxLayers.SelectedIndex = 0;
             }
@@ -1831,6 +1879,30 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(20135444, ex);
             }
+        }
+
+        private void ButtonImage_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var image = (Image)sender;
+                GenerateButtonImages(int.Parse(image.Name.Replace("ButtonImage", "")));
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+    }
+
+    internal class TagDataButtonImage
+    {
+        private bool isSelected = false;
+
+        public bool IsSelected
+        {
+            get => isSelected;
+            set => isSelected = value;
         }
     }
 }
