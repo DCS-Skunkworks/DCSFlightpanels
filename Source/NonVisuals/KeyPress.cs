@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
+using Newtonsoft.Json;
 
 namespace NonVisuals
 {
@@ -32,6 +33,7 @@ namespace NonVisuals
             set => _virtualKeyCodes = value;
         }
 
+        [JsonIgnore]
         public string VirtualKeyCodesAsString
         {
             get
@@ -91,6 +93,8 @@ namespace NonVisuals
             _executingThread?.Abort();
         }
 
+
+        [JsonIgnore]
         public List<KeyPress> NegatorOSKeyPresses
         {
             get => _negatorOSKeyPresses;

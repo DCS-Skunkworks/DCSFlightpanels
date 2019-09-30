@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using Newtonsoft.Json;
 using NonVisuals;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;
@@ -81,7 +83,7 @@ namespace DCSFlightpanels
             var width = 50;
             var fontSize = 30;
 
-            foreach (var image in Common.FindVisualChildren<System.Windows.Controls.Image>(GridButtons))
+            foreach (var image in Common.FindVisualChildren<Image>(GridButtons))
             {
                 try
                 {
@@ -252,7 +254,7 @@ namespace DCSFlightpanels
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
                 if (!textBox.Equals(TextBoxLogStreamDeck))
                 {
-                    textBox.Tag = new TagDataClassStreamDeck(textBox, GetStreamDeckKey(textBox));
+                    //textBox.Tag = new TagDataClassStreamDeck(textBox, GetStreamDeckKey(textBox));
                 }
             }
             _textBoxTagsSet = true;
@@ -655,7 +657,7 @@ namespace DCSFlightpanels
                 }
 
                 SetApplicationMode();
-
+                /*
                 foreach (var keyBinding in _streamDeck.KeyBindingsHashSet)
                 {
                     var textBox = GetTextBox(keyBinding.StreamDeckButton, keyBinding.WhenTurnedOn);
@@ -692,7 +694,7 @@ namespace DCSFlightpanels
                         ((TagDataClassStreamDeck)textBox.Tag).BIPLink = bipLink;
                     }
                 }
-
+                */
             }
             catch (Exception ex)
             {
@@ -761,8 +763,8 @@ namespace DCSFlightpanels
                             return;
                         }
                         textBox.Text = "";
-                        _streamDeck.RemoveButtonFromList(GetSelectedStreamDeckLayer().Name, ControlListStreamDeck.DCSBIOS, GetStreamDeckKey(textBox).StreamDeckButton, GetStreamDeckKey(textBox).ButtonState);
-                        ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding = null;
+                        //_streamDeck.RemoveButtonFromList(GetSelectedStreamDeckLayer().Name, ControlListStreamDeck.DCSBIOS, GetStreamDeckKey(textBox).StreamDeckButton, GetStreamDeckKey(textBox).ButtonState);
+                        //((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding = null;
                     }
                     else if (((TagDataClassStreamDeck)textBox.Tag).ContainsKeySequence())
                     {
@@ -1126,8 +1128,8 @@ namespace DCSFlightpanels
         {
             try
             {
-                var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateBIPLinkKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).BIPLink, key.ButtonState);
+                //var key = GetStreamDeckKey(textBox);
+                //_streamDeck.AddOrUpdateBIPLinkKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).BIPLink, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1139,8 +1141,8 @@ namespace DCSFlightpanels
         {
             try
             {
-                var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateSequencedKeyBinding(GetSelectedStreamDeckLayer().Name, textBox.Text, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence(), key.ButtonState);
+                //var key = GetSelectedButton();
+                //_streamDeck.AddOrUpdateSequencedKeyBinding(GetSelectedStreamDeckLayer().Name, textBox.Text, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence(), key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1162,8 +1164,8 @@ namespace DCSFlightpanels
                 {
                     keyPressLength = ((TagDataClassStreamDeck)textBox.Tag).KeyPress.GetLengthOfKeyPress();
                 }
-                var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateSingleKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, textBox.Text, keyPressLength, key.ButtonState);
+                //var key = GetStreamDeckKey(textBox);
+                //_streamDeck.AddOrUpdateSingleKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, textBox.Text, keyPressLength, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1188,8 +1190,8 @@ namespace DCSFlightpanels
         {
             try
             {
-                var key = GetStreamDeckKey(textBox);
-                _streamDeck.AddOrUpdateDCSBIOSBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
+                //var key = GetStreamDeckKey(textBox);
+                //_streamDeck.AddOrUpdateDCSBIOSBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1212,11 +1214,11 @@ namespace DCSFlightpanels
 
         private void SetTextBoxesVisibleStatus(bool show)
         {
-            StackPanelButtonColumn0.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
+            /*StackPanelButtonColumn0.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
             StackPanelButtonColumn1.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
             StackPanelButtonColumn2.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
             StackPanelButtonColumn3.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
-            StackPanelButtonColumn4.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
+            StackPanelButtonColumn4.Visibility = (show ? Visibility.Visible : Visibility.Hidden);*/
         }
 
         private void SetContextMenuClickHandlers()
@@ -1451,271 +1453,6 @@ namespace DCSFlightpanels
         }
 
 
-        private StreamDeckKeyOnOff GetStreamDeckKey(TextBox textBox)
-        {
-            try
-            {
-                if (textBox.Equals(TextBoxButton1On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON1, true);
-                }
-                if (textBox.Equals(TextBoxButton1Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON1, false);
-                }
-                if (textBox.Equals(TextBoxButton2On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON2, true);
-                }
-                if (textBox.Equals(TextBoxButton2Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON2, false);
-                }
-                if (textBox.Equals(TextBoxButton3On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON3, true);
-                }
-                if (textBox.Equals(TextBoxButton3Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON3, false);
-                }
-                if (textBox.Equals(TextBoxButton4On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON4, true);
-                }
-                if (textBox.Equals(TextBoxButton4Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON4, false);
-                }
-                if (textBox.Equals(TextBoxButton5On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON5, true);
-                }
-                if (textBox.Equals(TextBoxButton5Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON5, false);
-                }
-                if (textBox.Equals(TextBoxButton6On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON6, true);
-                }
-                if (textBox.Equals(TextBoxButton6Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON6, false);
-                }
-                if (textBox.Equals(TextBoxButton7On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON7, true);
-                }
-                if (textBox.Equals(TextBoxButton7Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON7, false);
-                }
-                if (textBox.Equals(TextBoxButton8On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON8, true);
-                }
-                if (textBox.Equals(TextBoxButton8Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON8, false);
-                }
-                if (textBox.Equals(TextBoxButton9On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON9, true);
-                }
-                if (textBox.Equals(TextBoxButton9Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON9, false);
-                }
-                if (textBox.Equals(TextBoxButton10On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON10, true);
-                }
-                if (textBox.Equals(TextBoxButton10Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON10, false);
-                }
-                if (textBox.Equals(TextBoxButton11On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON11, true);
-                }
-                if (textBox.Equals(TextBoxButton11Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON11, false);
-                }
-                if (textBox.Equals(TextBoxButton12On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON12, true);
-                }
-                if (textBox.Equals(TextBoxButton12Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON12, false);
-                }
-                if (textBox.Equals(TextBoxButton13On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON13, true);
-                }
-                if (textBox.Equals(TextBoxButton13Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON13, false);
-                }
-                if (textBox.Equals(TextBoxButton14On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON14, true);
-                }
-                if (textBox.Equals(TextBoxButton14Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON14, false);
-                }
-                if (textBox.Equals(TextBoxButton15On))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON15, true);
-                }
-                if (textBox.Equals(TextBoxButton15Off))
-                {
-                    return new StreamDeckKeyOnOff(StreamDeckButtons.BUTTON15, false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(3012, ex);
-            }
-            throw new Exception("Failed to find Stream Deck key for TextBox " + textBox.Name);
-
-        }
-
-
-        private TextBox GetTextBox(StreamDeckButtons knob, bool whenTurnedOn)
-        {
-            try
-            {
-                if (knob == StreamDeckButtons.BUTTON1 && whenTurnedOn)
-                {
-                    return TextBoxButton1On;
-                }
-                if (knob == StreamDeckButtons.BUTTON1 && !whenTurnedOn)
-                {
-                    return TextBoxButton1Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON2 && whenTurnedOn)
-                {
-                    return TextBoxButton2On;
-                }
-                if (knob == StreamDeckButtons.BUTTON2 && !whenTurnedOn)
-                {
-                    return TextBoxButton2Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON3 && whenTurnedOn)
-                {
-                    return TextBoxButton3On;
-                }
-                if (knob == StreamDeckButtons.BUTTON3 && !whenTurnedOn)
-                {
-                    return TextBoxButton3Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON4 && whenTurnedOn)
-                {
-                    return TextBoxButton4On;
-                }
-                if (knob == StreamDeckButtons.BUTTON4 && !whenTurnedOn)
-                {
-                    return TextBoxButton4Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON5 && whenTurnedOn)
-                {
-                    return TextBoxButton5On;
-                }
-                if (knob == StreamDeckButtons.BUTTON5 && !whenTurnedOn)
-                {
-                    return TextBoxButton5Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON6 && whenTurnedOn)
-                {
-                    return TextBoxButton6On;
-                }
-                if (knob == StreamDeckButtons.BUTTON6 && !whenTurnedOn)
-                {
-                    return TextBoxButton6Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON7 && whenTurnedOn)
-                {
-                    return TextBoxButton7On;
-                }
-                if (knob == StreamDeckButtons.BUTTON7 && !whenTurnedOn)
-                {
-                    return TextBoxButton7Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON8 && whenTurnedOn)
-                {
-                    return TextBoxButton8On;
-                }
-                if (knob == StreamDeckButtons.BUTTON8 && !whenTurnedOn)
-                {
-                    return TextBoxButton8Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON9 && whenTurnedOn)
-                {
-                    return TextBoxButton9On;
-                }
-                if (knob == StreamDeckButtons.BUTTON9 && !whenTurnedOn)
-                {
-                    return TextBoxButton9Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON10 && whenTurnedOn)
-                {
-                    return TextBoxButton10On;
-                }
-                if (knob == StreamDeckButtons.BUTTON10 && !whenTurnedOn)
-                {
-                    return TextBoxButton10Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON11 && whenTurnedOn)
-                {
-                    return TextBoxButton11On;
-                }
-                if (knob == StreamDeckButtons.BUTTON11 && !whenTurnedOn)
-                {
-                    return TextBoxButton11Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON12 && whenTurnedOn)
-                {
-                    return TextBoxButton12On;
-                }
-                if (knob == StreamDeckButtons.BUTTON12 && !whenTurnedOn)
-                {
-                    return TextBoxButton12Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON13 && whenTurnedOn)
-                {
-                    return TextBoxButton13On;
-                }
-                if (knob == StreamDeckButtons.BUTTON13 && !whenTurnedOn)
-                {
-                    return TextBoxButton13Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON14 && whenTurnedOn)
-                {
-                    return TextBoxButton14On;
-                }
-                if (knob == StreamDeckButtons.BUTTON14 && !whenTurnedOn)
-                {
-                    return TextBoxButton14Off;
-                }
-                if (knob == StreamDeckButtons.BUTTON15 && whenTurnedOn)
-                {
-                    return TextBoxButton15On;
-                }
-                if (knob == StreamDeckButtons.BUTTON15 && !whenTurnedOn)
-                {
-                    return TextBoxButton15Off;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(3012, ex);
-            }
-            throw new Exception("Failed to find TextBox from Stream Deck key : " + knob);
-        }
 
         private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
         {
@@ -1893,6 +1630,38 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(20135444, ex);
             }
         }
+
+
+        private void ButtonJSONTest_OnClick(object sender, RoutedEventArgs e)
+        {
+            var jsonSerializer = new JsonSerializer();
+            jsonSerializer.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            jsonSerializer.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+
+            using (var streamWriter = new StreamWriter(@"e:temp\test_json.txt"))
+            {
+                using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
+                {
+                    jsonWriter.Formatting = Formatting.Indented;
+                    jsonSerializer.Serialize(jsonWriter, _streamDeck.KeyBindingsHashSet);
+                    jsonSerializer.Serialize(jsonWriter, _streamDeck.DCSBiosBindings);
+                    jsonSerializer.Serialize(jsonWriter, _streamDeck.OSCommandHashSet);
+                }
+            }
+
+            /*
+            using (var streamWriter = new StreamWriter(@"e:temp\test_json.txt"))
+            {
+                foreach (var keyBindingPZ55 in _switchPanelPZ55.KeyBindingsHashSet)
+                {
+                    using (JsonWriter writer = new JsonTextWriter(streamWriter))
+                    {
+                        jsonSerializer.Serialize(writer, keyBindingPZ55);
+                    }
+                }
+            }
+            */
+        }
     }
 
     internal class TagDataButtonImage
@@ -1905,4 +1674,5 @@ namespace DCSFlightpanels
             set => isSelected = value;
         }
     }
+
 }

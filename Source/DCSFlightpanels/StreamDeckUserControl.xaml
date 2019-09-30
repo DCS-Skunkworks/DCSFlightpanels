@@ -73,96 +73,96 @@
                 <ColumnDefinition Width="60*" />
             </Grid.ColumnDefinitions>
 
-                <Grid Name="GridButtons" Background="Black" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="78" />
-                        <RowDefinition Height="78" />
-                        <RowDefinition Height="78" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100*" />
-                        <ColumnDefinition Width="100*" />
-                        <ColumnDefinition Width="100*" />
-                        <ColumnDefinition Width="100*" />
-                        <ColumnDefinition Width="100*" />
-                    </Grid.ColumnDefinitions>
+            <Grid Name="GridButtons" Background="Black" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="78" />
+                    <RowDefinition Height="78" />
+                    <RowDefinition Height="78" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
 
 
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="0">
-                        <Image Name="ButtonImage1" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="0" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="0">
-                        <Image Name="ButtonImage2" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="0" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="0">
-                        <Image Name="ButtonImage3" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="0" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="0">
-                        <Image Name="ButtonImage4" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="0" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="0">
-                        <Image Name="ButtonImage5" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="0" ></Image>
-                    </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="0">
+                    <Image Name="ButtonImage1" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="0">
+                    <Image Name="ButtonImage2" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="0">
+                    <Image Name="ButtonImage3" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="0">
+                    <Image Name="ButtonImage4" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="0">
+                    <Image Name="ButtonImage5" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="0" ></Image>
+                </Border>
 
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="1">
-                        <Image Name="ButtonImage6" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="1" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="1">
-                        <Image Name="ButtonImage7" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="1" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="1">
-                        <Image Name="ButtonImage8" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="1" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="1">
-                        <Image Name="ButtonImage9" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="1" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="1">
-                        <Image Name="ButtonImage10" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="1" ></Image>
-                    </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="1">
+                    <Image Name="ButtonImage6" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="1">
+                    <Image Name="ButtonImage7" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="1">
+                    <Image Name="ButtonImage8" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="1">
+                    <Image Name="ButtonImage9" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="1">
+                    <Image Name="ButtonImage10" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="1" ></Image>
+                </Border>
 
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="2">
-                        <Image Name="ButtonImage11" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="2" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="2">
-                        <Image Name="ButtonImage12" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="2" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="2">
-                        <Image Name="ButtonImage13" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="2" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="2">
-                        <Image Name="ButtonImage14" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="2" ></Image>
-                    </Border>
-                    <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="2">
-                        <Image Name="ButtonImage15" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="2" ></Image>
-                    </Border>
-
-
-                    <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="3">
-
-                        <!-- First row -->
-                        <Image Height="76" Name="DotImage1" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="-25" />
-                        <Image Height="76" Name="DotImage2" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="-25" />
-                        <Image Height="76" Name="DotImage3" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="-25" />
-                        <Image Height="76" Name="DotImage4" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="-25" />
-                        <Image Height="76" Name="DotImage5" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="-25" />
-
-                        <!-- Second row -->
-                        <Image Height="76" Name="DotImage6" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="55" />
-                        <Image Height="76" Name="DotImage7" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="55" />
-                        <Image Height="76" Name="DotImage8" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="55" />
-                        <Image Height="76" Name="DotImage9" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="55" />
-                        <Image Height="76" Name="DotImage10" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="55" />
-
-                        <!-- Third row -->
-                        <Image Height="76" Name="DotImage11" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="135" />
-                        <Image Height="76" Name="DotImage12" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="135" />
-                        <Image Height="76" Name="DotImage13" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="135" />
-                        <Image Height="76" Name="DotImage14" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="135" />
-                        <Image Height="76" Name="DotImage15" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="135" />
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="2">
+                    <Image Name="ButtonImage11" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="2">
+                    <Image Name="ButtonImage12" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="2">
+                    <Image Name="ButtonImage13" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="2">
+                    <Image Name="ButtonImage14" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="2">
+                    <Image Name="ButtonImage15" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="2" ></Image>
+                </Border>
 
 
-                    </Canvas>
-                </Grid>
+                <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="3">
+
+                    <!-- First row -->
+                    <Image Height="76" Name="DotImage1" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage2" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage3" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage4" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage5" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="-25" />
+
+                    <!-- Second row -->
+                    <Image Height="76" Name="DotImage6" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage7" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage8" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage9" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage10" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="55" />
+
+                    <!-- Third row -->
+                    <Image Height="76" Name="DotImage11" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage12" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage13" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage14" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage15" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="135" />
+
+
+                </Canvas>
+            </Grid>
 
 
 
@@ -191,100 +191,57 @@
             <GroupBox   FontSize="10"  Grid.Column="0" Grid.Row="3" Grid.RowSpan="12" Grid.ColumnSpan="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="5*"/>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="5*"/>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Name="StackPanelButtonColumn0" Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" >
-                        <Label Content="Button 1 On" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton1On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 1 Off" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton1Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 6 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton6On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 6 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton6Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 11 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton11On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 11 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton11Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                    <StackPanel Name="StackPanelChooseButtonType" Grid.Column="0">
+                        <StackPanel >
+                            <Label Content="Button Action Type"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonKeyPress" Content="Key Press" Margin="0,2,0,2"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonDCSBIOS" Content="DCS-BIOS" Margin="0,2,0,2"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonOSCommand" Content="OS Command" Margin="0,2,0,2"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonNavigational" Content="Layer Navigation" Margin="0,2,0,2"/>
+                            <Button Name="ButtonDeleteButtonConfiguration" Content="Delete Configuration"  Margin="0,15,0,2"></Button>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" />
-                    <StackPanel Name="StackPanelButtonColumn1" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
-                        <Label Content="Button 2 On" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton2On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 2 Off" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton2Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 7 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton7On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 7 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton7Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 12 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton12On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 12 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton12Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+
+                    <StackPanel Name="StackPanelButtonKeyPressSettings" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Visibility="Hidden">
+                        <Label Content="Key Press for Button On" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOn"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="Key Press for Button Off" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOff"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                    </StackPanel>
+                    <StackPanel Name="StackPanelButtonDCSBIOSSettings" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
+                        <Label Content="DCSBIOS Action for Button On" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBBIOSActionButtonOn"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <Label Content="DCSBIOS Action for Button Off" FontSize="10" Height="23"   />
+                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBBIOSActionButtonOff"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                     </StackPanel>
                     <StackPanel Grid.Column="3" MouseDown="MouseDownFocusLogTextBox"/>
-                    <StackPanel Name="StackPanelButtonColumn2" Grid.Column="4" MouseDown="MouseDownFocusLogTextBox">
-                        <Label Content="Button 3 On" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton3On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 3 Off" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton3Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 8 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton8On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 8 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton8Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 13 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton13On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 13 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton13Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+
+                    <StackPanel Name="StackPanelButtonImageType" Grid.Column="4">
+                        <StackPanel >
+                            <Label Content="Button Image Type"/>
+                            <RadioButton GroupName="ButtonImageType" Name="RadioButtonText" Content="Text" Margin="0,2,0,2"/>
+                            <RadioButton GroupName="ButtonImageType" Name="RadioButtonImage" Content="Image" Margin="0,2,0,2"/>
+                            <RadioButton GroupName="ButtonImageType" Name="RadioButtonDCSBIOSOutput" Content="DCS-BIOS Output" Margin="0,2,0,2"/>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="5" MouseDown="MouseDownFocusLogTextBox"/>
                     <StackPanel Name="StackPanelButtonColumn3" Grid.Column="6" MouseDown="MouseDownFocusLogTextBox">
-                        <Label Content="Button 4 On" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton4On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 4 Off" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton4Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 9 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton9On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 9 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton9Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 14 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton14On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 14 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton14Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+
                     </StackPanel>
                     <StackPanel Grid.Column="7" MouseDown="MouseDownFocusLogTextBox"/>
                     <StackPanel Name="StackPanelButtonColumn4" Grid.Column="8" MouseDown="MouseDownFocusLogTextBox">
-                        <Label Content="Button 5 On" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton5On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 5 Off" FontSize="10" Height="23"   />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton5Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 10 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton10On" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Label Content="Button 10 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18" IsReadOnly="True"  Name="TextBoxButton10Off" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
-                        <Separator Margin="0,20,0,0"/>
-                        <Label Content="Button 15 On" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton15On"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
-                        <Label Content="Button 15 Off" FontSize="10" Height="23" />
-                        <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxButton15Off"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <Button Height="18" Name="ButtonJSONTest" Content="To JSON" Click="ButtonJSONTest_OnClick"/>
                     </StackPanel>
                     <StackPanel Grid.Column="9" MouseDown="MouseDownFocusLogTextBox"/>
                 </Grid>

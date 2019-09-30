@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -7,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
+using Newtonsoft.Json;
 using NonVisuals;
 
 namespace DCSFlightpanels
@@ -1401,13 +1403,13 @@ namespace DCSFlightpanels
                         ((TagDataClassPZ55)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
                     }
                 }
-                
+
                 foreach (var osCommand in _switchPanelPZ55.OSCommandHashSet)
                 {
                     var textBox = GetTextBox(osCommand.SwitchPanelPZ55Key, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)
                     {
-                        ((TagDataClassPZ55) textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
+                        ((TagDataClassPZ55)textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
                     }
                 }
 
@@ -1812,7 +1814,7 @@ namespace DCSFlightpanels
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                
+
                 ((TagDataClassPZ55)textBox.Tag).ClearAll();
                 var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
@@ -1871,5 +1873,6 @@ namespace DCSFlightpanels
             }
         }
 
+        
     }
 }
