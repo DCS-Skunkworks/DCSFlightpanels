@@ -62,7 +62,6 @@ namespace NonVisuals
             {
                 return;
             }
-
             var keyId = e.Key;
             if (e.IsDown)
             {

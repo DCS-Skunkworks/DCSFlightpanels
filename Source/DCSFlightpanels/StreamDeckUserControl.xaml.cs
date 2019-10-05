@@ -51,6 +51,40 @@ namespace DCSFlightpanels
             _userControlLoaded = true;
             GenerateButtonImages(0);
             ShowGraphicConfiguration();
+            SetFormState();
+        }
+
+        private void SetFormState()
+        {
+            try
+            {
+                StackPanelButtonKeyPressSettings.Visibility = RadioButtonKeyPress.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSSettings.Visibility = RadioButtonDCSBIOS.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonOSCommandSettings.Visibility = RadioButtonOSCommand.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonLayerNavigationSettings.Visibility = RadioButtonNavigational.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+
+                RadioButtonDCSBIOSOutput.Visibility = RadioButtonNavigational?.IsChecked == true ? Visibility.Collapsed : Visibility.Visible;
+
+                StackPanelButtonTextAndStyle.Visibility = RadioButtonText.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonImageToShow.Visibility = RadioButtonImage.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSOutput.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+
+                StackPanelDCSBIOSBackgroundType.Visibility = RadioButtonDCSBIOSOutput?.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+
+                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+
+                StackPanelButtonImageType.Visibility = RadioButtonKeyPress.IsChecked == true || 
+                                                       RadioButtonDCSBIOS.IsChecked == true || 
+                                                       RadioButtonOSCommand.IsChecked == true || 
+                                                       RadioButtonNavigational.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+
+                SetTextBoxesVisibleStatus(ComboBoxLayers.SelectionBoxItem != null);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(471473, ex);
+            }
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
@@ -164,19 +198,6 @@ namespace DCSFlightpanels
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(471573, ex);
-            }
-        }
-
-        private void SetFormState()
-        {
-            try
-            {
-
-                SetTextBoxesVisibleStatus(ComboBoxLayers.SelectionBoxItem != null);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(471473, ex);
             }
         }
 
@@ -1661,6 +1682,62 @@ namespace DCSFlightpanels
                 }
             }
             */
+        }
+
+        private void RadioButtonButtonTypePress_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+
+        private void RadioButtonImageType_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+
+        private void RadioButtonDCSBIOSImage_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+
+        private void ColorPickerFontColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            
+        }
+
+        private void ColorPickerBackgroundColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            
+        }
+
+        private void ColorPickerDCSBIOSGeneratedImageFontColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            
+        }
+
+        private void ColorPickerDCSBIOSGeneratedImageBackgroundColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            
         }
     }
 
