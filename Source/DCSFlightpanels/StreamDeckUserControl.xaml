@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="StreamDeckUserControl_OnLoaded">
@@ -303,12 +302,6 @@
                         <ComboBox Name="ComboBoxTextFont"/>
                         <Label Content="Font Size" FontSize="10" Height="23"  Margin="0,2,2,0"  />
                         <ComboBox Name="ComboBoxTextFontSize"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,20,2,0">
-                            <Label Content="Font" FontSize="10" Height="23"    />
-                            <xctk:ColorPicker Name="ColorPickerFontColor" Height="23" Width="40" SelectedColorChanged="ColorPickerFontColor_OnSelectedColorChanged"></xctk:ColorPicker>
-                            <Label Content="Background" FontSize="10" Height="23"    />
-                            <xctk:ColorPicker Name="ColorPickerBackgroundColor" Height="23" Width="40" SelectedColorChanged="ColorPickerBackgroundColor_OnSelectedColorChanged"></xctk:ColorPicker>
-                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Right" >
                             <Button Name="ButtonTestTextForButtonOff" Width="65" Content="Test Released" Margin="0,0,5,0"/>
                             <Button Name="ButtonTestTextForButtonOn" Width="65" Content="Test Pressed" />
@@ -334,18 +327,20 @@
                         <Label Content="DCSBIOS Data to show when Button Pressed" FontSize="10" Height="23"   />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSOutputButtonOn"  IsEnabled="False" Background="LightSteelBlue" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                            <Button Name="ButtonSelectBIOSOutputButtonOn" Width="45" Content="Select" Margin="0,2,2,0"/>
-                            <Button Name="ButtonEditDCSBIOSOutputButtonOn" Width="45" Content="Edit" Margin="0,2,2,0"/>
-                            <Button Name="ButtonDeleteBIOSOutputButtonOn" Width="45" Content="Delete" Margin="0,2,2,0"/>
-                            <Button Name="ButtonFontBIOSOutputButtonOn" Width="45" Content="Font" Margin="10,2,2,0"/>
+                            <Button Name="ButtonSelectBIOSOutputButtonOn" Width="40" Content="Select" Margin="0,2,2,0"/>
+                            <Button Name="ButtonEditDCSBIOSOutputButtonOn" Width="40" Content="Edit" Margin="0,2,2,0"/>
+                            <Button Name="ButtonDeleteBIOSOutputButtonOn" Width="40" Content="Delete" Margin="0,2,2,0"/>
+                            <Button Name="ButtonFontBIOSOutputButtonOn" Width="40" Content="Font" Margin="10,2,2,0" Click="ButtonFontBIOSOutputButtonOn_OnClick"/>
+                            <Button Name="ButtonTestBIOSOutputButtonOn" Width="40" Content="Test" Margin="0,2,2,0"/>
                         </StackPanel>
                         <Label Content="DCSBIOS Data to show when Button Released" FontSize="10" Height="23"  Margin="0,10,2,0"  />
                         <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxBIOSOutputButtonOff" IsEnabled="False" Background="LightSteelBlue" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                            <Button Name="ButtonSelectBIOSOutputButtonOff" Width="45" Content="Select" Margin="0,2,2,0"/>
-                            <Button Name="ButtonEditBIOSOutputButtonOff" Width="45" Content="Edit" Margin="0,2,2,0"/>
-                            <Button Name="ButtonDeleteBIOSOutputButtonOff" Width="45" Content="Delete" Margin="0,2,2,0"/>
-                            <Button Name="ButtonFontBIOSOutputButtonOff" Width="45" Content="Font" Margin="10,2,2,0"/>
+                            <Button Name="ButtonSelectBIOSOutputButtonOff" Width="40" Content="Select" Margin="0,2,2,0"/>
+                            <Button Name="ButtonEditBIOSOutputButtonOff" Width="40" Content="Edit" Margin="0,2,2,0"/>
+                            <Button Name="ButtonDeleteBIOSOutputButtonOff" Width="40" Content="Delete" Margin="0,2,2,0"/>
+                            <Button Name="ButtonFontBIOSOutputButtonOff" Width="40" Content="Font" Margin="10,2,2,0"/>
+                            <Button Name="ButtonTestBIOSOutputButtonOff" Width="40" Content="Test" Margin="0,2,2,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical" Margin="0,15,0,0" HorizontalAlignment="Left" >
@@ -360,9 +355,6 @@
                                 <CheckBox Name="CheckBoxUnitRightDCSBIOSOutput" Content="Show Right" Margin="15,2,2,0"></CheckBox>
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Right" >
-                            <Button Name="ButtonTestDCSBIOSGeneratedImageForButton" Width="65" Content="Test" />
-                        </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="7" MouseDown="MouseDownFocusLogTextBox"/>
                     <StackPanel Name="StackPanelDCSBIOSBackgroundType" Grid.Column="8" MouseDown="MouseDownFocusLogTextBox">
@@ -373,10 +365,7 @@
                         </StackPanel>
                         <StackPanel Name="StackPanelButtonDCSBIOSBackgroundGeneratedImage" Visibility="Visible">
                             <StackPanel Orientation="Horizontal" Margin="0,20,2,0">
-                                <Label Content="Font" FontSize="10" Height="23"    />
-                                <xctk:ColorPicker Name="ColorPickerDCSBIOSGeneratedImageFontColor" Height="23" Width="40" SelectedColorChanged="ColorPickerDCSBIOSGeneratedImageFontColor_OnSelectedColorChanged"></xctk:ColorPicker>
-                                <Label Content="Background" FontSize="10" Height="23"    />
-                                <xctk:ColorPicker Name="ColorPickerDCSBIOSGeneratedImageBackgroundColor" Height="23" Width="40" SelectedColorChanged="ColorPickerDCSBIOSGeneratedImageBackgroundColor_OnSelectedColorChanged"></xctk:ColorPicker>
+                                <Button Name="ButtonChooseColor" Content="Select Color"></Button>
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Name="StackPanelButtonDCSBIOSBackgroundExistingImage" Visibility="Visible">

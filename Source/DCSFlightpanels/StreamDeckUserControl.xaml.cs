@@ -1720,25 +1720,8 @@ namespace DCSFlightpanels
             }
         }
 
-        private void ColorPickerFontColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
-        {
-            
-        }
+        
 
-        private void ColorPickerBackgroundColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
-        {
-            
-        }
-
-        private void ColorPickerDCSBIOSGeneratedImageFontColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
-        {
-            
-        }
-
-        private void ColorPickerDCSBIOSGeneratedImageBackgroundColor_OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
-        {
-            
-        }
     }
 
     internal class TagDataButtonImage

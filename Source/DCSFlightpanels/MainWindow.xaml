@@ -1,7 +1,17 @@
 ﻿<Window x:Class="DCSFlightpanels.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DCSFlightpanels" Height="800" Width="1300" Loaded="WindowLoaded" WindowStartupLocation="CenterScreen"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" Name="FlightpanelsMainWindow" Closing="MainWindowClosing" Closed="MainWindow_OnClosed" LocationChanged="MainWindowLocationChanged" SizeChanged="MainWindowSizeChanged">
+        Title="DCSFlightpanels" 
+        Height="800" 
+        Width="1300" 
+        Loaded="WindowLoaded" 
+        WindowStartupLocation="CenterScreen"  
+        Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" 
+        Name="DCSFlightpanelsMainWindow" 
+        Closing="MainWindowClosing" 
+        Closed="MainWindow_OnClosed" 
+        LocationChanged="MainWindowLocationChanged" 
+        SizeChanged="MainWindowSizeChanged">
     <Window.Resources>
     </Window.Resources>
     <Grid Name="MainGrid">
