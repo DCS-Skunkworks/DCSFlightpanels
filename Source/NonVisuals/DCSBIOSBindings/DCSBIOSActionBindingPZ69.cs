@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
-
+using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Radios;
 
 
-namespace NonVisuals
+namespace NonVisuals.DCSBIOSBindings
 {
 
-    public class DCSBIOSBindingPZ69 : DCSBIOSBindingBase
+    public class DCSBIOSActionBindingPZ69 : DCSBIOSActionBindingBase
     {
         /*
          This class binds a physical switch on the PZ69 with a DCSBIOSInput
+         Pressing the button will send a DCSBIOS command.
          */
         private PZ69DialPosition _pz69DialPosition;
         private RadioPanelPZ69KnobsEmulator _panelPZ69Knob;
         
-        ~DCSBIOSBindingPZ69()
+        ~DCSBIOSActionBindingPZ69()
         {
             CancelSendDCSBIOSCommands = true;
             DCSBIOSCommandsThread?.Abort();

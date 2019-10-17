@@ -9,6 +9,7 @@ using ClassLibraryCommon;
 using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCS_BIOS;
+using DCSFlightpanels.TagDataClasses;
 using NonVisuals.Radios;
 
 

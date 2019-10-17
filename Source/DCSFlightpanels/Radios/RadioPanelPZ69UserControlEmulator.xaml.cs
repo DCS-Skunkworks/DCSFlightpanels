@@ -8,6 +8,7 @@ using System.Windows.Media;
 using ClassLibraryCommon;
 using NonVisuals;
 using DCSFlightpanels.Properties;
+using DCSFlightpanels.TagDataClasses;
 using NonVisuals.Radios;
 
 namespace DCSFlightpanels.Radios

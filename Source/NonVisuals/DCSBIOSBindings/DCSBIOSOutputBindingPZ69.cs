@@ -3,10 +3,10 @@ using DCS_BIOS;
 
 using NonVisuals.Radios;
 
-namespace NonVisuals
+namespace NonVisuals.DCSBIOSBindings
 {
     
-    public class DCSBIOSBindingLCDPZ69
+    public class DCSBIOSOutputBindingPZ69
     {
         /*
          * This class binds a LCD on the PZ69 with a DCSBIOSOutput

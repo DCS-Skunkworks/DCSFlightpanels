@@ -4,16 +4,17 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using NonVisuals;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>
-    public partial class BackLitPanelUserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
         private readonly BacklitPanelBIP _backlitPanelBIP;

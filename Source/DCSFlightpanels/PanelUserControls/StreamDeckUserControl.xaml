@@ -1,0 +1,206 @@
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.StreamDeckUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="1000" Loaded="StreamDeckUserControl_OnLoaded">
+    <UserControl.Resources>
+        <Style TargetType="Border" x:Key="BorderMouseHoover">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Image" x:Key="ButtonImageStyle">
+            <Setter Property="Margin" Value="1,1,1,1"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <EventSetter Event="MouseDown" Handler="ButtonImage_OnMouseDown"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="240"/>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="60*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Name="GridButtons" Background="Black" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="78" />
+                    <RowDefinition Height="78" />
+                    <RowDefinition Height="78" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+
+
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="0">
+                    <Image Name="ButtonImage1" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="0">
+                    <Image Name="ButtonImage2" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="0">
+                    <Image Name="ButtonImage3" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="0">
+                    <Image Name="ButtonImage4" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="0" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="0">
+                    <Image Name="ButtonImage5" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="0" ></Image>
+                </Border>
+
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="1">
+                    <Image Name="ButtonImage6" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="1">
+                    <Image Name="ButtonImage7" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="1">
+                    <Image Name="ButtonImage8" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="1">
+                    <Image Name="ButtonImage9" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="1" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="1">
+                    <Image Name="ButtonImage10" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="1" ></Image>
+                </Border>
+
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="2">
+                    <Image Name="ButtonImage11" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="2">
+                    <Image Name="ButtonImage12" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="2">
+                    <Image Name="ButtonImage13" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="2">
+                    <Image Name="ButtonImage14" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="2" ></Image>
+                </Border>
+                <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="2">
+                    <Image Name="ButtonImage15" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="2" ></Image>
+                </Border>
+
+
+                <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Grid.RowSpan="3">
+
+                    <!-- First row -->
+                    <Image Height="76" Name="DotImage1" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage2" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage3" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage4" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="-25" />
+                    <Image Height="76" Name="DotImage5" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="-25" />
+
+                    <!-- Second row -->
+                    <Image Height="76" Name="DotImage6" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage7" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage8" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage9" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="55" />
+                    <Image Height="76" Name="DotImage10" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="55" />
+
+                    <!-- Third row -->
+                    <Image Height="76" Name="DotImage11" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="10" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage12" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="90" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage13" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="170" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage14" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="250" Canvas.Top="135" />
+                    <Image Height="76" Name="DotImage15" Source="/DCSFlightpanels;component/Images/dot2.jpg" Stretch="None" Canvas.Left="330" Canvas.Top="135" />
+
+
+                </Canvas>
+            </Grid>
+
+
+
+            <Button Name="ButtonGetId" Content="ID" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="500" Canvas.Top="12" Click="ButtonGetId_OnClick" Visibility="Hidden"/>
+
+            <GroupBox Header="Settings" FontSize="10" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Margin="0,10,0,0">
+                <StackPanel>
+                    <Label Content="Layer"></Label>
+                    <ComboBox Name="ComboBoxLayers" SelectedValuePath="Content" DisplayMemberPath="Name" SelectionChanged="ComboBoxLayers_OnSelectionChanged"></ComboBox>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <Button Name="ButtonNewLayer" Content="New Layer" Height="23" Width="70" Margin="0,0,10,0" Click="ButtonNewLayer_OnClick"></Button>
+                        <Button Name="ButtonDeleteLayer" Content="Delete Layer" Height="23" Width="70" Click="ButtonDeleteLayer_OnClick"></Button>
+                    </StackPanel>
+                    <CheckBox Name="CheckBoxMarkHomeLayer" Content="Mark this as Home Layer" Margin="30,20,0,0" Checked="CheckBoxMarkHomeLayer_OnChecked"></CheckBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Information"  FontSize="10"  Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Margin="0,10,0,0">
+                <StackPanel >
+                    <TextBlock TextWrapping="Wrap" FontSize="10" FontWeight="Bold">
+                    </TextBlock>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Log"  FontSize="10"  Grid.Column="4" Grid.Row="0" Grid.RowSpan="2" Margin="0,10,0,0">
+                <StackPanel>
+                    <TextBox Name="TextBoxLogStreamDeck" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
+                    <Button Height="18" Name="ButtonJSONTest" Content="To JSON" Click="ButtonJSONTest_OnClick"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox   FontSize="10"  Grid.Column="0" Grid.Row="3" Grid.RowSpan="14" Grid.ColumnSpan="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="20*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Name="StackPanelChooseButtonActionType" Grid.Column="0">
+                        <StackPanel >
+                            <Label Content="Button Action Type"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonKeyPress" Content="Key Press" Margin="0,2,0,2" Click="RadioButtonButtonTypePress_OnClick"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonDCSBIOS" Content="DCS-BIOS" Margin="0,2,0,2" Click="RadioButtonButtonTypePress_OnClick"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonOSCommand" Content="OS Command" Margin="0,2,0,2" Click="RadioButtonButtonTypePress_OnClick"/>
+                            <RadioButton GroupName="ButtonType" Name="RadioButtonNavigational" Content="Layer Navigation" Margin="0,2,0,2" Click="RadioButtonButtonTypePress_OnClick"/>
+                            <Button Name="ButtonAcceptButtonConfiguration" Content="Accept Configuration"  Margin="0,15,0,2"/>
+                            <Button Name="ButtonDeleteButtonConfiguration" Content="Delete Configuration"  Margin="0,5,0,2"/>
+                            <Button Name="ButtonCancelButtonConfigurationChanges" Content="Cancel Changes"  Margin="0,5,0,2"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <panelUserControls:UserControlStreamDeckButtonAction x:Name="UCStreamDeckButtonAction" Grid.Column="1"/>
+
+
+                    <panelUserControls:UserControlStreamDeckButtonImage  x:Name="UCStreamDeckButtonImage" Grid.Column="2"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</panelUserControls:UserControlBase>
+

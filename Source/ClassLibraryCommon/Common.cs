@@ -314,19 +314,19 @@ namespace ClassLibraryCommon
 
 
 
-        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
         {
-            if (depObj != null)
+            if (dependencyObject != null) 
             {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
                 {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child is T)
+                    var child = VisualTreeHelper.GetChild(dependencyObject, i);
+                    if (child is T o)
                     {
-                        yield return (T)child;
+                        yield return o;
                     }
 
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    foreach (var childOfChild in FindVisualChildren<T>(child))
                     {
                         yield return childOfChild;
                     }

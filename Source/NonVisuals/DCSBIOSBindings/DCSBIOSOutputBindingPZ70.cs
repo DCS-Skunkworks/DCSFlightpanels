@@ -1,7 +1,7 @@
 ﻿using System;
 using DCS_BIOS;
 
-namespace NonVisuals
+namespace NonVisuals.DCSBIOSBindings
 {
     public enum PZ70LCDPosition
     {
@@ -9,7 +9,7 @@ namespace NonVisuals
         LowerLCD,
     }
 
-    public class DCSBIOSBindingLCDPZ70
+    public class DCSBIOSOutputBindingPZ70
     {
         /*
          * This class binds a LCD row on the PZ70 with a DCSBIOSOutput

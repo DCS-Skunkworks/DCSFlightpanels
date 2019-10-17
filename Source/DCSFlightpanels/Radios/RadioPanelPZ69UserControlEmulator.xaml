@@ -1,9 +1,10 @@
-﻿<dcsFlightpanels:UserControlBase x:Class="DCSFlightpanels.Radios.RadioPanelPZ69UserControlEmulator"
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.Radios.RadioPanelPZ69UserControlEmulator"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              mc:Ignorable="d" 
              d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlEmulator_OnLoaded">
     <UserControl.Resources>
@@ -266,4 +267,4 @@
             
         </StackPanel>
     </Grid>
-</dcsFlightpanels:UserControlBase>
+</panelUserControls:UserControlBase>

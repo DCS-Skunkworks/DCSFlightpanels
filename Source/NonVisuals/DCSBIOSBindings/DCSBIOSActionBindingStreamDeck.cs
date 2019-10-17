@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.DCSBIOSBindings;
 
-namespace NonVisuals
+namespace NonVisuals.DCSBIOSBindings
 {
-    public class DCSBIOSBindingStreamDeck : DCSBIOSBindingBase
+    public class DCSBIOSActionBindingStreamDeck : DCSBIOSActionBindingBase
     {
         /*
          This class binds a physical key on the Stream Deck with a DCSBIOSInput
+         Pressing the button will send a DCSBIOS command.
          */
         private StreamDeckButtons _streamDeckButton;
         private string _layer = "";
 
-        ~DCSBIOSBindingStreamDeck()
+        ~DCSBIOSActionBindingStreamDeck()
         {
             CancelSendDCSBIOSCommands = true;
             DCSBIOSCommandsThread?.Abort();
@@ -26,13 +28,13 @@ namespace NonVisuals
             {
                 throw new ArgumentException("Import string empty. (DCSBIOSBindingStreamDeck)");
             }
-            if (settings.StartsWith("StreamDeckDCSBIOSControl{"))
+            if (settings.StartsWith("StreamDeckDCSBIOSInput{"))
             {
-                //StreamDeckDCSBIOSControl{Home Layer|1BUTTON12|DCS-BIOS}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
+                //StreamDeckDCSBIOSInput{Home Layer|1BUTTON12|DCS-BIOS}\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}
                 var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
 
-                //StreamDeckDCSBIOSControl{Home Layer|1BUTTON12|DCS-BIOS}
-                var param0 = parameters[0].Replace("StreamDeckDCSBIOSControl{", "").Replace("}","");
+                //StreamDeckDCSBIOSInput{Home Layer|1BUTTON12|DCS-BIOS}
+                var param0 = parameters[0].Replace("StreamDeckDCSBIOSInput{", "").Replace("}","");
                 //Home Layer|1BUTTON12|DCS-BIOS
                 var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -78,9 +80,9 @@ namespace NonVisuals
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "StreamDeckDCSBIOSControl{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
+                return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
             }
-            return "StreamDeckDCSBIOSControl{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + stringBuilder.ToString();
+            return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + stringBuilder.ToString();
         }
         
         public StreamDeckButtons StreamDeckButton

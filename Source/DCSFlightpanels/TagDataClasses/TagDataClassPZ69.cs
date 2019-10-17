@@ -5,7 +5,7 @@ using System.Windows.Media;
 using DCS_BIOS;
 using NonVisuals;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.TagDataClasses
 {
     internal class TagDataClassPZ69 : TagDataClassBase
     {

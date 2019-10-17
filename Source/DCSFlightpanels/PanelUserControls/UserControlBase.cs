@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Controls;
 using ClassLibraryCommon;
+using DCSFlightpanels.TagDataClasses;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.PanelUserControls
 {
     public class UserControlBase : UserControl
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.DCSBIOSBindings;
 using NonVisuals.StreamDeck;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -13,9 +14,8 @@ namespace NonVisuals
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
-        private volatile byte _knobSensitivitySkipper;
-        private HashSet<DCSBIOSBindingStreamDeck> _dcsBiosBindings = new HashSet<DCSBIOSBindingStreamDeck>();
-        private HashSet<DCSBIOSBindingLCDStreamDeck> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDStreamDeck>();
+        private HashSet<DCSBIOSActionBindingStreamDeck> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingStreamDeck>();
+        private HashSet<DCSBIOSOutputBindingStreamDeck> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingStreamDeck>();
         private HashSet<KeyBindingStreamDeck> _keyBindings = new HashSet<KeyBindingStreamDeck>();
         private HashSet<OSCommandBindingStreamDeck> _osCommandBindings = new HashSet<OSCommandBindingStreamDeck>();
         private HashSet<BIPLinkStreamDeck> _bipLinks = new HashSet<BIPLinkStreamDeck>();
@@ -178,9 +178,9 @@ namespace NonVisuals
                         osCommand.ImportSettings(setting);
                         _osCommandBindings.Add(osCommand);
                     }
-                    else if (setting.StartsWith("StreamDeckDCSBIOSControl{"))
+                    else if (setting.StartsWith("StreamDeckDCSBIOSInput{"))
                     {
-                        var dcsBIOSBindingStreamDeck = new DCSBIOSBindingStreamDeck();
+                        var dcsBIOSBindingStreamDeck = new DCSBIOSActionBindingStreamDeck();
                         dcsBIOSBindingStreamDeck.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingStreamDeck);
                     }
@@ -190,9 +190,9 @@ namespace NonVisuals
                         bipLinkStreamDeck.ImportSettings(setting);
                         _bipLinks.Add(bipLinkStreamDeck);
                     }
-                    else if (setting.StartsWith("StreamDeckDCSBIOSControlLCD{"))
+                    else if (setting.StartsWith("StreamDeckDCSBIOSOutput{"))
                     {
-                        var dcsBIOSBindingLCDStreamDeck = new DCSBIOSBindingLCDStreamDeck();
+                        var dcsBIOSBindingLCDStreamDeck = new DCSBIOSOutputBindingStreamDeck();
                         dcsBIOSBindingLCDStreamDeck.ImportSettings(setting);
                         _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDStreamDeck);
                     }
@@ -416,7 +416,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSBindingStreamDeck();
+                var dcsBiosBinding = new DCSBIOSActionBindingStreamDeck();
                 dcsBiosBinding.Layer = layer;
                 dcsBiosBinding.StreamDeckButton = streamDeckButton;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
@@ -441,7 +441,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDStreamDeck();
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingStreamDeck();
                 dcsBiosBindingLCD.Layer = layer;
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
@@ -463,7 +463,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDStreamDeck();
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingStreamDeck();
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.StreamDeckButton = streamDeckButton;
                 dcsBiosBindingLCD.Layer = layer;
@@ -630,7 +630,7 @@ namespace NonVisuals
             return null;
         }
 
-        public HashSet<DCSBIOSBindingStreamDeck> DCSBiosBindings
+        public HashSet<DCSBIOSActionBindingStreamDeck> DCSBiosBindings
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;
@@ -660,7 +660,7 @@ namespace NonVisuals
             set => _osCommandBindings = value;
         }
 
-        public HashSet<DCSBIOSBindingLCDStreamDeck> LCDBindings
+        public HashSet<DCSBIOSOutputBindingStreamDeck> LCDBindings
         {
             get => _dcsBiosLcdBindings;
             set => _dcsBiosLcdBindings = value;

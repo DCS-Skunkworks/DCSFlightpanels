@@ -5,6 +5,7 @@ using System.Globalization;
 using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
+using NonVisuals.DCSBIOSBindings;
 
 
 namespace NonVisuals.Radios
@@ -25,8 +26,8 @@ namespace NonVisuals.Radios
         private HashSet<KeyBindingPZ69DialPosition> _keyBindings = new HashSet<KeyBindingPZ69DialPosition>();
         private HashSet<OSCommandBindingPZ69FullEmulator> _osCommandBindings = new HashSet<OSCommandBindingPZ69FullEmulator>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
-        private HashSet<DCSBIOSBindingLCDPZ69> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ69>();
-        private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
+        private HashSet<DCSBIOSOutputBindingPZ69> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingPZ69>();
+        private HashSet<DCSBIOSActionBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ69>();
         private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
         private readonly byte[] _oldRadioPanelValue = { 0, 0, 0 };
         private readonly byte[] _newRadioPanelValue = { 0, 0, 0 };
@@ -113,13 +114,13 @@ namespace NonVisuals.Radios
                     }
                     else if (setting.StartsWith("RadioPanelDCSBIOSLCD{"))
                     {
-                        var dcsbiosBindingLCDPZ69 = new DCSBIOSBindingLCDPZ69();
+                        var dcsbiosBindingLCDPZ69 = new DCSBIOSOutputBindingPZ69();
                         dcsbiosBindingLCDPZ69.ImportSettings(setting);
                         _dcsBiosLcdBindings.Add(dcsbiosBindingLCDPZ69);
                     }
                     else if (setting.StartsWith("RadioPanelDCSBIOSControl{"))
                     {
-                        var dcsbiosBindingPZ69 = new DCSBIOSBindingPZ69();
+                        var dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
                         dcsbiosBindingPZ69.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsbiosBindingPZ69);
                     }
@@ -789,7 +790,7 @@ namespace NonVisuals.Radios
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ69();
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ69();
                 dcsBiosBindingLCD.DialPosition = pz69DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
@@ -818,7 +819,7 @@ namespace NonVisuals.Radios
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ69();
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ69();
                 dcsBiosBindingLCD.DialPosition = pz69DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.PZ69LcdPosition = pz69LCDPosition;
@@ -869,7 +870,7 @@ namespace NonVisuals.Radios
             }
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSBindingPZ69();
+                var dcsBiosBinding = new DCSBIOSActionBindingPZ69();
                 dcsBiosBinding.RadioPanelPZ69Knob = knob;
                 dcsBiosBinding.DialPosition = pz69DialPosition;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
@@ -1007,13 +1008,13 @@ namespace NonVisuals.Radios
             return "0X";
         }
 
-        public HashSet<DCSBIOSBindingLCDPZ69> LCDBindings
+        public HashSet<DCSBIOSOutputBindingPZ69> LCDBindings
         {
             get => _dcsBiosLcdBindings;
             set => _dcsBiosLcdBindings = value;
         }
 
-        public HashSet<DCSBIOSBindingPZ69> DCSBIOSBindings
+        public HashSet<DCSBIOSActionBindingPZ69> DCSBIOSBindings
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;

@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.DCSBIOSBindings;
 
-namespace NonVisuals
+namespace NonVisuals.DCSBIOSBindings
 {
-    public class DCSBIOSBindingPZ70 : DCSBIOSBindingBase
+    public class DCSBIOSActionBindingPZ70 : DCSBIOSActionBindingBase
     {
         /*
          This class binds a physical switch on the PZ70 with a DCSBIOSInput
+         Pressing the button will send a DCSBIOS command.
          */
         private PZ70DialPosition _pz70DialPosition;
         private MultiPanelPZ70Knobs _multiPanelPZ70Knob;
         
-        ~DCSBIOSBindingPZ70()
+        ~DCSBIOSActionBindingPZ70()
         {
             CancelSendDCSBIOSCommands = true;
             DCSBIOSCommandsThread?.Abort();

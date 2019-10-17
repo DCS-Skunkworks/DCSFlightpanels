@@ -1,8 +1,10 @@
-﻿<UserControl x:Class="DCSFlightpanels.BackLitPanelUserControl"
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.BackLitPanelUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="BackLitPanelUserControl_OnLoaded" >
     <UserControl.Resources>
@@ -99,4 +101,4 @@
         </StackPanel>
         <TextBlock HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" FontSize="18" FontWeight="Bold" TextWrapping="Wrap" Text="Upper row   : Position_1_1 -> Position_1_8&#x0a;Middle row  : Position_2_1 -> Position_2_8&#x0a;Bottom row : Position_3_1 -> Position_3_8" VerticalAlignment="Stretch"/>
     </Grid>
-</UserControl>
+</panelUserControls:UserControlBase>

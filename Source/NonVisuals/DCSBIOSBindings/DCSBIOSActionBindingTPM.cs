@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.DCSBIOSBindings;
 
-namespace NonVisuals
+namespace NonVisuals.DCSBIOSBindings
 {
-    public class DCSBIOSBindingTPM : DCSBIOSBindingBase
+    public class DCSBIOSActionBindingTPM : DCSBIOSActionBindingBase
     {
         /*
          This class binds a physical switch on the TPM with a DCSBIOSInput
+         Pressing the button will send a DCSBIOS command.
          */
         private TPMPanelSwitches _tpmPanelSwitch;
         
-        ~DCSBIOSBindingTPM()
+        ~DCSBIOSActionBindingTPM()
         {
             CancelSendDCSBIOSCommands = true;
             DCSBIOSCommandsThread?.Abort();

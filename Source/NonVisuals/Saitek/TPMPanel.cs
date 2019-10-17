@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.DCSBIOSBindings;
 
 namespace NonVisuals
 {
@@ -15,7 +16,7 @@ namespace NonVisuals
          * - sequenced key binding
          * - DCS-BIOS control
          */
-        private HashSet<DCSBIOSBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSBindingTPM>();
+        private HashSet<DCSBIOSActionBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
         private HashSet<OSCommandBindingTPM> _osCommandBindings = new HashSet<OSCommandBindingTPM>();
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
@@ -85,7 +86,7 @@ namespace NonVisuals
                     }
                     else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
                     {
-                        var dcsBIOSBindingTPM = new DCSBIOSBindingTPM();
+                        var dcsBIOSBindingTPM = new DCSBIOSActionBindingTPM();
                         dcsBIOSBindingTPM.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingTPM);
                     }
@@ -444,7 +445,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSBindingTPM();
+                var dcsBiosBinding = new DCSBIOSActionBindingTPM();
                 dcsBiosBinding.TPMSwitch = tpmPanelSwitch;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                 dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
@@ -531,7 +532,7 @@ namespace NonVisuals
             SaitekPanelKnobs = TPMPanelSwitch.GetTPMPanelSwitches();
         }
 
-        public HashSet<DCSBIOSBindingTPM> DCSBiosBindings
+        public HashSet<DCSBIOSActionBindingTPM> DCSBiosBindings
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;

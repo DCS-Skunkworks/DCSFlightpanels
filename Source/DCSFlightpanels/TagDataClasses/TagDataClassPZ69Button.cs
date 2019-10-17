@@ -1,11 +1,11 @@
 ﻿using System.Windows.Controls;
-using NonVisuals;
+using NonVisuals.DCSBIOSBindings;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.TagDataClasses
 {
     internal class TagDataClassPZ69Button
     {
-        private DCSBIOSBindingLCDPZ69 _dcsbiosBindingLCDPZ69;
+        private DCSBIOSOutputBindingPZ69 _dcsbiosBindingLCDPZ69;
         private readonly Button _button;
 
         public TagDataClassPZ69Button(Button button)
@@ -25,7 +25,7 @@ namespace DCSFlightpanels
             return _dcsbiosBindingLCDPZ69.DCSBIOSOutputObject == null;
         }
         
-        public DCSBIOSBindingLCDPZ69 DCSBIOSBindingLCD
+        public DCSBIOSOutputBindingPZ69 DCSBIOSBindingLCD
         {
             get => _dcsbiosBindingLCDPZ69;
             set => _dcsbiosBindingLCDPZ69 = value;

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using DCS_BIOS;
 using NonVisuals;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.TagDataClasses
 {
     public abstract class TagDataClassBase
     {

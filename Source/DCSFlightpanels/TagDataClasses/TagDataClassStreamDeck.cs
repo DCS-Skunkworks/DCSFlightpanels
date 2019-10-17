@@ -4,19 +4,20 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
 using NonVisuals;
+using NonVisuals.DCSBIOSBindings;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.TagDataClasses
 {
     internal class TagDataClassStreamDeck : TagDataClassBase
     {
-        private StreamDeckKeyOnOff _key;
-        private DCSBIOSBindingStreamDeck _dcsbiosBindingStreamDeck;
+        private StreamDeckButtonOnOff _button;
+        private DCSBIOSActionBindingStreamDeck _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
 
-        public TagDataClassStreamDeck(TextBox textBox, StreamDeckKeyOnOff key)
+        public TagDataClassStreamDeck(TextBox textBox, StreamDeckButtonOnOff button)
         {
             TextBox = textBox;
-            _key = key;
+            _button = button;
         }
 
         public override bool ContainsDCSBIOS()
@@ -38,13 +39,13 @@ namespace DCSFlightpanels
         {
             if (_dcsbiosBindingStreamDeck == null)
             {
-                _dcsbiosBindingStreamDeck = new DCSBIOSBindingStreamDeck();
+                _dcsbiosBindingStreamDeck = new DCSBIOSActionBindingStreamDeck();
             }
 
             _dcsbiosBindingStreamDeck.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSBindingStreamDeck DCSBIOSBinding
+        public DCSBIOSActionBindingStreamDeck DCSBIOSBinding
         {
             get => _dcsbiosBindingStreamDeck;
             set
@@ -89,10 +90,10 @@ namespace DCSFlightpanels
             }
         }
         
-        public StreamDeckKeyOnOff Key
+        public StreamDeckButtonOnOff Key
         {
-            get => _key;
-            set => _key = value;
+            get => _button;
+            set => _button = value;
         }
 
         public override void ClearAll()

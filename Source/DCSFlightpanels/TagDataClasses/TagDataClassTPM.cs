@@ -4,13 +4,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
 using NonVisuals;
+using NonVisuals.DCSBIOSBindings;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.TagDataClasses
 {
     internal class TagDataClassTPM : TagDataClassBase
     {
         private TPMPanelSwitchOnOff _key;
-        private DCSBIOSBindingTPM _dcsbiosBindingTPM;
+        private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
 
         public TagDataClassTPM(TextBox textBox, TPMPanelSwitchOnOff key)
@@ -38,13 +39,13 @@ namespace DCSFlightpanels
         {
             if (_dcsbiosBindingTPM == null)
             {
-                _dcsbiosBindingTPM = new DCSBIOSBindingTPM();
+                _dcsbiosBindingTPM = new DCSBIOSActionBindingTPM();
             }
 
             _dcsbiosBindingTPM.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSBindingTPM DCSBIOSBinding
+        public DCSBIOSActionBindingTPM DCSBIOSBinding
         {
             get => _dcsbiosBindingTPM;
             set

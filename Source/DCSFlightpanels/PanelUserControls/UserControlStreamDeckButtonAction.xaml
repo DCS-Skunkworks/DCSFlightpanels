@@ -1,0 +1,95 @@
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.UserControlStreamDeckButtonAction"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DCSFlightpanels"
+             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="300"
+             Loaded="UserControlStreamDeckButtonAction_OnLoaded">
+    <UserControl.Resources>
+        <ContextMenu x:Key="TextBoxContextMenuStreamDeck" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged">
+            <MenuItem Header="Keep pressed" Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FiftyMilliSec" Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="HalfSecond" Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Second" Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="SecondAndHalf" Name="contextMenuItemSecondAndHalf" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TwoSeconds" Name="contextMenuItemTwoSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThreeSeconds" Name="contextMenuItemThreeSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FourSeconds" Name="contextMenuItemFourSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FiveSecs" Name="contextMenuItemFiveSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TenSecs" Name="contextMenuItemTenSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FifteenSecs" Name="contextMenuItemFifteenSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TwentySecs" Name="contextMenuItemTwentySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThirtySecs" Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FortySecs" Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="SixtySecs" Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Edit OS command" Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
+            <MenuItem Header="Edit sequence" Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
+            <MenuItem Header="Edit DCS-BIOS Control" Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick" ContextMenuOpening="MenuContextEditDCSBIOSOpening"/>
+            <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick"/>
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <Grid Margin="10,0,10,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Visible">
+            <Label Content="Key Press / Sequence when Button Pressed" FontSize="10" Height="23"   />
+            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOn"/>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Button Name="ButtonAddEditKeySequenceButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOn_OnClick"/>
+                <Button Name="ButtonDeleteKeySequenceButtonOn" Width="65" Content="Delete" Margin="0,2,2,0"/>
+            </StackPanel>
+            <Label Content="Key Press / Sequence when Button Released" FontSize="10" Height="23"   />
+            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOff"/>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Button Name="ButtonAddEditKeySequenceButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOff_OnClick"/>
+                <Button Name="ButtonDeleteKeySequenceButtonOff" Width="65" Content="Delete" Margin="0,2,2,0"/>
+            </StackPanel>
+            <Button Name="ButtonFocus" Width="100" Height="5" Background="Transparent" Content="              " Margin="0,10,0,0"/>
+        </StackPanel>
+        <StackPanel Name="StackPanelButtonDCSBIOSSettings"  Visibility="Collapsed">
+            <Label Content="DCSBIOS Action when Button Pressed" FontSize="10" Height="23"   />
+            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOn"  IsEnabled="False" Background="LightSteelBlue" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Button Name="ButtonSelectDCSBIOSActionButtonOn" Width="65" Content="Select" Margin="0,2,2,0"/>
+                <Button Name="ButtonEditDCSBIOSActionButtonOn" Width="65" Content="Edit" Margin="0,2,2,0"/>
+                <Button Name="ButtonDeleteDCSBIOSActionButtonOn" Width="65" Content="Delete" Margin="0,2,2,0"/>
+            </StackPanel>
+            <Label Content="DCSBIOS Action when Button Released" FontSize="10" Height="23"  Margin="0,10,2,0"  />
+            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOff" IsEnabled="False" Background="LightSteelBlue" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxDCSBIOSInputButtonOff_OnGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBoxDCSBIOSInputButtonOff_OnMouseDown" />
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Button Name="ButtonSelectDCSBIOSActionButtonOff" Width="65" Content="Select" Margin="0,2,2,0"/>
+                <Button Name="ButtonEditDCSBIOSActionButtonOff" Width="65" Content="Edit" Margin="0,2,2,0"/>
+                <Button Name="ButtonDeleteDCSBIOSActionButtonOff" Width="65" Content="Delete" Margin="0,2,2,0"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Name="StackPanelButtonOSCommandSettings"  Visibility="Collapsed">
+            <Label Content="OS Command when Button Pressed" FontSize="10" Height="23"   />
+            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOn"  IsEnabled="False" Background="LightSteelBlue"/>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Button Name="ButtonAddOSCommandButtonOn" Width="65" Content="Add" Margin="0,2,2,0"/>
+                <Button Name="ButtonEditOSCommandButtonOn" Width="65" Content="Edit" Margin="0,2,2,0"/>
+                <Button Name="ButtonDeleteOSCommandButtonOn" Width="65" Content="Delete" Margin="0,2,2,0"/>
+            </StackPanel>
+            <Label Content="OS Command when Button Released" FontSize="10" Height="23"   />
+            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOff" IsEnabled="False" Background="LightSteelBlue"/>
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                <Button Name="ButtonAddOSCommandButtonOff" Width="65" Content="Add" Margin="0,2,2,0"/>
+                <Button Name="ButtonEditOSCommandButtonOff" Width="65" Content="Edit" Margin="0,2,2,0"/>
+                <Button Name="ButtonDeleteOSCommandButtonOff" Width="65" Content="Delete" Margin="0,2,2,0"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Collapsed">
+            <Label Content="Layer to show when Button Pressed" FontSize="10" Height="23"   />
+            <ComboBox Name="ComboBoxLayerNavigationButtonOn"/>
+            <Label Content="Layer to show when Button Released" FontSize="10" Height="23"   />
+            <ComboBox Name="ComboBoxLayerNavigationButtonOff"/>
+        </StackPanel>
+
+    </Grid>
+</panelUserControls:UserControlBase>

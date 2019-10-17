@@ -111,6 +111,7 @@
     <Compile Include="ColorPickerWindow.xaml.cs">
       <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IStreamDeckUIParent.cs" />
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -236,7 +237,7 @@
     <Compile Include="StreamDeckLayerWindow.xaml.cs">
       <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StreamDeckUserControl.xaml.cs">
+    <Compile Include="PanelUserControls\StreamDeckUserControl.xaml.cs">
       <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
@@ -259,6 +260,12 @@
     <Compile Include="PanelUserControls\UserControlBase.cs" />
     <Compile Include="OSCommandWindow.xaml.cs">
       <DependentUpon>OSCommandWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml.cs">
+      <DependentUpon>UserControlStreamDeckButtonAction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\UserControlStreamDeckButtonImage.xaml.cs">
+      <DependentUpon>UserControlStreamDeckButtonImage.xaml</DependentUpon>
     </Compile>
     <Page Include="AboutFPWindow.xaml">
       <SubType>Designer</SubType>
@@ -444,7 +451,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StreamDeckUserControl.xaml">
+    <Page Include="PanelUserControls\StreamDeckUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -461,6 +468,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="OSCommandWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelUserControls\UserControlStreamDeckButtonImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

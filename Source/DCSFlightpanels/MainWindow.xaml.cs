@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
+using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
 using Microsoft.Win32;
 using NonVisuals;

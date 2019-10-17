@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
     public class StreamDeckLayer
     {

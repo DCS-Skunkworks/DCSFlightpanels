@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
+using NonVisuals.DCSBIOSBindings;
 
 namespace NonVisuals
 {
@@ -10,8 +11,8 @@ namespace NonVisuals
     {
         private int _lcdKnobSensitivity;
         private volatile byte _knobSensitivitySkipper;
-        private HashSet<DCSBIOSBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ70>();
-        private HashSet<DCSBIOSBindingLCDPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSBindingLCDPZ70>();
+        private HashSet<DCSBIOSActionBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ70>();
+        private HashSet<DCSBIOSOutputBindingPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingPZ70>();
         private HashSet<KeyBindingPZ70> _knobBindings = new HashSet<KeyBindingPZ70>();
         private HashSet<OSCommandBindingPZ70> _osCommandBindings = new HashSet<OSCommandBindingPZ70>();
         private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
@@ -148,7 +149,7 @@ namespace NonVisuals
                     }
                     else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
                     {
-                        var dcsBIOSBindingPZ70 = new DCSBIOSBindingPZ70();
+                        var dcsBIOSBindingPZ70 = new DCSBIOSActionBindingPZ70();
                         dcsBIOSBindingPZ70.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingPZ70);
                     }
@@ -160,7 +161,7 @@ namespace NonVisuals
                     }
                     else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
                     {
-                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSBindingLCDPZ70();
+                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSOutputBindingPZ70();
                         dcsBIOSBindingLCDPZ70.ImportSettings(setting);
                         _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
                     }
@@ -376,7 +377,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSBindingPZ70();
+                var dcsBiosBinding = new DCSBIOSActionBindingPZ70();
                 dcsBiosBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
                 dcsBiosBinding.DialPosition = _pz70DialPosition;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
@@ -401,7 +402,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ70();
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70();
                 dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
@@ -424,7 +425,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBindingLCD = new DCSBIOSBindingLCDPZ70();
+                var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70();
                 dcsBiosBindingLCD.DialPosition = _pz70DialPosition;
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
@@ -1163,7 +1164,7 @@ namespace NonVisuals
             return null;
         }
 
-        public HashSet<DCSBIOSBindingPZ70> DCSBiosBindings
+        public HashSet<DCSBIOSActionBindingPZ70> DCSBiosBindings
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;
@@ -1193,7 +1194,7 @@ namespace NonVisuals
             set => _osCommandBindings = value;
         }
 
-        public HashSet<DCSBIOSBindingLCDPZ70> LCDBindings
+        public HashSet<DCSBIOSOutputBindingPZ70> LCDBindings
         {
             get => _dcsBiosLcdBindings;
             set => _dcsBiosLcdBindings = value;

@@ -4,13 +4,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
 using NonVisuals;
+using NonVisuals.DCSBIOSBindings;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.TagDataClasses
 {
     internal class TagDataClassPZ69Full : TagDataClassBase
     {
         private BIPLinkPZ69 _bipLinkPZ69;
-        private DCSBIOSBindingPZ69 _dcsbiosBindingPZ69;
+        private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
 
         public TagDataClassPZ69Full(TextBox textBox)
         {
@@ -36,7 +37,7 @@ namespace DCSFlightpanels
         {
             if (_dcsbiosBindingPZ69 == null)
             {
-                _dcsbiosBindingPZ69 = new DCSBIOSBindingPZ69();
+                _dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
             }
 
             _dcsbiosBindingPZ69.DCSBIOSInputs = dcsBiosInputs;
@@ -64,7 +65,7 @@ namespace DCSFlightpanels
             }
         }
         
-        public DCSBIOSBindingPZ69 DCSBIOSBinding
+        public DCSBIOSActionBindingPZ69 DCSBIOSBinding
         {
             get => _dcsbiosBindingPZ69;
             set

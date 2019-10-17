@@ -4,14 +4,15 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
-namespace NonVisuals
+namespace NonVisuals.DCSBIOSBindings
 {
-    public abstract class DCSBIOSBindingBase
+    public abstract class DCSBIOSActionBindingBase
     {
         private bool _whenOnTurnedOn = true;
         internal const string SeparatorChars = "\\o/";
         private string _description;
         private Thread _sendDCSBIOSCommandsThread;
+        public List<DCSBIOSInput> DCSBIOSInputs { get; set; }
 
         internal abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
@@ -29,7 +30,6 @@ namespace NonVisuals
             set => _description = value;
         }
 
-        public List<DCSBIOSInput> DCSBIOSInputs { get; set; }
 
         protected bool WhenOnTurnedOn
         {

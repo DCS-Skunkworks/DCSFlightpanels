@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -8,15 +7,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
-using Newtonsoft.Json;
+using DCSFlightpanels.TagDataClasses;
 using NonVisuals;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;

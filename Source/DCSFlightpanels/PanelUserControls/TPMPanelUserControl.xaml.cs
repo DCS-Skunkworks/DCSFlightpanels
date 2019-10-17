@@ -6,14 +6,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
+using DCSFlightpanels.TagDataClasses;
 using NonVisuals;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-    public partial class TPMPanelUserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
 
         private readonly TPMPanel _tpmPanel;

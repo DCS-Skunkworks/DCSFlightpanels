@@ -9,14 +9,16 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
 using DCSFlightpanels.Properties;
+using DCSFlightpanels.TagDataClasses;
+using NonVisuals.DCSBIOSBindings;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
 
-    public partial class MultiPanelUserControl : IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
         private readonly TabItem _parentTabItem;

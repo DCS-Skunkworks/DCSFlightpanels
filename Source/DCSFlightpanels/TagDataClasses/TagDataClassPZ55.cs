@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
+using DCSFlightpanels.TagDataClasses;
 using NonVisuals;
+using NonVisuals.DCSBIOSBindings;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.TagDataClasses
 {
     internal class TagDataClassPZ55 : TagDataClassBase
     {
-        private DCSBIOSBindingPZ55 _dcsbiosBindingPZ55;
+        private DCSBIOSActionBindingPZ55 _dcsbiosBindingPZ55;
         private BIPLinkPZ55 _bipLinkPZ55;
 
         public TagDataClassPZ55(TextBox textBox, SwitchPanelPZ55KeyOnOff key) : base()
@@ -37,12 +39,12 @@ namespace DCSFlightpanels
         {
             if (_dcsbiosBindingPZ55 == null)
             {
-                _dcsbiosBindingPZ55 = new DCSBIOSBindingPZ55();
+                _dcsbiosBindingPZ55 = new DCSBIOSActionBindingPZ55();
             }
             _dcsbiosBindingPZ55.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSBindingPZ55 DCSBIOSBinding
+        public DCSBIOSActionBindingPZ55 DCSBIOSBinding
         {
             get => _dcsbiosBindingPZ55;
             set

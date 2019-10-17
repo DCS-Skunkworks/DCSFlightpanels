@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.DCSBIOSBindings;
 
 namespace NonVisuals
 {
@@ -24,7 +25,7 @@ namespace NonVisuals
          * - seqenced key binding
          * - DCS-BIOS control
          */
-        private HashSet<DCSBIOSBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ55>();
+        private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
         private HashSet<OSCommandBindingPZ55> _osCommandBindings = new HashSet<OSCommandBindingPZ55>();
         private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
@@ -107,7 +108,7 @@ namespace NonVisuals
                     }
                     else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
                     {
-                        var dcsBIOSBindingPZ55 = new DCSBIOSBindingPZ55();
+                        var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
                         dcsBIOSBindingPZ55.ImportSettings(setting);
                         _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
                     }
@@ -542,7 +543,7 @@ namespace NonVisuals
             }
             if (!found)
             {
-                var dcsBiosBinding = new DCSBIOSBindingPZ55();
+                var dcsBiosBinding = new DCSBIOSActionBindingPZ55();
                 dcsBiosBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                 dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
@@ -844,7 +845,7 @@ namespace NonVisuals
             SaitekPanelKnobs = SwitchPanelKey.GetPanelSwitchKeys();
         }
 
-        public HashSet<DCSBIOSBindingPZ55> DCSBiosBindings
+        public HashSet<DCSBIOSActionBindingPZ55> DCSBiosBindings
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;
