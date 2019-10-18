@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using NonVisuals.Saitek;
 
-namespace NonVisuals
+namespace NonVisuals.StreamDeck
 {
     public class BIPLinkStreamDeck : BIPLink
     {
@@ -30,7 +31,7 @@ namespace NonVisuals
                 var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 Layer = param0Split[0];
 
-                _whenOnTurnedOn = param0Split[1].Substring(0, 1) == "1";
+                WhenOnTurnedOn = param0Split[1].Substring(0, 1) == "1";
                 param0Split[1] = param0Split[1].Substring(1);
                 StreamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
                 
@@ -58,7 +59,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            var onStr = _whenOnTurnedOn ? "1" : "0";
+            var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("StreamDeckBIPLink{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}");
             foreach (var bipLight in _bipLights)

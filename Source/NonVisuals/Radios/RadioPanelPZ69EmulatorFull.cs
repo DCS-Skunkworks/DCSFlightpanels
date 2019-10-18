@@ -6,6 +6,7 @@ using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek;
 
 
 namespace NonVisuals.Radios
@@ -128,7 +129,7 @@ namespace NonVisuals.Radios
             }
 
             _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
-            OnSettingsApplied();
+            SettingsApplied();
         }
 
         public override List<string> ExportSettings()

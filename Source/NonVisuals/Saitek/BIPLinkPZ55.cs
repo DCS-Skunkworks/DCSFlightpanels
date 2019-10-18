@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class BIPLinkPZ55 : BIPLink
     {
@@ -26,7 +26,7 @@ namespace NonVisuals
                 //SwitchPanelBIPLink{1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Replace("SwitchPanelBIPLink{", "").Replace("}", "").Trim();
                 //1KNOB_ENGINE_LEFT
-                _whenOnTurnedOn = param0.Substring(0, 1) == "1";
+                WhenOnTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
                 _switchPanelPZ55Key = (SwitchPanelPZ55Keys)Enum.Parse(typeof(SwitchPanelPZ55Keys), param0);
 
@@ -54,7 +54,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            var onStr = _whenOnTurnedOn ? "1" : "0";
+            var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("SwitchPanelBIPLink{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}");
             foreach (var bipLight in _bipLights)

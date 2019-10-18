@@ -4,11 +4,12 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
 
-namespace NonVisuals
+namespace NonVisuals.StreamDeck
 {
     public class StreamDeckPanel : GamingPanel
     {
@@ -204,7 +205,7 @@ namespace NonVisuals
             }
             SettingsLoading = false;
             _keyBindings = KeyBindingStreamDeck.SetNegators(_keyBindings);
-            OnSettingsApplied();
+            SettingsApplied();
         }
 
         public override List<string> ExportSettings()

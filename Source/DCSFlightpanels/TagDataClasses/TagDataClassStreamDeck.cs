@@ -5,6 +5,8 @@ using System.Windows.Media;
 using DCS_BIOS;
 using NonVisuals;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek;
+using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.TagDataClasses
 {

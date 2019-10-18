@@ -1,4 +1,4 @@
-﻿namespace NonVisuals
+﻿namespace NonVisuals.Saitek
 {
     public abstract class KeyBinding
     {

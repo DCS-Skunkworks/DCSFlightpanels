@@ -17,7 +17,9 @@ using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
 using Microsoft.Win32;
 using NonVisuals;
+using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Saitek;
 using Octokit;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
@@ -169,7 +171,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(() => MessageBox.Show(e.UserMessage, "Information")));
+                Dispatcher?.BeginInvoke((Action)(() => MessageBox.Show(e.UserMessage, "Information")));
             }
             catch (Exception ex)
             {
@@ -977,7 +979,7 @@ namespace DCSFlightpanels
                     }
                     if (newerAvailable)
                     {
-                        Dispatcher.Invoke(() =>
+                        Dispatcher?.Invoke(() =>
                         {
                             LabelVersionInformation.Visibility = Visibility.Hidden;
                             LabelDownloadNewVersion.Visibility = Visibility.Visible;
@@ -985,14 +987,14 @@ namespace DCSFlightpanels
                     }
                     else
                     {
-                        Dispatcher.Invoke(() =>
+                        Dispatcher?.Invoke(() =>
                         {
                             LabelVersionInformation.Text = "v." + fileVersionInfo.FileVersion;
                             LabelVersionInformation.Visibility = Visibility.Visible;
                         });
                     }
                     var lastDCSBIOSRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "dcs-bios");
-                    Dispatcher.Invoke(() =>
+                    Dispatcher?.Invoke(() =>
                     {
                         LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + lastDCSBIOSRelease.CreatedAt.Date.ToLongDateString();
                         Settings.Default.LastDCSBIOSRelease = lastDCSBIOSRelease.CreatedAt.Date.ToLongDateString();
@@ -1001,7 +1003,7 @@ namespace DCSFlightpanels
                 }
                 else
                 {
-                    Dispatcher.Invoke(() =>
+                    Dispatcher?.Invoke(() =>
                     {
                         LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                         LabelVersionInformation.Visibility = Visibility.Visible;
@@ -1034,7 +1036,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(() => ImageDcsBiosConnected.IsEnabled = false));
+                Dispatcher?.BeginInvoke((Action)(() => ImageDcsBiosConnected.IsEnabled = false));
                 _dcsStopGearTimer.Stop();
             }
             catch (Exception)
@@ -1447,7 +1449,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(() => RotateGear()));
+                Dispatcher?.BeginInvoke((Action)(() => RotateGear()));
             }
             catch (Exception ex)
             {
@@ -1501,7 +1503,7 @@ namespace DCSFlightpanels
                         _statusMessagesTimer.Interval = 1000;
                     }
 
-                    Dispatcher.BeginInvoke((Action)(() => LabelInformation.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(() => LabelInformation.Text = ""));
 
                     if (_statusMessages.Count == 0)
                     {
@@ -1509,7 +1511,7 @@ namespace DCSFlightpanels
                     }
 
                     var message = _statusMessages[0];
-                    Dispatcher.BeginInvoke((Action)(() => LabelInformation.Text = message));
+                    Dispatcher?.BeginInvoke((Action)(() => LabelInformation.Text = message));
                     _statusMessages.RemoveAt(0);
                 }
             }

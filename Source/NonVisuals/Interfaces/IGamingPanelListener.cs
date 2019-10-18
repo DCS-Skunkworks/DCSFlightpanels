@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using NonVisuals.Saitek;
+
+namespace NonVisuals.Interfaces
 {
     public interface IGamingPanelListener
     {

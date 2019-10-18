@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
@@ -104,7 +105,7 @@ namespace NonVisuals.Radios
             }
 
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            OnSettingsApplied();
+            SettingsApplied();
         }
 
         public override List<string> ExportSettings()

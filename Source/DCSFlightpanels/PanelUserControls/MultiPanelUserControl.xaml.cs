@@ -11,6 +11,8 @@ using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.TagDataClasses;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -221,8 +223,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.UniqueId.Equals(_multiPanelPZ70.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel)
                 {
-                    Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = ""));
                 }
             }
             catch (Exception ex)
@@ -285,7 +287,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.KNOB_ALT:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLeftKnobAlt.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -301,7 +303,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.KNOB_VS:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLeftKnobVs.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -317,7 +319,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.KNOB_IAS:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLeftKnobIas.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -333,7 +335,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.KNOB_HDG:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLeftKnobHdg.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -349,7 +351,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.KNOB_CRS:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLeftKnobCrs.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -365,80 +367,80 @@ namespace DCSFlightpanels.PanelUserControls
                             }
                         case MultiPanelPZ70Knobs.AP_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonAp.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonAp.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.HDG_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonHdg.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonHdg.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.NAV_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonNav.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonNav.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.IAS_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonIas.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonIas.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.ALT_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonAlt.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonAlt.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.VS_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonVs.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonVs.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.APR_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonApr.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonApr.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.REV_BUTTON:
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageLcdButtonRev.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageLcdButtonRev.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, multiKnob.MultiPanelPZ70Knob) ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
                         case MultiPanelPZ70Knobs.LCD_WHEEL_DEC:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLcdKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -448,7 +450,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.LCD_WHEEL_INC:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLcdKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -458,7 +460,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.AUTO_THROTTLE:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLcdAutoThrottleArm.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -469,7 +471,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.FLAPS_LEVER_UP:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageFlapsUp.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -479,7 +481,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageFlapsDown.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -489,7 +491,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImagePitchUp.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -499,7 +501,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN:
                             {
                                 var key = multiKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImagePitchDown.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -580,7 +582,7 @@ namespace DCSFlightpanels.PanelUserControls
                 DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow = null;
                 foreach (var dcsbiosBindingLCDPZ70 in _multiPanelPZ70.LCDBindings)
                 {
-                    if (dcsbiosBindingLCDPZ70.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == pz70LCDPosition)
+                    if (dcsbiosBindingLCDPZ70.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsbiosBindingLCDPZ70.PZ70LCDPosition == pz70LCDPosition)
                     {
                         if (dcsbiosBindingLCDPZ70.UseFormula)
                         {
@@ -652,19 +654,19 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 SetApplicationMode();
-                ImageLcdButtonAp.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.AP_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
-                ImageLcdButtonHdg.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
-                ImageLcdButtonNav.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
-                ImageLcdButtonIas.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
-                ImageLcdButtonAlt.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
-                ImageLcdButtonVs.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.VS_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
-                ImageLcdButtonApr.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.APR_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
-                ImageLcdButtonRev.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70_DialPosition, MultiPanelPZ70Knobs.REV_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonAp.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.AP_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonHdg.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.HDG_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonNav.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.NAV_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonIas.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.IAS_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonAlt.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.ALT_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonVs.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.VS_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonApr.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.APR_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
+                ImageLcdButtonRev.Visibility = _multiPanelPZ70.LCDButtonByteListHandler.IsOn(_multiPanelPZ70.PZ70DialPosition, MultiPanelPZ70Knobs.REV_BUTTON) ? Visibility.Visible : Visibility.Collapsed;
 
                 foreach (var keyBinding in _multiPanelPZ70.KeyBindingsHashSet)
                 {
                     var textBox = GetTextBox(keyBinding.MultiPanelPZ70Knob, keyBinding.WhenTurnedOn);
-                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition)
+                    if (keyBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition)
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
@@ -676,7 +678,7 @@ namespace DCSFlightpanels.PanelUserControls
                 foreach (var osCommand in _multiPanelPZ70.OSCommandHashSet)
                 {
                     var textBox = GetTextBox(osCommand.MultiPanelPZ70Knob, osCommand.WhenTurnedOn);
-                    if (osCommand.DialPosition == _multiPanelPZ70.PZ70_DialPosition)
+                    if (osCommand.DialPosition == _multiPanelPZ70.PZ70DialPosition)
                         if (osCommand.OSCommandObject != null)
                         {
                             ((TagDataClassPZ70) textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
@@ -686,7 +688,7 @@ namespace DCSFlightpanels.PanelUserControls
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
                 {
                     var textBox = GetTextBox(dcsBiosBinding.MultiPanelPZ70Knob, dcsBiosBinding.WhenTurnedOn);
-                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
+                    if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         ((TagDataClassPZ70)textBox.Tag).DCSBIOSBinding = dcsBiosBinding;
                     }
@@ -696,7 +698,7 @@ namespace DCSFlightpanels.PanelUserControls
                 foreach (var bipLink in _multiPanelPZ70.BIPLinkHashSet)
                 {
                     var textBox = GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
-                    if (bipLink.DialPosition == _multiPanelPZ70.PZ70_DialPosition && bipLink.BIPLights.Count > 0)
+                    if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
                         ((TagDataClassPZ70)textBox.Tag).BIPLink = bipLink;
                     }
@@ -705,7 +707,7 @@ namespace DCSFlightpanels.PanelUserControls
                 ImageLcdUpperRow.Visibility = Visibility.Collapsed;
                 ImageLcdLowerRow.Visibility = Visibility.Collapsed;
                 //Dial position IAS HDG CRS -> Only upper LCD row can be used -> Hide Lower Button
-                if (Common.NoDCSBIOSEnabled() || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.IAS || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.HDG || _multiPanelPZ70.PZ70_DialPosition == PZ70DialPosition.CRS)
+                if (Common.NoDCSBIOSEnabled() || _multiPanelPZ70.PZ70DialPosition == PZ70DialPosition.IAS || _multiPanelPZ70.PZ70DialPosition == PZ70DialPosition.HDG || _multiPanelPZ70.PZ70DialPosition == PZ70DialPosition.CRS)
                 {
                     ButtonLcdLower.Visibility = Visibility.Hidden;
                 }
@@ -715,7 +717,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 foreach (var dcsBiosBindingLCD in _multiPanelPZ70.LCDBindings)
                 {
-                    if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD && dcsBiosBindingLCD.HasBinding)
+                    if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.UpperLCD && dcsBiosBindingLCD.HasBinding)
                     {
                         ImageLcdUpperRow.Visibility = Visibility.Visible;
                         if (dcsBiosBindingLCD.UseFormula)
@@ -729,7 +731,7 @@ namespace DCSFlightpanels.PanelUserControls
                             ButtonLcdUpper.ToolTip = dcsBiosBindingLCD.DCSBIOSOutputObject.ToString();
                         }
                     }
-                    if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70_DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.LowerLCD && dcsBiosBindingLCD.HasBinding)
+                    if (dcsBiosBindingLCD.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == PZ70LCDPosition.LowerLCD && dcsBiosBindingLCD.HasBinding)
                     {
                         ImageLcdLowerRow.Visibility = Visibility.Visible;
                         if (dcsBiosBindingLCD.UseFormula)
@@ -1483,7 +1485,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 //Set focus to this so that virtual keypresses won't affect settings
-                Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ70.Focus()));
+                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Focus()));
                 foreach (var knob in knobs)
                 {
                     var multiPanelKnob = (MultiPanelKnob)knob;
@@ -1492,7 +1494,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         if (!string.IsNullOrEmpty(_multiPanelPZ70.GetKeyPressForLoggingPurposes(multiPanelKnob)))
                         {
-                            Dispatcher.BeginInvoke(
+                            Dispatcher?.BeginInvoke(
                                 (Action)
                                 (() =>
                                  TextBoxLogPZ70.Text = TextBoxLogPZ70.Text.Insert(0, _multiPanelPZ70.GetKeyPressForLoggingPurposes(multiPanelKnob) + "\n")));
@@ -1500,7 +1502,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                     else
                     {
-                        Dispatcher.BeginInvoke(
+                        Dispatcher?.BeginInvoke(
                             (Action)
                             (() =>
                              TextBoxLogPZ70.Text = TextBoxLogPZ70.Text.Insert(0, "No action taken, panel events Disabled.\n")));
@@ -1510,7 +1512,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Dispatcher.BeginInvoke(
+                Dispatcher?.BeginInvoke(
                     (Action)
                     (() =>
                      TextBoxLogPZ70.Text = TextBoxLogPZ70.Text.Insert(0, "0x16" + ex.Message + ".\n")));

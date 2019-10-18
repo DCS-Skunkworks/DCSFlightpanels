@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
 
     public enum BIPLedPositionEnum
@@ -192,7 +192,7 @@ namespace NonVisuals
                     _listColorOutputBinding.Add(colorOutput);
                 }
             }
-            OnSettingsApplied();
+            SettingsApplied();
         }
 
         public List<DcsOutputAndColorBinding> GetLedDcsBiosOutputs(BIPLedPositionEnum bipLedPositionEnum)
@@ -582,14 +582,14 @@ namespace NonVisuals
         {
             Startup();
             //IsAttached = true;
-            OnDeviceAttached();
+            DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Shutdown();
             //IsAttached = false;
-            OnDeviceDetached();
+            DeviceDetached();
         }
 
         private void SetLedStrength()

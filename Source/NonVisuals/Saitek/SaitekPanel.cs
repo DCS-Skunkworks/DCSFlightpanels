@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
+using NonVisuals.Interfaces;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
 
     public abstract class SaitekPanel : GamingPanel
@@ -68,7 +69,7 @@ namespace NonVisuals
                 Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
                 var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValueTPM, NewSaitekPanelValueTPM);
                 GamingPanelKnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
+                SwitchesChanged(hashSet);
                 FirstReportHasBeenRead = true;
             }
             else if (report.Data.Length == 3)
@@ -77,7 +78,7 @@ namespace NonVisuals
                 Array.Copy(report.Data, NewSaitekPanelValue, 3);
                 var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
                 GamingPanelKnobChanged(hashSet);
-                OnSwitchesChanged(hashSet);
+                SwitchesChanged(hashSet);
                 FirstReportHasBeenRead = true;
             }
             

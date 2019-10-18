@@ -1,5 +1,6 @@
 ﻿using System;
 using DCS_BIOS;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals.DCSBIOSBindings
 {
@@ -15,7 +16,7 @@ namespace NonVisuals.DCSBIOSBindings
         private int _currentValue = 0;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
-        private const string SeparatorChars = "\\o/";
+        private const string SEPARATOR_CHARS = "\\o/";
         private string _layer = "";
 
         internal void ImportSettings(string settings)
@@ -27,7 +28,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("StreamDeckDCSBIOSOutput{") && settings.Contains("DCSBiosOutput{"))
             {
                 //StreamDeckDCSBIOSOutput{Home Layer|Button1}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SEPARATOR_CHARS }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
                 //StreamDeckDCSBIOSOutput{Home Layer|Button1}
@@ -45,7 +46,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("StreamDeckDCSBIOSOutput{") && settings.Contains("DCSBiosOutputFormula{"))
             {
                 //StreamDeckDCSBIOSOutput{Home Layer|Button1}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SEPARATOR_CHARS }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
                 //StreamDeckDCSBIOSOutput{Home Layer|Button1}
@@ -110,9 +111,9 @@ namespace NonVisuals.DCSBIOSBindings
             if (_dcsbiosOutputFormula != null)
             {
                 //StreamDeckDCSBIOSOutput{Home Layer|ALT}\o/{Button11Left}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutputFormula.ToString();
+                return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SEPARATOR_CHARS + _dcsbiosOutputFormula.ToString();
             }
-            return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SeparatorChars + _dcsbiosOutput.ToString();
+            return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SEPARATOR_CHARS + _dcsbiosOutput.ToString();
         }
         
         public bool HasBinding => _dcsbiosOutput != null || _dcsbiosOutputFormula != null;

@@ -14,7 +14,7 @@ namespace DCSFlightpanels
     {
         private List<StreamDeckLayer> _existingLayers = new List<StreamDeckLayer>();
         private bool _loaded = false;
-        private const int _minimumLength = 3;
+        private const int MINIMUM_LENGTH = 3;
         private StreamDeckLayer _newLayer = new StreamDeckLayer();
 
         public StreamDeckLayerWindow(List<StreamDeckLayer> existingLayers)
@@ -45,7 +45,7 @@ namespace DCSFlightpanels
             try
             {
                 TextBoxLayerName.Text = TextBoxLayerName.Text.Replace("|", "").Replace("{", "").Replace("}", "").Replace("*", "");
-                ButtonOk.IsEnabled = TextBoxLayerName.Text.Length >= _minimumLength;
+                ButtonOk.IsEnabled = TextBoxLayerName.Text.Length >= MINIMUM_LENGTH;
             }
             catch (Exception ex)
             {
@@ -99,9 +99,9 @@ namespace DCSFlightpanels
                 }
             }
 
-            if (TextBoxLayerName.Text.Length < _minimumLength)
+            if (TextBoxLayerName.Text.Length < MINIMUM_LENGTH)
             {
-                throw new Exception("Layer name " + TextBoxLayerName.Text + " too short. Minimum length is " + _minimumLength + ".");
+                throw new Exception("Layer name " + TextBoxLayerName.Text + " too short. Minimum length is " + MINIMUM_LENGTH + ".");
             }
 
             _newLayer.Name = TextBoxLayerName.Text;

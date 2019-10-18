@@ -191,7 +191,7 @@
                     <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxPitotHeatOn"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
                     <Label Content="Gear Down (on)" FontSize="10" Height="23"  />
                     <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxGearDown"  KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
-                    <CheckBox x:Name="checkBoxManualLEDs" Content="Manual LEDs (via LG lever)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="CheckBoxManualLEDs_OnClick"/>
+                    <CheckBox x:Name="CheckBoxManualLeDs" Content="Manual LEDs (via LG lever)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="CheckBoxManualLEDs_OnClick"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Master Bat. Off" FontSize="10" Height="23"   />

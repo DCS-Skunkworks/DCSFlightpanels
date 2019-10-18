@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.TagDataClasses;
 using NonVisuals;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -192,22 +195,22 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         case PanelLEDColor.DARK:
                             {
-                                Dispatcher.BeginInvoke((Action)(() => imageArray[0].Visibility = Visibility.Visible));
+                                Dispatcher?.BeginInvoke((Action)(() => imageArray[0].Visibility = Visibility.Visible));
                                 break;
                             }
                         case PanelLEDColor.GREEN:
                             {
-                                Dispatcher.BeginInvoke((Action)(() => imageArray[1].Visibility = Visibility.Visible));
+                                Dispatcher?.BeginInvoke((Action)(() => imageArray[1].Visibility = Visibility.Visible));
                                 break;
                             }
                         case PanelLEDColor.YELLOW:
                             {
-                                Dispatcher.BeginInvoke((Action)(() => imageArray[2].Visibility = Visibility.Visible));
+                                Dispatcher?.BeginInvoke((Action)(() => imageArray[2].Visibility = Visibility.Visible));
                                 break;
                             }
                         case PanelLEDColor.RED:
                             {
-                                Dispatcher.BeginInvoke((Action)(() => imageArray[3].Visibility = Visibility.Visible));
+                                Dispatcher?.BeginInvoke((Action)(() => imageArray[3].Visibility = Visibility.Visible));
                                 break;
                             }
                     }
@@ -244,7 +247,7 @@ namespace DCSFlightpanels.PanelUserControls
             for (int i = 0; i < 4; i++)
             {
                 var image1 = imageArray[i];
-                Dispatcher.BeginInvoke((Action)(() => image1.Visibility = Visibility.Collapsed));
+                Dispatcher?.BeginInvoke((Action)(() => image1.Visibility = Visibility.Collapsed));
             }
         }
 
@@ -265,7 +268,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
-                    //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
@@ -280,7 +283,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
-                    //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)
@@ -295,8 +298,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel)
                 {
-                    Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke((Action) (() => TextBoxLogPZ55.Text = ""));
                 }
             }
             catch (Exception ex)
@@ -309,7 +312,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -1083,7 +1086,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 //Set focus to this so that virtual keypresses won't affect settings
-                Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ55.Focus()));
+                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Focus()));
                 foreach (var switchPanelKey in switches)
                 {
                     var key = (SwitchPanelKey)switchPanelKey;
@@ -1092,7 +1095,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         if (!string.IsNullOrEmpty(_switchPanelPZ55.GetKeyPressForLoggingPurposes(key)))
                         {
-                            Dispatcher.BeginInvoke(
+                            Dispatcher?.BeginInvoke(
                                 (Action)
                                 (() =>
                                  TextBoxLogPZ55.Text =
@@ -1101,7 +1104,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                     else
                     {
-                        Dispatcher.BeginInvoke(
+                        Dispatcher?.BeginInvoke(
                             (Action)
                             (() =>
                              TextBoxLogPZ55.Text =
@@ -1112,7 +1115,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Dispatcher.BeginInvoke(
+                Dispatcher?.BeginInvoke(
                     (Action)
                     (() =>
                      TextBoxLogPZ55.Text = TextBoxLogPZ55.Text.Insert(0, "0x16" + ex.Message + ".\n")));
@@ -1132,7 +1135,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageAvMasterOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1142,7 +1145,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         //This button is special. The Panel reports the button ON when it us switched upwards towards [CLOSE]. This is confusing semantics.
@@ -1154,7 +1157,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageDeIceOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1164,7 +1167,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageFuelPumpOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1174,7 +1177,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.LEVER_GEAR_DOWN:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageGearUp.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
@@ -1184,7 +1187,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.LEVER_GEAR_UP:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageGearUp.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1194,7 +1197,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageBeaconOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1204,7 +1207,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageLandingOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1214,7 +1217,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageNavOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1224,7 +1227,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImagePanelOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1234,7 +1237,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageStrobeOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1244,7 +1247,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageTaxiOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1254,7 +1257,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageMasterAltOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1264,7 +1267,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImageMasterBatOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1274,7 +1277,7 @@ namespace DCSFlightpanels.PanelUserControls
                         case SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT:
                             {
                                 var key = switchPanelKey;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         ImagePitotHeatOn.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1287,7 +1290,7 @@ namespace DCSFlightpanels.PanelUserControls
                         switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START)
                     {
                         var key = switchPanelKey;
-                        Dispatcher.BeginInvoke(
+                        Dispatcher?.BeginInvoke(
                             (Action)delegate
                             {
                                 if (key.IsOn)
@@ -1431,7 +1434,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                checkBoxManualLEDs.IsChecked = _switchPanelPZ55.ManualLandingGearLeds;
+                CheckBoxManualLeDs.IsChecked = _switchPanelPZ55.ManualLandingGearLeds;
                 SetConfigExistsImageVisibility();
             }
             catch (Exception ex)
@@ -1506,7 +1509,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_switchPanelPZ55 != null)
                 {
-                    _switchPanelPZ55.ManualLandingGearLeds = checkBoxManualLEDs.IsChecked.HasValue && checkBoxManualLEDs.IsChecked.Value;
+                    _switchPanelPZ55.ManualLandingGearLeds = CheckBoxManualLeDs.IsChecked.HasValue && CheckBoxManualLeDs.IsChecked.Value;
                 }
             }
             catch (Exception ex)

@@ -1,7 +1,7 @@
 ﻿using System;
 using ClassLibraryCommon;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class OSCommandBindingTPM : OSCommandBinding
     {

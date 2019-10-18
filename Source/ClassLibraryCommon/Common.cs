@@ -176,10 +176,10 @@ namespace ClassLibraryCommon
         public static string GetDescriptionField(this Enum value)
         {
             var field = value.GetType().GetField(value.ToString());
-            var attribs = field.GetCustomAttributes(typeof(DescriptionAttribute), true);
-            if (attribs.Length > 0)
+            var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), true);
+            if (attributes.Length > 0)
             {
-                return ((DescriptionAttribute)attribs[0]).Description;
+                return ((DescriptionAttribute)attributes[0]).Description;
             }
             return string.Empty;
         }
@@ -187,10 +187,10 @@ namespace ClassLibraryCommon
         public static bool DebugOn { get; set; } = false;
         public static bool DebugToFile = false;
         public static APIModeEnum APIMode = 0;
-        public static object _errorLoglockObject = new object();
-        public static object _debugLoglockObject = new object();
-        public static string ErrorLog = "";
-        public static string DebugLog = "";
+        private static readonly object ErrorLogLockObject = new object();
+        private static readonly object DebugLogLockObject = new object();
+        private static string _errorLog = "";
+        private static string _debugLog = "";
 
         public static void DebugP(string str)
         {
@@ -209,20 +209,20 @@ namespace ClassLibraryCommon
 
         public static void SetErrorLog(string filename)
         {
-            lock (_errorLoglockObject)
+            lock (ErrorLogLockObject)
             {
-                ErrorLog = filename;
+                _errorLog = filename;
             }
         }
 
         public static void SetDebugLog(string filename)
         {
-            lock (_debugLoglockObject)
+            lock (DebugLogLockObject)
             {
-                DebugLog = filename;
+                _debugLog = filename;
             }
         }
-
+        
         public static void LogError(Exception ex, string message = null)
         {
             LogError(0, ex, message);
@@ -230,17 +230,17 @@ namespace ClassLibraryCommon
 
         public static void LogError(uint location, Exception ex, string message = null)
         {
-            lock (_errorLoglockObject)
+            lock (ErrorLogLockObject)
             {
-                if (!File.Exists(ErrorLog))
+                if (!File.Exists(_errorLog))
                 {
-                    File.Create(ErrorLog);
+                    File.Create(_errorLog);
                 }
                 var assembly = Assembly.GetExecutingAssembly();
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 var version = fileVersionInfo.FileVersion;
 
-                var streamWriter = File.AppendText(ErrorLog);
+                var streamWriter = File.AppendText(_errorLog);
                 try
                 {
                     streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
@@ -256,17 +256,17 @@ namespace ClassLibraryCommon
 
         public static void LogError(uint location, string message)
         {
-            lock (_errorLoglockObject)
+            lock (ErrorLogLockObject)
             {
-                if (!File.Exists(ErrorLog))
+                if (!File.Exists(_errorLog))
                 {
-                    File.Create(ErrorLog);
+                    File.Create(_errorLog);
                 }
                 var assembly = Assembly.GetExecutingAssembly();
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 var version = fileVersionInfo.FileVersion;
 
-                var streamWriter = File.AppendText(ErrorLog);
+                var streamWriter = File.AppendText(_errorLog);
                 try
                 {
                     streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:yy") + "  version : " + version);
@@ -283,6 +283,12 @@ namespace ClassLibraryCommon
         {
             LogError(location, ex, message);
             MessageBox.Show(location + " " + ex.Message, "Details logged to error log.");
+        }
+
+        public static void ShowErrorMessageBox(Exception ex, string message = null)
+        {
+            LogError(ex, message);
+            MessageBox.Show(ex.Message, "Details logged to error log.\n" + ex.Source);
         }
 
         public static string PrintBitStrings(byte[] array)
@@ -336,14 +342,14 @@ namespace ClassLibraryCommon
 
         public static void LogToDebugFile(string message = null)
         {
-            lock (_debugLoglockObject)
+            lock (DebugLogLockObject)
             {
-                if (!File.Exists(DebugLog))
+                if (!File.Exists(_debugLog))
                 {
-                    File.Create(DebugLog);
+                    File.Create(_debugLog);
                 }
 
-                var debugStreamWriter = File.AppendText(DebugLog);
+                var debugStreamWriter = File.AppendText(_debugLog);
                 try
                 {
                     debugStreamWriter.Write(Environment.NewLine + "Message = [" + message + "]" + Environment.NewLine);

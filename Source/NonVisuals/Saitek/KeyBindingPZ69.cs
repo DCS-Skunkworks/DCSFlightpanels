@@ -5,7 +5,7 @@ using ClassLibraryCommon;
 using NonVisuals.Radios;
 
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class KeyBindingPZ69 : KeyBinding
     {

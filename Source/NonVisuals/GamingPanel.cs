@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
 
 namespace NonVisuals
 {
@@ -70,45 +71,45 @@ namespace NonVisuals
         }
 
         //Used by any but descendants that wants to see buttons that have changed, UI for example
-        protected virtual void OnSwitchesChanged(HashSet<object> hashSet)
+        protected virtual void SwitchesChanged(HashSet<object> hashSet)
         {
             OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel, Switches = hashSet });
         }
 
         //Used by any but descendants that wants to see buttons that have changed, UI for example
-        protected virtual void OnPanelDataAvailable(string stringData)
+        protected virtual void PanelDataAvailable(string stringData)
         {
             OnPanelDataAvailableA?.Invoke(this, new PanelDataToDCSBIOSEventEventArgs() { StringData = stringData });
         }
 
 
-        protected virtual void OnDeviceAttached()
+        protected virtual void DeviceAttached()
         {
             //IsAttached = true;
             OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
         }
 
 
-        protected virtual void OnDeviceDetached()
+        protected virtual void DeviceDetached()
         {
             //IsAttached = false;
             OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
         }
 
 
-        protected virtual void OnSettingsChanged()
+        protected virtual void SettingsChanged()
         {
             OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
         }
 
 
-        protected virtual void OnSettingsApplied()
+        protected virtual void SettingsApplied()
         {
             OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
         }
 
 
-        protected virtual void OnSettingsCleared()
+        protected virtual void SettingsCleared()
         {
             OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
         }
@@ -127,7 +128,7 @@ namespace NonVisuals
         public void ClearPanelSettings(object sender)
         {
             ClearSettings();
-            OnSettingsCleared();
+            SettingsCleared();
         }
 
         private int _vendorId;
@@ -138,7 +139,7 @@ namespace NonVisuals
         private bool _isDirty;
         //private bool _isAttached;
         private bool _forwardPanelEvent;
-        private static readonly object _lockObject = new object();
+        private static readonly object LockObject = new object();
         private static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>();
         private bool _settingsLoading = false;
         /*
@@ -158,7 +159,7 @@ namespace NonVisuals
         public abstract List<string> ExportSettings();
         public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
         public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
-        protected HIDSkeleton HIDSkeletonBase;
+        protected readonly HIDSkeleton HIDSkeletonBase;
         private bool _closed;
         public long ReportCounter = 0;
         
@@ -215,7 +216,7 @@ namespace NonVisuals
         
         public void SetIsDirty()
         {
-            OnSettingsChanged();
+            SettingsChanged();
             IsDirty = true;
         }
 

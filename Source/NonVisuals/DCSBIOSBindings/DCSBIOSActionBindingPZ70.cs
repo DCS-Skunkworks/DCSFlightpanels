@@ -4,6 +4,7 @@ using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.DCSBIOSBindings
 {

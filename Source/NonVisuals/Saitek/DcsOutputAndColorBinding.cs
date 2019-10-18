@@ -2,7 +2,7 @@
 using System.Text;
 using DCS_BIOS;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
 
     public enum PanelLEDColor : byte
@@ -42,7 +42,6 @@ namespace NonVisuals
     public abstract class DcsOutputAndColorBinding
     {
         private DCSBIOSOutput _dcsBiosOutputLED;
-        private readonly string[] SeparatorChars = { "\\o/" };
 
         public abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
@@ -50,7 +49,7 @@ namespace NonVisuals
         public PanelLEDColor LEDColor { get; set; }
         public SaitekPanelLEDPosition SaitekLEDPosition { get; set; }
 
-        public string[] Separator => SeparatorChars;
+        protected string[] Separator { get; } = { "\\o/" };
 
         public DCSBIOSOutput DCSBiosOutputLED
         {

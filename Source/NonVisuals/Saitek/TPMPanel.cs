@@ -4,7 +4,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
 
     public class TPMPanel : SaitekPanel
@@ -100,7 +100,7 @@ namespace NonVisuals
             }
 
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            OnSettingsApplied();
+            SettingsApplied();
         }
 
         public override List<string> ExportSettings()
@@ -518,13 +518,13 @@ namespace NonVisuals
         private void DeviceAttachedHandler()
         {
             Startup();
-            OnDeviceAttached();
+            DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Shutdown();
-            OnDeviceDetached();
+            DeviceDetached();
         }
 
         private void CreateSwitchKeys()

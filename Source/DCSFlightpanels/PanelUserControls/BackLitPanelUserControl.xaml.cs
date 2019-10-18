@@ -8,6 +8,8 @@ using System.Windows.Threading;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using NonVisuals;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -133,7 +135,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -161,7 +163,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -177,7 +179,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -191,7 +193,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
-                    //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
@@ -206,7 +208,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
-                    //Dispatcher.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
+                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)

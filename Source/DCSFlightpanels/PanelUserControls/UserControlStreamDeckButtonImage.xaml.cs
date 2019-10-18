@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.PanelUserControls;
 using NonVisuals;
+using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls
@@ -15,8 +16,13 @@ namespace DCSFlightpanels.PanelUserControls
     public partial class UserControlStreamDeckButtonImage : UserControlBase
     {
         private IGlobalHandler _globalHandler;
-
+        private bool _isDirty = false;
         private EnumStreamDeckButtonActionType _actionType;
+
+
+
+
+
 
         public UserControlStreamDeckButtonImage()
         {
@@ -28,7 +34,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         }
 
-        private void SetFormState()
+        public void SetFormState()
         {
             try
             {
@@ -119,6 +125,26 @@ namespace DCSFlightpanels.PanelUserControls
         {
             get => _globalHandler;
             set => _globalHandler = value;
+        }
+
+
+        public bool HasConfig
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        private void SetIsDirty()
+        {
+            _isDirty = true;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set => _isDirty = value;
         }
     }
 }

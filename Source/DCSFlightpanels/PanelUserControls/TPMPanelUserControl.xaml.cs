@@ -8,6 +8,8 @@ using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.TagDataClasses;
 using NonVisuals;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.PanelUserControls
 {

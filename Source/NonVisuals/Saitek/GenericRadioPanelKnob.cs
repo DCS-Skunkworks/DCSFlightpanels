@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using NonVisuals.Radios;
 
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public enum GenericRadioPanelKnobs
     {

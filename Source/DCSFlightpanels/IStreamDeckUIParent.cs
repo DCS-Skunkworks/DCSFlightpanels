@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NonVisuals;
+using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels
@@ -14,5 +15,6 @@ namespace DCSFlightpanels
         int GetButtonNumber();
         StreamDeckButtons GetButton();
         EnumStreamDeckButtonActionType GetButtonActionType();
+        void ChildChangesMade();
     }
 }

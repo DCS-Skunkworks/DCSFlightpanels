@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels
 {
@@ -21,7 +22,7 @@ namespace DCSFlightpanels
         {
             InitializeComponent();
             _bipLink = bipLink;
-            textBoxInformation.Text = bipLink.Description;
+            TextBoxInformation.Text = bipLink.Description;
             DataGridSequences.DataContext = _bipLink.BIPLights;
             DataGridSequences.ItemsSource = _bipLink.BIPLights;
             DataGridSequences.Items.Refresh();
@@ -36,17 +37,17 @@ namespace DCSFlightpanels
 
         public string GetInformation
         {
-            get { return textBoxInformation.Text; }
+            get { return TextBoxInformation.Text; }
         }
 
         private void SetFormState()
         {
-            buttonUp.IsEnabled = DataGridSequences.SelectedItems.Count == 1 && DataGridSequences.SelectedIndex > 0;
-            buttonDown.IsEnabled = DataGridSequences.SelectedItems.Count == 1 && DataGridSequences.SelectedIndex < DataGridSequences.Items.Count - 1;
-            buttonAdd.IsEnabled = true;
-            buttonEdit.IsEnabled = DataGridSequences.SelectedItems.Count == 1;
-            buttonDelete.IsEnabled = DataGridSequences.SelectedItems.Count > 0;
-            buttonOk.IsEnabled = IsDirty;
+            ButtonUp.IsEnabled = DataGridSequences.SelectedItems.Count == 1 && DataGridSequences.SelectedIndex > 0;
+            ButtonDown.IsEnabled = DataGridSequences.SelectedItems.Count == 1 && DataGridSequences.SelectedIndex < DataGridSequences.Items.Count - 1;
+            ButtonAdd.IsEnabled = true;
+            ButtonEdit.IsEnabled = DataGridSequences.SelectedItems.Count == 1;
+            ButtonDelete.IsEnabled = DataGridSequences.SelectedItems.Count > 0;
+            ButtonOk.IsEnabled = IsDirty;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -168,7 +169,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                _bipLink.Description = textBoxInformation.Text;
+                _bipLink.Description = TextBoxInformation.Text;
                 DialogResult = true;
                 Close();
             }
@@ -245,7 +246,7 @@ namespace DCSFlightpanels
 
         private void BIPLinkWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (!buttonOk.IsEnabled && e.Key == Key.Escape)
+            if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
             {
                 e.Handled = true;
                 Close();

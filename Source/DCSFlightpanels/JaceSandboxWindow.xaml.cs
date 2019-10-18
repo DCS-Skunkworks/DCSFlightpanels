@@ -119,12 +119,12 @@ namespace DCSFlightpanels
                         {
                             try
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LabelErrors.Content = "";
                                     });
-                                Dispatcher.Invoke(() =>
+                                Dispatcher?.Invoke(() =>
                                 {
                                     formula = TextBoxFormula.Text;
                                 });
@@ -150,7 +150,7 @@ namespace DCSFlightpanels
                                 }
                                 var result = _jaceExtended.CalculationEngine.Calculate(formula, variables);
 
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LabelResult.Content = "Result : " + result;
@@ -158,7 +158,7 @@ namespace DCSFlightpanels
                             }
                             catch (Exception e)
                             {
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LabelErrors.Content = e.Message;
@@ -264,7 +264,7 @@ namespace DCSFlightpanels
                 {
                     _value1 = e.Data;
                     _dataChanged = true;
-                    Dispatcher.BeginInvoke(
+                    Dispatcher?.BeginInvoke(
                         (Action)delegate
                         {
                             LabelSourceRawValue1.Content = "Value : " + _value1;
@@ -277,7 +277,7 @@ namespace DCSFlightpanels
                 {
                     _value2 = e.Data;
                     _dataChanged = true;
-                    Dispatcher.BeginInvoke(
+                    Dispatcher?.BeginInvoke(
                         (Action)delegate
                         {
                             LabelSourceRawValue2.Content = "Value : " + _value2;
@@ -290,7 +290,7 @@ namespace DCSFlightpanels
                 {
                     _value3 = e.Data;
                     _dataChanged = true;
-                    Dispatcher.BeginInvoke(
+                    Dispatcher?.BeginInvoke(
                         (Action)delegate
                         {
                             LabelSourceRawValue3.Content = "Value : " + _value3;
@@ -303,7 +303,7 @@ namespace DCSFlightpanels
                 {
                     _value4 = e.Data;
                     _dataChanged = true;
-                    Dispatcher.BeginInvoke(
+                    Dispatcher?.BeginInvoke(
                         (Action)delegate
                         {
                             LabelSourceRawValue4.Content = "Value : " + _value4;
@@ -316,7 +316,7 @@ namespace DCSFlightpanels
                 {
                     _value5 = e.Data;
                     _dataChanged = true;
-                    Dispatcher.BeginInvoke(
+                    Dispatcher?.BeginInvoke(
                         (Action)delegate
                         {
                             LabelSourceRawValue5.Content = "Value : " + _value5;

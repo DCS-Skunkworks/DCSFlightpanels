@@ -1,16 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using ClassLibraryCommon;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
+using NonVisuals.StreamDeck;
 
-namespace NonVisuals
+namespace NonVisuals.StreamDeck
 {
-    public class KeyBindingStreamDeck : KeyBinding
+    public class KeyBindingStreamDeck : KeyBinding, IStreamDeckButtonAction
     {
         /*
          This class binds a physical button on a Stream Deck with a user made virtual keypress in Windows.
          */
         private StreamDeckButtons _streamDeckButton;
         private string _layer = "";
+
+        public EnumStreamDeckButtonActionType GetActionType()
+        {
+            return EnumStreamDeckButtonActionType.KeyPress;
+        }
+
+        public void Execute()
+        {
+            OSKeyPress.Execute();
+        }
 
         internal override void ImportSettings(string settings)
         {
@@ -81,7 +94,6 @@ namespace NonVisuals
                     }
                 }
             }
-
             return keyBindings;
         }
     }

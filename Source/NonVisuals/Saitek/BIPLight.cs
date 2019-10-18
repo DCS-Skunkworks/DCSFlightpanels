@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
 
     public enum BIPLightDelays 

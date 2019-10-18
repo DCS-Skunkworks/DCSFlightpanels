@@ -4,7 +4,7 @@ using ClassLibraryCommon;
 using NonVisuals.Radios;
 
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class OSCommandBindingPZ69FullEmulator : OSCommandBinding
     {

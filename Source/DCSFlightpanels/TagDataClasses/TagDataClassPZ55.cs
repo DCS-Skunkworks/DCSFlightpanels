@@ -6,6 +6,7 @@ using DCS_BIOS;
 using DCSFlightpanels.TagDataClasses;
 using NonVisuals;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.TagDataClasses
 {

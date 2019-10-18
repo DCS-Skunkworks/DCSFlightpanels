@@ -39,7 +39,7 @@
                 <ComboBoxItem Content="4000" />
                 <ComboBoxItem Content="5000" />
             </ComboBox>
-            <Label Name="LabelBIPPanel" Content="BIP Panel" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
+            <Label Content="BIP Panel" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
             <ComboBox x:Name="ComboBoxBIPPanel" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0"/>
         </StackPanel>
     </Grid>

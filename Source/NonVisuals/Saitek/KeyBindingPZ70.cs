@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ClassLibraryCommon;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class KeyBindingPZ70 : KeyBinding
     {

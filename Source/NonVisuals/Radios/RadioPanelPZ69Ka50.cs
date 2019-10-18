@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 
 namespace NonVisuals.Radios
@@ -19,14 +21,14 @@ namespace NonVisuals.Radios
         private readonly object _lockVhf1DialObject1 = new object();
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetDial;
         private volatile uint _vhf1CockpitPresetDialPos = 1;
-        private const string Vhf1PresetCommandInc = "R828_CHANNEL INC\n";
-        private const string Vhf1PresetCommandDec = "R828_CHANNEL DEC\n";
+        private const string VHF1_PRESET_COMMAND_INC = "R828_CHANNEL INC\n";
+        private const string VHF1_PRESET_COMMAND_DEC = "R828_CHANNEL DEC\n";
         private int _vhf1PresetDialSkipper;
         //private DCSBIOSOutput _vhf1DcsbiosOutputVolumeDial;
-        private const string Vhf1VolumeKnobCommandInc = "R828_VOLUME +2500\n";
-        private const string Vhf1VolumeKnobCommandDec = "R828_VOLUME -2500\n";
-        private const string Vhf1TunerButtonPress = "R828_TUNER INC\n";
-        private const string Vhf1TunerButtonRelease = "R828_TUNER DEC\n";
+        private const string VHF1_VOLUME_KNOB_COMMAND_INC = "R828_VOLUME +2500\n";
+        private const string VHF1_VOLUME_KNOB_COMMAND_DEC = "R828_VOLUME -2500\n";
+        private const string VHF1_TUNER_BUTTON_PRESS = "R828_TUNER INC\n";
+        private const string VHF1_TUNER_BUTTON_RELEASE = "R828_TUNER DEC\n";
 
         /*COM2 Ka-50 VHF 2 R-800L1*/
         //Large dial 100-149  -> 220 - 399 [step of 1]
@@ -36,37 +38,37 @@ namespace NonVisuals.Radios
             108, 109, 110, 111, 113, 114, 115, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130,131, 132, 133, 134, 135, 136, 138, 139, 140, 141, 250, 251, 252, 253, 254, 255, 256,257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 344, 365, 385
             //
         };*/
-        private readonly ClickSpeedDetector _r800l1BigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
-        private readonly ClickSpeedDetector _r800l1BigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
-        const int ChangeValue = 10;
+        private readonly ClickSpeedDetector _r800L1BigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
+        private readonly ClickSpeedDetector _r800L1BigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
+        const int CHANGE_VALUE = 10;
         //private long _changesWithinLastticksSinceLastChangeLargeDial;
-        private readonly int[] _r800l1Freq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
-        private volatile uint _r800l1BigFrequencyStandby = 108;
-        private volatile uint _r800l1SmallFrequencyStandby;
-        private volatile uint _r800l1SavedCockpitBigFrequency;
-        private volatile uint _r800l1SavedCockpitSmallFrequency;
+        private readonly int[] _r800L1Freq1DialValues = { 10, 11, 12, 13, 14, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
+        private volatile uint _r800L1BigFrequencyStandby = 108;
+        private volatile uint _r800L1SmallFrequencyStandby;
+        private volatile uint _r800L1SavedCockpitBigFrequency;
+        private volatile uint _r800L1SavedCockpitSmallFrequency;
         private readonly object _lockR800L1DialsObject1 = new object();
         private readonly object _lockR800L1DialsObject2 = new object();
         private readonly object _lockR800L1DialsObject3 = new object();
         private readonly object _lockR800L1DialsObject4 = new object();
-        private DCSBIOSOutput _r800l1DcsbiosOutputFreqDial1;
-        private DCSBIOSOutput _r800l1DcsbiosOutputFreqDial2;
-        private DCSBIOSOutput _r800l1DcsbiosOutputFreqDial3;
-        private DCSBIOSOutput _r800l1DcsbiosOutputFreqDial4;
-        private volatile uint _r800l1CockpitFreq1DialPos = 1;
-        private volatile uint _r800l1CockpitFreq2DialPos = 1;
-        private volatile uint _r800l1CockpitFreq3DialPos = 1;
-        private volatile uint _r800l1CockpitFreq4DialPos = 1;
-        private const string R800L1Freq1DialCommand = "R800_FREQ1 ";
-        private const string R800L1Freq2DialCommand = "R800_FREQ2 ";
-        private const string R800L1Freq3DialCommand = "R800_FREQ3 ";
-        private const string R800L1Freq4DialCommand = "R800_FREQ4 ";
-        private Thread _r800l1SyncThread;
-        private long _r800l1ThreadNowSynching;
-        private long _r800l1Dial1WaitingForFeedback;
-        private long _r800l1Dial2WaitingForFeedback;
-        private long _r800l1Dial3WaitingForFeedback;
-        private long _r800l1Dial4WaitingForFeedback;
+        private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial1;
+        private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial2;
+        private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial3;
+        private DCSBIOSOutput _r800L1DcsbiosOutputFreqDial4;
+        private volatile uint _r800L1CockpitFreq1DialPos = 1;
+        private volatile uint _r800L1CockpitFreq2DialPos = 1;
+        private volatile uint _r800L1CockpitFreq3DialPos = 1;
+        private volatile uint _r800L1CockpitFreq4DialPos = 1;
+        private const string R800_L1_FREQ_1DIAL_COMMAND = "R800_FREQ1 ";
+        private const string R800_L1_FREQ_2DIAL_COMMAND = "R800_FREQ2 ";
+        private const string R800_L1_FREQ_3DIAL_COMMAND = "R800_FREQ3 ";
+        private const string R800_L1_FREQ_4DIAL_COMMAND = "R800_FREQ4 ";
+        private Thread _r800L1SyncThread;
+        private long _r800L1ThreadNowSynching;
+        private long _r800L1Dial1WaitingForFeedback;
+        private long _r800L1Dial2WaitingForFeedback;
+        private long _r800L1Dial3WaitingForFeedback;
+        private long _r800L1Dial4WaitingForFeedback;
 
 
         /*ADF Ka-50 ARK-22 ADF*/
@@ -76,19 +78,19 @@ namespace NonVisuals.Radios
         private readonly object _lockADFDialObject1 = new object();
         private DCSBIOSOutput _adfDcsbiosOutputPresetDial;
         private volatile uint _adfCockpitPresetDialPos = 1;
-        private const string ADFPresetCommandInc = "ADF_CHANNEL INC\n";
-        private const string ADFPresetCommandDec = "ADF_CHANNEL DEC\n";
+        private const string ADF_PRESET_COMMAND_INC = "ADF_CHANNEL INC\n";
+        private const string ADF_PRESET_COMMAND_DEC = "ADF_CHANNEL DEC\n";
         private int _adfPresetDialSkipper;
-        private const string ADFVolumeKnobCommandInc = "ADF_VOLUME +2500\n";
-        private const string ADFVolumeKnobCommandDec = "ADF_VOLUME -2500\n";
+        private const string ADF_VOLUME_KNOB_COMMAND_INC = "ADF_VOLUME +2500\n";
+        private const string ADF_VOLUME_KNOB_COMMAND_DEC = "ADF_VOLUME -2500\n";
         /*private const string ADFModeSwitchAntenna = "ADF_CMPS_ANT INC\n";
         private const string ADFModeSwitchCompass = "ADF_CMPS_ANT DEC\n";
         private string _adfModeSwitchLastSent = "";*/
         private readonly object _lockADFModeDialObject = new object();
         private DCSBIOSOutput _adfModeDcsbiosOutput;
         private volatile uint _adfModeCockpitPos = 1;
-        private const string ADFModeInc = "ADF_NDB_MODE INC\n";
-        private const string ADFModeDec = "ADF_NDB_MODE DEC\n";
+        private const string ADF_MODE_INC = "ADF_NDB_MODE INC\n";
+        private const string ADF_MODE_DEC = "ADF_NDB_MODE DEC\n";
         private bool _adfModeSwitchDirectionUp = false;
 
 
@@ -99,18 +101,18 @@ namespace NonVisuals.Radios
         //ACT/STBY Push Right ABRIS Dial IN/OUT
         private readonly ClickSpeedDetector _abrisLeftDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
         private readonly ClickSpeedDetector _abrisLeftDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
-        private const string ABRISLeftDialCommandIncMore = "ABRIS_BRIGHTNESS +2500\n";
-        private const string ABRISLeftDialCommandDecMore = "ABRIS_BRIGHTNESS -2500\n";
-        private const string ABRISLeftDialCommandInc = "ABRIS_BRIGHTNESS +1000\n";
-        private const string ABRISLeftDialCommandDec = "ABRIS_BRIGHTNESS -1000\n";
+        private const string ABRIS_LEFT_DIAL_COMMAND_INC_MORE = "ABRIS_BRIGHTNESS +2500\n";
+        private const string ABRIS_LEFT_DIAL_COMMAND_DEC_MORE = "ABRIS_BRIGHTNESS -2500\n";
+        private const string ABRIS_LEFT_DIAL_COMMAND_INC = "ABRIS_BRIGHTNESS +1000\n";
+        private const string ABRIS_LEFT_DIAL_COMMAND_DEC = "ABRIS_BRIGHTNESS -1000\n";
         private readonly ClickSpeedDetector _abrisRightDialIncreaseChangeMonitor = new ClickSpeedDetector(10);
         private readonly ClickSpeedDetector _abrisRightDialDecreaseChangeMonitor = new ClickSpeedDetector(10);
-        private const string ABRISRightDialCommandIncMore = "ABRIS_CURSOR_ROT +2500\n";
-        private const string ABRISRightDialCommandDecMore = "ABRIS_CURSOR_ROT -2500\n";
-        private const string ABRISRightDialCommandInc = "ABRIS_CURSOR_ROT +5000\n";
-        private const string ABRISRightDialCommandDec = "ABRIS_CURSOR_ROT -5000\n";
-        private const string ABRISRightDialPushToggleOnCommand = "ABRIS_CURSOR_BTN 1\n";
-        private const string ABRISRightDialPushToggleOffCommand = "ABRIS_CURSOR_BTN 0\n";
+        private const string ABRIS_RIGHT_DIAL_COMMAND_INC_MORE = "ABRIS_CURSOR_ROT +2500\n";
+        private const string ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE = "ABRIS_CURSOR_ROT -2500\n";
+        private const string ABRIS_RIGHT_DIAL_COMMAND_INC = "ABRIS_CURSOR_ROT +5000\n";
+        private const string ABRIS_RIGHT_DIAL_COMMAND_DEC = "ABRIS_CURSOR_ROT -5000\n";
+        private const string ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND = "ABRIS_CURSOR_BTN 1\n";
+        private const string ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND = "ABRIS_CURSOR_BTN 0\n";
 
         /*NAV2 Ka-50 Datalink Operation*/
         //Large dial Datalink Master Mode 0-3
@@ -119,19 +121,19 @@ namespace NonVisuals.Radios
         private readonly object _lockDatalinkMasterModeObject = new object();
         private DCSBIOSOutput _datalinkMasterModeDcsbiosOutput;
         private volatile uint _datalinkMasterModeCockpitPos = 1;
-        private const string DatalinkMasterModeCommandInc = "DLNK_MASTER_MODE INC\n";
-        private const string DatalinkMasterModeCommandDec = "DLNK_MASTER_MODE DEC\n";
+        private const string DATALINK_MASTER_MODE_COMMAND_INC = "DLNK_MASTER_MODE INC\n";
+        private const string DATALINK_MASTER_MODE_COMMAND_DEC = "DLNK_MASTER_MODE DEC\n";
         private int _datalinkMasterModeDialSkipper;
         private readonly object _lockDatalinkSelfIdObject = new object();
         private DCSBIOSOutput _datalinkSelfIdDcsbiosOutput;
         private volatile uint _datalinkSelfIdCockpitPos = 1;
-        private const string DatalinkSelfIdCommandInc = "DLNK_SELF_ID INC\n";
-        private const string DatalinkSelfIdCommandDec = "DLNK_SELF_ID DEC\n";
+        private const string DATALINK_SELF_ID_COMMAND_INC = "DLNK_SELF_ID INC\n";
+        private const string DATALINK_SELF_ID_COMMAND_DEC = "DLNK_SELF_ID DEC\n";
         private int _datalinkSelfIdDialSkipper;
         private readonly object _lockDatalinkPowerOnOffObject = new object();
         private DCSBIOSOutput _datalinkPowerOnOffDcsbiosOutput;
         private volatile uint _datalinkPowerOnOffCockpitPos = 1;
-        private const string DatalinkPowerOnOffCommandToggle = "PVI_POWER TOGGLE\n";
+        private const string DATALINK_POWER_ON_OFF_COMMAND_TOGGLE = "PVI_POWER TOGGLE\n";
 
 
 
@@ -150,7 +152,7 @@ namespace NonVisuals.Radios
 
         ~RadioPanelPZ69Ka50()
         {
-            _r800l1SyncThread?.Abort();
+            _r800L1SyncThread?.Abort();
         }
 
 
@@ -183,62 +185,62 @@ namespace NonVisuals.Radios
                 }
 
                 //VHF2 Dial 1 R-800L1
-                if (e.Address == _r800l1DcsbiosOutputFreqDial1.Address)
+                if (e.Address == _r800L1DcsbiosOutputFreqDial1.Address)
                 {
                     lock (_lockR800L1DialsObject1)
                     {
-                        var tmp = _r800l1CockpitFreq1DialPos;
-                        _r800l1CockpitFreq1DialPos = _r800l1DcsbiosOutputFreqDial1.GetUIntValue(e.Data);
-                        if (tmp != _r800l1CockpitFreq1DialPos)
+                        var tmp = _r800L1CockpitFreq1DialPos;
+                        _r800L1CockpitFreq1DialPos = _r800L1DcsbiosOutputFreqDial1.GetUIntValue(e.Data);
+                        if (tmp != _r800L1CockpitFreq1DialPos)
                         {
                             //Debug.WriteLine("_r800l1CockpitFreq1DialPos was " + tmp + ", is now " + _r800l1CockpitFreq1DialPos);
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            Interlocked.Exchange(ref _r800l1Dial1WaitingForFeedback, 0);
+                            Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
                         }
                     }
                 }
 
                 //VHF2 Dial 2 R-800L1
-                if (e.Address == _r800l1DcsbiosOutputFreqDial2.Address)
+                if (e.Address == _r800L1DcsbiosOutputFreqDial2.Address)
                 {
                     lock (_lockR800L1DialsObject2)
                     {
-                        var tmp = _r800l1CockpitFreq2DialPos;
-                        _r800l1CockpitFreq2DialPos = _r800l1DcsbiosOutputFreqDial2.GetUIntValue(e.Data);
-                        if (tmp != _r800l1CockpitFreq2DialPos)
+                        var tmp = _r800L1CockpitFreq2DialPos;
+                        _r800L1CockpitFreq2DialPos = _r800L1DcsbiosOutputFreqDial2.GetUIntValue(e.Data);
+                        if (tmp != _r800L1CockpitFreq2DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            Interlocked.Exchange(ref _r800l1Dial2WaitingForFeedback, 0);
+                            Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
                         }
                     }
                 }
 
                 //VHF2 Dial 3 R-800L1
-                if (e.Address == _r800l1DcsbiosOutputFreqDial3.Address)
+                if (e.Address == _r800L1DcsbiosOutputFreqDial3.Address)
                 {
                     lock (_lockR800L1DialsObject3)
                     {
-                        var tmp = _r800l1CockpitFreq3DialPos;
-                        _r800l1CockpitFreq3DialPos = _r800l1DcsbiosOutputFreqDial3.GetUIntValue(e.Data);
-                        if (tmp != _r800l1CockpitFreq3DialPos)
+                        var tmp = _r800L1CockpitFreq3DialPos;
+                        _r800L1CockpitFreq3DialPos = _r800L1DcsbiosOutputFreqDial3.GetUIntValue(e.Data);
+                        if (tmp != _r800L1CockpitFreq3DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            Interlocked.Exchange(ref _r800l1Dial3WaitingForFeedback, 0);
+                            Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
                         }
                     }
                 }
 
                 //VHF2 Dial 4 R-800L1
-                if (e.Address == _r800l1DcsbiosOutputFreqDial4.Address)
+                if (e.Address == _r800L1DcsbiosOutputFreqDial4.Address)
                 {
                     lock (_lockR800L1DialsObject4)
                     {
-                        var tmp = _r800l1CockpitFreq4DialPos;
-                        _r800l1CockpitFreq4DialPos = _r800l1DcsbiosOutputFreqDial4.GetUIntValue(e.Data);
-                        if (tmp != _r800l1CockpitFreq4DialPos)
+                        var tmp = _r800L1CockpitFreq4DialPos;
+                        _r800L1CockpitFreq4DialPos = _r800L1DcsbiosOutputFreqDial4.GetUIntValue(e.Data);
+                        if (tmp != _r800L1CockpitFreq4DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                            Interlocked.Exchange(ref _r800l1Dial4WaitingForFeedback, 0);
+                            Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
                         }
                     }
                 }
@@ -364,7 +366,7 @@ namespace NonVisuals.Radios
                                     }
                                 case CurrentKa50RadioMode.ABRIS:
                                     {
-                                        DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
+                                        DCSBIOS.Send(isOn ? ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND : ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND);
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ADF_ARK22:
@@ -392,7 +394,7 @@ namespace NonVisuals.Radios
                                     }
                                 case CurrentKa50RadioMode.ABRIS:
                                     {
-                                        DCSBIOS.Send(isOn ? ABRISRightDialPushToggleOnCommand : ABRISRightDialPushToggleOffCommand);
+                                        DCSBIOS.Send(isOn ? ABRIS_RIGHT_DIAL_PUSH_TOGGLE_ON_COMMAND : ABRIS_RIGHT_DIAL_PUSH_TOGGLE_OFF_COMMAND);
                                         break;
                                     }
                                 case CurrentKa50RadioMode.ADF_ARK22:
@@ -424,9 +426,9 @@ namespace NonVisuals.Radios
                 SaveCockpitFrequencyR800L1();
 
 
-                _r800l1SyncThread?.Abort();
-                _r800l1SyncThread = new Thread(() => R800L1SynchThreadMethod());
-                _r800l1SyncThread.Start();
+                _r800L1SyncThread?.Abort();
+                _r800L1SyncThread = new Thread(() => R800L1SynchThreadMethod());
+                _r800L1SyncThread.Start();
 
             }
             catch (Exception ex)
@@ -447,7 +449,7 @@ namespace NonVisuals.Radios
                      * Ka-50 R-800L1 VHF 2
                      */
                         Common.DebugP("Entering Ka-50 Radio R800L1SynchThreadMethod()");
-                        Interlocked.Exchange(ref _r800l1ThreadNowSynching, 1);
+                        Interlocked.Exchange(ref _r800L1ThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
                         long dial3Timeout = DateTime.Now.Ticks;
@@ -461,7 +463,7 @@ namespace NonVisuals.Radios
                         var dial3SendCount = 0;
                         var dial4SendCount = 0;
 
-                        var frequencyAsString = _r800l1BigFrequencyStandby.ToString() + "." + _r800l1SmallFrequencyStandby.ToString().PadLeft(2, '0');
+                        var frequencyAsString = _r800L1BigFrequencyStandby.ToString() + "." + _r800L1SmallFrequencyStandby.ToString().PadLeft(2, '0');
                         frequencyAsString = frequencyAsString.PadRight(6, '0');
                         //Frequency selector 1      R800_FREQ1
                         //      "10" "11" "12" "13" "14" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39"
@@ -490,7 +492,7 @@ namespace NonVisuals.Radios
                         //#2 = 1   (position = value)
                         //#3 = 9   (position = value)
                         //#4 = 5
-                        desiredPositionDial1X = Array.IndexOf(_r800l1Freq1DialValues, int.Parse(frequencyAsString.Substring(0, 2)));
+                        desiredPositionDial1X = Array.IndexOf(_r800L1Freq1DialValues, int.Parse(frequencyAsString.Substring(0, 2)));
                         desiredPositionDial2X = int.Parse(frequencyAsString.Substring(2, 1));
                         desiredPositionDial3X = int.Parse(frequencyAsString.Substring(4, 1));
                         desiredPositionDial4X = int.Parse(frequencyAsString.Substring(5, 1));
@@ -500,43 +502,43 @@ namespace NonVisuals.Radios
                             if (IsTimedOut(ref dial1Timeout, ResetSyncTimeout, "R-800L1 dial1Timeout"))
                             {
                                 //Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800l1Dial1WaitingForFeedback, 0);
+                                Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
                                 Common.DebugP("Resetting SYNC for R-800L1 1");
                             }
                             if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "R-800L1 dial2Timeout"))
                             {
                                 //Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800l1Dial2WaitingForFeedback, 0);
+                                Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
                                 Common.DebugP("Resetting SYNC for R-800L1 2");
                             }
                             if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "R-800L1 dial3Timeout"))
                             {
                                 //Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800l1Dial3WaitingForFeedback, 0);
+                                Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
                                 Common.DebugP("Resetting SYNC for R-800L1 3");
                             }
                             if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "R-800L1 dial4Timeout"))
                             {
                                 //Lets do an ugly reset
-                                Interlocked.Exchange(ref _r800l1Dial4WaitingForFeedback, 0);
+                                Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
                                 Common.DebugP("Resetting SYNC for R-800L1 4");
                             }
 
                             string str;
-                            if (Interlocked.Read(ref _r800l1Dial1WaitingForFeedback) == 0)
+                            if (Interlocked.Read(ref _r800L1Dial1WaitingForFeedback) == 0)
                             {
                                 lock (_lockR800L1DialsObject1)
                                 {
 
-                                    Common.DebugP("_r800l1CockpitFreq1DialPos is " + _r800l1CockpitFreq1DialPos + " and should be " + desiredPositionDial1X);
-                                    if (_r800l1CockpitFreq1DialPos != desiredPositionDial1X)
+                                    Common.DebugP("_r800l1CockpitFreq1DialPos is " + _r800L1CockpitFreq1DialPos + " and should be " + desiredPositionDial1X);
+                                    if (_r800L1CockpitFreq1DialPos != desiredPositionDial1X)
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
-                                        str = R800L1Freq1DialCommand + GetCommandDirectionForR800L1Dial1(desiredPositionDial1X, _r800l1CockpitFreq1DialPos);
+                                        str = R800_L1_FREQ_1DIAL_COMMAND + GetCommandDirectionForR800L1Dial1(desiredPositionDial1X, _r800L1CockpitFreq1DialPos);
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial1SendCount++;
-                                        Interlocked.Exchange(ref _r800l1Dial1WaitingForFeedback, 1);
+                                        Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial1Timeout);
                                 }
@@ -545,19 +547,19 @@ namespace NonVisuals.Radios
                             {
                                 dial1OkTime = DateTime.Now.Ticks;
                             }
-                            if (Interlocked.Read(ref _r800l1Dial2WaitingForFeedback) == 0)
+                            if (Interlocked.Read(ref _r800L1Dial2WaitingForFeedback) == 0)
                             {
                                 lock (_lockR800L1DialsObject2)
                                 {
-                                    Common.DebugP("_r800l1CockpitFreq2DialPos is " + _r800l1CockpitFreq2DialPos + " and should be " + desiredPositionDial2X);
-                                    if (_r800l1CockpitFreq2DialPos != desiredPositionDial2X)
+                                    Common.DebugP("_r800l1CockpitFreq2DialPos is " + _r800L1CockpitFreq2DialPos + " and should be " + desiredPositionDial2X);
+                                    if (_r800L1CockpitFreq2DialPos != desiredPositionDial2X)
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
-                                        str = R800L1Freq2DialCommand + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r800l1CockpitFreq2DialPos);
+                                        str = R800_L1_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r800L1CockpitFreq2DialPos);
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial2SendCount++;
-                                        Interlocked.Exchange(ref _r800l1Dial2WaitingForFeedback, 1);
+                                        Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial2Timeout);
                                 }
@@ -566,19 +568,19 @@ namespace NonVisuals.Radios
                             {
                                 dial2OkTime = DateTime.Now.Ticks;
                             }
-                            if (Interlocked.Read(ref _r800l1Dial3WaitingForFeedback) == 0)
+                            if (Interlocked.Read(ref _r800L1Dial3WaitingForFeedback) == 0)
                             {
                                 lock (_lockR800L1DialsObject3)
                                 {
-                                    Common.DebugP("_r800l1CockpitFreq3DialPos is " + _r800l1CockpitFreq3DialPos + " and should be " + desiredPositionDial3X);
-                                    if (_r800l1CockpitFreq3DialPos != desiredPositionDial3X)
+                                    Common.DebugP("_r800l1CockpitFreq3DialPos is " + _r800L1CockpitFreq3DialPos + " and should be " + desiredPositionDial3X);
+                                    if (_r800L1CockpitFreq3DialPos != desiredPositionDial3X)
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
-                                        str = R800L1Freq3DialCommand + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r800l1CockpitFreq3DialPos);
+                                        str = R800_L1_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r800L1CockpitFreq3DialPos);
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial3SendCount++;
-                                        Interlocked.Exchange(ref _r800l1Dial3WaitingForFeedback, 1);
+                                        Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial3Timeout);
                                 }
@@ -588,7 +590,7 @@ namespace NonVisuals.Radios
                                 dial3OkTime = DateTime.Now.Ticks;
                             }
                             var desiredPositionDial4 = 0;
-                            if (Interlocked.Read(ref _r800l1Dial4WaitingForFeedback) == 0)
+                            if (Interlocked.Read(ref _r800L1Dial4WaitingForFeedback) == 0)
                             {
                                 if (desiredPositionDial4X == 0)
                                 {
@@ -611,24 +613,24 @@ namespace NonVisuals.Radios
 
                                 lock (_lockR800L1DialsObject4)
                                 {
-                                    Common.DebugP("_r800l1CockpitFreq4DialPos is " + _r800l1CockpitFreq4DialPos + " and should be " + desiredPositionDial4);
-                                    if (_r800l1CockpitFreq4DialPos < desiredPositionDial4)
+                                    Common.DebugP("_r800l1CockpitFreq4DialPos is " + _r800L1CockpitFreq4DialPos + " and should be " + desiredPositionDial4);
+                                    if (_r800L1CockpitFreq4DialPos < desiredPositionDial4)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R800L1Freq4DialCommand + "INC\n";
+                                        str = R800_L1_FREQ_4DIAL_COMMAND + "INC\n";
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
-                                        Interlocked.Exchange(ref _r800l1Dial4WaitingForFeedback, 1);
+                                        Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
                                     }
-                                    else if (_r800l1CockpitFreq4DialPos > desiredPositionDial4)
+                                    else if (_r800L1CockpitFreq4DialPos > desiredPositionDial4)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
-                                        str = R800L1Freq4DialCommand + "DEC\n";
+                                        str = R800_L1_FREQ_4DIAL_COMMAND + "DEC\n";
                                         Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
-                                        Interlocked.Exchange(ref _r800l1Dial4WaitingForFeedback, 1);
+                                        Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
                                     }
                                     Reset(ref dial4Timeout);
                                 }
@@ -662,7 +664,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _r800l1ThreadNowSynching, 0);
+                    Interlocked.Exchange(ref _r800L1ThreadNowSynching, 0);
                 }
 
             }
@@ -680,8 +682,8 @@ namespace NonVisuals.Radios
             try
             {
                 Common.DebugP("Entering Ka-50 Radio SwapCockpitStandbyFrequencyR800L1()");
-                _r800l1BigFrequencyStandby = _r800l1SavedCockpitBigFrequency;
-                _r800l1SmallFrequencyStandby = _r800l1SavedCockpitSmallFrequency;
+                _r800L1BigFrequencyStandby = _r800L1SavedCockpitBigFrequency;
+                _r800L1SmallFrequencyStandby = _r800L1SavedCockpitSmallFrequency;
             }
             catch (Exception ex)
             {
@@ -818,7 +820,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentUpperRadioMode == CurrentKa50RadioMode.VHF1_R828)
                                     {
-                                        DCSBIOS.Send(radioPanelKnob.IsOn ? Vhf1TunerButtonPress : Vhf1TunerButtonRelease);
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? VHF1_TUNER_BUTTON_PRESS : VHF1_TUNER_BUTTON_RELEASE);
                                     }
                                     else if (_currentUpperRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
@@ -827,20 +829,20 @@ namespace NonVisuals.Radios
                                             if (_adfModeSwitchDirectionUp && _adfModeCockpitPos == 2)
                                             {
                                                 _adfModeSwitchDirectionUp = false;
-                                                DCSBIOS.Send(ADFModeDec);
+                                                DCSBIOS.Send(ADF_MODE_DEC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp && _adfModeCockpitPos == 0)
                                             {
                                                 _adfModeSwitchDirectionUp = true;
-                                                DCSBIOS.Send(ADFModeInc);
+                                                DCSBIOS.Send(ADF_MODE_INC);
                                             }
                                             else if (_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.Send(ADFModeInc);
+                                                DCSBIOS.Send(ADF_MODE_INC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.Send(ADFModeDec);
+                                                DCSBIOS.Send(ADF_MODE_DEC);
                                             }
                                         }
                                         /*if (_adfModeSwitchLastSent.Equals(ADFModeSwitchAntenna))
@@ -856,7 +858,7 @@ namespace NonVisuals.Radios
                                     }
                                     else if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(DatalinkPowerOnOffCommandToggle);
+                                        DCSBIOS.Send(DATALINK_POWER_ON_OFF_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -868,7 +870,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentKa50RadioMode.VHF1_R828)
                                     {
-                                        DCSBIOS.Send(radioPanelKnob.IsOn ? Vhf1TunerButtonPress : Vhf1TunerButtonRelease);
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? VHF1_TUNER_BUTTON_PRESS : VHF1_TUNER_BUTTON_RELEASE);
                                     }
                                     else if (_currentLowerRadioMode == CurrentKa50RadioMode.ADF_ARK22 && radioPanelKnob.IsOn)
                                     {
@@ -877,26 +879,26 @@ namespace NonVisuals.Radios
                                             if (_adfModeSwitchDirectionUp && _adfModeCockpitPos == 2)
                                             {
                                                 _adfModeSwitchDirectionUp = false;
-                                                DCSBIOS.Send(ADFModeDec);
+                                                DCSBIOS.Send(ADF_MODE_DEC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp && _adfModeCockpitPos == 0)
                                             {
                                                 _adfModeSwitchDirectionUp = true;
-                                                DCSBIOS.Send(ADFModeInc);
+                                                DCSBIOS.Send(ADF_MODE_INC);
                                             }
                                             else if (_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.Send(ADFModeInc);
+                                                DCSBIOS.Send(ADF_MODE_INC);
                                             }
                                             else if (!_adfModeSwitchDirectionUp)
                                             {
-                                                DCSBIOS.Send(ADFModeDec);
+                                                DCSBIOS.Send(ADF_MODE_DEC);
                                             }
                                         }
                                     }
                                     else if (_currentLowerRadioMode == CurrentKa50RadioMode.DATALINK && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(DatalinkPowerOnOffCommandToggle);
+                                        DCSBIOS.Send(DATALINK_POWER_ON_OFF_COMMAND_TOGGLE);
                                     }
                                     else
                                     {
@@ -942,25 +944,25 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVhf1PresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Vhf1PresetCommandInc);
+                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_INC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
                                                 //100-149  220-399
-                                                if (_r800l1BigFrequencyStandby.Equals(399))
+                                                if (_r800L1BigFrequencyStandby.Equals(399))
                                                 {
                                                     //@ max value
                                                     break;
                                                 }
-                                                if (_r800l1BigFrequencyStandby.Equals(149))
+                                                if (_r800L1BigFrequencyStandby.Equals(149))
                                                 {
-                                                    _r800l1BigFrequencyStandby = 220;
+                                                    _r800L1BigFrequencyStandby = 220;
                                                 }
                                                 else
                                                 {
-                                                    _r800l1BigFrequencyStandby++;
+                                                    _r800L1BigFrequencyStandby++;
                                                 }
 
                                                 break;
@@ -968,14 +970,14 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandIncMore : ABRISLeftDialCommandInc);
+                                                DCSBIOS.Send(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_INC_MORE : ABRIS_LEFT_DIAL_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkMasterModeChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkMasterModeCommandInc);
+                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -983,7 +985,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipADFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandInc);
+                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -1002,25 +1004,25 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVhf1PresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Vhf1PresetCommandDec);
+                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
                                                 //100-149  220-399
-                                                if (_r800l1BigFrequencyStandby.Equals(100))
+                                                if (_r800L1BigFrequencyStandby.Equals(100))
                                                 {
                                                     //@ min value
                                                     break;
                                                 }
-                                                if (_r800l1BigFrequencyStandby.Equals(220))
+                                                if (_r800L1BigFrequencyStandby.Equals(220))
                                                 {
-                                                    _r800l1BigFrequencyStandby = 149;
+                                                    _r800L1BigFrequencyStandby = 149;
                                                 }
                                                 else
                                                 {
-                                                    _r800l1BigFrequencyStandby--;
+                                                    _r800L1BigFrequencyStandby--;
                                                 }
 
                                                 break;
@@ -1028,14 +1030,14 @@ namespace NonVisuals.Radios
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandDecMore : ABRISLeftDialCommandDec);
+                                                DCSBIOS.Send(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_DEC_MORE : ABRIS_LEFT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkMasterModeChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkMasterModeCommandDec);
+                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -1043,7 +1045,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipADFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandDec);
+                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -1060,37 +1062,37 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandInc);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
-                                                if (_r800l1SmallFrequencyStandby >= 95)
+                                                if (_r800L1SmallFrequencyStandby >= 95)
                                                 {
                                                     //At max value
-                                                    _r800l1SmallFrequencyStandby = 0;
+                                                    _r800L1SmallFrequencyStandby = 0;
                                                     break;
                                                 }
-                                                _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby + 5;
+                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby + 5;
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandIncMore : ABRISRightDialCommandInc);
+                                                DCSBIOS.Send(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_INC_MORE : ABRIS_RIGHT_DIAL_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkSelfIdChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkSelfIdCommandInc);
+                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_INC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.Send(ADFVolumeKnobCommandInc);
+                                                DCSBIOS.Send(ADF_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.NOUSE:
@@ -1106,37 +1108,37 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandDec);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
-                                                if (_r800l1SmallFrequencyStandby <= 0)
+                                                if (_r800L1SmallFrequencyStandby <= 0)
                                                 {
                                                     //At min value
-                                                    _r800l1SmallFrequencyStandby = 95;
+                                                    _r800L1SmallFrequencyStandby = 95;
                                                     break;
                                                 }
-                                                _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby - 5;
+                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby - 5;
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandDecMore : ABRISRightDialCommandDec);
+                                                DCSBIOS.Send(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE : ABRIS_RIGHT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkSelfIdChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkSelfIdCommandDec);
+                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.Send(ADFVolumeKnobCommandDec);
+                                                DCSBIOS.Send(ADF_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.NOUSE:
@@ -1154,15 +1156,15 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVhf1PresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Vhf1PresetCommandInc);
+                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_INC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
                                                 var changeFaster = false;
-                                                _r800l1BigFreqIncreaseChangeMonitor.Click();
-                                                if (_r800l1BigFreqIncreaseChangeMonitor.ClickThresholdReached())
+                                                _r800L1BigFreqIncreaseChangeMonitor.Click();
+                                                if (_r800L1BigFreqIncreaseChangeMonitor.ClickThresholdReached())
                                                 {
                                                     //Change faster
                                                     changeFaster = true;
@@ -1170,36 +1172,36 @@ namespace NonVisuals.Radios
                                                 //100-149  220-399
                                                 if (changeFaster)
                                                 {
-                                                    _r800l1BigFrequencyStandby = _r800l1BigFrequencyStandby + ChangeValue;
+                                                    _r800L1BigFrequencyStandby = _r800L1BigFrequencyStandby + CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
-                                                    _r800l1BigFrequencyStandby++;
+                                                    _r800L1BigFrequencyStandby++;
                                                 }
-                                                if (_r800l1BigFrequencyStandby > 399)
+                                                if (_r800L1BigFrequencyStandby > 399)
                                                 {
                                                     //@ max value
-                                                    _r800l1BigFrequencyStandby = 399;
+                                                    _r800L1BigFrequencyStandby = 399;
                                                     break;
                                                 }
-                                                if (_r800l1BigFrequencyStandby > 149 && _r800l1BigFrequencyStandby < 220)
+                                                if (_r800L1BigFrequencyStandby > 149 && _r800L1BigFrequencyStandby < 220)
                                                 {
-                                                    _r800l1BigFrequencyStandby = _r800l1BigFrequencyStandby - 149 + 220;
+                                                    _r800L1BigFrequencyStandby = _r800L1BigFrequencyStandby - 149 + 220;
                                                 }
-                                                Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800l1BigFrequencyStandby);
+                                                Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800L1BigFrequencyStandby);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandIncMore : ABRISLeftDialCommandInc);
+                                                DCSBIOS.Send(_abrisLeftDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_INC_MORE : ABRIS_LEFT_DIAL_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkMasterModeChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkMasterModeCommandInc);
+                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -1207,7 +1209,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipADFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandInc);
+                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -1226,15 +1228,15 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVhf1PresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Vhf1PresetCommandDec);
+                                                    DCSBIOS.Send(VHF1_PRESET_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
                                                 var changeFaster = false;
-                                                _r800l1BigFreqDecreaseChangeMonitor.Click();
-                                                if (_r800l1BigFreqDecreaseChangeMonitor.ClickThresholdReached())
+                                                _r800L1BigFreqDecreaseChangeMonitor.Click();
+                                                if (_r800L1BigFreqDecreaseChangeMonitor.ClickThresholdReached())
                                                 {
                                                     //Change faster
                                                     changeFaster = true;
@@ -1242,36 +1244,36 @@ namespace NonVisuals.Radios
                                                 //100-149  220-399
                                                 if (changeFaster)
                                                 {
-                                                    _r800l1BigFrequencyStandby = _r800l1BigFrequencyStandby - ChangeValue;
+                                                    _r800L1BigFrequencyStandby = _r800L1BigFrequencyStandby - CHANGE_VALUE;
                                                 }
                                                 else
                                                 {
-                                                    _r800l1BigFrequencyStandby--;
+                                                    _r800L1BigFrequencyStandby--;
                                                 }
-                                                if (_r800l1BigFrequencyStandby <= 100)
+                                                if (_r800L1BigFrequencyStandby <= 100)
                                                 {
                                                     //@ max value
-                                                    _r800l1BigFrequencyStandby = 100;
+                                                    _r800L1BigFrequencyStandby = 100;
                                                     break;
                                                 }
-                                                if (_r800l1BigFrequencyStandby > 149 && _r800l1BigFrequencyStandby < 220)
+                                                if (_r800L1BigFrequencyStandby > 149 && _r800L1BigFrequencyStandby < 220)
                                                 {
-                                                    _r800l1BigFrequencyStandby = 149 - (220 - _r800l1BigFrequencyStandby);
+                                                    _r800L1BigFrequencyStandby = 149 - (220 - _r800L1BigFrequencyStandby);
                                                 }
-                                                Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800l1BigFrequencyStandby);
+                                                Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800L1BigFrequencyStandby);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisLeftDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISLeftDialCommandDecMore : ABRISLeftDialCommandDec);
+                                                DCSBIOS.Send(_abrisLeftDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_LEFT_DIAL_COMMAND_DEC_MORE : ABRIS_LEFT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkMasterModeChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkMasterModeCommandDec);
+                                                    DCSBIOS.Send(DATALINK_MASTER_MODE_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -1279,7 +1281,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipADFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(ADFPresetCommandDec);
+                                                    DCSBIOS.Send(ADF_PRESET_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -1296,37 +1298,37 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandInc);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
-                                                if (_r800l1SmallFrequencyStandby >= 95)
+                                                if (_r800L1SmallFrequencyStandby >= 95)
                                                 {
                                                     //At max value
-                                                    _r800l1SmallFrequencyStandby = 0;
+                                                    _r800L1SmallFrequencyStandby = 0;
                                                     break;
                                                 }
-                                                _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby + 5;
+                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby + 5;
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialIncreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandIncMore : ABRISRightDialCommandInc);
+                                                DCSBIOS.Send(_abrisRightDialIncreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_INC_MORE : ABRIS_RIGHT_DIAL_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkSelfIdChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkSelfIdCommandInc);
+                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_INC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.Send(ADFVolumeKnobCommandInc);
+                                                DCSBIOS.Send(ADF_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.NOUSE:
@@ -1342,37 +1344,37 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentKa50RadioMode.VHF1_R828:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandDec);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.VHF2_R800L1:
                                             {
-                                                if (_r800l1SmallFrequencyStandby <= 0)
+                                                if (_r800L1SmallFrequencyStandby <= 0)
                                                 {
                                                     //At min value
-                                                    _r800l1SmallFrequencyStandby = 95;
+                                                    _r800L1SmallFrequencyStandby = 95;
                                                     break;
                                                 }
-                                                _r800l1SmallFrequencyStandby = _r800l1SmallFrequencyStandby - 5;
+                                                _r800L1SmallFrequencyStandby = _r800L1SmallFrequencyStandby - 5;
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
                                             {
                                                 _abrisRightDialDecreaseChangeMonitor.Click();
-                                                DCSBIOS.Send(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRISRightDialCommandDecMore : ABRISRightDialCommandDec);
+                                                DCSBIOS.Send(_abrisRightDialDecreaseChangeMonitor.ClickThresholdReached() ? ABRIS_RIGHT_DIAL_COMMAND_DEC_MORE : ABRIS_RIGHT_DIAL_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.DATALINK:
                                             {
                                                 if (!SkipDataLinkSelfIdChange())
                                                 {
-                                                    DCSBIOS.Send(DatalinkSelfIdCommandDec);
+                                                    DCSBIOS.Send(DATALINK_SELF_ID_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ADF_ARK22:
                                             {
-                                                DCSBIOS.Send(ADFVolumeKnobCommandDec);
+                                                DCSBIOS.Send(ADF_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.NOUSE:
@@ -1405,21 +1407,21 @@ namespace NonVisuals.Radios
                 //R-800L VHF 2
                 //100.00 - 149.00
                 //220.00 - 399.00
-                if (_r800l1BigFrequencyStandby < 100)
+                if (_r800L1BigFrequencyStandby < 100)
                 {
-                    _r800l1BigFrequencyStandby = 100;
+                    _r800L1BigFrequencyStandby = 100;
                 }
-                if (_r800l1BigFrequencyStandby > 399)
+                if (_r800L1BigFrequencyStandby > 399)
                 {
-                    _r800l1BigFrequencyStandby = 399;
+                    _r800L1BigFrequencyStandby = 399;
                 }
-                if (_r800l1BigFrequencyStandby == 399 && _r800l1SmallFrequencyStandby > 0)
+                if (_r800L1BigFrequencyStandby == 399 && _r800L1SmallFrequencyStandby > 0)
                 {
-                    _r800l1SmallFrequencyStandby = 0;
+                    _r800L1SmallFrequencyStandby = 0;
                 }
-                if (_r800l1BigFrequencyStandby == 149 && _r800l1SmallFrequencyStandby > 0)
+                if (_r800L1BigFrequencyStandby == 149 && _r800L1SmallFrequencyStandby > 0)
                 {
-                    _r800l1SmallFrequencyStandby = 0;
+                    _r800L1SmallFrequencyStandby = 0;
                 }
             }
             catch (Exception ex)
@@ -1577,31 +1579,31 @@ namespace NonVisuals.Radios
                                 {
                                     try
                                     {
-                                        frequencyAsString = _r800l1Freq1DialValues[_r800l1CockpitFreq1DialPos].ToString();
+                                        frequencyAsString = _r800L1Freq1DialValues[_r800L1CockpitFreq1DialPos].ToString();
                                     }
                                     catch (Exception e)
                                     {
-                                        throw new Exception("Failed to get dial position from array _r800l1Freq1DialValues based on index " + _r800l1CockpitFreq1DialPos + ". Max array pos is " + _r800l1Freq1DialValues.Length + "\n" + e.Message + "\n" + e.StackTrace);
+                                        throw new Exception("Failed to get dial position from array _r800l1Freq1DialValues based on index " + _r800L1CockpitFreq1DialPos + ". Max array pos is " + _r800L1Freq1DialValues.Length + "\n" + e.Message + "\n" + e.StackTrace);
                                     }
                                 }
                                 lock (_lockR800L1DialsObject2)
                                 {
 
-                                    frequencyAsString = frequencyAsString + _r800l1CockpitFreq2DialPos;
+                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq2DialPos;
                                 }
                                 frequencyAsString = frequencyAsString + ".";
                                 lock (_lockR800L1DialsObject3)
                                 {
 
-                                    frequencyAsString = frequencyAsString + _r800l1CockpitFreq3DialPos;
+                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq3DialPos;
                                 }
                                 lock (_lockR800L1DialsObject4)
                                 {
 
-                                    frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800l1CockpitFreq4DialPos);
+                                    frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800L1CockpitFreq4DialPos);
                                 }
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800L1BigFrequencyStandby + "." + _r800L1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ABRIS:
@@ -1697,26 +1699,26 @@ namespace NonVisuals.Radios
                                 var frequencyAsString = "";
                                 lock (_lockR800L1DialsObject1)
                                 {
-                                    frequencyAsString = _r800l1Freq1DialValues[_r800l1CockpitFreq1DialPos].ToString();
+                                    frequencyAsString = _r800L1Freq1DialValues[_r800L1CockpitFreq1DialPos].ToString();
                                 }
                                 lock (_lockR800L1DialsObject2)
                                 {
 
-                                    frequencyAsString = frequencyAsString + _r800l1CockpitFreq2DialPos;
+                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq2DialPos;
                                 }
                                 frequencyAsString = frequencyAsString + ".";
                                 lock (_lockR800L1DialsObject3)
                                 {
 
-                                    frequencyAsString = frequencyAsString + _r800l1CockpitFreq3DialPos;
+                                    frequencyAsString = frequencyAsString + _r800L1CockpitFreq3DialPos;
                                 }
                                 lock (_lockR800L1DialsObject4)
                                 {
 
-                                    frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800l1CockpitFreq4DialPos);
+                                    frequencyAsString = frequencyAsString + GetR800L1DialFrequencyForPosition(_r800L1CockpitFreq4DialPos);
                                 }
                                 SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
-                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800l1BigFrequencyStandby + "." + _r800l1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
+                                SetPZ69DisplayBytesDefault(ref bytes, double.Parse(_r800L1BigFrequencyStandby + "." + _r800L1SmallFrequencyStandby.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0'), NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
                         case CurrentKa50RadioMode.ABRIS:
@@ -1816,10 +1818,10 @@ namespace NonVisuals.Radios
                 _vhf1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_CHANNEL");
 
                 //VHF2
-                _r800l1DcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ1");
-                _r800l1DcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ2");
-                _r800l1DcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ3");
-                _r800l1DcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ4");
+                _r800L1DcsbiosOutputFreqDial1 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ1");
+                _r800L1DcsbiosOutputFreqDial2 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ2");
+                _r800L1DcsbiosOutputFreqDial3 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ3");
+                _r800L1DcsbiosOutputFreqDial4 = DCSBIOSControlLocator.GetDCSBIOSOutput("R800_FREQ4");
 
                 //ADF
                 _adfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("ADF_CHANNEL");
@@ -1910,7 +1912,7 @@ namespace NonVisuals.Radios
 
         private bool R800L1NowSyncing()
         {
-            return Interlocked.Read(ref _r800l1ThreadNowSynching) > 0;
+            return Interlocked.Read(ref _r800L1ThreadNowSynching) > 0;
         }
 
         private void SaveCockpitFrequencyR800L1()
@@ -1944,7 +1946,7 @@ namespace NonVisuals.Radios
                             lock (_lockR800L1DialsObject4)
                             {
                                 uint dial4 = 0;
-                                switch (_r800l1CockpitFreq4DialPos)
+                                switch (_r800L1CockpitFreq4DialPos)
                                 {
                                     case 0:
                                     case 1:
@@ -1961,8 +1963,8 @@ namespace NonVisuals.Radios
                                             break;
                                         }
                                 }
-                                _r800l1SavedCockpitBigFrequency = uint.Parse(_r800l1Freq1DialValues[_r800l1CockpitFreq1DialPos].ToString() + _r800l1CockpitFreq2DialPos.ToString());
-                                _r800l1SavedCockpitSmallFrequency = uint.Parse(_r800l1CockpitFreq3DialPos.ToString() + dial4.ToString());
+                                _r800L1SavedCockpitBigFrequency = uint.Parse(_r800L1Freq1DialValues[_r800L1CockpitFreq1DialPos].ToString() + _r800L1CockpitFreq2DialPos.ToString());
+                                _r800L1SavedCockpitSmallFrequency = uint.Parse(_r800L1CockpitFreq3DialPos.ToString() + dial4.ToString());
                             }
                         }
                     }
@@ -1996,7 +1998,7 @@ namespace NonVisuals.Radios
                     {
                         break;
                     }
-                    if (tmpPos <= _r800l1Freq1DialValues.Length - 1)
+                    if (tmpPos <= _r800L1Freq1DialValues.Length - 1)
                     {
                         tmpPos++;
                         countUp++;
@@ -2019,7 +2021,7 @@ namespace NonVisuals.Radios
                     }
                     if (tmpPos == 0)
                     {
-                        tmpPos = unchecked((uint)_r800l1Freq1DialValues.Length - 1);
+                        tmpPos = unchecked((uint)_r800L1Freq1DialValues.Length - 1);
                         countDown++;
                     }
                     else

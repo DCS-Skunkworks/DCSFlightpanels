@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using ClassLibraryCommon;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public abstract class BIPLink
     {
@@ -12,7 +12,7 @@ namespace NonVisuals
          This class binds a physical switch with a BIP LED
          */
         internal SortedList<int, BIPLight> _bipLights = new SortedList<int, BIPLight>();
-        internal bool _whenOnTurnedOn = true;
+        internal bool WhenOnTurnedOn = true;
         internal const string SeparatorChars = "\\o/";
         internal string _description;
         private Thread _executingThread;
@@ -144,8 +144,8 @@ namespace NonVisuals
 
         public bool WhenTurnedOn
         {
-            get => _whenOnTurnedOn;
-            set => _whenOnTurnedOn = value;
+            get => WhenOnTurnedOn;
+            set => WhenOnTurnedOn = value;
         }
 
         public string Description

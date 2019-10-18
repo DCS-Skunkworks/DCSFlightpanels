@@ -10,6 +10,8 @@ using ClassLibraryCommon;
 using DCSFlightpanels.TagDataClasses;
 using Newtonsoft.Json;
 using NonVisuals;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
@@ -62,12 +64,22 @@ namespace DCSFlightpanels.PanelUserControls
                 UCStreamDeckButtonAction.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
                 UCStreamDeckButtonImage.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
                 StackPanelChooseButtonActionType.IsEnabled = selectedButtonNumber != 0;
+
                 UCStreamDeckButtonAction.SetFormState();
+                UCStreamDeckButtonImage.SetFormState();
+
+                ButtonCancelButtonConfigurationChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty;
+                ButtonDeleteButtonConfiguration.IsEnabled = UCStreamDeckButtonAction.HasConfig || UCStreamDeckButtonImage.HasConfig;
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(471473, ex);
             }
+        }
+
+        public void ChildChangesMade()
+        {
+            SetFormState();
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)

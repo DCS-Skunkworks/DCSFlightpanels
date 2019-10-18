@@ -1,4 +1,4 @@
-﻿namespace NonVisuals
+﻿namespace NonVisuals.Interfaces
 {
     public interface ISaitekPanelKnob
     {

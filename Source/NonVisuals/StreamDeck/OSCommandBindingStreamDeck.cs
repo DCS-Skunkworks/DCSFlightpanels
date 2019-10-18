@@ -1,15 +1,28 @@
 ﻿using System;
 using ClassLibraryCommon;
+using NonVisuals.Interfaces;
+using NonVisuals.StreamDeck;
 
-namespace NonVisuals
+namespace NonVisuals.StreamDeck
 {
-    public class OSCommandBindingStreamDeck : OSCommandBinding
+    public class OSCommandBindingStreamDeck : OSCommandBinding, IStreamDeckButtonAction
     {
         /*
-         This class binds a physical key on the Stream Deck with a Windows OS command.
+         This class binds a physical button on the Stream Deck with a Windows OS command.
          */
         private StreamDeckButtons _streamDeckButton;
-        
+
+
+        public EnumStreamDeckButtonActionType GetActionType()
+        {
+            return EnumStreamDeckButtonActionType.OSCommand;
+        }
+
+        public void Execute()
+        {
+            OSCommandObject.Execute();
+        }
+
         internal override void ImportSettings(string settings)
         {
             if (string.IsNullOrEmpty(settings))

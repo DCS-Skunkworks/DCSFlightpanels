@@ -1,8 +1,9 @@
 
 ﻿using NonVisuals.Radios;
+ using NonVisuals.StreamDeck;
 
 
-namespace NonVisuals
+ namespace NonVisuals.Saitek
 {
     public class PanelKeyOnOff
     {

@@ -74,14 +74,14 @@ namespace DCSFlightpanels
             RadioButtonKeyBd.Checked += RadioButtonAPI_OnChecked;
             RadioButtonSendInput.Checked += RadioButtonAPI_OnChecked;
             TextBoxDcsBiosJSONLocation.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSIPFrom.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSIPTo.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSPortFrom.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxDCSBIOSPortTo.TextChanged += TextBoxDcsBios_OnTextChanged;
-            TextBoxSRSIPFrom.TextChanged += TextBoxSRS_OnTextChanged;
-            TextBoxSRSIPTo.TextChanged += TextBoxSRS_OnTextChanged;
-            TextBoxSRSPortFrom.TextChanged += TextBoxSRS_OnTextChanged;
-            TextBoxSRSPortTo.TextChanged += TextBoxSRS_OnTextChanged;
+            TextBoxDCSBIOSFromIP.TextChanged += TextBoxDcsBios_OnTextChanged;
+            TextBoxDCSBIOSToIP.TextChanged += TextBoxDcsBios_OnTextChanged;
+            TextBoxDCSBIOSFromPort.TextChanged += TextBoxDcsBios_OnTextChanged;
+            TextBoxDCSBIOSToPort.TextChanged += TextBoxDcsBios_OnTextChanged;
+            TextBoxSRSFromIP.TextChanged += TextBoxSRS_OnTextChanged;
+            TextBoxSRSToIP.TextChanged += TextBoxSRS_OnTextChanged;
+            TextBoxSRSFromPort.TextChanged += TextBoxSRS_OnTextChanged;
+            TextBoxSRSToPort.TextChanged += TextBoxSRS_OnTextChanged;
             CheckBoxDoDebug.Checked += CheckBoxDebug_OnChecked;
             CheckBoxDebugToFile.Checked += CheckBoxDebug_OnChecked;
             CheckBoxMinimizeToTray.Checked += CheckBoxMinimizeToTray_OnChecked;
@@ -134,17 +134,17 @@ namespace DCSFlightpanels
             if (Common.PartialDCSBIOSEnabled())
             {
                 TextBoxDcsBiosJSONLocation.Text = Settings.Default.DCSBiosJSONLocation;
-                TextBoxDCSBIOSIPFrom.Text = Settings.Default.DCSBiosIPFrom;
-                TextBoxDCSBIOSIPTo.Text = Settings.Default.DCSBiosIPTo;
-                TextBoxDCSBIOSPortFrom.Text = Settings.Default.DCSBiosPortFrom;
-                TextBoxDCSBIOSPortTo.Text = Settings.Default.DCSBiosPortTo;
+                TextBoxDCSBIOSFromIP.Text = Settings.Default.DCSBiosIPFrom;
+                TextBoxDCSBIOSToIP.Text = Settings.Default.DCSBiosIPTo;
+                TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
+                TextBoxDCSBIOSToPort.Text = Settings.Default.DCSBiosPortTo;
             }
             if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled))
             {
-                TextBoxSRSIPFrom.Text = Settings.Default.SRSIpFrom;
-                TextBoxSRSIPTo.Text = Settings.Default.SRSIpTo;
-                TextBoxSRSPortFrom.Text = Settings.Default.SRSPortFrom.ToString();
-                TextBoxSRSPortTo.Text = Settings.Default.SRSPortTo.ToString();
+                TextBoxSRSFromIP.Text = Settings.Default.SRSIpFrom;
+                TextBoxSRSToIP.Text = Settings.Default.SRSIpTo;
+                TextBoxSRSFromPort.Text = Settings.Default.SRSPortFrom.ToString();
+                TextBoxSRSToPort.Text = Settings.Default.SRSPortTo.ToString();
             }
         }
 
@@ -288,19 +288,19 @@ namespace DCSFlightpanels
             try
             {
                 IPAddress ipAddress;
-                if (string.IsNullOrEmpty(TextBoxDCSBIOSIPFrom.Text))
+                if (string.IsNullOrEmpty(TextBoxDCSBIOSFromIP.Text))
                 {
                     throw new Exception("DCS-BIOS IP address from cannot be empty");
                 }
-                if (string.IsNullOrEmpty(TextBoxDCSBIOSIPTo.Text))
+                if (string.IsNullOrEmpty(TextBoxDCSBIOSToIP.Text))
                 {
                     throw new Exception("DCS-BIOS IP address to cannot be empty");
                 }
-                if (string.IsNullOrEmpty(TextBoxDCSBIOSPortFrom.Text))
+                if (string.IsNullOrEmpty(TextBoxDCSBIOSFromPort.Text))
                 {
                     throw new Exception("DCS-BIOS Port from cannot be empty");
                 }
-                if (string.IsNullOrEmpty(TextBoxDCSBIOSPortTo.Text))
+                if (string.IsNullOrEmpty(TextBoxDCSBIOSToPort.Text))
                 {
                     throw new Exception("DCS-BIOS Port to cannot be empty");
                 }
@@ -310,11 +310,11 @@ namespace DCSFlightpanels
                 }
                 try
                 {
-                    if (!IPAddress.TryParse(TextBoxDCSBIOSIPFrom.Text, out ipAddress))
+                    if (!IPAddress.TryParse(TextBoxDCSBIOSFromIP.Text, out ipAddress))
                     {
                         throw new Exception();
                     }
-                    _ipAddressFromDCSBIOS = TextBoxDCSBIOSIPFrom.Text;
+                    _ipAddressFromDCSBIOS = TextBoxDCSBIOSFromIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -322,11 +322,11 @@ namespace DCSFlightpanels
                 }
                 try
                 {
-                    if (!IPAddress.TryParse(TextBoxDCSBIOSIPTo.Text, out ipAddress))
+                    if (!IPAddress.TryParse(TextBoxDCSBIOSToIP.Text, out ipAddress))
                     {
                         throw new Exception();
                     }
-                    _ipAddressToDCSBIOS = TextBoxDCSBIOSIPTo.Text;
+                    _ipAddressToDCSBIOS = TextBoxDCSBIOSToIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -334,8 +334,8 @@ namespace DCSFlightpanels
                 }
                 try
                 {
-                    var test = Convert.ToInt32(TextBoxDCSBIOSPortFrom.Text);
-                    _portFromDCSBIOS = TextBoxDCSBIOSPortFrom.Text;
+                    var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
+                    _portFromDCSBIOS = TextBoxDCSBIOSFromPort.Text;
                 }
                 catch (Exception e)
                 {
@@ -343,8 +343,8 @@ namespace DCSFlightpanels
                 }
                 try
                 {
-                    var test = Convert.ToInt32(TextBoxDCSBIOSPortFrom.Text);
-                    _portToDCSBIOS = TextBoxDCSBIOSPortTo.Text;
+                    var test = Convert.ToInt32(TextBoxDCSBIOSFromPort.Text);
+                    _portToDCSBIOS = TextBoxDCSBIOSToPort.Text;
                 }
                 catch (Exception e)
                 {
@@ -371,29 +371,29 @@ namespace DCSFlightpanels
             try
             {
                 IPAddress ipAddress;
-                if (string.IsNullOrEmpty(TextBoxSRSIPFrom.Text))
+                if (string.IsNullOrEmpty(TextBoxSRSFromIP.Text))
                 {
                     throw new Exception("SRS IP address from cannot be empty");
                 }
-                if (string.IsNullOrEmpty(TextBoxSRSIPTo.Text))
+                if (string.IsNullOrEmpty(TextBoxSRSToIP.Text))
                 {
                     throw new Exception("SRS IP address to cannot be empty");
                 }
-                if (string.IsNullOrEmpty(TextBoxSRSPortFrom.Text))
+                if (string.IsNullOrEmpty(TextBoxSRSFromPort.Text))
                 {
                     throw new Exception("SRS Port from cannot be empty");
                 }
-                if (string.IsNullOrEmpty(TextBoxSRSPortTo.Text))
+                if (string.IsNullOrEmpty(TextBoxSRSToPort.Text))
                 {
                     throw new Exception("SRS Port to cannot be empty");
                 }
                 try
                 {
-                    if (!IPAddress.TryParse(TextBoxSRSIPFrom.Text, out ipAddress))
+                    if (!IPAddress.TryParse(TextBoxSRSFromIP.Text, out ipAddress))
                     {
                         throw new Exception();
                     }
-                    _ipAddressFromSRS = TextBoxSRSIPFrom.Text;
+                    _ipAddressFromSRS = TextBoxSRSFromIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -401,11 +401,11 @@ namespace DCSFlightpanels
                 }
                 try
                 {
-                    if (!IPAddress.TryParse(TextBoxSRSIPTo.Text, out ipAddress))
+                    if (!IPAddress.TryParse(TextBoxSRSToIP.Text, out ipAddress))
                     {
                         throw new Exception();
                     }
-                    _ipAddressToSRS = TextBoxSRSIPTo.Text;
+                    _ipAddressToSRS = TextBoxSRSToIP.Text;
                 }
                 catch (Exception e)
                 {
@@ -413,8 +413,8 @@ namespace DCSFlightpanels
                 }
                 try
                 {
-                    var test = Convert.ToInt32(TextBoxSRSPortFrom.Text);
-                    _portFromSRS = TextBoxSRSPortFrom.Text;
+                    var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
+                    _portFromSRS = TextBoxSRSFromPort.Text;
                 }
                 catch (Exception e)
                 {
@@ -422,8 +422,8 @@ namespace DCSFlightpanels
                 }
                 try
                 {
-                    var test = Convert.ToInt32(TextBoxSRSPortFrom.Text);
-                    _portToSRS = TextBoxSRSPortTo.Text;
+                    var test = Convert.ToInt32(TextBoxSRSFromPort.Text);
+                    _portToSRS = TextBoxSRSToPort.Text;
                 }
                 catch (Exception e)
                 {

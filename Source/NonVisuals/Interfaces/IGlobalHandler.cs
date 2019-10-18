@@ -1,6 +1,6 @@
 ﻿using ClassLibraryCommon;
 
-namespace NonVisuals
+namespace NonVisuals.Interfaces
 {
     public interface IGlobalHandler
     {

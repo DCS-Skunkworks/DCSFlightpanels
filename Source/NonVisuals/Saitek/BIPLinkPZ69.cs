@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using NonVisuals.Radios;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class BIPLinkPZ69 : BIPLink
     {
@@ -28,7 +28,7 @@ namespace NonVisuals
                 //RadioPanelBIPLink{1UpperCOM1}
                 var param0 = parameters[0].Replace("RadioPanelBIPLink{", "").Replace("}", "").Trim();
                 //1UpperCOM1
-                _whenOnTurnedOn = param0.Substring(0, 1) == "1";
+                WhenOnTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param0);
 
@@ -56,7 +56,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            var onStr = _whenOnTurnedOn ? "1" : "0";
+            var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("RadioPanelBIPLink{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "}");
             foreach (var bipLight in _bipLights)

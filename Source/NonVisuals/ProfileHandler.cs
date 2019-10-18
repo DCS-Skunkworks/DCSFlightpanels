@@ -6,6 +6,7 @@ using System.Windows;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
+using NonVisuals.Interfaces;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -76,9 +77,9 @@ namespace NonVisuals
         private bool _isNewProfile;
         private readonly List<string> _listPanelSettingsData = new List<string>();
         private readonly object _lockObject = new object();
-        private const string OpenFileDialogFileName = "*.bindings";
-        private const string OpenFileDialogDefaultExt = ".bindings";
-        private const string OpenFileDialogFilter = "DCSFlightpanels (.bindings)|*.bindings";
+        private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
+        private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
+        private const string OPEN_FILE_DIALOG_FILTER = "DCSFlightpanels (.bindings)|*.bindings";
         private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
@@ -108,9 +109,9 @@ namespace NonVisuals
             var openFileDialog = new OpenFileDialog();
             openFileDialog.RestoreDirectory = true;
             openFileDialog.InitialDirectory = tempDirectory;
-            openFileDialog.FileName = OpenFileDialogFileName;
-            openFileDialog.DefaultExt = OpenFileDialogDefaultExt;
-            openFileDialog.Filter = OpenFileDialogFilter;
+            openFileDialog.FileName = OPEN_FILE_DIALOG_FILE_NAME;
+            openFileDialog.DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT;
+            openFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
             if (openFileDialog.ShowDialog() == true)
             {
                 LoadProfile(openFileDialog.FileName);
@@ -444,8 +445,8 @@ namespace NonVisuals
             saveFileDialog.RestoreDirectory = true;
             saveFileDialog.InitialDirectory = MyDocumentsPath();
             saveFileDialog.FileName = "dcsfp_profile.bindings";
-            saveFileDialog.DefaultExt = OpenFileDialogDefaultExt;
-            saveFileDialog.Filter = OpenFileDialogFilter;
+            saveFileDialog.DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT;
+            saveFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
             saveFileDialog.OverwritePrompt = true;
             if (saveFileDialog.ShowDialog() == true)
             {

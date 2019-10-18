@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
 using NonVisuals;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.TagDataClasses
 {

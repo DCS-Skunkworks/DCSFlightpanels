@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 
 namespace NonVisuals.Radios
@@ -122,10 +124,10 @@ namespace NonVisuals.Radios
         private volatile uint _vhfFmCockpitFreq2DialPos = 1;
         private volatile uint _vhfFmCockpitFreq3DialPos = 1;
         private volatile uint _vhfFmCockpitFreq4DialPos = 1;
-        private const string VhfFmFreq1DialCommand = "VHFFM_FREQ1 ";	//3 4 5 6
-        private const string VhfFmFreq2DialCommand = "VHFFM_FREQ2 ";	//0 1 2 3 4 5 6 7 8 9
-        private const string VhfFmFreq3DialCommand = "VHFFM_FREQ3 ";	//0 1 2 3 4 5 6 7 8 9
-        private const string VhfFmFreq4DialCommand = "VHFFM_FREQ4 ";   //0 5
+        private const string VHF_FM_FREQ_1DIAL_COMMAND = "VHFFM_FREQ1 ";	//3 4 5 6
+        private const string VHF_FM_FREQ_2DIAL_COMMAND = "VHFFM_FREQ2 ";	//0 1 2 3 4 5 6 7 8 9
+        private const string VHF_FM_FREQ_3DIAL_COMMAND = "VHFFM_FREQ3 ";	//0 1 2 3 4 5 6 7 8 9
+        private const string VHF_FM_FREQ_4DIAL_COMMAND = "VHFFM_FREQ4 ";   //0 5
         private Thread _vhfFmSyncThread;
         private long _vhfFmThreadNowSynching;
         private long _vhfFmDial1WaitingForFeedback;
@@ -156,11 +158,11 @@ namespace NonVisuals.Radios
         private double _adfSignalStrength;
         private volatile uint _adfCockpitFrequencyBand;
         private volatile uint _adfStandbyFrequencyBand;
-        private const string AdfTuneKnobCommandInc = "ADF_TUNE -1000\n";
-        private const string AdfTuneKnobCommandDec = "ADF_TUNE +1000\n";
-        private const string AdfGainKnobCommandInc = "ADF_GAIN -2000\n";
-        private const string AdfGainKnobCommandDec = "ADF_GAIN +2000\n";
-        private const string AdfFrequencyBandCommand = "ADF_BAND ";
+        private const string ADF_TUNE_KNOB_COMMAND_INC = "ADF_TUNE -1000\n";
+        private const string ADF_TUNE_KNOB_COMMAND_DEC = "ADF_TUNE +1000\n";
+        private const string ADF_GAIN_KNOB_COMMAND_INC = "ADF_GAIN -2000\n";
+        private const string ADF_GAIN_KNOB_COMMAND_DEC = "ADF_GAIN +2000\n";
+        private const string ADF_FREQUENCY_BAND_COMMAND = "ADF_BAND ";
         private Thread _adfSyncThread;
         private long _adfThreadNowSynching;
         private long _adfFrequencyBandWaitingForFeedback;
@@ -1294,7 +1296,7 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq1DialPos < desiredFreqDial1Pos)
                                 {
-                                    const string str = VhfFmFreq1DialCommand + "INC\n";
+                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1302,7 +1304,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq1DialPos > desiredFreqDial1Pos)
                                 {
-                                    const string str = VhfFmFreq1DialCommand + "DEC\n";
+                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
@@ -1327,7 +1329,7 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq2DialPos < desiredFreqDial2Pos)
                                 {
-                                    const string str = VhfFmFreq2DialCommand + "INC\n";
+                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1335,7 +1337,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq2DialPos > desiredFreqDial2Pos)
                                 {
-                                    const string str = VhfFmFreq2DialCommand + "DEC\n";
+                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
@@ -1360,7 +1362,7 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq3DialPos < desiredFreqDial3Pos)
                                 {
-                                    const string str = VhfFmFreq3DialCommand + "INC\n";
+                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
@@ -1368,7 +1370,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq3DialPos > desiredFreqDial3Pos)
                                 {
-                                    const string str = VhfFmFreq3DialCommand + "DEC\n";
+                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
@@ -1393,7 +1395,7 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq4DialPos < desiredFreqDial4Pos)
                                 {
-                                    const string str = VhfFmFreq4DialCommand + "INC\n";
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
@@ -1401,7 +1403,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_vhfFmCockpitFreq4DialPos > desiredFreqDial4Pos)
                                 {
-                                    const string str = VhfFmFreq4DialCommand + "DEC\n";
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
@@ -1509,7 +1511,7 @@ namespace NonVisuals.Radios
 
                                 if (_adfCockpitFrequencyBand < desiredFreqBandDialPos)
                                 {
-                                    const string str = AdfFrequencyBandCommand + "INC\n";
+                                    const string str = ADF_FREQUENCY_BAND_COMMAND + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     freqBandDialSendCount++;
@@ -1517,7 +1519,7 @@ namespace NonVisuals.Radios
                                 }
                                 else if (_adfCockpitFrequencyBand > desiredFreqBandDialPos)
                                 {
-                                    const string str = AdfFrequencyBandCommand + "DEC\n";
+                                    const string str = ADF_FREQUENCY_BAND_COMMAND + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     freqBandDialSendCount++;
@@ -1966,7 +1968,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfTuneKnobCommandInc);
+                                            DCSBIOS.Send(ADF_TUNE_KNOB_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -2028,7 +2030,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfTuneKnobCommandDec);
+                                            DCSBIOS.Send(ADF_TUNE_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -2087,7 +2089,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfGainKnobCommandInc);
+                                            DCSBIOS.Send(ADF_GAIN_KNOB_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -2145,7 +2147,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfGainKnobCommandDec);
+                                            DCSBIOS.Send(ADF_GAIN_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -2208,7 +2210,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfTuneKnobCommandInc);
+                                            DCSBIOS.Send(ADF_TUNE_KNOB_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -2270,7 +2272,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfTuneKnobCommandDec);
+                                            DCSBIOS.Send(ADF_TUNE_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                 }
@@ -2329,7 +2331,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfGainKnobCommandInc);
+                                            DCSBIOS.Send(ADF_GAIN_KNOB_COMMAND_INC);
                                             break;
                                         }
                                 }
@@ -2387,7 +2389,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.ADF:
                                         {
-                                            DCSBIOS.Send(AdfGainKnobCommandDec);
+                                            DCSBIOS.Send(ADF_GAIN_KNOB_COMMAND_DEC);
                                             break;
                                         }
                                 }

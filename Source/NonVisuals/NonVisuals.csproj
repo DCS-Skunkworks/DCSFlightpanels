@@ -107,9 +107,10 @@
     <Compile Include="Saitek\KeyBindingPZ55.cs" />
     <Compile Include="ClickSpeedDetector.cs" />
     <Compile Include="GamingPanel.cs" />
-    <Compile Include="OSCommandBindingStreamDeck.cs" />
-    <Compile Include="StreamDeck\IStreamDeckButtonAction.cs" />
-    <Compile Include="StreamDeck\IStreamDeckButtonFace.cs" />
+    <Compile Include="StreamDeck\LayerBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\OSCommandBindingStreamDeck.cs" />
+    <Compile Include="Interfaces\IStreamDeckButtonAction.cs" />
+    <Compile Include="Interfaces\IStreamDeckButtonFace.cs" />
     <Compile Include="StreamDeck\StreamDeckButton.cs" />
     <Compile Include="Saitek\MultiPanelKnob.cs" />
     <Compile Include="Saitek\MultiPanelPZ70.cs" />

@@ -52,24 +52,24 @@
                 <Button Content="..." Height="23" VerticalAlignment="Bottom" Margin="0,0,0,0" x:Name="ButtonBrowse" Width="75" Click="ButtonBrowse_OnClick" />
             </StackPanel>
             <Label Content="IP address to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxDCSBIOSIPFrom" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="239.255.50.10"/>
+            <TextBox Name="TextBoxDCSBIOSFromIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="239.255.50.10"/>
             <Label Content="Port to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxDCSBIOSPortFrom" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="5010"/>
+            <TextBox Name="TextBoxDCSBIOSFromPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="5010"/>
             <Label Content="IP address to write to" Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxDCSBIOSIPTo" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
+            <TextBox Name="TextBoxDCSBIOSToIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
             <Label Content="Port to write to " Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxDCSBIOSPortTo" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7778"/>
+            <TextBox Name="TextBoxDCSBIOSToPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7778"/>
         </StackPanel>
         <StackPanel Name="StackPanelSRSSettings"  Margin="0,0,0,0" Grid.Column="1" Grid.Row="0" Visibility="Collapsed" >
             <Label FontWeight="Bold">SRS Settings</Label>
             <Label Content="IP address to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxSRSIPFrom" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="239.255.50.10"/>
+            <TextBox Name="TextBoxSRSFromIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="239.255.50.10"/>
             <Label Content="Port to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxSRSPortFrom" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="5010"/>
+            <TextBox Name="TextBoxSRSFromPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="5010"/>
             <Label Content="IP address to write to" Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxSRSIPTo" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
+            <TextBox Name="TextBoxSRSToIP" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="127.0.0.1"/>
             <Label Content="Port to write to " Margin="0,0,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="TextBoxSRSPortTo" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7778"/>
+            <TextBox Name="TextBoxSRSToPort" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="7778"/>
         </StackPanel>
     </Grid>
 

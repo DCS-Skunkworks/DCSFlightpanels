@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class BIPLinkPZ70 : BIPLink
     {
@@ -29,7 +29,7 @@ namespace NonVisuals
                 var param0 = parameters[0].Replace("MultipanelBIPLink{", "").Replace("}", "").Trim();
                 //ALT|1KNOB_ENGINE_LEFT
                 var tmpArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                _whenOnTurnedOn = tmpArray[1].Substring(0, 1) == "1";
+                WhenOnTurnedOn = tmpArray[1].Substring(0, 1) == "1";
                 MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), tmpArray[1].Substring(1));
                 DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), tmpArray[0]);
 
@@ -57,7 +57,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            var onStr = _whenOnTurnedOn ? "1" : "0";
+            var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("MultipanelBIPLink{" + DialPosition + "|" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}");
             foreach (var bipLight in _bipLights)

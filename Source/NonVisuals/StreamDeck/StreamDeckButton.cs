@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 
-namespace NonVisuals
+namespace NonVisuals.StreamDeck
 {
-    public enum StreamDeckButtons
+    public enum StreamDeckButtons 
     {
         BUTTON1,
         BUTTON2,
@@ -23,7 +24,7 @@ namespace NonVisuals
         BUTTON15
     }
 
-    public class StreamDeckButton
+    public class StreamDeckButton 
     {
         private StreamDeckButtons _streamDeckButton;
         private bool _isPressed = false;

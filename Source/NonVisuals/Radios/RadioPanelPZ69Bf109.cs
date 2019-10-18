@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
@@ -52,16 +54,16 @@ namespace NonVisuals.Radios
         private readonly object _lockFug16ZyPresetDialObject1 = new object();
         private DCSBIOSOutput _fug16ZyPresetDcsbiosOutputPresetDial;
         private volatile uint _fug16ZyPresetCockpitDialPos = 1;
-        private const string Fug16ZyPresetCommandInc = "RADIO_MODE INC\n";
-        private const string Fug16ZyPresetCommandDec = "RADIO_MODE DEC\n";
+        private const string FUG16_ZY_PRESET_COMMAND_INC = "RADIO_MODE INC\n";
+        private const string FUG16_ZY_PRESET_COMMAND_DEC = "RADIO_MODE DEC\n";
         private int _fug16ZyPresetDialSkipper;
         private readonly object _lockFug16ZyFineTuneDialObject1 = new object();
         private DCSBIOSOutput _fug16ZyFineTuneDcsbiosOutputDial;
         private volatile uint _fug16ZyFineTuneCockpitDialPos = 1;
-        private const string Fug16ZyFineTuneCommandInc = "FUG16_TUNING +300\n";
-        private const string Fug16ZyFineTuneCommandDec = "FUG16_TUNING -300\n";
-        private const string Fug16ZyFineTuneCommandIncMore = "FUG16_TUNING +3000\n";
-        private const string Fug16ZyFineTuneCommandDecMore = "FUG16_TUNING -3000\n";
+        private const string FUG16_ZY_FINE_TUNE_COMMAND_INC = "FUG16_TUNING +300\n";
+        private const string FUG16_ZY_FINE_TUNE_COMMAND_DEC = "FUG16_TUNING -300\n";
+        private const string FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE = "FUG16_TUNING +3000\n";
+        private const string FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE = "FUG16_TUNING -3000\n";
 
         /*Bf 109 FuG 25a IFF COM2*/
         //Large dial 0-1 [step of 1]
@@ -73,10 +75,10 @@ namespace NonVisuals.Radios
         private const string FUG25AIFFCommandInc = "FUG25_MODE INC\n";
         private const string FUG25AIFFCommandDec = "FUG25_MODE DEC\n";
         private int _fug25aIFFDialSkipper;
-        private const string RadioVolumeKnobCommandInc = "FUG16_VOLUME +2500\n";
-        private const string RadioVolumeKnobCommandDec = "FUG16_VOLUME -2500\n";
-        private const string FuG25ATestCommandInc = "FUG25_TEST INC\n";
-        private const string FuG25ATestCommandDec = "FUG25_TEST DEC\n";
+        private const string RADIO_VOLUME_KNOB_COMMAND_INC = "FUG16_VOLUME +2500\n";
+        private const string RADIO_VOLUME_KNOB_COMMAND_DEC = "FUG16_VOLUME -2500\n";
+        private const string FU_G25_A_TEST_COMMAND_INC = "FUG25_TEST INC\n";
+        private const string FU_G25_A_TEST_COMMAND_DEC = "FUG25_TEST DEC\n";
 
         /*Bf 109 FuG 16ZY Homing Switch NAV1*/
         //Large dial N/A
@@ -85,8 +87,8 @@ namespace NonVisuals.Radios
         private readonly object _lockHomingDialObject1 = new object();
         private DCSBIOSOutput _homingDcsbiosOutputPresetDial;
         private volatile uint _homingCockpitDialPos = 1;
-        private const string HomingCommandInc = "FT_ZF_SWITCH INC\n";
-        private const string HomingCommandDec = "FT_ZF_SWITCH DEC\n";
+        private const string HOMING_COMMAND_INC = "FT_ZF_SWITCH INC\n";
+        private const string HOMING_COMMAND_DEC = "FT_ZF_SWITCH DEC\n";
         private int _homingDialSkipper;
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
@@ -296,7 +298,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
                                     {
-                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FuG25ATestCommandInc : FuG25ATestCommandDec);
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
                                     }
                                     if (_currentUpperRadioMode == CurrentBf109RadioMode.HOMING)
                                     {
@@ -304,7 +306,7 @@ namespace NonVisuals.Radios
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HomingCommandDec : HomingCommandInc);
+                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
                                             }
                                         }
                                     }
@@ -314,7 +316,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.IFF)
                                     {
-                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FuG25ATestCommandInc : FuG25ATestCommandDec);
+                                        DCSBIOS.Send(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
                                     }
                                     if (_currentLowerRadioMode == CurrentBf109RadioMode.HOMING)
                                     {
@@ -322,7 +324,7 @@ namespace NonVisuals.Radios
                                         {
                                             lock (_lockHomingDialObject1)
                                             {
-                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HomingCommandDec : HomingCommandInc);
+                                                DCSBIOS.Send(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
                                             }
                                         }
                                     }
@@ -367,7 +369,7 @@ namespace NonVisuals.Radios
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandInc);
+                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -399,7 +401,7 @@ namespace NonVisuals.Radios
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandDec);
+                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -436,12 +438,12 @@ namespace NonVisuals.Radios
                                                     //Change faster
                                                     changeFaster = true;
                                                 }
-                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandIncMore : Fug16ZyFineTuneCommandInc);
+                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandInc);
+                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.HOMING:
@@ -470,12 +472,12 @@ namespace NonVisuals.Radios
                                                     changeFaster = true;
                                                 }
 
-                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandDecMore : Fug16ZyFineTuneCommandDec);
+                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandDec);
+                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.HOMING:
@@ -498,7 +500,7 @@ namespace NonVisuals.Radios
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandInc);
+                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -530,7 +532,7 @@ namespace NonVisuals.Radios
                                                 //Presets
                                                 if (!SkipFuG16ZYPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(Fug16ZyPresetCommandDec);
+                                                    DCSBIOS.Send(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -568,12 +570,12 @@ namespace NonVisuals.Radios
                                                     changeFaster = true;
                                                 }
 
-                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandIncMore : Fug16ZyFineTuneCommandInc);
+                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_INC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandInc);
+                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.HOMING:
@@ -602,12 +604,12 @@ namespace NonVisuals.Radios
                                                     changeFaster = true;
                                                 }
 
-                                                DCSBIOS.Send(changeFaster ? Fug16ZyFineTuneCommandDecMore : Fug16ZyFineTuneCommandDec);
+                                                DCSBIOS.Send(changeFaster ? FUG16_ZY_FINE_TUNE_COMMAND_DEC_MORE : FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.IFF:
                                             {
-                                                DCSBIOS.Send(RadioVolumeKnobCommandDec);
+                                                DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentBf109RadioMode.HOMING:

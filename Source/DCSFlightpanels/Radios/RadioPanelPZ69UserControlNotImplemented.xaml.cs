@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using NonVisuals;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 // Resharper Disable all
 namespace DCSFlightpanels.Radios

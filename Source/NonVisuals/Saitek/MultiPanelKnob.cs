@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using NonVisuals.Interfaces;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public enum MultiPanelPZ70Knobs
     {

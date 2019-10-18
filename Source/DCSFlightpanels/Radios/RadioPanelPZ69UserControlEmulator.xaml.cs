@@ -9,7 +9,9 @@ using ClassLibraryCommon;
 using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.TagDataClasses;
+using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Radios
 {
@@ -192,8 +194,8 @@ namespace DCSFlightpanels.Radios
             {
                 if (e.UniqueId.Equals(_radioPanelPZ69.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel)
                 {
-                    Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = ""));
                 }
             }
             catch (Exception ex)
@@ -206,7 +208,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                Dispatcher.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -1170,7 +1172,7 @@ namespace DCSFlightpanels.Radios
             try
             {
                 //Set focus to this so that virtual keypresses won't affect settings
-                Dispatcher.BeginInvoke((Action)(() => TextBoxLogPZ69.Focus()));
+                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Focus()));
                 foreach (var radioPanelKey in switches)
                 {
                     var key = (RadioPanelPZ69KnobEmulator)radioPanelKey;
@@ -1179,7 +1181,7 @@ namespace DCSFlightpanels.Radios
                     {
                         if (!string.IsNullOrEmpty(_radioPanelPZ69.GetKeyPressForLoggingPurposes(key)))
                         {
-                            Dispatcher.BeginInvoke(
+                            Dispatcher?.BeginInvoke(
                                 (Action)
                                 (() =>
                                  TextBoxLogPZ69.Text =
@@ -1188,7 +1190,7 @@ namespace DCSFlightpanels.Radios
                     }
                     else
                     {
-                        Dispatcher.BeginInvoke(
+                        Dispatcher?.BeginInvoke(
                             (Action)
                             (() =>
                              TextBoxLogPZ69.Text =
@@ -1199,7 +1201,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Dispatcher.BeginInvoke(
+                Dispatcher?.BeginInvoke(
                     (Action)
                     (() =>
                      TextBoxLogPZ69.Text = TextBoxLogPZ69.Text.Insert(0, "0x16" + ex.Message + ".\n")));
@@ -1415,7 +1417,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperCOM1:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         TopLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1425,7 +1427,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperCOM2:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         TopLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1435,7 +1437,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperNAV1:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         TopLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1445,7 +1447,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperNAV2:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         TopLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1455,7 +1457,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperADF:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         TopLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1465,7 +1467,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperDME:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         TopLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1475,7 +1477,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperXPDR:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         TopLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1485,7 +1487,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerCOM1:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLeftCom1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1495,7 +1497,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerCOM2:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLeftCom2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1505,7 +1507,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerNAV1:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLeftNav1.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1515,7 +1517,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerNAV2:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLeftNav2.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1525,7 +1527,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerADF:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLeftADF.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1535,7 +1537,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerDME:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLeftDME.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1545,7 +1547,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerXPDR:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLeftXPDR.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1555,7 +1557,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelInc:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         UpperSmallerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1565,7 +1567,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperSmallFreqWheelDec:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         UpperSmallerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1575,7 +1577,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelInc:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         UpperLargerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1585,7 +1587,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         UpperLargerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1595,7 +1597,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelInc:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerSmallerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1605,7 +1607,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerSmallFreqWheelDec:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerSmallerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1615,7 +1617,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLargerLCDKnobInc.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1625,7 +1627,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerLargerLCDKnobDec.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1635,7 +1637,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.UpperFreqSwitch:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         UpperRightSwitch.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
@@ -1645,7 +1647,7 @@ namespace DCSFlightpanels.Radios
                         case RadioPanelPZ69KnobsEmulator.LowerFreqSwitch:
                             {
                                 var key = radioKnob;
-                                Dispatcher.BeginInvoke(
+                                Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
                                         LowerRightSwitch.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;

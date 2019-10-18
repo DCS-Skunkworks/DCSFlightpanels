@@ -7,7 +7,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public enum SwitchPanelPZ55LEDPosition : byte
     {
@@ -124,7 +124,7 @@ namespace NonVisuals
                     }
                 }
             }
-            OnSettingsApplied();
+            SettingsApplied();
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
@@ -668,13 +668,13 @@ namespace NonVisuals
         private void DeviceAttachedHandler()
         {
             Startup();
-            OnDeviceAttached();
+            DeviceAttached();
         }
 
         private void DeviceRemovedHandler()
         {
             Shutdown();
-            OnDeviceDetached();
+            DeviceDetached();
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

@@ -1,4 +1,5 @@
 ﻿using NonVisuals;
+using NonVisuals.Saitek;
 
 namespace DCSFlightpanels
 {

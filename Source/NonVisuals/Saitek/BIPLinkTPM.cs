@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace NonVisuals
+namespace NonVisuals.Saitek
 {
     public class BIPLinkTPM : BIPLink
     {
@@ -23,7 +23,7 @@ namespace NonVisuals
                 //TPMPanelBipLink{1G1}
                 var param0 = parameters[0].Replace("TPMPanelBipLink{", "").Replace("}", "").Trim();
                 //1G1
-                _whenOnTurnedOn = param0.Substring(0, 1) == "1";
+                WhenOnTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
                 _tpmSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), param0);
 
@@ -51,7 +51,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            var onStr = _whenOnTurnedOn ? "1" : "0";
+            var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("TPMPanelBipLink{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}");
             foreach (var bipLight in _bipLights)

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 
 namespace NonVisuals.Radios
@@ -23,12 +25,12 @@ namespace NonVisuals.Radios
         /*FA-18C COMM1 radio*/
         //
         //
-        private const string COMM1ChannelInc = "UFC_COMM1_CHANNEL_SELECT +3200\n";
-        private const string COMM1ChannelDec = "UFC_COMM1_CHANNEL_SELECT -3200\n";
-        private const string COMM1VolInc = "UFC_COMM1_VOL +4000\n";
-        private const string COMM1VolDec = "UFC_COMM1_VOL -4000\n";
-        private const string COMM1PullPress = "UFC_COMM1_PULL INC\n";
-        private const string COMM1PullRelease = "UFC_COMM1_PULL DEC\n";
+        private const string COMM1_CHANNEL_INC = "UFC_COMM1_CHANNEL_SELECT +3200\n";
+        private const string COMM1_CHANNEL_DEC = "UFC_COMM1_CHANNEL_SELECT -3200\n";
+        private const string COMM1_VOL_INC = "UFC_COMM1_VOL +4000\n";
+        private const string COMM1_VOL_DEC = "UFC_COMM1_VOL -4000\n";
+        private const string COMM1_PULL_PRESS = "UFC_COMM1_PULL INC\n";
+        private const string COMM1_PULL_RELEASE = "UFC_COMM1_PULL DEC\n";
         private double _comm1BigFrequencyStandby = 225;
         private double _comm1SmallFrequencyStandby = 0;
         private double _comm1SavedCockpitBigFrequency;
@@ -45,12 +47,12 @@ namespace NonVisuals.Radios
         /*FA-18C COMM2 radio*/
         //
         //
-        private const string COMM2ChannelInc = "UFC_COMM2_CHANNEL_SELECT +3200\n";
-        private const string COMM2ChannelDec = "UFC_COMM2_CHANNEL_SELECT -3200\n";
-        private const string COMM2VolInc = "UFC_COMM2_VOL +4000\n";
-        private const string COMM2VolDec = "UFC_COMM2_VOL -4000\n";
-        private const string COMM2PullPress = "UFC_COMM2_PULL INC\n";
-        private const string COMM2PullRelease = "UFC_COMM2_PULL DEC\n";
+        private const string COMM2_CHANNEL_INC = "UFC_COMM2_CHANNEL_SELECT +3200\n";
+        private const string COMM2_CHANNEL_DEC = "UFC_COMM2_CHANNEL_SELECT -3200\n";
+        private const string COMM2_VOL_INC = "UFC_COMM2_VOL +4000\n";
+        private const string COMM2_VOL_DEC = "UFC_COMM2_VOL -4000\n";
+        private const string COMM2_PULL_PRESS = "UFC_COMM2_PULL INC\n";
+        private const string COMM2_PULL_RELEASE = "UFC_COMM2_PULL DEC\n";
         private double _comm2BigFrequencyStandby = 255;
         private double _comm2SmallFrequencyStandby = 0;
         private double _comm2SavedCockpitBigFrequency;
@@ -74,9 +76,9 @@ namespace NonVisuals.Radios
         private readonly object _lockIlsDialsObject = new object();
         private DCSBIOSOutput _ilsDcsbiosOutputChannel;
         private volatile uint _ilsCockpitChannel = 1;
-        private const string ILSChannelInc = "COM_ILS_CHANNEL_SW INC\n";
-        private const string ILSChannelDec = "COM_ILS_CHANNEL_SW DEC\n";
-        private const string ILSChannelCommand = "COM_ILS_CHANNEL_SW ";
+        private const string ILS_CHANNEL_INC = "COM_ILS_CHANNEL_SW INC\n";
+        private const string ILS_CHANNEL_DEC = "COM_ILS_CHANNEL_SW DEC\n";
+        private const string ILS_CHANNEL_COMMAND = "COM_ILS_CHANNEL_SW ";
         private Thread _ilsSyncThread;
         private long _ilsThreadNowSynching;
         private long _ilsDialWaitingForFeedback;
@@ -387,7 +389,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitChannel < standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILSChannelCommand + "INC\n";
+                                    const string str = ILS_CHANNEL_COMMAND + "INC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
@@ -396,7 +398,7 @@ namespace NonVisuals.Radios
                                 else if (_ilsCockpitChannel > standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILSChannelCommand + "DEC\n";
+                                    const string str = ILS_CHANNEL_COMMAND + "DEC\n";
                                     Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
@@ -470,11 +472,11 @@ namespace NonVisuals.Radios
                         {
                             var frequencyAsString = "";
 
-                            uint integer_comm1 = _comm1CockpitFreq / 100;
-                            uint decimal_comm1 = _comm1CockpitFreq - (integer_comm1 * 100);
-                            frequencyAsString = "" + integer_comm1;
+                            uint integerCOMM1 = _comm1CockpitFreq / 100;
+                            uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
+                            frequencyAsString = "" + integerCOMM1;
                             frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimal_comm1;
+                            frequencyAsString = frequencyAsString + decimalCOMM1;
 
                             if (_upperButtonPressed)
                             {
@@ -502,11 +504,11 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM2:     //  show comm2 frequencies in upper panel
                         {
                             var frequencyAsString = "";
-                            uint integer_comm2 = _comm2CockpitFreq / 100;
-                            uint decimal_comm2 = _comm2CockpitFreq - (integer_comm2 * 100);
-                            frequencyAsString = "" + integer_comm2;
+                            uint integerCOMM2 = _comm2CockpitFreq / 100;
+                            uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
+                            frequencyAsString = "" + integerCOMM2;
                             frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimal_comm2;
+                            frequencyAsString = frequencyAsString + decimalCOMM2;
 
                             if (_upperButtonPressed)
                             {
@@ -554,12 +556,12 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.ILS:
                         {
 
-                            uint ILSChannel = 1;
+                            uint ilsChannel = 1;
                             lock (_lockIlsDialsObject)
                             {
-                                ILSChannel = _ilsCockpitChannel;
+                                ilsChannel = _ilsCockpitChannel;
                             }
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)ILSChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)ilsChannel, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             SetPZ69DisplayBytesInteger(ref bytes, (int)_ilsChannelStandby, PZ69LCDPosition.UPPER_STBY_RIGHT);
                             break;
                         }
@@ -600,11 +602,11 @@ namespace NonVisuals.Radios
                         {
                             var frequencyAsString = "";
 
-                            uint integer_comm1 = _comm1CockpitFreq / 100;
-                            uint decimal_comm1 = _comm1CockpitFreq - (integer_comm1 * 100);
-                            frequencyAsString = "" + integer_comm1;
+                            uint integerCOMM1 = _comm1CockpitFreq / 100;
+                            uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
+                            frequencyAsString = "" + integerCOMM1;
                             frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimal_comm1;
+                            frequencyAsString = frequencyAsString + decimalCOMM1;
 
                             if (_lowerButtonPressed)
                             {
@@ -630,11 +632,11 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.COMM2:     //  show comm2 frequencies in lower panel
                         {
                             var frequencyAsString = "";
-                            uint integer_comm2 = _comm2CockpitFreq / 100;
-                            uint decimal_comm2 = _comm2CockpitFreq - (integer_comm2 * 100);
-                            frequencyAsString = "" + integer_comm2;
+                            uint integerCOMM2 = _comm2CockpitFreq / 100;
+                            uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
+                            frequencyAsString = "" + integerCOMM2;
                             frequencyAsString = frequencyAsString + ".";
-                            frequencyAsString = frequencyAsString + decimal_comm2;
+                            frequencyAsString = frequencyAsString + decimalCOMM2;
 
                             if (_lowerButtonPressed)
                             {
@@ -673,12 +675,12 @@ namespace NonVisuals.Radios
                     case CurrentFA18CRadioMode.ILS:
                         {
 
-                            uint ILSChannel = 1;
+                            uint ilsChannel = 1;
                             lock (_lockIlsDialsObject)
                             {
-                                ILSChannel = _ilsCockpitChannel;
+                                ilsChannel = _ilsCockpitChannel;
                             }
-                            SetPZ69DisplayBytesInteger(ref bytes, (int)ILSChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                            SetPZ69DisplayBytesInteger(ref bytes, (int)ilsChannel, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBytesInteger(ref bytes, (int)_ilsChannelStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
                             break;
                         }
@@ -717,14 +719,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1ChannelInc);
+                                            DCSBIOS.Send(COMM1_CHANNEL_INC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2ChannelInc);
+                                            DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             break;
 
                                         }
@@ -759,14 +761,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1ChannelDec);
+                                            DCSBIOS.Send(COMM1_CHANNEL_DEC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2ChannelDec);
+                                            DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             break;
 
                                         }
@@ -801,14 +803,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1VolInc);
+                                            DCSBIOS.Send(COMM1_VOL_INC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2VolInc);
+                                            DCSBIOS.Send(COMM2_VOL_INC);
                                             break;
 
                                         }
@@ -837,14 +839,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1VolDec);
+                                            DCSBIOS.Send(COMM1_VOL_DEC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2VolDec);
+                                            DCSBIOS.Send(COMM2_VOL_DEC);
                                             break;
 
                                         }
@@ -873,14 +875,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1ChannelInc);
+                                            DCSBIOS.Send(COMM1_CHANNEL_INC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2ChannelInc);
+                                            DCSBIOS.Send(COMM2_CHANNEL_INC);
                                             break;
 
                                         }
@@ -915,14 +917,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1ChannelDec);
+                                            DCSBIOS.Send(COMM1_CHANNEL_DEC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2ChannelDec);
+                                            DCSBIOS.Send(COMM2_CHANNEL_DEC);
                                             break;
 
                                         }
@@ -957,14 +959,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1VolInc);
+                                            DCSBIOS.Send(COMM1_VOL_INC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2VolInc);
+                                            DCSBIOS.Send(COMM2_VOL_INC);
                                             break;
 
                                         }
@@ -993,14 +995,14 @@ namespace NonVisuals.Radios
                                     case CurrentFA18CRadioMode.COMM1:
                                         {
 
-                                            DCSBIOS.Send(COMM1VolDec);
+                                            DCSBIOS.Send(COMM1_VOL_DEC);
                                             break;
 
                                         }
                                     case CurrentFA18CRadioMode.COMM2:
                                         {
 
-                                            DCSBIOS.Send(COMM2VolDec);
+                                            DCSBIOS.Send(COMM2_VOL_DEC);
                                             break;
 
                                         }
@@ -1218,11 +1220,11 @@ namespace NonVisuals.Radios
 
                                 if (_currentUpperRadioMode == CurrentFA18CRadioMode.COMM1)
                                 {
-                                    DCSBIOS.Send(_upperButtonPressed ? COMM1PullPress : COMM1PullRelease);
+                                    DCSBIOS.Send(_upperButtonPressed ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
                                 }
                                 if (_currentUpperRadioMode == CurrentFA18CRadioMode.COMM2)
                                 {
-                                    DCSBIOS.Send(_upperButtonPressed ? COMM2PullPress : COMM2PullRelease);
+                                    DCSBIOS.Send(_upperButtonPressed ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
                                 }
 
                                 if (!radioPanelKnob.IsOn)
@@ -1243,11 +1245,11 @@ namespace NonVisuals.Radios
 
                                 if (_currentLowerRadioMode == CurrentFA18CRadioMode.COMM1)
                                 {
-                                    DCSBIOS.Send(_lowerButtonPressed ? COMM1PullPress : COMM1PullRelease);
+                                    DCSBIOS.Send(_lowerButtonPressed ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
                                 }
                                 if (_currentLowerRadioMode == CurrentFA18CRadioMode.COMM2)
                                 {
-                                    DCSBIOS.Send(_lowerButtonPressed ? COMM2PullPress : COMM2PullRelease);
+                                    DCSBIOS.Send(_lowerButtonPressed ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
                                 }
 
 
