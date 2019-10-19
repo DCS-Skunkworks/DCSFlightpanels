@@ -244,6 +244,7 @@
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TagDataClasses\TagDataClassBase.cs" />
+    <Compile Include="TagDataClasses\TagDataClassButtonImage.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ69Button.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ69Full.cs" />
     <Compile Include="TagDataClasses\TagDataClassStreamDeck.cs" />

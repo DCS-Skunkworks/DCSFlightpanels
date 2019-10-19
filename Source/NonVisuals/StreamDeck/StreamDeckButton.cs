@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck;
 
 namespace NonVisuals.StreamDeck
 {
-    public enum StreamDeckButtons 
+    public enum StreamDeckButtonNames 
     {
+        BUTTON0_NO_BUTTON,
         BUTTON1,
         BUTTON2,
         BUTTON3,
@@ -26,21 +26,22 @@ namespace NonVisuals.StreamDeck
 
     public class StreamDeckButton 
     {
-        private StreamDeckButtons _streamDeckButton;
+        private StreamDeckButtonNames _streamDeckButtonName;
         private bool _isPressed = false;
         private IStreamDeckButtonFace _streamDeckButtonFace = null;
         private IStreamDeckButtonAction _streamDeckButtonAction = null;
+        private string _layerName;
 
-        public StreamDeckButton(bool isPressed, StreamDeckButtons streamDeckButton)
+        public StreamDeckButton(bool isPressed, StreamDeckButtonNames streamDeckButton)
         {
-            _streamDeckButton = streamDeckButton;
+            _streamDeckButtonName = streamDeckButton;
             _isPressed = isPressed;
         }
 
-        public StreamDeckButtons Button
+        public StreamDeckButtonNames StreamDeckButtonName
         {
-            get => _streamDeckButton;
-            set => _streamDeckButton = value;
+            get => _streamDeckButtonName;
+            set => _streamDeckButtonName = value;
         }
 
         public bool IsPressed
@@ -49,9 +50,15 @@ namespace NonVisuals.StreamDeck
             set => _isPressed = value;
         }
 
+        public string LayerName
+        {
+            get => _layerName;
+            set => _layerName = value;
+        }
+
         public string ExportString()
         {
-            return "StreamDeckButton{" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}";
+            return "StreamDeckButton{" + Enum.GetName(typeof(StreamDeckButtonNames), _streamDeckButtonName) + "}";
         }
 
         public void ImportString(string str)
@@ -69,28 +76,28 @@ namespace NonVisuals.StreamDeck
             //BUTTON11}
             dataString = dataString.Remove(dataString.Length - 1, 1);
             //BUTTON11
-            _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), dataString.Trim());
+            _streamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), dataString.Trim());
         }
 
-        public static HashSet<StreamDeckButton> GetMultiPanelKnobs()
+        public static HashSet<StreamDeckButton> GetAllStreamDeckButtonNames()
         {
             var result = new HashSet<StreamDeckButton>();
 
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON1));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON2));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON3));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON4));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON5));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON6));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON7));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON8));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON9));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON10));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON11));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON12));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON13));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON14));
-            result.Add(new StreamDeckButton(true, StreamDeckButtons.BUTTON15));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON1));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON2));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON3));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON4));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON5));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON6));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON7));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON8));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON9));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON10));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON11));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON12));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON13));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON14));
+            result.Add(new StreamDeckButton(true, StreamDeckButtonNames.BUTTON15));
             return result;
         }
 

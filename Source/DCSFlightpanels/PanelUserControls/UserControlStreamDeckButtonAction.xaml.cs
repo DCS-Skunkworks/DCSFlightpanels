@@ -21,7 +21,7 @@ namespace DCSFlightpanels.PanelUserControls
     {
         private IStreamDeckButtonAction panelResult = null;
         private bool _textBoxTagsSet;
-
+        private List<TextBox> _textBoxes = new List<TextBox>();
         private KeyPress _keyPress;
         private DCSBIOSActionBindingStreamDeck _dcsbiosActionBinding;
         private OSCommand _osCommand;
@@ -44,26 +44,35 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 return;
             }
+
+            FillTextBoxList();
             SetTextBoxTagObjects();
             _isLoaded = true;
         }
 
+        private void FillTextBoxList()
+        {
+            _textBoxes.Add(TextBoxKeyPressButtonOn);
+            _textBoxes.Add(TextBoxKeyPressButtonOff);
+            _textBoxes.Add(TextBoxDCSBIOSActionButtonOn);
+            _textBoxes.Add(TextBoxDCSBIOSActionButtonOff);
+            _textBoxes.Add(TextBoxOSCommandButtonOn);
+            _textBoxes.Add(TextBoxOSCommandButtonOff);
+            _textBoxes.Add(TextBoxLayerNavButtonOn);
+            _textBoxes.Add(TextBoxLayerNavButtonOff);
+        }
+
         public void Clear()
         {
-            TextBoxDCSBIOSActionButtonOff.Clear();
-            TextBoxDCSBIOSActionButtonOn.Clear();
-            TextBoxKeyPressButtonOff.Clear();
-            TextBoxKeyPressButtonOn.Clear();
-            TextBoxOSCommandButtonOff.Clear();
-            TextBoxOSCommandButtonOn.Clear();
-            ComboBoxLayerNavigationButtonOff.ItemsSource = null;
-            ComboBoxLayerNavigationButtonOn.ItemsSource = null;
+            foreach (var textBox in _textBoxes)
+            {
+                textBox.Clear();
+            }
             ComboBoxLayerNavigationButtonOn.ItemsSource = null;
             ComboBoxLayerNavigationButtonOff.ItemsSource = null;
             panelResult = null;
+            SetFormState();
         }
-
-
 
         public void SetFormState()
         {
@@ -82,10 +91,10 @@ namespace DCSFlightpanels.PanelUserControls
                                                             ((TagDataClassStreamDeck)TextBoxKeyPressButtonOn.Tag).ContainsOSKeyPress();
                 ButtonDeleteKeySequenceButtonOff.IsEnabled = ((TagDataClassStreamDeck)TextBoxKeyPressButtonOff.Tag).ContainsKeySequence() ||
                                                             ((TagDataClassStreamDeck)TextBoxKeyPressButtonOff.Tag).ContainsOSKeyPress();
-                /*ButtonDeleteDCSBIOSActionButtonOn.IsEnabled = ((TagDataClassStreamDeck)ButtonDeleteDCSBIOSActionButtonOn.Tag).ContainsDCSBIOS();
-                ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = ((TagDataClassStreamDeck)ButtonDeleteDCSBIOSActionButtonOff.Tag).ContainsDCSBIOS();
-                ButtonDeleteOSCommandButtonOn.IsEnabled = ((TagDataClassStreamDeck)ButtonDeleteOSCommandButtonOn.Tag).ContainsOSCommand();
-                ButtonDeleteOSCommandButtonOff.IsEnabled = ((TagDataClassStreamDeck)ButtonDeleteOSCommandButtonOff.Tag).ContainsOSCommand();*/
+                ButtonDeleteDCSBIOSActionButtonOn.IsEnabled = ((TagDataClassStreamDeck)TextBoxDCSBIOSActionButtonOn.Tag).ContainsDCSBIOS();
+                ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = ((TagDataClassStreamDeck)TextBoxDCSBIOSActionButtonOff.Tag).ContainsDCSBIOS();
+                ButtonDeleteOSCommandButtonOn.IsEnabled = ((TagDataClassStreamDeck)TextBoxOSCommandButtonOn.Tag).ContainsOSCommand();
+                ButtonDeleteOSCommandButtonOff.IsEnabled = ((TagDataClassStreamDeck)TextBoxOSCommandButtonOff.Tag).ContainsOSCommand();
 
 
             }
@@ -99,8 +108,10 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxTagObjects()
         {
-            TextBoxKeyPressButtonOn.Tag = new TagDataClassStreamDeck(TextBoxKeyPressButtonOn, new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), true));
-            TextBoxKeyPressButtonOff.Tag = new TagDataClassStreamDeck(TextBoxKeyPressButtonOff, new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), false));
+            foreach (var textBox in _textBoxes)
+            {
+                textBox.Tag = new TagDataClassStreamDeck(textBox, new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), !textBox.Name.Contains("Off")));
+            }
             _textBoxTagsSet = true;
         }
 
@@ -198,11 +209,23 @@ namespace DCSFlightpanels.PanelUserControls
             throw new Exception("Failed to determine focused component (GetStreamDeckButtonOnOff) ");
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
         private void ButtonAddEditKeySequenceButtonOn_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditKeyPress(TextBoxKeyPressButtonOn);
         }
-        
+
         private void ButtonAddEditKeySequenceButtonOff_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditKeyPress(TextBoxKeyPressButtonOff);
@@ -212,8 +235,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var keySequenceWindow = ((TagDataClassStreamDeck)textBox.Tag).ContainsKeySequence() ? 
-                    new KeySequenceWindow(textBox.Text, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence()) : 
+                var keySequenceWindow = ((TagDataClassStreamDeck)textBox.Tag).ContainsKeySequence() ?
+                    new KeySequenceWindow(textBox.Text, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence()) :
                     new KeySequenceWindow();
                 keySequenceWindow.ShowDialog();
                 if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
@@ -289,6 +312,12 @@ namespace DCSFlightpanels.PanelUserControls
 
 
 
+
+
+
+
+
+
         private void AddEditDCSBIOS(TextBox textBox)
         {
             try
@@ -298,21 +327,32 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                var dcsBIOSControlsConfigsWindow = ((TagDataClassStreamDeck)textBox.Tag).ContainsDCSBIOS() ? 
-                    new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text) : 
-                    new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                var tagDataClass = (TagDataClassStreamDeck)textBox.Tag;
+                DCSBIOSControlsConfigsWindow dcsbiosControlsConfigsWindow;
 
-                dcsBIOSControlsConfigsWindow.ShowDialog();
-
-
-                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true)
+                if (tagDataClass.ContainsDCSBIOS())
                 {
-                    var dcsBiosInputs = dcsBIOSControlsConfigsWindow.DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsBIOSControlsConfigsWindow.Description;
+                    dcsbiosControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(),
+                        textBox.Name.Replace("TextBox", ""),
+                        tagDataClass.DCSBIOSBinding.DCSBIOSInputs,
+                        textBox.Text);
+                }
+                else
+                {
+                    dcsbiosControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                }
+
+                dcsbiosControlsConfigsWindow.ShowDialog();
+
+
+                if (dcsbiosControlsConfigsWindow.DialogResult.HasValue && dcsbiosControlsConfigsWindow.DialogResult == true)
+                {
+                    var dcsBiosInputs = dcsbiosControlsConfigsWindow.DCSBIOSInputs;
+                    var text = string.IsNullOrWhiteSpace(dcsbiosControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsbiosControlsConfigsWindow.Description;
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    ((TagDataClassStreamDeck)textBox.Tag).Consume(dcsBiosInputs);
+                    tagDataClass.Consume(dcsBiosInputs);
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
                 }
@@ -362,7 +402,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ButtonDeleteDCSBIOSActionButtonOff_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -374,6 +414,182 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+
+
+
+
+
+
+
+
+
+        private void AddEditOSCommand(TextBox textBox)
+        {
+            try
+            {
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+                OSCommandWindow osCommandWindow;
+                if (((TagDataClassStreamDeck)textBox.Tag).ContainsOSCommand())
+                {
+                    osCommandWindow = new OSCommandWindow(((TagDataClassStreamDeck)textBox.Tag).OSCommandObject);
+                }
+                else
+                {
+                    osCommandWindow = new OSCommandWindow();
+                }
+                osCommandWindow.ShowDialog();
+                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
+                {
+                    //Clicked OK
+                    if (!osCommandWindow.IsDirty)
+                    {
+                        //User made no changes
+                        return;
+                    }
+                    var osCommand = osCommandWindow.OSCommandObject;
+                    ((TagDataClassStreamDeck)textBox.Tag).OSCommandObject = osCommand;
+                    textBox.Text = osCommand.Name;
+                    SetIsDirty();
+                }
+                ButtonFocus.Focus();
+                SDUIParent.ChildChangesMade();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2044, ex);
+            }
+        }
+
+        private void ButtonAddEditOSCommandButtonOn_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AddEditOSCommand(TextBoxOSCommandButtonOn);
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonDeleteOSCommandButtonOn_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ((TagDataClassStreamDeck)TextBoxOSCommandButtonOn.Tag).ClearAll();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonAddEditOSCommandButtonOff_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AddEditOSCommand(TextBoxOSCommandButtonOff);
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonDeleteOSCommandButtonOff_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ((TagDataClassStreamDeck)TextBoxOSCommandButtonOff.Tag).ClearAll();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        private void ComboBoxLayerNavigationButtonOn_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var layer = new StreamDeckLayer();
+                layer.Name = ComboBoxLayerNavigationButtonOn.Text;
+                ((TagDataClassStreamDeck)TextBoxLayerNavButtonOn.Tag).StreamDeckLayerObject = layer;
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ComboBoxLayerNavigationButtonOff_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                var layer = new StreamDeckLayer();
+                layer.Name = ComboBoxLayerNavigationButtonOff.Text;
+                ((TagDataClassStreamDeck)ComboBoxLayerNavigationButtonOff.Tag).StreamDeckLayerObject = layer;
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LoadComboBoxLayers(StreamDeckLayer selectedLayer, ComboBox comboBox, SelectionChangedEventHandler eventHandler)
+        {
+            LoadComboBoxLayers(selectedLayer.Name, comboBox, eventHandler);
+        }
+
+        private void LoadComboBoxLayers(string selectedLayerName, ComboBox comboBox, SelectionChangedEventHandler eventHandler)
+        {
+            var selectedIndex = comboBox.SelectedIndex;
+
+            comboBox.SelectionChanged -= eventHandler;
+            comboBox.ItemsSource = SDUIParent.GetStreamDeckLayerNames();
+            comboBox.Items.Refresh();
+
+            if (!string.IsNullOrEmpty(selectedLayerName))
+            {
+                foreach (string layer in comboBox.Items)
+                {
+                    if (layer == selectedLayerName)
+                    {
+                        comboBox.SelectedItem = layer;
+                        break;
+                    }
+                }
+                comboBox.SelectedItem = selectedLayerName;
+            }
+            else if (selectedIndex >= 0 && selectedIndex < SDUIParent.GetStreamDeckLayerNames().Count)
+            {
+                comboBox.SelectedIndex = selectedIndex;
+            }
+            else if (SDUIParent.GetStreamDeckLayerNames().Count > 0)
+            {
+                comboBox.SelectedIndex = 0;
+            }
+            comboBox.SelectionChanged += eventHandler;
         }
     }
 }

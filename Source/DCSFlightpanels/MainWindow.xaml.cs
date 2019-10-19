@@ -156,6 +156,7 @@ namespace DCSFlightpanels
                     MessageBox.Show("Remember to use the built in\nfunctionality to report bugs!\n[Options] -> [Report Bug]", "Bug related", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     Settings.Default.ShowBugReportInfo = false;
                 }
+
             }
             catch (Exception ex)
             {

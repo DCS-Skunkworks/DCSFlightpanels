@@ -77,16 +77,16 @@
 
     public class StreamDeckButtonOnOff : PanelKeyOnOff
     {
-        private readonly StreamDeckButtons _streamDeckButton;
+        private readonly StreamDeckButtonNames _streamDeckButtonName;
         private readonly bool _buttonState;
 
-        public StreamDeckButtonOnOff(StreamDeckButtons streamDeckButton, bool buttonState)
+        public StreamDeckButtonOnOff(StreamDeckButtonNames streamDeckButton, bool buttonState)
         {
-            _streamDeckButton = streamDeckButton;
+            _streamDeckButtonName = streamDeckButton;
             _buttonState = buttonState;
         }
 
-        public StreamDeckButtons StreamDeckButton => _streamDeckButton;
+        public StreamDeckButtonNames StreamDeckButton => _streamDeckButtonName;
 
         public bool ButtonState => _buttonState;
     }

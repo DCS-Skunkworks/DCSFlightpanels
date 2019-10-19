@@ -10,7 +10,7 @@ namespace NonVisuals.StreamDeck
         /*
          This class binds a physical button on the Stream Deck with a Windows OS command.
          */
-        private StreamDeckButtons _streamDeckButton;
+        private StreamDeckButtonNames _streamDeckButtonName;
 
 
         public EnumStreamDeckButtonActionType GetActionType()
@@ -39,7 +39,7 @@ namespace NonVisuals.StreamDeck
                 //1KNOB_ENGINE_LEFT
                 WhenTurnedOn = (param0.Substring(0, 1) == "1");
                 param0 = param0.Substring(1);
-                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0);
+                _streamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), param0);
 
                 //OSCommand{FILE\o/ARGUMENTS\o/NAME}
                 OSCommandObject = new OSCommand();
@@ -47,10 +47,10 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public StreamDeckButtons StreamDeckButton
+        public StreamDeckButtonNames StreamDeckButtonName
         {
-            get => _streamDeckButton;
-            set => _streamDeckButton = value;
+            get => _streamDeckButtonName;
+            set => _streamDeckButtonName = value;
         }
 
         public override string ExportSettings()
@@ -59,9 +59,9 @@ namespace NonVisuals.StreamDeck
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "      " + WhenTurnedOn);
+            Common.DebugP(Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "StreamDeckOS{" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + SeparatorChars + OSCommandObject.ExportString();
+            return "StreamDeckOS{" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "}" + SeparatorChars + OSCommandObject.ExportString();
         }
     }
 }

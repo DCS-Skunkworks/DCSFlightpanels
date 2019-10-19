@@ -50,7 +50,8 @@ namespace DCSFlightpanels.PanelUserControls
             }
             _userControlLoaded = true;
             UCStreamDeckButtonAction.SDUIParent = this;
-            GenerateButtonImages(0);
+            UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
+            GenerateButtonImages(StreamDeckButtonNames.BUTTON0_NO_BUTTON);
             ShowGraphicConfiguration();
             SetFormState();
         }
@@ -106,7 +107,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void GenerateButtonImages(int selectedButton)
+        private void GenerateButtonImages(StreamDeckButtonNames selectedButtonName)
         {
             var height = 50;
             var width = 50;
@@ -120,39 +121,43 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         continue;
                     }
-
-                    var number = image.Name.Replace("ButtonImage", "");
-                    if (selectedButton == 0)
+                    
+                    if (selectedButtonName == StreamDeckButtonNames.BUTTON0_NO_BUTTON)
                     {
                         //No image selected, load all
-                        image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.White));
-                        image.Tag = new TagDataButtonImage();
+                        var tagDataClass = new TagDataClassButtonImage();
+                        tagDataClass.StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + image.Name.Replace("ButtonImage", ""));
+                        image.Tag = tagDataClass;
+                        image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataClass.ButtonNumber().ToString(), fontSize, height, width, Color.Black, Color.White));
+                        
                     }
                     else
                     {
-                        if (selectedButton == int.Parse(number))
+                        var tagDataButtonImage = (TagDataClassButtonImage)image.Tag;
+
+                        if (selectedButtonName == tagDataButtonImage.StreamDeckButtonName)
                         {
-                            if (((TagDataButtonImage)image.Tag).IsSelected)
+                            if (((TagDataClassButtonImage)image.Tag).IsSelected)
                             {
-                                image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.White));
-                                ((TagDataButtonImage)image.Tag).IsSelected = false;
+                                image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), fontSize, height, width, Color.Black, Color.White));
+                                ((TagDataClassButtonImage)image.Tag).IsSelected = false;
                             }
                             else
                             {
-                                image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.CadetBlue));
-                                ((TagDataButtonImage)image.Tag).IsSelected = true;
+                                image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), fontSize, height, width, Color.Black, Color.CadetBlue));
+                                ((TagDataClassButtonImage)image.Tag).IsSelected = true;
                             }
                         }
                         else
                         {
-                            image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(number, fontSize, height, width, Color.Black, Color.White));
-                            ((TagDataButtonImage)image.Tag).IsSelected = false;
+                            image.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), fontSize, height, width, Color.Black, Color.White));
+                            ((TagDataClassButtonImage)image.Tag).IsSelected = false;
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    Common.ShowErrorMessageBox(ex);
                 }
             }
         }
@@ -167,7 +172,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 var number = image.Name.Replace("ButtonImage", "");
-                if (((TagDataButtonImage)image.Tag).IsSelected)
+                if (((TagDataClassButtonImage)image.Tag).IsSelected)
                 {
                     return int.Parse(number);
                 }
@@ -177,9 +182,9 @@ namespace DCSFlightpanels.PanelUserControls
             return 0;
         }
 
-        public StreamDeckButtons GetButton()
+        public StreamDeckButtonNames GetButton()
         {
-            return StreamDeckButtons.BUTTON1;
+            return StreamDeckButtonNames.BUTTON1;
         }
 
 
@@ -378,124 +383,11 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 SetApplicationMode();
-                /*
-                foreach (var keyBinding in _streamDeck.KeyBindingsHashSet)
-                {
-                    var textBox = GetTextBox(keyBinding.StreamDeckButton, keyBinding.WhenTurnedOn);
-                    if (keyBinding.OSKeyPress != null && keyBinding.Layer == GetSelectedStreamDeckLayer().Name)
-                    {
-                        ((TagDataClassStreamDeck)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
-                    }
-                }
-
-                foreach (var osCommand in _streamDeck.OSCommandHashSet)
-                {
-                    var textBox = GetTextBox(osCommand.StreamDeckButton, osCommand.WhenTurnedOn);
-                    if (osCommand.OSCommandObject != null)//&& osCommand.Layer == GetStreamDeckLayer()
-                    {
-                        ((TagDataClassStreamDeck)textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
-                    }
-                }
-
-                foreach (var dcsBiosBinding in _streamDeck.DCSBiosBindings)
-                {
-                    var textBox = GetTextBox(dcsBiosBinding.StreamDeckButton, dcsBiosBinding.WhenTurnedOn);
-                    if (dcsBiosBinding.Layer == GetSelectedStreamDeckLayer().Name)
-                    {
-                        ((TagDataClassStreamDeck)textBox.Tag).DCSBIOSBinding = dcsBiosBinding;
-                    }
-                }
-
-
-                foreach (var bipLink in _streamDeck.BIPLinkHashSet)
-                {
-                    var textBox = GetTextBox(bipLink.StreamDeckButton, bipLink.WhenTurnedOn);
-                    if (bipLink.BIPLights.Count > 0 && bipLink.Layer == GetSelectedStreamDeckLayer().Name)
-                    {
-                        ((TagDataClassStreamDeck)textBox.Tag).BIPLink = bipLink;
-                    }
-                }
-                */
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(993013, ex);
             }
-        }
-
-        private void UpdateBIPLinkBindings(TextBox textBox)
-        {
-            try
-            {
-                //var key = GetStreamDeckKey(textBox);
-                //_streamDeck.AddOrUpdateBIPLinkKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).BIPLink, key.ButtonState);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(3011, ex);
-            }
-        }
-
-        private void UpdateKeyBindingProfileSequencedKeyStrokesStreamDeck(TextBox textBox)
-        {
-            try
-            {
-                //var key = GetSelectedButton();
-                //_streamDeck.AddOrUpdateSequencedKeyBinding(GetSelectedStreamDeckLayer().Name, textBox.Text, key.StreamDeckButton, ((TagDataClassStreamDeck)textBox.Tag).GetKeySequence(), key.ButtonState);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(3011, ex);
-            }
-        }
-
-
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(TextBox textBox)
-        {
-            try
-            {
-                KeyPressLength keyPressLength;
-                if (!((TagDataClassStreamDeck)textBox.Tag).ContainsOSKeyPress() || ((TagDataClassStreamDeck)textBox.Tag).KeyPress.KeySequence.Count == 0)
-                {
-                    keyPressLength = KeyPressLength.FiftyMilliSec;
-                }
-                else
-                {
-                    keyPressLength = ((TagDataClassStreamDeck)textBox.Tag).KeyPress.GetLengthOfKeyPress();
-                }
-                //var key = GetStreamDeckKey(textBox);
-                //_streamDeck.AddOrUpdateSingleKeyBinding(GetSelectedStreamDeckLayer().Name, key.StreamDeckButton, textBox.Text, keyPressLength, key.ButtonState);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(3012, ex);
-            }
-        }
-
-        private void UpdateOSCommandBindingsStreamDeck(TextBox textBox)
-        {
-            try
-            {
-                var tag = (TagDataClassStreamDeck)textBox.Tag;
-                _streamDeck.AddOrUpdateOSCommandBinding(GetSelectedStreamDeckLayer().Name, tag.Key.StreamDeckButton, tag.OSCommandObject, tag.Key.ButtonState);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(3011, ex);
-            }
-        }
-
-
-
-
-
-        private void SetTextBoxesVisibleStatus(bool show)
-        {
-            /*StackPanelButtonColumn0.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
-            StackPanelButtonColumn1.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
-            StackPanelButtonColumn2.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
-            StackPanelButtonColumn3.Visibility = (show ? Visibility.Visible : Visibility.Hidden);
-            StackPanelButtonColumn4.Visibility = (show ? Visibility.Visible : Visibility.Hidden);*/
         }
 
         private void NotifyButtonChanges(HashSet<object> buttons)
@@ -538,28 +430,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonLcdMenuItemDeleteBinding_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var menuItem = (MenuItem)sender;
-                var button = (Button)((ContextMenu)(menuItem.Parent)).Tag;
-                if (button.Name.Contains("Upper"))
-                {
-                    //DeleteLCDBinding(StreamDeckLCDPosition.UpperLCD, button);
-                }
-                else
-                {
-                    //DeleteLCDBinding(StreamDeckLCDPosition.LowerLCD, button);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(7365005, ex);
-            }
-        }
-
-
         private void ButtonNewLayer_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -595,7 +465,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private StreamDeckLayer GetSelectedStreamDeckLayer()
+        public StreamDeckLayer GetSelectedStreamDeckLayer()
         {
             try
             {
@@ -614,9 +484,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 ClearAll(false);
-
-                SetTextBoxesVisibleStatus(ComboBoxLayers.SelectionBoxItem != null);
-
+                
                 SetCheckboxHomeLayer();
 
                 SetFormState();
@@ -689,7 +557,9 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var image = (Image)sender;
-                GenerateButtonImages(int.Parse(image.Name.Replace("ButtonImage", "")));
+                var imageTagClass = (TagDataClassButtonImage) image.Tag;
+                GenerateButtonImages(imageTagClass.StreamDeckButtonName);
+                
                 SetFormState();
             }
             catch (Exception ex)
@@ -758,14 +628,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetTextBoxesVisibleStatus(GetSelectedStreamDeckLayer() != null);
-
                 foreach (var streamDeckButton35 in buttons)
                 {
                     var streamDeckButton = (StreamDeckButton)streamDeckButton35;
-                    switch (streamDeckButton.Button)
+                    switch (streamDeckButton.StreamDeckButtonName)
                     {
-                        case StreamDeckButtons.BUTTON1:
+                        case StreamDeckButtonNames.BUTTON1:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -780,7 +648,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON2:
+                        case StreamDeckButtonNames.BUTTON2:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -795,7 +663,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON3:
+                        case StreamDeckButtonNames.BUTTON3:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -810,7 +678,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON4:
+                        case StreamDeckButtonNames.BUTTON4:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -825,7 +693,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON5:
+                        case StreamDeckButtonNames.BUTTON5:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -840,7 +708,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON6:
+                        case StreamDeckButtonNames.BUTTON6:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -855,7 +723,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON7:
+                        case StreamDeckButtonNames.BUTTON7:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -870,7 +738,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON8:
+                        case StreamDeckButtonNames.BUTTON8:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -885,7 +753,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON9:
+                        case StreamDeckButtonNames.BUTTON9:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -900,7 +768,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON10:
+                        case StreamDeckButtonNames.BUTTON10:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -915,7 +783,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON11:
+                        case StreamDeckButtonNames.BUTTON11:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -930,7 +798,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON12:
+                        case StreamDeckButtonNames.BUTTON12:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -945,7 +813,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON13:
+                        case StreamDeckButtonNames.BUTTON13:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -960,7 +828,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON14:
+                        case StreamDeckButtonNames.BUTTON14:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -975,7 +843,7 @@ namespace DCSFlightpanels.PanelUserControls
                                     });
                                 break;
                             }
-                        case StreamDeckButtons.BUTTON15:
+                        case StreamDeckButtonNames.BUTTON15:
                             {
                                 var key = streamDeckButton;
                                 Dispatcher?.BeginInvoke(
@@ -1022,18 +890,51 @@ namespace DCSFlightpanels.PanelUserControls
         {
             SetFormState();
         }
-    }
 
-    internal class TagDataButtonImage
-    {
-        private bool _isSelected = false;
-
-        public bool IsSelected
+        private void ButtonAcceptButtonConfiguration_OnClick(object sender, RoutedEventArgs e)
         {
-            get => _isSelected;
-            set => _isSelected = value;
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
+
+        private void ButtonDeleteButtonConfiguration_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                UCStreamDeckButtonAction.Clear();
+                UCStreamDeckButtonImage.Clear();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonCancelButtonConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public List<string> GetStreamDeckLayerNames()
+        {
+            return _streamDeck.GetStreamDeckLayerNames();
+        }
+
     }
+
+
 
 
 }

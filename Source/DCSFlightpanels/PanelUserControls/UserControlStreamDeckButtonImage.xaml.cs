@@ -60,6 +60,11 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(471473, ex);
             }
         }
+        
+
+        public void Clear()
+        {
+        }
 
         private void MouseDownFocusLogTextBox(object sender, MouseButtonEventArgs e)
         {

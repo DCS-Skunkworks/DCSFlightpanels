@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
+             xmlns:tagDataClasses="clr-namespace:DCSFlightpanels.TagDataClasses"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="StreamDeckUserControl_OnLoaded">
     <UserControl.Resources>
@@ -72,51 +74,51 @@
 
 
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="0">
-                    <Image Name="ButtonImage1" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="0" ></Image>
+                    <Image Name="ButtonImage1" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="0">
-                    <Image Name="ButtonImage2" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="0" ></Image>
+                    <Image Name="ButtonImage2" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="0">
-                    <Image Name="ButtonImage3" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="0" ></Image>
+                    <Image Name="ButtonImage3" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="0">
-                    <Image Name="ButtonImage4" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="0" ></Image>
+                    <Image Name="ButtonImage4" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="0">
-                    <Image Name="ButtonImage5" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="0" ></Image>
+                    <Image Name="ButtonImage5" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="0" />
                 </Border>
 
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="1">
-                    <Image Name="ButtonImage6" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="1" ></Image>
+                    <Image Name="ButtonImage6" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="1">
-                    <Image Name="ButtonImage7" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="1" ></Image>
+                    <Image Name="ButtonImage7" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="1">
-                    <Image Name="ButtonImage8" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="1" ></Image>
+                    <Image Name="ButtonImage8" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="1">
-                    <Image Name="ButtonImage9" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="1" ></Image>
+                    <Image Name="ButtonImage9" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="1">
-                    <Image Name="ButtonImage10" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="1" ></Image>
+                    <Image Name="ButtonImage10" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="1" />
                 </Border>
 
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="2">
-                    <Image Name="ButtonImage11" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="2" ></Image>
+                    <Image Name="ButtonImage11" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="2">
-                    <Image Name="ButtonImage12" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="2" ></Image>
+                    <Image Name="ButtonImage12" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="2">
-                    <Image Name="ButtonImage13" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="2" ></Image>
+                    <Image Name="ButtonImage13" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="2">
-                    <Image Name="ButtonImage14" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="2" ></Image>
+                    <Image Name="ButtonImage14" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="2">
-                    <Image Name="ButtonImage15" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="2" ></Image>
+                    <Image Name="ButtonImage15" Source="/DCSFlightpanels;component/Images/default_image_streamdeck_button.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="2" />
                 </Border>
 
 
@@ -188,9 +190,9 @@
                             <RadioButton GroupName="ButtonType" Name="RadioButtonDCSBIOS" Content="DCS-BIOS" Margin="0,2,0,2" Click="RadioButtonButtonTypePress_OnClick"/>
                             <RadioButton GroupName="ButtonType" Name="RadioButtonOSCommand" Content="OS Command" Margin="0,2,0,2" Click="RadioButtonButtonTypePress_OnClick"/>
                             <RadioButton GroupName="ButtonType" Name="RadioButtonNavigational" Content="Layer Navigation" Margin="0,2,0,2" Click="RadioButtonButtonTypePress_OnClick"/>
-                            <Button Name="ButtonAcceptButtonConfiguration" Content="Accept Configuration"  Margin="0,15,0,2"/>
-                            <Button Name="ButtonDeleteButtonConfiguration" Content="Delete Configuration"  Margin="0,5,0,2"/>
-                            <Button Name="ButtonCancelButtonConfigurationChanges" Content="Cancel Changes"  Margin="0,5,0,2"/>
+                            <Button Name="ButtonAcceptButtonConfiguration" Content="Accept Configuration"  Margin="0,15,0,2" Click="ButtonAcceptButtonConfiguration_OnClick"/>
+                            <Button Name="ButtonDeleteButtonConfiguration" Content="Delete Configuration"  Margin="0,5,0,2" Click="ButtonDeleteButtonConfiguration_OnClick"/>
+                            <Button Name="ButtonCancelButtonConfigurationChanges" Content="Cancel Changes"  Margin="0,5,0,2" Click="ButtonCancelButtonConfigurationChanges_OnClick"/>
                         </StackPanel>
                     </StackPanel>
 

@@ -14,7 +14,7 @@ namespace NonVisuals.DCSBIOSBindings
          This class binds a physical key on the Stream Deck with a DCSBIOSInput
          Pressing the button will send a DCSBIOS command.
          */
-        private StreamDeckButtons _streamDeckButton;
+        private StreamDeckButtonNames _streamDeckButtonName;
         private string _layer = "";
 
         ~DCSBIOSActionBindingStreamDeck()
@@ -42,7 +42,7 @@ namespace NonVisuals.DCSBIOSBindings
                 Layer = param0Split[0];
                 WhenOnTurnedOn = (param0Split[1].Substring(0, 1) == "1");
                 param0Split[1] = param0Split[1].Substring(1);
-                _streamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
+                _streamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), param0Split[1]);
 
                 if (param0Split.Length > 2)
                 {
@@ -71,7 +71,7 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "      " + WhenOnTurnedOn);
+            Common.DebugP(Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "      " + WhenOnTurnedOn);
             var onStr = WhenOnTurnedOn ? "1" : "0";
 
             var stringBuilder = new StringBuilder();
@@ -81,15 +81,15 @@ namespace NonVisuals.DCSBIOSBindings
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "|" + Description + "}" + stringBuilder.ToString();
+                return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "|" + Description + "}" + stringBuilder.ToString();
             }
-            return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtons), StreamDeckButton) + "}" + stringBuilder.ToString();
+            return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "}" + stringBuilder.ToString();
         }
         
-        public StreamDeckButtons StreamDeckButton
+        public StreamDeckButtonNames StreamDeckButtonName
         {
-            get => _streamDeckButton;
-            set => _streamDeckButton = value;
+            get => _streamDeckButtonName;
+            set => _streamDeckButtonName = value;
         }
 
         public string Layer

@@ -15,6 +15,7 @@ namespace DCSFlightpanels.TagDataClasses
         private StreamDeckButtonOnOff _button;
         private DCSBIOSActionBindingStreamDeck _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
+        private StreamDeckLayer _streamDeckLayer;
 
         public TagDataClassStreamDeck(TextBox textBox, StreamDeckButtonOnOff button)
         {
@@ -34,7 +35,10 @@ namespace DCSFlightpanels.TagDataClasses
 
         public override bool IsEmpty()
         {
-            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0);
+            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
+                   (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && 
+                   (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0) &&
+                    _streamDeckLayer == null;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -87,7 +91,7 @@ namespace DCSFlightpanels.TagDataClasses
                 }
                 else
                 {
-                    TextBox.Background = Brushes.White;
+                    TextBox.Background = Brushes.LightSteelBlue;
                 }
             }
         }
@@ -98,12 +102,18 @@ namespace DCSFlightpanels.TagDataClasses
             set => _button = value;
         }
 
+        public StreamDeckLayer StreamDeckLayerObject
+        {
+            get => _streamDeckLayer;
+            set => _streamDeckLayer = value;
+        }
+
         public override void ClearAll()
         {
             _dcsbiosBindingStreamDeck = null;
             _bipLinkStreamDeck = null;
             OSKeyPress = null;
-            TextBox.Background = Brushes.White;
+            TextBox.Background = Brushes.LightSteelBlue;
             TextBox.Text = "";
         }
     }

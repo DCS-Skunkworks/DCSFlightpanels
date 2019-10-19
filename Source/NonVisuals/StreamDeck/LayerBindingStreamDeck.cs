@@ -13,7 +13,7 @@ namespace NonVisuals.StreamDeck
          This class binds a physical button on the Stream Deck with a layer.
          Pressing this button shows this layer on the Stream Deck.
          */
-        private StreamDeckButtons _streamDeckButton;
+        private StreamDeckButtonNames _streamDeckButtonName;
 
         private StreamDeckLayer _streamDeckLayer;
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();

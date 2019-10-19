@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Documents;
 
 namespace NonVisuals.StreamDeck
 {
@@ -121,5 +122,32 @@ namespace NonVisuals.StreamDeck
                 return null;
             }
         }
+
+        public List<string> GetStreamDeckLayerNames()
+        {
+            var result = new List<string>();
+
+            foreach (var streamDeckLayer in _layerList)
+            {
+                result.Add(streamDeckLayer.Name);
+            }
+
+            return result;
+        }
+
+        public StreamDeckButton GetStreamDeckButton(StreamDeckButtonNames streamDeckButtonName, string layerName)
+        {
+
+            foreach (var streamDeckLayer in _layerList)
+            {
+                if (streamDeckLayer.Name == layerName && streamDeckLayer.ContainStreamDeckButton(streamDeckButtonName))
+                {
+                    return streamDeckLayer.GetStreamDeckButtonName(streamDeckButtonName);
+                }
+            }
+            
+            throw new Exception("Button " + streamDeckButtonName + " cannot be found in layer " + layerName + ".");
+        }
+
     }
 }

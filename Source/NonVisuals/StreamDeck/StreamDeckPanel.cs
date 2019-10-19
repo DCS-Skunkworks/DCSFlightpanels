@@ -262,7 +262,7 @@ namespace NonVisuals.StreamDeck
             var result = "";
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.OSKeyPress != null && keyBinding.StreamDeckButton == streamDeckButton.Button && keyBinding.WhenTurnedOn == streamDeckButton.IsPressed)
+                if (keyBinding.OSKeyPress != null && keyBinding.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && keyBinding.WhenTurnedOn == streamDeckButton.IsPressed)
                 {
                     result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
@@ -292,7 +292,7 @@ namespace NonVisuals.StreamDeck
             // ADD METHOD ?
         }
 
-        public void AddOrUpdateSingleKeyBinding(string layer, StreamDeckButtons streamDeckButton, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
+        public void AddOrUpdateSingleKeyBinding(string layer, StreamDeckButtonNames streamDeckButton, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
         {
             if (string.IsNullOrEmpty(keys))
             {
@@ -304,7 +304,7 @@ namespace NonVisuals.StreamDeck
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
-                if (layer == keyBinding.Layer && keyBinding.StreamDeckButton == streamDeckButton && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (layer == keyBinding.Layer && keyBinding.StreamDeckButtonName == streamDeckButton && keyBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     if (string.IsNullOrEmpty(keys))
                     {
@@ -321,7 +321,7 @@ namespace NonVisuals.StreamDeck
             {
                 var keyBinding = new KeyBindingStreamDeck();
                 keyBinding.Layer = layer;
-                keyBinding.StreamDeckButton = streamDeckButton;
+                keyBinding.StreamDeckButtonName = streamDeckButton;
                 keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
@@ -331,7 +331,7 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void AddOrUpdateOSCommandBinding(string layer, StreamDeckButtons streamDeckButton, OSCommand osCommand, bool whenTurnedOn)
+        public void AddOrUpdateOSCommandBinding(string layer, StreamDeckButtonNames streamDeckButton, OSCommand osCommand, bool whenTurnedOn)
         {
             //This must accept lists
             /*var found = false;
@@ -356,7 +356,7 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();*/
         }
 
-        public void AddOrUpdateSequencedKeyBinding(string layer, string information, StreamDeckButtons streamDeckButton, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
+        public void AddOrUpdateSequencedKeyBinding(string layer, string information, StreamDeckButtonNames streamDeckButton, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
         {
             if (sortedList.Count == 0)
             {
@@ -368,7 +368,7 @@ namespace NonVisuals.StreamDeck
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
-                if (layer == keyBinding.Layer && keyBinding.StreamDeckButton == streamDeckButton && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (layer == keyBinding.Layer && keyBinding.StreamDeckButtonName == streamDeckButton && keyBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     if (sortedList.Count == 0)
                     {
@@ -386,7 +386,7 @@ namespace NonVisuals.StreamDeck
             {
                 var keyBinding = new KeyBindingStreamDeck();
                 keyBinding.Layer = layer;
-                keyBinding.StreamDeckButton = streamDeckButton;
+                keyBinding.StreamDeckButtonName = streamDeckButton;
                 keyBinding.OSKeyPress = new KeyPress(information, sortedList);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
@@ -395,7 +395,7 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void AddOrUpdateDCSBIOSBinding(string layer, StreamDeckButtons streamDeckButton, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
+        public void AddOrUpdateDCSBIOSBinding(string layer, StreamDeckButtonNames streamDeckButton, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
         {
             if (dcsbiosInputs.Count == 0)
             {
@@ -407,7 +407,7 @@ namespace NonVisuals.StreamDeck
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (layer == dcsBiosBinding.Layer && dcsBiosBinding.StreamDeckButton == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                if (layer == dcsBiosBinding.Layer && dcsBiosBinding.StreamDeckButtonName == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
@@ -419,7 +419,7 @@ namespace NonVisuals.StreamDeck
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingStreamDeck();
                 dcsBiosBinding.Layer = layer;
-                dcsBiosBinding.StreamDeckButton = streamDeckButton;
+                dcsBiosBinding.StreamDeckButtonName = streamDeckButton;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                 dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
                 dcsBiosBinding.Description = description;
@@ -428,12 +428,12 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void AddOrUpdateLCDBinding(string layer, DCSBIOSOutput dcsbiosOutput, StreamDeckButtons streamDeckButton)
+        public void AddOrUpdateLCDBinding(string layer, DCSBIOSOutput dcsbiosOutput, StreamDeckButtonNames streamDeckButton)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (layer == dcsBiosBindingLCD.Layer && dcsBiosBindingLCD.StreamDeckButton == streamDeckButton)
+                if (layer == dcsBiosBindingLCD.Layer && dcsBiosBindingLCD.StreamDeckButtonName == streamDeckButton)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = dcsbiosOutput;
                     found = true;
@@ -450,12 +450,12 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void AddOrUpdateLCDBinding(string layer, DCSBIOSOutputFormula dcsbiosOutputFormula, StreamDeckButtons streamDeckButton)
+        public void AddOrUpdateLCDBinding(string layer, DCSBIOSOutputFormula dcsbiosOutputFormula, StreamDeckButtonNames streamDeckButton)
         {
             var found = false;
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (layer == dcsBiosBindingLCD.Layer && dcsBiosBindingLCD.StreamDeckButton == streamDeckButton)
+                if (layer == dcsBiosBindingLCD.Layer && dcsBiosBindingLCD.StreamDeckButtonName == streamDeckButton)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
                     found = true;
@@ -466,19 +466,19 @@ namespace NonVisuals.StreamDeck
             {
                 var dcsBiosBindingLCD = new DCSBIOSOutputBindingStreamDeck();
                 dcsBiosBindingLCD.DCSBIOSOutputFormulaObject = dcsbiosOutputFormula;
-                dcsBiosBindingLCD.StreamDeckButton = streamDeckButton;
+                dcsBiosBindingLCD.StreamDeckButtonName = streamDeckButton;
                 dcsBiosBindingLCD.Layer = layer;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
             SetIsDirty();
         }
 
-        public void AddOrUpdateDCSBIOSLcdBinding(string layer, StreamDeckButtons streamDeckButton)
+        public void AddOrUpdateDCSBIOSLcdBinding(string layer, StreamDeckButtonNames streamDeckButton)
         {
             //Removes config
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
-                if (layer == dcsBiosBindingLCD.Layer && dcsBiosBindingLCD.StreamDeckButton == streamDeckButton)
+                if (layer == dcsBiosBindingLCD.Layer && dcsBiosBindingLCD.StreamDeckButtonName == streamDeckButton)
                 {
                     dcsBiosBindingLCD.DCSBIOSOutputObject = null;
                     break;
@@ -487,7 +487,7 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void AddOrUpdateBIPLinkKeyBinding(string layer, StreamDeckButtons streamDeckButton, BIPLinkStreamDeck bipLinkStreamDeck, bool whenTurnedOn)
+        public void AddOrUpdateBIPLinkKeyBinding(string layer, StreamDeckButtonNames streamDeckButton, BIPLinkStreamDeck bipLinkStreamDeck, bool whenTurnedOn)
         {
             if (bipLinkStreamDeck.BIPLights.Count == 0)
             {
@@ -500,18 +500,18 @@ namespace NonVisuals.StreamDeck
 
             foreach (var bipLink in _bipLinks)
             {
-                if (layer == bipLink.Layer && bipLink.StreamDeckButton == streamDeckButton && bipLink.WhenTurnedOn == whenTurnedOn)
+                if (layer == bipLink.Layer && bipLink.StreamDeckButtonName == streamDeckButton && bipLink.WhenTurnedOn == whenTurnedOn)
                 {
                     bipLink.BIPLights = bipLinkStreamDeck.BIPLights;
                     bipLink.Description = bipLinkStreamDeck.Description;
-                    bipLink.StreamDeckButton = streamDeckButton;
+                    bipLink.StreamDeckButtonName = streamDeckButton;
                     found = true;
                     break;
                 }
             }
             if (!found && bipLinkStreamDeck.BIPLights.Count > 0)
             {
-                bipLinkStreamDeck.StreamDeckButton = streamDeckButton;
+                bipLinkStreamDeck.StreamDeckButtonName = streamDeckButton;
                 bipLinkStreamDeck.WhenTurnedOn = whenTurnedOn;
                 bipLinkStreamDeck.Layer = layer;
                 _bipLinks.Add(bipLinkStreamDeck);
@@ -519,14 +519,14 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void RemoveButtonFromList(string layer, ControlListStreamDeck controlListStreamDeck, StreamDeckButtons streamDeckButton, bool whenTurnedOn)
+        public void RemoveButtonFromList(string layer, ControlListStreamDeck controlListStreamDeck, StreamDeckButtonNames streamDeckButton, bool whenTurnedOn)
         {
             var found = false;
             if (controlListStreamDeck == ControlListStreamDeck.ALL || controlListStreamDeck == ControlListStreamDeck.KEYS)
             {
                 foreach (var buttonBinding in _keyBindings)
                 {
-                    if (layer == buttonBinding.Layer && buttonBinding.StreamDeckButton == streamDeckButton && buttonBinding.WhenTurnedOn == whenTurnedOn)
+                    if (layer == buttonBinding.Layer && buttonBinding.StreamDeckButtonName == streamDeckButton && buttonBinding.WhenTurnedOn == whenTurnedOn)
                     {
                         buttonBinding.OSKeyPress = null;
                         found = true;
@@ -537,7 +537,7 @@ namespace NonVisuals.StreamDeck
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (layer == dcsBiosBinding.Layer && dcsBiosBinding.StreamDeckButton == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                    if (layer == dcsBiosBinding.Layer && dcsBiosBinding.StreamDeckButtonName == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                         found = true;
@@ -548,7 +548,7 @@ namespace NonVisuals.StreamDeck
             {
                 foreach (var bipLink in _bipLinks)
                 {
-                    if (layer == bipLink.Layer && bipLink.StreamDeckButton == streamDeckButton && bipLink.WhenTurnedOn == whenTurnedOn)
+                    if (layer == bipLink.Layer && bipLink.StreamDeckButtonName == streamDeckButton && bipLink.WhenTurnedOn == whenTurnedOn)
                     {
                         bipLink.BIPLights.Clear();
                         found = true;
@@ -576,7 +576,7 @@ namespace NonVisuals.StreamDeck
                 var found = false;
                 foreach (var keyBinding in _keyBindings)
                 {
-                    if (keyBinding.OSKeyPress != null && keyBinding.StreamDeckButton == streamDeckButton.Button && keyBinding.WhenTurnedOn == streamDeckButton.IsPressed)
+                    if (keyBinding.OSKeyPress != null && keyBinding.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && keyBinding.WhenTurnedOn == streamDeckButton.IsPressed)
                     {
                         keyBinding.OSKeyPress.Execute();
                         found = true;
@@ -587,7 +587,7 @@ namespace NonVisuals.StreamDeck
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
                     {
-                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.StreamDeckButton == streamDeckButton.Button && dcsBiosBinding.WhenTurnedOn == streamDeckButton.IsPressed)
+                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && dcsBiosBinding.WhenTurnedOn == streamDeckButton.IsPressed)
                         {
                             dcsBiosBinding.SendDCSBIOSCommands();
                             break;
@@ -596,7 +596,7 @@ namespace NonVisuals.StreamDeck
                 }
                 foreach (var osCommand in _osCommandBindings)
                 {
-                    if (osCommand.OSCommandObject != null && osCommand.StreamDeckButton == streamDeckButton.Button && osCommand.WhenTurnedOn == streamDeckButton.IsPressed)
+                    if (osCommand.OSCommandObject != null && osCommand.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && osCommand.WhenTurnedOn == streamDeckButton.IsPressed)
                     {
                         osCommand.OSCommandObject.Execute();
                         found = true;
@@ -605,7 +605,7 @@ namespace NonVisuals.StreamDeck
                 }
                 foreach (var bipLinkStreamDeck in _bipLinks)
                 {
-                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.StreamDeckButton == streamDeckButton.Button && bipLinkStreamDeck.WhenTurnedOn == streamDeckButton.IsPressed)
+                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && bipLinkStreamDeck.WhenTurnedOn == streamDeckButton.IsPressed)
                     {
                         bipLinkStreamDeck.Execute();
                         break;
@@ -724,6 +724,16 @@ namespace NonVisuals.StreamDeck
         public void SetHomeLayer(StreamDeckLayer streamDeckLayer)
         {
             SetHomeLayer(streamDeckLayer.Name);
+        }
+
+        public List<string> GetStreamDeckLayerNames()
+        {
+            return _streamDeckLayerHandler.GetStreamDeckLayerNames();
+        }
+
+        public StreamDeckButton GetStreamDeckButton(StreamDeckButtonNames streamDeckButtonName, string layerName)
+        {
+            return _streamDeckLayerHandler.GetStreamDeckButton(streamDeckButtonName, layerName);
         }
     }
 

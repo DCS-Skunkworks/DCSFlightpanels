@@ -12,7 +12,7 @@ namespace NonVisuals.DCSBIOSBindings
          * 
          * The comparison part of the DCSBIOSOutput is ignored for DCSBIOSBindingLCDStreamDeck, all data will be shown
          */
-        private StreamDeckButtons _streamDeckButton;
+        private StreamDeckButtonNames _streamDeckButtonName;
         private int _currentValue = 0;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
@@ -36,7 +36,7 @@ namespace NonVisuals.DCSBIOSBindings
                 //Home Layer|Button1
                 var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 Layer = param0Split[0];
-                StreamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
+                StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), param0Split[1]);
 
                 //[1]
                 //DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
@@ -54,7 +54,7 @@ namespace NonVisuals.DCSBIOSBindings
                 //Home Layer|Button1
                 var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 Layer = param0Split[0];
-                StreamDeckButton = (StreamDeckButtons)Enum.Parse(typeof(StreamDeckButtons), param0Split[1]);
+                StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), param0Split[1]);
 
                 //[1]
                 //DCSBiosOutputFormula{ANT_EGIHQTOD+10}
@@ -69,10 +69,10 @@ namespace NonVisuals.DCSBIOSBindings
             set => _layer = value;
         }
 
-        public StreamDeckButtons StreamDeckButton
+        public StreamDeckButtonNames StreamDeckButtonName
         {
-            get => _streamDeckButton;
-            set => _streamDeckButton = value;
+            get => _streamDeckButtonName;
+            set => _streamDeckButtonName = value;
         }
         
         public int CurrentValue
@@ -111,9 +111,9 @@ namespace NonVisuals.DCSBIOSBindings
             if (_dcsbiosOutputFormula != null)
             {
                 //StreamDeckDCSBIOSOutput{Home Layer|ALT}\o/{Button11Left}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SEPARATOR_CHARS + _dcsbiosOutputFormula.ToString();
+                return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtonNames), _streamDeckButtonName) + "}" + SEPARATOR_CHARS + _dcsbiosOutputFormula.ToString();
             }
-            return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtons), _streamDeckButton) + "}" + SEPARATOR_CHARS + _dcsbiosOutput.ToString();
+            return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtonNames), _streamDeckButtonName) + "}" + SEPARATOR_CHARS + _dcsbiosOutput.ToString();
         }
         
         public bool HasBinding => _dcsbiosOutput != null || _dcsbiosOutputFormula != null;
