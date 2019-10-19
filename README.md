@@ -1,6 +1,8 @@
 # DCSFlightpanels
 
-[![](http://i63.tinypic.com/2s8jx9x.png)](https://www.paypal.me/jerkerdahlblom)
+
+[![](Documentation/support_dcsflightpanels2.png)](https://www.paypal.me/jerkerdahlblom)
+
 
 DCSFlightpanels primary use is for using Saitek/Logitech panels in DCS World.
 Together with DCS-BIOS you can manage every control for the aircraft and use
