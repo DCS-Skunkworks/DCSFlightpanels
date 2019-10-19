@@ -10,7 +10,8 @@ namespace NonVisuals.Interfaces
         KeyPress = 1,
         DCSBIOS = 2,
         OSCommand = 4,
-        LayerNavigation = 8
+        SRS = 8,
+        LayerNavigation = 16
     }
 
     public interface IStreamDeckButtonAction

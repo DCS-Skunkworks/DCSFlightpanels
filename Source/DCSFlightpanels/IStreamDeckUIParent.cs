@@ -12,8 +12,8 @@ namespace DCSFlightpanels
     public interface IStreamDeckUIParent
     {
 
-        int GetButtonNumber();
-        StreamDeckButtonNames GetButton();
+        int GetSelectedButtonNumber();
+        StreamDeckButtonNames GetSelectedButtonName();
         StreamDeckLayer GetSelectedStreamDeckLayer();
         List<string> GetStreamDeckLayerNames();
         EnumStreamDeckButtonActionType GetButtonActionType();

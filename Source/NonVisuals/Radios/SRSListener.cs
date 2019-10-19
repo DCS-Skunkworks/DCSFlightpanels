@@ -180,10 +180,13 @@ namespace NonVisuals.Radios
                 _udpReceiveClient.Client.Bind(ipEndPointReceiverUdp);
                 //_udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(_srsReceiveFromIPUdp));
 
-                _udpSendClient?.Close();
-                _udpSendClient = new UdpClient();
-                _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                _udpSendClient.EnableBroadcast = true;
+                lock (_sendSRSDataLockObject)
+                {
+                    _udpSendClient?.Close();
+                    _udpSendClient = new UdpClient();
+                    _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                    _udpSendClient.EnableBroadcast = true;
+                }
 
                 _srsListeningThread?.Abort();
                 _srsListeningThread = new Thread(ReceiveDataUdp);
@@ -199,10 +202,13 @@ namespace NonVisuals.Radios
                     _udpReceiveClient.Close();
                     _udpReceiveClient = null;
                 }
-                if (_udpSendClient != null && _udpSendClient.Client.Connected)
+                lock (_sendSRSDataLockObject)
                 {
-                    _udpSendClient.Close();
-                    _udpSendClient = null;
+                    if (_udpSendClient != null && _udpSendClient.Client.Connected)
+                    {
+                        _udpSendClient.Close();
+                        _udpSendClient = null;
+                    }
                 }
             }
         }
@@ -391,7 +397,10 @@ namespace NonVisuals.Radios
                 }
                 try
                 {
-                    _udpSendClient?.Close();
+                    lock (_sendSRSDataLockObject)
+                    {
+                        _udpSendClient?.Close();
+                    }
                 }
                 catch (Exception)
                 {

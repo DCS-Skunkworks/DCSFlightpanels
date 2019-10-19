@@ -4,18 +4,40 @@ using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 
 namespace NonVisuals.DCSBIOSBindings
 {
-    public class DCSBIOSActionBindingStreamDeck : DCSBIOSActionBindingBase
+    public class DCSBIOSActionBindingStreamDeck : DCSBIOSActionBindingBase, IStreamDeckButtonAction
     {
         /*
          This class binds a physical key on the Stream Deck with a DCSBIOSInput
          Pressing the button will send a DCSBIOS command.
          */
         private StreamDeckButtonNames _streamDeckButtonName;
-        private string _layer = "";
+        private string _layerName = "";
+
+
+
+
+
+
+
+
+
+
+
+        public EnumStreamDeckButtonActionType GetActionType()
+        {
+            return EnumStreamDeckButtonActionType.DCSBIOS;
+        }
+
+        public void Execute()
+        {
+            SendDCSBIOSCommands();
+        }
+
 
         ~DCSBIOSActionBindingStreamDeck()
         {
@@ -39,7 +61,7 @@ namespace NonVisuals.DCSBIOSBindings
                 //Home Layer|1BUTTON12|DCS-BIOS
                 var param0Split = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
 
-                Layer = param0Split[0];
+                LayerName = param0Split[0];
                 WhenOnTurnedOn = (param0Split[1].Substring(0, 1) == "1");
                 param0Split[1] = param0Split[1].Substring(1);
                 _streamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), param0Split[1]);
@@ -81,9 +103,9 @@ namespace NonVisuals.DCSBIOSBindings
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "|" + Description + "}" + stringBuilder.ToString();
+                return "StreamDeckDCSBIOSInput{" + LayerName + "|" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "|" + Description + "}" + stringBuilder.ToString();
             }
-            return "StreamDeckDCSBIOSInput{" + Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "}" + stringBuilder.ToString();
+            return "StreamDeckDCSBIOSInput{" + LayerName + "|" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "}" + stringBuilder.ToString();
         }
         
         public StreamDeckButtonNames StreamDeckButtonName
@@ -92,10 +114,10 @@ namespace NonVisuals.DCSBIOSBindings
             set => _streamDeckButtonName = value;
         }
 
-        public string Layer
+        public string LayerName
         {
-            get => _layer;
-            set => _layer = value;
+            get => _layerName;
+            set => _layerName = value;
         }
     }
 }

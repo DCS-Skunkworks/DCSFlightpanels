@@ -395,11 +395,11 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void AddOrUpdateDCSBIOSBinding(string layer, StreamDeckButtonNames streamDeckButton, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
+        public void AddOrUpdateDCSBIOSBinding(string layerName, StreamDeckButtonNames streamDeckButton, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
         {
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveButtonFromList(layer, ControlListStreamDeck.DCSBIOS, streamDeckButton, whenTurnedOn);
+                RemoveButtonFromList(layerName, ControlListStreamDeck.DCSBIOS, streamDeckButton, whenTurnedOn);
                 SetIsDirty();
                 return;
             }
@@ -407,7 +407,7 @@ namespace NonVisuals.StreamDeck
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (layer == dcsBiosBinding.Layer && dcsBiosBinding.StreamDeckButtonName == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                if (layerName == dcsBiosBinding.LayerName && dcsBiosBinding.StreamDeckButtonName == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
@@ -418,7 +418,7 @@ namespace NonVisuals.StreamDeck
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingStreamDeck();
-                dcsBiosBinding.Layer = layer;
+                dcsBiosBinding.LayerName = layerName;
                 dcsBiosBinding.StreamDeckButtonName = streamDeckButton;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                 dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
@@ -537,7 +537,7 @@ namespace NonVisuals.StreamDeck
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (layer == dcsBiosBinding.Layer && dcsBiosBinding.StreamDeckButtonName == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                    if (layer == dcsBiosBinding.LayerName && dcsBiosBinding.StreamDeckButtonName == streamDeckButton && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                         found = true;

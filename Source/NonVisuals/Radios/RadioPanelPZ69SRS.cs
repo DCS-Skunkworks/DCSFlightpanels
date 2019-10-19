@@ -689,7 +689,7 @@ namespace NonVisuals.Radios
                         break;
                     }
             }
-            var result = "{ \"Command\": 0,\"RadioId\":" + radioId + ",\"Frequency\": " + value.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture) + " }\n";
+            var result = "{ \"Command\": 0,\"RadioId\":" + radioId + ",\"Frequency\": " + value.ToString("0.000", CultureInfo.InvariantCulture) + " }\n";
             Common.DebugP(result);
             return result;
         }

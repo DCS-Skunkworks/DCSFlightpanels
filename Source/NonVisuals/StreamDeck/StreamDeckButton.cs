@@ -28,8 +28,10 @@ namespace NonVisuals.StreamDeck
     {
         private StreamDeckButtonNames _streamDeckButtonName;
         private bool _isPressed = false;
-        private IStreamDeckButtonFace _streamDeckButtonFace = null;
-        private IStreamDeckButtonAction _streamDeckButtonAction = null;
+        private IStreamDeckButtonFace _streamDeckButtonFaceForPress = null;
+        private IStreamDeckButtonAction _streamDeckButtonActionForPress = null;
+        private IStreamDeckButtonFace _streamDeckButtonFaceForRelease = null;
+        private IStreamDeckButtonAction _streamDeckButtonActionForRelease = null;
         private string _layerName;
 
         public StreamDeckButton(bool isPressed, StreamDeckButtonNames streamDeckButton)
@@ -42,6 +44,32 @@ namespace NonVisuals.StreamDeck
         {
             get => _streamDeckButtonName;
             set => _streamDeckButtonName = value;
+        }
+
+        public IStreamDeckButtonFace StreamDeckButtonFaceForPress
+        {
+            get => _streamDeckButtonFaceForPress;
+            set => _streamDeckButtonFaceForPress = value;
+        }
+
+        public IStreamDeckButtonAction StreamDeckButtonActionForPress
+        {
+            get => _streamDeckButtonActionForPress;
+            set => _streamDeckButtonActionForPress = value;
+        }
+
+
+
+        public IStreamDeckButtonFace StreamDeckButtonFaceForRelease
+        {
+            get => _streamDeckButtonFaceForRelease;
+            set => _streamDeckButtonFaceForRelease = value;
+        }
+
+        public IStreamDeckButtonAction StreamDeckButtonActionForRelease
+        {
+            get => _streamDeckButtonActionForRelease;
+            set => _streamDeckButtonActionForRelease = value;
         }
 
         public bool IsPressed

@@ -11,13 +11,19 @@ namespace NonVisuals.StreamDeck
     {
         /*
          This class binds a physical button on the Stream Deck with a layer.
-         Pressing this button shows this layer on the Stream Deck.
+         Pressing this button shows the _streamDeckLayer on the Stream Deck.
          */
         private StreamDeckButtonNames _streamDeckButtonName;
 
-        private StreamDeckLayer _streamDeckLayer;
+        private StreamDeckTargetLayer _streamDeckLayerTarget;
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
-        
+        private bool _whenTurnedOn;
+
+
+
+
+
+
         public EnumStreamDeckButtonActionType GetActionType()
         {
             return EnumStreamDeckButtonActionType.OSCommand;
@@ -26,6 +32,24 @@ namespace NonVisuals.StreamDeck
         public void Execute()
         {
         
+        }
+
+        public bool WhenTurnedOn
+        {
+            get => _whenTurnedOn;
+            set => _whenTurnedOn = value;
+        }
+
+        public StreamDeckButtonNames StreamDeckButtonName
+        {
+            get => _streamDeckButtonName;
+            set => _streamDeckButtonName = value;
+        }
+
+        public StreamDeckTargetLayer StreamDeckLayerTarget
+        {
+            get => _streamDeckLayerTarget;
+            set => _streamDeckLayerTarget = value;
         }
     }
 }

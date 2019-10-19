@@ -64,6 +64,9 @@
             </StackPanel>
         </StackPanel>
 
+        <StackPanel Name="StackPanelButtonSRSSettings"  Visibility="Collapsed">
+            <Label Content="TO BE DONE" FontSize="10" Height="23"   />
+        </StackPanel>
 
         <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Visible">
             <Label Content="Layer to show when Button Pressed" FontSize="10" Height="23"   />

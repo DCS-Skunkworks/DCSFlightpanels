@@ -8,7 +8,7 @@ namespace NonVisuals.StreamDeck
         private bool _isActive = false;
         private bool _isHomeLayer = false;
         private string _name = "";
-        private List<StreamDeckButton> _buttons = new List<StreamDeckButton>();
+        private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
 
         public bool IsActive
         {
@@ -30,15 +30,27 @@ namespace NonVisuals.StreamDeck
         }
 
         
-        public List<StreamDeckButton> Buttons
+        public List<StreamDeckButton> StreamDeckButtons
         {
-            get => _buttons;
-            set => _buttons = value;
+            get => _streamDeckButtons;
+            set => _streamDeckButtons = value;
+        }
+
+        public StreamDeckButton GetStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
+        {
+            foreach (var streamDeckButton in _streamDeckButtons)
+            {
+                if (streamDeckButton.StreamDeckButtonName == streamDeckButtonName)
+                {
+                    return streamDeckButton;
+                }
+            }
+            return new StreamDeckButton(false, streamDeckButtonName);
         }
 
         public bool ContainStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
         {
-            foreach (var streamDeckButton in _buttons)
+            foreach (var streamDeckButton in _streamDeckButtons)
             {
                 if (streamDeckButton.StreamDeckButtonName == streamDeckButtonName)
                 {
@@ -51,7 +63,7 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckButton GetStreamDeckButtonName(StreamDeckButtonNames streamDeckButtonName)
         {
-            foreach (var streamDeckButton in _buttons)
+            foreach (var streamDeckButton in _streamDeckButtons)
             {
                 if (streamDeckButton.StreamDeckButtonName == streamDeckButtonName)
                 {

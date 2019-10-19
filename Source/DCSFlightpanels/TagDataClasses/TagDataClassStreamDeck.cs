@@ -15,7 +15,7 @@ namespace DCSFlightpanels.TagDataClasses
         private StreamDeckButtonOnOff _button;
         private DCSBIOSActionBindingStreamDeck _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
-        private StreamDeckLayer _streamDeckLayer;
+        private StreamDeckTargetLayer _streamDeckTargetLayer;
 
         public TagDataClassStreamDeck(TextBox textBox, StreamDeckButtonOnOff button)
         {
@@ -28,6 +28,11 @@ namespace DCSFlightpanels.TagDataClasses
             return _dcsbiosBindingStreamDeck != null;// && _dcsbiosInputs.Count > 0;
         }
 
+        public bool ContainsStreamDeckLayer()
+        {
+            return _streamDeckTargetLayer != null;
+        }
+
         public override bool ContainsBIPLink()
         {
             return _bipLinkStreamDeck != null && _bipLinkStreamDeck.BIPLights.Count > 0;
@@ -38,7 +43,7 @@ namespace DCSFlightpanels.TagDataClasses
             return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
                    (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && 
                    (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0) &&
-                    _streamDeckLayer == null;
+                   _streamDeckTargetLayer == null;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -102,10 +107,10 @@ namespace DCSFlightpanels.TagDataClasses
             set => _button = value;
         }
 
-        public StreamDeckLayer StreamDeckLayerObject
+        public StreamDeckTargetLayer StreamDeckLayerTarget
         {
-            get => _streamDeckLayer;
-            set => _streamDeckLayer = value;
+            get => _streamDeckTargetLayer;
+            set => _streamDeckTargetLayer = value;
         }
 
         public override void ClearAll()
