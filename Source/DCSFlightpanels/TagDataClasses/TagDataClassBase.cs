@@ -8,7 +8,7 @@ namespace DCSFlightpanels.TagDataClasses
 {
     public abstract class TagDataClassBase
     {
-        private KeyPress _osKeyPress;
+        private KeyPress _keyPress;
         private OSCommand _osCommand;
         private TextBox _textBox;
 
@@ -24,34 +24,34 @@ namespace DCSFlightpanels.TagDataClasses
             return _osCommand != null;
         }
 
-        public bool ContainsOSKeyPress()
+        public bool ContainsKeyPress()
         {
-            return _osKeyPress != null && _osKeyPress.KeySequence.Count > 0;
+            return _keyPress != null && _keyPress.KeySequence.Count > 0;
         }
 
         public bool ContainsKeySequence()
         {
-            return _osKeyPress != null && _osKeyPress.IsMultiSequenced();
+            return _keyPress != null && _keyPress.IsMultiSequenced();
         }
 
         public bool ContainsSingleKey()
         {
-            return _osKeyPress != null && !_osKeyPress.IsMultiSequenced() && _osKeyPress.KeySequence.Count > 0;
+            return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeySequence.Count > 0;
         }
 
         public KeyPress KeyPress
         {
-            get => _osKeyPress;
+            get => _keyPress;
             set
             {
                 if (ContainsDCSBIOS())
                 {
                     throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
                 }
-                _osKeyPress = value;
-                if (_osKeyPress != null)
+                _keyPress = value;
+                if (_keyPress != null)
                 {
-                    _textBox.Text = _osKeyPress.GetKeyPressInformation();
+                    _textBox.Text = _keyPress.GetKeyPressInformation();
                 }
                 else
                 {
@@ -62,7 +62,7 @@ namespace DCSFlightpanels.TagDataClasses
 
         public SortedList<int, KeyPressInfo> GetKeySequence()
         {
-            return _osKeyPress.KeySequence;
+            return _keyPress.KeySequence;
         }
 
         public OSCommand OSCommandObject
@@ -73,12 +73,6 @@ namespace DCSFlightpanels.TagDataClasses
                 _osCommand = value;
                 _textBox.Text = _osCommand.Name;
             }
-        }
-
-        public KeyPress OSKeyPress
-        {
-            get => _osKeyPress;
-            set => _osKeyPress = value;
         }
 
         public TextBox TextBox

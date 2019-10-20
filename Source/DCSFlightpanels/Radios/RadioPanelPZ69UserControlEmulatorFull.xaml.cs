@@ -299,8 +299,8 @@ namespace DCSFlightpanels.Radios
                     textBox.ToolTip = null;
                     if (sequenceList.Count > 1)
                     {
-                        var osKeyPress = new KeyPress("Key press sequence", sequenceList);
-                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
+                        var keyPress = new KeyPress("Key press sequence", sequenceList);
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress = keyPress;
                         ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
@@ -312,8 +312,8 @@ namespace DCSFlightpanels.Radios
                     {
                         //If only one press was created treat it as a simple keypress
                         ((TagDataClassPZ69Full)textBox.Tag).ClearAll();
-                        var osKeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
+                        var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
+                        ((TagDataClassPZ69Full)textBox.Tag).KeyPress = keyPress;
                         ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
@@ -398,7 +398,7 @@ namespace DCSFlightpanels.Radios
             try
             {
                 KeyPressLength keyPressLength;
-                if (!((TagDataClassPZ69Full)textBox.Tag).ContainsOSKeyPress() || ((TagDataClassPZ69Full)textBox.Tag).KeyPress.KeySequence.Count == 0)
+                if (!((TagDataClassPZ69Full)textBox.Tag).ContainsKeyPress() || ((TagDataClassPZ69Full)textBox.Tag).KeyPress.KeySequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
@@ -2493,8 +2493,8 @@ namespace DCSFlightpanels.Radios
                 {
                     return;
                 }
-                var osKeyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
-                ((TagDataClassPZ69Full)textBox.Tag).KeyPress = osKeyPress;
+                var keyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
+                ((TagDataClassPZ69Full)textBox.Tag).KeyPress = keyPress;
                 ((TagDataClassPZ69Full)textBox.Tag).KeyPress.Information = "VK_NULL";
                 textBox.Text = vkNull;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);

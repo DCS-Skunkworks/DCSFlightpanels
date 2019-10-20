@@ -42,7 +42,7 @@ namespace DCSFlightpanels.TagDataClasses
         {
             return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
                    (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && 
-                   (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0) &&
+                   (KeyPress == null || KeyPress.KeySequence.Count == 0) &&
                    _streamDeckTargetLayer == null;
         }
 
@@ -61,7 +61,7 @@ namespace DCSFlightpanels.TagDataClasses
             get => _dcsbiosBindingStreamDeck;
             set
             {
-                if (ContainsOSKeyPress())
+                if (ContainsKeyPress())
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
                 }
@@ -117,7 +117,7 @@ namespace DCSFlightpanels.TagDataClasses
         {
             _dcsbiosBindingStreamDeck = null;
             _bipLinkStreamDeck = null;
-            OSKeyPress = null;
+            KeyPress = null;
             TextBox.Background = Brushes.LightSteelBlue;
             TextBox.Text = "";
         }

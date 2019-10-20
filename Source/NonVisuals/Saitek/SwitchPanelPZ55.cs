@@ -470,8 +470,8 @@ namespace NonVisuals.Saitek
                     }
                     else
                     {
-                        var osKeyPress = new KeyPress(information, sortedList);
-                        keyBinding.OSKeyPress = osKeyPress;
+                        var keyPress = new KeyPress(information, sortedList);
+                        keyBinding.OSKeyPress = keyPress;
                     }
                     found = true;
                     break;
@@ -481,8 +481,8 @@ namespace NonVisuals.Saitek
             {
                 var keyBinding = new KeyBindingPZ55();
                 keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                var osKeyPress = new KeyPress(information, sortedList);
-                keyBinding.OSKeyPress = osKeyPress;
+                var keyPress = new KeyPress(information, sortedList);
+                keyBinding.OSKeyPress = keyPress;
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }

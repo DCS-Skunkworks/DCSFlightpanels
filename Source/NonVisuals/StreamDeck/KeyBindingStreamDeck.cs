@@ -9,16 +9,8 @@ namespace NonVisuals.StreamDeck
 {
     public class KeyBindingStreamDeck : KeyBinding, IStreamDeckButtonAction
     {
-        /*
-         This class binds a physical button on a Stream Deck with a user made virtual keypress in Windows.
-         */
-        private StreamDeckButtonNames _streamDeckButtonName;
-        private string _layer = "";
 
-        public EnumStreamDeckButtonActionType GetActionType()
-        {
-            return EnumStreamDeckButtonActionType.KeyPress;
-        }
+        public EnumStreamDeckButtonActionType ActionType => EnumStreamDeckButtonActionType.KeyPress;
 
         public void Execute()
         {
@@ -27,7 +19,7 @@ namespace NonVisuals.StreamDeck
 
         internal override void ImportSettings(string settings)
         {
-            if (string.IsNullOrEmpty(settings))
+            /*if (string.IsNullOrEmpty(settings))
             {
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
@@ -49,37 +41,27 @@ namespace NonVisuals.StreamDeck
                 //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
                 OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[1]);
-            }
+            }*/
         }
         
-        public StreamDeckButtonNames StreamDeckButtonName
-        {
-            get => _streamDeckButtonName;
-            set => _streamDeckButtonName = value;
-        }
-
-        public string Layer
-        {
-            get => _layer;
-            set => _layer = value;
-        }
-
         public override string ExportSettings()
         {
-            if (OSKeyPress == null || OSKeyPress.IsEmpty())
+            /*if (OSKeyPress == null || OSKeyPress.IsEmpty())
             {
                 return null;
             }
             Common.DebugP(Layer + "|" + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
             return "StreamDeckButton{"+ Layer + "|" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "}" + SeparatorChars + OSKeyPress.ExportString();
+            */
+            return "";
         }
 
         public static HashSet<KeyBindingStreamDeck> SetNegators(HashSet<KeyBindingStreamDeck> keyBindings)
         {
-            if (keyBindings == null)
+            /*if (keyBindings == null)
             {
-                return keyBindings;
+                return null;
             }
             foreach (var keyBindingStreamDeck in keyBindings)
             {
@@ -93,7 +75,7 @@ namespace NonVisuals.StreamDeck
                         keyBindingStreamDeck.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                     }
                 }
-            }
+            }*/
             return keyBindings;
         }
     }

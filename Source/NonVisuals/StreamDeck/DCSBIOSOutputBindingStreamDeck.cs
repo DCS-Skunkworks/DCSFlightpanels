@@ -2,17 +2,11 @@
 using DCS_BIOS;
 using NonVisuals.StreamDeck;
 
-namespace NonVisuals.DCSBIOSBindings
+namespace NonVisuals.StreamDeck
 {
 
     public class DCSBIOSOutputBindingStreamDeck
     {
-        /*
-         * This class binds a DCSBIOSOutput with an LCD (key) on a Stream Deck
-         * 
-         * The comparison part of the DCSBIOSOutput is ignored for DCSBIOSBindingLCDStreamDeck, all data will be shown
-         */
-        private StreamDeckButtonNames _streamDeckButtonName;
         private int _currentValue = 0;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
@@ -21,6 +15,7 @@ namespace NonVisuals.DCSBIOSBindings
 
         internal void ImportSettings(string settings)
         {
+            /*
             if (string.IsNullOrEmpty(settings))
             {
                 throw new ArgumentException("Import string empty. (DCSBIOSBindingPZ70)");
@@ -61,6 +56,7 @@ namespace NonVisuals.DCSBIOSBindings
                 _dcsbiosOutputFormula = new DCSBIOSOutputFormula();
                 _dcsbiosOutputFormula.ImportString(parameters[1]);
             }
+            */
         }
 
         public string Layer
@@ -69,12 +65,6 @@ namespace NonVisuals.DCSBIOSBindings
             set => _layer = value;
         }
 
-        public StreamDeckButtonNames StreamDeckButtonName
-        {
-            get => _streamDeckButtonName;
-            set => _streamDeckButtonName = value;
-        }
-        
         public int CurrentValue
         {
             get => _currentValue;
@@ -104,6 +94,7 @@ namespace NonVisuals.DCSBIOSBindings
 
         public string ExportSettings()
         {
+            /*
             if (DCSBIOSOutputObject == null && DCSBIOSOutputFormulaObject == null)
             {
                 return null;
@@ -114,6 +105,8 @@ namespace NonVisuals.DCSBIOSBindings
                 return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtonNames), _streamDeckButtonName) + "}" + SEPARATOR_CHARS + _dcsbiosOutputFormula.ToString();
             }
             return "StreamDeckDCSBIOSOutput{" + Layer + "|" + Enum.GetName(typeof(StreamDeckButtonNames), _streamDeckButtonName) + "}" + SEPARATOR_CHARS + _dcsbiosOutput.ToString();
+            */
+            return "";
         }
         
         public bool HasBinding => _dcsbiosOutput != null || _dcsbiosOutputFormula != null;

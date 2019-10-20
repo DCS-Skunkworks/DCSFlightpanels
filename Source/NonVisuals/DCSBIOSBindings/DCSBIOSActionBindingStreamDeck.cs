@@ -28,10 +28,7 @@ namespace NonVisuals.DCSBIOSBindings
 
 
 
-        public EnumStreamDeckButtonActionType GetActionType()
-        {
-            return EnumStreamDeckButtonActionType.DCSBIOS;
-        }
+        public EnumStreamDeckButtonActionType ActionType => EnumStreamDeckButtonActionType.DCSBIOS;
 
         public void Execute()
         {

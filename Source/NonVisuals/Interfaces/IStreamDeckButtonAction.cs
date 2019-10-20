@@ -1,5 +1,7 @@
-﻿using DCS_BIOS;
+﻿using System.Windows.Forms;
+using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals.Interfaces
 {
@@ -16,8 +18,7 @@ namespace NonVisuals.Interfaces
 
     public interface IStreamDeckButtonAction
     {
-        EnumStreamDeckButtonActionType GetActionType();
-
+        EnumStreamDeckButtonActionType ActionType { get; }
         void Execute();
         //void SetAction(object action);
         //object GetAction();

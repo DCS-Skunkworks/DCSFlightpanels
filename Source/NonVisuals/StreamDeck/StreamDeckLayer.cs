@@ -16,6 +16,10 @@ namespace NonVisuals.StreamDeck
             set => _isActive = value;
         }
 
+        public void AddButton(StreamDeckButton streamDeckButton)
+        {
+            _streamDeckButtons.Add(streamDeckButton);
+        }
 
         public bool IsHomeLayer
         {

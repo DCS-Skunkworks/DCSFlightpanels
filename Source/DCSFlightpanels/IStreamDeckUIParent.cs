@@ -16,7 +16,7 @@ namespace DCSFlightpanels
         StreamDeckButtonNames GetSelectedButtonName();
         StreamDeckLayer GetSelectedStreamDeckLayer();
         List<string> GetStreamDeckLayerNames();
-        EnumStreamDeckButtonActionType GetButtonActionType();
+        EnumStreamDeckButtonActionType GetSelectedActionType();
         void ChildChangesMade();
     }
 }

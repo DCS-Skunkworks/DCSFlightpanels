@@ -37,7 +37,7 @@ namespace DCSFlightpanels.TagDataClasses
         
         public override bool IsEmpty()
         {
-            return _bipLinkPZ69 == null && (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0);
+            return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeySequence.Count == 0);
         }
         
         public BIPLinkPZ69 BIPLink
@@ -62,7 +62,7 @@ namespace DCSFlightpanels.TagDataClasses
         public override void ClearAll()
         {
             _bipLinkPZ69 = null;
-            OSKeyPress = null;
+            KeyPress = null;
             TextBox.Background = Brushes.White;
             TextBox.Text = "";
         }

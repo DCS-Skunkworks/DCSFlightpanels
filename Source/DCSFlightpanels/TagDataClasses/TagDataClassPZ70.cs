@@ -33,7 +33,7 @@ namespace DCSFlightpanels.TagDataClasses
 
         public override bool IsEmpty()
         {
-            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (OSKeyPress == null || OSKeyPress.KeySequence.Count == 0);
+            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -51,7 +51,7 @@ namespace DCSFlightpanels.TagDataClasses
             get => _dcsbiosBindingPZ70;
             set
             {
-                if (ContainsOSKeyPress())
+                if (ContainsKeyPress())
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
                 }
@@ -101,7 +101,7 @@ namespace DCSFlightpanels.TagDataClasses
         {
             _dcsbiosBindingPZ70 = null;
             _bipLinkPZ70 = null;
-            OSKeyPress = null;
+            KeyPress = null;
             TextBox.Background = Brushes.White;
             TextBox.Text = "";
         }

@@ -32,7 +32,6 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonAction _streamDeckButtonActionForPress = null;
         private IStreamDeckButtonFace _streamDeckButtonFaceForRelease = null;
         private IStreamDeckButtonAction _streamDeckButtonActionForRelease = null;
-        private string _layerName;
 
         public StreamDeckButton(bool isPressed, StreamDeckButtonNames streamDeckButton)
         {
@@ -58,7 +57,16 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckButtonActionForPress = value;
         }
 
-
+        public void Consume(StreamDeckButton streamDeckButton)
+        {
+            StreamDeckButtonName = streamDeckButton.StreamDeckButtonName;
+            IsPressed = streamDeckButton.IsPressed;
+            StreamDeckButtonActionForPress = streamDeckButton.StreamDeckButtonActionForPress;
+            StreamDeckButtonActionForRelease = streamDeckButton.StreamDeckButtonActionForRelease;
+            
+            StreamDeckButtonFaceForPress = streamDeckButton.StreamDeckButtonFaceForPress;
+            StreamDeckButtonFaceForRelease = streamDeckButton.StreamDeckButtonFaceForRelease;
+        }
 
         public IStreamDeckButtonFace StreamDeckButtonFaceForRelease
         {
@@ -77,13 +85,7 @@ namespace NonVisuals.StreamDeck
             get => _isPressed;
             set => _isPressed = value;
         }
-
-        public string LayerName
-        {
-            get => _layerName;
-            set => _layerName = value;
-        }
-
+        
         public string ExportString()
         {
             return "StreamDeckButton{" + Enum.GetName(typeof(StreamDeckButtonNames), _streamDeckButtonName) + "}";

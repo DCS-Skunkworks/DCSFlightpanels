@@ -49,7 +49,7 @@ namespace DCSFlightpanels
 
         private readonly bool _doSearchForPanels = true;
         private HIDHandler _hidHandler;
-        private ProfileHandler _panelProfileHandler;
+        private ProfileHandler _profileHandler;
         private readonly string _windowName = "DCSFlightpanels ";
         private readonly Timer _exceptionTimer = new Timer(1000);
         private readonly Timer _statusMessagesTimer = new Timer(1000);
@@ -125,15 +125,15 @@ namespace DCSFlightpanels
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
-                _panelProfileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
-                _panelProfileHandler.Attach(this);
-                _panelProfileHandler.AttachUserMessageHandler(this);
-                if (!_panelProfileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
+                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
+                _profileHandler.Attach(this);
+                _profileHandler.AttachUserMessageHandler(this);
+                if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
                 {
                     CreateNewProfile();
                 }
 
-                _dcsAirframe = _panelProfileHandler.Airframe;
+                _dcsAirframe = _profileHandler.Airframe;
 
                 if (!Common.PartialDCSBIOSEnabled())
                 {
@@ -203,9 +203,9 @@ namespace DCSFlightpanels
             var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
             if (chooseProfileModuleWindow.ShowDialog() == true)
             {
-                _panelProfileHandler.NewProfile();
+                _profileHandler.NewProfile();
                 Common.UseGenericRadio = chooseProfileModuleWindow.UseGenericRadio;
-                _panelProfileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
+                _profileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
                 SendEventRegardingForwardingOfKeys();
             }
 
@@ -288,8 +288,8 @@ namespace DCSFlightpanels
                         var saitekPanel = saitekPanelUserControl.GetSaitekPanel();
                         if (saitekPanel != null)
                         {
-                            _panelProfileHandler.Detach(saitekPanel);
-                            saitekPanel.Detach(_panelProfileHandler);
+                            _profileHandler.Detach(saitekPanel);
+                            saitekPanel.Detach(_profileHandler);
                             saitekPanel.Detach((IProfileHandlerListener) this);
                             _dcsBios?.DetachDataReceivedListener(saitekPanel);
 
@@ -330,8 +330,8 @@ namespace DCSFlightpanels
         public void Attach(GamingPanel gamingPanel)
         {
             OnForwardKeyPressesChanged += gamingPanel.SetForwardKeyPresses;
-            _panelProfileHandler.Attach(gamingPanel);
-            gamingPanel.Attach(_panelProfileHandler);
+            _profileHandler.Attach(gamingPanel);
+            gamingPanel.Attach(_profileHandler);
             gamingPanel.Attach((IProfileHandlerListener)this);
             _dcsBios?.AttachDataReceivedListener(gamingPanel);
         }
@@ -339,14 +339,14 @@ namespace DCSFlightpanels
         public void Detach(GamingPanel gamingPanel)
         {
             OnForwardKeyPressesChanged -= gamingPanel.SetForwardKeyPresses;
-            _panelProfileHandler.Detach(gamingPanel);
-            gamingPanel.Detach(_panelProfileHandler);
+            _profileHandler.Detach(gamingPanel);
+            gamingPanel.Detach(_profileHandler);
             gamingPanel.Detach((IProfileHandlerListener)this);
         }
 
         public DCSAirframe GetAirframe()
         {
-            return _panelProfileHandler.Airframe;
+            return _profileHandler.Airframe;
         }
 
         private void SearchForPanels()
@@ -370,7 +370,7 @@ namespace DCSFlightpanels
                                     tabItem.Header = "PZ55";
                                     var switchPanelPZ55UserControl = new SwitchPanelPZ55UserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(switchPanelPZ55UserControl);
-                                    _panelProfileHandler.Attach(switchPanelPZ55UserControl);
+                                    _profileHandler.Attach(switchPanelPZ55UserControl);
                                     tabItem.Content = switchPanelPZ55UserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
@@ -379,156 +379,156 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ69";
-                                    if (_panelProfileHandler.Airframe == DCSAirframe.KEYEMULATOR)
+                                    if (_profileHandler.Airframe == DCSAirframe.KEYEMULATOR)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled) || _panelProfileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
+                                    else if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled) || _profileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.A10C && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.A10C && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
                                         //var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFullEmulator(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.UH1H && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.UH1H && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlUH1H(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Mig21Bis && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.Mig21Bis && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMiG21Bis(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Ka50 && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.Ka50 && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Mi8 && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.Mi8 && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Bf109 && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.Bf109 && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.Fw190d9 && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.Fw190d9 && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.P51D && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.P51D && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.F86F && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.F86F && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF86F(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.SpitfireLFMkIX && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.SpitfireLFMkIX && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSpitfireLFMkIX(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.AJS37 && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.AJS37 && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAJS37(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.SA342M && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.SA342M && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.FA18C && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.FA18C && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFA18C(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.M2000C && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.M2000C && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlM2000C(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.F5E && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.F5E && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.F14B && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.F14B && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
-                                    else if (_panelProfileHandler.Airframe == DCSAirframe.AV8BNA && !Common.UseGenericRadio)
+                                    else if (_profileHandler.Airframe == DCSAirframe.AV8BNA && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
@@ -536,7 +536,7 @@ namespace DCSFlightpanels
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulatorFull(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
-                                        _panelProfileHandler.Attach(radioPanelPZ69UserControl);
+                                        _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
                                         TabControlPanels.Items.Add(tabItem);
                                     }
@@ -549,7 +549,7 @@ namespace DCSFlightpanels
                                     tabItem.Header = "PZ70";
                                     var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(multiPanelUserControl);
-                                    _panelProfileHandler.Attach(multiPanelUserControl);
+                                    _profileHandler.Attach(multiPanelUserControl);
                                     tabItem.Content = multiPanelUserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
@@ -560,7 +560,7 @@ namespace DCSFlightpanels
                                     tabItem.Header = "B.I.P.";
                                     var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
                                     _panelUserControls.Add(backLitPanelUserControl);
-                                    _panelProfileHandler.Attach(backLitPanelUserControl);
+                                    _profileHandler.Attach(backLitPanelUserControl);
                                     tabItem.Content = backLitPanelUserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
@@ -571,7 +571,7 @@ namespace DCSFlightpanels
                                     tabItem.Header = "TPM";
                                     var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this);
                                     _panelUserControls.Add(tpmPanelUserControl);
-                                    _panelProfileHandler.Attach(tpmPanelUserControl);
+                                    _profileHandler.Attach(tpmPanelUserControl);
                                     tabItem.Content = tpmPanelUserControl;
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
@@ -587,7 +587,7 @@ namespace DCSFlightpanels
                                 tabItemStreamDeck.Header = "StreamDeck";
                                 var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton, tabItemStreamDeck, this);
                                 _panelUserControls.Add(streamDeckUserControl);
-                                _panelProfileHandler.Attach(streamDeckUserControl);
+                                _profileHandler.Attach(streamDeckUserControl);
                                 tabItemStreamDeck.Content = streamDeckUserControl;
                                 TabControlPanels.Items.Add(tabItemStreamDeck);
                                 break;
@@ -847,13 +847,13 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (_panelProfileHandler.Airframe != _dcsAirframe)
+                if (_profileHandler.Airframe != _dcsAirframe)
                 {
-                    _dcsAirframe = _panelProfileHandler.Airframe;
+                    _dcsAirframe = _profileHandler.Airframe;
                     SetApplicationMode(_dcsAirframe);
                 }
 
-                MenuItemUseNS430.IsChecked = _panelProfileHandler.UseNS430;
+                MenuItemUseNS430.IsChecked = _profileHandler.UseNS430;
                 SetWindowState();
             }
             catch (Exception ex)
@@ -1047,20 +1047,20 @@ namespace DCSFlightpanels
 
         private void SetWindowTitle()
         {
-            if (_panelProfileHandler.Airframe == DCSAirframe.NOFRAMELOADEDYET)
+            if (_profileHandler.Airframe == DCSAirframe.NOFRAMELOADEDYET)
             {
                 Title = "";
             }
-            else if (_panelProfileHandler.IsNewProfile)
+            else if (_profileHandler.IsNewProfile)
             {
                 Title = _windowName; // + "      " + Common.GetLocalIPAddress();
             }
             else
             {
-                Title = _windowName + _panelProfileHandler.Filename; // + "      " + Common.GetLocalIPAddress();
+                Title = _windowName + _profileHandler.Filename; // + "      " + Common.GetLocalIPAddress();
             }
 
-            if (_panelProfileHandler.IsDirty)
+            if (_profileHandler.IsDirty)
             {
                 Title = Title + " *";
             }
@@ -1083,12 +1083,12 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (_panelProfileHandler.IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (_profileHandler.IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                 {
                     e.Cancel = true;
                 }
 
-                Settings.Default.LastProfileFileUsed = _panelProfileHandler.LastProfileUsed;
+                Settings.Default.LastProfileFileUsed = _profileHandler.LastProfileUsed;
                 Settings.Default.Save();
             }
             catch (Exception ex)
@@ -1204,7 +1204,7 @@ namespace DCSFlightpanels
 
         private void SaveNewOrExistingProfile()
         {
-            _panelProfileHandler.SaveProfile();
+            _profileHandler.SaveProfile();
             SetWindowState();
         }
 
@@ -1212,9 +1212,9 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (_panelProfileHandler.SaveAsNewProfile())
+                if (_profileHandler.SaveAsNewProfile())
                 {
-                    _panelProfileHandler.IsDirty = true;
+                    _profileHandler.IsDirty = true;
                     SetWindowState();
                 }
             }
@@ -1228,11 +1228,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                _panelProfileHandler.NewProfile();
+                _profileHandler.NewProfile();
                 var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
                 chooseProfileModuleWindow.ShowDialog();
                 Common.UseGenericRadio = chooseProfileModuleWindow.UseGenericRadio;
-                _panelProfileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
+                _profileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
                 SetWindowState();
             }
             catch (Exception ex)
@@ -1261,7 +1261,7 @@ namespace DCSFlightpanels
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    _panelProfileHandler.OpenProfile();
+                    _profileHandler.OpenProfile();
                 }
                 finally
                 {
@@ -1277,10 +1277,10 @@ namespace DCSFlightpanels
         private void CloseProfile()
         {
             CloseTabItems();
-            _panelProfileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
-            _panelProfileHandler.Attach(this);
-            _panelProfileHandler.AttachUserMessageHandler(this);
-            _dcsAirframe = _panelProfileHandler.Airframe;
+            _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
+            _profileHandler.Attach(this);
+            _profileHandler.AttachUserMessageHandler(this);
+            _dcsAirframe = _profileHandler.Airframe;
             SetApplicationMode(_dcsAirframe);
             SetWindowTitle();
             SetWindowState();
@@ -1335,7 +1335,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                _panelProfileHandler.OpenProfile();
+                _profileHandler.OpenProfile();
             }
             catch (Exception ex)
             {
@@ -1357,7 +1357,7 @@ namespace DCSFlightpanels
 
         private void RefreshProfile()
         {
-            _panelProfileHandler.ReloadProfile();
+            _profileHandler.ReloadProfile();
             SetWindowState();
         }
 
@@ -1404,17 +1404,17 @@ namespace DCSFlightpanels
 
         private void OpenProfileInNotepad()
         {
-            Process.Start(_panelProfileHandler.Filename);
+            Process.Start(_profileHandler.Filename);
         }
 
         private void SetWindowState()
         {
-            MenuItemSaveAs.IsEnabled = _panelProfileHandler.ProfileLoaded;
-            MenuItemCloseProfile.IsEnabled = _panelProfileHandler.ProfileLoaded;
-            ButtonImageSave.IsEnabled = _panelProfileHandler.IsDirty;
-            MenuItemSave.IsEnabled = _panelProfileHandler.IsDirty && !_panelProfileHandler.IsNewProfile;
-            ButtonImageRefresh.IsEnabled = !_panelProfileHandler.IsNewProfile && !_panelProfileHandler.IsDirty;
-            ButtonImageNotepad.IsEnabled = !_panelProfileHandler.IsNewProfile && !_panelProfileHandler.IsDirty;
+            MenuItemSaveAs.IsEnabled = _profileHandler.ProfileLoaded;
+            MenuItemCloseProfile.IsEnabled = _profileHandler.ProfileLoaded;
+            ButtonImageSave.IsEnabled = _profileHandler.IsDirty;
+            MenuItemSave.IsEnabled = _profileHandler.IsDirty && !_profileHandler.IsNewProfile;
+            ButtonImageRefresh.IsEnabled = !_profileHandler.IsNewProfile && !_profileHandler.IsDirty;
+            ButtonImageNotepad.IsEnabled = !_profileHandler.IsNewProfile && !_profileHandler.IsDirty;
             SetWindowTitle();
         }
 
@@ -1616,7 +1616,7 @@ namespace DCSFlightpanels
                     _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
                     _dcsBios.Shutdown();
                     _dcsBios.Startup();
-                    _panelProfileHandler.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    _profileHandler.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
                 }
 
                 if (settingsWindow.SRSChanged)
@@ -1762,7 +1762,7 @@ namespace DCSFlightpanels
             try
             {
                 ((MenuItem)sender).IsChecked = !((MenuItem)sender).IsChecked;
-                _panelProfileHandler.UseNS430 = ((MenuItem)sender).IsChecked;
+                _profileHandler.UseNS430 = ((MenuItem)sender).IsChecked;
                 SetWindowState();
             }
             catch (Exception ex)

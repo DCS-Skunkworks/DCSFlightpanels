@@ -278,8 +278,8 @@ namespace DCSFlightpanels.PanelUserControls
                     var sequenceList = keySequenceWindow.GetSequence;
                     if (sequenceList.Count > 1)
                     {
-                        var osKeyPress = new KeyPress("Key press sequence", sequenceList);
-                        ((TagDataClassTPM)textBox.Tag).KeyPress = osKeyPress;
+                        var keyPress = new KeyPress("Key press sequence", sequenceList);
+                        ((TagDataClassTPM)textBox.Tag).KeyPress = keyPress;
                         ((TagDataClassTPM)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
@@ -291,8 +291,8 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         //If only one press was created treat it as a simple keypress
                         ((TagDataClassTPM)textBox.Tag).ClearAll();
-                        var osKeyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        ((TagDataClassTPM)textBox.Tag).KeyPress = osKeyPress;
+                        var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
+                        ((TagDataClassTPM)textBox.Tag).KeyPress = keyPress;
                         ((TagDataClassTPM)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
@@ -1082,7 +1082,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 KeyPressLength keyPressLength;
-                if (!((TagDataClassTPM)textBox.Tag).ContainsOSKeyPress() || ((TagDataClassTPM)textBox.Tag).KeyPress.KeySequence.Count == 0)
+                if (!((TagDataClassTPM)textBox.Tag).ContainsKeyPress() || ((TagDataClassTPM)textBox.Tag).KeyPress.KeySequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
@@ -1380,8 +1380,8 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                var osKeyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
-                ((TagDataClassTPM)textBox.Tag).KeyPress = osKeyPress;
+                var keyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
+                ((TagDataClassTPM)textBox.Tag).KeyPress = keyPress;
                 ((TagDataClassTPM)textBox.Tag).KeyPress.Information = "VK_NULL";
                 textBox.Text = vkNull;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);

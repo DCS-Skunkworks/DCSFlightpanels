@@ -7,16 +7,7 @@ namespace NonVisuals.StreamDeck
 {
     public class OSCommandBindingStreamDeck : OSCommandBinding, IStreamDeckButtonAction
     {
-        /*
-         This class binds a physical button on the Stream Deck with a Windows OS command.
-         */
-        private StreamDeckButtonNames _streamDeckButtonName;
-
-
-        public EnumStreamDeckButtonActionType GetActionType()
-        {
-            return EnumStreamDeckButtonActionType.OSCommand;
-        }
+        public EnumStreamDeckButtonActionType ActionType => EnumStreamDeckButtonActionType.OSCommand;
 
         public void Execute()
         {
@@ -25,7 +16,7 @@ namespace NonVisuals.StreamDeck
 
         internal override void ImportSettings(string settings)
         {
-            if (string.IsNullOrEmpty(settings))
+     /*       if (string.IsNullOrEmpty(settings))
             {
                 throw new ArgumentException("Import string empty. (WindowsBinding)");
             }
@@ -44,24 +35,20 @@ namespace NonVisuals.StreamDeck
                 //OSCommand{FILE\o/ARGUMENTS\o/NAME}
                 OSCommandObject = new OSCommand();
                 OSCommandObject.ImportString(parameters[1]);
-            }
-        }
-
-        public StreamDeckButtonNames StreamDeckButtonName
-        {
-            get => _streamDeckButtonName;
-            set => _streamDeckButtonName = value;
+            }*/
         }
 
         public override string ExportSettings()
         {
-            if (OSCommandObject == null || OSCommandObject.IsEmpty)
+            /*if (OSCommandObject == null || OSCommandObject.IsEmpty)
             {
                 return null;
             }
             Common.DebugP(Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
             return "StreamDeckOS{" + onStr + Enum.GetName(typeof(StreamDeckButtonNames), StreamDeckButtonName) + "}" + SeparatorChars + OSCommandObject.ExportString();
+            */
+            return null;
         }
     }
 }

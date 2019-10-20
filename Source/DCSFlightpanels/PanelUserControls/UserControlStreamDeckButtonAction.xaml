@@ -11,71 +11,73 @@
     <UserControl.Resources>
     </UserControl.Resources>
 
-    <Grid Margin="10,0,10,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10*"/>
-        </Grid.ColumnDefinitions>
+    <GroupBox Header="Button Action">
+        <Grid Margin="10,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Collapsed">
-            <Label Content="Key Press / Sequence when Button Pressed" FontSize="10" Height="23"   />
-            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOn" Background="LightSteelBlue" />
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Button Name="ButtonAddEditKeySequenceButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOn_OnClick"/>
-                <Button Name="ButtonDeleteKeySequenceButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteKeySequenceButtonOn_OnClick" />
+            <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Collapsed">
+                <Label Content="Key Press / Sequence when Button Pressed" FontSize="10" Height="23"   />
+                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOn" Background="LightSteelBlue" />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonAddEditKeySequenceButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOn_OnClick"/>
+                    <Button Name="ButtonDeleteKeySequenceButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteKeySequenceButtonOn_OnClick" />
+                </StackPanel>
+                <Label Content="Key Press / Sequence when Button Released" FontSize="10" Height="23"   />
+                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOff" Background="LightSteelBlue" />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonAddEditKeySequenceButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOff_OnClick"/>
+                    <Button Name="ButtonDeleteKeySequenceButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteKeySequenceButtonOff_OnClick"/>
+                </StackPanel>
+                <Button Name="ButtonFocus" Width="100" Height="5" Background="Transparent" Content="              " Margin="0,10,0,0"/>
             </StackPanel>
-            <Label Content="Key Press / Sequence when Button Released" FontSize="10" Height="23"   />
-            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOff" Background="LightSteelBlue" />
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Button Name="ButtonAddEditKeySequenceButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOff_OnClick"/>
-                <Button Name="ButtonDeleteKeySequenceButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteKeySequenceButtonOff_OnClick"/>
+
+
+            <StackPanel Name="StackPanelButtonDCSBIOSSettings"  Visibility="Collapsed">
+                <Label Content="DCSBIOS Action when Button Pressed" FontSize="10" Height="23"   />
+                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOn"  IsEnabled="False" Background="LightSteelBlue"  />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonAddEditDCSBIOSActionButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditDCSBIOSActionButtonOn_OnClick"/>
+                    <Button Name="ButtonDeleteDCSBIOSActionButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSActionButtonOn_OnClick"/>
+                </StackPanel>
+                <Label Content="DCSBIOS Action when Button Released" FontSize="10" Height="23"  Margin="0,10,2,0"  />
+                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOff" IsEnabled="False" Background="LightSteelBlue"  />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonAddEditDCSBIOSActionButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditDCSBIOSActionButtonOff_OnClick"/>
+                    <Button Name="ButtonDeleteDCSBIOSActionButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSActionButtonOff_OnClick"/>
+                </StackPanel>
             </StackPanel>
-            <Button Name="ButtonFocus" Width="100" Height="5" Background="Transparent" Content="              " Margin="0,10,0,0"/>
-        </StackPanel>
 
 
-        <StackPanel Name="StackPanelButtonDCSBIOSSettings"  Visibility="Collapsed">
-            <Label Content="DCSBIOS Action when Button Pressed" FontSize="10" Height="23"   />
-            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOn"  IsEnabled="False" Background="LightSteelBlue"  />
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Button Name="ButtonAddEditDCSBIOSActionButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditDCSBIOSActionButtonOn_OnClick"/>
-                <Button Name="ButtonDeleteDCSBIOSActionButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSActionButtonOn_OnClick"/>
+            <StackPanel Name="StackPanelButtonOSCommandSettings"  Visibility="Collapsed">
+                <Label Content="OS Command when Button Pressed" FontSize="10" Height="23"   />
+                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOn"  IsEnabled="False" Background="LightSteelBlue"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonAddEditOSCommandButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditOSCommandButtonOn_OnClick"/>
+                    <Button Name="ButtonDeleteOSCommandButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteOSCommandButtonOn_OnClick" />
+                </StackPanel>
+                <Label Content="OS Command when Button Released" FontSize="10" Height="23"   />
+                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOff" IsEnabled="False" Background="LightSteelBlue"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonAddEditOSCommandButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditOSCommandButtonOff_OnClick"/>
+                    <Button Name="ButtonDeleteOSCommandButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteOSCommandButtonOff_OnClick"/>
+                </StackPanel>
             </StackPanel>
-            <Label Content="DCSBIOS Action when Button Released" FontSize="10" Height="23"  Margin="0,10,2,0"  />
-            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOff" IsEnabled="False" Background="LightSteelBlue"  />
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Button Name="ButtonAddEditDCSBIOSActionButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditDCSBIOSActionButtonOff_OnClick"/>
-                <Button Name="ButtonDeleteDCSBIOSActionButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSActionButtonOff_OnClick"/>
+
+            <StackPanel Name="StackPanelButtonSRSSettings"  Visibility="Collapsed">
+                <Label Content="TO BE DONE" FontSize="10" Height="23"   />
             </StackPanel>
-        </StackPanel>
 
-
-        <StackPanel Name="StackPanelButtonOSCommandSettings"  Visibility="Collapsed">
-            <Label Content="OS Command when Button Pressed" FontSize="10" Height="23"   />
-            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOn"  IsEnabled="False" Background="LightSteelBlue"/>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Button Name="ButtonAddEditOSCommandButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditOSCommandButtonOn_OnClick"/>
-                <Button Name="ButtonDeleteOSCommandButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteOSCommandButtonOn_OnClick" />
+            <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Visible">
+                <Label Content="Layer to show when Button Pressed" FontSize="10" Height="23"   />
+                <TextBox Name="TextBoxLayerNavButtonOn" Visibility="Collapsed"></TextBox>
+                <ComboBox Name="ComboBoxLayerNavigationButtonOn" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButtonOn_OnSelectionChanged"/>
+                <Label Content="Layer to show when Button Released" FontSize="10" Height="23"   />
+                <TextBox Name="TextBoxLayerNavButtonOff" Visibility="Collapsed"></TextBox>
+                <ComboBox Name="ComboBoxLayerNavigationButtonOff" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButtonOff_OnSelectionChanged"/>
             </StackPanel>
-            <Label Content="OS Command when Button Released" FontSize="10" Height="23"   />
-            <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOff" IsEnabled="False" Background="LightSteelBlue"/>
-            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                <Button Name="ButtonAddEditOSCommandButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditOSCommandButtonOff_OnClick"/>
-                <Button Name="ButtonDeleteOSCommandButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteOSCommandButtonOff_OnClick"/>
-            </StackPanel>
-        </StackPanel>
 
-        <StackPanel Name="StackPanelButtonSRSSettings"  Visibility="Collapsed">
-            <Label Content="TO BE DONE" FontSize="10" Height="23"   />
-        </StackPanel>
-
-        <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Visible">
-            <Label Content="Layer to show when Button Pressed" FontSize="10" Height="23"   />
-            <TextBox Name="TextBoxLayerNavButtonOn" Visibility="Collapsed"></TextBox>
-            <ComboBox Name="ComboBoxLayerNavigationButtonOn" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButtonOn_OnSelectionChanged"/>
-            <Label Content="Layer to show when Button Released" FontSize="10" Height="23"   />
-            <TextBox Name="TextBoxLayerNavButtonOff" Visibility="Collapsed"></TextBox>
-            <ComboBox Name="ComboBoxLayerNavigationButtonOff" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButtonOff_OnSelectionChanged"/>
-        </StackPanel>
-
-    </Grid>
+        </Grid>
+    </GroupBox>
 </panelUserControls:UserControlBase>

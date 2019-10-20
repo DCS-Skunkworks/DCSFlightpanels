@@ -79,7 +79,7 @@
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
-    <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\DCSBIOSOutputBindingStreamDeck.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingStreamDeck.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ69.cs" />

@@ -16,59 +16,6 @@ namespace NonVisuals
 
     public class ProfileHandler : IProfileHandlerListener
     {
-        public delegate void ProfileReadFromFileEventHandler(object sender, SettingsReadFromFileEventArgs e);
-        public event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
-
-        public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
-        public event SavePanelSettingsEventHandler OnSavePanelSettings;
-
-        public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
-        public event AirframeSelectedEventHandler OnAirframeSelected;
-
-        public delegate void ClearPanelSettingsEventHandler(object sender);
-        public event ClearPanelSettingsEventHandler OnClearPanelSettings;
-
-        public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
-        public event UserMessageEventHandler OnUserMessageEventHandler;
-
-        public void Attach(GamingPanel gamingPanel)
-        {
-            OnSettingsReadFromFile += gamingPanel.PanelSettingsReadFromFile;
-            OnSavePanelSettings += gamingPanel.SavePanelSettings;
-            OnClearPanelSettings += gamingPanel.ClearPanelSettings;
-            OnAirframeSelected += gamingPanel.SelectedAirframe;
-        }
-
-        public void Detach(GamingPanel gamingPanel)
-        {
-            OnSettingsReadFromFile -= gamingPanel.PanelSettingsReadFromFile;
-            OnSavePanelSettings -= gamingPanel.SavePanelSettings;
-            OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
-            OnAirframeSelected -= gamingPanel.SelectedAirframe;
-        }
-
-        public void Attach(IProfileHandlerListener gamingPanelSettingsListener)
-        {
-            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelSettingsReadFromFile;
-            OnAirframeSelected += gamingPanelSettingsListener.SelectedAirframe;
-        }
-
-        public void Detach(IProfileHandlerListener gamingPanelSettingsListener)
-        {
-            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelSettingsReadFromFile;
-            OnAirframeSelected -= gamingPanelSettingsListener.SelectedAirframe;
-        }
-
-        public void AttachUserMessageHandler(IUserMessageHandler userMessageHandler)
-        {
-            OnUserMessageEventHandler += userMessageHandler.UserMessage;
-        }
-
-        public void DetachUserMessageHandler(IUserMessageHandler userMessageHandler)
-        {
-            OnUserMessageEventHandler -= userMessageHandler.UserMessage;
-        }
-
         //Both directory and filename
         private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         private string _lastProfileUsed = "";
@@ -84,6 +31,15 @@ namespace NonVisuals
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private bool _profileLoaded;
+
+
+
+
+
+
+
+
+
 
         public ProfileHandler(string jsonDirectory)
         {
@@ -642,6 +598,60 @@ namespace NonVisuals
                 }
                 _isDirty = true;
             }
+        }
+
+
+        public delegate void ProfileReadFromFileEventHandler(object sender, SettingsReadFromFileEventArgs e);
+        public event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
+
+        public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
+        public event SavePanelSettingsEventHandler OnSavePanelSettings;
+
+        public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
+        public event AirframeSelectedEventHandler OnAirframeSelected;
+
+        public delegate void ClearPanelSettingsEventHandler(object sender);
+        public event ClearPanelSettingsEventHandler OnClearPanelSettings;
+
+        public delegate void UserMessageEventHandler(object sender, UserMessageEventArgs e);
+        public event UserMessageEventHandler OnUserMessageEventHandler;
+
+        public void Attach(GamingPanel gamingPanel)
+        {
+            OnSettingsReadFromFile += gamingPanel.PanelSettingsReadFromFile;
+            OnSavePanelSettings += gamingPanel.SavePanelSettings;
+            OnClearPanelSettings += gamingPanel.ClearPanelSettings;
+            OnAirframeSelected += gamingPanel.SelectedAirframe;
+        }
+
+        public void Detach(GamingPanel gamingPanel)
+        {
+            OnSettingsReadFromFile -= gamingPanel.PanelSettingsReadFromFile;
+            OnSavePanelSettings -= gamingPanel.SavePanelSettings;
+            OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
+            OnAirframeSelected -= gamingPanel.SelectedAirframe;
+        }
+
+        public void Attach(IProfileHandlerListener gamingPanelSettingsListener)
+        {
+            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnAirframeSelected += gamingPanelSettingsListener.SelectedAirframe;
+        }
+
+        public void Detach(IProfileHandlerListener gamingPanelSettingsListener)
+        {
+            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnAirframeSelected -= gamingPanelSettingsListener.SelectedAirframe;
+        }
+
+        public void AttachUserMessageHandler(IUserMessageHandler userMessageHandler)
+        {
+            OnUserMessageEventHandler += userMessageHandler.UserMessage;
+        }
+
+        public void DetachUserMessageHandler(IUserMessageHandler userMessageHandler)
+        {
+            OnUserMessageEventHandler -= userMessageHandler.UserMessage;
         }
 
     }

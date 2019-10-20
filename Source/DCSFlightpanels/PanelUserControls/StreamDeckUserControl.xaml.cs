@@ -28,6 +28,7 @@ namespace DCSFlightpanels.PanelUserControls
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
+        private List<RadioButton> _radioButtonActionsList = new List<RadioButton>();
 
         public StreamDeckUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -54,6 +55,7 @@ namespace DCSFlightpanels.PanelUserControls
             GenerateButtonImages(StreamDeckButtonNames.BUTTON0_NO_BUTTON);
             ShowGraphicConfiguration();
             SetFormState();
+            SetRadioButtonLists();
             UCStreamDeckButtonAction.Update();
         }
 
@@ -73,9 +75,13 @@ namespace DCSFlightpanels.PanelUserControls
                 UCStreamDeckButtonAction.SetFormState();
                 UCStreamDeckButtonImage.SetFormState();
 
-                ButtonAcceptButtonConfiguration.IsEnabled = UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty;
-                ButtonCancelButtonConfigurationChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty;
-                ButtonDeleteButtonConfiguration.IsEnabled = UCStreamDeckButtonAction.HasConfig || UCStreamDeckButtonImage.HasConfig;
+                ButtonAcceptActionConfiguration.IsEnabled = UCStreamDeckButtonAction.IsDirty;
+                ButtonCancelActionConfigurationChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty && UCStreamDeckButtonAction.HasConfig;
+                ButtonDeleteActionConfiguration.IsEnabled = UCStreamDeckButtonAction.HasConfig;
+
+                ButtonAcceptImageConfiguration.IsEnabled = UCStreamDeckButtonImage.IsDirty;
+                ButtonCancelImageConfigurationChanges.IsEnabled = UCStreamDeckButtonImage.IsDirty && UCStreamDeckButtonImage.HasConfig;
+                ButtonDeleteImageConfiguration.IsEnabled = UCStreamDeckButtonImage.HasConfig;
 
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
@@ -90,6 +96,20 @@ namespace DCSFlightpanels.PanelUserControls
 
         public void ChildChangesMade()
         {
+            if (UCStreamDeckButtonAction.IsDirty)
+            {
+                foreach (var radioButton in _radioButtonActionsList)
+                {
+                    radioButton.IsEnabled = radioButton.IsChecked == true;
+                }
+            }
+            else
+            {
+                foreach (var radioButton in _radioButtonActionsList)
+                {
+                    radioButton.IsEnabled = true;
+                }
+            }
             SetFormState();
         }
 
@@ -202,9 +222,13 @@ namespace DCSFlightpanels.PanelUserControls
             var tagDataClass = GetSelectedImageDataClass();
             return tagDataClass?.StreamDeckButtonName ?? StreamDeckButtonNames.BUTTON0_NO_BUTTON;
         }
-
-
         
+        public StreamDeckButton GetSelectedStreamDeckButton()
+        {
+            var tagDataClass = GetSelectedImageDataClass();
+            return _streamDeck.GetCurrentLayerStreamDeckButton(tagDataClass.StreamDeckButtonName);
+        }
+
         public string GetName()
         {
             return GetType().Name;
@@ -499,6 +523,7 @@ namespace DCSFlightpanels.PanelUserControls
                 
                 SetCheckboxHomeLayer();
 
+                _streamDeck.CurrentLayer = ComboBoxLayers.Text;
                 SetFormState();
             }
             catch (Exception ex)
@@ -540,6 +565,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 ComboBoxLayers.SelectedIndex = 0;
             }
+
+            _streamDeck.CurrentLayer = ComboBoxLayers.Text;
             ComboBoxLayers.SelectionChanged += ComboBoxLayers_OnSelectionChanged;
             SetCheckboxHomeLayer();
         }
@@ -563,6 +590,34 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(20135444, ex);
             }
         }
+        
+        private void ButtonImage_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var image = (Image)sender;
+                var imageTagClass = (TagDataClassButtonImage)image.Tag;
+
+                if (GetSelectedButtonName() != imageTagClass.StreamDeckButtonName && (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty))
+                {
+                    if (MessageBox.Show("Discard Changes to " + GetSelectedButtonName() + " ?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        UCStreamDeckButtonAction.Clear();
+                        UCStreamDeckButtonImage.Clear();
+                        SetFormState();
+                    }
+                    else
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
 
         private void ButtonImage_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -571,21 +626,12 @@ namespace DCSFlightpanels.PanelUserControls
                 var image = (Image)sender;
                 var imageTagClass = (TagDataClassButtonImage) image.Tag;
                 
-                if (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty)
-                {
-                    if (MessageBox.Show("Discard Changes to " + GetSelectedButtonName() + " ?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        UCStreamDeckButtonAction.Clear();
-                        UCStreamDeckButtonImage.Clear();
-                    }
-                    else
-                    {
-                        e.Handled = true;
-                        return;
-                    }
-                }
+
                 GenerateButtonImages(imageTagClass.StreamDeckButtonName);
-                
+
+                var streamDeckButton = _streamDeck.GetCurrentLayerStreamDeckButton(imageTagClass.StreamDeckButtonName);
+                SetButtonActionType();
+                UCStreamDeckButtonAction.ShowActionConfiguration(streamDeckButton);
                 SetFormState();
             }
             catch (Exception ex)
@@ -606,9 +652,9 @@ namespace DCSFlightpanels.PanelUserControls
                 using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
                 {
                     jsonWriter.Formatting = Formatting.Indented;
-                    jsonSerializer.Serialize(jsonWriter, _streamDeck.KeyBindingsHashSet);
+                    /*jsonSerializer.Serialize(jsonWriter, _streamDeck.KeyBindingsHashSet);
                     jsonSerializer.Serialize(jsonWriter, _streamDeck.DCSBiosBindings);
-                    jsonSerializer.Serialize(jsonWriter, _streamDeck.OSCommandHashSet);
+                    jsonSerializer.Serialize(jsonWriter, _streamDeck.OSCommandHashSet);*/
                 }
             }
 
@@ -626,8 +672,50 @@ namespace DCSFlightpanels.PanelUserControls
             */
         }
 
+        public void SetButtonActionType()
+        {
+            var streamDeckButton = GetSelectedStreamDeckButton();
+            foreach (var radioButton in _radioButtonActionsList)
+            {
+                radioButton.IsChecked = false;
+            }
 
-        public EnumStreamDeckButtonActionType GetButtonActionType()
+            if (streamDeckButton.StreamDeckButtonActionForPress == null)
+            {
+                return;
+            }
+
+            switch (streamDeckButton.StreamDeckButtonActionForPress.ActionType)
+            {
+                case EnumStreamDeckButtonActionType.KeyPress:
+                {
+                    RadioButtonKeyPress.IsChecked = true;
+                    break;
+                }
+                case EnumStreamDeckButtonActionType.DCSBIOS:
+                {
+                    RadioButtonDCSBIOS.IsChecked = true;
+                    break;
+                }
+                case EnumStreamDeckButtonActionType.OSCommand:
+                {
+                    RadioButtonOSCommand.IsChecked = true;
+                    break;
+                }
+                case EnumStreamDeckButtonActionType.LayerNavigation:
+                {
+                    RadioButtonLayerNav.IsChecked = true;
+                    break;
+                }
+                case EnumStreamDeckButtonActionType.SRS:
+                {
+                    RadioButtonSRS.IsChecked = true;
+                    break;
+                }
+            }
+        }
+
+        public EnumStreamDeckButtonActionType GetSelectedActionType()
         {
             if (RadioButtonKeyPress.IsChecked == true)
             {
@@ -912,17 +1000,74 @@ namespace DCSFlightpanels.PanelUserControls
             DotImage15.Visibility = Visibility.Collapsed;
         }
 
-        private void RadioButtonButtonTypePress_OnClick(object sender, RoutedEventArgs e)
+        private void RadioButtonButtonActionTypePress_OnClick(object sender, RoutedEventArgs e)
         {
+            /*
+            if (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty)
+            {
+                if (MessageBox.Show("Discard Changes to " + GetSelectedButtonName() + " ?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    UCStreamDeckButtonAction.Clear();
+                    UCStreamDeckButtonImage.Clear();
+                }
+                else
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }*/
             SetFormState();
         }
 
-        private void ButtonAcceptButtonConfiguration_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonAcceptActionConfiguration_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 var streamDeckButton = GetSelectedStreamDeckLayer().GetStreamDeckButton(GetSelectedButtonName());
-                streamDeckButton.StreamDeckButtonActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonActionForPress();
+                streamDeckButton.StreamDeckButtonActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
+                streamDeckButton.StreamDeckButtonActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
+                _streamDeck.AddStreamDeckButtonToCurrentLayer(streamDeckButton);
+                UCStreamDeckButtonAction.StateSaved();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonDeleteActionConfiguration_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UCStreamDeckButtonAction.Clear();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonCancelActionConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                UCStreamDeckButtonAction.Clear();
+                UCStreamDeckButtonAction.ShowActionConfiguration(GetSelectedStreamDeckButton());
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonAcceptImageConfiguration_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //var streamDeckButton = GetSelectedStreamDeckLayer().GetStreamDeckButton(GetSelectedButtonName());
+                //streamDeckButton.StreamDeckButtonActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonActionForPress();
                 //streamDeckButton.StreamDeckButtonActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonActionFor;
                 //streamDeckButton.StreamDeckButtonAction = UCStreamDeckButtonAction.get
             }
@@ -932,11 +1077,10 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonDeleteButtonConfiguration_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonDeleteImageConfiguration_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                UCStreamDeckButtonAction.Clear();
                 UCStreamDeckButtonImage.Clear();
             }
             catch (Exception ex)
@@ -945,7 +1089,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonCancelButtonConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonCancelImageConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -961,6 +1105,14 @@ namespace DCSFlightpanels.PanelUserControls
             return _streamDeck.GetStreamDeckLayerNames();
         }
 
+        private void SetRadioButtonLists()
+        {
+            _radioButtonActionsList.Add(RadioButtonKeyPress);
+            _radioButtonActionsList.Add(RadioButtonDCSBIOS);
+            _radioButtonActionsList.Add(RadioButtonOSCommand);
+            _radioButtonActionsList.Add(RadioButtonLayerNav);
+            _radioButtonActionsList.Add(RadioButtonSRS);
+        }
     }
 
 
