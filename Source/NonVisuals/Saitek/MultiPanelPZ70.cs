@@ -236,6 +236,8 @@ namespace NonVisuals.Saitek
             e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
         }
 
+        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
+
         public override void ClearSettings()
         {
             _knobBindings.Clear();

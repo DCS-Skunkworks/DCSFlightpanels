@@ -33,7 +33,15 @@ namespace NonVisuals.StreamDeck
             set => _name = value;
         }
 
-        
+        public StreamDeckLayer GetEmptyLayer()
+        {
+            var result = new StreamDeckLayer();
+            result.Name = Name;
+            result.IsHomeLayer = IsHomeLayer;
+            result.IsActive = IsActive;
+            return result;
+        }
+
         public List<StreamDeckButton> StreamDeckButtons
         {
             get => _streamDeckButtons;

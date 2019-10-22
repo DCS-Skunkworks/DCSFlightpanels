@@ -110,6 +110,8 @@ namespace NonVisuals.Radios
             } while (i < 5);
         }
 
+        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e){}
+
         protected void SetPZ69DisplayBytesUnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
         {
 

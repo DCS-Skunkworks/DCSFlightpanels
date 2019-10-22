@@ -188,7 +188,7 @@ namespace NonVisuals
                  */
                 _profileLoaded = true;
                 var fileLines = File.ReadAllLines(_filename);
-                GamingPanelEnum currentPanelType = GamingPanelEnum.Unknown;
+                var currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;
                 string currentPanelSettingsVersion = null;
                 var insidePanel = false;
@@ -418,6 +418,7 @@ namespace NonVisuals
         public void SendEventRegardingSavingPanelConfigurations()
         {
             OnSavePanelSettings?.Invoke(this, new ProfileHandlerEventArgs(){ProfileHandlerEA =  this});
+            OnSavePanelSettingsJSON?.Invoke(this, new ProfileHandlerEventArgs() { ProfileHandlerEA = this });
         }
 
         public bool IsNewProfile => _isNewProfile;
@@ -457,6 +458,7 @@ namespace NonVisuals
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
                     _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanel");
+
                     foreach (var s in strings)
                     {
                         if (s != null)
@@ -464,7 +466,34 @@ namespace NonVisuals
                             _listPanelSettingsData.Add("\t" + s);
                         }
                     }
+
                     _listPanelSettingsData.Add("EndPanel");
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(1062, ex);
+            }
+        }
+
+        public void RegisterJSONProfileData(GamingPanel gamingPanel, string jsonData)
+        {
+            try
+            {
+                lock (_lockObject)
+                {
+                    if (string.IsNullOrEmpty(jsonData))
+                    {
+                        return;
+                    }
+
+                    _listPanelSettingsData.Add(Environment.NewLine);
+                    _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
+                    _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
+                    _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
+                    _listPanelSettingsData.Add("BeginPanelJSON");
+
+                    _listPanelSettingsData.Add("EndPanelJSON");
                 }
             }
             catch (Exception ex)
@@ -607,6 +636,9 @@ namespace NonVisuals
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
         public event SavePanelSettingsEventHandler OnSavePanelSettings;
 
+        public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
+        public event SavePanelSettingsEventHandler OnSavePanelSettingsJSON;
+
         public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
         public event AirframeSelectedEventHandler OnAirframeSelected;
 
@@ -620,6 +652,7 @@ namespace NonVisuals
         {
             OnSettingsReadFromFile += gamingPanel.PanelSettingsReadFromFile;
             OnSavePanelSettings += gamingPanel.SavePanelSettings;
+            OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings += gamingPanel.ClearPanelSettings;
             OnAirframeSelected += gamingPanel.SelectedAirframe;
         }
@@ -628,6 +661,7 @@ namespace NonVisuals
         {
             OnSettingsReadFromFile -= gamingPanel.PanelSettingsReadFromFile;
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
+            OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
             OnAirframeSelected -= gamingPanel.SelectedAirframe;
         }

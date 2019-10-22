@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Documents;
+using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
 {
@@ -11,23 +10,38 @@ namespace NonVisuals.StreamDeck
         private const string SEPARATOR_CHARS = "\\o/";
         private const string HOME_LAYER_ID = "*";
 
-        public string ExportLayers()
+        public List<StreamDeckLayer> GetEmptyLayers()
         {
-            var stringBuilder = new StringBuilder();
-            var layers = "Layers{";
+            var result = new List<StreamDeckLayer>();
+
             foreach (var layer in _layerList)
             {
-                if (layer.IsHomeLayer)
+                var found = false;
+                foreach (var emptyLayer in result)
                 {
-                    layers = layers + "|*" + layer.Name;
+                    if (layer.Name == emptyLayer.Name)
+                    {
+                        found = true;
+                    }
                 }
-                else
+                if (!found)
                 {
-                    layers = layers + "|" + layer.Name;
+                    result.Add(layer.GetEmptyLayer());
                 }
             }
-            layers += "}";
-            return layers;
+            return result;
+        }
+
+        HÄR!
+            also some form of JSON verification?
+        public string ExportJSONSettings()
+        {
+            return JsonConvert.SerializeObject(_layerList, Formatting.Indented);
+        }
+
+        public void ImportJSONSettings(string jsonText)
+        {
+            _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText);
         }
 
         private void Add(bool isActive, bool isHomeLayer, string layerName)

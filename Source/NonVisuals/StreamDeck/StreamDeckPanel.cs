@@ -15,7 +15,7 @@ namespace NonVisuals.StreamDeck
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
-        private StreamDeckLayerHandler _streamDeckLayerHandler = new StreamDeckLayerHandler();
+        private readonly StreamDeckLayerHandler _streamDeckLayerHandler = new StreamDeckLayerHandler();
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
                 
@@ -137,45 +137,14 @@ namespace NonVisuals.StreamDeck
             foreach (var setting in settings)
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.Contains(SettingsVersion()))
-                {/*
-                    if (setting.StartsWith("StreamDeckButton{"))
-                    {
-                        var keyBinding = new KeyBindingStreamDeck();
-                        keyBinding.ImportSettings(setting);
-                        _keyBindings.Add(keyBinding);
-                    }
-                    else if (setting.StartsWith("StreamDeckOS"))
-                    {
-                        var osCommand = new OSCommandBindingStreamDeck();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
-                    }
-                    else if (setting.StartsWith("StreamDeckDCSBIOSInput{"))
-                    {
-                        var dcsBIOSBindingStreamDeck = new DCSBIOSActionBindingStreamDeck();
-                        dcsBIOSBindingStreamDeck.ImportSettings(setting);
-                        _dcsBiosBindings.Add(dcsBIOSBindingStreamDeck);
-                    }
-                    else if (setting.StartsWith("StreamDeckBIPLink{"))
-                    {
-                        var bipLinkStreamDeck = new BIPLinkStreamDeck();
-                        bipLinkStreamDeck.ImportSettings(setting);
-                        _bipLinks.Add(bipLinkStreamDeck);
-                    }
-                    else if (setting.StartsWith("StreamDeckDCSBIOSOutput{"))
-                    {
-                        var dcsBIOSBindingLCDStreamDeck = new DCSBIOSOutputBindingStreamDeck();
-                        dcsBIOSBindingLCDStreamDeck.ImportSettings(setting);
-                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDStreamDeck);
-                    }
-                    else*/ if (setting.StartsWith("Layers{"))
+                {
+                    if (setting.StartsWith("Layers{"))
                     {
                         _streamDeckLayerHandler.AddLayer(setting);
                     }
                 }
             }
             SettingsLoading = false;
-            //_keyBindings = KeyBindingStreamDeck.SetNegators(_keyBindings);
             SettingsApplied();
         }
 
@@ -185,45 +154,17 @@ namespace NonVisuals.StreamDeck
             {
                 return null;
             }
+            return new List<string>();
+        }
+
+        private string ExportJSONSettings()
+        {
+            if (Closed)
+            {
+                return null;
+            }
             var result = new List<string>();
-            /*
-            foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.OSKeyPress != null)
-                {
-                    result.Add(keyBinding.ExportSettings());
-                }
-            }
-            foreach (var osCommand in _osCommandBindings)
-            {
-                if (!osCommand.OSCommandObject.IsEmpty)
-                {
-                    result.Add(osCommand.ExportSettings());
-                }
-            }
-            foreach (var dcsBiosBinding in _dcsBiosBindings)
-            {
-                if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
-                {
-                    result.Add(dcsBiosBinding.ExportSettings());
-                }
-            }
-            foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
-            {
-                if (dcsBiosBindingLCD.HasBinding)
-                {
-                    result.Add(dcsBiosBindingLCD.ExportSettings());
-                }
-            }
-            foreach (var bipLink in _bipLinks)
-            {
-                if (bipLink.BIPLights.Count > 0)
-                {
-                    result.Add(bipLink.ExportSettings());
-                }
-            }
-            */
-            result.Add(_streamDeckLayerHandler.ExportLayers());
+            
 
             return result;
         }
@@ -241,9 +182,11 @@ namespace NonVisuals.StreamDeck
             return result;
         }
         
-        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e){        }
+
+        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterJSONProfileData(this, ExportJSONSettings());
         }
 
         public override void ClearSettings()
@@ -384,6 +327,15 @@ namespace NonVisuals.StreamDeck
         public override string SettingsVersion()
         {
             return "2X";
+        }
+
+        public List<StreamDeckLayer> EmptyLayerList
+        {
+            /*
+             * Use this for specific layer handling, lightweight
+             * compared to LayerList with all buttons
+             */
+            get => _streamDeckLayerHandler.GetEmptyLayers();
         }
 
         public List<StreamDeckLayer> LayerList

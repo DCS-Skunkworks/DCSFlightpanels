@@ -537,25 +537,25 @@ namespace DCSFlightpanels.PanelUserControls
             LoadComboBoxLayers(selectedLayer.Name);
         }
 
-        private void LoadComboBoxLayers(string selectedLayerNane)
+        private void LoadComboBoxLayers(string selectedLayerName)
         {
             var selectedIndex = ComboBoxLayers.SelectedIndex;
 
             ComboBoxLayers.SelectionChanged -= ComboBoxLayers_OnSelectionChanged;
-            ComboBoxLayers.ItemsSource = _streamDeck.LayerList;
+            ComboBoxLayers.ItemsSource = _streamDeck.EmptyLayerList;
             ComboBoxLayers.Items.Refresh();
 
-            if (!string.IsNullOrEmpty(selectedLayerNane))
+            if (!string.IsNullOrEmpty(selectedLayerName))
             {
                 foreach (StreamDeckLayer layer in ComboBoxLayers.Items)
                 {
-                    if (layer.Name == selectedLayerNane)
+                    if (layer.Name == selectedLayerName)
                     {
                         ComboBoxLayers.SelectedItem = layer;
                         break;
                     }
                 }
-                ComboBoxLayers.SelectedItem = selectedLayerNane;
+                ComboBoxLayers.SelectedItem = selectedLayerName;
             }
             else if (selectedIndex >= 0 && selectedIndex < _streamDeck.LayerList.Count)
             {

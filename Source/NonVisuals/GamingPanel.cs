@@ -9,6 +9,199 @@ namespace NonVisuals
 
     public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener
     {
+        private int _vendorId;
+        private int _productId;
+        private Exception _lastException;
+        private readonly object _exceptionLockObject = new object();
+        private GamingPanelEnum _typeOfGamingPanel;
+        private bool _isDirty;
+        //private bool _isAttached;
+        private bool _forwardPanelEvent;
+        private static readonly object LockObject = new object();
+        private static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>();
+        private bool _settingsLoading = false;
+        /*
+         * IMPORTANT STUFF
+         */
+        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
+        private static readonly object UpdateCounterLockObject = new object();
+        private uint _count;
+        private bool _synchedOnce;
+        private readonly Guid _guid = Guid.NewGuid();
+        private readonly string _hash;
+        public abstract string SettingsVersion();
+        public abstract void Startup();
+        public abstract void Shutdown();
+        public abstract void ClearSettings();
+        public abstract void ImportSettings(List<string> settings);
+        public abstract List<string> ExportSettings();
+        public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
+        public abstract void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e);
+        public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
+        protected readonly HIDSkeleton HIDSkeletonBase;
+        private bool _closed;
+        public long ReportCounter = 0;
+        
+        protected bool FirstReportHasBeenRead = false;
+        protected abstract void GamingPanelKnobChanged(IEnumerable<object> hashSet);
+
+        protected abstract void StartListeningForPanelChanges();
+
+
+
+        protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
+        {
+            _typeOfGamingPanel = typeOfGamingPanel;
+            HIDSkeletonBase = hidSkeleton;
+            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            {
+                _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+            }
+            _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
+        }
+
+
+        protected void UpdateCounter(uint address, uint data)
+        {
+            lock (UpdateCounterLockObject)
+            {
+                if (_updateCounterDCSBIOSOutput.Address == address)
+                {
+                    var newCount = _updateCounterDCSBIOSOutput.GetUIntValue(data);
+                    if (!_synchedOnce)
+                    {
+                        _count = newCount;
+                        _synchedOnce = true;
+                        return;
+                    }
+                    //Max is 255
+                    if ((newCount == 0 && _count == 255) || newCount - _count == 1)
+                    {
+                        //All is well
+                        _count = newCount;
+                    }
+                    else if (newCount - _count != 1)
+                    {
+                        //Not good
+                        if (OnUpdatesHasBeenMissed != null)
+                        {
+                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
+                            _count = newCount;
+                        }
+                    }
+                }
+            }
+        }
+        
+        public void SetIsDirty()
+        {
+            SettingsChanged();
+            IsDirty = true;
+        }
+
+        public void SelectedAirframe(object sender, AirframeEventArgs e) {}
+
+        //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
+        public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)
+        {
+            _forwardPanelEvent = e.Forward;
+        }
+
+        public bool ForwardPanelEvent
+        {
+            get => _forwardPanelEvent;
+            set => _forwardPanelEvent = value;
+        }
+
+        public int VendorId
+        {
+            get => _vendorId;
+            set => _vendorId = value;
+        }
+
+        public int ProductId
+        {
+            get => _productId;
+            set => _productId = value;
+        }
+
+        public string InstanceId
+        {
+            get => HIDSkeletonBase.InstanceId;
+            set => HIDSkeletonBase.InstanceId = value;
+        }
+
+        public string Hash => _hash;
+
+        public string GuidString => _guid.ToString();
+
+        public void SetLastException(Exception ex)
+        {
+            try
+            {
+                if (ex == null)
+                {
+                    return;
+                }
+                Common.LogError(666, ex, "Via GamingPanel.SetLastException()");
+                lock (_exceptionLockObject)
+                {
+                    _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public Exception GetLastException(bool resetException = false)
+        {
+            Exception result;
+            lock (_exceptionLockObject)
+            {
+                result = _lastException;
+                if (resetException)
+                {
+                    _lastException = null;
+                }
+            }
+            return result;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set => _isDirty = value;
+        }
+
+        public bool SettingsLoading
+        {
+            get => _settingsLoading;
+            set => _settingsLoading = value;
+        }
+
+        public GamingPanelEnum TypeOfPanel
+        {
+            get => _typeOfGamingPanel;
+            set => _typeOfGamingPanel = value;
+        }
+        //TODO fixa att man kan koppla in/ur panelerna?
+        /*
+         * 
+        
+        public bool IsAttached
+        {
+            get { return _isAttached; }
+            set { _isAttached = value; }
+        }
+        */
+
+        public bool Closed
+        {
+            get => _closed;
+            set => _closed = value;
+        }
+
         //These events can be raised by the descendants of this class.
         public delegate void SwitchesHasBeenChangedEventHandler(object sender, SwitchesChangedEventArgs e);
         public event SwitchesHasBeenChangedEventHandler OnSwitchesChangedA;
@@ -114,10 +307,7 @@ namespace NonVisuals
             OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
         }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
-        {
-            //do nada
-        }
+        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
 
         public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
         {
@@ -131,204 +321,8 @@ namespace NonVisuals
             SettingsCleared();
         }
 
-        private int _vendorId;
-        private int _productId;
-        private Exception _lastException;
-        private readonly object _exceptionLockObject = new object();
-        private GamingPanelEnum _typeOfGamingPanel;
-        private bool _isDirty;
-        //private bool _isAttached;
-        private bool _forwardPanelEvent;
-        private static readonly object LockObject = new object();
-        private static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>();
-        private bool _settingsLoading = false;
-        /*
-         * IMPORTANT STUFF
-         */
-        private readonly DCSBIOSOutput _updateCounterDCSBIOSOutput;
-        private static readonly object UpdateCounterLockObject = new object();
-        private uint _count;
-        private bool _synchedOnce;
-        private readonly Guid _guid = Guid.NewGuid();
-        private readonly string _hash;
-        public abstract string SettingsVersion();
-        public abstract void Startup();
-        public abstract void Shutdown();
-        public abstract void ClearSettings();
-        public abstract void ImportSettings(List<string> settings);
-        public abstract List<string> ExportSettings();
-        public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
-        public abstract void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e);
-        protected readonly HIDSkeleton HIDSkeletonBase;
-        private bool _closed;
-        public long ReportCounter = 0;
-        
-        protected bool FirstReportHasBeenRead = false;
-        protected abstract void GamingPanelKnobChanged(IEnumerable<object> hashSet);
-
-        protected abstract void StartListeningForPanelChanges();
-
-
-
-        protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
-        {
-            _typeOfGamingPanel = typeOfGamingPanel;
-            HIDSkeletonBase = hidSkeleton;
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
-            {
-                _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
-            }
-            _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
-        }
-
-
-        protected void UpdateCounter(uint address, uint data)
-        {
-            lock (UpdateCounterLockObject)
-            {
-                if (_updateCounterDCSBIOSOutput.Address == address)
-                {
-                    var newCount = _updateCounterDCSBIOSOutput.GetUIntValue(data);
-                    if (!_synchedOnce)
-                    {
-                        _count = newCount;
-                        _synchedOnce = true;
-                        return;
-                    }
-                    //Max is 255
-                    if ((newCount == 0 && _count == 255) || newCount - _count == 1)
-                    {
-                        //All is well
-                        _count = newCount;
-                    }
-                    else if (newCount - _count != 1)
-                    {
-                        //Not good
-                        if (OnUpdatesHasBeenMissed != null)
-                        {
-                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
-                            _count = newCount;
-                        }
-                    }
-                }
-            }
-        }
-        
-        public void SetIsDirty()
-        {
-            SettingsChanged();
-            IsDirty = true;
-        }
-
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
-        {
-
-        }
-
-        //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
-        public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)
-        {
-            _forwardPanelEvent = e.Forward;
-        }
-
-        public bool ForwardPanelEvent
-        {
-            get => _forwardPanelEvent;
-            set => _forwardPanelEvent = value;
-        }
-
-        public int VendorId
-        {
-            get => _vendorId;
-            set => _vendorId = value;
-        }
-
-        public int ProductId
-        {
-            get => _productId;
-            set => _productId = value;
-        }
-
-        public string InstanceId
-        {
-            get => HIDSkeletonBase.InstanceId;
-            set => HIDSkeletonBase.InstanceId = value;
-        }
-
-        public string Hash => _hash;
-
-        public string GuidString => _guid.ToString();
-
-        public void SetLastException(Exception ex)
-        {
-            try
-            {
-                if (ex == null)
-                {
-                    return;
-                }
-                Common.LogError(666, ex, "Via GamingPanel.SetLastException()");
-                lock (_exceptionLockObject)
-                {
-                    _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        public Exception GetLastException(bool resetException = false)
-        {
-            Exception result;
-            lock (_exceptionLockObject)
-            {
-                result = _lastException;
-                if (resetException)
-                {
-                    _lastException = null;
-                }
-            }
-            return result;
-        }
-
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set => _isDirty = value;
-        }
-
-        public bool SettingsLoading
-        {
-            get => _settingsLoading;
-            set => _settingsLoading = value;
-        }
-
-        public GamingPanelEnum TypeOfPanel
-        {
-            get => _typeOfGamingPanel;
-            set => _typeOfGamingPanel = value;
-        }
-        //TODO fixa att man kan koppla in/ur panelerna?
-        /*
-         * 
-        
-        public bool IsAttached
-        {
-            get { return _isAttached; }
-            set { _isAttached = value; }
-        }
-        */
-
-        public bool Closed
-        {
-            get => _closed;
-            set => _closed = value;
-        }
-
-
     }
-    
+
     public class DCSBIOSUpdatesMissedEventArgs : EventArgs
     {
         public string UniqueId { get; set; }
