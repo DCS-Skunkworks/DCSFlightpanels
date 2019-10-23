@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
@@ -32,16 +33,38 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
-        HÄR!
-            also some form of JSON verification?
         public string ExportJSONSettings()
         {
-            return JsonConvert.SerializeObject(_layerList, Formatting.Indented);
+            var indented = Formatting.Indented;
+            var settings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
+            return JsonConvert.SerializeObject(_layerList, indented, settings);
+            //return JsonConvert.SerializeObject(new { _layerList }, Formatting.Indented);
         }
 
         public void ImportJSONSettings(string jsonText)
         {
-            _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText);
+            if (string.IsNullOrEmpty(jsonText))
+            {
+                return;
+            }
+            //_layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText);
+            /*
+            var deserializedList = new
+            {
+                _layerList = new List<StreamDeckLayer>()
+            };
+            var json2 = jsonText.Replace("\r\n", Environment.NewLine);
+            deserializedList = JsonConvert.DeserializeAnonymousType(jsonText, deserializedList);
+            
+            _layerList.Reverse();*/
+            var settings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
+            _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
         }
 
         private void Add(bool isActive, bool isHomeLayer, string layerName)

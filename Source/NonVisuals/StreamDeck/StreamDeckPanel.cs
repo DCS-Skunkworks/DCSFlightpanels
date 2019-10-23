@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -55,6 +56,7 @@ namespace NonVisuals.StreamDeck
         public void AddStreamDeckButtonToCurrentLayer(StreamDeckButton streamDeckButton)
         {
             _streamDeckLayerHandler.AddStreamDeckButtonToCurrentLayer(streamDeckButton);
+            SetIsDirty();
         }
 
         private void StreamDeckKeyHandler(object sender, KeyEventArgs e)
@@ -126,6 +128,7 @@ namespace NonVisuals.StreamDeck
 
         public override void ImportSettings(List<string> settings)
         {
+            const string sepString = "\\o/";
             SettingsLoading = true;
             //Clear current bindings
             ClearSettings();
@@ -133,17 +136,17 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            
+
+            var stringBuilder = new StringBuilder();
+
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.Contains(SettingsVersion()))
+                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
-                    if (setting.StartsWith("Layers{"))
-                    {
-                        _streamDeckLayerHandler.AddLayer(setting);
-                    }
+                    stringBuilder.Append(setting.Replace(sepString, "").Replace(InstanceId, "") + Environment.NewLine);
                 }
             }
+            _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
             SettingsLoading = false;
             SettingsApplied();
         }
@@ -163,10 +166,8 @@ namespace NonVisuals.StreamDeck
             {
                 return null;
             }
-            var result = new List<string>();
-            
 
-            return result;
+            return _streamDeckLayerHandler.ExportJSONSettings();
         }
 
         public string GetKeyPressForLoggingPurposes(StreamDeckButton streamDeckButton)

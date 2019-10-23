@@ -192,6 +192,7 @@ namespace NonVisuals
                 string currentPanelInstanceID = null;
                 string currentPanelSettingsVersion = null;
                 var insidePanel = false;
+                var insideJSONPanel = false;
                 const string sepString = "\\o/";
 
                 foreach (var fileLine in fileLines)
@@ -235,7 +236,7 @@ namespace NonVisuals
                     {
                         Common.UseGenericRadio = (bool.Parse(fileLine.Replace("UseGenericRadio=", "").Trim()));
                     }
-                    else if (!fileLine.StartsWith("#") && fileLine.Length > 2)
+                    else if (!fileLine.StartsWith("#") && fileLine.Length > 0)
                     {
                         //Process all these lines.
                         if (fileLine.StartsWith("PanelType="))
@@ -251,13 +252,21 @@ namespace NonVisuals
                         {
                             currentPanelSettingsVersion = fileLine.Trim();
                         }
-                        else if (fileLine.StartsWith("BeginPanel"))
+                        else if (fileLine.Equals("BeginPanel"))
                         {
                             insidePanel = true;
                         }
-                        else if (fileLine.StartsWith("EndPanel"))
+                        else if (fileLine.Equals("EndPanel"))
                         {
                             insidePanel = false;
+                        }
+                        else if (fileLine.Equals("BeginPanelJSON"))
+                        {
+                            insideJSONPanel = true;
+                        }
+                        else if (fileLine.Equals("EndPanelJSON"))
+                        {
+                            insideJSONPanel = false;
                         }
                         else
                         {
@@ -285,6 +294,12 @@ namespace NonVisuals
                                 {
                                     _listPanelSettingsData.Add(line + sepString + currentPanelInstanceID);
                                 }
+                            }
+
+
+                            if (insideJSONPanel)
+                            {
+                                _listPanelSettingsData.Add(fileLine + sepString + currentPanelInstanceID);
                             }
                         }
                     }
@@ -384,9 +399,9 @@ namespace NonVisuals
                 if (OnSettingsReadFromFile != null)
                 {
                     //TODO DENNA ORSAKAR HÄNGANDE!!
-                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs(){Airframe =  _airframe});
+                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Airframe = _airframe });
                     //TODO DENNA ORSAKAR HÄNGANDE!!
-                    OnSettingsReadFromFile(this, new SettingsReadFromFileEventArgs(){Settings = _listPanelSettingsData});
+                    OnSettingsReadFromFile(this, new SettingsReadFromFileEventArgs() { Settings = _listPanelSettingsData });
                 }
             }
             catch (Exception e)
@@ -417,7 +432,7 @@ namespace NonVisuals
 
         public void SendEventRegardingSavingPanelConfigurations()
         {
-            OnSavePanelSettings?.Invoke(this, new ProfileHandlerEventArgs(){ProfileHandlerEA =  this});
+            OnSavePanelSettings?.Invoke(this, new ProfileHandlerEventArgs() { ProfileHandlerEA = this });
             OnSavePanelSettingsJSON?.Invoke(this, new ProfileHandlerEventArgs() { ProfileHandlerEA = this });
         }
 
@@ -492,7 +507,7 @@ namespace NonVisuals
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
                     _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanelJSON");
-
+                    _listPanelSettingsData.Add(jsonData);
                     _listPanelSettingsData.Add("EndPanelJSON");
                 }
             }
@@ -531,7 +546,7 @@ namespace NonVisuals
                 stringBuilder.AppendLine("Airframe=" + _airframe);
                 stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
                 stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio);
-                
+
                 foreach (var s in _listPanelSettingsData)
                 {
                     stringBuilder.AppendLine(s);
@@ -583,7 +598,7 @@ namespace NonVisuals
                 _airframe = value;
                 Common.ResetOperationModeFlag();
                 SetOperationLevelFlag();
-                OnAirframeSelected?.Invoke(this, new AirframeEventArgs() {Airframe = _airframe});
+                OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Airframe = _airframe });
             }
         }
 
@@ -616,7 +631,8 @@ namespace NonVisuals
         public bool UseNS430
         {
             get => Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled);
-            set {
+            set
+            {
                 if (value)
                 {
                     Common.SetOperationModeFlag(OperationFlag.NS430Enabled);
@@ -637,7 +653,7 @@ namespace NonVisuals
         public event SavePanelSettingsEventHandler OnSavePanelSettings;
 
         public delegate void SavePanelSettingsEventHandlerJSON(object sender, ProfileHandlerEventArgs e);
-        public event SavePanelSettingsEventHandler OnSavePanelSettingsJSON;
+        public event SavePanelSettingsEventHandlerJSON OnSavePanelSettingsJSON;
 
         public delegate void AirframeSelectedEventHandler(object sender, AirframeEventArgs e);
         public event AirframeSelectedEventHandler OnAirframeSelected;
@@ -706,5 +722,5 @@ namespace NonVisuals
     }
 
 
-    
+
 }

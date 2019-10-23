@@ -39,7 +39,7 @@ namespace DCSFlightpanels.PanelUserControls
             _streamDeck.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_streamDeck);
             _globalHandler = globalHandler;
-
+            
             HideAllImages();
         }
 
@@ -540,7 +540,11 @@ namespace DCSFlightpanels.PanelUserControls
         private void LoadComboBoxLayers(string selectedLayerName)
         {
             var selectedIndex = ComboBoxLayers.SelectedIndex;
-
+            var layers = _streamDeck.EmptyLayerList;
+            if (layers == null)
+            {
+                return;
+            }
             ComboBoxLayers.SelectionChanged -= ComboBoxLayers_OnSelectionChanged;
             ComboBoxLayers.ItemsSource = _streamDeck.EmptyLayerList;
             ComboBoxLayers.Items.Refresh();

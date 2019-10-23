@@ -714,6 +714,10 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void LoadComboBoxesLayers()
         {
+            if (SDUIParent.GetSelectedStreamDeckLayer() == null)
+            {
+                return;
+            }
             LoadComboBoxLayers(SDUIParent.GetSelectedStreamDeckLayer().Name,
                 ComboBoxLayerNavigationButtonOn,
                 ComboBoxLayerNavigationButtonOn_OnSelectionChanged);
@@ -734,6 +738,10 @@ namespace DCSFlightpanels.PanelUserControls
 
             comboBox.SelectionChanged -= eventHandler;
             var list = SDUIParent.GetStreamDeckLayerNames();
+            if (list == null)
+            {
+                return;
+            }
             list.Insert(0, "Back to previous layer");
             list.Insert(0, "Go to home layer");
             comboBox.ItemsSource = SDUIParent.GetStreamDeckLayerNames();
