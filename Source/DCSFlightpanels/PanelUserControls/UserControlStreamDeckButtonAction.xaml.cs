@@ -52,8 +52,7 @@ namespace DCSFlightpanels.PanelUserControls
             _textBoxes.Add(TextBoxDCSBIOSActionButtonOff);
             _textBoxes.Add(TextBoxOSCommandButtonOn);
             _textBoxes.Add(TextBoxOSCommandButtonOff);
-            _textBoxes.Add(TextBoxLayerNavButtonOn);
-            _textBoxes.Add(TextBoxLayerNavButtonOff);
+            _textBoxes.Add(TextBoxLayerNavButton);
         }
 
         public void Clear()
@@ -63,8 +62,7 @@ namespace DCSFlightpanels.PanelUserControls
                 ((TagDataClassStreamDeck)textBox.Tag).ClearAll();
             }
 
-            ComboBoxLayerNavigationButtonOn.SelectedIndex = 0;
-            ComboBoxLayerNavigationButtonOff.SelectedIndex = 0;
+            ComboBoxLayerNavigationButton.SelectedIndex = 0;
             _isDirty = false;
             SDUIParent.ChildChangesMade();
         }
@@ -161,8 +159,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     case EnumStreamDeckButtonActionType.LayerNavigation:
                         {
-                            return ((TagDataClassStreamDeck)TextBoxLayerNavButtonOn.Tag).ContainsStreamDeckLayer() ||
-                                   ((TagDataClassStreamDeck)TextBoxLayerNavButtonOff.Tag).ContainsStreamDeckLayer();
+                            return ((TagDataClassStreamDeck)TextBoxLayerNavButton.Tag).ContainsStreamDeckLayer();
                         }
                 }
                 return false;
@@ -172,6 +169,10 @@ namespace DCSFlightpanels.PanelUserControls
         public void ShowActionConfiguration(StreamDeckButton streamDeckButton)
         {
             Clear();
+            if (streamDeckButton == null)
+            {
+                return;
+            }
             ShowActionConfiguration(streamDeckButton.StreamDeckButtonActionForPress);
             ShowActionConfiguration(streamDeckButton.StreamDeckButtonActionForRelease);
         }
@@ -216,8 +217,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckButtonActionType.LayerNavigation:
                     {
                         var layerBindingStreamDeck = (LayerBindingStreamDeck)streamDeckButtonAction;
-                        var textBoxLayerNav = layerBindingStreamDeck.WhenTurnedOn ? TextBoxLayerNavButtonOn : TextBoxLayerNavButtonOff;
-                        ((TagDataClassStreamDeck)textBoxLayerNav.Tag).StreamDeckLayerTarget = layerBindingStreamDeck.StreamDeckLayerTarget;
+                        ((TagDataClassStreamDeck)TextBoxLayerNavButton.Tag).StreamDeckLayerTarget = layerBindingStreamDeck.StreamDeckLayerTarget;
                         SetFormState();
                         return;
                     }
@@ -234,28 +234,42 @@ namespace DCSFlightpanels.PanelUserControls
             var textBoxKeyPress = forButtonPressed ? TextBoxKeyPressButtonOn : TextBoxKeyPressButtonOff;
             var textBoxDCSBIOS = forButtonPressed ? TextBoxDCSBIOSActionButtonOn : TextBoxDCSBIOSActionButtonOff;
             var textBoxOSCommand = forButtonPressed ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
-            var textBoxLayerNav = forButtonPressed ? TextBoxLayerNavButtonOn : TextBoxLayerNavButtonOff;
 
             switch (SDUIParent.GetSelectedActionType())
             {
                 case EnumStreamDeckButtonActionType.KeyPress:
                     {
-                        var result = new KeyBindingStreamDeck();
-                        result.WhenTurnedOn = forButtonPressed;
-                        result.OSKeyPress = ((TagDataClassStreamDeck)textBoxKeyPress.Tag).KeyPress;
-                        return result;
+                        KeyBindingStreamDeck result;
+                        
+                        if (((TagDataClassStreamDeck) textBoxKeyPress.Tag).ContainsKeyPress())
+                        {
+                            result = new KeyBindingStreamDeck();
+                            result.WhenTurnedOn = forButtonPressed;
+                            result.OSKeyPress = ((TagDataClassStreamDeck) textBoxKeyPress.Tag).KeyPress;
+                            return result;
+                        }
+
+                        return null;
                     }
                 case EnumStreamDeckButtonActionType.DCSBIOS:
                     {
-                        ((TagDataClassStreamDeck)textBoxDCSBIOS.Tag).DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
-                        return ((TagDataClassStreamDeck)textBoxDCSBIOS.Tag).DCSBIOSBinding;
+                        if (((TagDataClassStreamDeck)textBoxDCSBIOS.Tag).ContainsDCSBIOS())
+                        {
+                            ((TagDataClassStreamDeck)textBoxDCSBIOS.Tag).DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
+                            return ((TagDataClassStreamDeck)textBoxDCSBIOS.Tag).DCSBIOSBinding;
+                        }
+                        return null;
                     }
                 case EnumStreamDeckButtonActionType.OSCommand:
                     {
-                        var result = new OSCommandBindingStreamDeck();
-                        result.WhenTurnedOn = forButtonPressed;
-                        result.OSCommandObject = ((TagDataClassStreamDeck)textBoxOSCommand.Tag).OSCommandObject;
-                        return result;
+                        if (((TagDataClassStreamDeck) textBoxOSCommand.Tag).ContainsOSCommand())
+                        {
+                            var result = new OSCommandBindingStreamDeck();
+                            result.WhenTurnedOn = forButtonPressed;
+                            result.OSCommandObject = ((TagDataClassStreamDeck)textBoxOSCommand.Tag).OSCommandObject;
+                            return result;
+                        }
+                        return null;
                     }
                 case EnumStreamDeckButtonActionType.SRS:
                     {
@@ -263,10 +277,15 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckButtonActionType.LayerNavigation:
                     {
-                        var result = new LayerBindingStreamDeck();
-                        result.WhenTurnedOn = forButtonPressed;
-                        result.StreamDeckLayerTarget = ((TagDataClassStreamDeck)textBoxLayerNav.Tag).StreamDeckLayerTarget;
-                        return result;
+                        if (((TagDataClassStreamDeck)TextBoxLayerNavButton.Tag).ContainsStreamDeckLayer())
+                        {
+                            var result = new LayerBindingStreamDeck();
+                            result.WhenTurnedOn = forButtonPressed;
+                            result.StreamDeckLayerTarget = ((TagDataClassStreamDeck)TextBoxLayerNavButton.Tag).StreamDeckLayerTarget;
+                            return result;
+                        }
+
+                        return null;
                     }
             }
 
@@ -671,8 +690,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ClearLayerComboBoxes()
         {
-            ClearComboBox(ComboBoxLayerNavigationButtonOn, ComboBoxLayerNavigationButtonOn_OnSelectionChanged);
-            ClearComboBox(ComboBoxLayerNavigationButtonOff, ComboBoxLayerNavigationButtonOff_OnSelectionChanged);
+            ClearComboBox(ComboBoxLayerNavigationButton, ComboBoxLayerNavigationButton_OnSelectionChanged);
         }
 
         private void ClearComboBox(ComboBox comboBox, SelectionChangedEventHandler eventHandler)
@@ -682,13 +700,14 @@ namespace DCSFlightpanels.PanelUserControls
             comboBox.SelectionChanged += eventHandler;
         }
 
-        private void ComboBoxLayerNavigationButtonOn_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBoxLayerNavigationButton_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
                 var target = new StreamDeckTargetLayer();
-                target.TargetLayer = ComboBoxLayerNavigationButtonOn.Text;
-                ((TagDataClassStreamDeck)TextBoxLayerNavButtonOn.Tag).StreamDeckLayerTarget = target;
+                target.TargetLayer = ComboBoxLayerNavigationButton.Text;
+                ((TagDataClassStreamDeck)TextBoxLayerNavButton.Tag).StreamDeckLayerTarget = target;
+                SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -697,20 +716,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ComboBoxLayerNavigationButtonOff_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                var target = new StreamDeckTargetLayer();
-                target.TargetLayer = ComboBoxLayerNavigationButtonOn.Text;
-                ((TagDataClassStreamDeck)ComboBoxLayerNavigationButtonOff.Tag).StreamDeckLayerTarget = target;
-                SDUIParent.ChildChangesMade();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
 
         private void LoadComboBoxesLayers()
         {
@@ -719,12 +724,8 @@ namespace DCSFlightpanels.PanelUserControls
                 return;
             }
             LoadComboBoxLayers(SDUIParent.GetSelectedStreamDeckLayer().Name,
-                ComboBoxLayerNavigationButtonOn,
-                ComboBoxLayerNavigationButtonOn_OnSelectionChanged);
-
-            LoadComboBoxLayers(SDUIParent.GetSelectedStreamDeckLayer().Name,
-                ComboBoxLayerNavigationButtonOff,
-                ComboBoxLayerNavigationButtonOff_OnSelectionChanged);
+                ComboBoxLayerNavigationButton,
+                ComboBoxLayerNavigationButton_OnSelectionChanged);
         }
 
         private void LoadComboBoxLayers(StreamDeckLayer selectedLayer, ComboBox comboBox, SelectionChangedEventHandler eventHandler)
@@ -744,7 +745,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             list.Insert(0, "Back to previous layer");
             list.Insert(0, "Go to home layer");
-            comboBox.ItemsSource = SDUIParent.GetStreamDeckLayerNames();
+            comboBox.ItemsSource = list;
             comboBox.Items.Refresh();
 
             if (!string.IsNullOrEmpty(selectedLayerName))

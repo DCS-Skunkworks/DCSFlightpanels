@@ -220,12 +220,20 @@ namespace DCSFlightpanels.PanelUserControls
         public StreamDeckButtonNames GetSelectedButtonName()
         {
             var tagDataClass = GetSelectedImageDataClass();
-            return tagDataClass?.StreamDeckButtonName ?? StreamDeckButtonNames.BUTTON0_NO_BUTTON;
+            if (tagDataClass == null)
+            {
+                return StreamDeckButtonNames.BUTTON0_NO_BUTTON;
+            }
+            return tagDataClass.StreamDeckButtonName;
         }
         
         public StreamDeckButton GetSelectedStreamDeckButton()
         {
             var tagDataClass = GetSelectedImageDataClass();
+            if (tagDataClass == null)
+            {
+                return null;
+            }
             return _streamDeck.GetCurrentLayerStreamDeckButton(tagDataClass.StreamDeckButtonName);
         }
 
@@ -679,6 +687,10 @@ namespace DCSFlightpanels.PanelUserControls
         public void SetButtonActionType()
         {
             var streamDeckButton = GetSelectedStreamDeckButton();
+            if (streamDeckButton == null)
+            {
+                return;
+            }
             foreach (var radioButton in _radioButtonActionsList)
             {
                 radioButton.IsChecked = false;
@@ -1028,9 +1040,24 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var streamDeckButton = GetSelectedStreamDeckLayer().GetStreamDeckButton(GetSelectedButtonName());
-                streamDeckButton.StreamDeckButtonActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
-                streamDeckButton.StreamDeckButtonActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
-                _streamDeck.AddStreamDeckButtonToCurrentLayer(streamDeckButton);
+                var actionPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
+                var actionRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
+                var added = false;
+                if (actionPress != null)
+                {
+                    streamDeckButton.StreamDeckButtonActionForPress = actionPress;
+                    added = true;
+                }
+                if (actionRelease != null)
+                {
+                    streamDeckButton.StreamDeckButtonActionForPress = actionRelease;
+                    added = true;
+                }
+
+                if (added)
+                {
+                    _streamDeck.AddStreamDeckButtonToCurrentLayer(streamDeckButton);
+                }
                 UCStreamDeckButtonAction.StateSaved();
                 SetFormState();
             }

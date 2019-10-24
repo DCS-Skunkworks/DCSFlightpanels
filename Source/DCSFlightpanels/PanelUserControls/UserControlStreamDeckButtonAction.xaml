@@ -70,12 +70,9 @@
             </StackPanel>
 
             <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Visible">
-                <Label Content="Layer to show when Button Pressed" FontSize="10" Height="23"   />
-                <TextBox Name="TextBoxLayerNavButtonOn" Visibility="Collapsed"></TextBox>
-                <ComboBox Name="ComboBoxLayerNavigationButtonOn" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButtonOn_OnSelectionChanged"/>
-                <Label Content="Layer to show when Button Released" FontSize="10" Height="23"   />
-                <TextBox Name="TextBoxLayerNavButtonOff" Visibility="Collapsed"></TextBox>
-                <ComboBox Name="ComboBoxLayerNavigationButtonOff" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButtonOff_OnSelectionChanged"/>
+                <Label Content="Layer to switch to" FontSize="10" Height="23"   />
+                <TextBox Name="TextBoxLayerNavButton" Visibility="Collapsed"></TextBox>
+                <ComboBox Name="ComboBoxLayerNavigationButton" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButton_OnSelectionChanged"/>
             </StackPanel>
 
         </Grid>
