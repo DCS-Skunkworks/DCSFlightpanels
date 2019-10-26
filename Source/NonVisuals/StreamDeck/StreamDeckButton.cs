@@ -58,6 +58,13 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckButtonActionForPress = value;
         }
 
+        public void Press()
+        {
+            StreamDeckButtonActionForPress?.Execute();
+            StreamDeckButtonActionForRelease?.Execute();
+            //StreamDeckButtonFaceForPress?.Execute();
+        }
+
         public void Consume(StreamDeckButton streamDeckButton)
         {
             StreamDeckButtonName = streamDeckButton.StreamDeckButtonName;

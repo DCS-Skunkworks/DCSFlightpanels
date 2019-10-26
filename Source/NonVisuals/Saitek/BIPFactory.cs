@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
 
 namespace NonVisuals.Saitek
 {

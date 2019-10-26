@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
@@ -67,8 +66,35 @@ namespace NonVisuals.StreamDeck
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
         }
 
+        public void SetHomeLayerStatus(bool isHomeLayer, string layerName)
+        {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                throw new Exception("SetHomeLayer : No layer name specified.");
+            }
+
+            foreach (var deckLayer in _layerList)
+            {
+                deckLayer.IsHomeLayer = false;
+                if (isHomeLayer && deckLayer.Name == layerName)
+                {
+                    deckLayer.IsHomeLayer = true;
+                }
+            }
+        }
+
+        public void SetHomeLayerStatus(bool isHomeLayer, StreamDeckLayer streamDeckLayer)
+        {
+            SetHomeLayerStatus(isHomeLayer, streamDeckLayer.Name);
+        }
+
         private void Add(bool isActive, bool isHomeLayer, string layerName)
         {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return;
+            }
+
             var found = false;
 
             foreach (var layer in _layerList)
@@ -89,32 +115,6 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void AddLayer(string layerName)
-        {
-            if (layerName.Contains(SEPARATOR_CHARS))
-            {
-                //Setting loaded, includes HID Instance and may contain many layers separated by |
-                var layers = layerName.Split(new[] { SEPARATOR_CHARS }, StringSplitOptions.RemoveEmptyEntries)[0];
-                layers = layers.Replace("Layers{", "").Replace("}", "");
-                var layerArray = layers.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var s in layerArray)
-                {
-                    if (s.Contains(HOME_LAYER_ID))
-                    {
-                        Add(false, true, s.Replace(HOME_LAYER_ID, ""));
-                    }
-                    else
-                    {
-                        Add(false, false, s);
-                    }
-                }
-            }
-            else
-            {
-                Add(false, false, layerName);
-            }
-        }
-
         public void AddLayer(StreamDeckLayer streamDeckLayer)
         {
             if (!LayerList.Contains(streamDeckLayer) && streamDeckLayer != null)
@@ -125,6 +125,11 @@ namespace NonVisuals.StreamDeck
 
         public void DeleteLayer(string layerName)
         {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return;
+            }
+
             _layerList.RemoveAll(x => x.Name == layerName);
         }
 
@@ -138,8 +143,7 @@ namespace NonVisuals.StreamDeck
         {
             _layerList.Clear();
         }
-
-
+        
         public StreamDeckLayer HomeLayer
         {
             get
@@ -170,6 +174,11 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckLayer GetStreamDeckLayer(string layerName)
         {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return null;
+            }
+
             foreach (var streamDeckLayer in _layerList)
             {
                 if (streamDeckLayer.Name == layerName)
@@ -177,11 +186,16 @@ namespace NonVisuals.StreamDeck
                     return streamDeckLayer;
                 }
             }
+
             throw new Exception("GetStreamDeckLayer : Failed to find layer " + layerName + ".");
         }
 
         public StreamDeckButton GetStreamDeckButton(StreamDeckButtonNames streamDeckButtonName, string layerName, bool throwExceptionIfNotFound = true)
         {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return null;
+            }
 
             foreach (var streamDeckLayer in _layerList)
             {
@@ -203,6 +217,12 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckButton GetCurrentLayerStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
         {
+            return GetStreamDeckButton(streamDeckButtonName, CurrentLayerName, false);
+        }
+
+        public StreamDeckButton GetCurrentLayerStreamDeckButton(int streamDeckButtonNumber)
+        {
+            var streamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
             return GetStreamDeckButton(streamDeckButtonName, CurrentLayerName, false);
         }
 

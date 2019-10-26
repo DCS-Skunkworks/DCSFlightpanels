@@ -3,10 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
-using DCSFlightpanels.PanelUserControls;
-using NonVisuals;
 using NonVisuals.Interfaces;
-using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls
 {

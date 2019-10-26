@@ -1858,7 +1858,7 @@ namespace NonVisuals.Radios
             Common.DebugP("Leaving Ka-50 Radio Shutdown()");
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings() { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {

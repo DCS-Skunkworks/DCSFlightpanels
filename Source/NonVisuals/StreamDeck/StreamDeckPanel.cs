@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
 
@@ -26,6 +23,7 @@ namespace NonVisuals.StreamDeck
         {
             Startup();
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
+            _streamDeckBoard.KeyStateChanged += StreamDeckKeyHandler;
         }
 
         public sealed override void Startup()
@@ -65,43 +63,17 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            var keyId = e.Key;
+
+            if (!ForwardPanelEvent)
+            {
+                return;
+            }
+
             if (e.IsDown)
             {
-                switch (keyId)
-                {
-                    /*case 0:
-                        //tens up
-                        SetFreqArray(Eagle.CurrentFreq + 100, Eagle);
-                        SendSrsInput(Xbox360Buttons.A);
-                        break;
-                    case 1:
-                        SetFreqArray(Eagle.CurrentFreq + 10, Eagle);
-                        SendSrsInput(Xbox360Buttons.X);
-                        break;
-                    case 2:
-                        //first decimal up
-                        SetFreqArray(Eagle.CurrentFreq + 1, Eagle);
-                        SendSrsInput(Xbox360Buttons.Up);
-                        break;
-                    case 10:
-                        //tens down
-                        SetFreqArray(Eagle.CurrentFreq - 100, Eagle);
-                        SendSrsInput(Xbox360Buttons.B);
-                        break;
-                    case 11:
-                        //ones down
-                        SetFreqArray(Eagle.CurrentFreq - 10, Eagle);
-                        SendSrsInput(Xbox360Buttons.Y);
-                        break;
-                    case 12:
-                        //first decimal down
-                        SetFreqArray(Eagle.CurrentFreq - 1, Eagle);
-                        SendSrsInput(Xbox360Buttons.Down);
-                        break;*/
-                }
+                var streamDeckButton = _streamDeckLayerHandler.GetCurrentLayerStreamDeckButton(e.Key + 1);
+                streamDeckButton.Press();
             }
-            //SetKeys(Eagle.FreqArray);
         }
 
         protected override void StartListeningForPanelChanges()
@@ -344,12 +316,6 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckLayerHandler.LayerList;
         }
 
-        public void AddLayer(string layerName)
-        {
-            _streamDeckLayerHandler.AddLayer(layerName);
-            SetIsDirty();
-        }
-
         public void AddLayer(StreamDeckLayer streamDeckLayer)
         {
             _streamDeckLayerHandler.AddLayer(streamDeckLayer);
@@ -373,18 +339,15 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckLayerHandler.HomeLayer;
         }
 
-        public void SetHomeLayer(string layerName)
+        public void SetHomeLayerStatus(bool isHomeLayer, string layerName)
         {
-            foreach (var deckLayer in _streamDeckLayerHandler.LayerList)
-            {
-                deckLayer.IsHomeLayer = layerName == deckLayer.Name;
-            }
+            _streamDeckLayerHandler.SetHomeLayerStatus(isHomeLayer, layerName);
             SetIsDirty();
         }
 
-        public void SetHomeLayer(StreamDeckLayer streamDeckLayer)
+        public void SetHomeLayerStatus(bool isHomeLayer, StreamDeckLayer streamDeckLayer)
         {
-            SetHomeLayer(streamDeckLayer.Name);
+            SetHomeLayerStatus(isHomeLayer, streamDeckLayer.Name);
         }
 
         public List<string> GetStreamDeckLayerNames()

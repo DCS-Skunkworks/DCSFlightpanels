@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="300"
+             d:DesignHeight="350" d:DesignWidth="300"
              Loaded="UserControlStreamDeckButtonAction_OnLoaded">
     <UserControl.Resources>
+
     </UserControl.Resources>
 
     <GroupBox Header="Button Action">
@@ -17,62 +18,136 @@
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Collapsed">
+            <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Visible" Margin="0,10,0,0">
                 <Label Content="Key Press / Sequence when Button Pressed" FontSize="10" Height="23"   />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOn" Background="LightSteelBlue" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonAddEditKeySequenceButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOn_OnClick"/>
                     <Button Name="ButtonDeleteKeySequenceButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteKeySequenceButtonOn_OnClick" />
                 </StackPanel>
-                <Label Content="Key Press / Sequence when Button Released" FontSize="10" Height="23"   />
+                <Label Content="Key Press / Sequence when Button Released" FontSize="10" Height="23" Margin="0,20,0,0"  />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxKeyPressButtonOff" Background="LightSteelBlue" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonAddEditKeySequenceButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditKeySequenceButtonOff_OnClick"/>
                     <Button Name="ButtonDeleteKeySequenceButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteKeySequenceButtonOff_OnClick"/>
                 </StackPanel>
-                <Button Name="ButtonFocus" Width="100" Height="5" Background="Transparent" Content="              " Margin="0,10,0,0"/>
+
+                <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
+
+                <ComboBox Name="ComboBoxReleaseDelayKeyPress" SelectedValuePath="Content" >
+                    <ComboBoxItem>250</ComboBoxItem>
+                    <ComboBoxItem>500</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem>1500</ComboBoxItem>
+                    <ComboBoxItem>2000</ComboBoxItem>
+                    <ComboBoxItem>2500</ComboBoxItem>
+                    <ComboBoxItem>3000</ComboBoxItem>
+                    <ComboBoxItem>4000</ComboBoxItem>
+                    <ComboBoxItem>5000</ComboBoxItem>
+                    <ComboBoxItem>6000</ComboBoxItem>
+                    <ComboBoxItem>7000</ComboBoxItem>
+                    <ComboBoxItem>8000</ComboBoxItem>
+                    <ComboBoxItem>9000</ComboBoxItem>
+                    <ComboBoxItem>10000</ComboBoxItem>
+                </ComboBox>
+
+                <Button Name="ButtonFocus" Width="10" Height="5" Background="Transparent" Content=" " Margin="0,10,0,0"/>
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonDCSBIOSSettings"  Visibility="Collapsed">
+            <StackPanel Name="StackPanelButtonDCSBIOSSettings"  Visibility="Collapsed"  Margin="0,10,0,0">
                 <Label Content="DCSBIOS Action when Button Pressed" FontSize="10" Height="23"   />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOn"  IsEnabled="False" Background="LightSteelBlue"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonAddEditDCSBIOSActionButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditDCSBIOSActionButtonOn_OnClick"/>
                     <Button Name="ButtonDeleteDCSBIOSActionButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSActionButtonOn_OnClick"/>
                 </StackPanel>
-                <Label Content="DCSBIOS Action when Button Released" FontSize="10" Height="23"  Margin="0,10,2,0"  />
+                <Label Content="DCSBIOS Action when Button Released" FontSize="10" Height="23"  Margin="0,20,2,0"  />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSActionButtonOff" IsEnabled="False" Background="LightSteelBlue"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonAddEditDCSBIOSActionButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditDCSBIOSActionButtonOff_OnClick"/>
                     <Button Name="ButtonDeleteDCSBIOSActionButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSActionButtonOff_OnClick"/>
                 </StackPanel>
+
+                <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
+
+                <ComboBox Name="ComboBoxReleaseDelayDCSBIOS"   SelectedValuePath="Content" >
+                    <ComboBoxItem>250</ComboBoxItem>
+                    <ComboBoxItem>500</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem>1500</ComboBoxItem>
+                    <ComboBoxItem>2000</ComboBoxItem>
+                    <ComboBoxItem>2500</ComboBoxItem>
+                    <ComboBoxItem>3000</ComboBoxItem>
+                    <ComboBoxItem>4000</ComboBoxItem>
+                    <ComboBoxItem>5000</ComboBoxItem>
+                    <ComboBoxItem>6000</ComboBoxItem>
+                    <ComboBoxItem>7000</ComboBoxItem>
+                    <ComboBoxItem>8000</ComboBoxItem>
+                    <ComboBoxItem>9000</ComboBoxItem>
+                    <ComboBoxItem>10000</ComboBoxItem>
+                </ComboBox>
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonOSCommandSettings"  Visibility="Collapsed">
+            <StackPanel Name="StackPanelButtonOSCommandSettings"  Visibility="Collapsed"  Margin="0,10,0,0">
                 <Label Content="OS Command when Button Pressed" FontSize="10" Height="23"   />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOn"  IsEnabled="False" Background="LightSteelBlue"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonAddEditOSCommandButtonOn" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditOSCommandButtonOn_OnClick"/>
                     <Button Name="ButtonDeleteOSCommandButtonOn" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteOSCommandButtonOn_OnClick" />
                 </StackPanel>
-                <Label Content="OS Command when Button Released" FontSize="10" Height="23"   />
+                <Label Content="OS Command when Button Released" FontSize="10" Height="23"  Margin="0,20,0,0" />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxOSCommandButtonOff" IsEnabled="False" Background="LightSteelBlue"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonAddEditOSCommandButtonOff" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonAddEditOSCommandButtonOff_OnClick"/>
                     <Button Name="ButtonDeleteOSCommandButtonOff" Width="65" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteOSCommandButtonOff_OnClick"/>
                 </StackPanel>
+
+                <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE"  Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
+
+                <ComboBox Name="ComboBoxReleaseDelayOSCommand"  SelectedValuePath="Content" >
+                    <ComboBoxItem>250</ComboBoxItem>
+                    <ComboBoxItem>500</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem>1500</ComboBoxItem>
+                    <ComboBoxItem>2000</ComboBoxItem>
+                    <ComboBoxItem>2500</ComboBoxItem>
+                    <ComboBoxItem>3000</ComboBoxItem>
+                    <ComboBoxItem>4000</ComboBoxItem>
+                    <ComboBoxItem>5000</ComboBoxItem>
+                    <ComboBoxItem>6000</ComboBoxItem>
+                    <ComboBoxItem>7000</ComboBoxItem>
+                    <ComboBoxItem>8000</ComboBoxItem>
+                    <ComboBoxItem>9000</ComboBoxItem>
+                    <ComboBoxItem>10000</ComboBoxItem>
+                </ComboBox>
             </StackPanel>
 
-            <StackPanel Name="StackPanelButtonSRSSettings"  Visibility="Collapsed">
-                <Label Content="TO BE DONE" FontSize="10" Height="23"   />
-            </StackPanel>
 
-            <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Visible">
+            <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Collapsed"  Margin="0,10,0,0">
                 <Label Content="Layer to switch to" FontSize="10" Height="23"   />
                 <TextBox Name="TextBoxLayerNavButton" Visibility="Collapsed"></TextBox>
                 <ComboBox Name="ComboBoxLayerNavigationButton" SelectedValuePath="Content" SelectionChanged="ComboBoxLayerNavigationButton_OnSelectionChanged"/>
+
+                <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
+
+                <ComboBox Name="ComboBoxReleaseDelayLayerNav"  SelectedValuePath="Content" >
+                    <ComboBoxItem>250</ComboBoxItem>
+                    <ComboBoxItem>500</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem>1500</ComboBoxItem>
+                    <ComboBoxItem>2000</ComboBoxItem>
+                    <ComboBoxItem>2500</ComboBoxItem>
+                    <ComboBoxItem>3000</ComboBoxItem>
+                    <ComboBoxItem>4000</ComboBoxItem>
+                    <ComboBoxItem>5000</ComboBoxItem>
+                    <ComboBoxItem>6000</ComboBoxItem>
+                    <ComboBoxItem>7000</ComboBoxItem>
+                    <ComboBoxItem>8000</ComboBoxItem>
+                    <ComboBoxItem>9000</ComboBoxItem>
+                    <ComboBoxItem>10000</ComboBoxItem>
+                </ComboBox>
             </StackPanel>
 
         </Grid>

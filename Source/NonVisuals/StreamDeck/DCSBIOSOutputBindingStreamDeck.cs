@@ -1,6 +1,4 @@
-﻿using System;
-using DCS_BIOS;
-using NonVisuals.StreamDeck;
+﻿using DCS_BIOS;
 
 namespace NonVisuals.StreamDeck
 {
