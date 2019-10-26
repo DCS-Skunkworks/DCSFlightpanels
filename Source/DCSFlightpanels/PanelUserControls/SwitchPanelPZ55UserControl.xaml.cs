@@ -18,7 +18,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
@@ -72,7 +72,7 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public SaitekPanel GetSaitekPanel()
+        public GamingPanel GetGamingPanel()
         {
             return _switchPanelPZ55;
         }

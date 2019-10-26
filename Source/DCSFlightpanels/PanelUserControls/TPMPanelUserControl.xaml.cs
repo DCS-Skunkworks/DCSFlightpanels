@@ -16,7 +16,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
 
         private readonly TPMPanel _tpmPanel;
@@ -46,7 +46,6 @@ namespace DCSFlightpanels.PanelUserControls
                 HidePositionIndicators();
                 _once = true;
             }
-            var now = DateTime.Now.Ticks;
             SetTextBoxTagObjects();
             SetContextMenuClickHandlers();
             _controlLoaded = true;
@@ -78,7 +77,7 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public SaitekPanel GetSaitekPanel()
+        public GamingPanel GetGamingPanel()
         {
             return _tpmPanel;
         }
@@ -88,29 +87,9 @@ namespace DCSFlightpanels.PanelUserControls
             return GetType().Name;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                //zip zilch nada
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(471373, ex);
-            }
-        }
+        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
 
-        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
-        {
-            try
-            {
-                //
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(471076, ex);
-            }
-        }
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
@@ -152,59 +131,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1085, ex);
-            }
-        }
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
 
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2008, ex);
-            }
-        }
+        public void DeviceAttached(object sender, PanelEventArgs e) { }
 
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-            try
-            {
-                //nada zip zilch
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1021, ex);
-            }
-        }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
-                {
-                    //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2031, ex);
-            }
-        }
+        public void DeviceDetached(object sender, PanelEventArgs e) { }
 
         public void SettingsApplied(object sender, PanelEventArgs e)
         {

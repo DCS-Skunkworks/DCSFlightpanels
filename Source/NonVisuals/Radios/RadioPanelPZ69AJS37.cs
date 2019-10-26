@@ -10,7 +10,6 @@ namespace NonVisuals.Radios
 {
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
-        //TODO Check again how to retrieve frequencies (SRS)
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
         private CurrentAJS37RadioMode _currentLowerRadioMode = CurrentAJS37RadioMode.FR22;
 
@@ -807,7 +806,6 @@ namespace NonVisuals.Radios
 
 
                 //ADF
-                //TODO
 
 
                 //XPDR
@@ -836,14 +834,10 @@ namespace NonVisuals.Radios
             Common.DebugP("Leaving AJS-37 Radio Shutdown()");
         }
 
-        public override void ClearSettings()
-        {
-            //todo
-        }
+        public override void ClearSettings() { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            //todo
             var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
             dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
             dcsOutputAndColorBinding.LEDColor = panelLEDColor;

@@ -284,17 +284,17 @@ namespace DCSFlightpanels
                     {
                         var item = (TabItem)TabControlPanels.Items.GetItemAt(0);
                         TabControlPanels.Items.Remove(item);
-                        var saitekPanelUserControl = ((ISaitekUserControl)item.Content);
-                        var saitekPanel = saitekPanelUserControl.GetSaitekPanel();
-                        if (saitekPanel != null)
+                        var gamingPanelUserControl = ((IGamingPanelUserControl)item.Content);
+                        var gamingPanel = gamingPanelUserControl.GetGamingPanel();
+                        if (gamingPanel != null)
                         {
-                            _profileHandler.Detach(saitekPanel);
-                            saitekPanel.Detach(_profileHandler);
-                            saitekPanel.Detach((IProfileHandlerListener) this);
-                            _dcsBios?.DetachDataReceivedListener(saitekPanel);
+                            _profileHandler.Detach(gamingPanel);
+                            gamingPanel.Detach(_profileHandler);
+                            gamingPanel.Detach((IProfileHandlerListener) this);
+                            _dcsBios?.DetachDataReceivedListener(gamingPanel);
 
-                            Common.DebugP("Shutting down " + saitekPanel.GetType().Name);
-                            saitekPanel.Shutdown();
+                            Common.DebugP("Shutting down " + gamingPanel.GetType().Name);
+                            gamingPanel.Shutdown();
                             _panelUserControls.Remove((UserControl) item.Content);
                             Common.DebugP("_saitekUserControls count is " + _panelUserControls.Count);
                             Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
@@ -623,7 +623,7 @@ namespace DCSFlightpanels
 
                 for (var i = 0; i < TabControlPanels.Items.Count; i++)
                 {
-                    var userControl = (ISaitekUserControl)((TabItem)TabControlPanels.Items.GetItemAt(i)).Content;
+                    var userControl = (IGamingPanelUserControl)((TabItem)TabControlPanels.Items.GetItemAt(i)).Content;
                     if (userControl is SwitchPanelPZ55UserControl && firstPZ55 < 0)
                     {
                         firstPZ55 = i;
@@ -652,7 +652,7 @@ namespace DCSFlightpanels
                     for (var i = 0; i < TabControlPanels.Items.Count; i++)
                     {
                         var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (ISaitekUserControl)tabItem.Content;
+                        var userControl = (IGamingPanelUserControl)tabItem.Content;
                         if (userControl.GetName().Contains("RadioPanel") && i < firstPZ55)
                         {
                             TabControlPanels.Items.RemoveAt(i);
@@ -668,7 +668,7 @@ namespace DCSFlightpanels
                     for (var i = 0; i < TabControlPanels.Items.Count; i++)
                     {
                         var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (ISaitekUserControl)tabItem.Content;
+                        var userControl = (IGamingPanelUserControl)tabItem.Content;
                         if (userControl.GetName().Contains("MultiPanel") && i < firstPZ69)
                         {
                             TabControlPanels.Items.RemoveAt(i);
@@ -684,7 +684,7 @@ namespace DCSFlightpanels
                     for (var i = 0; i < TabControlPanels.Items.Count; i++)
                     {
                         var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (ISaitekUserControl)tabItem.Content;
+                        var userControl = (IGamingPanelUserControl)tabItem.Content;
                         if (userControl.GetName().Contains("BackLit") && i < firstPZ70)
                         {
                             TabControlPanels.Items.RemoveAt(i);
@@ -700,7 +700,7 @@ namespace DCSFlightpanels
                     for (var i = 0; i < TabControlPanels.Items.Count; i++)
                     {
                         var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (ISaitekUserControl)tabItem.Content;
+                        var userControl = (IGamingPanelUserControl)tabItem.Content;
                         if (userControl.GetName().Contains("BackLit") && i < firstTPM)
                         {
                             TabControlPanels.Items.RemoveAt(i);
@@ -793,17 +793,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2036, ex);
-            }
-        }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
@@ -874,41 +864,11 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2040, ex);
-            }
-        }
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
 
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2041, ex);
-            }
-        }
+        public void DeviceAttached(object sender, PanelEventArgs e) { }
 
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2042, ex);
-            }
-        }
+        public void DeviceDetached(object sender, PanelEventArgs e) { }
 
         private void MainWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -927,15 +887,7 @@ namespace DCSFlightpanels
             }
         }
 
-        private void TimerCheckDcsBiosStatus(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception)
-            {
-            }
-        }
+        private void TimerCheckDcsBiosStatus(object sender, ElapsedEventArgs e) { }
 
 
         private async void CheckForNewDCSFPRelease()
@@ -1021,17 +973,7 @@ namespace DCSFlightpanels
             //#endif
         }
 
-        private void TimerCheckExceptions(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP("HUH? " + ex.Message + Environment.NewLine + Environment.NewLine + ex.StackTrace);
-            }
-        }
+        private void TimerCheckExceptions(object sender, ElapsedEventArgs e) { }
 
         private void TimerStopRotation(object sender, ElapsedEventArgs e)
         {
@@ -1132,7 +1074,7 @@ namespace DCSFlightpanels
             {
                 foreach (var saitekUserControl in _panelUserControls)
                 {
-                    ((ISaitekUserControl)saitekUserControl).GetSaitekPanel()?.Shutdown();
+                    ((IGamingPanelUserControl)saitekUserControl).GetGamingPanel()?.Shutdown();
                 }
             }
             catch (Exception ex)
@@ -1441,10 +1383,7 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DcsBiosDataReceived(byte[] array)
-        {
-            return;
-        }
+        public void DcsBiosDataReceived(byte[] array) { }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
@@ -1458,15 +1397,9 @@ namespace DCSFlightpanels
             }
         }
 
-        public void DeviceAttached(GamingPanelEnum saitekPanelsEnum)
-        {
-            //todo
-        }
+        public void DeviceAttached(GamingPanelEnum gamingPanelsEnum) { }
 
-        public void DeviceDetached(GamingPanelEnum saitekPanelsEnum)
-        {
-            //todo
-        }
+        public void DeviceDetached(GamingPanelEnum gamingPanelsEnum) { }
 
         private void ButtonDev_OnMouseDown(object sender, MouseButtonEventArgs e)
         {

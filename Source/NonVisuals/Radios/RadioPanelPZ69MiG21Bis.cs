@@ -169,17 +169,7 @@ namespace NonVisuals.Radios
 
         }
 
-        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
-        {
-            try
-            {
-                //nada
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(349998, ex, "DCSBIOSStringReceived()");
-            }
-        }
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e) { }
 
         private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsMiG21Bis knob)
         {
@@ -721,14 +711,10 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void ClearSettings()
-        {
-            //todo
-        }
+        public override void ClearSettings(){}
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            //todo
             var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
             dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
             dcsOutputAndColorBinding.LEDColor = panelLEDColor;

@@ -139,7 +139,7 @@
     <Compile Include="InformationRichTextWindow.xaml.cs">
       <DependentUpon>InformationRichTextWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ISaitekUserControl.cs" />
+    <Compile Include="IGamingPanelUserControl.cs" />
     <Compile Include="JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>

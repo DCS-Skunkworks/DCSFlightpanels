@@ -235,10 +235,15 @@ namespace NonVisuals.StreamDeck
                         return streamDeckLayer.Name;
                     }
                 }
-                throw new Exception("StreamDeckHandler : No layer is currently marked as active.");
+
+                return "";
             }
             set
             {
+                if (LayerList.Count == 0)
+                {
+                    return;
+                }
                 if (string.IsNullOrEmpty(value))
                 {
                     return;

@@ -20,7 +20,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
 
-    public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
         private readonly TabItem _parentTabItem;
@@ -58,22 +58,12 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public SaitekPanel GetSaitekPanel()
+        public GamingPanel GetGamingPanel()
         {
             return _multiPanelPZ70;
         }
 
-        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(471073, ex);
-            }
-        }
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
         public string GetName()
         {
@@ -181,41 +171,11 @@ namespace DCSFlightpanels.PanelUserControls
             _textBoxTagsSet = true;
         }
 
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1021, ex);
-            }
-        }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
 
-        public void PanelSettingsChanged(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo nada?
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1022, ex);
-            }
-        }
+        public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1023, ex);
-            }
-        }
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
 
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
@@ -233,29 +193,9 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void DeviceAttached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1025, ex);
-            }
-        }
+        public void DeviceAttached(object sender, PanelEventArgs e) { }
 
-        public void DeviceDetached(object sender, PanelEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1026, ex);
-            }
-        }
+        public void DeviceDetached(object sender, PanelEventArgs e) { }
 
         private void ButtonGetId_OnClick(object sender, RoutedEventArgs e)
         {

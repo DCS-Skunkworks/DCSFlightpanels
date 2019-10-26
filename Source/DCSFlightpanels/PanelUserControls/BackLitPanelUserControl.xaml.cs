@@ -16,7 +16,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for BackLitPanelUserControl.xaml
     /// </summary>
-    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, ISaitekUserControl
+    public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
 
         private readonly BacklitPanelBIP _backlitPanelBIP;
@@ -57,7 +57,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
         }
 
-        public SaitekPanel GetSaitekPanel()
+        public GamingPanel GetGamingPanel()
         {
             return _backlitPanelBIP;
         }
@@ -67,53 +67,14 @@ namespace DCSFlightpanels.PanelUserControls
             return GetType().Name;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                //nada
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(471773, ex);
-            }
-        }
+        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
+        
 
-        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(471071, ex);
-            }
-        }
+        public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1071, ex);
-            }
-        }
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
 
-        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1086, ex);
-            }
-        }
+        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
 
         public void SettingsCleared(object sender, PanelEventArgs e)
         {
@@ -143,17 +104,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
-        {
-            try
-            {
-                //todo
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2011, ex);
-            }
-        }
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
 
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
@@ -232,53 +183,6 @@ namespace DCSFlightpanels.PanelUserControls
                 }
             }
         }
-        /*
-        private void LedsAllBlack()
-        {
-            var array = new byte[7];
-            array[0] = 0xb8;
-            array[1] = 0;
-            array[2] = 0;
-            array[3] = 0;
-            array[4] = 0;
-            array[5] = 0;
-            array[6] = 0;
-            //todo
-            var bip = new BacklitPanelBIP(Settings.Default.BIPLedStrength, null, null);
-            bip.SendLEDData(array);
-        }
-        */
-        /*
-        private void PrintBitStrings(byte[] array)
-        {
-            TextBoxBits.Text = "";
-            for (int i = 0; i < array.Length; i++)
-            {
-                var str = Convert.ToString(array[i], 2).PadLeft(8, '0');
-                TextBoxBits.Text = TextBoxBits.Text + "  " + str;
-            }
-        }
-
-        private void TextBoxBIP_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                Send();
-
-            }
-        }
-        
-        private void ButtonClearBIP_OnClick(object sender, RoutedEventArgs e)
-        {
-            TextBox0BIP.Text = "0x0";
-            TextBox1BIP.Text = "0x0";
-            TextBox2BIP.Text = "0x0";
-            TextBox3BIP.Text = "0x0";
-            TextBox4BIP.Text = "0x0";
-            TextBox5BIP.Text = "0x0";
-            LedsAllBlack();
-        }
-        */
 
         private void ShowGraphicConfiguration()
         {

@@ -3,9 +3,9 @@ using NonVisuals.Saitek;
 
 namespace DCSFlightpanels
 {
-    interface ISaitekUserControl
+    interface IGamingPanelUserControl
     {
-        SaitekPanel GetSaitekPanel();
+        GamingPanel GetGamingPanel();
         string GetName();
     }
 }

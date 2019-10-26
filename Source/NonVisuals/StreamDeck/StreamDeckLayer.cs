@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
 {
@@ -10,6 +11,7 @@ namespace NonVisuals.StreamDeck
         private string _name = "";
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
 
+        [JsonIgnore]
         public bool IsActive
         {
             get => _isActive;

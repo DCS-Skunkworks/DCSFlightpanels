@@ -74,17 +74,7 @@ namespace NonVisuals
             }
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
-        {
-            try
-            {
-                //todo do nada
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(1050, ex);
-            }
-        }
+        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
@@ -608,17 +598,8 @@ namespace NonVisuals
             set => _lastProfileUsed = value;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
-        {
-            try
-            {
-                //nada
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(471473, ex);
-            }
-        }
+        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
+
         public string JSONDirectory
         {
             get => _jsonDirectory;

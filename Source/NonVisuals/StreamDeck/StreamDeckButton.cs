@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -80,6 +81,7 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckButtonActionForRelease = value;
         }
 
+        [JsonIgnore]
         public bool IsPressed
         {
             get => _isPressed;

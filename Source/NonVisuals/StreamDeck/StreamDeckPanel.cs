@@ -319,7 +319,7 @@ namespace NonVisuals.StreamDeck
             set => _lcdKnobSensitivity = value;
         }
 
-        public string CurrentLayer
+        public string CurrentLayerName
         {
             get => _streamDeckLayerHandler.CurrentLayerName;
             set => _streamDeckLayerHandler.CurrentLayerName = value;
@@ -400,6 +400,11 @@ namespace NonVisuals.StreamDeck
         public StreamDeckButton GetCurrentLayerStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
         {
             return _streamDeckLayerHandler.GetCurrentLayerStreamDeckButton(streamDeckButtonName);
+        }
+
+        public StreamDeckLayer GetLayer(string layerName)
+        {
+            return _streamDeckLayerHandler.GetStreamDeckLayer(layerName);
         }
     }
 

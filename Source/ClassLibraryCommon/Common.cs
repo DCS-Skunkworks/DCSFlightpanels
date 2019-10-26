@@ -240,16 +240,16 @@ namespace ClassLibraryCommon
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 var version = fileVersionInfo.FileVersion;
 
-                var streamWriter = File.AppendText(_errorLog);
-                try
+                    var tempFile = Path.GetTempFileName();
+                using (var streamWriter = new StreamWriter(tempFile))
+                using (var streamReader = new StreamReader(_errorLog))
                 {
                     streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
                     streamWriter.Write(Environment.NewLine + location + " Custom message = [" + message + "]" + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                    while (!streamReader.EndOfStream)
+                        streamWriter.WriteLine(streamReader.ReadLine());
                 }
-                finally
-                {
-                    streamWriter.Close();
-                }
+                File.Copy(tempFile, _errorLog, true);
             }
         }
 
