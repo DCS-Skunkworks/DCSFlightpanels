@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Threading;
 using ClassLibraryCommon;
+using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 
-namespace NonVisuals.DCSBIOSBindings
+namespace NonVisuals.StreamDeck
 {
     public class DCSBIOSActionBindingStreamDeck : DCSBIOSActionBindingBase, IStreamDeckButtonAction
     {
-        /*
-         This class binds a physical key on the Stream Deck with a DCSBIOSInput
-         Pressing the button will send a DCSBIOS command.
-         */
-        public EnumStreamDeckButtonActionType ActionType => EnumStreamDeckButtonActionType.DCSBIOS;
 
-        public int ExecutionDelay { get; set; } = 0;
+        public bool UseExecutionDelay { get; set; } = false;
+        public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.DCSBIOS;
+
+        public int ExecutionDelay { get; set; } = 1000;
         private Thread _delayedExecutionThread;
 
 
@@ -40,7 +39,7 @@ namespace NonVisuals.DCSBIOSBindings
 
         public void Execute()
         {
-            if (ExecutionDelay == 0)
+            if (!UseExecutionDelay)
             {
                 SendDCSBIOSCommands();
             }

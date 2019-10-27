@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 
@@ -11,7 +12,8 @@ namespace DCSFlightpanels
         StreamDeckButtonNames GetSelectedButtonName();
         StreamDeckLayer GetSelectedStreamDeckLayer();
         List<string> GetStreamDeckLayerNames();
-        EnumStreamDeckButtonActionType GetSelectedActionType();
+        EnumStreamDeckActionType GetSelectedActionType();
+        void TestImage(Bitmap bitmap);
         void ChildChangesMade();
     }
 }

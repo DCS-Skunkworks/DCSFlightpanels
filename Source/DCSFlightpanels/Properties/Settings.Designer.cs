@@ -370,5 +370,38 @@ namespace DCSFlightpanels.Properties {
                 this["ShowBugReportInfo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Font ButtonTextImageFont {
+            get {
+                return ((global::System.Drawing.Font)(this["ButtonTextImageFont"]));
+            }
+            set {
+                this["ButtonTextImageFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color ButtonTextImageFontColor {
+            get {
+                return ((global::System.Drawing.Color)(this["ButtonTextImageFontColor"]));
+            }
+            set {
+                this["ButtonTextImageFontColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Drawing.Color ButtonTextImageBackgroundColor {
+            get {
+                return ((global::System.Drawing.Color)(this["ButtonTextImageBackgroundColor"]));
+            }
+            set {
+                this["ButtonTextImageBackgroundColor"] = value;
+            }
+        }
     }
 }

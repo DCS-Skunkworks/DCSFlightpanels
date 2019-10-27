@@ -25,6 +25,39 @@ namespace NonVisuals.StreamDeck
         BUTTON15
     }
 
+    public static class StreamDeckFunction
+    {
+        public static int ButtonNumber(StreamDeckButtonNames streamDeckButtonName)
+        {
+            if (streamDeckButtonName == StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            {
+                return 0;
+            }
+
+            return int.Parse(streamDeckButtonName.ToString().Replace("BUTTON",""));
+        }
+        
+        public static StreamDeckButtonNames ButtonName(int streamDeckButtonNumber)
+        {
+            if (streamDeckButtonNumber == 0 )
+            {
+                return StreamDeckButtonNames.BUTTON0_NO_BUTTON;
+            }
+
+            return (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+        }
+
+        public static StreamDeckButtonNames ButtonName(string streamDeckButtonNumber)
+        {
+            if (string.IsNullOrEmpty(streamDeckButtonNumber) || streamDeckButtonNumber == "0")
+            {
+                return StreamDeckButtonNames.BUTTON0_NO_BUTTON;
+            }
+
+            return (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+        }
+    }
+
     public class StreamDeckButton 
     {
         private StreamDeckButtonNames _streamDeckButtonName;
@@ -95,29 +128,6 @@ namespace NonVisuals.StreamDeck
             set => _isPressed = value;
         }
         
-        public string ExportString()
-        {
-            return "StreamDeckButton{" + Enum.GetName(typeof(StreamDeckButtonNames), _streamDeckButtonName) + "}";
-        }
-
-        public void ImportString(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentException("Import string empty. (StreamDeckButton)");
-            }
-            if (!str.StartsWith("StreamDeckButton{") || !str.EndsWith("}"))
-            {
-                throw new ArgumentException("Import string format exception. (StreamDeckButton) >" + str + "<");
-            }
-            //StreamDeckButton{BUTTON11}
-            var dataString = str.Remove(0, 15);
-            //BUTTON11}
-            dataString = dataString.Remove(dataString.Length - 1, 1);
-            //BUTTON11
-            _streamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), dataString.Trim());
-        }
-
         public static HashSet<StreamDeckButton> GetAllStreamDeckButtonNames()
         {
             var result = new HashSet<StreamDeckButton>();

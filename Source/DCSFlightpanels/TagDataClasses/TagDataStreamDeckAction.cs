@@ -9,14 +9,14 @@ using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.TagDataClasses
 {
-    internal class TagDataClassStreamDeck : TagDataClassBase
+    internal class TagDataStreamDeckAction : TagDataClassBase
     {
         private StreamDeckButtonOnOff _button;
         private DCSBIOSActionBindingStreamDeck _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         private StreamDeckTargetLayer _streamDeckTargetLayer;
 
-        public TagDataClassStreamDeck(TextBox textBox, StreamDeckButtonOnOff button)
+        public TagDataStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button)
         {
             TextBox = textBox;
             _button = button;

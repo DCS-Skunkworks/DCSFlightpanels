@@ -8,13 +8,15 @@ namespace NonVisuals.StreamDeck
     public class LayerBindingStreamDeck : IStreamDeckButtonAction
     {
 
+        public bool UseExecutionDelay { get; set; } = false;
         private StreamDeckTargetLayer _streamDeckLayerTarget;
         private bool _whenTurnedOn;
         
-        public int ExecutionDelay { get; set; } = 0;
+
+        public int ExecutionDelay { get; set; } = 1000;
         private Thread _delayedExecutionThread;
 
-        public EnumStreamDeckButtonActionType ActionType => EnumStreamDeckButtonActionType.LayerNavigation;
+        public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.LayerNavigation;
 
 
 
@@ -35,7 +37,7 @@ namespace NonVisuals.StreamDeck
 
         public void Execute()
         {
-            if (ExecutionDelay == 0)
+            if (!UseExecutionDelay)
             {
                 //todo
             }

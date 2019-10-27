@@ -72,15 +72,15 @@
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
     <Compile Include="Saitek\BIPLink.cs" />
-    <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="Saitek\BIPLinkPZ55.cs" />
     <Compile Include="Saitek\BIPLinkPZ69.cs" />
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\DCSBIOSOutputBindingStreamDeck.cs" />
-    <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ70.cs" />
@@ -111,6 +111,7 @@
     <Compile Include="StreamDeck\OSCommandBindingStreamDeck.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonAction.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonFace.cs" />
+    <Compile Include="StreamDeck\SimpleImageButton.cs" />
     <Compile Include="StreamDeck\StreamDeckButton.cs" />
     <Compile Include="Saitek\MultiPanelKnob.cs" />
     <Compile Include="Saitek\MultiPanelPZ70.cs" />

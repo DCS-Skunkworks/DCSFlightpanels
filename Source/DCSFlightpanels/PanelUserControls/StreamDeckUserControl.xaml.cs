@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.Remoting.Messaging;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,6 +28,10 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _userControlLoaded;
         private List<RadioButton> _radioButtonActionsList = new List<RadioButton>();
         private List<Image> _buttonImages = new List<Image>();
+
+        private CancellationTokenSource _cancellationTokenSource;
+        Random _random = new Random();
+        private Thread _identificationThread;
 
         private const int IMAGE_HEIGHT = 50;
         private const int IMAGE_WIDTH = 50;
@@ -58,6 +63,8 @@ namespace DCSFlightpanels.PanelUserControls
             _userControlLoaded = true;
             UCStreamDeckButtonAction.SDUIParent = this;
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
+            UCStreamDeckButtonImage.SDUIParent = this;
+            UCStreamDeckButtonImage.GlobalHandler = _globalHandler;
             ShowGraphicConfiguration();
             SetFormState();
             UCStreamDeckButtonAction.Update();
@@ -87,6 +94,7 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonDeleteImageConfiguration.IsEnabled = UCStreamDeckButtonImage.HasConfig;
 
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty);
+                CheckBoxMarkHomeLayer.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
                 ButtonDeleteLayer.IsEnabled = ComboBoxLayers.IsEnabled;
                 //CheckBoxMarkHomeLayer.IsEnabled = ComboBoxLayers.IsEnabled;
@@ -145,7 +153,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                var tagDataClass = new TagDataClassButtonImage();
+                var tagDataClass = new TagDataStreamDeckImage();
                 tagDataClass.StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
                 buttonImage.Tag = tagDataClass;
                 buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataClass.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
@@ -159,25 +167,25 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 try
                 {
-                    var tagDataButtonImage = (TagDataClassButtonImage)buttonImage.Tag;
+                    var tagDataButtonImage = (TagDataStreamDeckImage)buttonImage.Tag;
 
                     if (selectedButtonName == tagDataButtonImage.StreamDeckButtonName)
                     {
-                        if (((TagDataClassButtonImage)buttonImage.Tag).IsSelected)
+                        if (((TagDataStreamDeckImage)buttonImage.Tag).IsSelected)
                         {
                             buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
-                            ((TagDataClassButtonImage)buttonImage.Tag).IsSelected = false;
+                            ((TagDataStreamDeckImage)buttonImage.Tag).IsSelected = false;
                         }
                         else
                         {
                             buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.CadetBlue));
-                            ((TagDataClassButtonImage)buttonImage.Tag).IsSelected = true;
+                            ((TagDataStreamDeckImage)buttonImage.Tag).IsSelected = true;
                         }
                     }
                     else
                     {
                         buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
-                        ((TagDataClassButtonImage)buttonImage.Tag).IsSelected = false;
+                        ((TagDataStreamDeckImage)buttonImage.Tag).IsSelected = false;
                     }
                 }
                 catch (Exception ex)
@@ -187,6 +195,20 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        public void TestImage(Bitmap bitmap)
+        {
+            try
+            {
+                if(GetSelectedButtonName() != StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+                {
+                    _streamDeck.SetImage(GetSelectedButtonName(), bitmap);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
         private void ShowLayer(string layerName)
         {
             if (string.IsNullOrEmpty(layerName))
@@ -215,13 +237,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private TagDataClassButtonImage GetSelectedImageDataClass()
+        private TagDataStreamDeckImage GetSelectedImageDataClass()
         {
             foreach (var image in _buttonImages)
             {
-                if (((TagDataClassButtonImage)image.Tag).IsSelected)
+                if (((TagDataStreamDeckImage)image.Tag).IsSelected)
                 {
-                    return (TagDataClassButtonImage)image.Tag;
+                    return (TagDataStreamDeckImage)image.Tag;
                 }
             }
             return null;
@@ -630,7 +652,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 var image = (Image)sender;
-                var imageTagClass = (TagDataClassButtonImage)image.Tag;
+                var imageTagClass = (TagDataStreamDeckImage)image.Tag;
 
                 if (GetSelectedButtonName() != imageTagClass.StreamDeckButtonName && (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty))
                 {
@@ -657,7 +679,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var image = (Image)sender;
-                var imageTagClass = (TagDataClassButtonImage)image.Tag;
+                var imageTagClass = (TagDataStreamDeckImage)image.Tag;
 
 
                 UpdateAllButtonsSelectedStatus(imageTagClass.StreamDeckButtonName);
@@ -695,22 +717,22 @@ namespace DCSFlightpanels.PanelUserControls
 
             switch (streamDeckButton.StreamDeckButtonActionForPress.ActionType)
             {
-                case EnumStreamDeckButtonActionType.KeyPress:
+                case EnumStreamDeckActionType.KeyPress:
                     {
                         RadioButtonKeyPress.IsChecked = true;
                         break;
                     }
-                case EnumStreamDeckButtonActionType.DCSBIOS:
+                case EnumStreamDeckActionType.DCSBIOS:
                     {
                         RadioButtonDCSBIOS.IsChecked = true;
                         break;
                     }
-                case EnumStreamDeckButtonActionType.OSCommand:
+                case EnumStreamDeckActionType.OSCommand:
                     {
                         RadioButtonOSCommand.IsChecked = true;
                         break;
                     }
-                case EnumStreamDeckButtonActionType.LayerNavigation:
+                case EnumStreamDeckActionType.LayerNavigation:
                     {
                         RadioButtonLayerNav.IsChecked = true;
                         break;
@@ -718,26 +740,26 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public EnumStreamDeckButtonActionType GetSelectedActionType()
+        public EnumStreamDeckActionType GetSelectedActionType()
         {
             if (RadioButtonKeyPress.IsChecked == true)
             {
-                return EnumStreamDeckButtonActionType.KeyPress;
+                return EnumStreamDeckActionType.KeyPress;
             }
             if (RadioButtonDCSBIOS.IsChecked == true)
             {
-                return EnumStreamDeckButtonActionType.DCSBIOS;
+                return EnumStreamDeckActionType.DCSBIOS;
             }
             if (RadioButtonOSCommand.IsChecked == true)
             {
-                return EnumStreamDeckButtonActionType.OSCommand;
+                return EnumStreamDeckActionType.OSCommand;
             }
             if (RadioButtonLayerNav.IsChecked == true)
             {
-                return EnumStreamDeckButtonActionType.LayerNavigation;
+                return EnumStreamDeckActionType.LayerNavigation;
             }
 
-            return EnumStreamDeckButtonActionType.Unknown;
+            return EnumStreamDeckActionType.Unknown;
         }
 
 
@@ -873,9 +895,9 @@ namespace DCSFlightpanels.PanelUserControls
             _buttonImages.Add(ButtonImage15);
         }
 
-        private TagDataClassButtonImage TagData(Image image)
+        private TagDataStreamDeckImage TagData(Image image)
         {
-            return (TagDataClassButtonImage)image.Tag;
+            return (TagDataStreamDeckImage)image.Tag;
         }
 
 
@@ -1141,6 +1163,66 @@ namespace DCSFlightpanels.PanelUserControls
             DotImage15.Visibility = Visibility.Collapsed;
         }
 
+        private void ButtonClearImages_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _streamDeck.ClearAllImageFaces();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2019, ex);
+            }
+        }
+
+        private void ButtonIdentifyPanel_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_identificationThread == null)
+                {
+                    _cancellationTokenSource = new CancellationTokenSource();
+                    _identificationThread = new Thread(() => ThreadedPanelIdentification(_cancellationTokenSource.Token));
+                    _identificationThread.Start();
+                }
+                else
+                {
+                    _cancellationTokenSource.Cancel();
+                    _identificationThread = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(2019, ex);
+            }
+        }
+
+        private Color[] _colors = new Color[]
+        {
+            Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
+            Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
+        };
+
+        private void ThreadedPanelIdentification(CancellationToken cancellationToken)
+        {
+            try
+            {
+                while (true)
+                {
+                    var bitmap = BitMapCreator.CreateEmtpyStreamDeckBitmap(_colors[_random.Next(0, 20)]);
+                    _streamDeck.SetImage(_random.Next(1,15), bitmap);
+                    Thread.Sleep(50);
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
     }
 
 

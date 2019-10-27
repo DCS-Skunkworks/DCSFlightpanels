@@ -9,10 +9,11 @@ namespace NonVisuals.StreamDeck
 {
     public class KeyBindingStreamDeck : KeyBinding, IStreamDeckButtonAction
     {
-        public int ExecutionDelay { get; set; } = 0;
+        public bool UseExecutionDelay { get; set; } = false;
+        public int ExecutionDelay { get; set; } = 1000;
         private Thread _delayedExecutionThread;
 
-        public EnumStreamDeckButtonActionType ActionType => EnumStreamDeckButtonActionType.KeyPress;
+        public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
 
 
 
@@ -27,7 +28,7 @@ namespace NonVisuals.StreamDeck
 
         public void Execute()
         {
-            if (ExecutionDelay == 0)
+            if (!UseExecutionDelay)
             {
                 OSKeyPress.Execute();
             }

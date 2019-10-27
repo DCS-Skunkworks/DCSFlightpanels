@@ -7,9 +7,10 @@ namespace NonVisuals.StreamDeck
 {
     public class OSCommandBindingStreamDeck : OSCommandBinding, IStreamDeckButtonAction
     {
-        public EnumStreamDeckButtonActionType ActionType => EnumStreamDeckButtonActionType.OSCommand;
-        
-        public int ExecutionDelay { get; set; } = 0;
+        public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
+
+        public bool UseExecutionDelay { get; set; } = false;
+        public int ExecutionDelay { get; set; } = 1000;
         private Thread _delayedExecutionThread;
 
 
@@ -29,7 +30,7 @@ namespace NonVisuals.StreamDeck
 
         public void Execute()
         {
-            if (ExecutionDelay == 0)
+            if (!UseExecutionDelay)
             {
                 OSCommandObject.Execute();
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -121,6 +122,29 @@ namespace NonVisuals.StreamDeck
             _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
             SettingsLoading = false;
             SettingsApplied();
+        }
+
+        public void SetImage(int streamDeckButtonNumber, Bitmap bitmap)
+        {
+            SetImage(StreamDeckFunction.ButtonName(streamDeckButtonNumber), bitmap);
+        }
+
+        public void SetImage(StreamDeckButtonNames streamDeckButtonName, Bitmap bitmap)
+        {
+            if (streamDeckButtonName == StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            {
+                return;
+            }
+            var keyBitmap = KeyBitmap.Create.FromBitmap(bitmap);
+            _streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
+        }
+
+        public void ClearAllImageFaces()
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                _streamDeckBoard.ClearKey(i);
+            }
         }
 
         public override List<string> ExportSettings()

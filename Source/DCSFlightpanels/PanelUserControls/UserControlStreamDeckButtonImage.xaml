@@ -5,9 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              Loaded="UserControlStreamDeckButtonImage_OnLoaded"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Image x:Key="UpArrow" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/DCSFlightpanels;component/Images/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/DCSFlightpanels;component/Images/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/DCSFlightpanels;component/Images/right_arrow.png"/>
+
+        <system:Double x:Key="ArrowHeight">18</system:Double>
+    </UserControl.Resources>
     <GroupBox Header="Button Image">
 
         <Grid Margin="10,0,10,0">
@@ -22,9 +32,9 @@
 
             <StackPanel Name="StackPanelButtonImageType" Grid.Column="0">
                 <StackPanel >
-                    <Label Content="Button Image Type"/>
-                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonText" Content="Text" Margin="0,2,0,2" Click="RadioButtonImageType_OnClick"/>
-                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonImage" Content="Image" Margin="0,2,0,2" Click="RadioButtonImageType_OnClick"/>
+                    <Label Content="Image Content" Margin="0,2,0,0"/>
+                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonText" Content="Static Text" Margin="0,2,0,2" Click="RadioButtonImageType_OnClick"/>
+                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonImage" Content="Image File" Margin="0,2,0,2" Click="RadioButtonImageType_OnClick"/>
                     <RadioButton GroupName="ButtonImageType" Name="RadioButtonDCSBIOSOutput" Content="DCS-BIOS Output" Margin="0,2,0,2" Click="RadioButtonImageType_OnClick"/>
                 </StackPanel>
                 <StackPanel Name="StackPanelDCSBIOSBackgroundTypeSelection" Margin="0,12,2,0">
@@ -35,22 +45,44 @@
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonTextAndStyle"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">
-                <Label Content="Text To Display when Button Pressed" FontSize="10" Height="23"  Margin="0,5,2,0"  />
-                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxTextForButtonOn" />
+            <StackPanel Name="StackPanelButtonTextAndStyle"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="10,5,10,0" Visibility="Visible">
+                <Label Content="Text To Display when Button Pressed" FontSize="10" Height="23"  Margin="0,5,0,0"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <Button Name="ButtonFontTextOutputButtonOn" Width="40" Content="Font" Margin="10,2,2,0"/>
-                    <Button Name="ButtonTestTextOutputButtonOn" Width="40" Content="Test" Margin="0,2,2,0"/>
+                    <TextBox Name="TextBoxButtonOnTextFace" FontSize="10" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0"  KeyUp="TextBoxButtonTextFace_OnKeyUp" />
+                    <StackPanel>
+                        <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
+                        <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
+                        <RepeatButton Name="RepeatButtonActionPressLeft" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
+                        <RepeatButton Name="RepeatButtonActionPressRight" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Button Name="ButtonOnTextFaceFont" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonOnTextFaceFont_OnClick"/>
+                            <Button Name="ButtonOnTextFaceFontColor" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonOnTextFaceFontColor_OnClick"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
+                            <Button Name="ButtonOnTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonOnTextFaceBackgroundColor_OnClick"/>
+                            <Button Name="ButtonOnTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonOnTestTextFace_OnClick"/>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
-                <Label Content="Text To Display when Button Released" FontSize="10" Height="23"  Margin="0,5,2,0"  />
-                <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxTextForButtonOff" />
+                <Label Content="Text To Display when Button Released" FontSize="10" Height="23"  Margin="0,15,2,0"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <Button Name="ButtonFontTextOutputButtonOff" Width="40" Content="Font" Margin="10,2,2,0"/>
-                    <Button Name="ButtonTestTextOutputButtonOff" Width="40" Content="Test" Margin="0,2,2,0"/>
+                    <TextBox Name="TextBoxButtonOffTextFace" FontSize="10" Height="72" Width="72" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0"  KeyUp="TextBoxButtonTextFace_OnKeyUp"   />
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Button Name="ButtonOffTextFaceFont" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonOffTextFaceFont_OnClick"/>
+                            <Button Name="ButtonOffTextFaceFontColor" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonOffTextFaceFontColor_OnClick"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                            <Button Name="ButtonOffTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonOffTextFaceBackgroundColor_OnClick"/>
+                            <Button Name="ButtonOffTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonOffTestTextFace_OnClick"/>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Visible">
+            <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">
                 <Label Content="DCSBIOS Data to show when Button Pressed" FontSize="10" Height="23"   />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxDCSBIOSOutputButtonOn"  IsEnabled="False" Background="LightSteelBlue" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -85,7 +117,7 @@
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelDCSBIOSBackgroundType" Margin="10,0,10,0" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
+            <StackPanel Name="StackPanelDCSBIOSBackgroundType" Margin="10,0,10,0" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">
                 <StackPanel Name="StackPanelButtonDCSBIOSBackgroundGeneratedImage" Visibility="Visible">
                     <StackPanel Orientation="Horizontal" Margin="0,20,2,0">
                         <Button Name="ButtonChooseColorPressed" Content="Select Color when Pressed"></Button>
@@ -114,7 +146,7 @@
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonImageToShow"   Margin="10,0,10,0" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Visibility="Visible">
+            <StackPanel Name="StackPanelButtonImageToShow"   Margin="10,0,10,0" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">
                 <Label Content="Selected Image when Button Pressed" FontSize="10" Height="23" Margin="0,5,2,0" />
                 <TextBox FontSize="10" Height="18"  IsReadOnly="True" Name="TextBoxSelectedImageButtonOn"  IsEnabled="False" Background="LightSteelBlue"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">

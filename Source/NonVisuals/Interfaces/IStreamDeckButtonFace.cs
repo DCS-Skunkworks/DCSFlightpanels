@@ -1,7 +1,17 @@
 ﻿namespace NonVisuals.Interfaces
 {
-    public interface IStreamDeckButtonFace{
-        void DoButtonPress();
-        void DoButtonRelease();
+
+    public enum EnumStreamDeckFaceType
+    {
+        Unknown = 0,
+        Text = 1,
+        DCSBIOSOutput = 2
+    }
+
+
+    public interface IStreamDeckButtonFace
+    {
+        EnumStreamDeckFaceType FaceType { get; }
+        void Execute();
     }
 }

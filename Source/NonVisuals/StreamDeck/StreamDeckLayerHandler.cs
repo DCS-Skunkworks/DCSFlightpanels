@@ -222,7 +222,7 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckButton GetCurrentLayerStreamDeckButton(int streamDeckButtonNumber)
         {
-            var streamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+            var streamDeckButtonName = StreamDeckFunction.ButtonName(streamDeckButtonNumber);
             return GetStreamDeckButton(streamDeckButtonName, CurrentLayerName, false);
         }
 

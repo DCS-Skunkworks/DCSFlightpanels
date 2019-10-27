@@ -35,9 +35,7 @@
                 <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
 
                 <ComboBox Name="ComboBoxReleaseDelayKeyPress" SelectedValuePath="Content" >
-                    <ComboBoxItem>250</ComboBoxItem>
-                    <ComboBoxItem>500</ComboBoxItem>
-                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem >1000</ComboBoxItem>
                     <ComboBoxItem>1500</ComboBoxItem>
                     <ComboBoxItem>2000</ComboBoxItem>
                     <ComboBoxItem>2500</ComboBoxItem>
@@ -51,7 +49,7 @@
                     <ComboBoxItem>10000</ComboBoxItem>
                 </ComboBox>
 
-                <Button Name="ButtonFocus" Width="10" Height="5" Background="Transparent" Content=" " Margin="0,10,0,0"/>
+                <Button Name="ButtonFocus" Width="10" Height="1" Background="Transparent" Content=" " Margin="0,10,0,0"/>
             </StackPanel>
 
 
@@ -72,9 +70,7 @@
                 <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
 
                 <ComboBox Name="ComboBoxReleaseDelayDCSBIOS"   SelectedValuePath="Content" >
-                    <ComboBoxItem>250</ComboBoxItem>
-                    <ComboBoxItem>500</ComboBoxItem>
-                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem >1000</ComboBoxItem>
                     <ComboBoxItem>1500</ComboBoxItem>
                     <ComboBoxItem>2000</ComboBoxItem>
                     <ComboBoxItem>2500</ComboBoxItem>
@@ -107,9 +103,7 @@
                 <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE"  Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
 
                 <ComboBox Name="ComboBoxReleaseDelayOSCommand"  SelectedValuePath="Content" >
-                    <ComboBoxItem>250</ComboBoxItem>
-                    <ComboBoxItem>500</ComboBoxItem>
-                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem >1000</ComboBoxItem>
                     <ComboBoxItem>1500</ComboBoxItem>
                     <ComboBoxItem>2000</ComboBoxItem>
                     <ComboBoxItem>2500</ComboBoxItem>
@@ -133,9 +127,7 @@
                 <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
 
                 <ComboBox Name="ComboBoxReleaseDelayLayerNav"  SelectedValuePath="Content" >
-                    <ComboBoxItem>250</ComboBoxItem>
-                    <ComboBoxItem>500</ComboBoxItem>
-                    <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
+                    <ComboBoxItem >1000</ComboBoxItem>
                     <ComboBoxItem>1500</ComboBoxItem>
                     <ComboBoxItem>2000</ComboBoxItem>
                     <ComboBoxItem>2500</ComboBoxItem>

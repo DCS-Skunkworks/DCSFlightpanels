@@ -244,10 +244,10 @@
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TagDataClasses\TagDataClassBase.cs" />
-    <Compile Include="TagDataClasses\TagDataClassButtonImage.cs" />
+    <Compile Include="TagDataClasses\TagDataStreamDeckImage.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ69Button.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ69Full.cs" />
-    <Compile Include="TagDataClasses\TagDataClassStreamDeck.cs" />
+    <Compile Include="TagDataClasses\TagDataStreamDeckAction.cs" />
     <Compile Include="TagDataClasses\TagDataClassTPM.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ69.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ70.cs" />
@@ -762,6 +762,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\question_mark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\down_arrow.png" />
+    <Resource Include="Images\left_arrow.png" />
+    <Resource Include="Images\right_arrow.png" />
+    <Resource Include="Images\up_arrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,7 +1,7 @@
 ﻿namespace NonVisuals.Interfaces
 {
 
-    public enum EnumStreamDeckButtonActionType
+    public enum EnumStreamDeckActionType
     {
         Unknown = 0,
         KeyPress = 1,
@@ -12,17 +12,7 @@
 
     public interface IStreamDeckButtonAction
     {
-        EnumStreamDeckButtonActionType ActionType { get; }
-        int ExecutionDelay { get; set; }
+        EnumStreamDeckActionType ActionType { get; }
         void Execute();
-        //void SetAction(object action);
-        //object GetAction();
-
-        /*string ExportJSON();
-        void ImportJSON(string json);*/
-
-
-
-
     }
 }
