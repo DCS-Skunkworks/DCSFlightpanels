@@ -40,7 +40,6 @@ namespace NonVisuals.StreamDeck
                 TypeNameHandling = TypeNameHandling.All
             };
             return JsonConvert.SerializeObject(_layerList, indented, settings);
-            //return JsonConvert.SerializeObject(new { _layerList }, Formatting.Indented);
         }
 
         public void ImportJSONSettings(string jsonText)
@@ -49,16 +48,6 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            //_layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText);
-            /*
-            var deserializedList = new
-            {
-                _layerList = new List<StreamDeckLayer>()
-            };
-            var json2 = jsonText.Replace("\r\n", Environment.NewLine);
-            deserializedList = JsonConvert.DeserializeAnonymousType(jsonText, deserializedList);
-            
-            _layerList.Reverse();*/
             var settings = new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.All
