@@ -190,6 +190,9 @@ namespace DCSFlightpanels
                 {
                     var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosJSONLocation);
                     window.ShowDialog();
+                    MessageBox.Show(
+                        "This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log once you have fixed the problem.",
+                        "Delete Error Log", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)

@@ -478,7 +478,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Tagg(TextBoxButtonOnTextFace).OffsetY += OFFSET_CHANGE_VALUE;
+                Tagg(TextBoxButtonOnTextFace).OffsetY -= OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonOnTextFace);
             }
             catch (Exception ex)
@@ -491,7 +491,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Tagg(TextBoxButtonOnTextFace).OffsetY -= OFFSET_CHANGE_VALUE;
+                Tagg(TextBoxButtonOnTextFace).OffsetY += OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonOnTextFace);
             }
             catch (Exception ex)
