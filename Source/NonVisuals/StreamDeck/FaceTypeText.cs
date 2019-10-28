@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using ClassLibraryCommon;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -21,13 +23,16 @@ namespace NonVisuals.StreamDeck
         public StreamDeckPanel ParentPanel { get; set; }
         private int _offsetX;
         private int _offsetY;
+        private bool _whenTurnedOn;
 
 
 
 
 
-
-
+        ~FaceTypeText()
+        {
+            _delayedExecutionThread?.Abort();
+        }
 
         public void Execute()
         {
@@ -36,8 +41,34 @@ namespace NonVisuals.StreamDeck
                 return;
             }
 
+            if (!UseExecutionDelay)
+            {
+                ShowButtonFace();
+            }
+            else
+            {
+                _delayedExecutionThread = new Thread(DelayedExecution);
+                _delayedExecutionThread.Start();
+            }
+        }
+
+        private void ShowButtonFace()
+        {
             var bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
             ParentPanel.SetImage(_streamDeckButtonName, bitmap);
+        }
+        
+        private void DelayedExecution()
+        {
+            try
+            {
+                Thread.Sleep(ExecutionDelay);
+                ShowButtonFace();
+            }
+            catch (Exception e)
+            {
+                Common.ShowErrorMessageBox(e);
+            }
         }
 
         public Bitmap Bitmap
@@ -114,6 +145,12 @@ namespace NonVisuals.StreamDeck
                 _refreshBitmap = true;
                 _offsetY = value;
             }
+        }
+
+        public bool WhenTurnedOn
+        {
+            get => _whenTurnedOn;
+            set => _whenTurnedOn = value;
         }
     }
 }

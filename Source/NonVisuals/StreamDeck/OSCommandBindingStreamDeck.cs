@@ -9,9 +9,6 @@ namespace NonVisuals.StreamDeck
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
 
-        public bool UseExecutionDelay { get; set; } = false;
-        public int ExecutionDelay { get; set; } = 1000;
-        private Thread _delayedExecutionThread;
 
 
 
@@ -19,42 +16,13 @@ namespace NonVisuals.StreamDeck
 
 
 
-
-
-
-
-        ~OSCommandBindingStreamDeck()
-        {
-            _delayedExecutionThread?.Abort();
-        }
 
         public void Execute()
         {
-            if (!UseExecutionDelay)
-            {
-                OSCommandObject.Execute();
-            }
-            else
-            {
-                _delayedExecutionThread = new Thread(DelayedExecution);
-                _delayedExecutionThread.Start();
-            }
+            OSCommandObject.Execute();
         }
 
-        private void DelayedExecution()
-        {
-            try
-            {
-                Thread.Sleep(ExecutionDelay);
-                OSCommandObject.Execute();
-            }
-            catch (Exception e)
-            {
-                Common.ShowErrorMessageBox(e);
-            }
-        }
-
-        internal override void ImportSettings(string settings){}
+        internal override void ImportSettings(string settings) { }
 
         public override string ExportSettings()
         {

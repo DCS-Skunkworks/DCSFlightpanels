@@ -89,13 +89,13 @@
     <Setting Name="ShowBugReportInfo" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ButtonTextImageFont" Type="System.Drawing.Font" Scope="User">
+    <Setting Name="ButtonTextFaceFont" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ButtonTextImageFontColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="ButtonTextFaceFontColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ButtonTextImageBackgroundColor" Type="System.Drawing.Color" Scope="User">
+    <Setting Name="ButtonTextFaceBackgroundColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

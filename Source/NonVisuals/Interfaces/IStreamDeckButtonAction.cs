@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Interfaces
+﻿using System.Threading;
+
+namespace NonVisuals.Interfaces
 {
 
     public enum EnumStreamDeckActionType
@@ -13,6 +15,6 @@
     public interface IStreamDeckButtonAction
     {
         EnumStreamDeckActionType ActionType { get; }
-        void Execute();
+        void Execute(CancellationToken cancellationToken);
     }
 }

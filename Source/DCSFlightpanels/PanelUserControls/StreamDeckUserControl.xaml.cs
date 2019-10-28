@@ -63,8 +63,8 @@ namespace DCSFlightpanels.PanelUserControls
             _userControlLoaded = true;
             UCStreamDeckButtonAction.SDUIParent = this;
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
-            UCStreamDeckButtonImage.SDUIParent = this;
-            UCStreamDeckButtonImage.GlobalHandler = _globalHandler;
+            UCStreamDeckButtonFace.SDUIParent = this;
+            UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
             ShowGraphicConfiguration();
             SetFormState();
             UCStreamDeckButtonAction.Update();
@@ -79,22 +79,22 @@ namespace DCSFlightpanels.PanelUserControls
                 RadioButtonDCSBIOS.Visibility = _globalHandler.GetAirframe() != DCSAirframe.KEYEMULATOR ? Visibility.Visible : Visibility.Collapsed;
 
                 UCStreamDeckButtonAction.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
-                UCStreamDeckButtonImage.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
+                UCStreamDeckButtonFace.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
                 StackPanelChooseButtonActionType.IsEnabled = selectedButtonNumber != 0;
 
                 UCStreamDeckButtonAction.SetFormState();
-                UCStreamDeckButtonImage.SetFormState();
+                UCStreamDeckButtonFace.SetFormState();
 
                 ButtonAcceptActionConfiguration.IsEnabled = UCStreamDeckButtonAction.IsDirty;
                 ButtonCancelActionConfigurationChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty && UCStreamDeckButtonAction.HasConfig;
                 ButtonDeleteActionConfiguration.IsEnabled = UCStreamDeckButtonAction.HasConfig;
 
-                ButtonAcceptImageConfiguration.IsEnabled = UCStreamDeckButtonImage.IsDirty;
-                ButtonCancelImageConfigurationChanges.IsEnabled = UCStreamDeckButtonImage.IsDirty && UCStreamDeckButtonImage.HasConfig;
-                ButtonDeleteImageConfiguration.IsEnabled = UCStreamDeckButtonImage.HasConfig;
+                ButtonAcceptImageConfiguration.IsEnabled = UCStreamDeckButtonFace.IsDirty;
+                ButtonCancelImageConfigurationChanges.IsEnabled = UCStreamDeckButtonFace.IsDirty && UCStreamDeckButtonFace.HasConfig;
+                ButtonDeleteImageConfiguration.IsEnabled = UCStreamDeckButtonFace.HasConfig;
 
-                ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty);
-                CheckBoxMarkHomeLayer.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty);
+                ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
+                CheckBoxMarkHomeLayer.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
                 ButtonDeleteLayer.IsEnabled = ComboBoxLayers.IsEnabled;
                 //CheckBoxMarkHomeLayer.IsEnabled = ComboBoxLayers.IsEnabled;
@@ -153,7 +153,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                var tagDataClass = new TagDataStreamDeckImage();
+                var tagDataClass = new TagDataStreamDeckFace();
                 tagDataClass.StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
                 buttonImage.Tag = tagDataClass;
                 buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataClass.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
@@ -167,25 +167,25 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 try
                 {
-                    var tagDataButtonImage = (TagDataStreamDeckImage)buttonImage.Tag;
+                    var tagDataButtonImage = (TagDataStreamDeckFace)buttonImage.Tag;
 
                     if (selectedButtonName == tagDataButtonImage.StreamDeckButtonName)
                     {
-                        if (((TagDataStreamDeckImage)buttonImage.Tag).IsSelected)
+                        if (((TagDataStreamDeckFace)buttonImage.Tag).IsSelected)
                         {
                             buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
-                            ((TagDataStreamDeckImage)buttonImage.Tag).IsSelected = false;
+                            ((TagDataStreamDeckFace)buttonImage.Tag).IsSelected = false;
                         }
                         else
                         {
                             buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.CadetBlue));
-                            ((TagDataStreamDeckImage)buttonImage.Tag).IsSelected = true;
+                            ((TagDataStreamDeckFace)buttonImage.Tag).IsSelected = true;
                         }
                     }
                     else
                     {
                         buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
-                        ((TagDataStreamDeckImage)buttonImage.Tag).IsSelected = false;
+                        ((TagDataStreamDeckFace)buttonImage.Tag).IsSelected = false;
                     }
                 }
                 catch (Exception ex)
@@ -237,13 +237,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private TagDataStreamDeckImage GetSelectedImageDataClass()
+        private TagDataStreamDeckFace GetSelectedImageDataClass()
         {
             foreach (var image in _buttonImages)
             {
-                if (((TagDataStreamDeckImage)image.Tag).IsSelected)
+                if (((TagDataStreamDeckFace)image.Tag).IsSelected)
                 {
-                    return (TagDataStreamDeckImage)image.Tag;
+                    return (TagDataStreamDeckFace)image.Tag;
                 }
             }
             return null;
@@ -508,12 +508,82 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 LoadComboBoxLayers(layerWindow.NewLayer);
                 UCStreamDeckButtonAction.Update();
-                UCStreamDeckButtonImage.Update();
+                UCStreamDeckButtonFace.Update();
                 SetFormState();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(20235442, ex);
+            }
+        }
+
+        private void Clear()
+        {
+            ComboBoxButtonReleaseDelay.SelectedIndex = 0;
+        }
+
+
+
+        private void ComboBoxReleaseDelaySetHandlerState(bool enableEventHandler)
+        {
+            if (enableEventHandler)
+            {
+                ComboBoxButtonReleaseDelay.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
+            }
+            else
+            {
+                ComboBoxButtonReleaseDelay.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
+            }
+        }
+
+        private void ComboBoxReleaseDelay_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelDelayedReleaseInfo_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                MessageBox.Show(
+                    "Stream Deck doesn't send information when a button is released, only when the button is pressed.\nSet therefore a time delay when the button can be considered released after have being pressed.",
+                    "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelDelayedReleaseInfo_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Hand;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelDelayedReleaseInfo_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = null;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -652,14 +722,14 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 var image = (Image)sender;
-                var imageTagClass = (TagDataStreamDeckImage)image.Tag;
+                var imageTagClass = (TagDataStreamDeckFace)image.Tag;
 
-                if (GetSelectedButtonName() != imageTagClass.StreamDeckButtonName && (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonImage.IsDirty))
+                if (GetSelectedButtonName() != imageTagClass.StreamDeckButtonName && (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty))
                 {
                     if (MessageBox.Show("Discard Changes to " + GetSelectedButtonName() + " ?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         UCStreamDeckButtonAction.Clear();
-                        UCStreamDeckButtonImage.Clear();
+                        UCStreamDeckButtonFace.Clear();
                         SetFormState();
                     }
                     else
@@ -679,7 +749,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var image = (Image)sender;
-                var imageTagClass = (TagDataStreamDeckImage)image.Tag;
+                var imageTagClass = (TagDataStreamDeckFace)image.Tag;
 
 
                 UpdateAllButtonsSelectedStatus(imageTagClass.StreamDeckButtonName);
@@ -832,10 +902,38 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                //var streamDeckButton = GetSelectedStreamDeckLayer().GetStreamDeckButton(GetSelectedButtonName());
-                //streamDeckButton.StreamDeckButtonActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonActionForPress();
-                //streamDeckButton.StreamDeckButtonActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonActionFor;
-                //streamDeckButton.StreamDeckButtonAction = UCStreamDeckButtonAction.get
+                try
+                {
+                    var streamDeckButton = GetSelectedStreamDeckLayer().GetStreamDeckButton(GetSelectedButtonName());
+                    var facePress = UCStreamDeckButtonFace.GetStreamDeckButtonFace(true);
+                    var faceRelease = UCStreamDeckButtonFace.GetStreamDeckButtonFace(false);
+                    var added = false;
+
+                    if (facePress != null)
+                    {
+                        streamDeckButton.StreamDeckButtonFaceForPress = facePress;
+                        added = true;
+                    }
+
+                    if (faceRelease != null)
+                    {
+                        streamDeckButton.StreamDeckButtonFaceForRelease = faceRelease;
+                        result.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayOSCommand.Text);
+                        added = true;
+                    }
+
+                    if (added)
+                    {
+                        _streamDeck.AddStreamDeckButtonToCurrentLayer(streamDeckButton);
+                    }
+                    UCStreamDeckButtonFace.StateSaved();
+
+                    SetFormState();
+                }
+                catch (Exception ex)
+                {
+                    Common.ShowErrorMessageBox(ex);
+                }
             }
             catch (Exception ex)
             {
@@ -847,7 +945,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                UCStreamDeckButtonImage.Clear();
+                UCStreamDeckButtonFace.Clear();
             }
             catch (Exception ex)
             {
@@ -895,9 +993,9 @@ namespace DCSFlightpanels.PanelUserControls
             _buttonImages.Add(ButtonImage15);
         }
 
-        private TagDataStreamDeckImage TagData(Image image)
+        private TagDataStreamDeckFace TagData(Image image)
         {
-            return (TagDataStreamDeckImage)image.Tag;
+            return (TagDataStreamDeckFace)image.Tag;
         }
 
 

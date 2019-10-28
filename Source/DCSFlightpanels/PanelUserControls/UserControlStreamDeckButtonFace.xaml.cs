@@ -21,9 +21,9 @@ using NonVisuals.StreamDeck;
 namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
-    /// Interaction logic for UserControlStreamDeckButtonImage.xaml
+    /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonImage : UserControlBase
+    public partial class UserControlStreamDeckButtonFace : UserControlBase
     {
         private IGlobalHandler _globalHandler;
         private bool _isDirty = false;
@@ -37,23 +37,23 @@ namespace DCSFlightpanels.PanelUserControls
 
 
 
-        public UserControlStreamDeckButtonImage()
+        public UserControlStreamDeckButtonFace()
         {
             InitializeComponent();
         }
-        
-        private void UserControlStreamDeckButtonImage_OnLoaded(object sender, RoutedEventArgs e)
+
+        private void UserControlStreamDeckButtonFace_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                if(_isLoaded)
+                if (_isLoaded)
                 {
                     return;
                 }
-                LoadFontSettings();
-                SetFormState();
                 FillControlLists();
                 SetTagData();
+                LoadFontSettings();
+                SetFormState();
                 _isLoaded = true;
             }
             catch (Exception ex)
@@ -66,22 +66,22 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                RadioButtonDCSBIOSOutput.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
+                RadioButtonDCSBIOSFace.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelButtonTextAndStyle.Visibility = RadioButtonText.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonImageToShow.Visibility = RadioButtonImage.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSOutput.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonTextAndStyle.Visibility = RadioButtonSimpleFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonImageToShow.Visibility = RadioButtonImageFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelDCSBIOSBackgroundType.Visibility = RadioButtonDCSBIOSOutput?.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelDCSBIOSBackgroundType.Visibility = RadioButtonDCSBIOSFace?.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSFaceBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSFaceBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelButtonImageType.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelDCSBIOSBackgroundTypeSelection.Visibility = RadioButtonDCSBIOSOutput.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelDCSBIOSBackgroundTypeSelection.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSFaceBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSFaceBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
                 ButtonOnTextFaceFont.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonOnTextFace.Text);
                 ButtonOnTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonOnTextFace.Text);
@@ -218,7 +218,25 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void RadioButtonImageType_OnClick(object sender, RoutedEventArgs e)
+        public EnumStreamDeckFaceType GetSelectedFaceType()
+        {
+            if (RadioButtonSimpleFace.IsChecked == true)
+            {
+                return EnumStreamDeckFaceType.Text;
+            }
+            if (RadioButtonImageFace.IsChecked == true)
+            {
+                return EnumStreamDeckFaceType.ImageFile;
+            }
+            if (RadioButtonDCSBIOSFace.IsChecked == true)
+            {
+                return EnumStreamDeckFaceType.DCSBIOS;
+            }
+
+            return EnumStreamDeckFaceType.Unknown;
+        }
+
+        private void RadioButtonFaceType_OnClick(object sender, RoutedEventArgs e)
         {
             SetFormState();
         }
@@ -229,13 +247,9 @@ namespace DCSFlightpanels.PanelUserControls
             set => _globalHandler = value;
         }
 
-
-        public bool HasConfig
+        public void StateSaved()
         {
-            get
-            {
-                return false;
-            }
+            _isDirty = false;
         }
 
         private void SetIsDirty()
@@ -261,7 +275,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in _textBoxList)
             {
-                textBox.Tag = new TagDataStreamDeckImage();
+                textBox.Tag = new TagDataStreamDeckFace();
+                Tagg(textBox).ParentTextBox = textBox;
             }
         }
 
@@ -270,6 +285,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 SetFontStyle(TextBoxButtonOnTextFace);
+                TestImage(TextBoxButtonOnTextFace);
                 SetFormState();
             }
             catch (Exception ex)
@@ -283,6 +299,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 SetFontColor(TextBoxButtonOnTextFace);
+                TestImage(TextBoxButtonOnTextFace);
                 SetFormState();
             }
             catch (Exception ex)
@@ -290,12 +307,13 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ButtonOnTextFaceBackgroundColor_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 SetBackgroundColor(TextBoxButtonOnTextFace);
+                TestImage(TextBoxButtonOnTextFace);
                 SetFormState();
             }
             catch (Exception ex)
@@ -322,6 +340,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 SetFontStyle(TextBoxButtonOffTextFace);
+                TestImage(TextBoxButtonOffTextFace);
                 SetFormState();
             }
             catch (Exception ex)
@@ -335,6 +354,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 SetFontColor(TextBoxButtonOffTextFace);
+                TestImage(TextBoxButtonOffTextFace);
                 SetFormState();
             }
             catch (Exception ex)
@@ -348,6 +368,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 SetBackgroundColor(TextBoxButtonOffTextFace);
+                TestImage(TextBoxButtonOffTextFace);
                 SetFormState();
             }
             catch (Exception ex)
@@ -371,17 +392,124 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void LoadFontSettings()
         {
-            if (Settings.Default.ButtonTextImageFont != null)
+            if (Settings.Default.ButtonTextFaceFont != null)
             {
-                TextBoxButtonOnTextFace.FontFamily = new FontFamily(Settings.Default.ButtonTextImageFont.Name);
-                TextBoxButtonOnTextFace.FontWeight = Settings.Default.ButtonTextImageFont.Bold ? FontWeights.Bold : FontWeights.Regular;
-                TextBoxButtonOnTextFace.FontSize = Settings.Default.ButtonTextImageFont.Size * 96.0 / 72.0;
-                TextBoxButtonOnTextFace.FontStyle = Settings.Default.ButtonTextImageFont.Italic ? FontStyles.Italic : FontStyles.Normal;
-                var textDecorationCollection = new TextDecorationCollection();
-                if (Settings.Default.ButtonTextImageFont.Underline) textDecorationCollection.Add(TextDecorations.Underline);
-                if (Settings.Default.ButtonTextImageFont.Strikeout) textDecorationCollection.Add(TextDecorations.Strikethrough);
-                TextBoxButtonOnTextFace.TextDecorations = textDecorationCollection;
+                Tagg(TextBoxButtonOnTextFace).TextFont = Settings.Default.ButtonTextFaceFont;
+                Tagg(TextBoxButtonOffTextFace).TextFont = Settings.Default.ButtonTextFaceFont;
             }
+        }
+
+
+        public bool HasConfig
+        {
+            get
+            {
+                switch (GetSelectedFaceType())
+                {
+                    case EnumStreamDeckFaceType.Text:
+                        {
+                            return Tagg(TextBoxButtonOnTextFace).ContainsSimpleFace();
+                        }
+                    case EnumStreamDeckFaceType.ImageFile:
+                        {
+                            return false;
+                        }
+                    case EnumStreamDeckFaceType.DCSBIOS:
+                        {
+                            return false;
+                        }
+                }
+                return false;
+            }
+        }
+
+        public void ShowFaceConfiguration(StreamDeckButton streamDeckButton)
+        {
+            Clear();
+            if (streamDeckButton == null)
+            {
+                return;
+            }
+            ShowFaceConfiguration(streamDeckButton.StreamDeckButtonFaceForPress);
+            ShowFaceConfiguration(streamDeckButton.StreamDeckButtonFaceForRelease);
+        }
+
+        public void ShowFaceConfiguration(IStreamDeckButtonFace streamDeckButtonFace)
+        {
+            if (streamDeckButtonFace == null)
+            {
+                return;
+            }
+
+            switch (streamDeckButtonFace.FaceType)
+            {
+                case EnumStreamDeckFaceType.Text:
+                    {
+                        var faceTypeText = (FaceTypeText)streamDeckButtonFace;
+                        var textBox = faceTypeText.WhenTurnedOn ? TextBoxButtonOnTextFace : TextBoxButtonOffTextFace;
+                        Tagg(textBox).TextFont = faceTypeText.TextFont;
+                        textBox.Text = faceTypeText.Text;
+                        Tagg(textBox).FontColor = faceTypeText.FontColor;
+                        Tagg(textBox).BackgroundColor = faceTypeText.BackgroundColor;
+                        SetFormState();
+                        return;
+                    }
+                case EnumStreamDeckFaceType.ImageFile:
+                    {
+                        SetFormState();
+                        return;
+                    }
+                case EnumStreamDeckFaceType.DCSBIOS:
+                    {
+                        
+                        SetFormState();
+                        return;
+                    }
+            }
+
+            throw new ArgumentException("ShowFaceConfiguration, failed to determine Face Type");
+        }
+
+
+        public IStreamDeckButtonFace GetStreamDeckButtonFace(bool forButtonPressed)
+        {
+            var textBoxSimpleFace = forButtonPressed ? TextBoxButtonOnTextFace : TextBoxButtonOffTextFace;
+
+            switch (GetSelectedFaceType())
+            {
+                case EnumStreamDeckFaceType.Text:
+                    {
+                        if (Tagg(textBoxSimpleFace).ContainsSimpleFace())
+                        {
+                            var result = new FaceTypeText();
+
+                            result.WhenTurnedOn = forButtonPressed;
+                            result.Text = textBoxSimpleFace.Text;
+                            result.TextFont = Tagg(textBoxSimpleFace).TextFont;
+                            result.FontColor = Tagg(textBoxSimpleFace).FontColor;
+                            result.BackgroundColor = Tagg(textBoxSimpleFace).BackgroundColor;
+                            result.OffsetX = Tagg(textBoxSimpleFace).OffsetX;
+                            result.OffsetY = Tagg(textBoxSimpleFace).OffsetY;
+
+                            result.UseExecutionDelay = !forButtonPressed;
+                            result.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayKeyPress.Text);
+
+                            return result;
+                        }
+
+                        return null;
+                    }
+                case EnumStreamDeckFaceType.ImageFile:
+                    {
+                        return null;
+                    }
+                case EnumStreamDeckFaceType.DCSBIOS:
+                    {
+                        return null;
+                    }
+            }
+
+            throw new ArgumentException("GetStreamDeckButtonFace, failed to determine Face Type");
         }
 
         private void SetFontStyle(TextBox textBox)
@@ -392,78 +520,83 @@ namespace DCSFlightpanels.PanelUserControls
             fontDialog.FontMustExist = true;
             fontDialog.MinSize = 6;
 
-            if (Settings.Default.ButtonTextImageFont != null)
+            if (Settings.Default.ButtonTextFaceFont != null)
             {
-                fontDialog.Font = Settings.Default.ButtonTextImageFont;
+                fontDialog.Font = Settings.Default.ButtonTextFaceFont;
             }
 
             var result = fontDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                textBox.FontFamily = new FontFamily(fontDialog.Font.Name);
-                textBox.FontSize = fontDialog.Font.Size * 96.0 / 72.0;
-                textBox.FontWeight = fontDialog.Font.Bold ? FontWeights.Bold : FontWeights.Regular;
-                textBox.FontStyle = fontDialog.Font.Italic ? FontStyles.Italic : FontStyles.Normal;
-                
-                var textDecorationCollection = new TextDecorationCollection();
-                if (fontDialog.Font.Underline) textDecorationCollection.Add(TextDecorations.Underline);
-                if (fontDialog.Font.Strikeout) textDecorationCollection.Add(TextDecorations.Strikethrough);
-                textBox.TextDecorations = textDecorationCollection;
+                Tagg(textBox).TextFont = fontDialog.Font;
 
-                Settings.Default.ButtonTextImageFont = fontDialog.Font;
+                Settings.Default.ButtonTextFaceFont = fontDialog.Font;
                 Settings.Default.Save();
 
                 SetIsDirty();
+                SDUIParent.ChildChangesMade();
             }
         }
 
         private void SetFontColor(TextBox textBox)
         {
             var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextImageFontColor;
+            colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
 
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                textBox.Foreground = new SolidColorBrush(Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B));
-                Settings.Default.ButtonTextImageFontColor = colorDialog.Color;
+                Tagg(textBox).FontColor = colorDialog.Color;
+
+                Settings.Default.ButtonTextFaceFontColor = colorDialog.Color;
                 Settings.Default.Save();
+
                 SetIsDirty();
+                SDUIParent.ChildChangesMade();
             }
         }
 
         private void SetBackgroundColor(TextBox textBox)
         {
             var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextImageBackgroundColor;
+            colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
 
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                textBox.Background = new SolidColorBrush(Color.FromArgb(colorDialog.Color.A, colorDialog.Color.R, colorDialog.Color.G, colorDialog.Color.B));
-                Settings.Default.ButtonTextImageBackgroundColor = colorDialog.Color;
+                Tagg(textBox).BackgroundColor = colorDialog.Color;
+
+                Settings.Default.ButtonTextFaceBackgroundColor = colorDialog.Color;
                 Settings.Default.Save();
+
                 SetIsDirty();
+                SDUIParent.ChildChangesMade();
             }
         }
-        
+
         private void TestImage(TextBox textBox)
         {
-            var bitmap = BitMapCreator.CreateStreamDeckBitmap(textBox.Text, Tagg(textBox).TextFont, Tagg(textBox).FontColor, Tagg(textBox).BackgroundColor , Tagg(textBox).OffsetX, Tagg(textBox).OffsetY);
+            var bitmap = BitMapCreator.CreateStreamDeckBitmap(textBox.Text, Tagg(textBox).TextFont, Tagg(textBox).FontColor, Tagg(textBox).BackgroundColor, Tagg(textBox).OffsetX, Tagg(textBox).OffsetY);
             SDUIParent.TestImage(bitmap);
         }
 
         public IStreamDeckUIParent SDUIParent { get; set; }
 
-        private TagDataStreamDeckImage Tagg(TextBox textBox)
+        private TagDataStreamDeckFace Tagg(TextBox textBox)
         {
-            return (TagDataStreamDeckImage) textBox.Tag;
+            return (TagDataStreamDeckFace)textBox.Tag;
         }
 
         private void TextBoxButtonTextFace_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
+                var textBox = (TextBox)sender;
+                if (!string.IsNullOrEmpty(textBox.Text))
+                {
+                    SetIsDirty();
+                    SDUIParent.ChildChangesMade();
+                }
                 SetFormState();
             }
             catch (Exception ex)
@@ -525,5 +658,6 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
     }
 }

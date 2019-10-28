@@ -5,7 +5,8 @@
     {
         Unknown = 0,
         Text = 1,
-        DCSBIOSOutput = 2
+        ImageFile = 2,
+        DCSBIOS = 4
     }
 
 

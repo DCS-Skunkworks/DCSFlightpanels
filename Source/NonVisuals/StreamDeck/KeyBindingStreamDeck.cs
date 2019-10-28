@@ -9,10 +9,6 @@ namespace NonVisuals.StreamDeck
 {
     public class KeyBindingStreamDeck : KeyBinding, IStreamDeckButtonAction
     {
-        public bool UseExecutionDelay { get; set; } = false;
-        public int ExecutionDelay { get; set; } = 1000;
-        private Thread _delayedExecutionThread;
-
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
 
 
@@ -21,35 +17,9 @@ namespace NonVisuals.StreamDeck
 
 
 
-        ~KeyBindingStreamDeck()
+        public void Execute(CancellationToken cancellationToken)
         {
-            _delayedExecutionThread?.Abort();
-        }
-
-        public void Execute()
-        {
-            if (!UseExecutionDelay)
-            {
-                OSKeyPress.Execute();
-            }
-            else
-            {
-                _delayedExecutionThread = new Thread(DelayedExecution);
-                _delayedExecutionThread.Start();
-            }
-        }
-
-        private void DelayedExecution()
-        {
-            try
-            {
-                Thread.Sleep(ExecutionDelay);
-                OSKeyPress.Execute();
-            }
-            catch (Exception e)
-            {
-                Common.ShowErrorMessageBox(e);
-            }
+            OSKeyPress.Execute(cancellationToken);
         }
         
         public static HashSet<KeyBindingStreamDeck> SetNegators(HashSet<KeyBindingStreamDeck> keyBindings)

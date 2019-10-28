@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace NonVisuals
 {
@@ -51,7 +52,7 @@ namespace NonVisuals
             return "OSCommand{" + _file + SEPARATOR_CHARS + _arguments + SEPARATOR_CHARS + _name + "}";
         }
 
-        public string Execute()
+        public string Execute(CancellationToken cancellationToken)
         {
             var process = new Process
             {
@@ -68,6 +69,10 @@ namespace NonVisuals
             var result = "";
             while (!process.StandardOutput.EndOfStream)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
                 result = result + " " + process.StandardOutput.ReadLine();
             }
 

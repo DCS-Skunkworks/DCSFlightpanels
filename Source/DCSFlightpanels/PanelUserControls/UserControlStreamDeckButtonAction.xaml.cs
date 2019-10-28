@@ -59,16 +59,13 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in _textBoxes)
             {
-                ((TagDataStreamDeckAction)textBox.Tag).ClearAll();
+                Tagg(textBox).ClearAll();
             }
 
             ComboBoxLayerNavigationButton.SelectedIndex = 0;
 
             ComboBoxReleaseDelaySetHandlerState(false);
-            ComboBoxReleaseDelayKeyPress.SelectedIndex = 0;
-            ComboBoxReleaseDelayDCSBIOS.SelectedIndex = 0;
-            ComboBoxReleaseDelayOSCommand.SelectedIndex = 0;
-            ComboBoxReleaseDelayLayerNav.SelectedIndex = 0;
+            
             ComboBoxReleaseDelaySetHandlerState(true);
 
             _isDirty = false;
@@ -88,14 +85,14 @@ namespace DCSFlightpanels.PanelUserControls
                 StackPanelButtonOSCommandSettings.Visibility = SDUIParent.GetSelectedActionType() == EnumStreamDeckActionType.OSCommand ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonLayerNavigationSettings.Visibility = SDUIParent.GetSelectedActionType() == EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                ButtonDeleteKeySequenceButtonOn.IsEnabled = ((TagDataStreamDeckAction)TextBoxKeyPressButtonOn.Tag).ContainsKeySequence() ||
-                                                            ((TagDataStreamDeckAction)TextBoxKeyPressButtonOn.Tag).ContainsKeyPress();
-                ButtonDeleteKeySequenceButtonOff.IsEnabled = ((TagDataStreamDeckAction)TextBoxKeyPressButtonOff.Tag).ContainsKeySequence() ||
-                                                            ((TagDataStreamDeckAction)TextBoxKeyPressButtonOff.Tag).ContainsKeyPress();
-                ButtonDeleteDCSBIOSActionButtonOn.IsEnabled = ((TagDataStreamDeckAction)TextBoxDCSBIOSActionButtonOn.Tag).ContainsDCSBIOS();
-                ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = ((TagDataStreamDeckAction)TextBoxDCSBIOSActionButtonOff.Tag).ContainsDCSBIOS();
-                ButtonDeleteOSCommandButtonOn.IsEnabled = ((TagDataStreamDeckAction)TextBoxOSCommandButtonOn.Tag).ContainsOSCommand();
-                ButtonDeleteOSCommandButtonOff.IsEnabled = ((TagDataStreamDeckAction)TextBoxOSCommandButtonOff.Tag).ContainsOSCommand();
+                ButtonDeleteKeySequenceButtonOn.IsEnabled = Tagg(TextBoxKeyPressButtonOn).ContainsKeySequence() ||
+                                                            Tagg(TextBoxKeyPressButtonOn).ContainsKeyPress();
+                ButtonDeleteKeySequenceButtonOff.IsEnabled = Tagg(TextBoxKeyPressButtonOff).ContainsKeySequence() ||
+                                                            Tagg(TextBoxKeyPressButtonOff).ContainsKeyPress();
+                ButtonDeleteDCSBIOSActionButtonOn.IsEnabled = Tagg(TextBoxDCSBIOSActionButtonOn).ContainsDCSBIOS();
+                ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = Tagg(TextBoxDCSBIOSActionButtonOff).ContainsDCSBIOS();
+                ButtonDeleteOSCommandButtonOn.IsEnabled = Tagg(TextBoxOSCommandButtonOn).ContainsOSCommand();
+                ButtonDeleteOSCommandButtonOff.IsEnabled = Tagg(TextBoxOSCommandButtonOff).ContainsOSCommand();
             }
             catch (Exception ex)
             {
@@ -148,24 +145,24 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     case EnumStreamDeckActionType.KeyPress:
                         {
-                            return ((TagDataStreamDeckAction)TextBoxKeyPressButtonOn.Tag).ContainsKeySequence() ||
-                                   ((TagDataStreamDeckAction)TextBoxKeyPressButtonOn.Tag).ContainsSingleKey() ||
-                                   ((TagDataStreamDeckAction)TextBoxKeyPressButtonOff.Tag).ContainsKeySequence() ||
-                                   ((TagDataStreamDeckAction)TextBoxKeyPressButtonOff.Tag).ContainsSingleKey();
+                            return Tagg(TextBoxKeyPressButtonOn).ContainsKeySequence() ||
+                                   Tagg(TextBoxKeyPressButtonOn).ContainsSingleKey() ||
+                                   Tagg(TextBoxKeyPressButtonOff).ContainsKeySequence() ||
+                                   Tagg(TextBoxKeyPressButtonOff).ContainsSingleKey();
                         }
                     case EnumStreamDeckActionType.DCSBIOS:
                         {
-                            return ((TagDataStreamDeckAction)TextBoxDCSBIOSActionButtonOn.Tag).ContainsDCSBIOS() ||
-                                   ((TagDataStreamDeckAction)TextBoxDCSBIOSActionButtonOff.Tag).ContainsDCSBIOS();
+                            return Tagg(TextBoxDCSBIOSActionButtonOn).ContainsDCSBIOS() ||
+                                   Tagg(TextBoxDCSBIOSActionButtonOff).ContainsDCSBIOS();
                         }
                     case EnumStreamDeckActionType.OSCommand:
                         {
-                            return ((TagDataStreamDeckAction)TextBoxOSCommandButtonOn.Tag).ContainsOSCommand() ||
-                                   ((TagDataStreamDeckAction)TextBoxOSCommandButtonOff.Tag).ContainsOSCommand();
+                            return Tagg(TextBoxOSCommandButtonOn).ContainsOSCommand() ||
+                                   Tagg(TextBoxOSCommandButtonOff).ContainsOSCommand();
                         }
                     case EnumStreamDeckActionType.LayerNavigation:
                         {
-                            return ((TagDataStreamDeckAction)TextBoxLayerNavButton.Tag).ContainsStreamDeckLayer();
+                            return Tagg(TextBoxLayerNavButton).ContainsStreamDeckLayer();
                         }
                 }
                 return false;
@@ -196,7 +193,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var keyBindingStreamDeck = (KeyBindingStreamDeck)streamDeckButtonAction;
                         var textBoxKeyPress = keyBindingStreamDeck.WhenTurnedOn ? TextBoxKeyPressButtonOn : TextBoxKeyPressButtonOff;
-                        ((TagDataStreamDeckAction)textBoxKeyPress.Tag).KeyPress = keyBindingStreamDeck.OSKeyPress;
+                        Tagg(textBoxKeyPress).KeyPress = keyBindingStreamDeck.OSKeyPress;
                         if (!keyBindingStreamDeck.WhenTurnedOn)
                         {
                             ComboBoxReleaseDelayKeyPress.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
@@ -210,7 +207,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var dcsBIOSBinding = (DCSBIOSActionBindingStreamDeck)streamDeckButtonAction;
                         var textBoxDCSBIOS = dcsBIOSBinding.WhenTurnedOn ? TextBoxDCSBIOSActionButtonOn : TextBoxDCSBIOSActionButtonOff;
-                        ((TagDataStreamDeckAction)textBoxDCSBIOS.Tag).DCSBIOSBinding = dcsBIOSBinding;
+                        Tagg(textBoxDCSBIOS).DCSBIOSBinding = dcsBIOSBinding;
                         if (!dcsBIOSBinding.WhenTurnedOn)
                         {
                             ComboBoxReleaseDelayDCSBIOS.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
@@ -224,7 +221,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var osCommandBindingStreamDeck = (OSCommandBindingStreamDeck)streamDeckButtonAction;
                         var textBoxOSCommand = osCommandBindingStreamDeck.WhenTurnedOn ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
-                        ((TagDataStreamDeckAction)textBoxOSCommand.Tag).OSCommandObject = osCommandBindingStreamDeck.OSCommandObject;
+                        Tagg(textBoxOSCommand).OSCommandObject = osCommandBindingStreamDeck.OSCommandObject;
                         if (!osCommandBindingStreamDeck.WhenTurnedOn)
                         {
                             ComboBoxReleaseDelayOSCommand.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
@@ -237,7 +234,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckActionType.LayerNavigation:
                     {
                         var layerBindingStreamDeck = (LayerBindingStreamDeck)streamDeckButtonAction;
-                        ((TagDataStreamDeckAction)TextBoxLayerNavButton.Tag).StreamDeckLayerTarget = layerBindingStreamDeck.StreamDeckLayerTarget;
+                        Tagg(TextBoxLayerNavButton).StreamDeckLayerTarget = layerBindingStreamDeck.StreamDeckLayerTarget;
                         if (!layerBindingStreamDeck.WhenTurnedOn)
                         {
                             ComboBoxReleaseDelayLayerNav.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
@@ -267,13 +264,11 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         KeyBindingStreamDeck result;
 
-                        if (((TagDataStreamDeckAction)textBoxKeyPress.Tag).ContainsKeyPress())
+                        if (Tagg(textBoxKeyPress).ContainsKeyPress())
                         {
                             result = new KeyBindingStreamDeck();
                             result.WhenTurnedOn = forButtonPressed;
-                            result.OSKeyPress = ((TagDataStreamDeckAction)textBoxKeyPress.Tag).KeyPress;
-                            result.UseExecutionDelay = !forButtonPressed;
-                            result.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayKeyPress.Text);
+                            result.OSKeyPress = Tagg(textBoxKeyPress).KeyPress;
                             
                             return result;
                         }
@@ -282,25 +277,21 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckActionType.DCSBIOS:
                     {
-                        if (((TagDataStreamDeckAction)textBoxDCSBIOS.Tag).ContainsDCSBIOS())
+                        if (Tagg(textBoxDCSBIOS).ContainsDCSBIOS())
                         {
-                            ((TagDataStreamDeckAction)textBoxDCSBIOS.Tag).DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
-                            ((TagDataStreamDeckAction)textBoxDCSBIOS.Tag).DCSBIOSBinding.UseExecutionDelay = !forButtonPressed;
-                            ((TagDataStreamDeckAction)textBoxDCSBIOS.Tag).DCSBIOSBinding.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayDCSBIOS.Text);
+                            Tagg(textBoxDCSBIOS).DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
                             
-                            return ((TagDataStreamDeckAction)textBoxDCSBIOS.Tag).DCSBIOSBinding;
+                            return Tagg(textBoxDCSBIOS).DCSBIOSBinding;
                         }
                         return null;
                     }
                 case EnumStreamDeckActionType.OSCommand:
                     {
-                        if (((TagDataStreamDeckAction)textBoxOSCommand.Tag).ContainsOSCommand())
+                        if (Tagg(textBoxOSCommand).ContainsOSCommand())
                         {
                             var result = new OSCommandBindingStreamDeck();
                             result.WhenTurnedOn = forButtonPressed;
-                            result.OSCommandObject = ((TagDataStreamDeckAction)textBoxOSCommand.Tag).OSCommandObject;
-                            result.UseExecutionDelay = !forButtonPressed;
-                            result.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayOSCommand.Text);
+                            result.OSCommandObject = Tagg(textBoxOSCommand).OSCommandObject;
                             
                             return result;
                         }
@@ -308,13 +299,11 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckActionType.LayerNavigation:
                     {
-                        if (((TagDataStreamDeckAction)TextBoxLayerNavButton.Tag).ContainsStreamDeckLayer())
+                        if (Tagg(TextBoxLayerNavButton).ContainsStreamDeckLayer())
                         {
                             var result = new LayerBindingStreamDeck();
                             result.WhenTurnedOn = forButtonPressed;
-                            result.StreamDeckLayerTarget = ((TagDataStreamDeckAction)TextBoxLayerNavButton.Tag).StreamDeckLayerTarget;
-                            result.UseExecutionDelay = !forButtonPressed;
-                            result.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayLayerNav.Text);
+                            result.StreamDeckLayerTarget = Tagg(TextBoxLayerNavButton).StreamDeckLayerTarget;
 
                             return result;
                         }
@@ -433,8 +422,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var keySequenceWindow = ((TagDataStreamDeckAction)textBox.Tag).ContainsKeySequence() ?
-                    new KeySequenceWindow(textBox.Text, ((TagDataStreamDeckAction)textBox.Tag).GetKeySequence()) :
+                var keySequenceWindow = Tagg(textBox).ContainsKeySequence() ?
+                    new KeySequenceWindow(textBox.Text, Tagg(textBox).GetKeySequence()) :
                     new KeySequenceWindow();
                 keySequenceWindow.ShowDialog();
                 if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
@@ -450,8 +439,8 @@ namespace DCSFlightpanels.PanelUserControls
                     if (sequenceList.Count > 1)
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        ((TagDataStreamDeckAction)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataStreamDeckAction)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        Tagg(textBox).KeyPress = keyPress;
+                        Tagg(textBox).KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
                             textBox.Text = keySequenceWindow.GetInformation;
@@ -460,10 +449,10 @@ namespace DCSFlightpanels.PanelUserControls
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        ((TagDataStreamDeckAction)textBox.Tag).ClearAll();
+                        Tagg(textBox).ClearAll();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        ((TagDataStreamDeckAction)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataStreamDeckAction)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        Tagg(textBox).KeyPress = keyPress;
+                        Tagg(textBox).KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                     }
                     SetIsDirty();
@@ -482,7 +471,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TagDataStreamDeckAction)TextBoxKeyPressButtonOn.Tag).ClearAll();
+                Tagg(TextBoxKeyPressButtonOn).ClearAll();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -495,7 +484,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TagDataStreamDeckAction)TextBoxKeyPressButtonOff.Tag).ClearAll();
+                Tagg(TextBoxKeyPressButtonOff).ClearAll();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -581,7 +570,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TagDataStreamDeckAction)TextBoxDCSBIOSActionButtonOn.Tag).ClearAll();
+                Tagg(TextBoxDCSBIOSActionButtonOn).ClearAll();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -607,7 +596,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TagDataStreamDeckAction)TextBoxDCSBIOSActionButtonOff.Tag).ClearAll();
+                Tagg(TextBoxDCSBIOSActionButtonOff).ClearAll();
                 SetFormState();
             }
             catch (Exception ex)
@@ -634,9 +623,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 OSCommandWindow osCommandWindow;
-                if (((TagDataStreamDeckAction)textBox.Tag).ContainsOSCommand())
+                if (Tagg(textBox).ContainsOSCommand())
                 {
-                    osCommandWindow = new OSCommandWindow(((TagDataStreamDeckAction)textBox.Tag).OSCommandObject);
+                    osCommandWindow = new OSCommandWindow(Tagg(textBox).OSCommandObject);
                 }
                 else
                 {
@@ -652,7 +641,7 @@ namespace DCSFlightpanels.PanelUserControls
                         return;
                     }
                     var osCommand = osCommandWindow.OSCommandObject;
-                    ((TagDataStreamDeckAction)textBox.Tag).OSCommandObject = osCommand;
+                    Tagg(textBox).OSCommandObject = osCommand;
                     textBox.Text = osCommand.Name;
                     SetIsDirty();
                 }
@@ -682,7 +671,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TagDataStreamDeckAction)TextBoxOSCommandButtonOn.Tag).ClearAll();
+                Tagg(TextBoxOSCommandButtonOn).ClearAll();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -708,7 +697,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TagDataStreamDeckAction)TextBoxOSCommandButtonOff.Tag).ClearAll();
+                Tagg(TextBoxOSCommandButtonOff).ClearAll();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -740,7 +729,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 var target = new StreamDeckTargetLayer();
                 target.TargetLayer = ComboBoxLayerNavigationButton.Text;
-                ((TagDataStreamDeckAction)TextBoxLayerNavButton.Tag).StreamDeckLayerTarget = target;
+                Tagg(TextBoxLayerNavButton).StreamDeckLayerTarget = target;
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
@@ -805,73 +794,12 @@ namespace DCSFlightpanels.PanelUserControls
             comboBox.SelectionChanged += eventHandler;
         }
 
-        private void LabelDelayedReleaseInfo_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                MessageBox.Show(
-                    "Stream Deck doesn't send information when a button is released, only when the button is pressed.\nSet therefore a time delay when the button can be considered released after have being pressed.",
-                    "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
 
-        private void LabelDelayedReleaseInfo_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = Cursors.Hand;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
 
-        private void LabelDelayedReleaseInfo_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = null;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
 
-        private void ComboBoxReleaseDelaySetHandlerState(bool enableEventHandler)
+        private TagDataStreamDeckAction Tagg(TextBox textBox)
         {
-            if (enableEventHandler)
-            {
-                ComboBoxReleaseDelayKeyPress.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-                ComboBoxReleaseDelayDCSBIOS.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-                ComboBoxReleaseDelayOSCommand.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-                ComboBoxReleaseDelayLayerNav.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-            }
-            else
-            {
-                ComboBoxReleaseDelayKeyPress.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-                ComboBoxReleaseDelayDCSBIOS.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-                ComboBoxReleaseDelayOSCommand.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-                ComboBoxReleaseDelayLayerNav.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-            }
-        }
-
-        private void ComboBoxReleaseDelay_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                SetIsDirty();
-                SDUIParent.ChildChangesMade();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
+            return (TagDataStreamDeckAction) textBox.Tag;
         }
     }
 }

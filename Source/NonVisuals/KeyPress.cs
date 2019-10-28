@@ -131,7 +131,7 @@ namespace NonVisuals
             Interlocked.Exchange(ref _threadHasFinished, 0);
         }
 
-        public void Execute()
+        public void Execute(CancellationToken cancellationToken)
         {
             try
             {
@@ -150,14 +150,14 @@ namespace NonVisuals
                     }
                     ResetAbortThreadState();
                     ResetThreadHasFinishedState();
-                    _executingThread = new Thread(() => ExecuteThreaded(_sortedKeyPressInfoList));
+                    _executingThread = new Thread(() => ExecuteThreaded(cancellationToken, _sortedKeyPressInfoList));
                     _executingThread.Start();
                 }
                 else
                 {
                     ResetAbortThreadState();
                     ResetThreadHasFinishedState();
-                    _executingThread = new Thread(() => ExecuteThreaded(_sortedKeyPressInfoList));
+                    _executingThread = new Thread(() => ExecuteThreaded(cancellationToken, _sortedKeyPressInfoList));
                     _executingThread.Start();
                 }
             }
@@ -167,7 +167,7 @@ namespace NonVisuals
             }
         }
 
-        private void ExecuteThreaded(SortedList<int, KeyPressInfo> sortedList)
+        private void ExecuteThreaded(CancellationToken cancellationToken, SortedList<int, KeyPressInfo> sortedList)
         {
             try
             {
@@ -193,12 +193,12 @@ namespace NonVisuals
                         Common.DebugP("-----------------------------------");
                         if (Common.APIMode == APIModeEnum.keybd_event)
                         {
-                            KeyBdEventAPI(keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
+                            KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
                             //Common.DebugP("KeyBdEventAPI result code -----------------------------------> " + Marshal.GetLastWin32Error());
                         }
                         else
                         {
-                            SendKeys(keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
+                            SendKeys(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
                             //Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
                         }
                         if (DoAbortThread())
@@ -219,7 +219,7 @@ namespace NonVisuals
             }
         }
 
-        private void KeyBdEventAPI(KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength)
+        private void KeyBdEventAPI(CancellationToken cancellationToken, KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength)
         {
             var keyPressLengthTimeConsumed = 0;
             var breakLengthConsumed = 0;
@@ -231,7 +231,7 @@ namespace NonVisuals
             {
                 Thread.Sleep(50);
                 breakLengthConsumed += 50;
-                if (DoAbortThread())
+                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
                 {
                     ResetAbortThreadState();
                     return;
@@ -285,7 +285,7 @@ namespace NonVisuals
                     ReleaseKeys(virtualKeyCodes);
                 }
 
-                if (DoAbortThread())
+                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
                 {
                     ResetAbortThreadState();
                     //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
@@ -609,7 +609,7 @@ namespace NonVisuals
              * 
              * 
         */
-        public void SendKeys(KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength)
+        public void SendKeys(CancellationToken cancellationToken, KeyPressLength breakLength, VirtualKeyCode[] virtualKeyCodes, KeyPressLength keyPressLength)
         {
             var keyPressLengthTimeConsumed = 0;
             var breakLengthConsumed = 0;
@@ -617,7 +617,7 @@ namespace NonVisuals
             {
                 Thread.Sleep(50);
                 breakLengthConsumed += 50;
-                if (DoAbortThread())
+                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
                 {
                     ResetAbortThreadState();
                     return;
@@ -689,7 +689,7 @@ namespace NonVisuals
                     Thread.Sleep(20);
                 }
 
-                if (DoAbortThread())
+                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
                 {
                     //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
                     ResetAbortThreadState();

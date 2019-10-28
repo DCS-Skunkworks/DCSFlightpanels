@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Saitek;
@@ -184,20 +185,6 @@ namespace NonVisuals.Radios
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
-        private void PZ69KnobChanged(RadioPanelPZ69KnobEmulator radioPanelKey)
-        {
-            if (!ForwardPanelEvent)
-            {
-                return;
-            }
-            foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
-                {
-                    keyBinding.OSKeyPress.Execute();
-                }
-            }
-        }
 
         private void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
@@ -226,7 +213,7 @@ namespace NonVisuals.Radios
                     {
                         if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
                         {
-                            keyBinding.OSKeyPress.Execute();
+                            keyBinding.OSKeyPress.Execute(new CancellationToken());
                             break;
                         }
                     }

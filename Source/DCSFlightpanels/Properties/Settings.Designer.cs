@@ -373,34 +373,34 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Font ButtonTextImageFont {
+        public global::System.Drawing.Font ButtonTextFaceFont {
             get {
-                return ((global::System.Drawing.Font)(this["ButtonTextImageFont"]));
+                return ((global::System.Drawing.Font)(this["ButtonTextFaceFont"]));
             }
             set {
-                this["ButtonTextImageFont"] = value;
+                this["ButtonTextFaceFont"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Color ButtonTextImageFontColor {
+        public global::System.Drawing.Color ButtonTextFaceFontColor {
             get {
-                return ((global::System.Drawing.Color)(this["ButtonTextImageFontColor"]));
+                return ((global::System.Drawing.Color)(this["ButtonTextFaceFontColor"]));
             }
             set {
-                this["ButtonTextImageFontColor"] = value;
+                this["ButtonTextFaceFontColor"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Drawing.Color ButtonTextImageBackgroundColor {
+        public global::System.Drawing.Color ButtonTextFaceBackgroundColor {
             get {
-                return ((global::System.Drawing.Color)(this["ButtonTextImageBackgroundColor"]));
+                return ((global::System.Drawing.Color)(this["ButtonTextFaceBackgroundColor"]));
             }
             set {
-                this["ButtonTextImageBackgroundColor"] = value;
+                this["ButtonTextFaceBackgroundColor"] = value;
             }
         }
     }

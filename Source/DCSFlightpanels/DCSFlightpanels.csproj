@@ -244,7 +244,7 @@
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TagDataClasses\TagDataClassBase.cs" />
-    <Compile Include="TagDataClasses\TagDataStreamDeckImage.cs" />
+    <Compile Include="TagDataClasses\TagDataStreamDeckFace.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ69Button.cs" />
     <Compile Include="TagDataClasses\TagDataClassPZ69Full.cs" />
     <Compile Include="TagDataClasses\TagDataStreamDeckAction.cs" />
@@ -265,8 +265,8 @@
     <Compile Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml.cs">
       <DependentUpon>UserControlStreamDeckButtonAction.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelUserControls\UserControlStreamDeckButtonImage.xaml.cs">
-      <DependentUpon>UserControlStreamDeckButtonImage.xaml</DependentUpon>
+    <Compile Include="PanelUserControls\UserControlStreamDeckButtonFace.xaml.cs">
+      <DependentUpon>UserControlStreamDeckButtonFace.xaml</DependentUpon>
     </Compile>
     <Page Include="AboutFPWindow.xaml">
       <SubType>Designer</SubType>
@@ -476,7 +476,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelUserControls\UserControlStreamDeckButtonImage.xaml">
+    <Page Include="PanelUserControls\UserControlStreamDeckButtonFace.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
