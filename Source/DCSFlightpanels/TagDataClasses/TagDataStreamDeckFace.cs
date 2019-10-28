@@ -20,7 +20,7 @@ namespace DCSFlightpanels.TagDataClasses
 
 
 
-        public bool ContainsSimpleFace()
+        public bool ContainsTextFace()
         {
             return _textFont != null && !string.IsNullOrEmpty(ParentTextBox.Text); 
         }

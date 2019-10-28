@@ -92,7 +92,12 @@ namespace NonVisuals
                 }
             }
         }
-        
+
+        public void SignalPanelChange()
+        {
+            SetIsDirty();
+        }
+
         public void SetIsDirty()
         {
             SettingsChanged();

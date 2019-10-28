@@ -10,16 +10,19 @@ namespace NonVisuals.StreamDeck
 
 
 
-    public class StreamDeckButton 
+    public class StreamDeckButton
     {
         private StreamDeckButtonNames _streamDeckButtonName;
         private bool _isPressed = false;
         private IStreamDeckButtonFace _streamDeckButtonFaceForPress = null;
-        private IStreamDeckButtonAction _streamDeckButtonActionForPress = null;
         private IStreamDeckButtonFace _streamDeckButtonFaceForRelease = null;
+        private IStreamDeckButtonAction _streamDeckButtonActionForPress = null;
         private IStreamDeckButtonAction _streamDeckButtonActionForRelease = null;
         public int ExecutionDelay { get; set; } = 1000;
+
+        [JsonIgnore]
         private Thread _delayedExecutionThread;
+        [JsonIgnore]
         private CancellationTokenSource _cancellationTokenSource;
 
         public StreamDeckButton(bool isPressed, StreamDeckButtonNames streamDeckButton)
@@ -35,7 +38,7 @@ namespace NonVisuals.StreamDeck
 
         public void Press()
         {
-            StreamDeckButtonActionForPress?.Execute();
+            StreamDeckButtonActionForPress?.Execute(new CancellationToken());
 
             _cancellationTokenSource?.Cancel();
 
@@ -43,13 +46,13 @@ namespace NonVisuals.StreamDeck
             _delayedExecutionThread = new Thread(() => DelayedRelease(_cancellationTokenSource.Token, StreamDeckButtonActionForRelease, _streamDeckButtonFaceForRelease));
             _delayedExecutionThread.Start();
         }
-        
+
         private void DelayedRelease(CancellationToken cancellationToken, IStreamDeckButtonAction streamDeckButtonAction, IStreamDeckButtonFace streamDeckButtonFace)
         {
             try
             {
                 Thread.Sleep(ExecutionDelay);
-                streamDeckButtonAction?.Execute();
+                streamDeckButtonAction?.Execute(new CancellationToken());
                 streamDeckButtonFace?.Execute();
             }
             catch (Exception e)
@@ -82,7 +85,7 @@ namespace NonVisuals.StreamDeck
             IsPressed = streamDeckButton.IsPressed;
             StreamDeckButtonActionForPress = streamDeckButton.StreamDeckButtonActionForPress;
             StreamDeckButtonActionForRelease = streamDeckButton.StreamDeckButtonActionForRelease;
-            
+
             StreamDeckButtonFaceForPress = streamDeckButton.StreamDeckButtonFaceForPress;
             StreamDeckButtonFaceForRelease = streamDeckButton.StreamDeckButtonFaceForRelease;
         }
@@ -105,7 +108,18 @@ namespace NonVisuals.StreamDeck
             get => _isPressed;
             set => _isPressed = value;
         }
-        
+
+        public bool HasConfig
+        {
+            get
+            {
+                return _streamDeckButtonFaceForPress != null ||
+                _streamDeckButtonFaceForRelease != null ||
+                _streamDeckButtonActionForPress != null ||
+                _streamDeckButtonActionForRelease != null;
+            }
+        }
+
         public static HashSet<StreamDeckButton> GetAllStreamDeckButtonNames()
         {
             var result = new HashSet<StreamDeckButton>();

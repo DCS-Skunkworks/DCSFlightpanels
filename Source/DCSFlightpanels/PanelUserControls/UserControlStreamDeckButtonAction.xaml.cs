@@ -40,7 +40,6 @@ namespace DCSFlightpanels.PanelUserControls
 
             FillTextBoxList();
             SetTextBoxTagObjects();
-            ComboBoxReleaseDelaySetHandlerState(true);
             _isLoaded = true;
         }
 
@@ -63,11 +62,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
 
             ComboBoxLayerNavigationButton.SelectedIndex = 0;
-
-            ComboBoxReleaseDelaySetHandlerState(false);
             
-            ComboBoxReleaseDelaySetHandlerState(true);
-
             _isDirty = false;
             SDUIParent.ChildChangesMade();
         }
@@ -194,12 +189,6 @@ namespace DCSFlightpanels.PanelUserControls
                         var keyBindingStreamDeck = (KeyBindingStreamDeck)streamDeckButtonAction;
                         var textBoxKeyPress = keyBindingStreamDeck.WhenTurnedOn ? TextBoxKeyPressButtonOn : TextBoxKeyPressButtonOff;
                         Tagg(textBoxKeyPress).KeyPress = keyBindingStreamDeck.OSKeyPress;
-                        if (!keyBindingStreamDeck.WhenTurnedOn)
-                        {
-                            ComboBoxReleaseDelayKeyPress.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-                            ComboBoxReleaseDelayKeyPress.SelectedValue = keyBindingStreamDeck.ExecutionDelay;
-                            ComboBoxReleaseDelayKeyPress.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-                        }
                         SetFormState();
                         return;
                     }
@@ -208,12 +197,6 @@ namespace DCSFlightpanels.PanelUserControls
                         var dcsBIOSBinding = (DCSBIOSActionBindingStreamDeck)streamDeckButtonAction;
                         var textBoxDCSBIOS = dcsBIOSBinding.WhenTurnedOn ? TextBoxDCSBIOSActionButtonOn : TextBoxDCSBIOSActionButtonOff;
                         Tagg(textBoxDCSBIOS).DCSBIOSBinding = dcsBIOSBinding;
-                        if (!dcsBIOSBinding.WhenTurnedOn)
-                        {
-                            ComboBoxReleaseDelayDCSBIOS.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-                            ComboBoxReleaseDelayDCSBIOS.SelectedValue = dcsBIOSBinding.ExecutionDelay;
-                            ComboBoxReleaseDelayDCSBIOS.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-                        }
                         SetFormState();
                         return;
                     }
@@ -222,12 +205,6 @@ namespace DCSFlightpanels.PanelUserControls
                         var osCommandBindingStreamDeck = (OSCommandBindingStreamDeck)streamDeckButtonAction;
                         var textBoxOSCommand = osCommandBindingStreamDeck.WhenTurnedOn ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
                         Tagg(textBoxOSCommand).OSCommandObject = osCommandBindingStreamDeck.OSCommandObject;
-                        if (!osCommandBindingStreamDeck.WhenTurnedOn)
-                        {
-                            ComboBoxReleaseDelayOSCommand.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-                            ComboBoxReleaseDelayOSCommand.SelectedValue = osCommandBindingStreamDeck.ExecutionDelay;
-                            ComboBoxReleaseDelayOSCommand.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-                        }
                         SetFormState();
                         return;
                     }
@@ -235,12 +212,6 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var layerBindingStreamDeck = (LayerBindingStreamDeck)streamDeckButtonAction;
                         Tagg(TextBoxLayerNavButton).StreamDeckLayerTarget = layerBindingStreamDeck.StreamDeckLayerTarget;
-                        if (!layerBindingStreamDeck.WhenTurnedOn)
-                        {
-                            ComboBoxReleaseDelayLayerNav.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-                            ComboBoxReleaseDelayLayerNav.SelectedValue = layerBindingStreamDeck.ExecutionDelay;
-                            ComboBoxReleaseDelayLayerNav.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
-                        }
                         SetFormState();
                         return;
                     }

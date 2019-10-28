@@ -221,7 +221,7 @@ namespace NonVisuals.Radios
                     {
                         if (osCommand.OSCommandObject != null && osCommand.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && osCommand.WhenTurnedOn == radioPanelKey.IsOn)
                         {
-                            osCommand.OSCommandObject.Execute();
+                            osCommand.OSCommandObject.Execute(new CancellationToken());
                             break;
                         }
                     }

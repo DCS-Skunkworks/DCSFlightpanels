@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
@@ -82,7 +83,7 @@ namespace DCSFlightpanels
             try
             {
                 var osCommand = new OSCommand(TextBoxCommand.Text, TextBoxArguments.Text, "");
-                TextBoxResult.Text = osCommand.Execute();
+                TextBoxResult.Text = osCommand.Execute(new CancellationToken());
             }
             catch (Exception ex)
             {

@@ -264,7 +264,7 @@ namespace NonVisuals.Radios
             {
                 if (keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
                 {
-                    keyBinding.OSKeyPress.Execute();
+                    keyBinding.OSKeyPress.Execute(new CancellationToken());
                 }
             }
         }
@@ -359,7 +359,7 @@ namespace NonVisuals.Radios
                         {
                             if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
                             {
-                                keyBinding.OSKeyPress.Execute();
+                                keyBinding.OSKeyPress.Execute(new CancellationToken());
                                 break;
                             }
                         }
@@ -371,7 +371,7 @@ namespace NonVisuals.Radios
                         {
                             if (osCommand.OSCommandObject != null && osCommand.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && osCommand.WhenTurnedOn == radioPanelKey.IsOn)
                             {
-                                osCommand.OSCommandObject.Execute();
+                                osCommand.OSCommandObject.Execute(new CancellationToken());
                                 break;
                             }
                         }

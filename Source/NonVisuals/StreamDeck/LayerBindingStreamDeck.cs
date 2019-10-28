@@ -18,7 +18,7 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public void Execute()
+        public void Execute(CancellationToken cancellationToken)
         {
             //todo
         }

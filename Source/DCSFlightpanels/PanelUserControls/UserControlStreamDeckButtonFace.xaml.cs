@@ -17,6 +17,7 @@ using FontFamily = System.Windows.Media.FontFamily;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 using NonVisuals.StreamDeck;
+using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -29,7 +30,7 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _isDirty = false;
         private bool _isLoaded = false;
         private List<TextBox> _textBoxList = new List<TextBox>();
-
+        private List<RadioButton> _radioButtonList = new List<RadioButton>();
 
 
 
@@ -68,20 +69,20 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 RadioButtonDCSBIOSFace.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelButtonTextAndStyle.Visibility = RadioButtonSimpleFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonTextAndStyle.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonImageToShow.Visibility = RadioButtonImageFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelDCSBIOSBackgroundType.Visibility = RadioButtonDCSBIOSFace?.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSFaceBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSFaceBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelButtonImageType.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelDCSBIOSBackgroundTypeSelection.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSFaceBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSFaceBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
                 ButtonOnTextFaceFont.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonOnTextFace.Text);
                 ButtonOnTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonOnTextFace.Text);
@@ -114,6 +115,15 @@ namespace DCSFlightpanels.PanelUserControls
 
         public void Clear()
         {
+            foreach (var textBox in _textBoxList)
+            {
+                textBox.Clear();
+            }
+
+            foreach (var radioButton in _radioButtonList)
+            {
+                radioButton.IsChecked = false;
+            }
             _isDirty = false;
         }
 
@@ -220,7 +230,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         public EnumStreamDeckFaceType GetSelectedFaceType()
         {
-            if (RadioButtonSimpleFace.IsChecked == true)
+            if (RadioButtonTextFace.IsChecked == true)
             {
                 return EnumStreamDeckFaceType.Text;
             }
@@ -267,8 +277,19 @@ namespace DCSFlightpanels.PanelUserControls
         {
             _textBoxList.Add(TextBoxButtonOnTextFace);
             _textBoxList.Add(TextBoxButtonOffTextFace);
-            _textBoxList.Add(TextBoxDCSBIOSOutputButtonOn);
-            _textBoxList.Add(TextBoxDCSBIOSOutputButtonOff);
+            _textBoxList.Add(TextBoxDCSBIOSFaceButtonOn);
+            _textBoxList.Add(TextBoxDCSBIOSFaceButtonOff);
+            _textBoxList.Add(TextBoxDCSBIOSBackgroundImageButtonOn);
+            _textBoxList.Add(TextBoxDCSBIOSBackgroundImageButtonOff);
+            _textBoxList.Add(TextBoxDCSBIOSFaceUnit);
+            _textBoxList.Add(TextBoxSelectedImageFaceButtonOn);
+            _textBoxList.Add(TextBoxSelectedImageFaceButtonOff);
+
+            _radioButtonList.Add(RadioButtonTextFace);
+            _radioButtonList.Add(RadioButtonImageFace);
+            _radioButtonList.Add(RadioButtonDCSBIOSFace);
+            _radioButtonList.Add(RadioButtonDCSBIOSBackgroundGenerated);
+            _radioButtonList.Add(RadioButtonDCSBIOSBackgroundExisting);
         }
 
         private void SetTagData()
@@ -408,7 +429,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     case EnumStreamDeckFaceType.Text:
                         {
-                            return Tagg(TextBoxButtonOnTextFace).ContainsSimpleFace();
+                            return Tagg(TextBoxButtonOnTextFace).ContainsTextFace();
                         }
                     case EnumStreamDeckFaceType.ImageFile:
                         {
@@ -473,27 +494,24 @@ namespace DCSFlightpanels.PanelUserControls
 
         public IStreamDeckButtonFace GetStreamDeckButtonFace(bool forButtonPressed)
         {
-            var textBoxSimpleFace = forButtonPressed ? TextBoxButtonOnTextFace : TextBoxButtonOffTextFace;
+            var textBoxTextFace = forButtonPressed ? TextBoxButtonOnTextFace : TextBoxButtonOffTextFace;
 
             switch (GetSelectedFaceType())
             {
                 case EnumStreamDeckFaceType.Text:
                     {
-                        if (Tagg(textBoxSimpleFace).ContainsSimpleFace())
+                        if (Tagg(textBoxTextFace).ContainsTextFace())
                         {
                             var result = new FaceTypeText();
 
                             result.WhenTurnedOn = forButtonPressed;
-                            result.Text = textBoxSimpleFace.Text;
-                            result.TextFont = Tagg(textBoxSimpleFace).TextFont;
-                            result.FontColor = Tagg(textBoxSimpleFace).FontColor;
-                            result.BackgroundColor = Tagg(textBoxSimpleFace).BackgroundColor;
-                            result.OffsetX = Tagg(textBoxSimpleFace).OffsetX;
-                            result.OffsetY = Tagg(textBoxSimpleFace).OffsetY;
-
-                            result.UseExecutionDelay = !forButtonPressed;
-                            result.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayKeyPress.Text);
-
+                            result.Text = textBoxTextFace.Text;
+                            result.TextFont = Tagg(textBoxTextFace).TextFont;
+                            result.FontColor = Tagg(textBoxTextFace).FontColor;
+                            result.BackgroundColor = Tagg(textBoxTextFace).BackgroundColor;
+                            result.OffsetX = Tagg(textBoxTextFace).OffsetX;
+                            result.OffsetY = Tagg(textBoxTextFace).OffsetY;
+                            
                             return result;
                         }
 

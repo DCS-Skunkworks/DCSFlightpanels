@@ -310,7 +310,7 @@ namespace NonVisuals.Saitek
                 {
                     if (keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
                     {
-                        keyBinding.OSKeyPress.Execute();
+                        keyBinding.OSKeyPress.Execute(new CancellationToken());
                         found = true;
                         break;
                     }
@@ -319,7 +319,7 @@ namespace NonVisuals.Saitek
                 {
                     if (osCommand.OSCommandObject != null && osCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && osCommand.WhenTurnedOn == switchPanelKey.IsOn)
                     {
-                        osCommand.OSCommandObject.Execute();
+                        osCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
                         break;
                     }

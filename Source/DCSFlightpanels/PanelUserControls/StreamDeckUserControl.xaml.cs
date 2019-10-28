@@ -540,8 +540,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetIsDirty();
-                SDUIParent.ChildChangesMade();
+                if (GetSelectedButtonName() == StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+                {
+                    return;
+                }
+                _streamDeck.GetStreamDeckButton(GetSelectedButtonName(), ComboBoxLayers.Text).ExecutionDelay = int.Parse(ComboBoxButtonReleaseDelay.Text);
+                _streamDeck.SignalPanelChange();
             }
             catch (Exception ex)
             {
@@ -758,7 +762,9 @@ namespace DCSFlightpanels.PanelUserControls
                 if (streamDeckButton != null)
                 {
                     SetButtonActionType();
+                    ComboBoxButtonReleaseDelay.SelectedValue = streamDeckButton.ExecutionDelay;
                     UCStreamDeckButtonAction.ShowActionConfiguration(streamDeckButton);
+                    UCStreamDeckButtonFace.ShowFaceConfiguration(streamDeckButton);
                 }
                 SetFormState();
             }
@@ -918,7 +924,7 @@ namespace DCSFlightpanels.PanelUserControls
                     if (faceRelease != null)
                     {
                         streamDeckButton.StreamDeckButtonFaceForRelease = faceRelease;
-                        result.ExecutionDelay = forButtonPressed ? 0 : int.Parse(ComboBoxReleaseDelayOSCommand.Text);
+                        streamDeckButton.ExecutionDelay = int.Parse(ComboBoxButtonReleaseDelay.Text);
                         added = true;
                     }
 

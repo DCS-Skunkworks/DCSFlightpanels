@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
@@ -39,7 +40,7 @@ namespace NonVisuals.StreamDeck
             {
                 TypeNameHandling = TypeNameHandling.All
             };
-            return JsonConvert.SerializeObject(_layerList, indented, settings);
+            return JsonConvert.SerializeObject(_layerList.Where(o => o.h), indented, settings);
         }
 
         public void ImportJSONSettings(string jsonText)

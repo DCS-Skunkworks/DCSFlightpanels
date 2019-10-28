@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
@@ -200,7 +201,7 @@ namespace NonVisuals.Saitek
             {
                 if (keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                 {
-                    keyBinding.OSKeyPress.Execute();
+                    keyBinding.OSKeyPress.Execute(new CancellationToken());
                 }
             }
         }
@@ -219,7 +220,7 @@ namespace NonVisuals.Saitek
                 {
                     if (keyBinding.OSKeyPress != null && keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
-                        keyBinding.OSKeyPress.Execute();
+                        keyBinding.OSKeyPress.Execute(new CancellationToken());
                         found = true;
                         break;
                     }
@@ -228,7 +229,7 @@ namespace NonVisuals.Saitek
                 {
                     if (osCommand.OSCommandObject != null && osCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && osCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
-                        osCommand.OSCommandObject.Execute();
+                        osCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
                         break;
                     }

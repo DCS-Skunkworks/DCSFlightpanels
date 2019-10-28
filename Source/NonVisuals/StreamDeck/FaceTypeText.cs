@@ -29,46 +29,15 @@ namespace NonVisuals.StreamDeck
 
 
 
-        ~FaceTypeText()
-        {
-            _delayedExecutionThread?.Abort();
-        }
-
         public void Execute()
         {
-            if (string.IsNullOrEmpty(_text))
-            {
-                return;
-            }
-
-            if (!UseExecutionDelay)
-            {
-                ShowButtonFace();
-            }
-            else
-            {
-                _delayedExecutionThread = new Thread(DelayedExecution);
-                _delayedExecutionThread.Start();
-            }
+            ShowButtonFace();
         }
 
         private void ShowButtonFace()
         {
             var bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
             ParentPanel.SetImage(_streamDeckButtonName, bitmap);
-        }
-        
-        private void DelayedExecution()
-        {
-            try
-            {
-                Thread.Sleep(ExecutionDelay);
-                ShowButtonFace();
-            }
-            catch (Exception e)
-            {
-                Common.ShowErrorMessageBox(e);
-            }
         }
 
         public Bitmap Bitmap

@@ -35,6 +35,28 @@ namespace NonVisuals.StreamDeck
             set => _name = value;
         }
 
+        public bool HasConfig
+        {
+            get
+            {
+                foreach (var streamDeckButton in _streamDeckButtons)
+                {
+                    if (streamDeckButton.HasConfig)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public List<StreamDeckButton> GetButtonsWithConfig()
+        {
+            var result = new List<StreamDeckButton>();
+
+        }
+
         public StreamDeckLayer GetEmptyLayer()
         {
             var result = new StreamDeckLayer();

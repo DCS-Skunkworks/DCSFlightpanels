@@ -652,13 +652,13 @@ namespace NonVisuals.Saitek
                         {
                             if (!SkipCurrentLcdKnobChange())
                             {
-                                knobBinding.OSKeyPress.Execute();
+                                knobBinding.OSKeyPress.Execute(new CancellationToken());
                             }
                             found = true;
                         }
                         else
                         {
-                            knobBinding.OSKeyPress.Execute();
+                            knobBinding.OSKeyPress.Execute(new CancellationToken());
                             found = true;
                         }
                         break;
@@ -679,7 +679,7 @@ namespace NonVisuals.Saitek
                 {
                     if (osCommand.DialPosition == _pz70DialPosition && osCommand.OSCommandObject != null && osCommand.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && osCommand.WhenTurnedOn == multiPanelKnob.IsOn)
                     {
-                        osCommand.OSCommandObject.Execute();
+                        osCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
                         break;
                     }
