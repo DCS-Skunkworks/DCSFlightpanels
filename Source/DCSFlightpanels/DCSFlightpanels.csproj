@@ -114,6 +114,7 @@
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckImage.cs" />
+    <Compile Include="CustomControls\TextBoxBase.cs" />
     <Compile Include="CustomControls\TPMTextBox.cs" />
     <Compile Include="CustomControls\PZ70TextBox.cs" />
     <Compile Include="CustomControls\PZ69Button.cs" />

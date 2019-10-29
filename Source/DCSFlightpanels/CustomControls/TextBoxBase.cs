@@ -3,8 +3,8 @@ using DCSFlightpanels.Bills;
 
 namespace DCSFlightpanels.CustomControls
 {
-    public class PZ69Button : Button
+    public class TextBoxBase : TextBox
     {
-        public BillPZ69Button Bill { get; set; }
+        public BillBase Bill { get; set; }
     }
 }

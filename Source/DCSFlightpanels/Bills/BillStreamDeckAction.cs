@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
-using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
 
@@ -62,7 +61,7 @@ namespace DCSFlightpanels.Bills
             {
                 if (ContainsKeyPress())
                 {
-                    throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
+                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
                 _dcsbiosBindingStreamDeck = value;
                 if (_dcsbiosBindingStreamDeck != null)

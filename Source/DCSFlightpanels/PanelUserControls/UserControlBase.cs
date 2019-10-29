@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
+using DCSFlightpanels.CustomControls;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -87,7 +87,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
         
-        internal void SetKeyPressLength(TextBox textBox, MenuItem contextMenuItem)
+        internal void SetKeyPressLength(TextBoxBase textBox, MenuItem contextMenuItem)
         {
             try
             {
@@ -101,63 +101,63 @@ namespace DCSFlightpanels.PanelUserControls
                     var infoDialog = new InformationTextBlockWindow(message);
                     infoDialog.Height = 250;
                     infoDialog.ShowDialog();
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemHalfSecond")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecond")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecondAndHalf")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwoSeconds")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThreeSeconds")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFourSeconds")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFiveSecs")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTenSecs")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFifteenSecs")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwentySecs")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtySecs")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFortySecs")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSixtySecs")
                 {
-                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
                 }
             }
             catch (Exception ex)

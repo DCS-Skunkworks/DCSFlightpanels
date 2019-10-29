@@ -25,7 +25,7 @@ namespace DCSFlightpanels.PanelUserControls
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
         private bool _once;
-        private bool _textBoxTagsSet;
+        private bool _textBoxBillsSet;
         private bool _controlLoaded;
 
         public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
@@ -47,7 +47,7 @@ namespace DCSFlightpanels.PanelUserControls
                 HidePositionIndicators();
                 _once = true;
             }
-            SetTextBoxTagObjects();
+            SetTextBoxBills();
             SetContextMenuClickHandlers();
             _controlLoaded = true;
             ShowGraphicConfiguration();
@@ -365,22 +365,21 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void SetTextBoxTagObjects()
+        private void SetTextBoxBills()
         {
-            if (_textBoxTagsSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
+            if (_textBoxBillsSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
             {
                 return;
             }
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
-                //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
                 if (textBox.Equals(TextBoxLogTPM))
                 {
                     continue;
                 }
                 textBox.Bill = new BillTPM(textBox, GetTPMSwitch(textBox));
             }
-            _textBoxTagsSet = true;
+            _textBoxBillsSet = true;
         }
 
         private void RemoveContextMenuClickHandlers()
@@ -1057,7 +1056,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_controlLoaded || !_textBoxTagsSet)
+                if (!_controlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }

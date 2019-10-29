@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Net.Mime;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
 using NonVisuals.Interfaces;
-using Color = System.Windows.Media.Color;
-using FontFamily = System.Windows.Media.FontFamily;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 using NonVisuals.StreamDeck;
@@ -53,7 +47,7 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
                 FillControlLists();
-                SetTagData();
+                SetBills();
                 LoadFontSettings();
                 SetFormState();
                 _isLoaded = true;
@@ -293,7 +287,7 @@ namespace DCSFlightpanels.PanelUserControls
             _radioButtonList.Add(RadioButtonDCSBIOSBackgroundExisting);
         }
 
-        private void SetTagData()
+        private void SetBills()
         {
             foreach (var textBox in _textBoxList)
             {

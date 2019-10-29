@@ -28,8 +28,8 @@ namespace DCSFlightpanels.Radios
         private string _parentTabItemHeader;
         private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
-        private bool _textBoxTagsSet;
-        private bool _buttonTagsSet;
+        private bool _textBoxBillsSet;
+        private bool _buttonBillsSet;
         private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
         private const string UPPER_TEXT = "Upper Dial Profile : ";
         private const string LOWER_TEXT = "Lower Dial Profile : ";
@@ -55,8 +55,8 @@ namespace DCSFlightpanels.Radios
             try
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
-                SetTextBoxTagObjects();
-                SetButtonTagObjects();
+                SetTextBoxBills();
+                SetButtonBills();
                 SetContextMenuClickHandlers();
                 _userControlLoaded = true;
                 ShowGraphicConfiguration();
@@ -157,27 +157,26 @@ namespace DCSFlightpanels.Radios
 
 
 
-        private void SetTextBoxTagObjects()
+        private void SetTextBoxBills()
         {
-            if (_textBoxTagsSet || !Common.FindVisualChildren<PZ69FullTextBox>(this).Any())
+            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ69FullTextBox>(this).Any())
             {
                 return;
             }
             foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
             {
-                //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
                 if (textBox.Equals(TextBoxLogPZ69))
                 {
                     continue;
                 }
                 textBox.Bill = new BillPZ69Full(textBox);
             }
-            _textBoxTagsSet = true;
+            _textBoxBillsSet = true;
         }
 
-        private void SetButtonTagObjects()
+        private void SetButtonBills()
         {
-            if (_buttonTagsSet)
+            if (_buttonBillsSet)
             {
                 return;
             }
@@ -185,7 +184,7 @@ namespace DCSFlightpanels.Radios
             ButtonLowerLeftLcd.Bill = new BillPZ69Button(ButtonLowerLeftLcd);
             ButtonUpperRightLcd.Bill = new BillPZ69Button(ButtonUpperRightLcd);
             ButtonLowerRightLcd.Bill = new BillPZ69Button(ButtonLowerRightLcd);
-            _buttonTagsSet = true;
+            _buttonBillsSet = true;
         }
 
         private void MenuContextEditTextBoxClick(object sender, RoutedEventArgs e)
@@ -1206,7 +1205,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (!_userControlLoaded || !_textBoxTagsSet)
+                if (!_userControlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }

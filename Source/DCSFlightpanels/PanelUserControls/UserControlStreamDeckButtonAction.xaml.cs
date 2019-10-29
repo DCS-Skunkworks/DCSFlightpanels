@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
 using NonVisuals;
-using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;

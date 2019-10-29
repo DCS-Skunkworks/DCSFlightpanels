@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using DCSFlightpanels.Bills;
+﻿using DCSFlightpanels.Bills;
 
 namespace DCSFlightpanels.CustomControls
 {
-    public class StreamDeckActionTextBox : TextBox
+    public class StreamDeckActionTextBox : TextBoxBase
     {
-        public BillStreamDeckAction Bill { get; set; }
+        public new BillStreamDeckAction Bill { get; set; }
     }
 }

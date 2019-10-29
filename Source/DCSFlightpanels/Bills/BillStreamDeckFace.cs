@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using DCSFlightpanels.Properties;
 using NonVisuals.StreamDeck;
 using Color = System.Drawing.Color;
 

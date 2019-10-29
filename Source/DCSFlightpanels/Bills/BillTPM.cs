@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
 using DCSFlightpanels.CustomControls;
@@ -53,7 +52,7 @@ namespace DCSFlightpanels.Bills
             {
                 if (ContainsKeyPress())
                 {
-                    throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
+                    throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
                 _dcsbiosBindingTPM = value;
                 if (_dcsbiosBindingTPM != null)

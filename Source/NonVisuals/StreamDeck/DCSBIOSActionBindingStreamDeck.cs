@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using ClassLibraryCommon;
+﻿using System.Threading;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 

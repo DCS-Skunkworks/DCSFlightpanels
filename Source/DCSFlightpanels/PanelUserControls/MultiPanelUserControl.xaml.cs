@@ -28,7 +28,7 @@ namespace DCSFlightpanels.PanelUserControls
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
-        private bool _textBoxTagsSet;
+        private bool _textBoxBillsSet;
 
         public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -46,7 +46,7 @@ namespace DCSFlightpanels.PanelUserControls
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
-            SetTextBoxTagObjects();
+            SetTextBoxBills();
             SetContextMenuClickHandlers();
             _userControlLoaded = true;
             ShowGraphicConfiguration();
@@ -153,21 +153,20 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void SetTextBoxTagObjects()
+        private void SetTextBoxBills()
         {
-            if (_textBoxTagsSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
+            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
             {
                 return;
             }
             foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
-                //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
                 if (!textBox.Equals(TextBoxLogPZ70))
                 {
                     textBox.Bill = new BillPZ70(textBox, GetPZ70Knob(textBox));
                 }
             }
-            _textBoxTagsSet = true;
+            _textBoxBillsSet = true;
         }
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
@@ -587,7 +586,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_userControlLoaded || !_textBoxTagsSet)
+                if (!_userControlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }
@@ -818,12 +817,7 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
-
-                /*if (((TextBoxTagHolderClass)textBox.Tag) == null)
-                {
-                    ((TextBoxTagHolderClass)textBox.Tag) = xxKeyPressLength.FiftyMilliSec;
-                }*/
-
+                
                 var keyCode = KeyInterop.VirtualKeyFromKey(e.Key);
                 e.Handled = true;
 

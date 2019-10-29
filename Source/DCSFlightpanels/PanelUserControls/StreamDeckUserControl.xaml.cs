@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Bills;
@@ -14,7 +12,6 @@ using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
-using Image = System.Windows.Controls.Image;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -51,7 +48,7 @@ namespace DCSFlightpanels.PanelUserControls
             _globalHandler = globalHandler;
 
             FillControlLists();
-            SetImageTagDataClasses();
+            SetImageBills();
 
             HideAllImages();
         }
@@ -148,14 +145,15 @@ namespace DCSFlightpanels.PanelUserControls
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        private void SetImageTagDataClasses()
+        private void SetImageBills()
         {
             foreach (var buttonImage in _buttonImages)
             {
-                if (buttonImage.Tag != null)
+                if (buttonImage.Bill != null)
                 {
                     continue;
                 }
+                buttonImage.Bill = new BillStreamDeckFace();
                 buttonImage.Bill.StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
                 buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Green);
                 buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
@@ -238,7 +236,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private BillStreamDeckFace GetSelectedImageDataClass()
+        private BillStreamDeckFace GetSelectedImageBill()
         {
             foreach (var image in _buttonImages)
             {
@@ -252,30 +250,27 @@ namespace DCSFlightpanels.PanelUserControls
 
         public int GetSelectedButtonNumber()
         {
-            var tagDataClass = GetSelectedImageDataClass();
-
-            return tagDataClass?.ButtonNumber() ?? 0;
-
+            return GetSelectedImageBill()?.ButtonNumber() ?? 0;
         }
 
         public StreamDeckButtonNames GetSelectedButtonName()
         {
-            var tagDataClass = GetSelectedImageDataClass();
-            if (tagDataClass == null)
+            var bill = GetSelectedImageBill();
+            if (bill == null)
             {
                 return StreamDeckButtonNames.BUTTON0_NO_BUTTON;
             }
-            return tagDataClass.StreamDeckButtonName;
+            return bill.StreamDeckButtonName;
         }
 
         public StreamDeckButton GetSelectedStreamDeckButton()
         {
-            var tagDataClass = GetSelectedImageDataClass();
-            if (tagDataClass == null)
+            var bill = GetSelectedImageBill();
+            if (bill == null)
             {
                 return null;
             }
-            return _streamDeck.GetCurrentLayerStreamDeckButton(tagDataClass.StreamDeckButtonName);
+            return _streamDeck.GetCurrentLayerStreamDeckButton(bill.StreamDeckButtonName);
         }
 
         public string GetName()
@@ -348,8 +343,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             foreach (var buttonImage in _buttonImages)
             {
-                var tagDataClass = buttonImage.Bill;
-                tagDataClass.Clear();
+                buttonImage.Bill.Clear();
             }
             if (clearAlsoProfile)
             {

@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using DCSFlightpanels.CustomControls;
+﻿using DCSFlightpanels.CustomControls;
 using NonVisuals.DCSBIOSBindings;
 
 namespace DCSFlightpanels.Bills

@@ -46,7 +46,7 @@ namespace DCSFlightpanels.Bills
             {
                 if (ContainsDCSBIOS())
                 {
-                    throw new Exception("Cannot insert KeyPress, TextBoxTagHolderClass already contains DCSBIOSInputs");
+                    throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
                 }
                 _keyPress = value;
                 if (_keyPress != null)

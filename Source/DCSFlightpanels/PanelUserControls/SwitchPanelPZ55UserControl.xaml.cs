@@ -29,7 +29,7 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly Image[] _imageArrayLeft = new Image[4];
         private readonly Image[] _imageArrayRight = new Image[4];
         private readonly IGlobalHandler _globalHandler;
-        private bool _textBoxTagsSet;
+        private bool _textBoxBillsSet;
         private bool _controlLoaded;
 
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
@@ -60,7 +60,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            SetTextBoxTagObjects();
+            SetTextBoxBills();
             SetContextMenuClickHandlers();
             _controlLoaded = true;
             ShowGraphicConfiguration();
@@ -523,22 +523,22 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void SetTextBoxTagObjects()
+        private void SetTextBoxBills()
         {
-            if (_textBoxTagsSet || !Common.FindVisualChildren<PZ55TextBox>(this).Any())
+            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ55TextBox>(this).Any())
             {
                 return;
             }
             foreach (var textBox in Common.FindVisualChildren<PZ55TextBox>(this))
             {
-                //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
+                
                 if (textBox == TextBoxLogPZ55)
                 {
                     continue;
                 }
                 textBox.Bill = new BillPZ55(textBox, GetPZ55Key(textBox));
             }
-            _textBoxTagsSet = true;
+            _textBoxBillsSet = true;
         }
 
         private void RemoveContextMenuClickHandlers()
@@ -1391,7 +1391,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_controlLoaded || !_textBoxTagsSet)
+                if (!_controlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }
@@ -1447,7 +1447,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 textBox.Background = brush;
             }
-            _textBoxTagsSet = true;
+            _textBoxBillsSet = true;
         }
 
         private void SetConfigExistsImageVisibility()
