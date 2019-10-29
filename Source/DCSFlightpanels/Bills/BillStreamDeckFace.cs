@@ -68,8 +68,9 @@ namespace DCSFlightpanels.Bills
             set => _isSelected = value;
         }
 
-        public int OffsetY { get; set; } = 0;
-        public int OffsetX { get; set; } = 0;
+
+        public int OffsetX { get; set; } = 10;
+        public int OffsetY { get; set; } = 24;
         
 
         public int ButtonNumber()
@@ -92,7 +93,7 @@ namespace DCSFlightpanels.Bills
         public void Clear()
         {
             Button = null;
-            ParentTextBox.Clear();
+            ParentTextBox?.Clear();
         }
     }
 

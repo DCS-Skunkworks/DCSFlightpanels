@@ -170,8 +170,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 return;
             }
-            ShowActionConfiguration(streamDeckButton.StreamDeckButtonActionForPress);
-            ShowActionConfiguration(streamDeckButton.StreamDeckButtonActionForRelease);
+            ShowActionConfiguration(streamDeckButton.ActionForPress);
+            ShowActionConfiguration(streamDeckButton.ActionForRelease);
         }
 
         public void ShowActionConfiguration(IStreamDeckButtonAction streamDeckButtonAction)

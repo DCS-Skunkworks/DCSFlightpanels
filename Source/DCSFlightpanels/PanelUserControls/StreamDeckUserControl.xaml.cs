@@ -27,6 +27,7 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _userControlLoaded;
         private List<RadioButton> _radioButtonActionsList = new List<RadioButton>();
         private List<StreamDeckImage> _buttonImages = new List<StreamDeckImage>();
+        private List<System.Windows.Controls.Image> _dotImages = new List<System.Windows.Controls.Image>();
 
         private CancellationTokenSource _cancellationTokenSource;
         Random _random = new Random();
@@ -55,19 +56,17 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void StreamDeckUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (_userControlLoaded)
+            if (!_userControlLoaded)
             {
-                return;
+                _userControlLoaded = true;
+                UCStreamDeckButtonAction.SDUIParent = this;
+                UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
+                UCStreamDeckButtonFace.SDUIParent = this;
+                UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
+                ShowGraphicConfiguration();
+                UCStreamDeckButtonAction.Update();
             }
-            _userControlLoaded = true;
-            UCStreamDeckButtonAction.SDUIParent = this;
-            UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
-            UCStreamDeckButtonFace.SDUIParent = this;
-            UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
-            SetComboBoxLayersSelectedValue(1000);
-            ShowGraphicConfiguration();
             SetFormState();
-            UCStreamDeckButtonAction.Update();
         }
 
         private void SetFormState()
@@ -75,6 +74,10 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var selectedButtonNumber = GetSelectedButtonNumber();
+
+                SetButtonGridStatus(_streamDeck.HasLayers);
+
+                LabelCreateLayer.Visibility = _streamDeck.HasLayers ? Visibility.Collapsed : Visibility.Visible;
 
                 RadioButtonDCSBIOS.Visibility = _globalHandler.GetAirframe() != DCSAirframe.KEYEMULATOR ? Visibility.Visible : Visibility.Collapsed;
 
@@ -96,7 +99,7 @@ namespace DCSFlightpanels.PanelUserControls
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 CheckBoxMarkHomeLayer.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
-                ButtonDeleteLayer.IsEnabled = ComboBoxLayers.IsEnabled;
+                ButtonDeleteLayer.IsEnabled = ComboBoxLayers.IsEnabled && ComboBoxLayers.SelectedValue != null;
                 //CheckBoxMarkHomeLayer.IsEnabled = ComboBoxLayers.IsEnabled;
             }
             catch (Exception ex)
@@ -164,6 +167,8 @@ namespace DCSFlightpanels.PanelUserControls
         private void UpdateAllButtonsSelectedStatus(StreamDeckButtonNames selectedButtonName)
         {
 
+            //System.Diagnostics.Debugger.Break();
+
             foreach (var buttonImage in _buttonImages)
             {
                 try
@@ -184,6 +189,7 @@ namespace DCSFlightpanels.PanelUserControls
                     else
                     {
                         buttonImage.Source = buttonImage.Bill.DeselectedImage;
+                        buttonImage.Bill.IsSelected = false;
                     }
                 }
                 catch (Exception ex)
@@ -193,12 +199,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        
+
         public void TestImage(Bitmap bitmap)
         {
             try
             {
-                if(GetSelectedButtonName() != StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+                if (GetSelectedButtonName() != StreamDeckButtonNames.BUTTON0_NO_BUTTON)
                 {
                     _streamDeck.SetImage(GetSelectedButtonName(), bitmap);
                 }
@@ -227,6 +233,10 @@ namespace DCSFlightpanels.PanelUserControls
 
                     buttonImage.Bill.Button = streamDeckButton;
 
+                    if (streamDeckButton.HasConfig)
+                    {
+                        SetDotImageStatus(true, StreamDeckFunction.ButtonNumber(streamDeckButton.StreamDeckButtonName));
+                    }
                     SetFormState();
                 }
                 catch (Exception ex)
@@ -479,7 +489,7 @@ namespace DCSFlightpanels.PanelUserControls
                              TextBoxLogStreamDeck.Text = TextBoxLogStreamDeck.Text.Insert(0, "No action taken, panel events Disabled.\n")));
                     }
                 }
-                SetGraphicsState(buttons);
+                //SetGraphicsState(buttons);
             }
             catch (Exception ex)
             {
@@ -519,16 +529,18 @@ namespace DCSFlightpanels.PanelUserControls
 
 
 
-        private void ComboBoxReleaseDelaySetHandlerState(bool enableEventHandler)
+        private void SetComboBoxButtonReleaseDelayValue(int value)
         {
-            if (enableEventHandler)
+            ComboBoxButtonReleaseDelay.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
+            foreach (ComboBoxItem item in ComboBoxButtonReleaseDelay.Items)
             {
-                ComboBoxButtonReleaseDelay.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
+                if (int.Parse(item.Content.ToString()) == value)
+                {
+                    ComboBoxButtonReleaseDelay.SelectedItem = item;
+                    break;
+                }
             }
-            else
-            {
-                ComboBoxButtonReleaseDelay.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
-            }
+            ComboBoxButtonReleaseDelay.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
         }
 
         private void ComboBoxReleaseDelay_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -614,13 +626,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
 
             return null;
-        }
-
-        private void SetComboBoxLayersSelectedValue(int value)
-        {
-            ComboBoxLayers.SelectionChanged -= ComboBoxLayers_OnSelectionChanged;
-            ComboBoxLayers.SelectedValue = value;
-            ComboBoxLayers.SelectionChanged += ComboBoxLayers_OnSelectionChanged;
         }
 
         private void ComboBoxLayers_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -749,10 +754,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonImage_OnMouseDown(object sender, MouseButtonEventArgs e)
+        private void ButtonImage_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             try
             {
+                /*
+                 * bselect 
+                 */
                 var image = (StreamDeckImage)sender;
 
 
@@ -761,6 +769,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var streamDeckButton = image.Bill.Button;
                 if (streamDeckButton != null)
                 {
+                    SetComboBoxButtonReleaseDelayValue(streamDeckButton.ExecutionDelay);
                     SetButtonActionType();
                     ComboBoxButtonReleaseDelay.SelectedValue = streamDeckButton.ExecutionDelay;
                     UCStreamDeckButtonAction.ShowActionConfiguration(streamDeckButton);
@@ -774,24 +783,37 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        private void SetDotImageStatus(bool show, int number, bool allOthersNegated = false)
+        {
+            foreach (var dotImage in _dotImages)
+            {
+                if (allOthersNegated)
+                {
+                    dotImage.Visibility = show ? Visibility.Collapsed : Visibility.Visible;
+                }
+
+                if (dotImage.Name == "DotImage" + number)
+                {
+                    dotImage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+        }
+
         public void SetButtonActionType()
         {
             var streamDeckButton = GetSelectedStreamDeckButton();
+
             if (streamDeckButton == null)
             {
                 return;
             }
+
             foreach (var radioButton in _radioButtonActionsList)
             {
                 radioButton.IsChecked = false;
             }
-
-            if (streamDeckButton.StreamDeckButtonActionForPress == null)
-            {
-                return;
-            }
-
-            switch (streamDeckButton.StreamDeckButtonActionForPress.ActionType)
+            
+            switch (streamDeckButton.ActionType)
             {
                 case EnumStreamDeckActionType.KeyPress:
                     {
@@ -855,13 +877,13 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (actionPress != null)
                 {
-                    streamDeckButton.StreamDeckButtonActionForPress = actionPress;
+                    streamDeckButton.ActionForPress = actionPress;
                     added = true;
                 }
 
                 if (actionRelease != null)
                 {
-                    streamDeckButton.StreamDeckButtonActionForRelease = actionRelease;
+                    streamDeckButton.ActionForRelease = actionRelease;
                     added = true;
                 }
 
@@ -883,6 +905,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 UCStreamDeckButtonAction.Clear();
+                _streamDeck.SignalPanelChange(); //todo fix event propagation
                 SetFormState();
             }
             catch (Exception ex)
@@ -917,13 +940,13 @@ namespace DCSFlightpanels.PanelUserControls
 
                     if (facePress != null)
                     {
-                        streamDeckButton.StreamDeckButtonFaceForPress = facePress;
+                        streamDeckButton.FaceForPress = facePress;
                         added = true;
                     }
 
                     if (faceRelease != null)
                     {
-                        streamDeckButton.StreamDeckButtonFaceForRelease = faceRelease;
+                        streamDeckButton.FaceForRelease = faceRelease;
                         streamDeckButton.ExecutionDelay = int.Parse(ComboBoxButtonReleaseDelay.Text);
                         added = true;
                     }
@@ -952,6 +975,8 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 UCStreamDeckButtonFace.Clear();
+                _streamDeck.SignalPanelChange(); //todo fix event propagation
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -963,6 +988,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                UCStreamDeckButtonFace.Clear();
+                UCStreamDeckButtonFace.ShowFaceConfiguration(GetSelectedStreamDeckButton());
             }
             catch (Exception ex)
             {
@@ -997,251 +1024,24 @@ namespace DCSFlightpanels.PanelUserControls
             _buttonImages.Add(ButtonImage13);
             _buttonImages.Add(ButtonImage14);
             _buttonImages.Add(ButtonImage15);
+
+            _dotImages.Add(DotImage1);
+            _dotImages.Add(DotImage2);
+            _dotImages.Add(DotImage3);
+            _dotImages.Add(DotImage4);
+            _dotImages.Add(DotImage5);
+            _dotImages.Add(DotImage6);
+            _dotImages.Add(DotImage7);
+            _dotImages.Add(DotImage8);
+            _dotImages.Add(DotImage9);
+            _dotImages.Add(DotImage10);
+            _dotImages.Add(DotImage11);
+            _dotImages.Add(DotImage12);
+            _dotImages.Add(DotImage13);
+            _dotImages.Add(DotImage14);
+            _dotImages.Add(DotImage15);
         }
         
-        private void SetGraphicsState(HashSet<object> buttons)
-        {
-            try
-            {
-                foreach (var streamDeckButton35 in buttons)
-                {
-                    var streamDeckButton = (StreamDeckButton)streamDeckButton35;
-                    switch (streamDeckButton.StreamDeckButtonName)
-                    {
-                        case StreamDeckButtonNames.BUTTON1:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage1.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON2:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage2.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON3:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage3.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON4:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage4.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON5:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage5.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON6:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage6.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON7:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage7.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON8:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage8.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON9:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage9.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON10:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage10.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON11:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage11.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON12:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage12.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON13:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage13.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON14:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage14.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                        case StreamDeckButtonNames.BUTTON15:
-                            {
-                                var key = streamDeckButton;
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        DotImage15.Visibility = key.IsPressed ? Visibility.Visible : Visibility.Collapsed;
-                                        if (key.IsPressed)
-                                        {
-                                            ClearAll(false);
-                                            ShowGraphicConfiguration();
-                                        }
-                                    });
-                                break;
-                            }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2019, ex);
-            }
-        }
-
         private void HideAllImages()
         {
             DotImage1.Visibility = Visibility.Collapsed;
@@ -1308,7 +1108,7 @@ namespace DCSFlightpanels.PanelUserControls
                 while (true)
                 {
                     var bitmap = BitMapCreator.CreateEmtpyStreamDeckBitmap(_colors[_random.Next(0, 20)]);
-                    _streamDeck.SetImage(_random.Next(1,15), bitmap);
+                    _streamDeck.SetImage(_random.Next(1, 15), bitmap);
                     Thread.Sleep(50);
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -1319,6 +1119,14 @@ namespace DCSFlightpanels.PanelUserControls
             catch (Exception ex)
             {
                 Common.LogError(ex);
+            }
+        }
+
+        private void SetButtonGridStatus(bool enabled)
+        {
+            foreach (var streamDeckImage in _buttonImages)
+            {
+                streamDeckImage.IsEnabled = enabled;
             }
         }
     }

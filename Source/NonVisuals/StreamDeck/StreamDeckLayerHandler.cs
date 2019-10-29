@@ -40,6 +40,8 @@ namespace NonVisuals.StreamDeck
                 TypeNameHandling = TypeNameHandling.All
             };
 
+            CleanLayers();
+
             return JsonConvert.SerializeObject(_layerList, indented, settings);
         }
 
@@ -292,6 +294,19 @@ namespace NonVisuals.StreamDeck
                 }
 
                 return notFound;
+            }
+        }
+
+        public bool HasLayers
+        {
+            get { return _layerList.Count > 0; }
+        }
+
+        private void CleanLayers()
+        {
+            foreach (var streamDeckLayer in _layerList)
+            {
+                streamDeckLayer.RemoveEmptyButtons();
             }
         }
 

@@ -393,6 +393,11 @@ namespace NonVisuals.StreamDeck
         {
             return _streamDeckLayerHandler.GetStreamDeckLayer(layerName);
         }
+
+        public bool HasLayers
+        {
+            get { return _streamDeckLayerHandler.HasLayers; }
+        }
     }
 
 

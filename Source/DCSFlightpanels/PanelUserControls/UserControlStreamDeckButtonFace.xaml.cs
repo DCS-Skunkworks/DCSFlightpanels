@@ -88,6 +88,12 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonOffTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonOffTextFace.Text);
                 ButtonOffTextFaceBackgroundColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonOffTextFace.Text);
                 ButtonOffTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonOffTextFace.Text);
+
+                /*
+                 * Not yet implemented
+                 */
+                RadioButtonImageFace.IsEnabled = false;
+                RadioButtonDCSBIOSFace.IsEnabled = false;
             }
             catch (Exception ex)
             {
@@ -446,8 +452,37 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 return;
             }
-            ShowFaceConfiguration(streamDeckButton.StreamDeckButtonFaceForPress);
-            ShowFaceConfiguration(streamDeckButton.StreamDeckButtonFaceForRelease);
+
+
+            switch (streamDeckButton.FaceType)
+            {
+                case EnumStreamDeckFaceType.Text:
+                    {
+                        RadioButtonTextFace.IsChecked = true;
+                        break;
+                    }
+                case EnumStreamDeckFaceType.ImageFile:
+                    {
+                        RadioButtonImageFace.IsChecked = true;
+                        break;
+                    }
+                case EnumStreamDeckFaceType.DCSBIOS:
+                    {
+                        RadioButtonDCSBIOSFace.IsChecked = true;
+                        break;
+                    }
+                case EnumStreamDeckFaceType.Unknown:
+                    {
+                        return;
+                    }
+                default:
+                    {
+                        return;
+                    }
+            }
+            ShowFaceConfiguration(streamDeckButton.FaceForPress);
+            ShowFaceConfiguration(streamDeckButton.FaceForRelease);
+
         }
 
         public void ShowFaceConfiguration(IStreamDeckButtonFace streamDeckButtonFace)
@@ -477,7 +512,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        
+
                         SetFormState();
                         return;
                     }
@@ -506,7 +541,7 @@ namespace DCSFlightpanels.PanelUserControls
                             result.BackgroundColor = textBoxTextFace.Bill.BackgroundColor;
                             result.OffsetX = textBoxTextFace.Bill.OffsetX;
                             result.OffsetY = textBoxTextFace.Bill.OffsetY;
-                            
+
                             return result;
                         }
 
@@ -599,9 +634,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (StreamDeckFaceTextBox)sender;
                 if (!string.IsNullOrEmpty(textBox.Text))
                 {
+                    TestImage(textBox);
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
                 }
