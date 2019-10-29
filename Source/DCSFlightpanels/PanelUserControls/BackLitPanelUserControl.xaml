@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="BackLitPanelUserControl_OnLoaded" >
     <UserControl.Resources>

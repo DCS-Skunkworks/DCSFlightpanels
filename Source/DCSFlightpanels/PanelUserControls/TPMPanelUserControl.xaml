@@ -5,31 +5,32 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="TPMPanelUserControl_OnLoaded">
     <UserControl.Resources>
         <ContextMenu x:Key="TextBoxContextMenuTPM" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged">
             
-            <MenuItem Header="Keep pressed" Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FiftyMilliSec" Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="HalfSecond" Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="Second" Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="SecondAndHalf" Name="contextMenuItemSecondAndHalf" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TwoSeconds" Name="contextMenuItemTwoSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThreeSeconds" Name="contextMenuItemThreeSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FourSeconds" Name="contextMenuItemFourSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FiveSecs" Name="contextMenuItemFiveSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TenSecs" Name="contextMenuItemTenSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FifteenSecs" Name="contextMenuItemFifteenSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TwentySecs" Name="contextMenuItemTwentySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThirtySecs" Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FortySecs" Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="SixtySecs" Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="Add VK_NULL key" Name="contextMenuItemAddNullKey" Click="MenuItemAddNullKey_OnClick"/>
-            <MenuItem Header="Edit OS command" Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
-            <MenuItem Header="Edit sequence" Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
-            <MenuItem Header="Edit DCS-BIOS Control" Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick"/>
-            <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick"/>
+            <MenuItem Header="Keep pressed" x:Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FiftyMilliSec" x:Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="HalfSecond" x:Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Second" x:Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="SecondAndHalf" x:Name="contextMenuItemSecondAndHalf" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TwoSeconds" x:Name="contextMenuItemTwoSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThreeSeconds" x:Name="contextMenuItemThreeSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FourSeconds" x:Name="contextMenuItemFourSeconds" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FiveSecs" x:Name="contextMenuItemFiveSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TenSecs" x:Name="contextMenuItemTenSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FifteenSecs" x:Name="contextMenuItemFifteenSecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="TwentySecs" x:Name="contextMenuItemTwentySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThirtySecs" x:Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="FortySecs" x:Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="SixtySecs" x:Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="Add VK_NULL key" x:Name="contextMenuItemAddNullKey" Click="MenuItemAddNullKey_OnClick"/>
+            <MenuItem Header="Edit OS command" x:Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
+            <MenuItem Header="Edit sequence" x:Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
+            <MenuItem Header="Edit DCS-BIOS Control" x:Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick"/>
+            <MenuItem Header="Edit B.I.P." x:Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick"/>
         </ContextMenu>
     </UserControl.Resources>
     <Grid>
@@ -73,7 +74,7 @@
             <Image Height="5" Width="5" x:Name="ImageG9Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="143" Visibility="Collapsed"/>
             <Image Height="5" Width="5" x:Name="ImageG9On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="169" Visibility="Collapsed"/>
 
-            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="20" Canvas.Top="15" Click="ButtonGetId_OnClick"/>
+            <Button x:Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="20" Canvas.Top="15" Click="ButtonGetId_OnClick"/>
         </Canvas>
         <GroupBox Header="Switches 1-9"  FontSize="10" Grid.Column="1" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="4">
             <Grid>
@@ -85,47 +86,47 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G1 On" FontSize="10" Height="23"   />
-                    <TextBox Height="18" IsReadOnly="True" Name="TextBoxG1On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG1On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G2 On" FontSize="10" Height="23"  />
-                    <TextBox Height="18" IsReadOnly="True" Name="TextBoxG2On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG2On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G3 On" Height="23"  FontSize="10"  />
-                    <TextBox Height="18" IsReadOnly="True" Name="TextBoxG3On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG3On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G4 On" Height="23" FontSize="10"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG4On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG4On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G5 On" Height="23"  FontSize="10"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG5On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG5On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G1 Off" FontSize="10" Height="23"   />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG1Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG1Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G2 Off" FontSize="10" Height="23" />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG2Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG2Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G3 Off" FontSize="10" Height="23"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG3Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG3Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G4 Off" FontSize="10" Height="23"   />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG4Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG4Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G5 Off" FontSize="10" Height="23"   />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG5Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG5Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G6 On" FontSize="10" Height="23"   />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG6On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG6On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G7 On" FontSize="10" Height="23"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG7On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG7On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G8 On" FontSize="10" Height="23"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG8On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG8On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G9 On" FontSize="10" Height="23"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG9On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG9On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="3" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G6 Off" FontSize="10" Height="23"   />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG6Off" MouseDoubleClick="TextBoxMouseDoubleClick" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG6Off" MouseDoubleClick="TextBoxMouseDoubleClick" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G7 Off" FontSize="10" Height="23"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG7Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG7Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G8 Off" FontSize="10" Height="23"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG8Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG8Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G9 Off" FontSize="10" Height="23"  />
-                    <TextBox FontSize="10" Height="18" IsReadOnly="True" Name="TextBoxG9Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG9Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -133,7 +134,7 @@
 
 
         <GroupBox Header="Log"  FontSize="10"  Grid.Column="4" Grid.Row="1" Grid.RowSpan="1" Margin="0,0.5,0,-1">
-            <TextBox Name="TextBoxLogTPM" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
+            <customControl:TPMTextBox x:Name="TextBoxLogTPM" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
         </GroupBox>
 
     </Grid>

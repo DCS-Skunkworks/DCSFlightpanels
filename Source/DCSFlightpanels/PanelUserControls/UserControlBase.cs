@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using ClassLibraryCommon;
-using DCSFlightpanels.TagDataClasses;
+using DCSFlightpanels.Bills;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -101,63 +101,63 @@ namespace DCSFlightpanels.PanelUserControls
                     var infoDialog = new InformationTextBlockWindow(message);
                     infoDialog.Height = 250;
                     infoDialog.ShowDialog();
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemHalfSecond")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecond")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSecondAndHalf")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwoSeconds")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThreeSeconds")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFourSeconds")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFiveSecs")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTenSecs")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFifteenSecs")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemTwentySecs")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtySecs")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFortySecs")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemSixtySecs")
                 {
-                    ((TagDataClassBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
+                    ((BillBase)textBox.Tag).KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
                 }
             }
             catch (Exception ex)

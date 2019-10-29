@@ -9,7 +9,8 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
 using DCSFlightpanels.Properties;
-using DCSFlightpanels.TagDataClasses;
+using DCSFlightpanels.Bills;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -138,15 +139,13 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ClearAll(bool clearAlsoProfile = true)
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
                 if (textBox.Equals(TextBoxLogPZ70))
                 {
                     continue;
                 }
-                var tagHolderClass = (TagDataClassPZ70)textBox.Tag;
-                textBox.Text = "";
-                tagHolderClass.ClearAll();
+                textBox.Bill.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -156,16 +155,16 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxTagObjects()
         {
-            if (_textBoxTagsSet || !Common.FindVisualChildren<TextBox>(this).Any())
+            if (_textBoxTagsSet || !Common.FindVisualChildren<PZ70TextBox>(this).Any())
             {
                 return;
             }
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
                 if (!textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Tag = new TagDataClassPZ70(textBox, GetPZ70Knob(textBox));
+                    textBox.Bill = new BillPZ70(textBox, GetPZ70Knob(textBox));
                 }
             }
             _textBoxTagsSet = true;
@@ -568,14 +567,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TextBox)sender;
-                if (((TagDataClassPZ70)textBox.Tag).ContainsBIPLink())
+                var textBox = (PZ70TextBox)sender;
+                if (textBox.Bill.ContainsBIPLink())
                 {
-                    ((TextBox)sender).Background = Brushes.Bisque;
+                    ((PZ70TextBox)sender).Background = Brushes.Bisque;
                 }
                 else
                 {
-                    ((TextBox)sender).Background = Brushes.White;
+                    ((PZ70TextBox)sender).Background = Brushes.White;
                 }
             }
             catch (Exception ex)
@@ -610,7 +609,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         if (keyBinding.OSKeyPress != null)
                         {
-                            ((TagDataClassPZ70)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
+                            textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                         }
                     }
                 }
@@ -621,7 +620,7 @@ namespace DCSFlightpanels.PanelUserControls
                     if (osCommand.DialPosition == _multiPanelPZ70.PZ70DialPosition)
                         if (osCommand.OSCommandObject != null)
                         {
-                            ((TagDataClassPZ70) textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
+                            textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
                         }
                 }
             
@@ -630,7 +629,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = GetTextBox(dcsBiosBinding.MultiPanelPZ70Knob, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        ((TagDataClassPZ70)textBox.Tag).DCSBIOSBinding = dcsBiosBinding;
+                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
                     }
                 }
 
@@ -640,7 +639,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
-                        ((TagDataClassPZ70)textBox.Tag).BIPLink = bipLink;
+                        textBox.Bill.BIPLink = bipLink;
                     }
                 }
 
@@ -698,9 +697,9 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = ((PZ70TextBox)sender);
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence() || ((TagDataClassPZ70)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
                 {
                     return;
                 }
@@ -728,7 +727,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
                 textBox.Text = result;
-                ((TagDataClassPZ70)textBox.Tag).KeyPress = new KeyPress(result);
+                textBox.Bill.KeyPress = new KeyPress(result);
                 UpdateKeyBindingProfileSequencedKeyStrokesPZ70(textBox);
             }
             catch (Exception ex)
@@ -741,13 +740,13 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (PZ70TextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
 
                     //Check if this textbox contains DCS-BIOS information. If so then prompt the user for deletion
-                    if (((TagDataClassPZ70)textBox.Tag).ContainsDCSBIOS())
+                    if (textBox.Bill.ContainsDCSBIOS())
                     {
                         if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS control?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
@@ -755,33 +754,33 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                         textBox.Text = "";
                         _multiPanelPZ70.RemoveMultiPanelKnobFromList(ControlListPZ70.DCSBIOS, GetPZ70Knob(textBox).MultiPanelPZ70Knob, GetPZ70Knob(textBox).ButtonState);
-                        ((TagDataClassPZ70)textBox.Tag).DCSBIOSBinding = null;
+                        textBox.Bill.DCSBIOSBinding = null;
                     }
-                    else if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence())
+                    else if (textBox.Bill.ContainsKeySequence())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress.KeySequence.Clear();
+                        textBox.Bill.KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    else if (((TagDataClassPZ70)textBox.Tag).ContainsSingleKey())
+                    else if (textBox.Bill.ContainsSingleKey())
                     {
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress.KeySequence.Clear();
+                        textBox.Bill.KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    if (((TagDataClassPZ70)textBox.Tag).ContainsBIPLink())
+                    if (textBox.Bill.ContainsBIPLink())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassPZ70)textBox.Tag).BIPLink.BIPLights.Clear();
+                        textBox.Bill.BIPLink.BIPLights.Clear();
                         textBox.Background = Brushes.White;
                         UpdateBIPLinkBindings(textBox);
                     }
@@ -798,7 +797,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((PZ70TextBox)sender).Background = Brushes.Yellow;
             }
             catch (Exception ex)
             {
@@ -811,10 +810,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = ((PZ70TextBox)sender);
 
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence() || ((TagDataClassPZ70)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
                 {
                     return;
                 }
@@ -850,7 +849,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
                 textBox.Text = result;
-                ((TagDataClassPZ70)textBox.Tag).KeyPress = new KeyPress(result);
+                textBox.Bill.KeyPress = new KeyPress(result);
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
             catch (Exception ex)
@@ -864,8 +863,8 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (TextBox)sender;
-                if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence())
+                var textBox = (PZ70TextBox)sender;
+                if (textBox.Bill.ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
                 }
@@ -915,11 +914,11 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
                 
-                if (!((TagDataClassPZ70)textBox.Tag).ContainsSingleKey())
+                if (!textBox.Bill.ContainsSingleKey())
                 {
                     return;
                 }
-                var keyPressLength = ((TagDataClassPZ70)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                var keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 CheckContextMenuItems(keyPressLength, contextMenu);
             }
             catch (Exception ex)
@@ -944,9 +943,9 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private TextBox GetTextBoxInFocus()
+        private PZ70TextBox GetTextBoxInFocus()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
                 if (!textBox.Equals(TextBoxLogPZ70) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
@@ -967,9 +966,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 KeySequenceWindow keySequenceWindow;
-                if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence())
+                if (textBox.Bill.ContainsKeySequence())
                 {
-                    keySequenceWindow = new KeySequenceWindow(textBox.Text, ((TagDataClassPZ70)textBox.Tag).GetKeySequence());
+                    keySequenceWindow = new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence());
                 }
                 else
                 {
@@ -989,8 +988,8 @@ namespace DCSFlightpanels.PanelUserControls
                     if (sequenceList.Count > 1)
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress = keyPress;
+                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
                             textBox.Text = keySequenceWindow.GetInformation;
@@ -1006,10 +1005,10 @@ namespace DCSFlightpanels.PanelUserControls
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        ((TagDataClassPZ70)textBox.Tag).ClearAll();
+                        textBox.Bill.ClearAll();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress = keyPress;
+                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         /*textBox.Text = sequenceList.Values[0].VirtualKeyCodesAsString;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
@@ -1053,9 +1052,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
-                if (((TagDataClassPZ70)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassPZ70)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
@@ -1069,7 +1068,7 @@ namespace DCSFlightpanels.PanelUserControls
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    ((TagDataClassPZ70)textBox.Tag).Consume(dcsBiosInputs);
+                    textBox.Bill.Consume(dcsBiosInputs);
                     UpdateDCSBIOSBinding(textBox);
                 }
                 TextBoxLogPZ70.Focus();
@@ -1090,9 +1089,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 BIPLinkWindow bipLinkWindow;
-                if (((TagDataClassPZ70)textBox.Tag).ContainsBIPLink())
+                if (textBox.Bill.ContainsBIPLink())
                 {
-                    var bipLink = ((TagDataClassPZ70)textBox.Tag).BIPLink;
+                    var bipLink = textBox.Bill.BIPLink;
                     bipLinkWindow = new BIPLinkWindow(bipLink);
                 }
                 else
@@ -1103,7 +1102,7 @@ namespace DCSFlightpanels.PanelUserControls
                 bipLinkWindow.ShowDialog();
                 if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
                 {
-                    ((TagDataClassPZ70)textBox.Tag).BIPLink = (BIPLinkPZ70)bipLinkWindow.BIPLink;
+                    textBox.Bill.BIPLink = (BIPLinkPZ70)bipLinkWindow.BIPLink;
                     UpdateBIPLinkBindings(textBox);
                 }
                 TextBoxLogPZ70.Focus();
@@ -1115,12 +1114,12 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private void UpdateBIPLinkBindings(TextBox textBox)
+        private void UpdateBIPLinkBindings(PZ70TextBox textBox)
         {
             try
             {
                 var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateBIPLinkKnobBinding(key.MultiPanelPZ70Knob, ((TagDataClassPZ70)textBox.Tag).BIPLink, key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateBIPLinkKnobBinding(key.MultiPanelPZ70Knob, textBox.Bill.BIPLink, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1128,12 +1127,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateKeyBindingProfileSequencedKeyStrokesPZ70(TextBox textBox)
+        private void UpdateKeyBindingProfileSequencedKeyStrokesPZ70(PZ70TextBox textBox)
         {
             try
             {
                 var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateSequencedKeyBinding(textBox.Text, key.MultiPanelPZ70Knob, ((TagDataClassPZ70)textBox.Tag).GetKeySequence(), key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateSequencedKeyBinding(textBox.Text, key.MultiPanelPZ70Knob, textBox.Bill.GetKeySequence(), key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1142,18 +1141,18 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(TextBox textBox)
+        private void UpdateKeyBindingProfileSimpleKeyStrokes(PZ70TextBox textBox)
         {
             try
             {
                 KeyPressLength keyPressLength;
-                if (!((TagDataClassPZ70)textBox.Tag).ContainsKeyPress() || ((TagDataClassPZ70)textBox.Tag).KeyPress.KeySequence.Count == 0)
+                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeySequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
                 else
                 {
-                    keyPressLength = ((TagDataClassPZ70)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
                 var key = GetPZ70Knob(textBox);
                 _multiPanelPZ70.AddOrUpdateSingleKeyBinding(key.MultiPanelPZ70Knob, textBox.Text, keyPressLength, key.ButtonState);
@@ -1164,12 +1163,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateOSCommandBindingsPZ55(TextBox textBox)
+        private void UpdateOSCommandBindingsPZ70(PZ70TextBox textBox)
         {
             try
             {
-                var tag = (TagDataClassPZ70)textBox.Tag;
-                _multiPanelPZ70.AddOrUpdateOSCommandBinding(tag.Key.MultiPanelPZ70Knob, tag.OSCommandObject, tag.Key.ButtonState);
+                var key = GetPZ70Knob(textBox);
+                _multiPanelPZ70.AddOrUpdateOSCommandBinding(key.MultiPanelPZ70Knob, textBox.Bill.OSCommandObject, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1177,12 +1176,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateDCSBIOSBinding(TextBox textBox)
+        private void UpdateDCSBIOSBinding(PZ70TextBox textBox)
         {
             try
             {
                 var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateDCSBIOSBinding(key.MultiPanelPZ70Knob, ((TagDataClassPZ70)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateDCSBIOSBinding(key.MultiPanelPZ70Knob, textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1243,7 +1242,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void RemoveContextMenuClickHandlers()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ70))
                 {
@@ -1255,7 +1254,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetContextMenuClickHandlers()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ70))
                 {
@@ -1285,7 +1284,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (PZ70TextBox)sender;
                 var contextMenu = textBox.ContextMenu;
                 if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
                 {
@@ -1302,7 +1301,7 @@ namespace DCSFlightpanels.PanelUserControls
                     item.Visibility = Visibility.Collapsed;
                 }
 
-                if (((TagDataClassPZ70)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsDCSBIOS())
                 {
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
@@ -1317,7 +1316,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassPZ70)textBox.Tag).ContainsKeySequence())
+                else if (textBox.Bill.ContainsKeySequence())
                 {
                     // 2) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1332,7 +1331,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassPZ70)textBox.Tag).IsEmpty())
+                else if (textBox.Bill.IsEmpty())
                 {
                     // 4) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1363,7 +1362,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassPZ70)textBox.Tag).ContainsSingleKey())
+                else if (textBox.Bill.ContainsSingleKey())
                 {
                     // 5) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1384,7 +1383,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassPZ70)textBox.Tag).ContainsBIPLink())
+                else if (textBox.Bill.ContainsBIPLink())
                 {
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -1403,7 +1402,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassPZ55)textBox.Tag).ContainsOSCommand())
+                else if (textBox.Bill.ContainsOSCommand())
                 {
                     foreach (MenuItem item in contextMenu.Items)
                     {
@@ -1556,7 +1555,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((PZ70TextBox)sender).Background = Brushes.Yellow;
             }
             catch (Exception ex)
             {
@@ -1565,7 +1564,7 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private MultiPanelPZ70KnobOnOff GetPZ70Knob(TextBox textBox)
+        private MultiPanelPZ70KnobOnOff GetPZ70Knob(PZ70TextBox textBox)
         {
             try
             {
@@ -1674,7 +1673,7 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private TextBox GetTextBox(MultiPanelPZ70Knobs knob, bool whenTurnedOn)
+        private PZ70TextBox GetTextBox(MultiPanelPZ70Knobs knob, bool whenTurnedOn)
         {
             try
             {
@@ -1792,15 +1791,15 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                ((TagDataClassPZ70)textBox.Tag).ClearAll();
+                textBox.Bill.ClearAll();
                 var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {
                     return;
                 }
                 var keyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
-                ((TagDataClassPZ70)textBox.Tag).KeyPress = keyPress;
-                ((TagDataClassPZ70)textBox.Tag).KeyPress.Information = "VK_NULL";
+                textBox.Bill.KeyPress = keyPress;
+                textBox.Bill.KeyPress.Information = "VK_NULL";
                 textBox.Text = vkNull;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -1820,9 +1819,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 OSCommandWindow osCommandWindow;
-                if (((TagDataClassPZ70)textBox.Tag).ContainsOSCommand())
+                if (textBox.Bill.ContainsOSCommand())
                 {
-                    osCommandWindow = new OSCommandWindow(((TagDataClassPZ70)textBox.Tag).OSCommandObject);
+                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
                 }
                 else
                 {
@@ -1838,9 +1837,9 @@ namespace DCSFlightpanels.PanelUserControls
                         return;
                     }
                     var osCommand = osCommandWindow.OSCommandObject;
-                    ((TagDataClassPZ70)textBox.Tag).OSCommandObject = osCommand;
+                    textBox.Bill.OSCommandObject = osCommand;
                     textBox.Text = osCommand.Name;
-                    UpdateOSCommandBindingsPZ55(textBox);
+                    UpdateOSCommandBindingsPZ70(textBox);
                 }
                 TextBoxLogPZ70.Focus();
             }

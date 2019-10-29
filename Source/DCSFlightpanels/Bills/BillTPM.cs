@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Saitek;
 
-namespace DCSFlightpanels.TagDataClasses
+namespace DCSFlightpanels.Bills
 {
-    internal class TagDataClassPZ70 : TagDataClassBase
+    public class BillTPM : BillBase
     {
-        private MultiPanelPZ70KnobOnOff _key;
-        private DCSBIOSActionBindingPZ70 _dcsbiosBindingPZ70;
-        private BIPLinkPZ70 _bipLinkPZ70;
+        private TPMPanelSwitchOnOff _key;
+        private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
+        private BIPLinkTPM _bipLinkTPM;
 
-        public TagDataClassPZ70(TextBox textBox, MultiPanelPZ70KnobOnOff key)
+        public BillTPM(TPMTextBox textBox, TPMPanelSwitchOnOff key)
         {
             TextBox = textBox;
             _key = key;
@@ -22,48 +23,48 @@ namespace DCSFlightpanels.TagDataClasses
 
         public override bool ContainsDCSBIOS()
         {
-            return _dcsbiosBindingPZ70 != null;// && _dcsbiosInputs.Count > 0;
+            return _dcsbiosBindingTPM != null;// && _dcsbiosInputs.Count > 0;
         }
 
         public override bool ContainsBIPLink()
         {
-            return _bipLinkPZ70 != null && _bipLinkPZ70.BIPLights.Count > 0;
+            return _bipLinkTPM != null && _bipLinkTPM.BIPLights.Count > 0;
         }
-
+        
         public override bool IsEmpty()
         {
-            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
         {
-            if (_dcsbiosBindingPZ70 == null)
+            if (_dcsbiosBindingTPM == null)
             {
-                _dcsbiosBindingPZ70 = new DCSBIOSActionBindingPZ70();
+                _dcsbiosBindingTPM = new DCSBIOSActionBindingTPM();
             }
 
-            _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
+            _dcsbiosBindingTPM.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSActionBindingPZ70 DCSBIOSBinding
+        public DCSBIOSActionBindingTPM DCSBIOSBinding
         {
-            get => _dcsbiosBindingPZ70;
+            get => _dcsbiosBindingTPM;
             set
             {
                 if (ContainsKeyPress())
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, TextBoxTagHolderClass already contains KeyPress");
                 }
-                _dcsbiosBindingPZ70 = value;
-                if (_dcsbiosBindingPZ70 != null)
+                _dcsbiosBindingTPM = value;
+                if (_dcsbiosBindingTPM != null)
                 {
-                    if (string.IsNullOrEmpty(_dcsbiosBindingPZ70.Description))
+                    if (string.IsNullOrEmpty(_dcsbiosBindingTPM.Description))
                     {
                         TextBox.Text = "DCS-BIOS";
                     }
                     else
                     {
-                        TextBox.Text = _dcsbiosBindingPZ70.Description;
+                        TextBox.Text = _dcsbiosBindingTPM.Description;
                     }
                 }
                 else
@@ -73,13 +74,13 @@ namespace DCSFlightpanels.TagDataClasses
             }
         }
 
-        public BIPLinkPZ70 BIPLink
+        public BIPLinkTPM BIPLink
         {
-            get => _bipLinkPZ70;
+            get => _bipLinkTPM;
             set
             {
-                _bipLinkPZ70 = value;
-                if (_bipLinkPZ70 != null)
+                _bipLinkTPM = value;
+                if (_bipLinkTPM != null)
                 {
                     TextBox.Background = Brushes.Bisque;
                 }
@@ -90,7 +91,7 @@ namespace DCSFlightpanels.TagDataClasses
             }
         }
         
-        public MultiPanelPZ70KnobOnOff Key
+        public TPMPanelSwitchOnOff Key
         {
             get => _key;
             set => _key = value;
@@ -98,8 +99,8 @@ namespace DCSFlightpanels.TagDataClasses
 
         public override void ClearAll()
         {
-            _dcsbiosBindingPZ70 = null;
-            _bipLinkPZ70 = null;
+            _dcsbiosBindingTPM = null;
+            _bipLinkTPM = null;
             KeyPress = null;
             TextBox.Background = Brushes.White;
             TextBox.Text = "";

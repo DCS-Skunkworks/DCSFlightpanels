@@ -6,8 +6,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
-using DCSFlightpanels.TagDataClasses;
+using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Bills;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -27,7 +29,7 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
         private List<RadioButton> _radioButtonActionsList = new List<RadioButton>();
-        private List<Image> _buttonImages = new List<Image>();
+        private List<StreamDeckImage> _buttonImages = new List<StreamDeckImage>();
 
         private CancellationTokenSource _cancellationTokenSource;
         Random _random = new Random();
@@ -65,6 +67,7 @@ namespace DCSFlightpanels.PanelUserControls
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
             UCStreamDeckButtonFace.SDUIParent = this;
             UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
+            SetComboBoxLayersSelectedValue(1000);
             ShowGraphicConfiguration();
             SetFormState();
             UCStreamDeckButtonAction.Update();
@@ -153,10 +156,10 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                var tagDataClass = new TagDataStreamDeckFace();
-                tagDataClass.StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
-                buttonImage.Tag = tagDataClass;
-                buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataClass.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
+                buttonImage.Bill.StreamDeckButtonName = (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
+                buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Green);
+                buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
+                buttonImage.Source = buttonImage.Bill.DeselectedImage;
             }
         }
 
@@ -167,25 +170,22 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 try
                 {
-                    var tagDataButtonImage = (TagDataStreamDeckFace)buttonImage.Tag;
-
-                    if (selectedButtonName == tagDataButtonImage.StreamDeckButtonName)
+                    if (selectedButtonName == buttonImage.Bill.StreamDeckButtonName)
                     {
-                        if (((TagDataStreamDeckFace)buttonImage.Tag).IsSelected)
+                        if (buttonImage.Bill.IsSelected)
                         {
-                            buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
-                            ((TagDataStreamDeckFace)buttonImage.Tag).IsSelected = false;
+                            buttonImage.Source = buttonImage.Bill.DeselectedImage;
+                            buttonImage.Bill.IsSelected = false;
                         }
                         else
                         {
-                            buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.CadetBlue));
-                            ((TagDataStreamDeckFace)buttonImage.Tag).IsSelected = true;
+                            buttonImage.Source = buttonImage.Bill.SelectedImage;
+                            buttonImage.Bill.IsSelected = true;
                         }
                     }
                     else
                     {
-                        buttonImage.Source = BitMapCreator.CreateBitmapSourceFromGdiBitmap(BitMapCreator.CreateBitmapImage(tagDataButtonImage.ButtonNumber().ToString(), FONT_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, Color.Black, Color.White));
-                        ((TagDataStreamDeckFace)buttonImage.Tag).IsSelected = false;
+                        buttonImage.Source = buttonImage.Bill.DeselectedImage;
                     }
                 }
                 catch (Exception ex)
@@ -195,6 +195,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        
         public void TestImage(Bitmap bitmap)
         {
             try
@@ -222,11 +223,11 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 try
                 {
-                    TagData(buttonImage).Clear();
+                    buttonImage.Bill.Clear();
 
-                    var streamDeckButton = selectedLayer.GetStreamDeckButton(TagData(buttonImage).StreamDeckButtonName);
+                    var streamDeckButton = selectedLayer.GetStreamDeckButton(buttonImage.Bill.StreamDeckButtonName);
 
-                    TagData(buttonImage).Button = streamDeckButton;
+                    buttonImage.Bill.Button = streamDeckButton;
 
                     SetFormState();
                 }
@@ -237,13 +238,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private TagDataStreamDeckFace GetSelectedImageDataClass()
+        private BillStreamDeckFace GetSelectedImageDataClass()
         {
             foreach (var image in _buttonImages)
             {
-                if (((TagDataStreamDeckFace)image.Tag).IsSelected)
+                if (image.Bill.IsSelected)
                 {
-                    return (TagDataStreamDeckFace)image.Tag;
+                    return image.Bill;
                 }
             }
             return null;
@@ -347,7 +348,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             foreach (var buttonImage in _buttonImages)
             {
-                var tagDataClass = TagData(buttonImage);
+                var tagDataClass = buttonImage.Bill;
                 tagDataClass.Clear();
             }
             if (clearAlsoProfile)
@@ -621,6 +622,13 @@ namespace DCSFlightpanels.PanelUserControls
             return null;
         }
 
+        private void SetComboBoxLayersSelectedValue(int value)
+        {
+            ComboBoxLayers.SelectionChanged -= ComboBoxLayers_OnSelectionChanged;
+            ComboBoxLayers.SelectedValue = value;
+            ComboBoxLayers.SelectionChanged += ComboBoxLayers_OnSelectionChanged;
+        }
+
         private void ComboBoxLayers_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -725,10 +733,9 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
 
-                var image = (Image)sender;
-                var imageTagClass = (TagDataStreamDeckFace)image.Tag;
+                var image = (StreamDeckImage)sender;
 
-                if (GetSelectedButtonName() != imageTagClass.StreamDeckButtonName && (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty))
+                if (GetSelectedButtonName() != image.Bill.StreamDeckButtonName && (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty))
                 {
                     if (MessageBox.Show("Discard Changes to " + GetSelectedButtonName() + " ?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
@@ -752,13 +759,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var image = (Image)sender;
-                var imageTagClass = (TagDataStreamDeckFace)image.Tag;
+                var image = (StreamDeckImage)sender;
 
 
-                UpdateAllButtonsSelectedStatus(imageTagClass.StreamDeckButtonName);
+                UpdateAllButtonsSelectedStatus(image.Bill.StreamDeckButtonName);
 
-                var streamDeckButton = imageTagClass.Button;
+                var streamDeckButton = image.Bill.Button;
                 if (streamDeckButton != null)
                 {
                     SetButtonActionType();
@@ -998,13 +1004,7 @@ namespace DCSFlightpanels.PanelUserControls
             _buttonImages.Add(ButtonImage14);
             _buttonImages.Add(ButtonImage15);
         }
-
-        private TagDataStreamDeckFace TagData(Image image)
-        {
-            return (TagDataStreamDeckFace)image.Tag;
-        }
-
-
+        
         private void SetGraphicsState(HashSet<object> buttons)
         {
             try
@@ -1328,8 +1328,4 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
     }
-
-
-
-
 }

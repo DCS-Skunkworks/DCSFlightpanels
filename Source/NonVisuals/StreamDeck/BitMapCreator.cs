@@ -14,6 +14,12 @@ namespace NonVisuals.StreamDeck
         private const string DEFAULT_FONT = "Consolas";
         private const int STREAMDECK_ICON_HEIGHT = 72;
         private const int STREAMDECK_ICON_WIDTH = 72;
+        private const string NUMBER_BUTTON_LOCATION = @"pack://application:,,,/DCSFlightpanels;component/StreamDeckGallery/NumberButtons/";
+        
+        public static BitmapImage GetButtonNumberImage(StreamDeckButtonNames streamDeckButtonName, Color color)
+        {
+            return   new BitmapImage(new Uri(NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
+        }
 
         public static Bitmap CreateBitmapImage(string text, int fontSize, int height, int width, Color fontColor, Color backgroundColor)
         {
@@ -22,7 +28,7 @@ namespace NonVisuals.StreamDeck
 
         public static Bitmap CreateBitmapImage(string text, Font font, Color fontColor, Color backgroundColor)
         {
-            return CreateBitmapImage(text, font, 0, 0,0,0, fontColor, backgroundColor, true);
+            return CreateBitmapImage(text, font, 0, 0, 0, 0, fontColor, backgroundColor, true);
         }
 
         public static Bitmap CreateBitmapImage(string text, int fontSize, FontStyle fontStyle, int height, int width, Color fontColor, Color backgroundColor)
@@ -34,7 +40,7 @@ namespace NonVisuals.StreamDeck
 
         public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, Color backgroundColor, int offsetX, int offsetY)
         {
-            return CreateBitmapImage(text, font,  offsetX, offsetY, STREAMDECK_ICON_HEIGHT, STREAMDECK_ICON_WIDTH, fontColor, backgroundColor);
+            return CreateBitmapImage(text, font, offsetX, offsetY, STREAMDECK_ICON_HEIGHT, STREAMDECK_ICON_WIDTH, fontColor, backgroundColor);
         }
 
         public static Bitmap CreateBitmapImage(string text, Font font, int offsetX, int offsetY, int height, int width, Color fontColor, Color backgroundColor, bool setBitmapSizeToTextSize = false)
@@ -56,8 +62,8 @@ namespace NonVisuals.StreamDeck
             if (setBitmapSizeToTextSize)
             {
                 // This is where the bitmap size is determined.
-                height = (int) graphicsObject.MeasureString(text, font).Height;
-                width = (int) graphicsObject.MeasureString(text, font).Width;
+                height = (int)graphicsObject.MeasureString(text, font).Height;
+                width = (int)graphicsObject.MeasureString(text, font).Width;
 
                 // Create the bmpImage again with the correct size for the text and font.
                 createdBitmap = new Bitmap(createdBitmap, new Size(width, height));
@@ -83,7 +89,7 @@ namespace NonVisuals.StreamDeck
 
         public static Bitmap CreateEmtpyStreamDeckBitmap(Color color)
         {
-            return CreateStreamDeckBitmap(null, null, color, color,0,0);
+            return CreateStreamDeckBitmap(null, null, color, color, 0, 0);
         }
 
         public static BitmapSource CreateBitmapSourceFromGdiBitmap(Bitmap bitmap)

@@ -4,9 +4,9 @@ using System.Windows.Controls;
 using DCS_BIOS;
 using NonVisuals;
 
-namespace DCSFlightpanels.TagDataClasses
+namespace DCSFlightpanels.Bills
 {
-    public abstract class TagDataClassBase
+    public abstract class BillBase
     {
         private KeyPress _keyPress;
         private OSCommand _osCommand;

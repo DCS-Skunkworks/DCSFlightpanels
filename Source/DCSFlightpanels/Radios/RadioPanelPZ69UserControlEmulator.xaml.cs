@@ -8,7 +8,8 @@ using System.Windows.Media;
 using ClassLibraryCommon;
 using NonVisuals;
 using DCSFlightpanels.Properties;
-using DCSFlightpanels.TagDataClasses;
+using DCSFlightpanels.Bills;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
 using NonVisuals.Saitek;
@@ -152,18 +153,18 @@ namespace DCSFlightpanels.Radios
 
         private void SetTextBoxTagObjects()
         {
-            if (_textBoxTagsSet || !Common.FindVisualChildren<TextBox>(this).Any())
+            if (_textBoxTagsSet || !Common.FindVisualChildren<PZ69TextBox>(this).Any())
             {
                 return;
             }
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
                 if (textBox.Equals(TextBoxLogPZ69) || textBox.Name.EndsWith("Numbers"))
                 {
                     continue;
                 }
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
-                textBox.Tag = new TagDataClassPZ69(textBox, GetPZ69Key(textBox));
+                textBox.Tag = new BillPZ69(textBox, GetPZ69Key(textBox));
             }
             _textBoxTagsSet = true;
         }
@@ -178,9 +179,9 @@ namespace DCSFlightpanels.Radios
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 KeySequenceWindow keySequenceWindow;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (textBox.Bill.ContainsKeySequence())
                 {
-                    keySequenceWindow = new KeySequenceWindow(textBox.Text, ((TagDataClassPZ69)textBox.Tag).GetKeySequence());
+                    keySequenceWindow = new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence());
                 }
                 else
                 {
@@ -201,8 +202,8 @@ namespace DCSFlightpanels.Radios
                     if (sequenceList.Count > 1)
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress = keyPress;
+                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
                             textBox.Text = keySequenceWindow.GetInformation;
@@ -212,10 +213,10 @@ namespace DCSFlightpanels.Radios
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        ((TagDataClassPZ69)textBox.Tag).ClearAll();
+                        textBox.Bill.ClearAll();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress = keyPress;
+                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
@@ -240,9 +241,9 @@ namespace DCSFlightpanels.Radios
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 BIPLinkWindow bipLinkWindow;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+                if (textBox.Bill.ContainsBIPLink())
                 {
-                    var bipLink = ((TagDataClassPZ69)textBox.Tag).BIPLink;
+                    var bipLink = textBox.Bill.BIPLink;
                     bipLinkWindow = new BIPLinkWindow(bipLink);
                 }
                 else
@@ -253,7 +254,7 @@ namespace DCSFlightpanels.Radios
                 bipLinkWindow.ShowDialog();
                 if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null && bipLinkWindow.BIPLink.BIPLights.Count > 0)
                 {
-                    ((TagDataClassPZ69)textBox.Tag).BIPLink = (BIPLinkPZ69)bipLinkWindow.BIPLink;
+                    textBox.Bill.BIPLink = (BIPLinkPZ69)bipLinkWindow.BIPLink;
                     UpdateBipLinkBindings(textBox);
                 }
 
@@ -266,12 +267,12 @@ namespace DCSFlightpanels.Radios
         }
 
 
-        private void UpdateKeyBindingProfileSequencedKeyStrokesPZ69(TextBox textBox)
+        private void UpdateKeyBindingProfileSequencedKeyStrokesPZ69(PZ69TextBox textBox)
         {
             try
             {
                 var key = GetPZ69Key(textBox);
-                _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, key.RadioPanelPZ69Key, ((TagDataClassPZ69)textBox.Tag).GetKeySequence(), key.ButtonState);
+                _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(textBox.Text, key.RadioPanelPZ69Key, textBox.Bill.GetKeySequence(), key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -280,12 +281,12 @@ namespace DCSFlightpanels.Radios
         }
 
 
-        private void UpdateBipLinkBindings(TextBox textBox)
+        private void UpdateBipLinkBindings(PZ69TextBox textBox)
         {
             try
             {
                 var key = GetPZ69Key(textBox);
-                _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(key.RadioPanelPZ69Key, ((TagDataClassPZ69)textBox.Tag).BIPLink, key.ButtonState);
+                _radioPanelPZ69.AddOrUpdateBIPLinkKeyBinding(key.RadioPanelPZ69Key, textBox.Bill.BIPLink, key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -294,18 +295,18 @@ namespace DCSFlightpanels.Radios
         }
 
 
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(TextBox textBox)
+        private void UpdateKeyBindingProfileSimpleKeyStrokes(PZ69TextBox textBox)
         {
             try
             {
                 KeyPressLength keyPressLength;
-                if (!((TagDataClassPZ69)textBox.Tag).ContainsKeyPress() || ((TagDataClassPZ69)textBox.Tag).KeyPress.KeySequence.Count == 0)
+                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeySequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
                 else
                 {
-                    keyPressLength = ((TagDataClassPZ69)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
                 var key = GetPZ69Key(textBox);
                 _radioPanelPZ69.AddOrUpdateSingleKeyBinding(key.RadioPanelPZ69Key, textBox.Text, keyPressLength, key.ButtonState);
@@ -316,12 +317,11 @@ namespace DCSFlightpanels.Radios
             }
         }
 
-        private void UpdateOSCommandBindingsPZ55(TextBox textBox)
+        private void UpdateOSCommandBindingsPZ55(PZ69TextBox textBox)
         {
             try
             {
-                var tag = (TagDataClassPZ69)textBox.Tag;
-                _radioPanelPZ69.AddOrUpdateOSCommandBinding(tag.Knob.RadioPanelPZ69Key, tag.OSCommandObject, tag.Knob.ButtonState);
+                _radioPanelPZ69.AddOrUpdateOSCommandBinding(textBox.Bill.Knob.RadioPanelPZ69Key, textBox.Bill.OSCommandObject, textBox.Bill.Knob.ButtonState);
             }
             catch (Exception ex)
             {
@@ -329,7 +329,7 @@ namespace DCSFlightpanels.Radios
             }
         }
 
-        private void UpdateDisplayValues(TextBox textBox)
+        private void UpdateDisplayValues(PZ69TextBox textBox)
         {
             try
             {
@@ -476,11 +476,11 @@ namespace DCSFlightpanels.Radios
                     return;
                 }
 
-                if (!((TagDataClassPZ69)textBox.Tag).ContainsSingleKey())
+                if (!textBox.Bill.ContainsSingleKey())
                 {
                     return;
                 }
-                var keyPressLength = ((TagDataClassPZ69)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                var keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 CheckContextMenuItems(keyPressLength, contextMenu);
 
 
@@ -493,15 +493,13 @@ namespace DCSFlightpanels.Radios
 
         private void ClearAll(bool clearAlsoProfile)
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
                 if (textBox.Equals(TextBoxLogPZ69))
                 {
                     continue;
                 }
-                var tagHolderClass = (TagDataClassPZ69)textBox.Tag;
-                textBox.Text = "";
-                tagHolderClass.ClearAll();
+                textBox.Bill.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -511,7 +509,7 @@ namespace DCSFlightpanels.Radios
 
         private void ClearAllDisplayValues()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
                 if (textBox.Name.EndsWith("Numbers"))
                 {
@@ -523,7 +521,7 @@ namespace DCSFlightpanels.Radios
 
         private void RemoveContextMenuClickHandlers()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ69))
                 {
@@ -535,7 +533,7 @@ namespace DCSFlightpanels.Radios
 
         private void SetContextMenuClickHandlers()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ69) && !textBox.Name.EndsWith("Numbers"))
                 {
@@ -566,7 +564,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (PZ69TextBox)sender;
                 var contextMenu = textBox.ContextMenu;
                 if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
                 {
@@ -581,7 +579,7 @@ namespace DCSFlightpanels.Radios
                 {
                     item.Visibility = Visibility.Collapsed;
                 }
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (textBox.Bill.ContainsKeySequence())
                 {
                     // 2) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -596,7 +594,7 @@ namespace DCSFlightpanels.Radios
                         }
                     }
                 }
-                else if (((TagDataClassPZ69)textBox.Tag).IsEmpty())
+                else if (textBox.Bill.IsEmpty())
                 {
                     // 4) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -623,7 +621,7 @@ namespace DCSFlightpanels.Radios
                         }
                     }
                 }
-                else if (((TagDataClassPZ69)textBox.Tag).ContainsSingleKey())
+                else if (textBox.Bill.ContainsSingleKey())
                 {
                     // 5) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -644,7 +642,7 @@ namespace DCSFlightpanels.Radios
                         }
                     }
                 }
-                else if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+                else if (textBox.Bill.ContainsBIPLink())
                 {
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -659,7 +657,7 @@ namespace DCSFlightpanels.Radios
                         }
                     }
                 }
-                else if (((TagDataClassPZ55)textBox.Tag).ContainsOSCommand())
+                else if (textBox.Bill.ContainsOSCommand())
                 {
                     foreach (MenuItem item in contextMenu.Items)
                     {
@@ -677,9 +675,9 @@ namespace DCSFlightpanels.Radios
         }
 
 
-        private TextBox GetTextBoxInFocus()
+        private PZ69TextBox GetTextBoxInFocus()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
@@ -707,35 +705,35 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (PZ69TextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-                    if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                    if (textBox.Bill.ContainsKeySequence())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.KeySequence.Clear();
+                        textBox.Bill.KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    else if (((TagDataClassPZ69)textBox.Tag).ContainsSingleKey())
+                    else if (textBox.Bill.ContainsSingleKey())
                     {
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress.KeySequence.Clear();
+                        textBox.Bill.KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+                    if (textBox.Bill.ContainsBIPLink())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassPZ69)textBox.Tag).BIPLink.BIPLights.Clear();
+                        textBox.Bill.BIPLink.BIPLights.Clear();
                         textBox.Background = Brushes.White;
                         UpdateBipLinkBindings(textBox);
                     }
@@ -768,7 +766,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((PZ69TextBox)sender).Background = Brushes.Yellow;
             }
             catch (Exception ex)
             {
@@ -778,14 +776,14 @@ namespace DCSFlightpanels.Radios
 
         private void TextBoxLostFocus(object sender, RoutedEventArgs e)
         {
-            var textBox = (TextBox)sender;
-            if (((TagDataClassPZ69)textBox.Tag).ContainsBIPLink())
+            var textBox = (PZ69TextBox)sender;
+            if (textBox.Bill.ContainsBIPLink())
             {
-                ((TextBox) sender).Background = Brushes.Bisque;
+                ((PZ69TextBox) sender).Background = Brushes.Bisque;
             }
             else
             {
-                ((TextBox)sender).Background = Brushes.White;
+                ((PZ69TextBox)sender).Background = Brushes.White;
             }
         }
 
@@ -794,10 +792,10 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = ((PZ69TextBox)sender);
 
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (textBox.Bill.ContainsKeySequence())
                 {
                     return;
                 }
@@ -846,7 +844,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = ((PZ69TextBox)sender);
 
                 if (textBox.Text.Contains("."))
                 {
@@ -890,7 +888,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (PZ69TextBox)sender;
                 UpdateDisplayValues(textBox);
             }
             catch (Exception ex)
@@ -903,7 +901,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (PZ69TextBox)sender;
                 var radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperCOM1;
                 var radioDisplay = RadioPanelPZ69Display.UpperActive;
 
@@ -1027,8 +1025,8 @@ namespace DCSFlightpanels.Radios
             try
             {
                 //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (TextBox)sender;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                var textBox = (PZ69TextBox)sender;
+                if (textBox.Bill.ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
                 }
@@ -1048,9 +1046,9 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = ((PZ69TextBox)sender);
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassPZ69)textBox.Tag).ContainsKeySequence())
+                if (textBox.Bill.ContainsKeySequence())
                 {
                     return;
                 }
@@ -1300,7 +1298,7 @@ namespace DCSFlightpanels.Radios
                     var textBox = GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        ((TagDataClassPZ69)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
+                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
@@ -1309,14 +1307,14 @@ namespace DCSFlightpanels.Radios
                     var textBox = GetTextBox(osCommand.RadioPanelPZ69Key, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)
                     {
-                        ((TagDataClassPZ69)textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
+                        textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
                     }
                 }
 
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
-                    ((TagDataClassPZ69)textBox.Tag).BIPLink = bipLinkPZ69;
+                    textBox.Bill.BIPLink = bipLinkPZ69;
                 }
             }
             catch (Exception ex)
@@ -1646,7 +1644,7 @@ namespace DCSFlightpanels.Radios
             }
         }
 
-        private RadioPanelPZ69KeyOnOff GetPZ69Key(TextBox textBox)
+        private RadioPanelPZ69KeyOnOff GetPZ69Key(PZ69TextBox textBox)
         {
             try
             {
@@ -1762,7 +1760,7 @@ namespace DCSFlightpanels.Radios
             throw new Exception("Failed to find Radiopanel knob for TextBox " + textBox.Name);
         }
 
-        private TextBox GetTextBox(RadioPanelPZ69KnobsEmulator knob, bool whenTurnedOn)
+        private PZ69TextBox GetTextBox(RadioPanelPZ69KnobsEmulator knob, bool whenTurnedOn)
         {
             try
             {
@@ -1888,15 +1886,15 @@ namespace DCSFlightpanels.Radios
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                ((TagDataClassPZ69)textBox.Tag).ClearAll();
+                textBox.Bill.ClearAll();
                 var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {
                     return;
                 }
                 var keyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
-                ((TagDataClassPZ69)textBox.Tag).KeyPress = keyPress;
-                ((TagDataClassPZ69)textBox.Tag).KeyPress.Information = "VK_NULL";
+                textBox.Bill.KeyPress = keyPress;
+                textBox.Bill.KeyPress.Information = "VK_NULL";
                 textBox.Text = vkNull;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -1916,9 +1914,9 @@ namespace DCSFlightpanels.Radios
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 OSCommandWindow osCommandWindow;
-                if (((TagDataClassPZ69)textBox.Tag).ContainsOSCommand())
+                if (textBox.Bill.ContainsOSCommand())
                 {
-                    osCommandWindow = new OSCommandWindow(((TagDataClassPZ69)textBox.Tag).OSCommandObject);
+                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
                 }
                 else
                 {
@@ -1934,7 +1932,7 @@ namespace DCSFlightpanels.Radios
                         return;
                     }
                     var osCommand = osCommandWindow.OSCommandObject;
-                    ((TagDataClassPZ69)textBox.Tag).OSCommandObject = osCommand;
+                    textBox.Bill.OSCommandObject = osCommand;
                     textBox.Text = osCommand.Name;
                     UpdateOSCommandBindingsPZ55(textBox);
                 }

@@ -6,7 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
-using DCSFlightpanels.TagDataClasses;
+using DCSFlightpanels.Bills;
+using DCSFlightpanels.CustomControls;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -190,9 +191,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 KeySequenceWindow keySequenceWindow;
-                if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence())
+                if (textBox.Bill.ContainsKeySequence())
                 {
-                    keySequenceWindow = new KeySequenceWindow(textBox.Text, ((TagDataClassTPM)textBox.Tag).GetKeySequence());
+                    keySequenceWindow = new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence());
                 }
                 else
                 {
@@ -212,8 +213,8 @@ namespace DCSFlightpanels.PanelUserControls
                     if (sequenceList.Count > 1)
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        ((TagDataClassTPM)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataClassTPM)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress = keyPress;
+                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
                             textBox.Text = keySequenceWindow.GetInformation;
@@ -223,10 +224,10 @@ namespace DCSFlightpanels.PanelUserControls
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        ((TagDataClassTPM)textBox.Tag).ClearAll();
+                        textBox.Bill.ClearAll();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        ((TagDataClassTPM)textBox.Tag).KeyPress = keyPress;
-                        ((TagDataClassTPM)textBox.Tag).KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress = keyPress;
+                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
@@ -249,9 +250,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
-                if (((TagDataClassTPM)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), ((TagDataClassTPM)textBox.Tag).DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
@@ -265,7 +266,7 @@ namespace DCSFlightpanels.PanelUserControls
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    ((TagDataClassTPM)textBox.Tag).Consume(dcsBiosInputs);
+                    textBox.Bill.Consume(dcsBiosInputs);
                     UpdateDCSBIOSBinding(textBox);
                 }
                 TextBoxLogTPM.Focus();
@@ -286,9 +287,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 BIPLinkWindow bipLinkWindow;
-                if (((TagDataClassTPM)textBox.Tag).ContainsBIPLink())
+                if (textBox.Bill.ContainsBIPLink())
                 {
-                    var bipLink = ((TagDataClassTPM)textBox.Tag).BIPLink;
+                    var bipLink = textBox.Bill.BIPLink;
                     bipLinkWindow = new BIPLinkWindow(bipLink);
                 }
                 else
@@ -299,7 +300,7 @@ namespace DCSFlightpanels.PanelUserControls
                 bipLinkWindow.ShowDialog();
                 if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
                 {
-                    ((TagDataClassTPM)textBox.Tag).BIPLink = (BIPLinkTPM)bipLinkWindow.BIPLink;
+                    textBox.Bill.BIPLink = (BIPLinkTPM)bipLinkWindow.BIPLink;
                     UpdateBIPLinkBindings(textBox);
                 }
                 TextBoxLogTPM.Focus();
@@ -334,11 +335,11 @@ namespace DCSFlightpanels.PanelUserControls
                     //Do not show if not visible
                     return;
                 }
-                if (!((TagDataClassTPM)textBox.Tag).ContainsSingleKey())
+                if (!textBox.Bill.ContainsSingleKey())
                 {
                     return;
                 }
-                var keyPressLength = ((TagDataClassTPM)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                var keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 CheckContextMenuItems(keyPressLength, contextMenu);
 
             }
@@ -350,15 +351,13 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ClearAll(bool clearAlsoProfile)
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
                 if (textBox.Equals(TextBoxLogTPM))
                 {
                     continue;
                 }
-                var tagHolderClass = (TagDataClassTPM)textBox.Tag;
-                textBox.Text = "";
-                tagHolderClass.ClearAll();
+                textBox.Bill.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -368,25 +367,25 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetTextBoxTagObjects()
         {
-            if (_textBoxTagsSet || !Common.FindVisualChildren<TextBox>(this).Any())
+            if (_textBoxTagsSet || !Common.FindVisualChildren<TPMTextBox>(this).Any())
             {
                 return;
             }
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
                 //Debug.WriteLine("Adding TextBoxTagHolderClass for TextBox " + textBox.Name);
                 if (textBox.Equals(TextBoxLogTPM))
                 {
                     continue;
                 }
-                textBox.Tag = new TagDataClassTPM(textBox, GetTPMSwitch(textBox));
+                textBox.Bill = new BillTPM(textBox, GetTPMSwitch(textBox));
             }
             _textBoxTagsSet = true;
         }
 
         private void RemoveContextMenuClickHandlers()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogTPM))
                 {
@@ -398,7 +397,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetContextMenuClickHandlers()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogTPM))
                 {
@@ -446,7 +445,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (TPMTextBox)sender;
                 var contextMenu = textBox.ContextMenu;
                 if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
                 {
@@ -462,7 +461,7 @@ namespace DCSFlightpanels.PanelUserControls
                     item.Visibility = Visibility.Collapsed;
                 }
 
-                if (((TagDataClassTPM)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsDCSBIOS())
                 {
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
@@ -477,7 +476,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence())
+                else if (textBox.Bill.ContainsKeySequence())
                 {
                     // 2) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -492,7 +491,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassTPM)textBox.Tag).IsEmpty())
+                else if (textBox.Bill.IsEmpty())
                 {
                     // 4) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -523,7 +522,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassTPM)textBox.Tag).ContainsSingleKey())
+                else if (textBox.Bill.ContainsSingleKey())
                 {
                     // 5) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -544,7 +543,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassTPM)textBox.Tag).ContainsBIPLink())
+                else if (textBox.Bill.ContainsBIPLink())
                 {
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
@@ -563,7 +562,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     }
                 }
-                else if (((TagDataClassTPM)textBox.Tag).ContainsOSCommand())
+                else if (textBox.Bill.ContainsOSCommand())
                 {
                     foreach (MenuItem item in contextMenu.Items)
                     {
@@ -580,9 +579,9 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private TextBox GetTextBoxInFocus()
+        private TPMTextBox GetTextBoxInFocus()
         {
-            foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogTPM) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
@@ -611,13 +610,13 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TextBox)sender;
+                var textBox = (TPMTextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
 
                     //Check if this textbox contains DCS-BIOS information. If so then prompt the user for deletion
-                    if (((TagDataClassTPM)textBox.Tag).ContainsDCSBIOS())
+                    if (textBox.Bill.ContainsDCSBIOS())
                     {
                         if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS configuration?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
@@ -625,33 +624,33 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                         textBox.Text = "";
                         _tpmPanel.RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, GetTPMSwitch(textBox).TPMSwitch, GetTPMSwitch(textBox).ButtonState);
-                        ((TagDataClassTPM)textBox.Tag).DCSBIOSBinding = null;
+                        textBox.Bill.DCSBIOSBinding = null;
                     }
-                    else if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence())
+                    else if (textBox.Bill.ContainsKeySequence())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassTPM)textBox.Tag).KeyPress.KeySequence.Clear();
+                        textBox.Bill.KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    else if (((TagDataClassTPM)textBox.Tag).ContainsSingleKey())
+                    else if (textBox.Bill.ContainsSingleKey())
                     {
-                        ((TagDataClassTPM)textBox.Tag).KeyPress.KeySequence.Clear();
+                        textBox.Bill.KeyPress.KeySequence.Clear();
                         textBox.Text = "";
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
-                    if (((TagDataClassTPM)textBox.Tag).ContainsBIPLink())
+                    if (textBox.Bill.ContainsBIPLink())
                     {
                         //Check if this textbox contains sequence information. If so then prompt the user for deletion
                         if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
                         {
                             return;
                         }
-                        ((TagDataClassTPM)textBox.Tag).BIPLink.BIPLights.Clear();
+                        textBox.Bill.BIPLink.BIPLights.Clear();
                         textBox.Background = Brushes.White;
                         UpdateBIPLinkBindings(textBox);
                     }
@@ -685,7 +684,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TextBox)sender).Background = Brushes.Yellow;
+                ((TPMTextBox)sender).Background = Brushes.Yellow;
             }
             catch (Exception ex)
             {
@@ -697,14 +696,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TextBox)sender;
-                if (((TagDataClassTPM)textBox.Tag).ContainsBIPLink())
+                var textBox = (TPMTextBox)sender;
+                if (textBox.Bill.ContainsBIPLink())
                 {
-                    ((TextBox)sender).Background = Brushes.Bisque;
+                    ((TPMTextBox)sender).Background = Brushes.Bisque;
                 }
                 else
                 {
-                    ((TextBox)sender).Background = Brushes.White;
+                    ((TPMTextBox)sender).Background = Brushes.White;
                 }
             }
             catch (Exception ex)
@@ -718,10 +717,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = ((TPMTextBox)sender);
 
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence() || ((TagDataClassTPM)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
                 {
                     return;
                 }
@@ -766,8 +765,8 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (TextBox)sender;
-                if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence())
+                var textBox = (TPMTextBox)sender;
+                if (textBox.Bill.ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
                 }
@@ -787,9 +786,9 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = ((TextBox)sender);
+                var textBox = ((TPMTextBox)sender);
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (((TagDataClassTPM)textBox.Tag).ContainsKeySequence() || ((TagDataClassTPM)textBox.Tag).ContainsDCSBIOS())
+                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
                 {
                     return;
                 }
@@ -984,12 +983,11 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateKeyBindingProfileSequencedKeyStrokesTPM(TextBox textBox)
+        private void UpdateKeyBindingProfileSequencedKeyStrokesTPM(TPMTextBox textBox)
         {
             try
             {
-                var tag = (TagDataClassTPM)textBox.Tag;
-                _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, tag.Key.TPMSwitch, tag.GetKeySequence(), tag.Key.ButtonState);
+                _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, textBox.Bill.Key.TPMSwitch, textBox.Bill.GetKeySequence(), textBox.Bill.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -997,12 +995,11 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateBIPLinkBindings(TextBox textBox)
+        private void UpdateBIPLinkBindings(TPMTextBox textBox)
         {
             try
             {
-                var tag = (TagDataClassTPM)textBox.Tag;
-                _tpmPanel.AddOrUpdateBIPLinkKeyBinding(tag.Key.TPMSwitch, tag.BIPLink, tag.Key.ButtonState);
+                _tpmPanel.AddOrUpdateBIPLinkKeyBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.BIPLink, textBox.Bill.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1010,21 +1007,20 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(TextBox textBox)
+        private void UpdateKeyBindingProfileSimpleKeyStrokes(TPMTextBox textBox)
         {
             try
             {
                 KeyPressLength keyPressLength;
-                if (!((TagDataClassTPM)textBox.Tag).ContainsKeyPress() || ((TagDataClassTPM)textBox.Tag).KeyPress.KeySequence.Count == 0)
+                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeySequence.Count == 0)
                 {
                     keyPressLength = KeyPressLength.FiftyMilliSec;
                 }
                 else
                 {
-                    keyPressLength = ((TagDataClassTPM)textBox.Tag).KeyPress.GetLengthOfKeyPress();
+                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
-                var tag = (TagDataClassTPM)textBox.Tag;
-                _tpmPanel.AddOrUpdateSingleKeyBinding(tag.Key.TPMSwitch, textBox.Text, keyPressLength, tag.Key.ButtonState);
+                _tpmPanel.AddOrUpdateSingleKeyBinding(textBox.Bill.Key.TPMSwitch, textBox.Text, keyPressLength, textBox.Bill.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1032,12 +1028,11 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateOSCommandBindingsPZ55(TextBox textBox)
+        private void UpdateOSCommandBindingsTPM(TPMTextBox textBox)
         {
             try
             {
-                var tag = (TagDataClassTPM)textBox.Tag;
-                _tpmPanel.AddOrUpdateOSCommandBinding(tag.Key.TPMSwitch, tag.OSCommandObject, tag.Key.ButtonState);
+                _tpmPanel.AddOrUpdateOSCommandBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.OSCommandObject, textBox.Bill.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1045,12 +1040,11 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void UpdateDCSBIOSBinding(TextBox textBox)
+        private void UpdateDCSBIOSBinding(TPMTextBox textBox)
         {
             try
             {
-                var tag = (TagDataClassTPM)textBox.Tag;
-                _tpmPanel.AddOrUpdateDCSBIOSBinding(tag.Key.TPMSwitch, tag.DCSBIOSBinding.DCSBIOSInputs, textBox.Text, tag.Key.ButtonState);
+                _tpmPanel.AddOrUpdateDCSBIOSBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text, textBox.Bill.Key.ButtonState);
             }
             catch (Exception ex)
             {
@@ -1072,7 +1066,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = GetTextBox(keyBinding.TPMSwitch, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
-                        ((TagDataClassTPM)textBox.Tag).KeyPress = keyBinding.OSKeyPress;
+                        textBox.Bill.KeyPress = keyBinding.OSKeyPress;
                     }
                 }
 
@@ -1081,7 +1075,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = GetTextBox(osCommand.TPMSwitch, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)
                     {
-                        ((TagDataClassTPM)textBox.Tag).OSCommandObject = osCommand.OSCommandObject;
+                        textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
                     }
                 }
 
@@ -1090,7 +1084,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
-                        ((TagDataClassTPM)textBox.Tag).DCSBIOSBinding = dcsBiosBinding;
+                        textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
                     }
                 }
 
@@ -1099,7 +1093,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
                     if (bipLink.BIPLights.Count > 0)
                     {
-                        ((TagDataClassTPM)textBox.Tag).BIPLink = bipLink;
+                        textBox.Bill.BIPLink = bipLink;
                     }
                 }
             }
@@ -1128,7 +1122,7 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private TPMPanelSwitchOnOff GetTPMSwitch(TextBox textBox)
+        private TPMPanelSwitchOnOff GetTPMSwitch(TPMTextBox textBox)
         {
             try
             {
@@ -1212,7 +1206,7 @@ namespace DCSFlightpanels.PanelUserControls
             throw new Exception("Failed to find TPM switch for TextBox : " + textBox.Name);
         }
 
-        private TextBox GetTextBox(TPMPanelSwitches key, bool whenTurnedOn)
+        private TPMTextBox GetTextBox(TPMPanelSwitches key, bool whenTurnedOn)
         {
             try
             {
@@ -1307,15 +1301,15 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                ((TagDataClassTPM)textBox.Tag).ClearAll();
+                textBox.Bill.ClearAll();
                 var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {
                     return;
                 }
                 var keyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
-                ((TagDataClassTPM)textBox.Tag).KeyPress = keyPress;
-                ((TagDataClassTPM)textBox.Tag).KeyPress.Information = "VK_NULL";
+                textBox.Bill.KeyPress = keyPress;
+                textBox.Bill.KeyPress.Information = "VK_NULL";
                 textBox.Text = vkNull;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -1335,9 +1329,9 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
                 OSCommandWindow osCommandWindow;
-                if (((TagDataClassTPM)textBox.Tag).ContainsOSCommand())
+                if (textBox.Bill.ContainsOSCommand())
                 {
-                    osCommandWindow = new OSCommandWindow(((TagDataClassTPM)textBox.Tag).OSCommandObject);
+                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
                 }
                 else
                 {
@@ -1353,8 +1347,8 @@ namespace DCSFlightpanels.PanelUserControls
                         return;
                     }
                     var osCommand = osCommandWindow.OSCommandObject;
-                    ((TagDataClassTPM)textBox.Tag).OSCommandObject = osCommand;
-                    UpdateOSCommandBindingsPZ55(textBox);
+                    textBox.Bill.OSCommandObject = osCommand;
+                    UpdateOSCommandBindingsTPM(textBox);
                     textBox.Text = osCommand.Name;
                 }
                 TextBoxLogTPM.Focus();

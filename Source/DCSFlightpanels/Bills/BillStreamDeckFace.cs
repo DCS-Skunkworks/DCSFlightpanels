@@ -2,13 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using DCSFlightpanels.Properties;
 using NonVisuals.StreamDeck;
 using Color = System.Drawing.Color;
 
-namespace DCSFlightpanels.TagDataClasses
+namespace DCSFlightpanels.Bills
 {
-    public class TagDataStreamDeckFace
+    public class BillStreamDeckFace
     {
         public StreamDeckButtonNames StreamDeckButtonName;
         public StreamDeckButton Button;
@@ -17,8 +18,8 @@ namespace DCSFlightpanels.TagDataClasses
         private Color _backgroundColor = Color.White;
         private bool _isSelected = false;
         public TextBox ParentTextBox { get; set; }
-
-
+        public BitmapImage SelectedImage { get; set; }
+        public BitmapImage DeselectedImage { get; set; }
 
         public bool ContainsTextFace()
         {
@@ -92,6 +93,7 @@ namespace DCSFlightpanels.TagDataClasses
         public void Clear()
         {
             Button = null;
+            ParentTextBox.Clear();
         }
     }
 

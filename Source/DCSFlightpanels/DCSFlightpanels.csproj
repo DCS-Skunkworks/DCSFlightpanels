@@ -111,6 +111,15 @@
     <Compile Include="ColorPickerWindow.xaml.cs">
       <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomControls\PZ69FullTextBox.cs" />
+    <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
+    <Compile Include="CustomControls\StreamDeckImage.cs" />
+    <Compile Include="CustomControls\TPMTextBox.cs" />
+    <Compile Include="CustomControls\PZ70TextBox.cs" />
+    <Compile Include="CustomControls\PZ69Button.cs" />
+    <Compile Include="CustomControls\PZ69TextBox.cs" />
+    <Compile Include="CustomControls\StreamDeckActionTextBox.cs" />
+    <Compile Include="CustomControls\PZ55TextBox.cs" />
     <Compile Include="IStreamDeckUIParent.cs" />
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
@@ -243,18 +252,18 @@
     <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagDataClasses\TagDataClassBase.cs" />
-    <Compile Include="TagDataClasses\TagDataStreamDeckFace.cs" />
-    <Compile Include="TagDataClasses\TagDataClassPZ69Button.cs" />
-    <Compile Include="TagDataClasses\TagDataClassPZ69Full.cs" />
-    <Compile Include="TagDataClasses\TagDataStreamDeckAction.cs" />
-    <Compile Include="TagDataClasses\TagDataClassTPM.cs" />
-    <Compile Include="TagDataClasses\TagDataClassPZ69.cs" />
-    <Compile Include="TagDataClasses\TagDataClassPZ70.cs" />
+    <Compile Include="Bills\BillBase.cs" />
+    <Compile Include="Bills\BillStreamDeckFace.cs" />
+    <Compile Include="Bills\BillPZ69Button.cs" />
+    <Compile Include="Bills\BillPZ69Full.cs" />
+    <Compile Include="Bills\BillStreamDeckAction.cs" />
+    <Compile Include="Bills\BillTPM.cs" />
+    <Compile Include="Bills\BillPZ69.cs" />
+    <Compile Include="Bills\BillPZ70.cs" />
     <Compile Include="TextBlockDialogWindow.xaml.cs">
       <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagDataClasses\TagDataClassPZ55.cs" />
+    <Compile Include="Bills\BillPZ55.cs" />
     <Compile Include="PanelUserControls\TPMPanelUserControl.xaml.cs">
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -771,60 +780,152 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="StreamDeckGallery\1_blue.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\1_green.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\1_red.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\2_blue.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\2_green.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\2_red.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\3_blue.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\3_green.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\3_red.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\4_blue.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\4_green.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\4_red.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\5_blue.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\5_green.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\5_red.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\wpn_blue.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\wpn_green.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StreamDeckGallery\wpn_red.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Resource Include="StreamDeckGallery\CockpitButtons\wpn_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\CockpitButtons\wpn_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\CockpitButtons\wpn_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\NumberButtons\10_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\10_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\10_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\11_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\11_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\11_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\12_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\12_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\12_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\13_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\13_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\13_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\14_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\14_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\14_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\15_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\15_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\15_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\1_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\1_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\1_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\2_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\2_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\2_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\3_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\3_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\3_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\4_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\4_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\4_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\5_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\5_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\5_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\6_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\6_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\6_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\7_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\7_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\7_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\8_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\8_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\8_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\9_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\9_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\9_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

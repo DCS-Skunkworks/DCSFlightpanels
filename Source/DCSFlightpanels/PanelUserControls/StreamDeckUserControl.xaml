@@ -6,6 +6,7 @@
              xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
              xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
              xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
+             xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="StreamDeckUserControl_OnLoaded">
     <UserControl.Resources>
@@ -74,51 +75,51 @@
 
 
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="0">
-                    <Image Name="ButtonImage1" Source="/DCSFlightpanels;component/StreamDeckGallery/1_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="0" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage1"  Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="0">
-                    <Image Name="ButtonImage2" Source="/DCSFlightpanels;component/StreamDeckGallery/2_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="0" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage2"  Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="0">
-                    <Image Name="ButtonImage3" Source="/DCSFlightpanels;component/StreamDeckGallery/3_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="0" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage3"  Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="0">
-                    <Image Name="ButtonImage4" Source="/DCSFlightpanels;component/StreamDeckGallery/4_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="0" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage4" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="0" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="0">
-                    <Image Name="ButtonImage5" Source="/DCSFlightpanels;component/StreamDeckGallery/5_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="0" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage5"  Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="0" />
                 </Border>
 
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="1">
-                    <Image Name="ButtonImage6" Source="/DCSFlightpanels;component/StreamDeckGallery/6_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="1" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage6"  Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="1">
-                    <Image Name="ButtonImage7" Source="/DCSFlightpanels;component/StreamDeckGallery/7_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="1" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage7"  Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="1">
-                    <Image Name="ButtonImage8" Source="/DCSFlightpanels;component/StreamDeckGallery/8_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="1" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage8"  Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="1">
-                    <Image Name="ButtonImage9" Source="/DCSFlightpanels;component/StreamDeckGallery/9_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="1" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage9"  Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="1" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="1">
-                    <Image Name="ButtonImage10" Source="/DCSFlightpanels;component/StreamDeckGallery/10_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="1" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage10"  Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="1" />
                 </Border>
 
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="2">
-                    <Image Name="ButtonImage11" Source="/DCSFlightpanels;component/StreamDeckGallery/11_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="2" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage11"  Style="{StaticResource ButtonImageStyle}" Grid.Column="0" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="2">
-                    <Image Name="ButtonImage12" Source="/DCSFlightpanels;component/StreamDeckGallery/12_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="2" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage12"  Style="{StaticResource ButtonImageStyle}" Grid.Column="1" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="2">
-                    <Image Name="ButtonImage13" Source="/DCSFlightpanels;component/StreamDeckGallery/13_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="2" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage13"  Style="{StaticResource ButtonImageStyle}" Grid.Column="2" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="2">
-                    <Image Name="ButtonImage14" Source="/DCSFlightpanels;component/StreamDeckGallery/14_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="2" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage14"  Style="{StaticResource ButtonImageStyle}" Grid.Column="3" Grid.Row="2" />
                 </Border>
                 <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="2">
-                    <Image Name="ButtonImage15" Source="/DCSFlightpanels;component/StreamDeckGallery/15_blue.png" Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="2" />
+                    <customControls:StreamDeckImage x:Name="ButtonImage15"  Style="{StaticResource ButtonImageStyle}" Grid.Column="4" Grid.Row="2" />
                 </Border>
 
 
@@ -170,8 +171,8 @@
 
                         <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
 
-                        <ComboBox Name="ComboBoxButtonReleaseDelay" SelectedValuePath="Content" >
-                            <ComboBoxItem >1000</ComboBoxItem>
+                        <ComboBox Name="ComboBoxButtonReleaseDelay" >
+                            <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
                             <ComboBoxItem>1500</ComboBoxItem>
                             <ComboBoxItem>2000</ComboBoxItem>
                             <ComboBoxItem>2500</ComboBoxItem>

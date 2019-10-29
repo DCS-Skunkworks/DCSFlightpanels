@@ -7,16 +7,16 @@ using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
 
-namespace DCSFlightpanels.TagDataClasses
+namespace DCSFlightpanels.Bills
 {
-    internal class TagDataStreamDeckAction : TagDataClassBase
+    public class BillStreamDeckAction : BillBase
     {
         private StreamDeckButtonOnOff _button;
         private DCSBIOSActionBindingStreamDeck _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         private StreamDeckTargetLayer _streamDeckTargetLayer;
 
-        public TagDataStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button)
+        public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button)
         {
             TextBox = textBox;
             _button = button;

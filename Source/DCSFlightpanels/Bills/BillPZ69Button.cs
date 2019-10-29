@@ -1,14 +1,15 @@
 ﻿using System.Windows.Controls;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.DCSBIOSBindings;
 
-namespace DCSFlightpanels.TagDataClasses
+namespace DCSFlightpanels.Bills
 {
-    internal class TagDataClassPZ69Button
+    public class BillPZ69Button
     {
         private DCSBIOSOutputBindingPZ69 _dcsbiosBindingLCDPZ69;
-        private readonly Button _button;
+        private readonly PZ69Button _button;
 
-        public TagDataClassPZ69Button(Button button)
+        public BillPZ69Button(PZ69Button button)
         {
             _button = button;
         }

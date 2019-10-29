@@ -40,7 +40,8 @@ namespace NonVisuals.StreamDeck
             {
                 TypeNameHandling = TypeNameHandling.All
             };
-            return JsonConvert.SerializeObject(_layerList.Where(o => o.h), indented, settings);
+
+            return JsonConvert.SerializeObject(_layerList, indented, settings);
         }
 
         public void ImportJSONSettings(string jsonText)

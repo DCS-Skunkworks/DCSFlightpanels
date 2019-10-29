@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
@@ -39,22 +40,13 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                foreach (var streamDeckButton in _streamDeckButtons)
-                {
-                    if (streamDeckButton.HasConfig)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+                return _streamDeckButtons.Any(o => o.HasConfig);
             }
         }
 
         public List<StreamDeckButton> GetButtonsWithConfig()
         {
-            var result = new List<StreamDeckButton>();
-
+            return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig);
         }
 
         public StreamDeckLayer GetEmptyLayer()

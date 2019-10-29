@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.Saitek;
 
-namespace DCSFlightpanels.TagDataClasses
+namespace DCSFlightpanels.Bills
 {
-    internal class TagDataClassPZ69 : TagDataClassBase
+    public class BillPZ69 : BillBase
     {
         private RadioPanelPZ69KeyOnOff _knob;
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public TagDataClassPZ69(TextBox textBox, RadioPanelPZ69KeyOnOff knob)
+        public BillPZ69(PZ69TextBox textBox, RadioPanelPZ69KeyOnOff knob)
         {
             TextBox = textBox;
             _knob = knob;
@@ -26,7 +27,7 @@ namespace DCSFlightpanels.TagDataClasses
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
         {
-            throw new Exception("TagDataClassPZ69 cannot contain DCS-BIOS");
+            throw new Exception("BillPZ69 cannot contain DCS-BIOS");
         }
 
         public override bool ContainsBIPLink()

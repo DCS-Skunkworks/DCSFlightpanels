@@ -10,7 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
-using DCSFlightpanels.TagDataClasses;
+using DCSFlightpanels.Bills;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.Interfaces;
 using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
@@ -29,7 +30,7 @@ namespace DCSFlightpanels.PanelUserControls
         private IGlobalHandler _globalHandler;
         private bool _isDirty = false;
         private bool _isLoaded = false;
-        private List<TextBox> _textBoxList = new List<TextBox>();
+        private List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
         private List<RadioButton> _radioButtonList = new List<RadioButton>();
 
 
@@ -117,7 +118,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in _textBoxList)
             {
-                textBox.Clear();
+                textBox.Bill.Clear();
             }
 
             foreach (var radioButton in _radioButtonList)
@@ -296,8 +297,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in _textBoxList)
             {
-                textBox.Tag = new TagDataStreamDeckFace();
-                Tagg(textBox).ParentTextBox = textBox;
+                textBox.Bill = new BillStreamDeckFace();
+                textBox.Bill.ParentTextBox = textBox;
             }
         }
 
@@ -415,8 +416,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (Settings.Default.ButtonTextFaceFont != null)
             {
-                Tagg(TextBoxButtonOnTextFace).TextFont = Settings.Default.ButtonTextFaceFont;
-                Tagg(TextBoxButtonOffTextFace).TextFont = Settings.Default.ButtonTextFaceFont;
+                TextBoxButtonOnTextFace.Bill.TextFont = Settings.Default.ButtonTextFaceFont;
+                TextBoxButtonOffTextFace.Bill.TextFont = Settings.Default.ButtonTextFaceFont;
             }
         }
 
@@ -429,7 +430,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     case EnumStreamDeckFaceType.Text:
                         {
-                            return Tagg(TextBoxButtonOnTextFace).ContainsTextFace();
+                            return TextBoxButtonOnTextFace.Bill.ContainsTextFace();
                         }
                     case EnumStreamDeckFaceType.ImageFile:
                         {
@@ -468,10 +469,10 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var faceTypeText = (FaceTypeText)streamDeckButtonFace;
                         var textBox = faceTypeText.WhenTurnedOn ? TextBoxButtonOnTextFace : TextBoxButtonOffTextFace;
-                        Tagg(textBox).TextFont = faceTypeText.TextFont;
+                        textBox.Bill.TextFont = faceTypeText.TextFont;
                         textBox.Text = faceTypeText.Text;
-                        Tagg(textBox).FontColor = faceTypeText.FontColor;
-                        Tagg(textBox).BackgroundColor = faceTypeText.BackgroundColor;
+                        textBox.Bill.FontColor = faceTypeText.FontColor;
+                        textBox.Bill.BackgroundColor = faceTypeText.BackgroundColor;
                         SetFormState();
                         return;
                     }
@@ -500,17 +501,17 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 case EnumStreamDeckFaceType.Text:
                     {
-                        if (Tagg(textBoxTextFace).ContainsTextFace())
+                        if (textBoxTextFace.Bill.ContainsTextFace())
                         {
                             var result = new FaceTypeText();
 
                             result.WhenTurnedOn = forButtonPressed;
                             result.Text = textBoxTextFace.Text;
-                            result.TextFont = Tagg(textBoxTextFace).TextFont;
-                            result.FontColor = Tagg(textBoxTextFace).FontColor;
-                            result.BackgroundColor = Tagg(textBoxTextFace).BackgroundColor;
-                            result.OffsetX = Tagg(textBoxTextFace).OffsetX;
-                            result.OffsetY = Tagg(textBoxTextFace).OffsetY;
+                            result.TextFont = textBoxTextFace.Bill.TextFont;
+                            result.FontColor = textBoxTextFace.Bill.FontColor;
+                            result.BackgroundColor = textBoxTextFace.Bill.BackgroundColor;
+                            result.OffsetX = textBoxTextFace.Bill.OffsetX;
+                            result.OffsetY = textBoxTextFace.Bill.OffsetY;
                             
                             return result;
                         }
@@ -530,7 +531,7 @@ namespace DCSFlightpanels.PanelUserControls
             throw new ArgumentException("GetStreamDeckButtonFace, failed to determine Face Type");
         }
 
-        private void SetFontStyle(TextBox textBox)
+        private void SetFontStyle(StreamDeckFaceTextBox textBox)
         {
             var fontDialog = new FontDialog();
 
@@ -546,7 +547,7 @@ namespace DCSFlightpanels.PanelUserControls
             var result = fontDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                Tagg(textBox).TextFont = fontDialog.Font;
+                textBox.Bill.TextFont = fontDialog.Font;
 
                 Settings.Default.ButtonTextFaceFont = fontDialog.Font;
                 Settings.Default.Save();
@@ -556,7 +557,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void SetFontColor(TextBox textBox)
+        private void SetFontColor(StreamDeckFaceTextBox textBox)
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
@@ -564,7 +565,7 @@ namespace DCSFlightpanels.PanelUserControls
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                Tagg(textBox).FontColor = colorDialog.Color;
+                textBox.Bill.FontColor = colorDialog.Color;
 
                 Settings.Default.ButtonTextFaceFontColor = colorDialog.Color;
                 Settings.Default.Save();
@@ -574,7 +575,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void SetBackgroundColor(TextBox textBox)
+        private void SetBackgroundColor(StreamDeckFaceTextBox textBox)
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
@@ -582,7 +583,7 @@ namespace DCSFlightpanels.PanelUserControls
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                Tagg(textBox).BackgroundColor = colorDialog.Color;
+                textBox.Bill.BackgroundColor = colorDialog.Color;
 
                 Settings.Default.ButtonTextFaceBackgroundColor = colorDialog.Color;
                 Settings.Default.Save();
@@ -592,18 +593,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void TestImage(TextBox textBox)
+        private void TestImage(StreamDeckFaceTextBox textBox)
         {
-            var bitmap = BitMapCreator.CreateStreamDeckBitmap(textBox.Text, Tagg(textBox).TextFont, Tagg(textBox).FontColor, Tagg(textBox).BackgroundColor, Tagg(textBox).OffsetX, Tagg(textBox).OffsetY);
+            var bitmap = BitMapCreator.CreateStreamDeckBitmap(textBox.Text, textBox.Bill.TextFont, textBox.Bill.FontColor, textBox.Bill.BackgroundColor, textBox.Bill.OffsetX, textBox.Bill.OffsetY);
             SDUIParent.TestImage(bitmap);
         }
 
         public IStreamDeckUIParent SDUIParent { get; set; }
-
-        private TagDataStreamDeckFace Tagg(TextBox textBox)
-        {
-            return (TagDataStreamDeckFace)textBox.Tag;
-        }
 
         private void TextBoxButtonTextFace_OnKeyUp(object sender, KeyEventArgs e)
         {
@@ -629,7 +625,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Tagg(TextBoxButtonOnTextFace).OffsetY -= OFFSET_CHANGE_VALUE;
+                TextBoxButtonOnTextFace.Bill.OffsetY -= OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonOnTextFace);
             }
             catch (Exception ex)
@@ -642,7 +638,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Tagg(TextBoxButtonOnTextFace).OffsetY += OFFSET_CHANGE_VALUE;
+                TextBoxButtonOnTextFace.Bill.OffsetY += OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonOnTextFace);
             }
             catch (Exception ex)
@@ -655,7 +651,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Tagg(TextBoxButtonOnTextFace).OffsetX -= OFFSET_CHANGE_VALUE;
+                TextBoxButtonOnTextFace.Bill.OffsetX -= OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonOnTextFace);
             }
             catch (Exception ex)
@@ -668,7 +664,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Tagg(TextBoxButtonOnTextFace).OffsetX += OFFSET_CHANGE_VALUE;
+                TextBoxButtonOnTextFace.Bill.OffsetX += OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonOnTextFace);
             }
             catch (Exception ex)

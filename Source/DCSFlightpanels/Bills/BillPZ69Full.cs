@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
+using DCSFlightpanels.CustomControls;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Saitek;
 
-namespace DCSFlightpanels.TagDataClasses
+namespace DCSFlightpanels.Bills
 {
-    internal class TagDataClassPZ69Full : TagDataClassBase
+    public class BillPZ69Full : BillBase
     {
         private BIPLinkPZ69 _bipLinkPZ69;
         private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
 
-        public TagDataClassPZ69Full(TextBox textBox)
+        public BillPZ69Full(PZ69FullTextBox textBox)
         {
             TextBox = textBox;
         }
