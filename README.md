@@ -1,8 +1,11 @@
 # DCSFlightpanels
 
 
-[![](Documentation/support_dcsflightpanels2.png)](https://www.paypal.me/jerkerdahlblom)
 
+<p align="center">
+<a href="https://www.paypal.me/jerkerdahlblom"><img src="./Documentation/support_dcsflightpanels2.png" width="200"></a>
+</p>
+<br/>
 
 DCSFlightpanels primary use is for using Saitek/Logitech panels in DCS World.
 Together with DCS-BIOS you can manage every control for the aircraft and use
@@ -11,8 +14,16 @@ aircraft in the Multipanel & Backlit Panel.
 Using DCSFlightpanels as a key emulator it can be used in almost any game like
 Elite Dangerous, War Thunder, Flaming Cliff Series, IL-2.
 You can use multiple panels of each type and configure them separately.
-
 DCSFlightpanels supports [Simple Radio Standalone](https://github.com/ciribob/DCS-SimpleRadioStandalone) (PZ69 Radio Panel).
+
+
+<br/><br/>
+<p align="center">
+<a href="https://www.jetbrains.com/?from=Flightpanels"><img src="./Documentation/jetbrains.png" width="100"></a>
+This project is proudly sponsored by Jetbrains Open Source Support Program.
+</p>
+<br/><br/>
+
 
 Saitek / Logitech Panels Supported:
 ---------------------------------------------
