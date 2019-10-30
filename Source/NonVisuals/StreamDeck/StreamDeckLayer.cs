@@ -70,7 +70,7 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckButtons = value;
         }
 
-        public StreamDeckButton GetStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
+        public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             foreach (var streamDeckButton in _streamDeckButtons)
             {
@@ -82,7 +82,7 @@ namespace NonVisuals.StreamDeck
             return new StreamDeckButton(streamDeckButtonName);
         }
 
-        public bool ContainStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
+        public bool ContainStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             foreach (var streamDeckButton in _streamDeckButtons)
             {
@@ -95,7 +95,7 @@ namespace NonVisuals.StreamDeck
             return false;
         }
 
-        public StreamDeckButton GetStreamDeckButtonName(StreamDeckButtonNames streamDeckButtonName)
+        public StreamDeckButton GetStreamDeckButtonName(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             foreach (var streamDeckButton in _streamDeckButtons)
             {

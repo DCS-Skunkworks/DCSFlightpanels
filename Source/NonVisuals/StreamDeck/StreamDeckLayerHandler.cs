@@ -199,7 +199,7 @@ namespace NonVisuals.StreamDeck
             throw new Exception("GetStreamDeckLayer : Failed to find layer " + layerName + ".");
         }
 
-        public StreamDeckButton GetStreamDeckButton(StreamDeckButtonNames streamDeckButtonName, string layerName, bool throwExceptionIfNotFound = true)
+        public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName, bool throwExceptionIfNotFound = true)
         {
             if (string.IsNullOrEmpty(layerName))
             {
@@ -224,7 +224,7 @@ namespace NonVisuals.StreamDeck
             return streamDeckButton;
         }
 
-        public StreamDeckButton GetCurrentLayerStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
+        public StreamDeckButton GetCurrentLayerStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return GetStreamDeckButton(streamDeckButtonName, CurrentLayerName, false);
         }

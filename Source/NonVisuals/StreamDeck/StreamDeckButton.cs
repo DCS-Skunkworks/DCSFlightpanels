@@ -12,9 +12,8 @@ namespace NonVisuals.StreamDeck
 
     public class StreamDeckButton
     {
-        private StreamDeckButtonNames _streamDeckButtonName;
-        private IStreamDeckButtonFace _buttonFaceForPress = null;
-        private IStreamDeckButtonFace _buttonFaceForRelease = null;
+        private EnumStreamDeckButtonNames _enumStreamDeckButtonName;
+        private IStreamDeckButtonFace _buttonFace = null;
         private IStreamDeckButtonAction _buttonActionForPress = null;
         private IStreamDeckButtonAction _buttonActionForRelease = null;
         public int ExecutionDelay { get; set; } = 1000;
@@ -24,9 +23,9 @@ namespace NonVisuals.StreamDeck
         [JsonIgnore]
         private CancellationTokenSource _cancellationTokenSource;
 
-        public StreamDeckButton(StreamDeckButtonNames streamDeckButton)
+        public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {
-            _streamDeckButtonName = streamDeckButton;
+            _enumStreamDeckButtonName = enumStreamDeckButton;
         }
 
         ~StreamDeckButton()
@@ -37,25 +36,32 @@ namespace NonVisuals.StreamDeck
         public void Press(StreamDeckPanel streamDeckPanel)
         {
             ActionForPress?.Execute(new CancellationToken());
-            FaceForPress?.Execute(streamDeckPanel);
+            Face?.Show(streamDeckPanel);
 
-            if (_buttonFaceForRelease != null)
+            if (_buttonActionForRelease != null)
             {
                 _cancellationTokenSource?.Cancel();
 
                 _cancellationTokenSource = new CancellationTokenSource();
-                _delayedExecutionThread = new Thread(() => DelayedRelease(streamDeckPanel, ActionForRelease, _buttonFaceForRelease));
+                _delayedExecutionThread = new Thread(() => DelayedRelease(ActionForRelease));
                 _delayedExecutionThread.Start();
             }
         }
 
-        private void DelayedRelease(StreamDeckPanel streamDeckPanel, IStreamDeckButtonAction streamDeckButtonAction, IStreamDeckButtonFace streamDeckButtonFace)
+        public void Show(StreamDeckPanel streamDeckPanel)
+        {
+            if (Face != null)
+            {
+                Face?.Show(streamDeckPanel);
+            }
+        }
+
+        private void DelayedRelease(IStreamDeckButtonAction streamDeckButtonAction)
         {
             try
             {
                 Thread.Sleep(ExecutionDelay);
                 streamDeckButtonAction?.Execute(new CancellationToken());
-                streamDeckButtonFace?.Execute(streamDeckPanel);
             }
             catch (Exception e)
             {
@@ -63,16 +69,16 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public StreamDeckButtonNames StreamDeckButtonName
+        public EnumStreamDeckButtonNames StreamDeckButtonName
         {
-            get => _streamDeckButtonName;
-            set => _streamDeckButtonName = value;
+            get => _enumStreamDeckButtonName;
+            set => _enumStreamDeckButtonName = value;
         }
 
-        public IStreamDeckButtonFace FaceForPress
+        public IStreamDeckButtonFace Face
         {
-            get => _buttonFaceForPress;
-            set => _buttonFaceForPress = value;
+            get => _buttonFace;
+            set => _buttonFace = value;
         }
 
         public IStreamDeckButtonAction ActionForPress
@@ -87,14 +93,7 @@ namespace NonVisuals.StreamDeck
             ActionForPress = streamDeckButton.ActionForPress;
             ActionForRelease = streamDeckButton.ActionForRelease;
 
-            FaceForPress = streamDeckButton.FaceForPress;
-            FaceForRelease = streamDeckButton.FaceForRelease;
-        }
-
-        public IStreamDeckButtonFace FaceForRelease
-        {
-            get => _buttonFaceForRelease;
-            set => _buttonFaceForRelease = value;
+            Face = streamDeckButton.Face;
         }
 
         public IStreamDeckButtonAction ActionForRelease
@@ -104,8 +103,7 @@ namespace NonVisuals.StreamDeck
         }
 
         public bool HasConfig =>
-            _buttonFaceForPress != null ||
-            _buttonFaceForRelease != null ||
+            _buttonFace != null ||
             _buttonActionForPress != null ||
             _buttonActionForRelease != null;
 
@@ -132,13 +130,9 @@ namespace NonVisuals.StreamDeck
             get
             {
                 var result = EnumStreamDeckFaceType.Unknown;
-                if (FaceForPress != null)
+                if (Face != null)
                 {
-                    result = FaceForPress.FaceType;
-                }
-                else if (FaceForRelease != null)
-                {
-                    result = FaceForRelease.FaceType;
+                    result = Face.FaceType;
                 }
 
                 return result;
@@ -149,21 +143,21 @@ namespace NonVisuals.StreamDeck
         {
             var result = new HashSet<StreamDeckButton>();
 
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON1));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON2));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON3));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON4));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON5));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON6));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON7));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON8));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON9));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON10));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON11));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON12));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON13));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON14));
-            result.Add(new StreamDeckButton(StreamDeckButtonNames.BUTTON15));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON1));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON2));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON3));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON4));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON5));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON6));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON7));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON8));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON9));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON10));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON11));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON12));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON13));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON14));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON15));
             return result;
         }
 
@@ -171,7 +165,7 @@ namespace NonVisuals.StreamDeck
     }
 
 
-    public enum StreamDeckButtonNames
+    public enum EnumStreamDeckButtonNames
     {
         BUTTON0_NO_BUTTON,
         BUTTON1,
@@ -193,9 +187,9 @@ namespace NonVisuals.StreamDeck
 
     public static class StreamDeckFunction
     {
-        public static int ButtonNumber(StreamDeckButtonNames streamDeckButtonName)
+        public static int ButtonNumber(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            if (streamDeckButtonName == StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
             {
                 return 0;
             }
@@ -203,24 +197,24 @@ namespace NonVisuals.StreamDeck
             return int.Parse(streamDeckButtonName.ToString().Replace("BUTTON", ""));
         }
 
-        public static StreamDeckButtonNames ButtonName(int streamDeckButtonNumber)
+        public static EnumStreamDeckButtonNames ButtonName(int streamDeckButtonNumber)
         {
             if (streamDeckButtonNumber == 0)
             {
-                return StreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
             }
 
-            return (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
         }
 
-        public static StreamDeckButtonNames ButtonName(string streamDeckButtonNumber)
+        public static EnumStreamDeckButtonNames ButtonName(string streamDeckButtonNumber)
         {
             if (string.IsNullOrEmpty(streamDeckButtonNumber) || streamDeckButtonNumber == "0")
             {
-                return StreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
             }
 
-            return (StreamDeckButtonNames)Enum.Parse(typeof(StreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
         }
     }
 

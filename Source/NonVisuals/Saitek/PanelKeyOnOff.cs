@@ -1,5 +1,5 @@
-
-﻿using NonVisuals.Radios;
+﻿
+ using NonVisuals.Radios;
  using NonVisuals.StreamDeck;
 
 
@@ -77,16 +77,16 @@
 
     public class StreamDeckButtonOnOff : PanelKeyOnOff
     {
-        private readonly StreamDeckButtonNames _streamDeckButtonName;
+        private readonly EnumStreamDeckButtonNames _enumStreamDeckButtonName;
         private readonly bool _buttonState;
 
-        public StreamDeckButtonOnOff(StreamDeckButtonNames streamDeckButton, bool buttonState)
+        public StreamDeckButtonOnOff(EnumStreamDeckButtonNames enumStreamDeckButton, bool buttonState)
         {
-            _streamDeckButtonName = streamDeckButton;
+            _enumStreamDeckButtonName = enumStreamDeckButton;
             _buttonState = buttonState;
         }
 
-        public StreamDeckButtonNames StreamDeckButton => _streamDeckButtonName;
+        public EnumStreamDeckButtonNames EnumStreamDeckButton => _enumStreamDeckButtonName;
 
         public bool ButtonState => _buttonState;
     }

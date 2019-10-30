@@ -33,7 +33,7 @@ namespace NonVisuals.StreamDeck
 
                 foreach (var keyBinding in keyBindings)
                 {
-                    if (keyBinding != keyBindingStreamDeck && keyBinding.StreamDeckButtonName == keyBindingStreamDeck.StreamDeckButtonName && keyBinding.WhenTurnedOn != keyBindingStreamDeck.WhenTurnedOn)
+                    if (keyBinding != keyBindingStreamDeck && keyBinding.EnumStreamDeckButtonName == keyBindingStreamDeck.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn != keyBindingStreamDeck.WhenTurnedOn)
                     {
                         keyBindingStreamDeck.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                     }

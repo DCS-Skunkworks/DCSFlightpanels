@@ -16,7 +16,7 @@ namespace NonVisuals.StreamDeck
         private const int STREAMDECK_ICON_WIDTH = 72;
         private const string NUMBER_BUTTON_LOCATION = @"pack://application:,,,/DCSFlightpanels;component/StreamDeckGallery/NumberButtons/";
         
-        public static BitmapImage GetButtonNumberImage(StreamDeckButtonNames streamDeckButtonName, Color color)
+        public static BitmapImage GetButtonNumberImage(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
         {
             return   new BitmapImage(new Uri(NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
         }
@@ -47,19 +47,12 @@ namespace NonVisuals.StreamDeck
         {
             Bitmap createdBitmap;
 
-            if (setBitmapSizeToTextSize)
-            {
-                createdBitmap = new Bitmap(2, 2);
-            }
-            else
-            {
-                createdBitmap = new Bitmap(width, height);
-            }
+            createdBitmap = setBitmapSizeToTextSize ? new Bitmap(2, 2) : new Bitmap(width, height);
 
             // Create a graphics object to measure the text's width and height.
             var graphicsObject = Graphics.FromImage(createdBitmap);
 
-            if (setBitmapSizeToTextSize)
+            if (setBitmapSizeToTextSize && !string.IsNullOrEmpty(text))
             {
                 // This is where the bitmap size is determined.
                 height = (int)graphicsObject.MeasureString(text, font).Height;

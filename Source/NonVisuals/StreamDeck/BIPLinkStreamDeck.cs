@@ -9,7 +9,7 @@ namespace NonVisuals.StreamDeck
          This class binds a physical key on a Stream Deck with a BIP LED
          */
 
-        public StreamDeckButtonNames StreamDeckButtonName { get; set; }
+        public EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         public string Layer { get; set; } = "";
 
         public override void ImportSettings(string settings){}

@@ -293,12 +293,12 @@ namespace DCSFlightpanels
                         {
                             _profileHandler.Detach(gamingPanel);
                             gamingPanel.Detach(_profileHandler);
-                            gamingPanel.Detach((IProfileHandlerListener) this);
+                            gamingPanel.Detach((IProfileHandlerListener)this);
                             _dcsBios?.DetachDataReceivedListener(gamingPanel);
 
                             Common.DebugP("Shutting down " + gamingPanel.GetType().Name);
                             gamingPanel.Shutdown();
-                            _panelUserControls.Remove((UserControl) item.Content);
+                            _panelUserControls.Remove((UserControl)item.Content);
                             Common.DebugP("_saitekUserControls count is " + _panelUserControls.Count);
                             Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
                             closedItemCount++;
@@ -581,20 +581,20 @@ namespace DCSFlightpanels
                                 }
                             case GamingPanelEnum.StreamDeckMini:
                             case GamingPanelEnum.StreamDeckXL:
-                            {
-                                break;
-                            }
+                                {
+                                    break;
+                                }
                             case GamingPanelEnum.StreamDeck:
-                            {
-                                var tabItemStreamDeck = new TabItem();
-                                tabItemStreamDeck.Header = "StreamDeck";
-                                var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton, tabItemStreamDeck, this);
-                                _panelUserControls.Add(streamDeckUserControl);
-                                _profileHandler.Attach(streamDeckUserControl);
-                                tabItemStreamDeck.Content = streamDeckUserControl;
-                                TabControlPanels.Items.Add(tabItemStreamDeck);
-                                break;
-                            }
+                                {
+                                    var tabItemStreamDeck = new TabItem();
+                                    tabItemStreamDeck.Header = "StreamDeck";
+                                    var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton, tabItemStreamDeck, this);
+                                    _panelUserControls.Add(streamDeckUserControl);
+                                    _profileHandler.Attach(streamDeckUserControl);
+                                    tabItemStreamDeck.Content = streamDeckUserControl;
+                                    TabControlPanels.Items.Add(tabItemStreamDeck);
+                                    break;
+                                }
                         }
                     } //for each
                 }
@@ -963,7 +963,7 @@ namespace DCSFlightpanels
                     {
                         LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                         LabelVersionInformation.Visibility = Visibility.Visible;
-                        LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " +  Settings.Default.LastDCSBIOSRelease;
+                        LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
                     });
                 }
             }
@@ -1783,6 +1783,31 @@ namespace DCSFlightpanels
             {
                 var bugWindow = new BugReportWindow();
                 bugWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20297, ex);
+            }
+        }
+
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control && ButtonImageSave.IsEnabled)
+                {
+                    SaveNewOrExistingProfile();
+                    SetWindowState();
+                }
+                else if (e.Key == Key.O && Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    _profileHandler.OpenProfile();
+                }
+                else if (e.Key == Key.N && Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    CreateNewProfile();
+                }
+
             }
             catch (Exception ex)
             {

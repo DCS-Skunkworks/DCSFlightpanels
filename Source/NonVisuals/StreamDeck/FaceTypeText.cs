@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -8,30 +9,34 @@ namespace NonVisuals.StreamDeck
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
-        private StreamDeckButtonNames _streamDeckButtonName;
+        private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _text;
         private Font _textFont;
         private Color _fontColor;
         private Color _backgroundColor;
         private int _offsetX;
         private int _offsetY;
-        private bool _whenTurnedOn;
 
 
 
 
 
-        public void Execute(StreamDeckPanel streamDeckPanel)
+        public void Show(StreamDeckPanel streamDeckPanel)
         {
             ShowButtonFace(streamDeckPanel);
         }
 
         private void ShowButtonFace(StreamDeckPanel streamDeckPanel)
         {
-            var bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
-            streamDeckPanel.SetImage(_streamDeckButtonName, bitmap);
+            if (_refreshBitmap)
+            {
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _refreshBitmap = false;
+            }
+            streamDeckPanel.SetImage(_streamDeckButtonName, _bitmap);
         }
 
+        [JsonIgnore]
         public Bitmap Bitmap
         {
             get => _bitmap;
@@ -42,7 +47,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public StreamDeckButtonNames StreamDeckButtonName
+        public EnumStreamDeckButtonNames StreamDeckButtonName
         {
             get => _streamDeckButtonName;
             set
@@ -108,10 +113,5 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public bool WhenTurnedOn
-        {
-            get => _whenTurnedOn;
-            set => _whenTurnedOn = value;
-        }
     }
 }

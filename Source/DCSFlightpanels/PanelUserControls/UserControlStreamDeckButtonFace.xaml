@@ -47,9 +47,9 @@
 
 
             <StackPanel Name="StackPanelButtonTextAndStyle"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="10,5,10,0" Visibility="Visible">
-                <Label Content="Text To Display when Button Pressed" FontSize="10" Height="23"  Margin="0,5,0,0"  />
+                <Label Content="Choose Button Text and Color" Background="#e6e6e6" HorizontalContentAlignment="Center" Margin="0,5,0,0"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonOnTextFace" FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0"   KeyUp="TextBoxButtonTextFace_OnKeyUp" />
+                    <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonTextFace" FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0"   KeyUp="TextBoxButtonTextFace_OnKeyUp" />
                     <StackPanel>
                         <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
                         <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
@@ -58,29 +58,16 @@
                     </StackPanel>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Button Name="ButtonOnTextFaceFont" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonOnTextFaceFont_OnClick"/>
-                            <Button Name="ButtonOnTextFaceFontColor" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonOnTextFaceFontColor_OnClick"/>
+                            <Button Name="ButtonTextFaceFont" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
+                            <Button Name="ButtonTextFaceFontColor" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
-                            <Button Name="ButtonOnTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonOnTextFaceBackgroundColor_OnClick"/>
-                            <Button Name="ButtonOnTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonOnTestTextFace_OnClick"/>
+                            <Button Name="ButtonTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
+                            <Button Name="ButtonTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestTextFace_OnClick"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-                <Label Content="Text To Display when Button Released" FontSize="10" Height="23"  Margin="0,15,2,0"  />
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonOffTextFace" FontSize="10" Height="72" Width="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0"  KeyUp="TextBoxButtonTextFace_OnKeyUp"   />
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <Button Name="ButtonOffTextFaceFont" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonOffTextFaceFont_OnClick"/>
-                            <Button Name="ButtonOffTextFaceFontColor" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonOffTextFaceFontColor_OnClick"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                            <Button Name="ButtonOffTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonOffTextFaceBackgroundColor_OnClick"/>
-                            <Button Name="ButtonOffTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonOffTestTextFace_OnClick"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
+                <Label Name="LabelFaceTypeTextFontInfo" HorizontalContentAlignment="Center" Margin="0,5,0,0"  />
             </StackPanel>
 
             <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">

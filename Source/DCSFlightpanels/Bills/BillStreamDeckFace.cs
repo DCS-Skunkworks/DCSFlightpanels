@@ -10,7 +10,7 @@ namespace DCSFlightpanels.Bills
 {
     public class BillStreamDeckFace
     {
-        public StreamDeckButtonNames StreamDeckButtonName;
+        public EnumStreamDeckButtonNames StreamDeckButtonName;
         public StreamDeckButton Button;
         private Font _textFont = new Font("Consolas", 10);
         private Color _fontColor = Color.Black;
@@ -75,7 +75,7 @@ namespace DCSFlightpanels.Bills
 
         public int ButtonNumber()
         {
-            if (StreamDeckButtonName == StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            if (StreamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
             {
                 return 0;
             }

@@ -129,9 +129,9 @@ namespace NonVisuals.StreamDeck
             SetImage(StreamDeckFunction.ButtonName(streamDeckButtonNumber), bitmap);
         }
 
-        public void SetImage(StreamDeckButtonNames streamDeckButtonName, Bitmap bitmap)
+        public void SetImage(EnumStreamDeckButtonNames streamDeckButtonName, Bitmap bitmap)
         {
-            if (streamDeckButtonName == StreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
             {
                 return;
             }
@@ -139,7 +139,7 @@ namespace NonVisuals.StreamDeck
             _streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
         }
 
-        public void ClearAllImageFaces()
+        public void ClearAllFaces()
         {
             for (int i = 0; i < 15; i++)
             {
@@ -171,7 +171,7 @@ namespace NonVisuals.StreamDeck
             var result = "";
             /*foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.OSKeyPress != null && keyBinding.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && keyBinding.WhenTurnedOn == streamDeckButton.IsPressed)
+                if (keyBinding.OSKeyPress != null && keyBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)
                 {
                     result = keyBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
@@ -218,7 +218,7 @@ namespace NonVisuals.StreamDeck
                 var found = false;
                 /*foreach (var keyBinding in _keyBindings)
                 {
-                    if (keyBinding.OSKeyPress != null && keyBinding.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && keyBinding.WhenTurnedOn == streamDeckButton.IsPressed)
+                    if (keyBinding.OSKeyPress != null && keyBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)
                     {
                         keyBinding.OSKeyPress.Execute();
                         found = true;
@@ -229,7 +229,7 @@ namespace NonVisuals.StreamDeck
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
                     {
-                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && dcsBiosBinding.WhenTurnedOn == streamDeckButton.IsPressed)
+                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && dcsBiosBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)
                         {
                             dcsBiosBinding.SendDCSBIOSCommands();
                             break;
@@ -238,7 +238,7 @@ namespace NonVisuals.StreamDeck
                 }
                 foreach (var osCommand in _osCommandBindings)
                 {
-                    if (osCommand.OSCommandObject != null && osCommand.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && osCommand.WhenTurnedOn == streamDeckButton.IsPressed)
+                    if (osCommand.OSCommandObject != null && osCommand.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && osCommand.WhenTurnedOn == enumStreamDeckButton.IsPressed)
                     {
                         osCommand.OSCommandObject.Execute();
                         found = true;
@@ -247,7 +247,7 @@ namespace NonVisuals.StreamDeck
                 }
                 foreach (var bipLinkStreamDeck in _bipLinks)
                 {
-                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName && bipLinkStreamDeck.WhenTurnedOn == streamDeckButton.IsPressed)
+                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && bipLinkStreamDeck.WhenTurnedOn == enumStreamDeckButton.IsPressed)
                     {
                         bipLinkStreamDeck.Execute();
                         break;
@@ -379,12 +379,12 @@ namespace NonVisuals.StreamDeck
             return _streamDeckLayerHandler.GetStreamDeckLayerNames();
         }
 
-        public StreamDeckButton GetStreamDeckButton(StreamDeckButtonNames streamDeckButtonName, string layerName)
+        public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName)
         {
             return _streamDeckLayerHandler.GetStreamDeckButton(streamDeckButtonName, layerName);
         }
 
-        public StreamDeckButton GetCurrentLayerStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)
+        public StreamDeckButton GetCurrentLayerStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return _streamDeckLayerHandler.GetCurrentLayerStreamDeckButton(streamDeckButtonName);
         }
