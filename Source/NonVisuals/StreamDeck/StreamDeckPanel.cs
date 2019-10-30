@@ -73,7 +73,7 @@ namespace NonVisuals.StreamDeck
             if (e.IsDown)
             {
                 var streamDeckButton = _streamDeckLayerHandler.GetCurrentLayerStreamDeckButton(e.Key + 1);
-                streamDeckButton.Press();
+                streamDeckButton.Press(this);
             }
         }
 
@@ -340,10 +340,10 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckLayerHandler.LayerList;
         }
 
-        public void AddLayer(StreamDeckLayer streamDeckLayer)
+        public bool AddLayer(StreamDeckLayer streamDeckLayer)
         {
-            _streamDeckLayerHandler.AddLayer(streamDeckLayer);
             SetIsDirty();
+            return _streamDeckLayerHandler.AddLayer(streamDeckLayer);
         }
 
         public void DeleteLayer(StreamDeckLayer streamDeckLayer)

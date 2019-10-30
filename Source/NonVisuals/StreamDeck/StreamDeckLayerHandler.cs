@@ -80,11 +80,13 @@ namespace NonVisuals.StreamDeck
             SetHomeLayerStatus(isHomeLayer, streamDeckLayer.Name);
         }
 
-        private void Add(bool isActive, bool isHomeLayer, string layerName)
+        private bool Add(bool isActive, bool isHomeLayer, string layerName)
         {
+            var result = isHomeLayer;
+
             if (string.IsNullOrEmpty(layerName))
             {
-                return;
+                return result;
             }
 
             var found = false;
@@ -103,16 +105,31 @@ namespace NonVisuals.StreamDeck
                 layer.Name = layerName;
                 layer.IsHomeLayer = isHomeLayer;
                 layer.IsActive = isActive;
+                if (_layerList.Count == 0)
+                {
+                    layer.IsHomeLayer = true;
+                    result = true;
+                }
                 _layerList.Add(layer);
             }
+
+            return result;
         }
 
-        public void AddLayer(StreamDeckLayer streamDeckLayer)
+        public bool AddLayer(StreamDeckLayer streamDeckLayer)
         {
+            var result = streamDeckLayer.IsHomeLayer;
+
             if (!LayerList.Contains(streamDeckLayer) && streamDeckLayer != null)
             {
+                if (LayerList.Count == 0)
+                {
+                    streamDeckLayer.IsHomeLayer = true;
+                }
                 LayerList.Add(streamDeckLayer);
             }
+
+            return result;
         }
 
         public void DeleteLayer(string layerName)
@@ -202,7 +219,7 @@ namespace NonVisuals.StreamDeck
                 throw new Exception("Button " + streamDeckButtonName + " cannot be found in layer " + layerName + ".");
             }
 
-            var streamDeckButton = new StreamDeckButton(false, streamDeckButtonName);
+            var streamDeckButton = new StreamDeckButton(streamDeckButtonName);
             GetStreamDeckLayer(layerName).AddButton(streamDeckButton);
             return streamDeckButton;
         }

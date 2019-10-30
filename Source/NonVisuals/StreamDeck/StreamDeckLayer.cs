@@ -38,13 +38,7 @@ namespace NonVisuals.StreamDeck
 
         public void RemoveEmptyButtons()
         {
-            foreach (var streamDeckButton in _streamDeckButtons)
-            {
-                if (!streamDeckButton.HasConfig)
-                {
-                    _streamDeckButtons.Remove(streamDeckButton);
-                }
-            }
+            _streamDeckButtons.RemoveAll(o => !o.HasConfig);
         }
 
         [JsonIgnore]
@@ -85,7 +79,7 @@ namespace NonVisuals.StreamDeck
                     return streamDeckButton;
                 }
             }
-            return new StreamDeckButton(false, streamDeckButtonName);
+            return new StreamDeckButton(streamDeckButtonName);
         }
 
         public bool ContainStreamDeckButton(StreamDeckButtonNames streamDeckButtonName)

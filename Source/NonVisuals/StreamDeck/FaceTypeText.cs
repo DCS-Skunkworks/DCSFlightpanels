@@ -13,7 +13,6 @@ namespace NonVisuals.StreamDeck
         private Font _textFont;
         private Color _fontColor;
         private Color _backgroundColor;
-        public StreamDeckPanel ParentPanel { get; set; }
         private int _offsetX;
         private int _offsetY;
         private bool _whenTurnedOn;
@@ -22,15 +21,15 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public void Execute()
+        public void Execute(StreamDeckPanel streamDeckPanel)
         {
-            ShowButtonFace();
+            ShowButtonFace(streamDeckPanel);
         }
 
-        private void ShowButtonFace()
+        private void ShowButtonFace(StreamDeckPanel streamDeckPanel)
         {
             var bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
-            ParentPanel.SetImage(_streamDeckButtonName, bitmap);
+            streamDeckPanel.SetImage(_streamDeckButtonName, bitmap);
         }
 
         public Bitmap Bitmap

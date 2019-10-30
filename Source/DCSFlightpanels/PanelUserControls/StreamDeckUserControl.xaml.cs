@@ -51,7 +51,12 @@ namespace DCSFlightpanels.PanelUserControls
             FillControlLists();
             SetImageBills();
 
-            HideAllImages();
+            UCStreamDeckButtonAction.SDUIParent = this;
+            UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
+            UCStreamDeckButtonFace.SDUIParent = this;
+            UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
+
+            HideAllDotImages();
         }
 
         private void StreamDeckUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -59,10 +64,6 @@ namespace DCSFlightpanels.PanelUserControls
             if (!_userControlLoaded)
             {
                 _userControlLoaded = true;
-                UCStreamDeckButtonAction.SDUIParent = this;
-                UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
-                UCStreamDeckButtonFace.SDUIParent = this;
-                UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
                 ShowGraphicConfiguration();
                 UCStreamDeckButtonAction.Update();
             }
@@ -223,6 +224,8 @@ namespace DCSFlightpanels.PanelUserControls
 
             var selectedLayer = _streamDeck.GetLayer(layerName);
 
+            HideAllDotImages();
+
             foreach (var buttonImage in _buttonImages)
             {
                 try
@@ -335,6 +338,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                if (!_userControlLoaded)
+                {
+                    return;
+                }
                 ClearAll(false);
                 ShowGraphicConfiguration();
             }
@@ -355,6 +362,10 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 buttonImage.Bill.Clear();
             }
+
+            UCStreamDeckButtonAction.Clear();
+            UCStreamDeckButtonFace.Clear();
+
             if (clearAlsoProfile)
             {
                 _streamDeck.ClearSettings();
@@ -509,7 +520,8 @@ namespace DCSFlightpanels.PanelUserControls
                 layerWindow.ShowDialog();
                 if (layerWindow.DialogResult == true)
                 {
-                    _streamDeck.AddLayer(layerWindow.NewLayer);
+                    var result = _streamDeck.AddLayer(layerWindow.NewLayer);
+                    SetCheckboxHomeStatus(result);
                 }
                 LoadComboBoxLayers(layerWindow.NewLayer);
                 UCStreamDeckButtonAction.Update();
@@ -633,15 +645,15 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 ClearAll(false);
-
-                //De-select if whatever button is selected
-                UpdateAllButtonsSelectedStatus(StreamDeckButtonNames.BUTTON0_NO_BUTTON);
-
+                
                 _streamDeck.CurrentLayerName = ((StreamDeckLayer)ComboBoxLayers.SelectedItem).Name;
 
                 SetCheckboxHomeLayer();
 
                 ShowLayer(_streamDeck.CurrentLayerName);
+                
+                //De-select if whatever button is selected
+                UpdateAllButtonsSelectedStatus(StreamDeckButtonNames.BUTTON0_NO_BUTTON);
 
                 SetFormState();
             }
@@ -699,12 +711,17 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetCheckboxHomeLayer()
         {
-            CheckBoxMarkHomeLayer.Checked -= CheckBoxMarkHomeLayer_CheckedChanged;
-            CheckBoxMarkHomeLayer.Unchecked -= CheckBoxMarkHomeLayer_CheckedChanged;
             if (GetSelectedStreamDeckLayer() != null && _streamDeck.HomeLayer != null)
             {
-                CheckBoxMarkHomeLayer.IsChecked = GetSelectedStreamDeckLayer().Name == _streamDeck.HomeLayer.Name;
+                SetCheckboxHomeStatus(GetSelectedStreamDeckLayer().Name == _streamDeck.HomeLayer.Name);
             }
+        }
+
+        private void SetCheckboxHomeStatus(bool isChecked)
+        {
+            CheckBoxMarkHomeLayer.Checked -= CheckBoxMarkHomeLayer_CheckedChanged;
+            CheckBoxMarkHomeLayer.Unchecked -= CheckBoxMarkHomeLayer_CheckedChanged;
+            CheckBoxMarkHomeLayer.IsChecked = isChecked;
             CheckBoxMarkHomeLayer.Checked += CheckBoxMarkHomeLayer_CheckedChanged;
             CheckBoxMarkHomeLayer.Unchecked += CheckBoxMarkHomeLayer_CheckedChanged;
         }
@@ -1042,23 +1059,12 @@ namespace DCSFlightpanels.PanelUserControls
             _dotImages.Add(DotImage15);
         }
         
-        private void HideAllImages()
+        private void HideAllDotImages()
         {
-            DotImage1.Visibility = Visibility.Collapsed;
-            DotImage2.Visibility = Visibility.Collapsed;
-            DotImage3.Visibility = Visibility.Collapsed;
-            DotImage4.Visibility = Visibility.Collapsed;
-            DotImage5.Visibility = Visibility.Collapsed;
-            DotImage6.Visibility = Visibility.Collapsed;
-            DotImage7.Visibility = Visibility.Collapsed;
-            DotImage8.Visibility = Visibility.Collapsed;
-            DotImage9.Visibility = Visibility.Collapsed;
-            DotImage10.Visibility = Visibility.Collapsed;
-            DotImage11.Visibility = Visibility.Collapsed;
-            DotImage12.Visibility = Visibility.Collapsed;
-            DotImage13.Visibility = Visibility.Collapsed;
-            DotImage14.Visibility = Visibility.Collapsed;
-            DotImage15.Visibility = Visibility.Collapsed;
+            foreach (var dotImage in _dotImages)
+            {
+                dotImage.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void ButtonClearImages_OnClick(object sender, RoutedEventArgs e)
