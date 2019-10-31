@@ -93,9 +93,9 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonCancelActionConfigurationChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty && UCStreamDeckButtonAction.HasConfig;
                 ButtonDeleteActionConfiguration.IsEnabled = UCStreamDeckButtonAction.HasConfig;
 
-                ButtonAcceptImageConfiguration.IsEnabled = UCStreamDeckButtonFace.IsDirty;
-                ButtonCancelImageConfigurationChanges.IsEnabled = UCStreamDeckButtonFace.IsDirty && UCStreamDeckButtonFace.HasConfig;
-                ButtonDeleteImageConfiguration.IsEnabled = UCStreamDeckButtonFace.HasConfig;
+                ButtonAcceptFaceConfiguration.IsEnabled = UCStreamDeckButtonFace.IsDirty;
+                ButtonCancelFaceConfigurationChanges.IsEnabled = UCStreamDeckButtonFace.IsDirty && UCStreamDeckButtonFace.HasConfig;
+                ButtonDeleteFaceConfiguration.IsEnabled = UCStreamDeckButtonFace.HasConfig;
 
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 CheckBoxMarkHomeLayer.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
@@ -228,7 +228,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 HideAllDotImages();
 
-                var selectedLayer = _streamDeck.GetLayer(layerName);
+                var selectedLayer = _streamDeck.GetLayer(true, layerName);
                 
                 foreach (var buttonImage in _buttonImages)
                 {
@@ -238,7 +238,6 @@ namespace DCSFlightpanels.PanelUserControls
 
                     buttonImage.Bill.Button = streamDeckButton;
 
-                    streamDeckButton.Show(_streamDeck);
                     if (streamDeckButton.HasConfig)
                     {
                         SetDotImageStatus(true, StreamDeckFunction.ButtonNumber(streamDeckButton.StreamDeckButtonName));
@@ -623,7 +622,10 @@ namespace DCSFlightpanels.PanelUserControls
 
                 }
                 LoadComboBoxLayers("");
-                ShowLayer(GetSelectedStreamDeckLayer().Name);
+                if (GetSelectedStreamDeckLayer() != null)
+                {
+                    ShowLayer(GetSelectedStreamDeckLayer().Name);
+                }
             }
             catch (Exception ex)
             {
@@ -736,7 +738,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var isChecked = CheckBoxMarkHomeLayer.IsChecked == true;
-                _streamDeck.SetHomeLayerStatus(isChecked, GetSelectedStreamDeckLayer());
+                _streamDeck.SetHomeStatus(isChecked, GetSelectedStreamDeckLayer());
                 SetFormState();
             }
             catch (Exception ex)
@@ -884,7 +886,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             return EnumStreamDeckActionType.Unknown;
         }
-
+        
 
         private void RadioButtonButtonActionTypePress_OnClick(object sender, RoutedEventArgs e)
         {
@@ -952,7 +954,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonAcceptImageConfiguration_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonAcceptFaceConfiguration_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -982,7 +984,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonDeleteImageConfiguration_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonDeleteFaceConfiguration_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -996,7 +998,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonCancelImageConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonCancelFaceConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -1130,5 +1132,11 @@ namespace DCSFlightpanels.PanelUserControls
                 streamDeckImage.IsEnabled = enabled;
             }
         }
+
+        private void ButtonAddPredefinedButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
     }
 }

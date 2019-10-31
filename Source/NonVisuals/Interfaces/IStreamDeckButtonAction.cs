@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals.Interfaces
 {
@@ -15,6 +16,6 @@ namespace NonVisuals.Interfaces
     public interface IStreamDeckButtonAction
     {
         EnumStreamDeckActionType ActionType { get; }
-        void Execute(CancellationToken cancellationToken);
+        void Execute(StreamDeckRequisites streamDeckRequisites);
     }
 }

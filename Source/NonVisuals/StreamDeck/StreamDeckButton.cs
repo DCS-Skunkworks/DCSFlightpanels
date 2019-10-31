@@ -4,6 +4,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
+using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
@@ -33,35 +34,34 @@ namespace NonVisuals.StreamDeck
             _delayedExecutionThread?.Abort();
         }
 
-        public void Press(StreamDeckPanel streamDeckPanel)
+        public void Press(StreamDeckRequisites streamDeckRequisites)
         {
-            ActionForPress?.Execute(new CancellationToken());
-            Face?.Show(streamDeckPanel);
+            ActionForPress?.Execute(streamDeckRequisites);
 
             if (_buttonActionForRelease != null)
             {
                 _cancellationTokenSource?.Cancel();
 
                 _cancellationTokenSource = new CancellationTokenSource();
-                _delayedExecutionThread = new Thread(() => DelayedRelease(ActionForRelease));
+                _delayedExecutionThread = new Thread(() => DelayedRelease(streamDeckRequisites, ActionForRelease));
                 _delayedExecutionThread.Start();
             }
         }
 
-        public void Show(StreamDeckPanel streamDeckPanel)
+        public void Show(StreamDeckRequisites streamDeckRequisites)
         {
             if (Face != null)
             {
-                Face?.Show(streamDeckPanel);
+                Face?.Show(streamDeckRequisites);
             }
         }
 
-        private void DelayedRelease(IStreamDeckButtonAction streamDeckButtonAction)
+        private void DelayedRelease(StreamDeckRequisites streamDeckRequisites, IStreamDeckButtonAction streamDeckButtonAction)
         {
             try
             {
                 Thread.Sleep(ExecutionDelay);
-                streamDeckButtonAction?.Execute(new CancellationToken());
+                streamDeckButtonAction?.Execute(streamDeckRequisites);
             }
             catch (Exception e)
             {

@@ -7,18 +7,10 @@ namespace NonVisuals.StreamDeck
 {
     public class StreamDeckLayer
     {
-        private bool _isActive = false;
         private bool _isHomeLayer = false;
         private string _name = "";
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
-
-        [JsonIgnore]
-        public bool IsActive
-        {
-            get => _isActive;
-            set => _isActive = value;
-        }
-
+        
         public void AddButton(StreamDeckButton streamDeckButton)
         {
             _streamDeckButtons.Add(streamDeckButton);
@@ -60,7 +52,6 @@ namespace NonVisuals.StreamDeck
             var result = new StreamDeckLayer();
             result.Name = Name;
             result.IsHomeLayer = IsHomeLayer;
-            result.IsActive = IsActive;
             return result;
         }
 

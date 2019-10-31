@@ -14,17 +14,22 @@ namespace NonVisuals.StreamDeck
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
-        private readonly StreamDeckLayerHandler _streamDeckLayerHandler = new StreamDeckLayerHandler();
+        private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
-                
+        private StreamDeckRequisites _streamDeckRequisite = new StreamDeckRequisites();
+
         private long _doUpdatePanelLCD;
+
+
 
         public StreamDeckPanel(HIDSkeleton hidSkeleton):base(GamingPanelEnum.StreamDeck, hidSkeleton)
         {
             Startup();
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyHandler;
+            _streamDeckLayerHandler =  new StreamDeckLayerHandler(_streamDeckBoard);
+            _streamDeckRequisite = new StreamDeckRequisites{ StreamDeck = this };
         }
 
         public sealed override void Startup()
@@ -54,7 +59,7 @@ namespace NonVisuals.StreamDeck
 
         public void AddStreamDeckButtonToCurrentLayer(StreamDeckButton streamDeckButton)
         {
-            _streamDeckLayerHandler.AddStreamDeckButtonToCurrentLayer(streamDeckButton);
+            _streamDeckLayerHandler.AddStreamDeckButtonToActiveLayer(streamDeckButton);
             SetIsDirty();
         }
 
@@ -72,8 +77,8 @@ namespace NonVisuals.StreamDeck
 
             if (e.IsDown)
             {
-                var streamDeckButton = _streamDeckLayerHandler.GetCurrentLayerStreamDeckButton(e.Key + 1);
-                streamDeckButton.Press(this);
+                var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
+                streamDeckButton.Press(_streamDeckRequisite);
             }
         }
 
@@ -141,10 +146,7 @@ namespace NonVisuals.StreamDeck
 
         public void ClearAllFaces()
         {
-            for (int i = 0; i < 15; i++)
-            {
-                _streamDeckBoard.ClearKey(i);
-            }
+            _streamDeckLayerHandler.ClearAllFaces();
         }
 
         public override List<string> ExportSettings()
@@ -317,8 +319,8 @@ namespace NonVisuals.StreamDeck
 
         public string CurrentLayerName
         {
-            get => _streamDeckLayerHandler.CurrentLayerName;
-            set => _streamDeckLayerHandler.CurrentLayerName = value;
+            get => _streamDeckLayerHandler.ActiveLayer;
+            set => _streamDeckLayerHandler.ActiveLayer = value;
         }
 
         public override string SettingsVersion()
@@ -351,27 +353,21 @@ namespace NonVisuals.StreamDeck
             _streamDeckLayerHandler.DeleteLayer(streamDeckLayer.Name);
             SetIsDirty();
         }
-
-        public void DeleteLayer(string layerName)
-        {
-            _streamDeckLayerHandler.DeleteLayer(layerName);
-            SetIsDirty();
-        }
-
+        
         public StreamDeckLayer HomeLayer
         {
             get => _streamDeckLayerHandler.HomeLayer;
         }
 
-        public void SetHomeLayerStatus(bool isHomeLayer, string layerName)
+        public void SetHomeStatus(bool isHomeLayer, string layerName)
         {
-            _streamDeckLayerHandler.SetHomeLayerStatus(isHomeLayer, layerName);
+            _streamDeckLayerHandler.SetHomeStatus(isHomeLayer, layerName);
             SetIsDirty();
         }
 
-        public void SetHomeLayerStatus(bool isHomeLayer, StreamDeckLayer streamDeckLayer)
+        public void SetHomeStatus(bool isHomeLayer, StreamDeckLayer streamDeckLayer)
         {
-            SetHomeLayerStatus(isHomeLayer, streamDeckLayer.Name);
+            SetHomeStatus(isHomeLayer, streamDeckLayer.Name);
         }
 
         public List<string> GetStreamDeckLayerNames()
@@ -386,17 +382,37 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckButton GetCurrentLayerStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return _streamDeckLayerHandler.GetCurrentLayerStreamDeckButton(streamDeckButtonName);
+            return _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(streamDeckButtonName);
         }
 
-        public StreamDeckLayer GetLayer(string layerName)
+        public StreamDeckLayer GetLayer(bool activateThisLayer, string layerName)
         {
-            return _streamDeckLayerHandler.GetStreamDeckLayer(layerName);
+            return _streamDeckLayerHandler.GetStreamDeckLayer(activateThisLayer, layerName);
         }
 
         public bool HasLayers
         {
             get { return _streamDeckLayerHandler.HasLayers; }
+        }
+
+        public void ShowHomeLayer()
+        {
+            _streamDeckLayerHandler.ShowHomeLayer();
+        }
+
+        public void ShowPreviousLayer()
+        {
+            _streamDeckLayerHandler.ShowPreviousLayer();
+        }
+
+        public void ShowActiveLayer()
+        {
+            _streamDeckLayerHandler.ShowActiveLayer();
+        }
+
+        public void ShowLayer(string layerName)
+        {
+            _streamDeckLayerHandler.ShowLayer(layerName);
         }
     }
 

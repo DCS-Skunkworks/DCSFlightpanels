@@ -1,14 +1,44 @@
 ﻿namespace NonVisuals.StreamDeck
 {
-    public enum LayerNavType 
+    public enum LayerNavType
     {
-        SwitchToSpecificLayer,
-        Back
+        SwitchToSpecificLayer = 0,
+        Back = 1,
+        Home = 2
     }
 
     public class StreamDeckTargetLayer
     {
         public LayerNavType NavigationType;
         public string TargetLayer;
+
+        public void Navigate(StreamDeckRequisites streamDeckRequisite)
+        {
+            if (streamDeckRequisite.StreamDeck == null)
+            {
+                return;
+            }
+
+            var streamDeck = streamDeckRequisite.StreamDeck;
+
+            switch (NavigationType)
+            {
+                case LayerNavType.Home:
+                    {
+                        streamDeck.ShowHomeLayer();
+                        break;
+                    }
+                case LayerNavType.Back:
+                    {
+                        streamDeck.ShowPreviousLayer();
+                        break;
+                    }
+                case LayerNavType.SwitchToSpecificLayer:
+                    {
+                        streamDeck.ShowLayer(TargetLayer);
+                        break;
+                    }
+            }
+        }
     }
 }

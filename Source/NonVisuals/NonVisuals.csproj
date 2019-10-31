@@ -173,6 +173,7 @@
     <Compile Include="Radios\SRSRadioInformation.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
+    <Compile Include="StreamDeck\StreamDeckRequisites.cs" />
     <Compile Include="StreamDeck\StreamDeckTargetLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckPanel.cs" />
     <Compile Include="Saitek\TPMPanelSwitch.cs" />

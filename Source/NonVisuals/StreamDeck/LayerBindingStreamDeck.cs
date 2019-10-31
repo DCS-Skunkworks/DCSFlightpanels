@@ -5,8 +5,7 @@ namespace NonVisuals.StreamDeck
 {
     public class LayerBindingStreamDeck : IStreamDeckButtonAction
     {
-        private StreamDeckTargetLayer _streamDeckLayerTarget;
-        private bool _whenTurnedOn;
+        public StreamDeckTargetLayer LayerTarget { get; set; }
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.LayerNavigation;
 
 
@@ -16,21 +15,11 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public void Execute(CancellationToken cancellationToken)
+        public void Execute(StreamDeckRequisites streamDeckRequisite)
         {
-            //todo
+            LayerTarget.Navigate(streamDeckRequisite);
         }
-
-        public bool WhenTurnedOn
-        {
-            get => _whenTurnedOn;
-            set => _whenTurnedOn = value;
-        }
-
-        public StreamDeckTargetLayer StreamDeckLayerTarget
-        {
-            get => _streamDeckLayerTarget;
-            set => _streamDeckLayerTarget = value;
-        }
+        
+        
     }
 }

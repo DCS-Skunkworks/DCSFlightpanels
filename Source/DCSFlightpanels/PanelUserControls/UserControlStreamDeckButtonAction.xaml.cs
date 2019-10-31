@@ -23,7 +23,8 @@ namespace DCSFlightpanels.PanelUserControls
         private IGlobalHandler _globalHandler;
         private bool _isLoaded = false;
         private bool _isDirty = false;
-
+        private const string GO_BACK_ONE_LAYER = "Go Back";
+        private const string GO_TO_HOME_LAYER = "Go to Home";
 
         public UserControlStreamDeckButtonAction()
         {
@@ -61,7 +62,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
 
             ComboBoxLayerNavigationButton.SelectedIndex = 0;
-            
+
             _isDirty = false;
             SDUIParent.ChildChangesMade();
         }
@@ -210,7 +211,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckActionType.LayerNavigation:
                     {
                         var layerBindingStreamDeck = (LayerBindingStreamDeck)streamDeckButtonAction;
-                        TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck.StreamDeckLayerTarget;
+                        TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck.LayerTarget;
                         SetFormState();
                         return;
                     }
@@ -239,7 +240,7 @@ namespace DCSFlightpanels.PanelUserControls
                             result = new KeyBindingStreamDeck();
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSKeyPress = textBoxKeyPress.Bill.KeyPress;
-                            
+
                             return result;
                         }
 
@@ -250,7 +251,7 @@ namespace DCSFlightpanels.PanelUserControls
                         if (textBoxDCSBIOS.Bill.ContainsDCSBIOS())
                         {
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
-                            
+
                             return textBoxDCSBIOS.Bill.DCSBIOSBinding;
                         }
                         return null;
@@ -262,7 +263,7 @@ namespace DCSFlightpanels.PanelUserControls
                             var result = new OSCommandBindingStreamDeck();
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSCommandObject = textBoxOSCommand.Bill.OSCommandObject;
-                            
+
                             return result;
                         }
                         return null;
@@ -272,9 +273,8 @@ namespace DCSFlightpanels.PanelUserControls
                         if (TextBoxLayerNavButton.Bill.ContainsStreamDeckLayer())
                         {
                             var result = new LayerBindingStreamDeck();
-                            result.WhenTurnedOn = forButtonPressed;
-                            result.StreamDeckLayerTarget = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
-
+                            result.LayerTarget = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
+                            fortsätt med att testa layer navigering
                             return result;
                         }
 
@@ -697,6 +697,25 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 var target = new StreamDeckTargetLayer();
                 target.TargetLayer = ComboBoxLayerNavigationButton.Text;
+                switch (ComboBoxLayerNavigationButton.Text)
+                {
+                    case GO_TO_HOME_LAYER:
+                        {
+                            target.NavigationType = LayerNavType.Home;
+                            break;
+                        }
+                    case GO_BACK_ONE_LAYER:
+                        {
+                            target.NavigationType = LayerNavType.Back;
+                            break;
+                        }
+                    default:
+                        {
+                            target.NavigationType = LayerNavType.SwitchToSpecificLayer;
+                            break;
+                        }
+                }
+
                 TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = target;
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -719,11 +738,6 @@ namespace DCSFlightpanels.PanelUserControls
                 ComboBoxLayerNavigationButton_OnSelectionChanged);
         }
 
-        private void LoadComboBoxLayers(StreamDeckLayer selectedLayer, ComboBox comboBox, SelectionChangedEventHandler eventHandler)
-        {
-            LoadComboBoxLayers(selectedLayer.Name, comboBox, eventHandler);
-        }
-
         private void LoadComboBoxLayers(string selectedLayerName, ComboBox comboBox, SelectionChangedEventHandler eventHandler)
         {
             var selectedIndex = comboBox.SelectedIndex;
@@ -734,8 +748,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 return;
             }
-            list.Insert(0, "Back to previous layer");
-            list.Insert(0, "Go to home layer");
+            list.Insert(0, GO_BACK_ONE_LAYER);
+            list.Insert(0, GO_TO_HOME_LAYER);
             comboBox.ItemsSource = list;
             comboBox.Items.Refresh();
 

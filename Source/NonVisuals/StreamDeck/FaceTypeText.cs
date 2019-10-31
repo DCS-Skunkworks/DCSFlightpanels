@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
+using OpenMacroBoard.SDK;
+using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
@@ -19,11 +21,34 @@ namespace NonVisuals.StreamDeck
 
 
 
-
-
-        public void Show(StreamDeckPanel streamDeckPanel)
+        public void Show(StreamDeckRequisites streamDeckRequisite)
         {
-            ShowButtonFace(streamDeckPanel);
+            if (streamDeckRequisite.StreamDeck != null)
+            {
+                ShowButtonFace(streamDeckRequisite.StreamDeck);
+            }
+            else if (streamDeckRequisite.StreamDeckBoard != null)
+            {
+                ShowButtonFace(streamDeckRequisite.StreamDeckBoard);
+            }
+        }
+
+        private void ShowButtonFace(IStreamDeckBoard streamDeckBoard)
+        {
+            if (_streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            {
+                return;
+            }
+
+            if (_refreshBitmap)
+            {
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _refreshBitmap = false;
+            }
+
+            var keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
+
+            streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(_streamDeckButtonName) - 1, keyBitmap);
         }
 
         private void ShowButtonFace(StreamDeckPanel streamDeckPanel)

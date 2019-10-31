@@ -1,4 +1,5 @@
 ﻿using NonVisuals.StreamDeck;
+using StreamDeckSharp;
 
 namespace NonVisuals.Interfaces
 {
@@ -15,6 +16,6 @@ namespace NonVisuals.Interfaces
     public interface IStreamDeckButtonFace
     {
         EnumStreamDeckFaceType FaceType { get; }
-        void Show(StreamDeckPanel streamDeckPanel);
+        void Show(StreamDeckRequisites streamDeckRequisites);
     }
 }

@@ -240,23 +240,39 @@
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="20*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Name="StackPanelChooseButtonActionType" Grid.Column="0">
-                        <StackPanel >
-                            <Label Content="Button Action Type"/>
-                            <RadioButton GroupName="ButtonType" Name="RadioButtonKeyPress" Content="Key Press" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
-                            <RadioButton GroupName="ButtonType" Name="RadioButtonDCSBIOS" Content="DCS-BIOS" Margin="4,2,0,2"  Click="RadioButtonButtonActionTypePress_OnClick"/>
-                            <RadioButton GroupName="ButtonType" Name="RadioButtonOSCommand" Content="OS Command" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
-                            <RadioButton GroupName="ButtonType" Name="RadioButtonLayerNav" Content="Layer Navigation" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
-                            <Button Name="ButtonAcceptActionConfiguration" Content="Accept Action Conf."  Margin="4,15,4,2" Click="ButtonAcceptActionConfiguration_OnClick"/>
-                            <Button Name="ButtonDeleteActionConfiguration" Content="Delete Action Conf."  Margin="4,5,4,2" Click="ButtonDeleteActionConfiguration_OnClick"/>
-                            <Button Name="ButtonCancelActionConfigurationChanges" Content="Cancel Action Changes"  Margin="4,5,4,2" Click="ButtonCancelActionConfigurationChanges_OnClick"/>
-                            <Separator Margin="0,10,0,0"/>
-                            <Button Name="ButtonAcceptImageConfiguration" Content="Accept Image Conf."  Margin="4,15,4,2" Click="ButtonAcceptImageConfiguration_OnClick"/>
-                            <Button Name="ButtonDeleteImageConfiguration" Content="Delete Image Conf."  Margin="4,5,4,2" Click="ButtonDeleteImageConfiguration_OnClick"/>
-                            <Button Name="ButtonCancelImageConfigurationChanges" Content="Cancel Image Changes"  Margin="4,5,4,2" Click="ButtonCancelImageConfigurationChanges_OnClick"/>
+                    <StackPanel>
+                        <StackPanel Name="StackPanelChoosePredefinedButton">
+                            <GroupBox Header="Predefined Buttons">
+                                <StackPanel >
+                                    <ComboBox Name="ComboBoxPredefinedButtons">
+                                    </ComboBox>
+                                    <Button Name="ButtonAddPredefinedButton" Content="Add Selected Button"  Margin="04,4,4,2" Click="ButtonAddPredefinedButton_OnClick"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Name="StackPanelChooseButtonActionType">
+                            <GroupBox Header="Button Action Type">
+                                <StackPanel >
+                                    <RadioButton GroupName="ButtonType" Name="RadioButtonKeyPress" Content="Key Press" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
+                                    <RadioButton GroupName="ButtonType" Name="RadioButtonDCSBIOS" Content="DCS-BIOS" Margin="4,2,0,2"  Click="RadioButtonButtonActionTypePress_OnClick"/>
+                                    <RadioButton GroupName="ButtonType" Name="RadioButtonOSCommand" Content="OS Command" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
+                                    <RadioButton GroupName="ButtonType" Name="RadioButtonLayerNav" Content="Layer Navigation" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
+                                    <Button Name="ButtonAcceptActionConfiguration" Content="Accept Action Conf."  Margin="4,15,4,2" Click="ButtonAcceptActionConfiguration_OnClick"/>
+                                    <Button Name="ButtonDeleteActionConfiguration" Content="Delete Action Conf."  Margin="4,5,4,2" Click="ButtonDeleteActionConfiguration_OnClick"/>
+                                    <Button Name="ButtonCancelActionConfigurationChanges" Content="Cancel Action Changes"  Margin="4,5,4,2" Click="ButtonCancelActionConfigurationChanges_OnClick"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Name="StackPanelChooseButtonFaceType">
+                            <GroupBox Header="Button Image">
+                                <StackPanel >
+                                    <Button Name="ButtonAcceptFaceConfiguration" Content="Accept Image Conf."  Margin="4,2,4,2" Click="ButtonAcceptFaceConfiguration_OnClick"/>
+                                    <Button Name="ButtonDeleteFaceConfiguration" Content="Delete Image Conf."  Margin="4,5,4,2" Click="ButtonDeleteFaceConfiguration_OnClick"/>
+                                    <Button Name="ButtonCancelFaceConfigurationChanges" Content="Cancel Image Changes"  Margin="4,5,4,2" Click="ButtonCancelFaceConfigurationChanges_OnClick"/>
+                                </StackPanel>
+                            </GroupBox>
                         </StackPanel>
                     </StackPanel>
-
                     <panelUserControls:UserControlStreamDeckButtonAction x:Name="UCStreamDeckButtonAction" Grid.Column="1"/>
 
 

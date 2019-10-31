@@ -16,7 +16,7 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public void Execute(CancellationToken cancellationToken)
+        public void Execute(StreamDeckRequisites streamDeckRequisite)
         {
             SendDCSBIOSCommands();
         }

@@ -15,9 +15,9 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public void Execute(CancellationToken cancellationToken)
+        public void Execute(StreamDeckRequisites streamDeckRequisite)
         {
-            OSCommandObject.Execute(cancellationToken);
+            OSCommandObject.Execute(streamDeckRequisite.ThreadCancellationToken);
         }
 
         internal override void ImportSettings(string settings) { }

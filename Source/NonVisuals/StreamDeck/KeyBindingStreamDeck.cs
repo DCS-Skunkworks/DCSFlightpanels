@@ -15,9 +15,9 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public void Execute(CancellationToken cancellationToken)
+        public void Execute(StreamDeckRequisites streamDeckRequisite)
         {
-            OSKeyPress.Execute(cancellationToken);
+            OSKeyPress.Execute(streamDeckRequisite.ThreadCancellationToken);
         }
         
         public static HashSet<KeyBindingStreamDeck> SetNegators(HashSet<KeyBindingStreamDeck> keyBindings)
