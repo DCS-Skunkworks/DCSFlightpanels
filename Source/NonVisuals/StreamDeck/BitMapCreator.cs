@@ -11,14 +11,9 @@ namespace NonVisuals.StreamDeck
 {
     public static class BitMapCreator
     {
-        private const string DEFAULT_FONT = "Consolas";
-        private const int STREAMDECK_ICON_HEIGHT = 72;
-        private const int STREAMDECK_ICON_WIDTH = 72;
-        private const string NUMBER_BUTTON_LOCATION = @"pack://application:,,,/DCSFlightpanels;component/StreamDeckGallery/NumberButtons/";
-        
         public static BitmapImage GetButtonNumberImage(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
         {
-            return   new BitmapImage(new Uri(NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
+            return   new BitmapImage(new Uri( Constants.NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
         }
 
         public static Bitmap CreateBitmapImage(string text, int fontSize, int height, int width, Color fontColor, Color backgroundColor)
@@ -34,13 +29,13 @@ namespace NonVisuals.StreamDeck
         public static Bitmap CreateBitmapImage(string text, int fontSize, FontStyle fontStyle, int height, int width, Color fontColor, Color backgroundColor)
         {
             // Create the Font object for the image text drawing.
-            var font = new Font(DEFAULT_FONT, fontSize, fontStyle, GraphicsUnit.Pixel);
+            var font = new Font(Constants.DEFAULT_FONT, fontSize, fontStyle, GraphicsUnit.Pixel);
             return CreateBitmapImage(text, font, 0, 0, height, width, fontColor, backgroundColor);
         }
 
         public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, Color backgroundColor, int offsetX, int offsetY)
         {
-            return CreateBitmapImage(text, font, offsetX, offsetY, STREAMDECK_ICON_HEIGHT, STREAMDECK_ICON_WIDTH, fontColor, backgroundColor);
+            return CreateBitmapImage(text, font, offsetX, offsetY, Constants.STREAMDECK_ICON_HEIGHT, Constants.STREAMDECK_ICON_WIDTH, fontColor, backgroundColor);
         }
 
         public static Bitmap CreateBitmapImage(string text, Font font, int offsetX, int offsetY, int height, int width, Color fontColor, Color backgroundColor, bool setBitmapSizeToTextSize = false)

@@ -21,7 +21,7 @@ namespace NonVisuals.Saitek
             if (settings.StartsWith("MultiPanelOSPZ70{"))
             {
                 //MultiPanelOSPZ70{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //MultiPanelOSPZ70{ALT}
                 var param0 = parameters[0].Replace("MultiPanelOSPZ70{", "").Replace("}", "");
@@ -60,7 +60,7 @@ namespace NonVisuals.Saitek
             }
             Common.DebugP(Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "MultiPanelOSPZ70{" + _pz70DialPosition + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + SeparatorChars + OSCommandObject.ExportString();
+            return "MultiPanelOSPZ70{" + _pz70DialPosition + "}" + Constants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + Constants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
+using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;

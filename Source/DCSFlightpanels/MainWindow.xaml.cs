@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
+using DCSFlightpanels.Windows;
 using Microsoft.Win32;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -63,6 +64,7 @@ namespace DCSFlightpanels
         private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_debug_log.txt";
         private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_error_log.txt";
         private bool _disablePanelEventsFromBeingRouted;
+        private bool _isLoaded = false;
 
         public MainWindow()
         {
@@ -76,6 +78,11 @@ namespace DCSFlightpanels
         {
             try
             {
+                if (_isLoaded)
+                {
+                    return;
+                }
+
                 if (Settings.Default.RunMinimized)
                 {
                     this.WindowState = WindowState.Minimized;
@@ -157,6 +164,7 @@ namespace DCSFlightpanels
                     Settings.Default.ShowBugReportInfo = false;
                 }
 
+                _isLoaded = true;
             }
             catch (Exception ex)
             {

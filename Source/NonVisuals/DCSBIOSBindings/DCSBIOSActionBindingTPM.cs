@@ -30,7 +30,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("TPMPanelDCSBIOSControl{"))
             {
                 //TPMPanelDCSBIOSControl{1KNOB_ENGINE_OFF}\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //TPMPanelDCSBIOSControl{1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
@@ -84,13 +84,13 @@ namespace NonVisuals.DCSBIOSBindings
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
-                stringBuilder.Append(SeparatorChars + dcsbiosInput.ToString());
+                stringBuilder.Append(Constants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "TPMPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "|" + Description + "}" + SeparatorChars + stringBuilder.ToString();
+                return "TPMPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "|" + Description + "}" + Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
             }
-            return "TPMPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + SeparatorChars + stringBuilder.ToString();
+            return "TPMPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
         }
 
     }

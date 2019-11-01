@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using NonVisuals;
 using NonVisuals.StreamDeck;
 using Color = System.Drawing.Color;
 
@@ -12,7 +13,7 @@ namespace DCSFlightpanels.Bills
     {
         public EnumStreamDeckButtonNames StreamDeckButtonName;
         public StreamDeckButton Button;
-        private Font _textFont = new Font("Consolas", 10);
+        private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor = Color.Black;
         private Color _backgroundColor = Color.White;
         private bool _isSelected = false;
@@ -24,7 +25,7 @@ namespace DCSFlightpanels.Bills
         {
             return _textFont != null && !string.IsNullOrEmpty(ParentTextBox.Text); 
         }
-
+        fortsätt med layer navigeringen för den fungerar inte. verkar som om target sparas fel?
         public Font TextFont
         {
             get => _textFont;
@@ -84,10 +85,7 @@ namespace DCSFlightpanels.Bills
             
         }
 
-        public bool IsClean
-        {
-            get { return OffsetX == 0 && OffsetY == 0 && BackgroundColor == Color.White && FontColor == Color.Black && TextFont.Name == "Consolas"; }
-        }
+        public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == Color.White && FontColor == Color.Black && TextFont.Name == Constants.DEFAULT_FONT;
 
 
         public void Clear()

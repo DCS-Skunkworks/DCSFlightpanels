@@ -9,7 +9,6 @@ namespace NonVisuals.DCSBIOSBindings
     public abstract class DCSBIOSActionBindingBase
     {
         private bool _whenOnTurnedOn = true;
-        internal const string SeparatorChars = "\\o/";
         private string _description;
         private Thread _sendDCSBIOSCommandsThread;
         public List<DCSBIOSInput> DCSBIOSInputs { get; set; }

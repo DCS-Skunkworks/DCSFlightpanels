@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -23,8 +24,6 @@ namespace DCSFlightpanels.PanelUserControls
         private IGlobalHandler _globalHandler;
         private bool _isLoaded = false;
         private bool _isDirty = false;
-        private const string GO_BACK_ONE_LAYER = "Go Back";
-        private const string GO_TO_HOME_LAYER = "Go to Home";
 
         public UserControlStreamDeckButtonAction()
         {
@@ -99,7 +98,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                LoadComboBoxesLayers();
+                LoadComboBoxLayers();
                 SetFormState();
             }
             catch (Exception ex)
@@ -167,7 +166,7 @@ namespace DCSFlightpanels.PanelUserControls
         public void ShowActionConfiguration(StreamDeckButton streamDeckButton)
         {
             Clear();
-            LoadComboBoxesLayers();
+            LoadComboBoxLayers();
             if (streamDeckButton == null)
             {
                 return;
@@ -674,24 +673,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-
-
-
-
-
-        private void ClearLayerComboBoxes()
+        private void ClearLayerComboBox()
         {
-            ClearComboBox(ComboBoxLayerNavigationButton, ComboBoxLayerNavigationButton_OnSelectionChanged);
+            ComboBoxLayerNavigationButton.ItemsSource = null;
         }
-
-        private void ClearComboBox(ComboBox comboBox, SelectionChangedEventHandler eventHandler)
-        {
-            comboBox.SelectionChanged -= eventHandler;
-            comboBox.ItemsSource = null;
-            comboBox.SelectionChanged += eventHandler;
-        }
-
-        private void ComboBoxLayerNavigationButton_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        private void ComboBoxLayerNavigationButton_OnDropDownClosed(object sender, EventArgs e)
         {
             try
             {
@@ -699,24 +686,25 @@ namespace DCSFlightpanels.PanelUserControls
                 target.TargetLayer = ComboBoxLayerNavigationButton.Text;
                 switch (ComboBoxLayerNavigationButton.Text)
                 {
-                    case GO_TO_HOME_LAYER:
-                        {
-                            target.NavigationType = LayerNavType.Home;
-                            break;
-                        }
-                    case GO_BACK_ONE_LAYER:
-                        {
-                            target.NavigationType = LayerNavType.Back;
-                            break;
-                        }
+                    case Constants.GO_TO_HOME_LAYER_STRING:
+                    {
+                        target.NavigationType = LayerNavType.Home;
+                        break;
+                    }
+                    case Constants.GO_BACK_ONE_LAYER_STRING:
+                    {
+                        target.NavigationType = LayerNavType.Back;
+                        break;
+                    }
                     default:
-                        {
-                            target.NavigationType = LayerNavType.SwitchToSpecificLayer;
-                            break;
-                        }
+                    {
+                        target.NavigationType = LayerNavType.SwitchToSpecificLayer;
+                        break;
+                    }
                 }
-
+                
                 TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = target;
+                ActionTypeChangedLayerNavigation(Constants.TranslateLayerName(ComboBoxLayerNavigationButton.Text));
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
@@ -725,56 +713,81 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-        private void LoadComboBoxesLayers()
+        
+        private void LoadComboBoxLayers()
         {
+
             if (SDUIParent.GetUISelectedLayer() == null)
             {
                 return;
             }
-            LoadComboBoxLayers(SDUIParent.GetUISelectedLayer().Name,
-                ComboBoxLayerNavigationButton,
-                ComboBoxLayerNavigationButton_OnSelectionChanged);
-        }
 
-        private void LoadComboBoxLayers(string selectedLayerName, ComboBox comboBox, SelectionChangedEventHandler eventHandler)
-        {
-            var selectedIndex = comboBox.SelectedIndex;
+            var selectedLayerName = SDUIParent.GetUISelectedLayer().Name;
 
-            comboBox.SelectionChanged -= eventHandler;
+            var selectedIndex = ComboBoxLayerNavigationButton.SelectedIndex;
+
             var list = SDUIParent.GetStreamDeckLayerNames();
             if (list == null)
             {
                 return;
             }
-            list.Insert(0, GO_BACK_ONE_LAYER);
-            list.Insert(0, GO_TO_HOME_LAYER);
-            comboBox.ItemsSource = list;
-            comboBox.Items.Refresh();
+            list.Insert(0, Constants.GO_BACK_ONE_LAYER_STRING);
+            list.Insert(0, Constants.GO_TO_HOME_LAYER_STRING);
+            ComboBoxLayerNavigationButton.ItemsSource = list;
+            ComboBoxLayerNavigationButton.Items.Refresh();
 
             if (!string.IsNullOrEmpty(selectedLayerName))
             {
-                foreach (string layer in comboBox.Items)
+                foreach (string layer in ComboBoxLayerNavigationButton.Items)
                 {
                     if (layer == selectedLayerName)
                     {
-                        comboBox.SelectedItem = layer;
+                        ComboBoxLayerNavigationButton.SelectedItem = layer;
                         break;
                     }
                 }
-                comboBox.SelectedItem = selectedLayerName;
+                ComboBoxLayerNavigationButton.SelectedItem = selectedLayerName;
             }
             else if (selectedIndex >= 0 && selectedIndex < SDUIParent.GetStreamDeckLayerNames().Count)
             {
-                comboBox.SelectedIndex = selectedIndex;
+                ComboBoxLayerNavigationButton.SelectedIndex = selectedIndex;
             }
             else if (SDUIParent.GetStreamDeckLayerNames().Count > 0)
             {
-                comboBox.SelectedIndex = 0;
+                ComboBoxLayerNavigationButton.SelectedIndex = 0;
             }
-            comboBox.SelectionChanged += eventHandler;
         }
 
+        public interface IStreamDeckButtonActionListener
+        {
+            void ActionTypeChangedEvent(object sender, ActionTypeChangedEventArgs e);
+        }
+
+        public virtual void AttachListener(IStreamDeckButtonActionListener buttonActionListener)
+        {
+            OnActionTypeChanged += buttonActionListener.ActionTypeChangedEvent;
+        }
+
+        public virtual void DetachListener(IStreamDeckButtonActionListener buttonActionListener)
+        {
+            OnActionTypeChanged -= buttonActionListener.ActionTypeChangedEvent;
+        }
+
+        public delegate void ActionTypeChangedEventHandler(object sender, ActionTypeChangedEventArgs e);
+        public event ActionTypeChangedEventHandler OnActionTypeChanged;
+
+        public class ActionTypeChangedEventArgs : EventArgs
+        {
+            public EnumStreamDeckActionType ActionType { get; set; }
+            public string TargetLayerName { get; set; }
+        }
+
+        private void ActionTypeChangedLayerNavigation(string layerName)
+        {
+            var arguments = new ActionTypeChangedEventArgs();
+            arguments.ActionType = SDUIParent.GetSelectedActionType();
+            arguments.TargetLayerName = layerName;
+            OnActionTypeChanged?.Invoke(this, arguments);
+        }
     }
 }

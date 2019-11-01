@@ -23,7 +23,7 @@ namespace NonVisuals.Saitek
             if (settings.StartsWith("RadioPanelKey{"))
             {
                 //RadioPanelKey{1UpperCOM1}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //RadioPanelKey{1UpperCOM1}
                 var param0 = parameters[0].Trim().Substring(14);
@@ -54,7 +54,7 @@ namespace NonVisuals.Saitek
             }
             Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "RadioPanelKey{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SeparatorChars + OSKeyPress.ExportString();
+            return "RadioPanelKey{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + Constants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }
 
         public static HashSet<KeyBindingPZ69> SetNegators(HashSet<KeyBindingPZ69> knobBindings)

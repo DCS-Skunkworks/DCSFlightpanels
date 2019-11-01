@@ -183,7 +183,6 @@ namespace NonVisuals
                 string currentPanelSettingsVersion = null;
                 var insidePanel = false;
                 var insideJSONPanel = false;
-                const string sepString = "\\o/";
 
                 foreach (var fileLine in fileLines)
                 {
@@ -273,23 +272,23 @@ namespace NonVisuals
                                     //and that old settings won't be loaded.
                                     if (currentPanelSettingsVersion.EndsWith("0X"))
                                     {
-                                        _listPanelSettingsData.Add(line + sepString + currentPanelInstanceID);
+                                        _listPanelSettingsData.Add(line + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID);
                                     }
                                     else
                                     {
-                                        _listPanelSettingsData.Add(line + sepString + currentPanelInstanceID + sepString + currentPanelSettingsVersion);
+                                        _listPanelSettingsData.Add(line + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID + Constants.SEPARATOR_SYMBOL + currentPanelSettingsVersion);
                                     }
                                 }
                                 else
                                 {
-                                    _listPanelSettingsData.Add(line + sepString + currentPanelInstanceID);
+                                    _listPanelSettingsData.Add(line + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID);
                                 }
                             }
 
 
                             if (insideJSONPanel)
                             {
-                                _listPanelSettingsData.Add(fileLine + sepString + currentPanelInstanceID);
+                                _listPanelSettingsData.Add(fileLine + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID);
                             }
                         }
                     }

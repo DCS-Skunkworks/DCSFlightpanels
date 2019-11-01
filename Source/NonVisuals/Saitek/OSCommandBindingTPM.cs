@@ -20,7 +20,7 @@ namespace NonVisuals.Saitek
             if (settings.StartsWith("TPMPanelOSCommand{"))
             {
                 //TPMPanelOSCommand{1KNOB_ENGINE_LEFT}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //TPMPanelOSCommand{1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Replace("TPMPanelOSCommand{", "").Replace("}", "");
@@ -49,7 +49,7 @@ namespace NonVisuals.Saitek
             }
             Common.DebugP(Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "TPMPanelOSCommand{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + SeparatorChars + OSCommandObject.ExportString();
+            return "TPMPanelOSCommand{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + Constants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
         }
 
     }

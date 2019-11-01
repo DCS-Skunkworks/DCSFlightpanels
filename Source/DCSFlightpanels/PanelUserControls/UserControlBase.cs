@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Windows;
 
 namespace DCSFlightpanels.PanelUserControls
 {

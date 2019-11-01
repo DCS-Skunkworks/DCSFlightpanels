@@ -8,7 +8,6 @@ namespace NonVisuals.StreamDeck
         private int _currentValue = 0;
         private DCSBIOSOutput _dcsbiosOutput;
         private DCSBIOSOutputFormula _dcsbiosOutputFormula; //If this is set to !null value then ignore the _dcsbiosOutput
-        private const string SEPARATOR_CHARS = "\\o/";
         private string _layer = "";
 
         internal void ImportSettings(string settings){}

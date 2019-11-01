@@ -9,7 +9,7 @@
          */
         private KeyPress _keyPress;
         private bool _whenOnTurnedOn = true;
-        protected const string SeparatorChars = "\\o/";
+        
 
         internal abstract void ImportSettings(string settings);
 

@@ -106,7 +106,6 @@ namespace NonVisuals.StreamDeck
 
         public override void ImportSettings(List<string> settings)
         {
-            const string sepString = "\\o/";
             SettingsLoading = true;
             //Clear current bindings
             ClearSettings();
@@ -121,7 +120,7 @@ namespace NonVisuals.StreamDeck
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
-                    stringBuilder.Append(setting.Replace(sepString, "").Replace(InstanceId, "") + Environment.NewLine);
+                    stringBuilder.Append(setting.Replace(Constants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "") + Environment.NewLine);
                 }
             }
             _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());

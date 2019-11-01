@@ -1,0 +1,75 @@
+﻿<Window x:Class="DCSFlightpanels.Windows.DCSBIOSControlsConfigsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DCS-BIOS Control configurations" Height="400" Width="800" Loaded="DCSBIOSControlsConfigsWindow_OnLoaded"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="DCSBIOSControlsConfigsWindow_OnKeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <WrapPanel Name="LeftWrapPanel">
+            <DataGrid AutoGenerateColumns="false" 
+                      ItemsSource="{Binding}" 
+                      SelectionMode="Single" 
+                      SelectionUnit="FullRow" 
+                      HorizontalAlignment="Stretch" 
+                      Name="DataGridValues" 
+                      VerticalAlignment="Stretch" 
+                      VerticalScrollBarVisibility="Visible" 
+                      SelectionChanged="DataGridValues_OnSelectionChanged" 
+                      CanUserReorderColumns="False" 
+                      CanUserResizeRows="False" 
+                      CanUserSortColumns="False" 
+                      CanUserAddRows="False"
+                      Height="366" 
+                      Width="592">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Control ID" IsReadOnly="True" Binding="{Binding Path=ControlId}"  Width="Auto"/>
+                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=ControlDescription}" Width="Auto"/>
+                    <DataGridTextColumn Header="Delay" IsReadOnly="True" Binding="{Binding Path=Delay}" Width="Auto"/>
+                    <!--<DataGridTextColumn Header="FixedStep" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedFixedStepArgument}" Width="Auto"/>
+                    <DataGridTextColumn Header="Action" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedActionArgument}" Width="Auto"/>
+                    <DataGridTextColumn Header="SetState" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedSetStateArgument}" Width="Auto"/>
+                    <DataGridTextColumn Header="VariableStep" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedVariableStepArgument}" Width="Auto"/>-->
+                </DataGrid.Columns>
+            </DataGrid>
+        </WrapPanel>
+        <StackPanel Name="RightStackPanel" Grid.Column="1" Orientation="Vertical">
+            <Grid Name="RightGrid" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90*" />
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="99*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+
+                <TextBox Name="TextBoxHeader" Text="Description here" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"  FontSize="14" IsReadOnly="True" MaxLines="2" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                <Button Name="NewControlButton" Content="New" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" Click="NewControlButton_OnClick"/>
+                <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" Click="EditButton_OnClick"/>
+                <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="DeleteButton_OnClick" />
+                <Label Content="Description" Grid.Row="6" Grid.ColumnSpan="3"/>
+                <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7" KeyDown="TextBoxDescription_OnKeyDown"/>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" >
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  >
+                        <Button Name="ButtonOk"  Content="Ok" Width="70" Margin="0,0,0,0" VerticalAlignment="Center" Click="OkButton_OnClick"/>
+                        <Button Name="ButtonCancel"  Content="Cancel" Width="70" Margin="5,0,5,0" VerticalAlignment="Center" Click="CancelButton_OnClick"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

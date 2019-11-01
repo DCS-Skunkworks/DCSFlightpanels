@@ -22,7 +22,7 @@ namespace NonVisuals.Saitek
             }
             if (settings.StartsWith("RadioPanelOSPZ69Full{"))
             {
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
                 var param0 = parameters[0].Replace("RadioPanelOSPZ69Full{", "").Replace("}", "");
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
                 var param1 = parameters[1].Replace("{", "").Replace("}", "");
@@ -60,7 +60,7 @@ namespace NonVisuals.Saitek
             }
             Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SeparatorChars + OSCommandObject.ExportString();
+            return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + Constants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + Constants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
         }
 
     }

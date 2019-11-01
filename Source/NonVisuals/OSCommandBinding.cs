@@ -7,7 +7,7 @@
          that binds a physical switch to a Windows OS command.
          */
         private bool _whenOnTurnedOn = true;
-        protected const string SeparatorChars = "\\o/";
+        
         private OSCommand _osCommand;
 
         internal abstract void ImportSettings(string settings);

@@ -13,7 +13,7 @@ namespace NonVisuals.StreamDeck
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _text;
-        private Font _textFont;
+        private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor;
         private Color _backgroundColor;
         private int _offsetX;

@@ -186,7 +186,7 @@
                             <Bold>Create a layer first!</Bold>
                         </Label>
                         <Label Content="Layer"></Label>
-                        <ComboBox Name="ComboBoxLayers" SelectedValuePath="Content" DisplayMemberPath="Content"  SelectionChanged="ComboBoxLayers_OnSelectionChanged"></ComboBox>
+                        <ComboBox Name="ComboBoxLayers" SelectedValuePath="Content" DropDownClosed="ComboBoxLayers_OnDropDownClosed"></ComboBox>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                             <Button Name="ButtonNewLayer" Content="New Layer" Height="23" Width="70" Margin="0,0,10,0" Click="ButtonNewLayer_OnClick"></Button>
                             <Button Name="ButtonDeleteLayer" Content="Delete Layer" Height="23" Width="70" Click="ButtonDeleteLayer_OnClick"></Button>
@@ -200,7 +200,7 @@
 
                         <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
 
-                        <ComboBox Name="ComboBoxButtonReleaseDelay" SelectedValuePath="Content" >
+                        <ComboBox Name="ComboBoxButtonReleaseDelay" SelectedValuePath="Content" DropDownClosed="ComboBoxButtonReleaseDelay_OnDropDownClosed" >
                             <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
                             <ComboBoxItem>1500</ComboBoxItem>
                             <ComboBoxItem>2000</ComboBoxItem>

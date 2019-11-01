@@ -11,6 +11,7 @@ using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Windows;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;

@@ -11,6 +11,7 @@ using DCSFlightpanels.Properties;
 using DCS_BIOS;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Windows;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
 using NonVisuals.Saitek;

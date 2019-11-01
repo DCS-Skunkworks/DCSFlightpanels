@@ -8,6 +8,7 @@ using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;

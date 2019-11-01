@@ -34,7 +34,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("RadioPanelDCSBIOSControl{"))
             {
                 //RadioPanelDCSBIOSControl{COM1}\\o/{1UpperSmallFreqWheelInc|DCS-BIOS}\\o/\\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}\\o/\\\\?\\hid#vid_06a3&pid_0d06#9&244b4bcc&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}\\o/PanelSettingsVersion=2X"
-                var parameters = settings.Split(new[] {SeparatorChars}, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //RadioPanelDCSBIOSControl{COM1}
                 var param0 = parameters[0].Replace("RadioPanelDCSBIOSControl{", "").Replace("}", "");
@@ -98,20 +98,20 @@ namespace NonVisuals.DCSBIOSBindings
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
-                stringBuilder.Append(SeparatorChars + dcsbiosInput.ToString());
+                stringBuilder.Append(Constants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
             }
 
             if (!string.IsNullOrWhiteSpace(Description))
             {
                 //RadioPanelDCSBIOSControl{0COM1_BUTTON|Oxygen System Test}\o/\o/DCSBIOSInput{ENVCP_OXY_TEST|SET_STATE|0}
                 return "RadioPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" +
-                       SeparatorChars + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) +
-                       "|" + Description + "}" + SeparatorChars + stringBuilder.ToString();
+                       Constants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) +
+                       "|" + Description + "}" + Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
             }
 
             return "RadioPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ69DialPosition), _pz69DialPosition) + "}" +
-                   SeparatorChars + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "}" +
-                   SeparatorChars + stringBuilder.ToString();
+                   Constants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "}" +
+                   Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
         }
     }
 }

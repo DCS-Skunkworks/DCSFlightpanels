@@ -9,7 +9,7 @@ namespace NonVisuals
         private string _file;
         private string _arguments;
         private string _name;
-        private const string SEPARATOR_CHARS = "\\o/";
+        
 
         public OSCommand()
         {}
@@ -31,7 +31,7 @@ namespace NonVisuals
             var tmp = value;
             tmp = tmp.Replace("OSCommand{", "").Replace("}", "");
             //FILE\o/ARGUMENTS\o/NAME]
-            var array = tmp.Split(new[] { SEPARATOR_CHARS }, StringSplitOptions.None);
+            var array = tmp.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.None);
             _file = array[0];
             if (array.Length > 1)
             {
@@ -49,7 +49,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            return "OSCommand{" + _file + SEPARATOR_CHARS + _arguments + SEPARATOR_CHARS + _name + "}";
+            return "OSCommand{" + _file + Constants.SEPARATOR_SYMBOL + _arguments + Constants.SEPARATOR_SYMBOL + _name + "}";
         }
 
         public string Execute(CancellationToken cancellationToken)

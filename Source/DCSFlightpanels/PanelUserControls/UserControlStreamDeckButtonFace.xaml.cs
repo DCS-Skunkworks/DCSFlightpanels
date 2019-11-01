@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -8,6 +9,7 @@ using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using NonVisuals;
 using NonVisuals.Interfaces;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
@@ -19,7 +21,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonFace : UserControlBase
+    public partial class UserControlStreamDeckButtonFace : UserControlBase, UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener
     {
         private IGlobalHandler _globalHandler;
         private bool _isDirty = false;
@@ -458,7 +460,7 @@ namespace DCSFlightpanels.PanelUserControls
             throw new ArgumentException("ShowFaceConfiguration, failed to determine Face Type");
         }
 
-
+        
         public IStreamDeckButtonFace GetStreamDeckButtonFace(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             switch (GetSelectedFaceType())
@@ -484,11 +486,11 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.ImageFile:
                     {
-                        return null;
+                        throw  new NotImplementedException("GetStreamDeckButtonFace for ImageFile has not been developed");
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        return null;
+                        throw new NotImplementedException("GetStreamDeckButtonFace for DCSBIOS has not been developed");
                     }
             }
 
@@ -582,13 +584,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private const int OFFSET_CHANGE_VALUE = 2;
 
         private void RepeatButtonActionPressUp_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetY -= OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetY -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
             }
             catch (Exception ex)
@@ -601,7 +602,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetY += OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetY += Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
             }
             catch (Exception ex)
@@ -614,7 +615,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetX -= OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetX -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
             }
             catch (Exception ex)
@@ -627,12 +628,32 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetX += OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetX += Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public void ActionTypeChangedEvent(object sender, UserControlStreamDeckButtonAction.ActionTypeChangedEventArgs e)
+        {
+            /*
+             * Add the incoming button face if there isn't any already specified.
+             * Layer navigation always updates.
+             */
+            if (e.ActionType == EnumStreamDeckActionType.LayerNavigation && !string.IsNullOrEmpty(e.TargetLayerName))
+            {
+                /*
+                 * Create a basic face containing the name
+                 */
+                Clear();
+                RadioButtonTextFace.IsChecked = true;
+                TextBoxButtonTextFace.Text = e.TargetLayerName;
+                TextBoxButtonTextFace.Bill.FontColor = Color.White;
+                TextBoxButtonTextFace.Bill.BackgroundColor = ColorTranslator.FromHtml(Constants.COLOR_GUNSHIP_GREEN);
+                SetIsDirty();
             }
         }
 

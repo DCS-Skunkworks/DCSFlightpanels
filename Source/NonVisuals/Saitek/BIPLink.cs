@@ -13,7 +13,6 @@ namespace NonVisuals.Saitek
          */
         internal SortedList<int, BIPLight> _bipLights = new SortedList<int, BIPLight>();
         internal bool WhenOnTurnedOn = true;
-        internal const string SeparatorChars = "\\o/";
         internal string _description;
         private Thread _executingThread;
         private long _abortCurrentSequence;

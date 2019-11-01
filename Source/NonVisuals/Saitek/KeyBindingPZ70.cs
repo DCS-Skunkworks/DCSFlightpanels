@@ -21,7 +21,7 @@ namespace NonVisuals.Saitek
             if (settings.StartsWith("MultiPanelKnob{"))
             {
                 //MultiPanelKey{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //MultiPanelKey{ALT}
                 var param0 = parameters[0].Replace("MultiPanelKnob{", "").Replace("}", "");
@@ -60,7 +60,7 @@ namespace NonVisuals.Saitek
             }
             Common.DebugP(Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "MultiPanelKnob{" + _pz70DialPosition + "}" + SeparatorChars + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + SeparatorChars + OSKeyPress.ExportString();
+            return "MultiPanelKnob{" + _pz70DialPosition + "}" + Constants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + Constants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }
 
         public static HashSet<KeyBindingPZ70> SetNegators(HashSet<KeyBindingPZ70> knobBindings)

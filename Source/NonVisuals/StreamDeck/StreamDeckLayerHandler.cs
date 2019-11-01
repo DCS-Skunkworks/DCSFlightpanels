@@ -10,7 +10,7 @@ namespace NonVisuals.StreamDeck
     public class StreamDeckLayerHandler
     {
         private List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
-        private const string SEPARATOR_CHARS = "\\o/";
+        
         private const string HOME_LAYER_ID = "*";
         private List<string> _layerHistory = new List<string>();
         private string _activeLayer = "";
@@ -371,15 +371,31 @@ namespace NonVisuals.StreamDeck
 
         private void SetActiveLayer(string layerName)
         {
-            if (string.IsNullOrEmpty(layerName) || _layerList.Count == 0)
+            /*
+             * First layer : list is empty, layer name contains value
+             */
+            if (!string.IsNullOrEmpty(layerName) && _layerHistory.Count == 0)
             {
-                _layerHistory.Clear();
-                _activeLayer = "";
+                _activeLayer = layerName;
+                ClearAllFaces();
+                ShowActiveLayer();
+                return;
+            }
+
+            /*
+             * Something is wrong
+             */
+            if (string.IsNullOrEmpty(layerName))
+            {
                 ClearAllFaces();
                 return;
             }
-            if(_layerHistory.Last() != layerName)
-            { 
+
+            /*
+             * There are already layers, add last only if name differs
+             */
+            if (_activeLayer != layerName)
+            {
                 _layerHistory.Add(_activeLayer);
             }
             _activeLayer = layerName;

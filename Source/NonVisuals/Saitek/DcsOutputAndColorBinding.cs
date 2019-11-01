@@ -49,7 +49,7 @@ namespace NonVisuals.Saitek
         public PanelLEDColor LEDColor { get; set; }
         public SaitekPanelLEDPosition SaitekLEDPosition { get; set; }
 
-        protected string[] Separator { get; } = { "\\o/" };
+        protected string[] Separator { get; } = { Constants.SEPARATOR_SYMBOL };
 
         public DCSBIOSOutput DCSBiosOutputLED
         {

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Bills;
+using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -66,6 +67,7 @@ namespace DCSFlightpanels.PanelUserControls
                 _userControlLoaded = true;
                 ShowGraphicConfiguration();
                 UCStreamDeckButtonAction.Update();
+                UCStreamDeckButtonAction.AttachListener(UCStreamDeckButtonFace);
             }
             SetFormState();
         }
@@ -544,7 +546,6 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetComboBoxButtonReleaseDelayValue(int value)
         {
-            ComboBoxButtonReleaseDelay.SelectionChanged -= ComboBoxReleaseDelay_OnSelectionChanged;
             foreach (ComboBoxItem item in ComboBoxButtonReleaseDelay.Items)
             {
                 if (int.Parse(item.Content.ToString()) == value)
@@ -553,10 +554,9 @@ namespace DCSFlightpanels.PanelUserControls
                     break;
                 }
             }
-            ComboBoxButtonReleaseDelay.SelectionChanged += ComboBoxReleaseDelay_OnSelectionChanged;
         }
-
-        private void ComboBoxReleaseDelay_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        private void ComboBoxButtonReleaseDelay_OnDropDownClosed(object sender, EventArgs e)
         {
             try
             {
@@ -651,7 +651,8 @@ namespace DCSFlightpanels.PanelUserControls
             return null;
         }
 
-        private void ComboBoxLayers_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
         {
             try
             {
@@ -690,17 +691,17 @@ namespace DCSFlightpanels.PanelUserControls
                 return;
             }
 
-            ComboBoxLayers.SelectionChanged -= ComboBoxLayers_OnSelectionChanged;
+            ComboBoxLayers.DropDownClosed -= ComboBoxLayers_OnDropDownClosed;
             ComboBoxLayers.ItemsSource = layerList;
             ComboBoxLayers.Items.Refresh();
 
             if (!string.IsNullOrEmpty(selectedLayerName))
             {
-                foreach (StreamDeckLayer layer in ComboBoxLayers.Items)
+                foreach (string layer in ComboBoxLayers.Items)
                 {
-                    if (layer.Name == selectedLayerName)
+                    if (layer == selectedLayerName)
                     {
-                        ComboBoxLayers.SelectedItem = layer;
+                        ComboBoxLayers.Text = layer;
                         break;
                     }
                 }
@@ -717,14 +718,14 @@ namespace DCSFlightpanels.PanelUserControls
 
             _streamDeck.ActiveLayerName = ComboBoxLayers.Text;
             SetCheckboxHomeLayer();
-            ComboBoxLayers.SelectionChanged += ComboBoxLayers_OnSelectionChanged;
+            ComboBoxLayers.DropDownClosed += ComboBoxLayers_OnDropDownClosed;
         }
 
         private void SetCheckboxHomeLayer()
         {
             if (GetSelectedLayerName() != null && _streamDeck.HomeLayer != null)
             {
-                SetCheckboxHomeStatus(GetSelectedLayerName() == _streamDeck.HomeLayer.Name);
+                SetCheckboxHomeStatus(ComboBoxLayers.Text == _streamDeck.HomeLayer.Name);
             }
         }
 
@@ -917,15 +918,7 @@ namespace DCSFlightpanels.PanelUserControls
                     streamDeckButton.ActionForRelease = actionRelease;
                     added = true;
                 }
-
-                /*
-                 * Set a default Face
-                 */
-                if (added && UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName) == null)
-                {
-                    streamDeckButton.Face = FaceFactory.HomButtonFace(streamDeckButton.StreamDeckButtonName);
-                }
-
+                
                 if (added)
                 {
                     _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
@@ -943,6 +936,15 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                var streamDeckButton = _streamDeck.GetActiveLayerStreamDeckButton(GetSelectedButtonName());
+                if (streamDeckButton.ActionForPress != null && streamDeckButton.ActionForPress.ActionType == EnumStreamDeckActionType.LayerNavigation)
+                {
+                    streamDeckButton.Face = null;
+                    UCStreamDeckButtonFace.Clear();
+                }
+                streamDeckButton.ActionForPress = null;
+                streamDeckButton.ActionForRelease = null;
+
                 UCStreamDeckButtonAction.Clear();
                 _streamDeck.SignalPanelChange(); //todo fix event propagation
                 SetFormState();
@@ -1000,6 +1002,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                var streamDeckButton = _streamDeck.GetActiveLayerStreamDeckButton(GetSelectedButtonName());
+                streamDeckButton.Face = null;
                 UCStreamDeckButtonFace.Clear();
                 _streamDeck.SignalPanelChange(); //todo fix event propagation
                 SetFormState();

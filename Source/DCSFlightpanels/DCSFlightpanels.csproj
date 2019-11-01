@@ -108,7 +108,7 @@
     <Compile Include="AboutFPWindow.xaml.cs">
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ColorPickerWindow.xaml.cs">
+    <Compile Include="Windows\ColorPickerWindow.xaml.cs">
       <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />
@@ -126,47 +126,47 @@
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChooseProfileModuleWindow.xaml.cs">
+    <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
       <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBIOSControlsConfigsWindow.xaml.cs">
+    <Compile Include="Windows\DCSBIOSControlsConfigsWindow.xaml.cs">
       <DependentUpon>DCSBIOSControlsConfigsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BipLightWindow.xaml.cs">
+    <Compile Include="Windows\BipLightWindow.xaml.cs">
       <DependentUpon>BipLightWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBiosInputWindow.xaml.cs">
+    <Compile Include="Windows\DCSBiosInputWindow.xaml.cs">
       <DependentUpon>DCSBiosInputWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBIOSNotFoundWindow.xaml.cs">
+    <Compile Include="Windows\DCSBIOSNotFoundWindow.xaml.cs">
       <DependentUpon>DCSBIOSNotFoundWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
+    <Compile Include="Windows\DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InformationTextBlockWindow.xaml.cs">
+    <Compile Include="Windows\InformationTextBlockWindow.xaml.cs">
       <DependentUpon>InformationTextBlockWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InformationRichTextWindow.xaml.cs">
+    <Compile Include="Windows\InformationRichTextWindow.xaml.cs">
       <DependentUpon>InformationRichTextWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="IGamingPanelUserControl.cs" />
-    <Compile Include="JaceHelpWindow.xaml.cs">
+    <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JaceSandboxWindow.xaml.cs">
+    <Compile Include="Windows\JaceSandboxWindow.xaml.cs">
       <DependentUpon>JaceSandboxWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\MultiPanelUserControl.xaml.cs">
       <DependentUpon>MultiPanelUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBiosOutputTriggerWindow.xaml.cs">
+    <Compile Include="Windows\DCSBiosOutputTriggerWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputTriggerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="KeyPressWindow.xaml.cs">
+    <Compile Include="Windows\KeyPressWindow.xaml.cs">
       <DependentUpon>KeyPressWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LEDConfigsWindow.xaml.cs">
+    <Compile Include="Windows\LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Radios\RadioPanelPZ69UserControlAV8BNA.xaml.cs">
@@ -233,19 +233,19 @@
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BIPLinkWindow.xaml.cs">
+    <Compile Include="Windows\BIPLinkWindow.xaml.cs">
       <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BugReportWindow.xaml.cs">
+    <Compile Include="Windows\BugReportWindow.xaml.cs">
       <DependentUpon>BugReportWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="KeySequenceWindow.xaml.cs">
+    <Compile Include="Windows\KeySequenceWindow.xaml.cs">
       <DependentUpon>KeySequenceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StreamDeckLayerWindow.xaml.cs">
+    <Compile Include="Windows\StreamDeckLayerWindow.xaml.cs">
       <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\StreamDeckUserControl.xaml.cs">
@@ -262,7 +262,7 @@
     <Compile Include="Bills\BillTPM.cs" />
     <Compile Include="Bills\BillPZ69.cs" />
     <Compile Include="Bills\BillPZ70.cs" />
-    <Compile Include="TextBlockDialogWindow.xaml.cs">
+    <Compile Include="Windows\TextBlockDialogWindow.xaml.cs">
       <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillPZ55.cs" />
@@ -270,7 +270,7 @@
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\UserControlBase.cs" />
-    <Compile Include="OSCommandWindow.xaml.cs">
+    <Compile Include="Windows\OSCommandWindow.xaml.cs">
       <DependentUpon>OSCommandWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml.cs">
@@ -283,7 +283,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ColorPickerWindow.xaml">
+    <Page Include="Windows\ColorPickerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -291,55 +291,55 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChooseProfileModuleWindow.xaml">
+    <Page Include="Windows\ChooseProfileModuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DCSBIOSControlsConfigsWindow.xaml">
+    <Page Include="Windows\DCSBIOSControlsConfigsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BipLightWindow.xaml">
+    <Page Include="Windows\BipLightWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DCSBiosInputWindow.xaml">
+    <Page Include="Windows\DCSBiosInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DCSBIOSNotFoundWindow.xaml">
+    <Page Include="Windows\DCSBIOSNotFoundWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DCSBiosOutputFormulaWindow.xaml">
+    <Page Include="Windows\DCSBiosOutputFormulaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DCSBiosOutputTriggerWindow.xaml">
+    <Page Include="Windows\DCSBiosOutputTriggerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InformationTextBlockWindow.xaml">
+    <Page Include="Windows\InformationTextBlockWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="InformationRichTextWindow.xaml">
+    <Page Include="Windows\InformationRichTextWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JaceHelpWindow.xaml">
+    <Page Include="Windows\JaceHelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JaceSandboxWindow.xaml">
+    <Page Include="Windows\JaceSandboxWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="KeyPressWindow.xaml">
+    <Page Include="Windows\KeyPressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LEDConfigsWindow.xaml">
+    <Page Include="Windows\LEDConfigsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -443,23 +443,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BIPLinkWindow.xaml">
+    <Page Include="Windows\BIPLinkWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BugReportWindow.xaml">
+    <Page Include="Windows\BugReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="KeySequenceWindow.xaml">
+    <Page Include="Windows\KeySequenceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StreamDeckLayerWindow.xaml">
+    <Page Include="Windows\StreamDeckLayerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -471,7 +471,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TextBlockDialogWindow.xaml">
+    <Page Include="Windows\TextBlockDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -479,7 +479,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="OSCommandWindow.xaml">
+    <Page Include="Windows\OSCommandWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -928,6 +928,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

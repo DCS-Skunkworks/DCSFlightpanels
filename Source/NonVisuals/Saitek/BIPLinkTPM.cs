@@ -18,7 +18,7 @@ namespace NonVisuals.Saitek
             {
                 //TPMPanelBipLink{1G1}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 // 0 1 2 3
-                var parameters = settings.Split(new[] { SeparatorChars }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //TPMPanelBipLink{1G1}
                 var param0 = parameters[0].Replace("TPMPanelBipLink{", "").Replace("}", "").Trim();
@@ -56,12 +56,12 @@ namespace NonVisuals.Saitek
             stringBuilder.Append("TPMPanelBipLink{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}");
             foreach (var bipLight in _bipLights)
             {
-                stringBuilder.Append(SeparatorChars + bipLight.Value.ExportSettings());
+                stringBuilder.Append(Constants.SEPARATOR_SYMBOL + bipLight.Value.ExportSettings());
             }
 
             if (!string.IsNullOrWhiteSpace(_description))
             {
-                stringBuilder.Append(SeparatorChars + "Description[" + _description + "]");
+                stringBuilder.Append(Constants.SEPARATOR_SYMBOL + "Description[" + _description + "]");
             }
             return stringBuilder.ToString();
         }
