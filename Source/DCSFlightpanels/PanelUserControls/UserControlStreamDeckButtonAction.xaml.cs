@@ -167,6 +167,7 @@ namespace DCSFlightpanels.PanelUserControls
         public void ShowActionConfiguration(StreamDeckButton streamDeckButton)
         {
             Clear();
+            LoadComboBoxesLayers();
             if (streamDeckButton == null)
             {
                 return;
@@ -274,7 +275,6 @@ namespace DCSFlightpanels.PanelUserControls
                         {
                             var result = new LayerBindingStreamDeck();
                             result.LayerTarget = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
-                            fortsätt med att testa layer navigering
                             return result;
                         }
 
@@ -729,11 +729,11 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void LoadComboBoxesLayers()
         {
-            if (SDUIParent.GetSelectedStreamDeckLayer() == null)
+            if (SDUIParent.GetUISelectedLayer() == null)
             {
                 return;
             }
-            LoadComboBoxLayers(SDUIParent.GetSelectedStreamDeckLayer().Name,
+            LoadComboBoxLayers(SDUIParent.GetUISelectedLayer().Name,
                 ComboBoxLayerNavigationButton,
                 ComboBoxLayerNavigationButton_OnSelectionChanged);
         }

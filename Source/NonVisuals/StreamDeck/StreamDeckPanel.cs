@@ -57,7 +57,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void AddStreamDeckButtonToCurrentLayer(StreamDeckButton streamDeckButton)
+        public void AddStreamDeckButtonToActiveLayer(StreamDeckButton streamDeckButton)
         {
             _streamDeckLayerHandler.AddStreamDeckButtonToActiveLayer(streamDeckButton);
             SetIsDirty();
@@ -317,7 +317,7 @@ namespace NonVisuals.StreamDeck
             set => _lcdKnobSensitivity = value;
         }
 
-        public string CurrentLayerName
+        public string ActiveLayerName
         {
             get => _streamDeckLayerHandler.ActiveLayer;
             set => _streamDeckLayerHandler.ActiveLayer = value;
@@ -328,13 +328,9 @@ namespace NonVisuals.StreamDeck
             return "2X";
         }
 
-        public List<StreamDeckLayer> EmptyLayerList
+        public List<string> LayerNameList
         {
-            /*
-             * Use this for specific layer handling, lightweight
-             * compared to LayerList with all buttons
-             */
-            get => _streamDeckLayerHandler.GetEmptyLayers();
+            get => _streamDeckLayerHandler.GetLayerNameList();
         }
 
         public List<StreamDeckLayer> LayerList
@@ -348,9 +344,9 @@ namespace NonVisuals.StreamDeck
             return _streamDeckLayerHandler.AddLayer(streamDeckLayer);
         }
 
-        public void DeleteLayer(StreamDeckLayer streamDeckLayer)
+        public void DeleteLayer(string streamDeckLayerName)
         {
-            _streamDeckLayerHandler.DeleteLayer(streamDeckLayer.Name);
+            _streamDeckLayerHandler.DeleteLayer(streamDeckLayerName);
             SetIsDirty();
         }
         
@@ -380,7 +376,7 @@ namespace NonVisuals.StreamDeck
             return _streamDeckLayerHandler.GetStreamDeckButton(streamDeckButtonName, layerName);
         }
 
-        public StreamDeckButton GetCurrentLayerStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
+        public StreamDeckButton GetActiveLayerStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(streamDeckButtonName);
         }
@@ -388,6 +384,16 @@ namespace NonVisuals.StreamDeck
         public StreamDeckLayer GetLayer(bool activateThisLayer, string layerName)
         {
             return _streamDeckLayerHandler.GetStreamDeckLayer(activateThisLayer, layerName);
+        }
+
+        public StreamDeckLayer GetLayer(string layerName)
+        {
+            return _streamDeckLayerHandler.GetStreamDeckLayer(false, layerName);
+        }
+
+        public StreamDeckLayer GetActiveLayer()
+        {
+            return _streamDeckLayerHandler.GetActiveStreamDeckLayer();
         }
 
         public bool HasLayers

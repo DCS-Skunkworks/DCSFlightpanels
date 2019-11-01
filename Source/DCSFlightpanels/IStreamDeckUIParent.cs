@@ -7,10 +7,9 @@ namespace DCSFlightpanels
 {
     public interface IStreamDeckUIParent
     {
-
         int GetSelectedButtonNumber();
         EnumStreamDeckButtonNames GetSelectedButtonName();
-        StreamDeckLayer GetSelectedStreamDeckLayer();
+        StreamDeckLayer GetUISelectedLayer();
         List<string> GetStreamDeckLayerNames();
         EnumStreamDeckActionType GetSelectedActionType();
         void TestImage(Bitmap bitmap);

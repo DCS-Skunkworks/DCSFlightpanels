@@ -102,6 +102,7 @@
     <Compile Include="Saitek\KeyBindingPZ69DialPosition.cs" />
     <Compile Include="Saitek\KeyBindingPZ69.cs" />
     <Compile Include="Saitek\KeyBindingTPM.cs" />
+    <Compile Include="StreamDeck\FaceFactory.cs" />
     <Compile Include="StreamDeck\KeyBindingStreamDeck.cs" />
     <Compile Include="Saitek\KeyBindingPZ70.cs" />
     <Compile Include="Saitek\KeyBindingPZ55.cs" />

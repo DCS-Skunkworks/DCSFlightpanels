@@ -47,14 +47,6 @@ namespace NonVisuals.StreamDeck
             return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig);
         }
 
-        public StreamDeckLayer GetEmptyLayer()
-        {
-            var result = new StreamDeckLayer();
-            result.Name = Name;
-            result.IsHomeLayer = IsHomeLayer;
-            return result;
-        }
-
         public List<StreamDeckButton> StreamDeckButtons
         {
             get => _streamDeckButtons;

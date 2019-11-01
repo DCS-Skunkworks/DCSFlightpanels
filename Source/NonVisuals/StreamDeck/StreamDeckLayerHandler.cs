@@ -30,24 +30,13 @@ namespace NonVisuals.StreamDeck
             _streamDeckRequisite.StreamDeckBoard = _streamDeckBoard;
         }
 
-        public List<StreamDeckLayer> GetEmptyLayers()
+        public List<string> GetLayerNameList()
         {
-            var result = new List<StreamDeckLayer>();
+            var result = new List<string>();
 
             foreach (var layer in _layerList)
             {
-                var found = false;
-                foreach (var emptyLayer in result)
-                {
-                    if (layer.Name == emptyLayer.Name)
-                    {
-                        found = true;
-                    }
-                }
-                if (!found)
-                {
-                    result.Add(layer.GetEmptyLayer());
-                }
+                result.Add(layer.Name);
             }
             return result;
         }
@@ -389,7 +378,10 @@ namespace NonVisuals.StreamDeck
                 ClearAllFaces();
                 return;
             }
-            _layerHistory.Add(_activeLayer);
+            if(_layerHistory.Last() != layerName)
+            { 
+                _layerHistory.Add(_activeLayer);
+            }
             _activeLayer = layerName;
             ShowActiveLayer();
         }
