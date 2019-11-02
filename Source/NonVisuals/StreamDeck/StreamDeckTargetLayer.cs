@@ -35,7 +35,7 @@
                     }
                 case LayerNavType.SwitchToSpecificLayer:
                     {
-                        streamDeck.ShowLayer(TargetLayer);
+                        streamDeck.ActiveLayer = TargetLayer;
                         break;
                     }
             }

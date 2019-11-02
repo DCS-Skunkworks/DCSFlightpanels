@@ -17,35 +17,21 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonFace _buttonFace = null;
         private IStreamDeckButtonAction _buttonActionForPress = null;
         private IStreamDeckButtonAction _buttonActionForRelease = null;
-        public int ExecutionDelay { get; set; } = 1000;
-
-        [JsonIgnore]
-        private Thread _delayedExecutionThread;
-        [JsonIgnore]
-        private CancellationTokenSource _cancellationTokenSource;
+        
 
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {
             _enumStreamDeckButtonName = enumStreamDeckButton;
         }
 
-        ~StreamDeckButton()
-        {
-            _delayedExecutionThread?.Abort();
-        }
-
-        public void Press(StreamDeckRequisites streamDeckRequisites)
+        public void IsPressed(StreamDeckRequisites streamDeckRequisites)
         {
             ActionForPress?.Execute(streamDeckRequisites);
+        }
 
-            if (_buttonActionForRelease != null)
-            {
-                _cancellationTokenSource?.Cancel();
-
-                _cancellationTokenSource = new CancellationTokenSource();
-                _delayedExecutionThread = new Thread(() => DelayedRelease(streamDeckRequisites, ActionForRelease));
-                _delayedExecutionThread.Start();
-            }
+        public void WasReleased(StreamDeckRequisites streamDeckRequisites)
+        {
+            ActionForRelease?.Execute(streamDeckRequisites);
         }
 
         public void Show(StreamDeckRequisites streamDeckRequisites)
@@ -53,19 +39,6 @@ namespace NonVisuals.StreamDeck
             if (Face != null)
             {
                 Face?.Show(streamDeckRequisites);
-            }
-        }
-
-        private void DelayedRelease(StreamDeckRequisites streamDeckRequisites, IStreamDeckButtonAction streamDeckButtonAction)
-        {
-            try
-            {
-                Thread.Sleep(ExecutionDelay);
-                streamDeckButtonAction?.Execute(streamDeckRequisites);
-            }
-            catch (Exception e)
-            {
-                Common.ShowErrorMessageBox(e);
             }
         }
 

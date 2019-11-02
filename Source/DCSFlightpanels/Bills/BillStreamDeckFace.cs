@@ -15,17 +15,22 @@ namespace DCSFlightpanels.Bills
         public StreamDeckButton Button;
         private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor = Color.Black;
-        private Color _backgroundColor = Color.White;
+        private Color _backgroundColor = ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE);
         private bool _isSelected = false;
         public TextBox ParentTextBox { get; set; }
         public BitmapImage SelectedImage { get; set; }
         public BitmapImage DeselectedImage { get; set; }
 
+
+
+
+
+
         public bool ContainsTextFace()
         {
             return _textFont != null && !string.IsNullOrEmpty(ParentTextBox.Text); 
         }
-        fortsätt med layer navigeringen för den fungerar inte. verkar som om target sparas fel?
+
         public Font TextFont
         {
             get => _textFont;
@@ -85,8 +90,9 @@ namespace DCSFlightpanels.Bills
             
         }
 
-        public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == Color.White && FontColor == Color.Black && TextFont.Name == Constants.DEFAULT_FONT;
+        public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE) && FontColor == Color.Black && TextFont.Name == Constants.DEFAULT_FONT;
 
+        public string BackgroundHex => "#" + _fontColor.R.ToString("X2") + _fontColor.G.ToString("X2") + _fontColor.B.ToString("X2");
 
         public void Clear()
         {

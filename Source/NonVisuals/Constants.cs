@@ -11,13 +11,14 @@ namespace NonVisuals
         public const string GO_BACK_ONE_LAYER_STRING = "Go Back";
         public const string GO_TO_HOME_LAYER_STRING = "Go to Home";
         public const string SEPARATOR_SYMBOL = "\\o/";
+        public const string NO_HOME_LAYER_FOUND = "No home layer specified. Home layer must be set.";
+        public const string SEVERAL_HOME_LAYER_FOUND = "Several layers has been marked as Home Layer.\n Only Home layer must be set.";
 
         public const int ADJUST_OFFSET_CHANGE_VALUE = 2;
         public const string DEFAULT_FONT = "Lucida Console";
         public const int STREAMDECK_ICON_HEIGHT = 72;
         public const int STREAMDECK_ICON_WIDTH = 72;
         public const string NUMBER_BUTTON_LOCATION = @"pack://application:,,,/DCSFlightpanels;component/StreamDeckGallery/NumberButtons/";
-
         
         public const string COLOR_MILITARY_GRAY = "#e6e6e6";
         public const string COLOR_DEFAULT_WHITE = "#f0e9ee";
@@ -99,5 +100,7 @@ namespace NonVisuals
         {
             return ColorTranslator.FromHtml(hexColor);
         }
+
+        public static string[] ProjectsInSolution = new[] {"DCSFlightpanels", "NonVisuals", "DCS-BIOS", "ClassLibraryCommon"};
     }
 }

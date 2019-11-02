@@ -186,7 +186,7 @@
                             <Bold>Create a layer first!</Bold>
                         </Label>
                         <Label Content="Layer"></Label>
-                        <ComboBox Name="ComboBoxLayers" SelectedValuePath="Content" DropDownClosed="ComboBoxLayers_OnDropDownClosed"></ComboBox>
+                        <ComboBox Name="ComboBoxLayers" SelectedValuePath="Content" ContextMenuOpening="ComboBoxLayers_OnContextMenuOpening" DropDownClosed="ComboBoxLayers_OnDropDownClosed"></ComboBox>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                             <Button Name="ButtonNewLayer" Content="New Layer" Height="23" Width="70" Margin="0,0,10,0" Click="ButtonNewLayer_OnClick"></Button>
                             <Button Name="ButtonDeleteLayer" Content="Delete Layer" Height="23" Width="70" Click="ButtonDeleteLayer_OnClick"></Button>
@@ -195,27 +195,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="Button Settings" FontSize="10" Margin="0,10,0,0">
-                    <StackPanel>
 
-                        <Label Content="Delay before release action (milliseconds)" FontSize="10" Foreground="#0000EE" Height="23" Margin="0,0,0,0"  MouseLeave="LabelDelayedReleaseInfo_OnMouseLeave" MouseEnter="LabelDelayedReleaseInfo_OnMouseEnter" MouseLeftButtonDown="LabelDelayedReleaseInfo_OnMouseLeftButtonDown"/>
-
-                        <ComboBox Name="ComboBoxButtonReleaseDelay" SelectedValuePath="Content" DropDownClosed="ComboBoxButtonReleaseDelay_OnDropDownClosed" >
-                            <ComboBoxItem IsSelected="True">1000</ComboBoxItem>
-                            <ComboBoxItem>1500</ComboBoxItem>
-                            <ComboBoxItem>2000</ComboBoxItem>
-                            <ComboBoxItem>2500</ComboBoxItem>
-                            <ComboBoxItem>3000</ComboBoxItem>
-                            <ComboBoxItem>4000</ComboBoxItem>
-                            <ComboBoxItem>5000</ComboBoxItem>
-                            <ComboBoxItem>6000</ComboBoxItem>
-                            <ComboBoxItem>7000</ComboBoxItem>
-                            <ComboBoxItem>8000</ComboBoxItem>
-                            <ComboBoxItem>9000</ComboBoxItem>
-                            <ComboBoxItem>10000</ComboBoxItem>
-                        </ComboBox>
-                    </StackPanel>
-                </GroupBox>
             </StackPanel>
 
 

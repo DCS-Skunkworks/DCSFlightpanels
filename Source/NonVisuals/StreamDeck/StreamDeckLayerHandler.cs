@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClassLibraryCommon;
 using Newtonsoft.Json;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
+
 
 namespace NonVisuals.StreamDeck
 {
     public class StreamDeckLayerHandler
     {
-        private List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
-        
+        private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string HOME_LAYER_ID = "*";
-        private List<string> _layerHistory = new List<string>();
-        private string _activeLayer = "";
+        private volatile List<string> _layerHistory = new List<string>();
+        private volatile string _activeLayer = "";
         private string _homeLayer = "";
         private IStreamDeckBoard _streamDeckBoard;
         private StreamDeckRequisites _streamDeckRequisite = new StreamDeckRequisites();
@@ -43,13 +44,15 @@ namespace NonVisuals.StreamDeck
 
         public string ExportJSONSettings()
         {
-            var indented = Formatting.Indented;
+            const Formatting indented = Formatting.Indented;
             var settings = new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.All
             };
 
             CleanLayers();
+
+            CheckHomeLayerStatus();
 
             return JsonConvert.SerializeObject(_layerList, indented, settings);
         }
@@ -64,12 +67,17 @@ namespace NonVisuals.StreamDeck
             {
                 TypeNameHandling = TypeNameHandling.All
             };
+
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
 
-            CheckAndSetHomeStatus();
+            if (!string.IsNullOrEmpty(_activeLayer) && _layerList.FindAll(o => o.Name == _activeLayer).Count == 1)
+            {
+                SetActiveLayer(_activeLayer);
+            }
+            CheckHomeLayerStatus();
         }
 
-        private void CheckAndSetHomeStatus()
+        private void CheckHomeLayerStatus()
         {
             var found = false;
             foreach (var streamDeckLayer in _layerList)
@@ -109,7 +117,7 @@ namespace NonVisuals.StreamDeck
                 }
             }
 
-            CheckAndSetHomeStatus();
+            CheckHomeLayerStatus();
         }
         
 
@@ -169,15 +177,22 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                foreach (var streamDeckLayer in _layerList)
-                {
-                    if (streamDeckLayer.IsHomeLayer)
-                    {
-                        return streamDeckLayer;
-                    }
-                }
+                VerifyHomeLayer();
 
-                return null;
+                return _layerList.Find(o => o.IsHomeLayer);
+            }
+        }
+
+        public void VerifyHomeLayer()
+        {
+            if(_layerList.Find(o => o.IsHomeLayer) == null)
+            {
+                throw new Exception(Constants.NO_HOME_LAYER_FOUND);
+            }
+
+            if (_layerList.FindAll(o => o.IsHomeLayer).Count > 1)
+            {
+                throw new Exception(Constants.SEVERAL_HOME_LAYER_FOUND);
             }
         }
 
@@ -195,10 +210,10 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckLayer GetActiveStreamDeckLayer()
         {
-            return GetStreamDeckLayer(false, _activeLayer);
+            return GetStreamDeckLayer(_activeLayer);
         }
 
-        public StreamDeckLayer GetStreamDeckLayer(bool activateThisLayer, string layerName)
+        public StreamDeckLayer GetStreamDeckLayer(string layerName)
         {
             if (string.IsNullOrEmpty(layerName))
             {
@@ -209,11 +224,6 @@ namespace NonVisuals.StreamDeck
             {
                 if (streamDeckLayer.Name == layerName)
                 {
-                    if (activateThisLayer)
-                    {
-                        SetActiveLayer(layerName);
-                    }
-
                     return streamDeckLayer;
                 }
             }
@@ -242,7 +252,7 @@ namespace NonVisuals.StreamDeck
             }
 
             var streamDeckButton = new StreamDeckButton(streamDeckButtonName);
-            GetStreamDeckLayer(true, layerName).AddButton(streamDeckButton);
+            GetStreamDeckLayer(layerName).AddButton(streamDeckButton);
             return streamDeckButton;
         }
 
@@ -316,10 +326,9 @@ namespace NonVisuals.StreamDeck
             }
         }
         
-        public bool HasLayers
-        {
-            get { return _layerList.Count > 0; }
-        }
+        public bool HasLayers => _layerList.Count > 0;
+
+        public bool HasActiveLayer => _layerList.Count > 0 && !string.IsNullOrEmpty(_activeLayer);
 
         public void ClearAllFaces()
         {
@@ -352,16 +361,12 @@ namespace NonVisuals.StreamDeck
             ShowLayer(_homeLayer);
         }
 
-        public void ShowActiveLayer()
+        private void ShowLayer(string layerName)
         {
-            ShowLayer(_activeLayer);
-        }
-
-        public void ShowLayer(string layerName)
-        {
+            Common.LogStackTrace(Constants.ProjectsInSolution);
             ClearAllFaces();
 
-            var layer = GetStreamDeckLayer(false, layerName);
+            var layer = GetStreamDeckLayer(layerName);
 
             foreach (var streamDeckButton in layer.StreamDeckButtons)
             {
@@ -371,24 +376,15 @@ namespace NonVisuals.StreamDeck
 
         private void SetActiveLayer(string layerName)
         {
-            /*
-             * First layer : list is empty, layer name contains value
-             */
-            if (!string.IsNullOrEmpty(layerName) && _layerHistory.Count == 0)
-            {
-                _activeLayer = layerName;
-                ClearAllFaces();
-                ShowActiveLayer();
-                return;
-            }
+            ClearAllFaces();
 
             /*
              * Something is wrong
              */
             if (string.IsNullOrEmpty(layerName))
             {
-                ClearAllFaces();
-                return;
+                
+                throw  new Exception("StreamDeckLayerHandler : Trying to set an empty or null layer active.");
             }
 
             /*
@@ -399,7 +395,7 @@ namespace NonVisuals.StreamDeck
                 _layerHistory.Add(_activeLayer);
             }
             _activeLayer = layerName;
-            ShowActiveLayer();
+            ShowLayer(_activeLayer);
         }
     }
 }

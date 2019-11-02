@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using Jace.Operations;
 using NonVisuals.Saitek;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -78,7 +80,12 @@ namespace NonVisuals.StreamDeck
             if (e.IsDown)
             {
                 var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
-                streamDeckButton.Press(_streamDeckRequisite);
+                streamDeckButton.IsPressed(_streamDeckRequisite);
+            }
+            else
+            {
+                var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
+                streamDeckButton.WasReleased(_streamDeckRequisite);
             }
         }
 
@@ -316,7 +323,12 @@ namespace NonVisuals.StreamDeck
             set => _lcdKnobSensitivity = value;
         }
 
-        public string ActiveLayerName
+        public bool HasActiveLayer
+        {
+            get => _streamDeckLayerHandler.HasLayers;
+        }
+
+        public string ActiveLayer
         {
             get => _streamDeckLayerHandler.ActiveLayer;
             set => _streamDeckLayerHandler.ActiveLayer = value;
@@ -380,16 +392,11 @@ namespace NonVisuals.StreamDeck
             return _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(streamDeckButtonName);
         }
 
-        public StreamDeckLayer GetLayer(bool activateThisLayer, string layerName)
-        {
-            return _streamDeckLayerHandler.GetStreamDeckLayer(activateThisLayer, layerName);
-        }
-
         public StreamDeckLayer GetLayer(string layerName)
         {
-            return _streamDeckLayerHandler.GetStreamDeckLayer(false, layerName);
+            return _streamDeckLayerHandler.GetStreamDeckLayer(layerName);
         }
-
+        
         public StreamDeckLayer GetActiveLayer()
         {
             return _streamDeckLayerHandler.GetActiveStreamDeckLayer();
@@ -409,16 +416,11 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckLayerHandler.ShowPreviousLayer();
         }
-
-        public void ShowActiveLayer()
-        {
-            _streamDeckLayerHandler.ShowActiveLayer();
-        }
-
+        /*
         public void ShowLayer(string layerName)
         {
             _streamDeckLayerHandler.ShowLayer(layerName);
-        }
+        }*/
     }
 
 

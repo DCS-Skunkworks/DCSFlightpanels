@@ -222,7 +222,34 @@ namespace ClassLibraryCommon
                 _debugLog = filename;
             }
         }
-        
+
+        public static void Log(string message)
+        {
+            lock (ErrorLogLockObject)
+            {
+                if (!File.Exists(_errorLog))
+                {
+                    File.Create(_errorLog);
+                }
+                var assembly = Assembly.GetExecutingAssembly();
+                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+                var version = fileVersionInfo.FileVersion;
+
+                var tempFile = Path.GetTempFileName();
+                using (var streamWriter = new StreamWriter(tempFile))
+                using (var streamReader = new StreamReader(_errorLog))
+                {
+                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
+                    streamWriter.Write(message);
+                    while (!streamReader.EndOfStream)
+                    {
+                        streamWriter.WriteLine(streamReader.ReadLine());
+                    }
+                }
+                File.Copy(tempFile, _errorLog, true);
+            }
+        }
+
         public static void LogError(Exception ex, string message = null)
         {
             LogError(0, ex, message);
@@ -230,65 +257,68 @@ namespace ClassLibraryCommon
 
         public static void LogError(uint location, Exception ex, string message = null)
         {
-            lock (ErrorLogLockObject)
-            {
-                if (!File.Exists(_errorLog))
-                {
-                    File.Create(_errorLog);
-                }
-                var assembly = Assembly.GetExecutingAssembly();
-                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                var version = fileVersionInfo.FileVersion;
-
-                    var tempFile = Path.GetTempFileName();
-                using (var streamWriter = new StreamWriter(tempFile))
-                using (var streamReader = new StreamReader(_errorLog))
-                {
-                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
-                    streamWriter.Write(Environment.NewLine + location + " Custom message = [" + message + "]" + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
-                    while (!streamReader.EndOfStream)
-                        streamWriter.WriteLine(streamReader.ReadLine());
-                }
-                File.Copy(tempFile, _errorLog, true);
-            }
+            Log(Environment.NewLine + location + " Custom message = [" + message + "]" + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
         }
 
 
         public static void LogError(uint location, string message)
         {
-            lock (ErrorLogLockObject)
-            {
-                if (!File.Exists(_errorLog))
-                {
-                    File.Create(_errorLog);
-                }
-                var assembly = Assembly.GetExecutingAssembly();
-                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                var version = fileVersionInfo.FileVersion;
-
-                var streamWriter = File.AppendText(_errorLog);
-                try
-                {
-                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:yy") + "  version : " + version);
-                    streamWriter.Write(Environment.NewLine + location + " Message = [" + message + "]" + Environment.NewLine);
-                }
-                finally
-                {
-                    streamWriter.Close();
-                }
-            }
+            Log(Environment.NewLine + location + " Message = [" + message + "]" + Environment.NewLine);
         }
 
         public static void ShowErrorMessageBox(uint location, Exception ex, string message = null)
         {
             LogError(location, ex, message);
-            MessageBox.Show(location + " " + ex.Message, "Details logged to error log.");
+            MessageBox.Show(location + " " + ex.Message, "Details logged to error log.", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
             LogError(ex, message);
-            MessageBox.Show(ex.Message, "Details logged to error log.\n" + ex.Source);
+            MessageBox.Show(ex.Message, "Details logged to error log.\n" + ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public static void ShowMessageBox(string text, string header = "Information")
+        {
+            MessageBox.Show(text, header, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private static string GetStackTrace(string[] traceLineMustInclude, string header = "Stacktrace")
+        {
+            var stacktrace = Environment.StackTrace;
+            var lines = stacktrace.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var result = new StringBuilder();
+
+            foreach (var line in lines)
+            {
+                bool found = false;
+                foreach (var mustIncludeProject in traceLineMustInclude)
+                {
+                    if (line.Contains(mustIncludeProject))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found && !line.Contains("LogStackTrace") && !line.Contains("GetStackTrace") && !line.Contains("ShowStackTraceBox"))
+                {
+                    result.Append(line);
+                }
+            }
+
+            return result.ToString();
+        }
+
+        public static void LogStackTrace(string[] traceLineMustInclude, string header = "Stacktrace")
+        {
+            var stackTrace = GetStackTrace(traceLineMustInclude, header);
+            Log("  This is a logged Stacktrace\n" + stackTrace);
+        }
+
+        public static void ShowStackTraceBox(string[] traceLineMustInclude, string header = "Stacktrace")
+        {
+            MessageBox.Show(GetStackTrace(traceLineMustInclude,header), header, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public static string PrintBitStrings(byte[] array)

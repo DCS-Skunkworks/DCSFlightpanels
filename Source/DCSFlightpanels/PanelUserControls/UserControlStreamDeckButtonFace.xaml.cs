@@ -64,6 +64,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                if (!_isLoaded)
+                {
+                    return;
+                }
                 RadioButtonDCSBIOSFace.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelButtonTextAndStyle.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
@@ -86,7 +90,11 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonTextFaceBackgroundColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
 
-                
+
+                LabelFaceTypeTextFontInfo.Content = TextBoxButtonTextFace.Bill.TextFont.Name + " " + 
+                                                    TextBoxButtonTextFace.Bill.TextFont.Size + " " +
+                                                    (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
+                LabelFaceBackgroundInfo.Content = TextBoxButtonTextFace.Bill.BackgroundHex;
                 /*
                  * Not yet implemented
                  */
@@ -651,7 +659,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Clear();
                 RadioButtonTextFace.IsChecked = true;
                 TextBoxButtonTextFace.Text = e.TargetLayerName;
-                TextBoxButtonTextFace.Bill.FontColor = Color.White;
+                TextBoxButtonTextFace.Bill.FontColor = ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE);
                 TextBoxButtonTextFace.Bill.BackgroundColor = ColorTranslator.FromHtml(Constants.COLOR_GUNSHIP_GREEN);
                 SetIsDirty();
             }

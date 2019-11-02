@@ -218,20 +218,35 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ShowLayer(string layerName)
+        private void UIShowLayer(string layerName)
         {
             try
             {
-                if (string.IsNullOrEmpty(layerName))
+
+                if (!_userControlLoaded)
+                {
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(layerName) || ComboBoxLayers.Text == null)
                 {
                     ClearAll();
                     return;
                 }
 
+                /*
+                 * Two choices.
+                 * Settings has been read from the config file => Set current layer to whatever the combobox shows.
+                 * StreamDeck has a current layer => 
+                 */
+                LoadComboBoxLayers("");
+
+                _streamDeck.ActiveLayer = ComboBoxLayers.Text;
+
                 HideAllDotImages();
 
-                var selectedLayer = _streamDeck.GetLayer(true, layerName);
-                
+                var selectedLayer = _streamDeck.GetLayer(layerName);
+
                 foreach (var buttonImage in _buttonImages)
                 {
                     buttonImage.Bill.Clear();
@@ -246,13 +261,15 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                     SetFormState();
                 }
+
+                SetApplicationMode();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private BillStreamDeckFace GetSelectedImageBill()
         {
             foreach (var image in _buttonImages)
@@ -446,29 +463,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                /*
-                 * Two choices.
-                 * Settings has been read from the config file => Set current layer to whatever the combobox shows.
-                 * StreamDeck has a current layer => 
-                 */
-                LoadComboBoxLayers("");
-
-                if (GetSelectedLayerName() == null)
-                {
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(_streamDeck.ActiveLayerName))
-                {
-                    _streamDeck.ActiveLayerName = GetSelectedLayerName();
-                }
-
-                if (!_userControlLoaded)
-                {
-                    return;
-                }
-                ShowLayer(_streamDeck.ActiveLayerName);
-                SetApplicationMode();
+                UIShowLayer(_streamDeck.HomeLayer.Name);
             }
             catch (Exception ex)
             {
@@ -527,8 +522,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var result = _streamDeck.AddLayer(layerWindow.NewLayer);
                     SetCheckboxHomeStatus(result);
                 }
-                LoadComboBoxLayers(layerWindow.NewLayer);
-                ShowLayer(layerWindow.NewLayer.Name);
+                UIShowLayer(layerWindow.NewLayer.Name);
                 SetFormState();
             }
             catch (Exception ex)
@@ -539,91 +533,26 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void Clear()
         {
-            ComboBoxButtonReleaseDelay.SelectedIndex = 0;
-        }
 
-
-
-        private void SetComboBoxButtonReleaseDelayValue(int value)
-        {
-            foreach (ComboBoxItem item in ComboBoxButtonReleaseDelay.Items)
-            {
-                if (int.Parse(item.Content.ToString()) == value)
-                {
-                    ComboBoxButtonReleaseDelay.SelectedItem = item;
-                    break;
-                }
-            }
-        }
-        
-        private void ComboBoxButtonReleaseDelay_OnDropDownClosed(object sender, EventArgs e)
-        {
-            try
-            {
-                if (GetSelectedButtonName() == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-                {
-                    return;
-                }
-                _streamDeck.GetStreamDeckButton(GetSelectedButtonName(), ComboBoxLayers.Text).ExecutionDelay = int.Parse(ComboBoxButtonReleaseDelay.Text);
-                _streamDeck.SignalPanelChange();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void LabelDelayedReleaseInfo_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                MessageBox.Show(
-                    "Stream Deck doesn't send information when a button is released, only when the button is pressed.\nSet therefore a time delay when the button can be considered released after have being pressed.",
-                    "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void LabelDelayedReleaseInfo_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = Cursors.Hand;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void LabelDelayedReleaseInfo_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Mouse.OverrideCursor = null;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
         }
 
         private void ButtonDeleteLayer_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                if (MessageBox.Show("Delete layer " + GetSelectedLayerName() + "?", "Can not be undone!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                ClearAll();
+
+                if (MessageBox.Show("Delete layer " + ComboBoxLayers.Text + "?", "Can not be undone!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    _streamDeck.DeleteLayer(GetSelectedLayerName());
+                    _streamDeck.DeleteLayer(ComboBoxLayers.Text);
 
                 }
+
                 LoadComboBoxLayers("");
-                if (!string.IsNullOrEmpty(GetSelectedLayerName()))
+
+                if (!string.IsNullOrEmpty(ComboBoxLayers.Text))
                 {
-                    ShowLayer(GetSelectedLayerName());
+                    UIShowLayer(ComboBoxLayers.Text);
                 }
             }
             catch (Exception ex)
@@ -637,32 +566,27 @@ namespace DCSFlightpanels.PanelUserControls
             return _streamDeck.GetLayer(ComboBoxLayers.Text);
         }
 
-        public string GetSelectedLayerName()
+
+        private string _comboBoxLayerTextComparison;
+        private void ComboBoxLayers_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            try
-            {
-                return ComboBoxLayers.Text;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(20235444, ex);
-            }
-
-            return null;
+            _comboBoxLayerTextComparison = ComboBoxLayers.Text;
         }
-
 
         private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
         {
             try
             {
-                ClearAll();
+                if (_comboBoxLayerTextComparison == ComboBoxLayers.Text)
+                {
+                    return;
+                }
 
-                _streamDeck.ActiveLayerName = ComboBoxLayers.Text;
+                ClearAll();
 
                 SetCheckboxHomeLayer();
 
-                ShowLayer(_streamDeck.ActiveLayerName);
+                UIShowLayer(ComboBoxLayers.Text);
 
                 //De-select if whatever button is selected
                 UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
@@ -674,12 +598,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(20135444, ex);
             }
         }
-
-        private void LoadComboBoxLayers(StreamDeckLayer selectedLayer)
-        {
-            LoadComboBoxLayers(selectedLayer.Name);
-        }
-
+        
         private void LoadComboBoxLayers(string selectedLayerName)
         {
             var selectedIndex = ComboBoxLayers.SelectedIndex;
@@ -691,7 +610,6 @@ namespace DCSFlightpanels.PanelUserControls
                 return;
             }
 
-            ComboBoxLayers.DropDownClosed -= ComboBoxLayers_OnDropDownClosed;
             ComboBoxLayers.ItemsSource = layerList;
             ComboBoxLayers.Items.Refresh();
 
@@ -716,14 +634,17 @@ namespace DCSFlightpanels.PanelUserControls
                 ComboBoxLayers.SelectedIndex = 0;
             }
 
-            _streamDeck.ActiveLayerName = ComboBoxLayers.Text;
+            if (!_userControlLoaded)
+            {
+                _streamDeck.ActiveLayer = ComboBoxLayers.Text;
+            }
+
             SetCheckboxHomeLayer();
-            ComboBoxLayers.DropDownClosed += ComboBoxLayers_OnDropDownClosed;
         }
 
         private void SetCheckboxHomeLayer()
         {
-            if (GetSelectedLayerName() != null && _streamDeck.HomeLayer != null)
+            if (ComboBoxLayers.Text != null && _streamDeck.HomeLayer != null)
             {
                 SetCheckboxHomeStatus(ComboBoxLayers.Text == _streamDeck.HomeLayer.Name);
             }
@@ -743,7 +664,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var isChecked = CheckBoxMarkHomeLayer.IsChecked == true;
-                _streamDeck.SetHomeStatus(isChecked, GetSelectedLayerName());
+                _streamDeck.SetHomeStatus(isChecked, ComboBoxLayers.Text);
                 SetFormState();
             }
             catch (Exception ex)
@@ -800,9 +721,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var streamDeckButton = image.Bill.Button;
                     if (streamDeckButton != null)
                     {
-                        SetComboBoxButtonReleaseDelayValue(streamDeckButton.ExecutionDelay);
                         SetButtonActionType();
-                        ComboBoxButtonReleaseDelay.SelectedValue = streamDeckButton.ExecutionDelay;
                         UCStreamDeckButtonAction.ShowActionConfiguration(streamDeckButton);
                         UCStreamDeckButtonFace.ShowFaceConfiguration(streamDeckButton);
                     }
@@ -891,7 +810,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             return EnumStreamDeckActionType.Unknown;
         }
-        
+
 
         private void RadioButtonButtonActionTypePress_OnClick(object sender, RoutedEventArgs e)
         {
@@ -918,7 +837,7 @@ namespace DCSFlightpanels.PanelUserControls
                     streamDeckButton.ActionForRelease = actionRelease;
                     added = true;
                 }
-                
+
                 if (added)
                 {
                     _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
@@ -976,7 +895,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     var streamDeckButton = _streamDeck.GetActiveLayer().GetStreamDeckButton(GetSelectedButtonName());
                     var faceType = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
-                    
+
                     if (faceType != null)
                     {
                         streamDeckButton.Face = faceType;
@@ -1114,12 +1033,12 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private Color[] _colors = new Color[]
+        private readonly Color[] _colors = new Color[]
         {
             Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
             Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
         };
-
+        
         private void ThreadedPanelIdentification(CancellationToken cancellationToken)
         {
             try
@@ -1151,7 +1070,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ButtonAddPredefinedButton_OnClick(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
     }

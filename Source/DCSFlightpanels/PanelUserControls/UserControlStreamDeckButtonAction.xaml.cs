@@ -87,6 +87,8 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = TextBoxDCSBIOSActionButtonOff.Bill.ContainsDCSBIOS();
                 ButtonDeleteOSCommandButtonOn.IsEnabled = TextBoxOSCommandButtonOn.Bill.ContainsOSCommand();
                 ButtonDeleteOSCommandButtonOff.IsEnabled = TextBoxOSCommandButtonOff.Bill.ContainsOSCommand();
+
+                
             }
             catch (Exception ex)
             {
@@ -270,6 +272,10 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckActionType.LayerNavigation:
                     {
+                        if (!forButtonPressed)
+                        {
+                            return null;
+                        }
                         if (TextBoxLayerNavButton.Bill.ContainsStreamDeckLayer())
                         {
                             var result = new LayerBindingStreamDeck();
@@ -394,7 +400,9 @@ namespace DCSFlightpanels.PanelUserControls
                 var keySequenceWindow = textBox.Bill.ContainsKeySequence() ?
                     new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence()) :
                     new KeySequenceWindow();
+
                 keySequenceWindow.ShowDialog();
+
                 if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
                 {
                     //Clicked OK
