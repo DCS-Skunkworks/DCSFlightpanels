@@ -10,8 +10,9 @@
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="SwitchPanelPZ55UserControl_OnLoaded">
     <UserControl.Resources>
         <ContextMenu x:Key="TextBoxContextMenuPZ55" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged" >
-            
+
             <MenuItem Header="Keep pressed" Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThirtyTwoMilliSec" x:Name="contextMenuItemThirtyTwoMilliSec" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="FiftyMilliSec" Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="HalfSecond" Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="Second" Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>

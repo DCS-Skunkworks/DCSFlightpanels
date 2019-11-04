@@ -1143,7 +1143,7 @@ namespace DCSFlightpanels.PanelUserControls
                 KeyPressLength keyPressLength;
                 if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeySequence.Count == 0)
                 {
-                    keyPressLength = KeyPressLength.FiftyMilliSec;
+                    keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
                 }
                 else
                 {
@@ -1792,7 +1792,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                var keyPress = new KeyPress(vkNull, KeyPressLength.FiftyMilliSec);
+                var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
                 textBox.Bill.KeyPress = keyPress;
                 textBox.Bill.KeyPress.Information = "VK_NULL";
                 textBox.Text = vkNull;

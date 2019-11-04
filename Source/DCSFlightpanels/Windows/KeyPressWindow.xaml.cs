@@ -73,7 +73,7 @@ namespace DCSFlightpanels.Windows
                 var textBox = ((TextBox)sender);
                 if (textBox.Tag == null)
                 {
-                    textBox.Tag = KeyPressLength.FiftyMilliSec;
+                    textBox.Tag = KeyPressLength.ThirtyTwoMilliSec;
                 }
                 var keyPressed = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(e.Key);
                 e.Handled = true;

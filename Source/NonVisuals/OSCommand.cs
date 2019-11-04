@@ -9,7 +9,7 @@ namespace NonVisuals
         private string _file;
         private string _arguments;
         private string _name;
-        
+        private volatile bool _isRunning;
 
         public OSCommand()
         {}
@@ -52,6 +52,11 @@ namespace NonVisuals
             return "OSCommand{" + _file + Constants.SEPARATOR_SYMBOL + _arguments + Constants.SEPARATOR_SYMBOL + _name + "}";
         }
 
+        public bool IsRunning()
+        {
+            return _isRunning;
+        }
+
         public string Execute(CancellationToken cancellationToken)
         {
             var process = new Process
@@ -69,6 +74,7 @@ namespace NonVisuals
             var result = "";
             while (!process.StandardOutput.EndOfStream)
             {
+                _isRunning = true;
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;
@@ -76,6 +82,7 @@ namespace NonVisuals
                 result = result + " " + process.StandardOutput.ReadLine();
             }
 
+            _isRunning = false;
             return result;
         }
 

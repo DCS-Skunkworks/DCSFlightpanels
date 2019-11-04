@@ -65,13 +65,10 @@
                             <Button Name="ButtonTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
                             <Button Name="ButtonTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestTextFace_OnClick"/>
                         </StackPanel>
-                        <StackPanel>
-                            <Label Name="LabelFaceTypeTextFontInfo" HorizontalContentAlignment="Center" Margin="0,5,0,0"  />
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Name="LabelFaceBackgroundInfo" HorizontalContentAlignment="Center" Margin="0,5,0,0"  />
-                        </StackPanel>
                     </StackPanel>
+                </StackPanel>
+                <StackPanel>
+                    <TextBox Name="TextBoxFontInfo" Height="30" IsReadOnly="True" Background="Transparent"></TextBox>
                 </StackPanel>
             </StackPanel>
 

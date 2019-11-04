@@ -6,6 +6,7 @@ namespace NonVisuals.StreamDeck
     public class OSCommandBindingStreamDeck : OSCommandBinding, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
+        public bool IsRepeatable() => true;
 
 
 
@@ -13,6 +14,10 @@ namespace NonVisuals.StreamDeck
 
 
 
+        public bool IsRunning()
+        {
+            return OSCommandObject.IsRunning();
+        }
 
 
         public void Execute(StreamDeckRequisites streamDeckRequisite)

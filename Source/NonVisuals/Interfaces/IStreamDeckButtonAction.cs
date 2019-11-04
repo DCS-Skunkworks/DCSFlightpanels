@@ -17,5 +17,7 @@ namespace NonVisuals.Interfaces
     {
         EnumStreamDeckActionType ActionType { get; }
         void Execute(StreamDeckRequisites streamDeckRequisites);
+        bool IsRunning();
+        bool IsRepeatable();
     }
 }

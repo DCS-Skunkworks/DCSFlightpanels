@@ -15,6 +15,7 @@
         <ContextMenu x:Key="TextBoxContextMenuPZ70" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged">
             
             <MenuItem Header="Keep pressed" x:Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
+            <MenuItem Header="ThirtyTwoMilliSec" x:Name="contextMenuItemThirtyTwoMilliSec" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="FiftyMilliSec" x:Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="HalfSecond" x:Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
             <MenuItem Header="Second" x:Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>

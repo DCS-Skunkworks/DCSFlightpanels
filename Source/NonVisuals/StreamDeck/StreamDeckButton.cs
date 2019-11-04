@@ -17,29 +17,85 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonFace _buttonFace = null;
         private IStreamDeckButtonAction _buttonActionForPress = null;
         private IStreamDeckButtonAction _buttonActionForRelease = null;
-        
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private Thread _keyPressedThread;
 
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {
             _enumStreamDeckButtonName = enumStreamDeckButton;
         }
 
-        public void IsPressed(StreamDeckRequisites streamDeckRequisites)
+        public void DoPress(StreamDeckRequisites streamDeckRequisites)
         {
-            ActionForPress?.Execute(streamDeckRequisites);
+            if (ActionForPress == null)
+            {
+                return;
+            }
+
+            while (ActionForPress.IsRunning())
+            {
+                _cancellationTokenSource.Cancel();
+            }
+
+            if (ActionForPress.IsRepeatable())
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+                streamDeckRequisites.ThreadCancellationToken = _cancellationTokenSource.Token;
+                _keyPressedThread = new Thread(() => ThreadedPress(streamDeckRequisites));
+                _keyPressedThread.Start();
+            }
+            else
+            {
+                ActionForPress.Execute(streamDeckRequisites);
+            }
         }
 
-        public void WasReleased(StreamDeckRequisites streamDeckRequisites)
+        private void ThreadedPress(StreamDeckRequisites streamDeckRequisites)
         {
-            ActionForRelease?.Execute(streamDeckRequisites);
+            var first = true;
+            while (true)
+            {
+                if (_cancellationTokenSource.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                if (!ActionForPress.IsRunning())
+                {
+                    ActionForPress?.Execute(streamDeckRequisites);
+                }
+
+
+                if (first)
+                {
+                    Thread.Sleep(500);
+                    first = false;
+                }
+                else
+                {
+                    Thread.Sleep(25);
+                }
+            }
+        }
+
+        public void DoRelease(StreamDeckRequisites streamDeckRequisites)
+        {
+            _cancellationTokenSource.Cancel();
+
+            if (ActionForRelease == null)
+            {
+                return;
+            }
+
+            if (!ActionForRelease.IsRunning())
+            {
+                ActionForRelease?.Execute(streamDeckRequisites);
+            }
         }
 
         public void Show(StreamDeckRequisites streamDeckRequisites)
         {
-            if (Face != null)
-            {
-                Face?.Show(streamDeckRequisites);
-            }
+            Face?.Show(streamDeckRequisites);
         }
 
         public EnumStreamDeckButtonNames StreamDeckButtonName

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -11,34 +12,23 @@ namespace NonVisuals.DCSBIOSBindings
         private bool _whenOnTurnedOn = true;
         private string _description;
         private Thread _sendDCSBIOSCommandsThread;
-        public List<DCSBIOSInput> DCSBIOSInputs { get; set; }
-
+        private volatile List<DCSBIOSInput> _dcsbiosInputs;
+        
         internal abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
+        
 
 
-        public bool WhenTurnedOn
+        public bool IsRunning()
         {
-            get => _whenOnTurnedOn;
-            set => _whenOnTurnedOn = value;
-        }
+            if (_sendDCSBIOSCommandsThread != null && (_sendDCSBIOSCommandsThread.ThreadState == ThreadState.Running ||
+                                                       _sendDCSBIOSCommandsThread.ThreadState == ThreadState.WaitSleepJoin ||
+                                                       _sendDCSBIOSCommandsThread.ThreadState == ThreadState.Unstarted))
+            {
+                return true;
+            }
 
-        public string Description
-        {
-            get => string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description;
-            set => _description = value;
-        }
-
-
-        protected bool WhenOnTurnedOn
-        {
-            get => _whenOnTurnedOn;
-            set => _whenOnTurnedOn = value;
-        }
-
-        public bool HasBinding()
-        {
-            return DCSBIOSInputs != null && DCSBIOSInputs.Count > 0;
+            return false;
         }
 
         protected Thread DCSBIOSCommandsThread => _sendDCSBIOSCommandsThread;
@@ -46,14 +36,14 @@ namespace NonVisuals.DCSBIOSBindings
         protected bool CancelSendDCSBIOSCommands { get; set; }
 
 
-        public void SendDCSBIOSCommands()
+        public void SendDCSBIOSCommands(CancellationToken cancellationToken)
         {
             CancelSendDCSBIOSCommands = true;
-            _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(DCSBIOSInputs));
+            _sendDCSBIOSCommandsThread = new Thread(() => SendDCSBIOSCommandsThread(DCSBIOSInputs, cancellationToken));
             _sendDCSBIOSCommandsThread.Start();
         }
 
-        private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs)
+        private void SendDCSBIOSCommandsThread(List<DCSBIOSInput> dcsbiosInputs, CancellationToken cancellationToken)
         {
             CancelSendDCSBIOSCommands = false;
             try
@@ -62,13 +52,13 @@ namespace NonVisuals.DCSBIOSBindings
                 {
                     foreach (var dcsbiosInput in dcsbiosInputs)
                     {
-                        if (CancelSendDCSBIOSCommands)
+                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
                         var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
                         Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
-                        if (CancelSendDCSBIOSCommands)
+                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
                         {
                             return;
                         }
@@ -87,6 +77,35 @@ namespace NonVisuals.DCSBIOSBindings
             }
         }
 
+
+        public bool WhenTurnedOn
+        {
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
+        }
+
+        public string Description
+        {
+            get => string.IsNullOrWhiteSpace(_description) ? "DCS-BIOS" : _description;
+            set => _description = value;
+        }
+
+        public List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get => _dcsbiosInputs;
+            set => _dcsbiosInputs = value;
+        }
+
+        protected bool WhenOnTurnedOn
+        {
+            get => _whenOnTurnedOn;
+            set => _whenOnTurnedOn = value;
+        }
+
+        public bool HasBinding()
+        {
+            return DCSBIOSInputs != null && DCSBIOSInputs.Count > 0;
+        }
 
         /*
          * 

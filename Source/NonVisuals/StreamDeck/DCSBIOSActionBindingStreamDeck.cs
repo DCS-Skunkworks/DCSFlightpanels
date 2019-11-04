@@ -7,7 +7,7 @@ namespace NonVisuals.StreamDeck
     public class DCSBIOSActionBindingStreamDeck : DCSBIOSActionBindingBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.DCSBIOS;
-
+        public bool IsRepeatable() => true;
 
 
 
@@ -18,9 +18,8 @@ namespace NonVisuals.StreamDeck
 
         public void Execute(StreamDeckRequisites streamDeckRequisite)
         {
-            SendDCSBIOSCommands();
+            SendDCSBIOSCommands(streamDeckRequisite.ThreadCancellationToken);
         }
-
 
         internal override void ImportSettings(string settings) { }
 

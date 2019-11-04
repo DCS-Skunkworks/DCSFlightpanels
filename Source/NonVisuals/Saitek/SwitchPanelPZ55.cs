@@ -338,7 +338,7 @@ namespace NonVisuals.Saitek
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelKey.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands();
+                            dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
                             break;
                         }
                     }

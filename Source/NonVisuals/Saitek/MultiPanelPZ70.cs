@@ -670,7 +670,7 @@ namespace NonVisuals.Saitek
                     {
                         if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands();
+                            dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
                             break;
                         }
                     }

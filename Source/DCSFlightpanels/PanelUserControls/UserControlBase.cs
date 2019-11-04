@@ -24,6 +24,10 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         item.IsChecked = true;
                     }
+                    else if (item.Name == "contextMenuItemThirtyTwoMilliSec" && keyPressLength == KeyPressLength.ThirtyTwoMilliSec)
+                    {
+                        item.IsChecked = true;
+                    }
                     else if (item.Name == "contextMenuItemFiftyMilliSec" && keyPressLength == KeyPressLength.FiftyMilliSec)
                     {
                         item.IsChecked = true;
@@ -103,6 +107,10 @@ namespace DCSFlightpanels.PanelUserControls
                     infoDialog.Height = 250;
                     infoDialog.ShowDialog();
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
+                }
+                else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")
+                {
+                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtyTwoMilliSec);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
                 {

@@ -29,7 +29,7 @@ namespace NonVisuals.StreamDeck
         {
             Startup();
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
-            _streamDeckBoard.KeyStateChanged += StreamDeckKeyHandler;
+            _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler =  new StreamDeckLayerHandler(_streamDeckBoard);
             _streamDeckRequisite = new StreamDeckRequisites{ StreamDeck = this };
         }
@@ -65,7 +65,7 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        private void StreamDeckKeyHandler(object sender, KeyEventArgs e)
+        private void StreamDeckKeyListener(object sender, KeyEventArgs e)
         {
             if (!(sender is IMacroBoard))
             {
@@ -80,12 +80,12 @@ namespace NonVisuals.StreamDeck
             if (e.IsDown)
             {
                 var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
-                streamDeckButton.IsPressed(_streamDeckRequisite);
+                streamDeckButton.DoPress(_streamDeckRequisite);
             }
             else
             {
                 var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
-                streamDeckButton.WasReleased(_streamDeckRequisite);
+                streamDeckButton.DoRelease(_streamDeckRequisite);
             }
         }
 
@@ -280,43 +280,7 @@ namespace NonVisuals.StreamDeck
         {
             return null;
         }
-        /*
-        public HashSet<DCSBIOSActionBindingStreamDeck> DCSBiosBindings
-        {
-            get => _dcsBiosBindings;
-            set => _dcsBiosBindings = value;
-        }
 
-        public HashSet<KeyBindingStreamDeck> KeyBindings
-        {
-            get => _keyBindings;
-            set => _keyBindings = value;
-        }
-
-        public HashSet<BIPLinkStreamDeck> BIPLinkHashSet
-        {
-            get => _bipLinks;
-            set => _bipLinks = value;
-        }
-
-        public HashSet<KeyBindingStreamDeck> KeyBindingsHashSet
-        {
-            get => _keyBindings;
-            set => _keyBindings = value;
-        }
-
-        public HashSet<OSCommandBindingStreamDeck> OSCommandHashSet
-        {
-            get => _osCommandBindings;
-            set => _osCommandBindings = value;
-        }
-
-        public HashSet<DCSBIOSOutputBindingStreamDeck> LCDBindings
-        {
-            get => _dcsBiosLcdBindings;
-            set => _dcsBiosLcdBindings = value;
-        }
-        */
         public int LCDKnobSensitivity
         {
             get => _lcdKnobSensitivity;

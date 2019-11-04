@@ -373,6 +373,7 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Consolas, 12pt")]
         public global::System.Drawing.Font ButtonTextFaceFont {
             get {
                 return ((global::System.Drawing.Font)(this["ButtonTextFaceFont"]));
@@ -384,6 +385,7 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
         public global::System.Drawing.Color ButtonTextFaceFontColor {
             get {
                 return ((global::System.Drawing.Color)(this["ButtonTextFaceFontColor"]));
@@ -395,6 +397,7 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
         public global::System.Drawing.Color ButtonTextFaceBackgroundColor {
             get {
                 return ((global::System.Drawing.Color)(this["ButtonTextFaceBackgroundColor"]));

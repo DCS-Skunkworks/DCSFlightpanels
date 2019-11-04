@@ -8,18 +8,24 @@ namespace NonVisuals.StreamDeck
     public class KeyBindingStreamDeck : KeyBinding, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
+        public bool IsRepeatable() => true;
 
 
 
 
 
-
+        public bool IsRunning()
+        {
+            return OSKeyPress.IsRunning();
+        }
 
         public void Execute(StreamDeckRequisites streamDeckRequisite)
         {
             OSKeyPress.Execute(streamDeckRequisite.ThreadCancellationToken);
         }
-        
+
+
+
         public static HashSet<KeyBindingStreamDeck> SetNegators(HashSet<KeyBindingStreamDeck> keyBindings)
         {
             /*if (keyBindings == null)

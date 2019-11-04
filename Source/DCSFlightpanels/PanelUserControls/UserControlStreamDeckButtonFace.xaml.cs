@@ -91,10 +91,10 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
 
 
-                LabelFaceTypeTextFontInfo.Content = TextBoxButtonTextFace.Bill.TextFont.Name + " " + 
+                TextBoxFontInfo.Text =  "Font : " + TextBoxButtonTextFace.Bill.TextFont.Name + " " + 
                                                     TextBoxButtonTextFace.Bill.TextFont.Size + " " +
                                                     (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
-                LabelFaceBackgroundInfo.Content = TextBoxButtonTextFace.Bill.BackgroundHex;
+                TextBoxFontInfo.Text = TextBoxFontInfo.Text  + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
                 /*
                  * Not yet implemented
                  */

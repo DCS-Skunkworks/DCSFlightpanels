@@ -248,7 +248,7 @@ namespace NonVisuals.Saitek
                     {
                         if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                         {
-                            dcsBiosBinding.SendDCSBIOSCommands();
+                            dcsBiosBinding.SendDCSBIOSCommands(new CancellationToken());
                             break;
                         }
                     }

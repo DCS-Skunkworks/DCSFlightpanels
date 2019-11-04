@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Collapsed" Margin="0,10,0,0">
+            <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Visible" Margin="0,10,0,0">
                 <Label Content="Key Press / Sequence when Button Pressed" FontSize="10" Height="23"   />
                 <customControl:StreamDeckActionTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxKeyPressButtonOn" Background="LightSteelBlue" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -69,7 +69,7 @@
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Visible"  Margin="0,10,0,0">
+            <StackPanel Name="StackPanelButtonLayerNavigationSettings"  Visibility="Collapsed"  Margin="0,10,0,0">
                 <Label Content="Layer to switch to" FontSize="10" Height="23"   />
                 <customControl:StreamDeckActionTextBox x:Name="TextBoxLayerNavButton" Visibility="Collapsed"></customControl:StreamDeckActionTextBox>
                     <ComboBox Name="ComboBoxLayerNavigationButton" SelectedValuePath="Content" DropDownClosed="ComboBoxLayerNavigationButton_OnDropDownClosed"/>

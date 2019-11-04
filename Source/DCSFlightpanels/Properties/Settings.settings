@@ -90,13 +90,13 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ButtonTextFaceFont" Type="System.Drawing.Font" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Consolas, 12pt</Value>
     </Setting>
     <Setting Name="ButtonTextFaceFontColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="ButtonTextFaceBackgroundColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Black</Value>
     </Setting>
   </Settings>
 </SettingsFile>

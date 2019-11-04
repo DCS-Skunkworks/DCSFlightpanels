@@ -9,59 +9,12 @@ using Newtonsoft.Json;
 
 namespace NonVisuals
 {
-    public class KeyPressInfo
-    {
-        private KeyPressLength _lengthOfBreak = KeyPressLength.FiftyMilliSec;
-        private KeyPressLength _lengthOfKeyPress = KeyPressLength.FiftyMilliSec;
-        private HashSet<VirtualKeyCode> _virtualKeyCodes = new HashSet<VirtualKeyCode>();
-
-        public KeyPressLength LengthOfBreak
-        {
-            get => _lengthOfBreak;
-            set => _lengthOfBreak = value;
-        }
-
-        public KeyPressLength LengthOfKeyPress
-        {
-            get => _lengthOfKeyPress;
-            set => _lengthOfKeyPress = value;
-        }
-
-        public HashSet<VirtualKeyCode> VirtualKeyCodes
-        {
-            get => _virtualKeyCodes;
-            set => _virtualKeyCodes = value;
-        }
-
-        [JsonIgnore]
-        public string VirtualKeyCodesAsString
-        {
-            get
-            {
-                var result = new StringBuilder();
-                if (_virtualKeyCodes.Count > 0)
-                {
-                    foreach (var virtualKeyCode in _virtualKeyCodes)
-                    {
-                        if (result.Length > 0)
-                        {
-                            result.Append(" + ");
-                        }
-                        result.Append(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                    }
-                }
-                return result.ToString();
-            }
-        }
-    }
-
     public class KeyPress
     {
         private SortedList<int, KeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
         private string _information = "Key press sequence";
         private Thread _executingThread;
-        private long _abortCurrentSequence;
-        private long _threadHasFinished = 1;
+
         /*
          * When this OSKeyPress Executes it should cancel any execution _negatorOSKeyPress does.
          * No need for constructor of this. It is not know at startup whether there are negators,
@@ -69,6 +22,17 @@ namespace NonVisuals
          * It is the binding class that must make sure to set these.
          */
         private List<KeyPress> _negatorOSKeyPresses = new List<KeyPress>();
+        private CancellationToken _cancellationToken = new CancellationToken();
+        private volatile bool _abort;
+        private const int _sleepValue = 32;
+
+
+
+
+
+
+
+
 
         public KeyPress() { }
 
@@ -90,6 +54,7 @@ namespace NonVisuals
 
         ~KeyPress()
         {
+            Abort = true;
             _executingThread?.Abort();
         }
 
@@ -101,34 +66,16 @@ namespace NonVisuals
             set => _negatorOSKeyPresses = value;
         }
 
-        private void SetAbortThreadState()
+        public bool IsRunning()
         {
-            Interlocked.Exchange(ref _abortCurrentSequence, 1);
-        }
+            if (_executingThread != null && (_executingThread.ThreadState == ThreadState.Running ||
+                                             _executingThread.ThreadState == ThreadState.WaitSleepJoin ||
+                                             _executingThread.ThreadState == ThreadState.Unstarted))
+            {
+                return true;
+            }
 
-        private void ResetAbortThreadState()
-        {
-            Interlocked.Exchange(ref _abortCurrentSequence, 0);
-        }
-
-        private bool DoAbortThread()
-        {
-            return Interlocked.Read(ref _abortCurrentSequence) == 1;
-        }
-
-        private bool HasThreadHasFinished()
-        {
-            return Interlocked.Read(ref _threadHasFinished) == 1;
-        }
-
-        private void SignalThreadHasFinished()
-        {
-            Interlocked.Exchange(ref _threadHasFinished, 1);
-        }
-
-        private void ResetThreadHasFinishedState()
-        {
-            Interlocked.Exchange(ref _threadHasFinished, 0);
+            return false;
         }
 
         public void Execute(CancellationToken cancellationToken)
@@ -137,29 +84,22 @@ namespace NonVisuals
             {
                 foreach (var negatorOSKeyPress in _negatorOSKeyPresses)
                 {
-                    negatorOSKeyPress?.SetAbortThreadState();
+                    negatorOSKeyPress.Abort = true;
                 }
-                //PrintInterlockedVars(0);
+
                 //Check for already executing key sequence which may use long timings and breaks
-                if (!HasThreadHasFinished() && _executingThread != null)
+                if (IsRunning() && _executingThread != null)
                 {
-                    SetAbortThreadState();
-                    while (!HasThreadHasFinished())
+                    Abort = true;
+                    while (IsRunning())
                     {
-                        Thread.Sleep(50);
+                        Thread.Sleep(_sleepValue);
                     }
-                    ResetAbortThreadState();
-                    ResetThreadHasFinishedState();
-                    _executingThread = new Thread(() => ExecuteThreaded(cancellationToken, _sortedKeyPressInfoList));
-                    _executingThread.Start();
                 }
-                else
-                {
-                    ResetAbortThreadState();
-                    ResetThreadHasFinishedState();
-                    _executingThread = new Thread(() => ExecuteThreaded(cancellationToken, _sortedKeyPressInfoList));
-                    _executingThread.Start();
-                }
+
+                Abort = false;
+                _executingThread = new Thread(() => ExecuteThreaded(cancellationToken, _sortedKeyPressInfoList));
+                _executingThread.Start();
             }
             catch (Exception ex)
             {
@@ -184,6 +124,7 @@ namespace NonVisuals
                         {
                             return;
                         }
+
                         var array = keyPressInfo.VirtualKeyCodes.ToArray();
                         Common.DebugP("-----------------------------------");
                         foreach (var virtualKeyCode in array)
@@ -191,6 +132,9 @@ namespace NonVisuals
                             Common.DebugP(virtualKeyCode + " " + CommonVK.IsModifierKey(virtualKeyCode));
                         }
                         Common.DebugP("-----------------------------------");
+
+
+
                         if (Common.APIMode == APIModeEnum.keybd_event)
                         {
                             KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
@@ -201,9 +145,9 @@ namespace NonVisuals
                             SendKeys(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
                             //Common.DebugP("SendKeys result code -----------------------------------> " + Marshal.GetLastWin32Error());
                         }
-                        if (DoAbortThread())
+                        if (Abort)
                         {
-                            Common.DebugP("Aborting key pressing routine (AbortThread)");
+                            Common.DebugP("Aborting key pressing routine (Abort)");
                             break;
                         }
                     }
@@ -215,7 +159,6 @@ namespace NonVisuals
             }
             finally
             {
-                SignalThreadHasFinished();
             }
         }
 
@@ -229,11 +172,10 @@ namespace NonVisuals
             */
             while (breakLengthConsumed < (int)breakLength)
             {
-                Thread.Sleep(50);
-                breakLengthConsumed += 50;
-                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
+                Thread.Sleep(_sleepValue);
+                breakLengthConsumed += _sleepValue;
+                if (Abort || cancellationToken.IsCancellationRequested)
                 {
-                    ResetAbortThreadState();
                     return;
                 }
             }
@@ -272,8 +214,8 @@ namespace NonVisuals
 
                 if (keyPressLength != KeyPressLength.Indefinite)
                 {
-                    Thread.Sleep(50);
-                    keyPressLengthTimeConsumed += 50;
+                    Thread.Sleep(_sleepValue);
+                    keyPressLengthTimeConsumed += _sleepValue;
                 }
                 else
                 {
@@ -285,9 +227,8 @@ namespace NonVisuals
                     ReleaseKeys(virtualKeyCodes);
                 }
 
-                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
+                if (Abort || cancellationToken.IsCancellationRequested)
                 {
-                    ResetAbortThreadState();
                     //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
                     break;
                 }
@@ -615,11 +556,10 @@ namespace NonVisuals
             var breakLengthConsumed = 0;
             while (breakLengthConsumed < (int)breakLength)
             {
-                Thread.Sleep(50);
-                breakLengthConsumed += 50;
-                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
+                Thread.Sleep(_sleepValue);
+                breakLengthConsumed += _sleepValue;
+                if (Abort || cancellationToken.IsCancellationRequested)
                 {
-                    ResetAbortThreadState();
                     return;
                 }
             }
@@ -681,18 +621,17 @@ namespace NonVisuals
 
                 if (keyPressLength != KeyPressLength.Indefinite)
                 {
-                    Thread.Sleep(50);
-                    keyPressLengthTimeConsumed += 50;
+                    Thread.Sleep(_sleepValue);
+                    keyPressLengthTimeConsumed += _sleepValue;
                 }
                 else
                 {
                     Thread.Sleep(20);
                 }
 
-                if (DoAbortThread() || cancellationToken.IsCancellationRequested)
+                if (Abort || cancellationToken.IsCancellationRequested)
                 {
                     //If we are to cancel the whole operation. Release pressed keys ASAP and exit.
-                    ResetAbortThreadState();
                     break;
                 }
             }
@@ -704,6 +643,12 @@ namespace NonVisuals
             Array.Reverse(inputs);
             //Release same keys
             NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
+        }
+
+        public bool Abort
+        {
+            get => _abort;
+            set => _abort = value;
         }
     }
 
