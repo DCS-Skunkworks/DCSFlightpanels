@@ -47,6 +47,27 @@ namespace NonVisuals
         public const string COLOR_SKY = "#acac9a";
         public const string COLOR_AIRCRAFT_YELLOW = "#ffaa07";
 
+        public static int[] GetOLEColors()
+        {
+            return new int[] {
+                ColorTranslator.ToOle( ColorTranslator.FromHtml(COLOR_MILITARY_GRAY)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_DEFAULT_WHITE2)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_NAVY_BLUE)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_MILITARY_SAND)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_AIRCRAFT_YELLOW)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_WARNING_RED)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_INSIGNIA_BLUE)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_INSTRUMENT_BLACK)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_INTERIOR_GREEN)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_GUNSHIP_GREEN)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_CAMO_EARTH)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_DRAB_CAMO)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_CAMO_GRAY)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_SKY)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_MI8_BLUE)),
+                ColorTranslator.ToOle(ColorTranslator.FromHtml(COLOR_MILITARY_LIGHT_GREEN)),
+            };
+        }
         public static List<Color> GetColors()
         {
             var result = new List<Color>();

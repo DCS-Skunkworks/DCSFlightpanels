@@ -535,6 +535,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
+            colorDialog.CustomColors = Constants.GetOLEColors();
 
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
@@ -553,7 +554,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
-
+            colorDialog.CustomColors = Constants.GetOLEColors();
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
