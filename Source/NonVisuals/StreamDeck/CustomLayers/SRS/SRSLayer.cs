@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ClassLibraryCommon;
 using NonVisuals.Radios;
 
-namespace NonVisuals.StreamDeck.CustomLayers
+namespace NonVisuals.StreamDeck.CustomLayers.SRS
 {
 
     public enum EnumSRSButtonType
@@ -35,7 +35,6 @@ namespace NonVisuals.StreamDeck.CustomLayers
 
     public class SRSLayer : StreamDeckLayer, ISRSDataListener
     {
-        private double _frequency = 0;
         private double _lowerMainFreq = 0;
         private double _upperGuardFreq = 0;
         private double _lowerGuardFreq = 0;
@@ -46,8 +45,10 @@ namespace NonVisuals.StreamDeck.CustomLayers
         private int _radio;
         private double _radioFrequency;
         private double _guardFrequency;
+        private double _channel;
+        private SRSRadioMode _srsRadioMode;
         private ButtonFunctionList _buttonFunctionList = new ButtonFunctionList();
-
+        private bool _guardIsOn;
 
 
         public SRSLayer()
@@ -64,6 +65,54 @@ namespace NonVisuals.StreamDeck.CustomLayers
             }
             SRSListenerFactory.SetParams(_portFrom, _ipAddressTo, _portTo);
             SRSListenerFactory.GetSRSListener().Attach(this);
+        }
+
+        public int Radio
+        {
+            get => _radio;
+            set => _radio = value;
+        }
+
+        public double Frequency
+        {
+            get
+            {
+                if (GuardIsOn)
+                {
+                    return _guardFrequency;
+                }
+                return _radioFrequency;
+            }
+            set
+            {
+                if (GuardIsOn)
+                {
+                    _guardFrequency = value;
+                }
+                else
+                {
+                    _radioFrequency = value;
+                }
+                    
+            }
+        }
+
+        public double Channel
+        {
+            get => _channel;
+            set => _channel = value;
+        }
+
+        public SRSRadioMode SRSRadioMode
+        {
+            get => _srsRadioMode;
+            set => _srsRadioMode = value;
+        }
+
+        public bool GuardIsOn
+        {
+            get => _guardIsOn;
+            set => _guardIsOn = value;
         }
 
         public void SRSDataReceived(object sender)
