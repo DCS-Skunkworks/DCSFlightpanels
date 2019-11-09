@@ -506,7 +506,7 @@ namespace NonVisuals.Radios
 
 
 
-        public void ToggleBetweenGuardAndFrequency(int radioNumber)
+        public void ToggleGuard(int radioNumber)
         {
             var currentSRSRadioMode = TranslateSRSRadioMode(radioNumber);
             ToggleBetweenGuardAndFrequency(currentSRSRadioMode);

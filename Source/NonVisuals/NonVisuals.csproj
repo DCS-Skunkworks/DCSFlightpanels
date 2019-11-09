@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Interfaces\ISRSHandler.cs" />
     <Compile Include="KeyPressInfo.cs" />
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />

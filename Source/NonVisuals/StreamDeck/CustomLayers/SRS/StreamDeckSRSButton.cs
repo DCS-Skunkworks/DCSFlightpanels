@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck.CustomLayers.SRS
 {
@@ -13,21 +9,17 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
     {
         private EnumSRSButtonType _srsFunction;
         private ButtonFunction _buttonFunction;
+        private SRSLayer _parentLayer;
 
-        public StreamDeckSRSButton(EnumStreamDeckButtonNames enumStreamDeckButton) : base(enumStreamDeckButton)
+        public StreamDeckSRSButton(SRSLayer parentLayer, EnumStreamDeckButtonNames streamDeckButtonName, ButtonFunction buttonFunction) : base(streamDeckButtonName)
         {
+            _parentLayer = parentLayer;
+            _buttonFunction = buttonFunction;
+            _srsFunction = Type();
+            
+            ActionForPress = new SRSAction(buttonFunction.Description, _srsFunction,  (ISRSHandler)_parentLayer);
         }
-
-        public new void DoPress(StreamDeckRequisites streamDeckRequisites)
-        {
-
-        }
-
-        public new void DoRelease(StreamDeckRequisites streamDeckRequisites)
-        {
-
-        }
-
+        
         public EnumSRSButtonType SRSFunction
         {
             get => _srsFunction;
@@ -38,6 +30,12 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
         {
             get => _buttonFunction;
             set => _buttonFunction = value;
+        }
+
+        public SRSLayer ParentLayer
+        {
+            get => _parentLayer;
+            set => _parentLayer = value;
         }
 
         private EnumSRSButtonType Type()

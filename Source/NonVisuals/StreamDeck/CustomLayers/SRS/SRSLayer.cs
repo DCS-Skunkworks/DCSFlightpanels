@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ClassLibraryCommon;
+using NonVisuals.Interfaces;
 using NonVisuals.Radios;
 
 namespace NonVisuals.StreamDeck.CustomLayers.SRS
@@ -33,11 +34,8 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
         SetChannel10 = 29
     }
 
-    public class SRSLayer : StreamDeckLayer, ISRSDataListener
+    public class SRSLayer : StreamDeckLayer, ISRSDataListener, ISRSHandler
     {
-        private double _lowerMainFreq = 0;
-        private double _upperGuardFreq = 0;
-        private double _lowerGuardFreq = 0;
         private int _portFrom;
         private string _ipAddressTo;
         private int _portTo;
@@ -53,8 +51,6 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
 
         public SRSLayer()
         {
-            var button = new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON1);
-            //button
         }
 
         public void Initialize()
@@ -103,7 +99,7 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
             set => _channel = value;
         }
 
-        public SRSRadioMode SRSRadioMode
+        public SRSRadioMode RadioMode
         {
             get => _srsRadioMode;
             set => _srsRadioMode = value;

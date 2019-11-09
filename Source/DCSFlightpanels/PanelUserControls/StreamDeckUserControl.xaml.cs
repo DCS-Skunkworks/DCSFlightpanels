@@ -262,6 +262,12 @@ namespace DCSFlightpanels.PanelUserControls
                     SetFormState();
                 }
 
+                ComboBoxPredefinedButtons.ItemsSource = null;
+
+                if (selectedLayer.GetCustomButtonList() != null && selectedLayer.GetCustomButtonList().Count > 0)
+                {
+                    ComboBoxPredefinedButtons.ItemsSource = selectedLayer.GetCustomButtonList();
+                }
                 SetApplicationMode();
             }
             catch (Exception ex)
@@ -1076,8 +1082,22 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ButtonAddPredefinedButton_OnClick(object sender, RoutedEventArgs e)
         {
-
+            throw new NotImplementedException();
         }
 
+        private void ComboBoxCustomLayers_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ComboBoxCustomLayers_OnDropDownClosed(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ButtonAddCustomerLayer_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NonVisuals.Interfaces;
+﻿using NonVisuals.Interfaces;
 using NonVisuals.Radios;
 
 namespace NonVisuals.StreamDeck.CustomLayers.SRS
@@ -15,7 +10,15 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.Custom;
         public int RadioNumber { get; set; }
         public string Description => _description;
-        public SRSLayer ParentSRSLayer { get; set; }
+        public ISRSHandler SRSHandler { get; set; }
+        private bool _isRepeatable;
+
+        public SRSAction(string description, EnumSRSButtonType functionType, ISRSHandler srsHandler)
+        {
+            _description = description;
+            _functionType = functionType;
+            SRSHandler = srsHandler;
+        }
 
         public void Execute(StreamDeckRequisites streamDeckRequisites)
         {
@@ -23,7 +26,7 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
             {
                 case EnumSRSButtonType.Cycle:
                     {
-                        SRSListenerFactory.GetSRSListener().ToggleBetweenGuardAndFrequency(RadioNumber);
+                        SRSListenerFactory.GetSRSListener().ToggleGuard(RadioNumber);
                         break;
                     }
                 case EnumSRSButtonType.SelectNextRadio:
@@ -34,7 +37,7 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
                             RadioNumber = 1;
                         }
 
-                        UpdateParentFrequency();
+                        UpdateSRSFrequency();
                         break;
                     }
                 case EnumSRSButtonType.SelectPreviousRadio:
@@ -45,91 +48,147 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
                             RadioNumber = 7;
                         }
 
-                        UpdateParentFrequency();
+                        UpdateSRSFrequency();
                         break;
                     }
                 case EnumSRSButtonType.IncrementWholeNumber:
                     {
+                        SRSHandler.Frequency++;
                         break;
                     }
                 case EnumSRSButtonType.DecrementWholeNumber:
                     {
+                        SRSHandler.Frequency--;
                         break;
                     }
                 case EnumSRSButtonType.IncrementDecimalNumber:
                     {
+                        SRSHandler.Frequency += 0.25;
                         break;
                     }
                 case EnumSRSButtonType.DecrementDecimalNumber:
                     {
+                        SRSHandler.Frequency -= 0.25;
                         break;
                     }
                 case EnumSRSButtonType.IncrementChannel:
                     {
+                        SRSHandler.Channel++;
                         break;
                     }
                 case EnumSRSButtonType.DecrementChannel:
                     {
+                        SRSHandler.Channel--;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel1:
                     {
+                        SRSHandler.Channel = 1;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel2:
                     {
+                        SRSHandler.Channel = 2;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel3:
                     {
+                        SRSHandler.Channel = 3;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel4:
                     {
+                        SRSHandler.Channel = 4;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel5:
                     {
+                        SRSHandler.Channel = 5;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel6:
                     {
+                        SRSHandler.Channel = 6;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel7:
                     {
+                        SRSHandler.Channel = 7;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel8:
                     {
+                        SRSHandler.Channel = 8;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel9:
                     {
+                        SRSHandler.Channel = 9;
                         break;
                     }
                 case EnumSRSButtonType.SetChannel10:
                     {
+                        SRSHandler.Channel = 10;
                         break;
                     }
                 default:
                     {
+                        SRSHandler.Channel = 1;
                         break;
                     }
             }
         }
 
-        private void UpdateParentFrequency()
+        private void SetRepeatStatus()
+        {
+            switch (FunctionType)
+            {
+                case EnumSRSButtonType.Cycle:
+                case EnumSRSButtonType.SelectNextRadio:
+                case EnumSRSButtonType.SelectPreviousRadio:
+                case EnumSRSButtonType.IncrementChannel:
+                case EnumSRSButtonType.DecrementChannel:
+                case EnumSRSButtonType.SetChannel1:
+                case EnumSRSButtonType.SetChannel2:
+                case EnumSRSButtonType.SetChannel3:
+                case EnumSRSButtonType.SetChannel4:
+                case EnumSRSButtonType.SetChannel5:
+                case EnumSRSButtonType.SetChannel6:
+                case EnumSRSButtonType.SetChannel7:
+                case EnumSRSButtonType.SetChannel8:
+                case EnumSRSButtonType.SetChannel9:
+                case EnumSRSButtonType.SetChannel10:
+                    {
+                        _isRepeatable = false;
+                        break;
+                    }
+                case EnumSRSButtonType.IncrementWholeNumber:
+                case EnumSRSButtonType.DecrementWholeNumber:
+                case EnumSRSButtonType.IncrementDecimalNumber:
+                case EnumSRSButtonType.DecrementDecimalNumber:
+                    {
+                        _isRepeatable = true;
+                        break;
+                    }
+                default:
+                    {
+                        _isRepeatable = false;
+                        break;
+                    }
+            }
+        }
+
+        private void UpdateSRSFrequency()
         {
             var mode = SRSListenerFactory.GetSRSListener().GetRadioMode(RadioNumber);
-            ParentSRSLayer.SRSRadioMode = mode;
+            SRSHandler.RadioMode = mode;
             if (mode == SRSRadioMode.Channel)
             {
-                ParentSRSLayer.Channel = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(RadioNumber, ParentSRSLayer.GuardIsOn);
+                SRSHandler.Channel = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(RadioNumber, SRSHandler.GuardIsOn);
             }
             else
             {
-                ParentSRSLayer.Frequency = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(RadioNumber, ParentSRSLayer.GuardIsOn);
+                SRSHandler.Frequency = SRSListenerFactory.GetSRSListener().GetFrequencyOrChannel(RadioNumber, SRSHandler.GuardIsOn);
             }
         }
 
@@ -146,7 +205,7 @@ namespace NonVisuals.StreamDeck.CustomLayers.SRS
 
         public bool IsRepeatable()
         {
-            return true;
+            return _isRepeatable;
         }
     }
 }
