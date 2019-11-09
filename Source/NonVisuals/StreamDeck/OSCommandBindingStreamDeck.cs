@@ -12,7 +12,7 @@ namespace NonVisuals.StreamDeck
 
 
 
-
+        public string Description { get => "OS Command"; }
 
         public bool IsRunning()
         {

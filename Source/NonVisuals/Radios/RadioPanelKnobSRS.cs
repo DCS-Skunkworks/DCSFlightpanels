@@ -43,6 +43,7 @@ namespace NonVisuals.Radios
         XPDR = 64
     }
 
+
     public class RadioPanelKnobSRS : ISaitekPanelKnob
     {
         public RadioPanelKnobSRS(int group, int mask, bool isOn, RadioPanelPZ69KnobsSRS radioPanelPZ69Knob)

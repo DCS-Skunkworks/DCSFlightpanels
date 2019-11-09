@@ -11,7 +11,7 @@ namespace NonVisuals.StreamDeck
         public bool IsRepeatable() => true;
 
 
-
+        public string Description { get => "Key press"; }
 
 
         public bool IsRunning()

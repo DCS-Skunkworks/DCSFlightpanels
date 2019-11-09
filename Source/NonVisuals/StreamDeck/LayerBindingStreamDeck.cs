@@ -11,7 +11,7 @@ namespace NonVisuals.StreamDeck
         private volatile bool _isRunning;
 
 
-
+        public string Description { get => "Layer Navigation"; }
 
         public bool IsRunning()
         {

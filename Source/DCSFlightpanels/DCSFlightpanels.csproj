@@ -932,7 +932,20 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\Symbols\back_turkose.png" />
+    <Resource Include="StreamDeckGallery\Symbols\back_white.png" />
+    <Resource Include="StreamDeckGallery\Symbols\home_turkose.png" />
+    <Resource Include="StreamDeckGallery\Symbols\home_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\Symbols\minus_sign.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\Symbols\plus_sign.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

@@ -81,6 +81,9 @@
     <Compile Include="CommonVK.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
+    <Compile Include="StreamDeck\CustomLayers\ButtonFunctionClass.cs" />
+    <Compile Include="StreamDeck\CustomLayers\SRSLayer.cs" />
+    <Compile Include="StreamDeck\CustomLayers\StreamDeckSRSButton.cs" />
     <Compile Include="StreamDeck\DCSBIOSOutputBindingStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
@@ -171,7 +174,7 @@
     <Compile Include="Radios\RadiopanelSpitfireLFMkIX.cs" />
     <Compile Include="Saitek\SaitekPanel.cs" />
     <Compile Include="Radios\RadioPanelPZ69Emulator.cs" />
-    <Compile Include="Radios\SRSListener.cs" />
+    <Compile Include="Radios\SRSRadio.cs" />
     <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
     <Compile Include="Radios\SRSRadioInformation.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />

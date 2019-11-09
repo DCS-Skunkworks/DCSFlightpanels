@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
+using NonVisuals.StreamDeck.CustomLayers;
 
 namespace NonVisuals.StreamDeck
 {
@@ -10,7 +12,59 @@ namespace NonVisuals.StreamDeck
         private bool _isHomeLayer = false;
         private string _name = "";
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
-        
+        private Font _textFont;
+        private Color _fontColor;
+        private Color _backgroundColor;
+
+
+        public Font TextFont
+        {
+            set
+            {
+                foreach (var streamDeckButton in StreamDeckButtons)
+                {
+                    if (streamDeckButton.Face != null)
+                    {
+                        streamDeckButton.Face.TextFont = value;
+                    }
+                }
+
+                _textFont = value;
+            }
+        }
+
+        public Color FontColor
+        {
+            set
+            {
+                foreach (var streamDeckButton in StreamDeckButtons)
+                {
+                    if (streamDeckButton.Face != null)
+                    {
+                        streamDeckButton.Face.FontColor = value;
+                    }
+                }
+
+                _fontColor = value;
+            }
+        }
+
+        public Color BackgroundColor
+        {
+            set
+            {
+                foreach (var streamDeckButton in StreamDeckButtons)
+                {
+                    if (streamDeckButton.Face != null)
+                    {
+                        streamDeckButton.Face.BackgroundColor = value;
+                    }
+                }
+
+                _backgroundColor = value;
+            }
+        }
+
         public void AddButton(StreamDeckButton streamDeckButton)
         {
             _streamDeckButtons.Add(streamDeckButton);
@@ -89,6 +143,18 @@ namespace NonVisuals.StreamDeck
             }
 
             throw new Exception("StreamDeckLayer " + Name + " does not contain button " + streamDeckButtonName + ".");
+        }
+
+
+        public void AddButton(EnumStreamDeckButtonNames streamDeckButtonName, ButtonFunction buttonFunction)
+        {
+            //Do nothing
+        }
+
+        public ButtonFunctionList GetCustomButtonList()
+        {
+            var result = new ButtonFunctionList();
+            return result;
         }
     }
 }

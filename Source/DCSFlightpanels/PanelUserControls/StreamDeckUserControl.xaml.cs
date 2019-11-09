@@ -786,6 +786,11 @@ namespace DCSFlightpanels.PanelUserControls
                         RadioButtonLayerNav.IsChecked = true;
                         break;
                     }
+                case EnumStreamDeckActionType.Custom:
+                {
+                    RadioButtonCustom.IsChecked = true;
+                    break;
+                }
             }
         }
 
@@ -957,6 +962,7 @@ namespace DCSFlightpanels.PanelUserControls
             _radioButtonActionsList.Add(RadioButtonDCSBIOS);
             _radioButtonActionsList.Add(RadioButtonOSCommand);
             _radioButtonActionsList.Add(RadioButtonLayerNav);
+            _radioButtonActionsList.Add(RadioButtonCustom);
 
             _buttonImages.Add(ButtonImage1);
             _buttonImages.Add(ButtonImage2);
