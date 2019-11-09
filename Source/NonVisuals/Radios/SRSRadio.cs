@@ -83,9 +83,6 @@ namespace NonVisuals.Radios
         private readonly object _sendSRSDataLockObject = new object();
         private readonly object _readSRSDataLockObject = new object();
         public bool IsRunning = false;
-        private CurrentSRSRadioMode _currentSRSRadioMode = CurrentSRSRadioMode.COM1;
-        private double _channel;
-        private double _frequency;
 
 
 
