@@ -99,6 +99,8 @@ namespace ClassLibraryCommon
         Fw190d9,
         [Description("I-16")]
         I16,
+        [Description("JF-17")]
+        JF17,
         [Description("Ka-50")]
         Ka50,
         [Description("L-39ZA")]
