@@ -12,17 +12,17 @@ namespace NonVisuals.Radios
         private CurrentM2000CRadioMode _currentUpperRadioMode = CurrentM2000CRadioMode.VUHF;
         private CurrentM2000CRadioMode _currentLowerRadioMode = CurrentM2000CRadioMode.VUHF;
 
-        /*M-2000C V/UHF PRESETS COM1*/
+        /*M-2000C VHF PRESETS COM1*/
         //Large dial PRESETS [step of 1]
         //Small dial Volume
         private readonly object _lockVUHFPresetDialObject = new object();
-        private DCSBIOSOutput _vuhfDcsbiosOutputPresetDial;
-        private volatile uint _vuhfPresetCockpitDialPos = 1;
-        private const string VUHFPresetCommandInc = "UVHF_PRESET_KNOB INC\n";
-        private const string VUHFPresetCommandDec = "UVHF_PRESET_KNOB DEC\n";
-        private int _vuhfPresetDialSkipper;
-        private const string VUHFVolumeCommandInc = "VUHF_RADIO_VOL_KNOB +3200\n";
-        private const string VUHFVolumeCommandDec = "VUHF_RADIO_VOL_KNOB -3200\n";
+        private DCSBIOSOutput _vhfDcsbiosOutputPresetDial;
+        private volatile uint _vhfPresetCockpitDialPos = 1;
+        private const string VHFPresetCommandInc = "VHF_CH_SEL INC\n";
+        private const string VHFPresetCommandDec = "VHF_CH_SEL DEC\n";
+        private int _vhfPresetDialSkipper;
+        private const string VHFVolumeCommandInc = "VUHF_RADIO_VOL_KNOB +3200\n";
+        private const string VHFVolumeCommandDec = "VUHF_RADIO_VOL_KNOB -3200\n";
 
         /*M2000C UHF PRESETS COM2*/
         //Large dial PRESETS [step of 1]
@@ -125,14 +125,14 @@ namespace NonVisuals.Radios
 
 
                 // V/UHF Preset Channel Dial
-                if (e.Address == _vuhfDcsbiosOutputPresetDial.Address)
+                if (e.Address == _vhfDcsbiosOutputPresetDial.Address)
                 {
                     lock (_lockVUHFPresetDialObject)
                     {
-                        var tmp = _vuhfPresetCockpitDialPos;
-                        _vuhfPresetCockpitDialPos = _vuhfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        _vuhfPresetCockpitDialPos++;
-                        if (tmp != _vuhfPresetCockpitDialPos)
+                        var tmp = _vhfPresetCockpitDialPos;
+                        _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
+                        _vhfPresetCockpitDialPos++;
+                        if (tmp != _vhfPresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -512,7 +512,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(VUHFPresetCommandInc);
+                                                    DCSBIOS.Send(VHFPresetCommandInc);
                                                 }
                                                 break;
                                             }
@@ -555,7 +555,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(VUHFPresetCommandDec);
+                                                    DCSBIOS.Send(VHFPresetCommandDec);
                                                 }
                                                 break;
                                             }
@@ -592,7 +592,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VUHFVolumeCommandInc);
+                                                DCSBIOS.Send(VHFVolumeCommandInc);
                                                 break;
                                             }
                                         case CurrentM2000CRadioMode.UHF:
@@ -634,7 +634,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VUHFVolumeCommandDec);
+                                                DCSBIOS.Send(VHFVolumeCommandDec);
                                                 break;
                                             }
                                         case CurrentM2000CRadioMode.TACAN:
@@ -668,7 +668,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(VUHFPresetCommandInc);
+                                                    DCSBIOS.Send(VHFPresetCommandInc);
                                                 }
                                                 break;
                                             }
@@ -711,7 +711,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipVUHFPresetDialChange())
                                                 {
-                                                    DCSBIOS.Send(VUHFPresetCommandDec);
+                                                    DCSBIOS.Send(VHFPresetCommandDec);
                                                 }
                                                 break;
                                             }
@@ -757,7 +757,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VUHFVolumeCommandInc);
+                                                DCSBIOS.Send(VHFVolumeCommandInc);
                                                 break;
                                             }
                                         case CurrentM2000CRadioMode.TACAN:
@@ -794,7 +794,7 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentM2000CRadioMode.VUHF:
                                             {
-                                                DCSBIOS.Send(VUHFVolumeCommandDec);
+                                                DCSBIOS.Send(VHFVolumeCommandDec);
                                                 break;
                                             }
                                         case CurrentM2000CRadioMode.TACAN:
@@ -861,7 +861,7 @@ namespace NonVisuals.Radios
                                 var channelAsString = "";
                                 lock (_lockVUHFPresetDialObject)
                                 {
-                                    channelAsString = (_vuhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
+                                    channelAsString = (_vhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
@@ -920,7 +920,7 @@ namespace NonVisuals.Radios
                                 var channelAsString = "";
                                 lock (_lockVUHFPresetDialObject)
                                 {
-                                    channelAsString = (_vuhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
+                                    channelAsString = (_vhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(channelAsString), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -996,7 +996,7 @@ namespace NonVisuals.Radios
                 StartupBase("M2000C");
 
                 //COM1
-                _vuhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("UVHF_PRESET_KNOB");
+                _vhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("VHF_CH_SEL");
 
                 //COM2
                 _uhfDcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET_KNOB");
@@ -1097,13 +1097,13 @@ namespace NonVisuals.Radios
                 Common.DebugP("Entering M2000C Radio SkipVUHFPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentM2000CRadioMode.VUHF || _currentLowerRadioMode == CurrentM2000CRadioMode.VUHF)
                 {
-                    if (_vuhfPresetDialSkipper > 2)
+                    if (_vhfPresetDialSkipper > 2)
                     {
-                        _vuhfPresetDialSkipper = 0;
+                        _vhfPresetDialSkipper = 0;
                         Common.DebugP("Leaving M2000C Radio SkipVUHFPresetDialChange()");
                         return false;
                     }
-                    _vuhfPresetDialSkipper++;
+                    _vhfPresetDialSkipper++;
                     Common.DebugP("Leaving M2000C Radio SkipVUHFPresetDialChange()");
                     return true;
                 }
