@@ -22,6 +22,7 @@ namespace NonVisuals.Interfaces
         Color BackgroundColor { get; set; }
         int OffsetX { get; set; }
         int OffsetY { get; set; }
+        DCSBIOSFaceBindingStreamDeck DCSBIOSFaceBinding { get; set; }
         void Show(StreamDeckRequisites streamDeckRequisites);
     }
 }

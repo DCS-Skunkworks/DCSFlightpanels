@@ -640,9 +640,9 @@
       <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
       <Name>DCS-BIOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NonVisuals\NonVisuals_BAK.csproj">
+    <ProjectReference Include="..\NonVisuals\NonVisuals.csproj">
       <Project>{54c2dd8f-259c-41b7-94ed-88f51f698595}</Project>
-      <Name>NonVisuals_BAK</Name>
+      <Name>NonVisuals</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

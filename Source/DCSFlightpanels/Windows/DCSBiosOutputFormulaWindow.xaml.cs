@@ -25,33 +25,37 @@ namespace DCSFlightpanels.Windows
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
+        private bool _userEditsDescription = false;
 
-        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description)
+        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, bool userEditsDescription = false)
         {
             InitializeComponent();
             _dcsAirframe = dcsAirframe;
             _description = description;
+            _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = new DCSBIOSOutput();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, DCSBIOSOutput dcsBiosOutput)
+        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
         {
             InitializeComponent();
             _dcsAirframe = dcsAirframe;
             _description = description;
+            _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = dcsBiosOutput;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControl = DCSBIOSControlLocator.GetControl(_dcsBiosOutput.ControlId);
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, DCSBIOSOutputFormula dcsBiosOutputFormula)
+        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool userEditsDescription = false)
         {
             InitializeComponent();
             _dcsAirframe = dcsAirframe;
             _description = description;
+            _userEditsDescription = userEditsDescription;
             _dcsbiosOutputFormula = dcsBiosOutputFormula;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
@@ -98,6 +102,10 @@ namespace DCSFlightpanels.Windows
             {
                 return;
             }
+            
+            LabelDescription.Visibility = !_userEditsDescription ? Visibility.Visible : Visibility.Collapsed;
+            LabelUserDescription.Visibility = _userEditsDescription ? Visibility.Visible : Visibility.Collapsed;
+            TextBoxUserDescription.Visibility = _userEditsDescription ? Visibility.Visible : Visibility.Collapsed;
 
             GroupBoxFormula.Visibility = Visibility.Visible;
 
@@ -106,6 +114,11 @@ namespace DCSFlightpanels.Windows
             LabelResult.IsEnabled = LabelFormula.IsEnabled;
             ButtonTestFormula.IsEnabled = LabelFormula.IsEnabled;
             ButtonOk.IsEnabled = (_dcsbiosControl == null && _dcsBiosOutput == null) || (_dcsbiosControl != null || (!string.IsNullOrWhiteSpace(TextBoxFormula.Text) && CheckBoxUseFormula.IsChecked == true));
+            if (_userEditsDescription && string.IsNullOrEmpty(TextBoxUserDescription.Text))
+            {
+                ButtonOk.IsEnabled = false;
+            }
+
             if (_dcsbiosControl == null && _dcsBiosOutput == null)
             {
                 TextBoxControlId.Text = "";
@@ -411,6 +424,11 @@ namespace DCSFlightpanels.Windows
                 e.Handled = true;
                 Close();
             }
+        }
+
+        public string UserDescription
+        {
+            get { return TextBoxUserDescription.Text; }
         }
     }
 }

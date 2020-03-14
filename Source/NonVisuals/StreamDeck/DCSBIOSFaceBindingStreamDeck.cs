@@ -3,7 +3,7 @@
 namespace NonVisuals.StreamDeck
 {
 
-    public class DCSBIOSOutputBindingStreamDeck
+    public class DCSBIOSFaceBindingStreamDeck
     {
         private int _currentValue = 0;
         private DCSBIOSOutput _dcsbiosOutput;

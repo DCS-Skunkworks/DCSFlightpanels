@@ -15,7 +15,7 @@ namespace DCSFlightpanels.Bills
     public class BillStreamDeckFace : BillBaseOutput
     {
         public EnumStreamDeckButtonNames StreamDeckButtonName;
-        private DCSBIOSOutput _dcsbiosOutput;
+        private DCSBIOSFaceBindingStreamDeck _dcsbiosOutputBinding;
         private StreamDeckTargetLayer _streamDeckTargetLayer;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
@@ -33,13 +33,13 @@ namespace DCSFlightpanels.Bills
         public override bool IsEmpty()
         {
             return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) &&
-                   (_dcsbiosOutput == null) &&
+                   (_dcsbiosOutputBinding == null) &&
                    _streamDeckTargetLayer == null;
         }
 
-        public override void Consume(DCSBIOSOutput dcsBiosOutput)
+        public override void Consume(DCSBIOSFaceBindingStreamDeck dcsBiosFaceBindingStreamDeck)
         {
-            _dcsbiosOutput = dcsBiosOutput;
+            _dcsbiosOutputBinding = dcsBiosFaceBindingStreamDeck;
         }
 
 
@@ -68,7 +68,7 @@ namespace DCSFlightpanels.Bills
         
         public override bool ContainsDCSBIOS()
         {
-            return _dcsbiosOutput != null;
+            return _dcsbiosOutputBinding != null;
         }
 
         public bool ContainsStreamDeckLayer()
@@ -136,16 +136,16 @@ namespace DCSFlightpanels.Bills
 
         public override void ClearAll()
         {
-            _dcsbiosOutput = null;
+            _dcsbiosOutputBinding = null;
             _bipLinkStreamDeck = null;
             TextBox.Background = Brushes.LightSteelBlue;
             TextBox.Text = "";
         }
 
-        public DCSBIOSOutput DCSBIOSOutputFace
+        public DCSBIOSFaceBindingStreamDeck DCSBIOSOutputBinding
         {
-            get => _dcsbiosOutput;
-            set => _dcsbiosOutput = value;
+            get => _dcsbiosOutputBinding;
+            set => _dcsbiosOutputBinding = value;
         }
     }
 

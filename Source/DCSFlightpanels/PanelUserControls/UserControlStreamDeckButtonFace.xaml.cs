@@ -93,10 +93,10 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
 
 
-                TextBoxFontInfo.Text =  "Font : " + TextBoxButtonTextFace.Bill.TextFont.Name + " " + 
+                TextBoxFontInfo.Text = "Font : " + TextBoxButtonTextFace.Bill.TextFont.Name + " " +
                                                     TextBoxButtonTextFace.Bill.TextFont.Size + " " +
                                                     (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
-                TextBoxFontInfo.Text = TextBoxFontInfo.Text  + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
+                TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
             }
             catch (Exception ex)
             {
@@ -462,7 +462,7 @@ namespace DCSFlightpanels.PanelUserControls
             throw new ArgumentException("ShowFaceConfiguration, failed to determine Face Type");
         }
 
-        
+
         public IStreamDeckButtonFace GetStreamDeckButtonFace(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             switch (GetSelectedFaceType())
@@ -488,11 +488,11 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.ImageFile:
                     {
-                        throw  new NotImplementedException("GetStreamDeckButtonFace for ImageFile has not been developed");
+                        throw new NotImplementedException("GetStreamDeckButtonFace for ImageFile has not been developed");
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        throw new NotImplementedException("GetStreamDeckButtonFace for DCSBIOS has not been developed");
+                        //här ska den göras. facetype dcsbios
                     }
             }
 
@@ -576,9 +576,9 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var textBox = (StreamDeckFaceTextBox)sender;
-                    TestImage(textBox);
-                    SetIsDirty();
-                    SDUIParent.ChildChangesMade();
+                TestImage(textBox);
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
                 SetFormState();
             }
             catch (Exception ex)
@@ -686,7 +686,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSOutputFace);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSOutputBinding.DCSBIOSOutputObject);
                 }
                 else
                 {
@@ -698,13 +698,20 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult == true)
                 {
-                    var dcsBiosInputs = dcsBiosOutputFormulaWindow.UseFormula() DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBiosOutputFormulaWindow.Description) ? "DCS-BIOS" : dcsBiosOutputFormulaWindow.Description;
+                    textBox.Bill.DCSBIOSOutputBinding = new DCSBIOSFaceBindingStreamDeck();
+                    
+                    if (dcsBiosOutputFormulaWindow.UseFormula())
+                    {
+                        textBox.Bill.DCSBIOSOutputBinding.DCSBIOSOutputFormulaObject = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
+                    }
+                    else
+                    {
+                        textBox.Bill.DCSBIOSOutputBinding.DCSBIOSOutputObject = dcsBiosOutputFormulaWindow.DCSBiosOutput;
+                    }
+                    var text = string.IsNullOrWhiteSpace(dcsBiosOutputFormulaWindow.UserDescription) ? "DCS-BIOS" : dcsBiosOutputFormulaWindow.UserDescription;
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;
-                    //textBox.Bill.Consume(dcsBiosInputs);
-                    //textBox.Bill.DCSBIOSBinding.WhenTurnedOn = !textBox.Name.Contains("Off");
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
                 }

@@ -20,20 +20,14 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="91*" />
-            <ColumnDefinition Width="32*"/>
-            <ColumnDefinition Width="123*" />
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="50*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.RowSpan="7" Grid.ColumnSpan="2">
+
+        <StackPanel Grid.Column="0">
             <Label Content="Control Id" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="False" />
             <TextBox Name="TextBoxControlId" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,0,0" IsEnabled="true" IsReadOnly="True" />
 
@@ -51,28 +45,29 @@
                 <Image Margin="0,8,0,0" Source="/DCSFlightpanels;component/Images/info.png" Stretch="Uniform" VerticalAlignment="Center" Width="40"  RenderOptions.BitmapScalingMode="Fant" />
             </Button>
         </StackPanel>
-        <!-- <Label Name="ColorLabel"  VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="GREEN" Visibility="Hidden" Grid.Column="1" Grid.Row="0" FontSize="20"/> -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Grid.Row="6">
-            <Button Name="ButtonClearAll" Content="Clear all" Height="23" VerticalAlignment="Bottom" Width="75" HorizontalAlignment="Right" Margin="10,0,0,10" Click="ButtonClearAll_OnClick"/>
-            <Button Content="Ok" Height="23" VerticalAlignment="Bottom" Margin="10,0,0,10"  x:Name="ButtonOk" Width="75" Click="ButtonOkClick" />
-            <Button Content="Cancel" Height="23" VerticalAlignment="Bottom" Margin="10,0,10,10" x:Name="ButtonCancel" Width="75" Click="ButtonCancelClick" />
-        </StackPanel>
-        <StackPanel Grid.Column="2" Grid.RowSpan="6">
-            <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
-            <Label Content="Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
-            <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true"/>
 
-
-
-            <GroupBox Name="GroupBoxFormula" Header="Formula">
-                <StackPanel>
-                    <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnUnchecked" Checked="CheckBoxUseFormula_OnChecked"/>
-                    <Label Name="LabelFormula" Content="Copy DCS-BIOS control names directly as is into the formula" Margin="10,0,10,0"/>
-                    <TextBox x:Name="TextBoxFormula" Height="150" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" TextChanged="TextBoxFormula_OnTextChanged"/>
-                    <Label Name="LabelResult" Content="Result :" Margin="10,0,10,0"/>
-                    <Button Name="ButtonTestFormula" Content="Test" Width="75" HorizontalAlignment="Right" Margin="0,0,10,10" Click="ButtonTestFormula_OnClick"/>
-                </StackPanel>
-            </GroupBox>
+        <StackPanel Grid.Column="1">
+            <StackPanel Grid.Column="2" Grid.RowSpan="6">
+                <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
+                <Label Name="LabelUserDescription" Content="Description"></Label>
+                <TextBox Name="TextBoxUserDescription" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" IsEnabled="true"/>
+                <Label Content="Search Box : Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
+                <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true"/>
+                <GroupBox Name="GroupBoxFormula" Header="Formula">
+                    <StackPanel>
+                        <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnUnchecked" Checked="CheckBoxUseFormula_OnChecked"/>
+                        <Label Name="LabelFormula" Content="Copy DCS-BIOS control names directly as is into the formula" Margin="10,0,10,0"/>
+                        <TextBox x:Name="TextBoxFormula" Height="150" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" TextChanged="TextBoxFormula_OnTextChanged"/>
+                        <Label Name="LabelResult" Content="Result :" Margin="10,0,10,0"/>
+                        <Button Name="ButtonTestFormula" Content="Test" Width="75" HorizontalAlignment="Right" Margin="0,0,10,10" Click="ButtonTestFormula_OnClick"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="2" Grid.Row="6">
+                <Button Name="ButtonClearAll" Content="Clear all" Height="23" VerticalAlignment="Bottom" Width="75" HorizontalAlignment="Right" Margin="10,0,0,10" Click="ButtonClearAll_OnClick"/>
+                <Button Content="Ok" Height="23" VerticalAlignment="Bottom" Margin="10,0,0,10"  x:Name="ButtonOk" Width="75" Click="ButtonOkClick" />
+                <Button Content="Cancel" Height="23" VerticalAlignment="Bottom" Margin="10,0,10,10" x:Name="ButtonCancel" Width="75" Click="ButtonCancelClick" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

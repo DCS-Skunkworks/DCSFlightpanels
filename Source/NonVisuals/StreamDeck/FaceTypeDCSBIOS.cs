@@ -7,7 +7,7 @@ using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
-    public class FaceTypeText : IStreamDeckButtonFace
+    public class FaceTypeDCSBIOS : IStreamDeckButtonFace
     {
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
         private Bitmap _bitmap;
@@ -19,8 +19,9 @@ namespace NonVisuals.StreamDeck
         private Color _backgroundColor;
         private int _offsetX;
         private int _offsetY;
-
-
+        private DCSBIOSFaceBindingStreamDeck _dcsbiosFaceBindingStreamDeck;
+        private uint _dcsBiosValue = 0;
+        
 
         public void Show(StreamDeckRequisites streamDeckRequisite)
         {
@@ -78,11 +79,11 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                return null;
+                return _dcsbiosFaceBindingStreamDeck;
             }
             set
             {
-                throw new Exception("Text Face can not accept DCS-BIOS Binding.");
+                _dcsbiosFaceBindingStreamDeck = DCSBIOSFaceBinding;
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using DCS_BIOS;
 using NonVisuals;
+using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.Bills
 {
@@ -15,7 +16,7 @@ namespace DCSFlightpanels.Bills
         public abstract bool ContainsDCSBIOS();
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
-        public abstract void Consume(DCSBIOSOutput dcsBiosOutput);
+        public abstract void Consume(DCSBIOSFaceBindingStreamDeck dcsBiosOutput);
         public abstract void ClearAll();
 
         public TextBox TextBox

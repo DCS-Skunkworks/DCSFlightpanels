@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCSFlightpanels", "DCSFlightpanels\DCSFlightpanels.csproj", "{6459906E-71BE-4987-B128-B793B50EAD10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonVisuals_BAK", "NonVisuals\NonVisuals_BAK.csproj", "{54C2DD8F-259C-41B7-94ED-88F51F698595}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonVisuals", "NonVisuals\NonVisuals.csproj", "{54C2DD8F-259C-41B7-94ED-88F51F698595}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCS-BIOS", "DCS-BIOS\DCS-BIOS.csproj", "{6EF4492F-D4B4-42BC-B209-98783098DB22}"
 EndProject

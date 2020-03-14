@@ -56,15 +56,20 @@
       <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\StreamDeckSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.NonGeneric, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.NonGeneric.4.0.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.NonGeneric.4.3.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Runtime.Serialization.Formatters, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -77,6 +82,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -85,6 +93,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Theraot.Core, Version=3.1.4.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Theraot.Core.3.1.4\lib\net46\Theraot.Core.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +117,7 @@
     <Compile Include="StreamDeck\CustomLayers\SRS\SRSAction.cs" />
     <Compile Include="StreamDeck\CustomLayers\SRS\SRSLayer.cs" />
     <Compile Include="StreamDeck\CustomLayers\SRS\StreamDeckSRSButton.cs" />
-    <Compile Include="StreamDeck\DCSBIOSOutputBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\DCSBIOSFaceBindingStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ69.cs" />
@@ -130,6 +141,7 @@
     <Compile Include="Saitek\KeyBindingPZ69.cs" />
     <Compile Include="Saitek\KeyBindingTPM.cs" />
     <Compile Include="StreamDeck\FaceFactory.cs" />
+    <Compile Include="StreamDeck\FaceTypeDCSBIOS.cs" />
     <Compile Include="StreamDeck\KeyBindingStreamDeck.cs" />
     <Compile Include="Saitek\KeyBindingPZ70.cs" />
     <Compile Include="Saitek\KeyBindingPZ55.cs" />
@@ -238,6 +250,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

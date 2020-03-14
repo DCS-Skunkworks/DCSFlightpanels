@@ -8,3 +8,12 @@ namespace DCSFlightpanels.CustomControls
         public BillBaseInput Bill { get; set; }
     }
 }
+
+
+namespace DCSFlightpanels.CustomControls
+{
+    public class TextBoxBaseOutput : TextBox
+    {
+        public BillBaseOutput Bill { get; set; }
+    }
+}
