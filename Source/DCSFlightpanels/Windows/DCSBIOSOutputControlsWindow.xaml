@@ -1,7 +1,14 @@
-﻿<Window x:Class="DCSFlightpanels.Windows.DCSBIOSControlsConfigsWindow"
+﻿<Window x:Class="DCSFlightpanels.Windows.DCSBIOSOutputControlsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DCS-BIOS Control configurations" Height="400" Width="800" Loaded="DCSBIOSControlsConfigsWindow_OnLoaded"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen" KeyDown="DCSBIOSControlsConfigsWindow_OnKeyDown">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCSFlightpanels.Windows"
+        mc:Ignorable="d"
+        Title="DCS-BIOS Output Controls Configuration" Height="400" Width="800"
+        Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico"
+        Loaded="DCSBIOSOutputControlsWindow_OnLoaded"  
+        WindowStartupLocation="CenterScreen" KeyDown="DCSBIOSOutputControlsWindow_OnKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />

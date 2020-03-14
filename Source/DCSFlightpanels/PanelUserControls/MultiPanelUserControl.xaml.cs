@@ -1046,20 +1046,20 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
-                DCSBIOSControlsConfigsWindow dcsBIOSControlsConfigsWindow;
+                DCSBIOSOutputControlsWindow dcsBIOSInputControlsWindow;
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSInputControlsWindow = new DCSBIOSOutputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsBIOSControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsBIOSInputControlsWindow = new DCSBIOSOutputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
-                dcsBIOSControlsConfigsWindow.ShowDialog();
-                if (dcsBIOSControlsConfigsWindow.DialogResult.HasValue && dcsBIOSControlsConfigsWindow.DialogResult == true)
+                dcsBIOSInputControlsWindow.ShowDialog();
+                if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
                 {
-                    var dcsBiosInputs = dcsBIOSControlsConfigsWindow.DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSControlsConfigsWindow.Description) ? "DCS-BIOS" : dcsBIOSControlsConfigsWindow.Description;
+                    var dcsBiosInputs = dcsBIOSInputControlsWindow.DCSBIOSInputs;
+                    var text = string.IsNullOrWhiteSpace(dcsBIOSInputControlsWindow.Description) ? "DCS-BIOS" : dcsBIOSInputControlsWindow.Description;
                     //1 appropriate text to textbox
                     //2 update bindings
                     textBox.Text = text;

@@ -1,17 +1,23 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DCS_BIOS;
 using NonVisuals;
 using NonVisuals.StreamDeck;
+using Brushes = System.Windows.Media.Brushes;
 using Color = System.Drawing.Color;
 
 namespace DCSFlightpanels.Bills
 {
-    public class BillStreamDeckFace
+    public class BillStreamDeckFace : BillBaseOutput
     {
         public EnumStreamDeckButtonNames StreamDeckButtonName;
+        private DCSBIOSOutput _dcsbiosOutput;
+        private StreamDeckTargetLayer _streamDeckTargetLayer;
+        private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
         private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor = Color.Black;
@@ -23,6 +29,18 @@ namespace DCSFlightpanels.Bills
 
 
 
+
+        public override bool IsEmpty()
+        {
+            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) &&
+                   (_dcsbiosOutput == null) &&
+                   _streamDeckTargetLayer == null;
+        }
+
+        public override void Consume(DCSBIOSOutput dcsBiosOutput)
+        {
+            _dcsbiosOutput = dcsBiosOutput;
+        }
 
 
 
@@ -46,6 +64,21 @@ namespace DCSFlightpanels.Bills
                 if (_textFont.Strikeout) textDecorationCollection.Add(TextDecorations.Strikethrough);
                 ParentTextBox.TextDecorations = textDecorationCollection;
             }
+        }
+        
+        public override bool ContainsDCSBIOS()
+        {
+            return _dcsbiosOutput != null;
+        }
+
+        public bool ContainsStreamDeckLayer()
+        {
+            return _streamDeckTargetLayer != null;
+        }
+
+        public override bool ContainsBIPLink()
+        {
+            return _bipLinkStreamDeck != null && _bipLinkStreamDeck.BIPLights.Count > 0;
         }
 
         public Color FontColor
@@ -98,6 +131,21 @@ namespace DCSFlightpanels.Bills
         {
             Button = null;
             ParentTextBox?.Clear();
+        }
+
+
+        public override void ClearAll()
+        {
+            _dcsbiosOutput = null;
+            _bipLinkStreamDeck = null;
+            TextBox.Background = Brushes.LightSteelBlue;
+            TextBox.Text = "";
+        }
+
+        public DCSBIOSOutput DCSBIOSOutputFace
+        {
+            get => _dcsbiosOutput;
+            set => _dcsbiosOutput = value;
         }
     }
 

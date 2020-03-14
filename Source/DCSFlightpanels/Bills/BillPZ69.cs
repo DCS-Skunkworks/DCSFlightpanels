@@ -7,7 +7,7 @@ using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Bills
 {
-    public class BillPZ69 : BillBase
+    public class BillPZ69 : BillBaseInput
     {
         private RadioPanelPZ69KeyOnOff _knob;
         private BIPLinkPZ69 _bipLinkPZ69;

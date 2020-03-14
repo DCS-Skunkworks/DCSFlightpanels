@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using CommonClassLibraryJD;
+using EnumEx = CommonClassLibraryJD.EnumEx;
 
 namespace DCSFlightpanels.Windows
 {

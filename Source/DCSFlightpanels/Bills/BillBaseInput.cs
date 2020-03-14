@@ -6,7 +6,7 @@ using NonVisuals;
 
 namespace DCSFlightpanels.Bills
 {
-    public abstract class BillBase
+    public abstract class BillBaseInput
     {
         private KeyPress _keyPress;
         private OSCommand _osCommand;

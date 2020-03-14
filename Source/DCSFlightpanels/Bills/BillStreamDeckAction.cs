@@ -8,7 +8,7 @@ using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.Bills
 {
-    public class BillStreamDeckAction : BillBase
+    public class BillStreamDeckAction : BillBaseInput
     {
         private StreamDeckButtonOnOff _button;
         private DCSBIOSActionBindingStreamDeck _dcsbiosBindingStreamDeck;

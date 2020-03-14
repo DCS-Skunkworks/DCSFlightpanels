@@ -9,11 +9,13 @@ using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 using NonVisuals.StreamDeck;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace DCSFlightpanels.PanelUserControls
@@ -95,11 +97,6 @@ namespace DCSFlightpanels.PanelUserControls
                                                     TextBoxButtonTextFace.Bill.TextFont.Size + " " +
                                                     (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
                 TextBoxFontInfo.Text = TextBoxFontInfo.Text  + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
-                /*
-                 * Not yet implemented
-                 */
-                RadioButtonImageFace.IsEnabled = false;
-                RadioButtonDCSBIOSFace.IsEnabled = false;
             }
             catch (Exception ex)
             {
@@ -283,13 +280,10 @@ namespace DCSFlightpanels.PanelUserControls
         private void FillControlLists()
         {
             _textBoxList.Add(TextBoxButtonTextFace);
-            _textBoxList.Add(TextBoxDCSBIOSFaceButtonOn);
-            _textBoxList.Add(TextBoxDCSBIOSFaceButtonOff);
-            _textBoxList.Add(TextBoxDCSBIOSBackgroundImageButtonOn);
-            _textBoxList.Add(TextBoxDCSBIOSBackgroundImageButtonOff);
+            _textBoxList.Add(TextBoxDCSBIOSFaceButton);
+            _textBoxList.Add(TextBoxDCSBIOSBackgroundImageButton);
             _textBoxList.Add(TextBoxDCSBIOSFaceUnit);
-            _textBoxList.Add(TextBoxSelectedImageFaceButtonOn);
-            _textBoxList.Add(TextBoxSelectedImageFaceButtonOff);
+            _textBoxList.Add(TextBoxSelectedImageFaceButton);
 
             _radioButtonList.Add(RadioButtonTextFace);
             _radioButtonList.Add(RadioButtonImageFace);
@@ -666,5 +660,60 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        private void ButtonSelectDCSBIOSFaceButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AddEditDCSBIOS(TextBoxDCSBIOSFaceButton);
+                SDUIParent.ChildChangesMade();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void AddEditDCSBIOS(StreamDeckFaceTextBox textBox)
+        {
+            try
+            {
+                if (textBox == null)
+                {
+                    throw new Exception("Failed to locate which textbox is focused.");
+                }
+
+                DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow;
+
+                if (textBox.Bill.ContainsDCSBIOS())
+                {
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSOutputFace);
+                }
+                else
+                {
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""));
+                }
+
+                dcsBiosOutputFormulaWindow.ShowDialog();
+
+
+                if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult == true)
+                {
+                    var dcsBiosInputs = dcsBiosOutputFormulaWindow.UseFormula() DCSBIOSInputs;
+                    var text = string.IsNullOrWhiteSpace(dcsBiosOutputFormulaWindow.Description) ? "DCS-BIOS" : dcsBiosOutputFormulaWindow.Description;
+                    //1 appropriate text to textbox
+                    //2 update bindings
+                    textBox.Text = text;
+                    //textBox.Bill.Consume(dcsBiosInputs);
+                    //textBox.Bill.DCSBIOSBinding.WhenTurnedOn = !textBox.Name.Contains("Off");
+                    SetIsDirty();
+                    SDUIParent.ChildChangesMade();
+                }
+                ButtonFocus.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(442044, ex);
+            }
+        }
     }
 }

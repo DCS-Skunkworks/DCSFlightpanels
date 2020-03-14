@@ -100,7 +100,6 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonDeleteFaceConfiguration.IsEnabled = UCStreamDeckButtonFace.HasConfig;
 
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
-                CheckBoxMarkHomeLayer.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
                 ButtonDeleteLayer.IsEnabled = ComboBoxLayers.IsEnabled && ComboBoxLayers.Text != null;
                 //CheckBoxMarkHomeLayer.IsEnabled = ComboBoxLayers.IsEnabled;
@@ -241,6 +240,9 @@ namespace DCSFlightpanels.PanelUserControls
                  */
                 LoadComboBoxLayers("");
 
+
+
+                HideAllDotImages();
                 _streamDeck.ActiveLayer = ComboBoxLayers.Text;
 
                 HideAllDotImages();
@@ -262,12 +264,6 @@ namespace DCSFlightpanels.PanelUserControls
                     SetFormState();
                 }
 
-                ComboBoxPredefinedButtons.ItemsSource = null;
-
-                if (selectedLayer.GetCustomButtonList() != null && selectedLayer.GetCustomButtonList().Count > 0)
-                {
-                    ComboBoxPredefinedButtons.ItemsSource = selectedLayer.GetCustomButtonList();
-                }
                 SetApplicationMode();
             }
             catch (Exception ex)
@@ -469,6 +465,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                if (!_streamDeck.HasLayers)
+                {
+                    _streamDeck.AddHomeLayer();
+                }
                 UIShowLayer(_streamDeck.HomeLayer.Name);
             }
             catch (Exception ex)
@@ -526,7 +526,6 @@ namespace DCSFlightpanels.PanelUserControls
                 if (layerWindow.DialogResult == true)
                 {
                     var result = _streamDeck.AddLayer(layerWindow.NewLayer);
-                    SetCheckboxHomeStatus(result);
                 }
                 UIShowLayer(layerWindow.NewLayer.Name);
                 SetFormState();
@@ -590,8 +589,6 @@ namespace DCSFlightpanels.PanelUserControls
 
                 ClearAll();
 
-                SetCheckboxHomeLayer();
-
                 UIShowLayer(ComboBoxLayers.Text);
 
                 //De-select if whatever button is selected
@@ -604,7 +601,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(20135444, ex);
             }
         }
-        
+
         private void LoadComboBoxLayers(string selectedLayerName)
         {
             var selectedIndex = ComboBoxLayers.SelectedIndex;
@@ -643,39 +640,6 @@ namespace DCSFlightpanels.PanelUserControls
             if (!_userControlLoaded)
             {
                 _streamDeck.ActiveLayer = ComboBoxLayers.Text;
-            }
-
-            SetCheckboxHomeLayer();
-        }
-
-        private void SetCheckboxHomeLayer()
-        {
-            if (ComboBoxLayers.Text != null && _streamDeck.HomeLayer != null)
-            {
-                SetCheckboxHomeStatus(ComboBoxLayers.Text == _streamDeck.HomeLayer.Name);
-            }
-        }
-
-        private void SetCheckboxHomeStatus(bool isChecked)
-        {
-            CheckBoxMarkHomeLayer.Checked -= CheckBoxMarkHomeLayer_CheckedChanged;
-            CheckBoxMarkHomeLayer.Unchecked -= CheckBoxMarkHomeLayer_CheckedChanged;
-            CheckBoxMarkHomeLayer.IsChecked = isChecked;
-            CheckBoxMarkHomeLayer.Checked += CheckBoxMarkHomeLayer_CheckedChanged;
-            CheckBoxMarkHomeLayer.Unchecked += CheckBoxMarkHomeLayer_CheckedChanged;
-        }
-
-        private void CheckBoxMarkHomeLayer_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var isChecked = CheckBoxMarkHomeLayer.IsChecked == true;
-                _streamDeck.SetHomeStatus(isChecked, ComboBoxLayers.Text);
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(20135444, ex);
             }
         }
 
@@ -793,10 +757,10 @@ namespace DCSFlightpanels.PanelUserControls
                         break;
                     }
                 case EnumStreamDeckActionType.Custom:
-                {
-                    RadioButtonCustom.IsChecked = true;
-                    break;
-                }
+                    {
+                        RadioButtonCustom.IsChecked = true;
+                        break;
+                    }
             }
         }
 
@@ -1050,7 +1014,7 @@ namespace DCSFlightpanels.PanelUserControls
             Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
             Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
         };
-        
+
         private void ThreadedPanelIdentification(CancellationToken cancellationToken)
         {
             try
@@ -1078,26 +1042,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 streamDeckImage.IsEnabled = enabled;
             }
-        }
-
-        private void ButtonAddPredefinedButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ComboBoxCustomLayers_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ComboBoxCustomLayers_OnDropDownClosed(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ButtonAddCustomerLayer_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }

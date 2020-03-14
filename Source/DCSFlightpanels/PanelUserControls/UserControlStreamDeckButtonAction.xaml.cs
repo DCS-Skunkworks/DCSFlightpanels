@@ -493,17 +493,17 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                DCSBIOSControlsConfigsWindow dcsbiosControlsConfigsWindow;
+                DCSBIOSInputControlsWindow dcsbiosControlsConfigsWindow;
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(),
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(),
                         textBox.Name.Replace("TextBox", ""),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSControlsConfigsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();

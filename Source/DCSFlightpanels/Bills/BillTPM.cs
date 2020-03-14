@@ -8,7 +8,7 @@ using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Bills
 {
-    public class BillTPM : BillBase
+    public class BillTPM : BillBaseInput
     {
         private TPMPanelSwitchOnOff _key;
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;

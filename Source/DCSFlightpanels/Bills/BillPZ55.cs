@@ -8,7 +8,7 @@ using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Bills
 {
-    public class BillPZ55 : BillBase
+    public class BillPZ55 : BillBaseInput
     {
         private DCSBIOSActionBindingPZ55 _dcsbiosBindingPZ55;
         private BIPLinkPZ55 _bipLinkPZ55;

@@ -62,17 +62,17 @@
     <Reference Include="CommonClassLibraryJD">
       <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
     </Reference>
-    <Reference Include="HidLibrary, Version=3.2.46.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\hidlibrary.3.2.46.0\lib\HidLibrary.dll</HintPath>
+    <Reference Include="HidLibrary, Version=3.3.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\hidlibrary.3.3.24\lib\net45\HidLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Jace, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Jace.0.9.2\lib\netstandard1.6\Jace.dll</HintPath>
+      <HintPath>..\packages\Jace.1.0.0\lib\netstandard1.6\Jace.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Octokit, Version=0.32.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.32.0\lib\net45\Octokit.dll</HintPath>
+    <Reference Include="Octokit, Version=0.43.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.43.0\lib\net46\Octokit.dll</HintPath>
     </Reference>
     <Reference Include="OpenMacroBoard.SDK">
       <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\OpenMacroBoard.SDK.dll</HintPath>
@@ -81,9 +81,36 @@
       <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\StreamDeckSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.NonGeneric.4.3.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Formatters.4.3.0\lib\net46\System.Runtime.Serialization.Formatters.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -92,6 +119,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Theraot.Core, Version=3.1.4.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Theraot.Core.3.1.4\lib\net46\Theraot.Core.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -108,6 +138,7 @@
     <Compile Include="AboutFPWindow.xaml.cs">
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bills\BillBaseOutput.cs" />
     <Compile Include="Windows\ColorPickerWindow.xaml.cs">
       <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
     </Compile>
@@ -129,8 +160,8 @@
     <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
       <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DCSBIOSControlsConfigsWindow.xaml.cs">
-      <DependentUpon>DCSBIOSControlsConfigsWindow.xaml</DependentUpon>
+    <Compile Include="Windows\DCSBIOSInputControlsWindow.xaml.cs">
+      <DependentUpon>DCSBIOSInputControlsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\BipLightWindow.xaml.cs">
       <DependentUpon>BipLightWindow.xaml</DependentUpon>
@@ -140,6 +171,9 @@
     </Compile>
     <Compile Include="Windows\DCSBIOSNotFoundWindow.xaml.cs">
       <DependentUpon>DCSBIOSNotFoundWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DCSBIOSOutputControlsWindow.xaml.cs">
+      <DependentUpon>DCSBIOSOutputControlsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
@@ -254,7 +288,7 @@
     <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Bills\BillBase.cs" />
+    <Compile Include="Bills\BillBaseInput.cs" />
     <Compile Include="Bills\BillStreamDeckFace.cs" />
     <Compile Include="Bills\BillPZ69Button.cs" />
     <Compile Include="Bills\BillPZ69Full.cs" />
@@ -299,7 +333,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DCSBIOSControlsConfigsWindow.xaml">
+    <Page Include="Windows\DCSBIOSInputControlsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -312,6 +346,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DCSBIOSNotFoundWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DCSBIOSOutputControlsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -602,9 +640,9 @@
       <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
       <Name>DCS-BIOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NonVisuals\NonVisuals.csproj">
+    <ProjectReference Include="..\NonVisuals\NonVisuals_BAK.csproj">
       <Project>{54c2dd8f-259c-41b7-94ed-88f51f698595}</Project>
-      <Name>NonVisuals</Name>
+      <Name>NonVisuals_BAK</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -92,7 +92,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
         
-        internal void SetKeyPressLength(TextBoxBase textBox, MenuItem contextMenuItem)
+        internal void SetKeyPressLength(TextBoxBaseInput textBox, MenuItem contextMenuItem)
         {
             try
             {

@@ -2,7 +2,7 @@
 
 namespace DCSFlightpanels.CustomControls
 {
-    public class TPMTextBox : TextBoxBase
+    public class TPMTextBox : TextBoxBaseInput
     {
         public new BillTPM Bill { get; set; }
     }

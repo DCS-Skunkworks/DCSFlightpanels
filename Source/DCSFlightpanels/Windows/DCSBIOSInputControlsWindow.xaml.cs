@@ -9,9 +9,9 @@ using DCS_BIOS;
 namespace DCSFlightpanels.Windows
 {
     /// <summary>
-    /// Interaction logic for DCSBIOSControlsConfigsWindow.xaml
+    /// Interaction logic for DCSBIOSInputControlsWindow.xaml
     /// </summary>
-    public partial class DCSBIOSControlsConfigsWindow : Window
+    public partial class DCSBIOSInputControlsWindow : Window
     {
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private readonly string _header;
@@ -19,7 +19,7 @@ namespace DCSFlightpanels.Windows
         private readonly DCSAirframe _dcsAirframe = DCSAirframe.A10C;
         private bool _isDirty = false;
 
-        public DCSBIOSControlsConfigsWindow(DCSAirframe dcsAirframe, string header, string description)
+        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, string description)
         {
             InitializeComponent();
             _dcsAirframe = dcsAirframe;
@@ -29,7 +29,7 @@ namespace DCSFlightpanels.Windows
             ShowItems();
         }
 
-        public DCSBIOSControlsConfigsWindow(DCSAirframe dcsAirframe, string header, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, List<DCSBIOSInput> dcsbiosInputs, string description)
         {
             InitializeComponent();
             _dcsAirframe = dcsAirframe;
@@ -43,7 +43,7 @@ namespace DCSFlightpanels.Windows
             ShowItems();
         }
 
-        private void DCSBIOSControlsConfigsWindow_OnLoaded(object sender, RoutedEventArgs e)
+        private void DCSBIOSInputControlsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             TextBoxHeader.Text = _header;
         }
@@ -193,7 +193,7 @@ namespace DCSFlightpanels.Windows
             throw new NotImplementedException();
         }
 
-        private void DCSBIOSControlsConfigsWindow_OnKeyDown(object sender, KeyEventArgs e)
+        private void DCSBIOSInputControlsWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
             {

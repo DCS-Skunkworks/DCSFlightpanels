@@ -2,7 +2,7 @@
 
 namespace DCSFlightpanels.CustomControls
 {
-    public class PZ69TextBox : TextBoxBase
+    public class PZ69TextBox : TextBoxBaseInput
     {
         public new BillPZ69 Bill { get; set; }
     }

@@ -59,6 +59,18 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public void AddHomeLayer()
+        {
+            if (!HasLayers)
+            {
+                var homeLayer = new StreamDeckLayer();
+                homeLayer.Name = "Home";
+                homeLayer.IsHomeLayer = true;
+                AddLayer(homeLayer);
+                ActiveLayer = "Home";
+            }
+        }
+
         public void AddStreamDeckButtonToActiveLayer(StreamDeckButton streamDeckButton)
         {
             _streamDeckLayerHandler.AddStreamDeckButtonToActiveLayer(streamDeckButton);

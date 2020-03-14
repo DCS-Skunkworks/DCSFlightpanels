@@ -2,7 +2,7 @@
 
 namespace DCSFlightpanels.CustomControls
 {
-    class StreamDeckFaceTextBox : TextBoxBase
+    class StreamDeckFaceTextBox : TextBoxBaseInput
     {
         public new BillStreamDeckFace Bill { get; set; }
     }
