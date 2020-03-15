@@ -112,11 +112,7 @@
     <Compile Include="CommonVK.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
-    <Compile Include="StreamDeck\CustomLayers\A10C\Radios.cs" />
-    <Compile Include="StreamDeck\CustomLayers\ButtonFunctionClass.cs" />
-    <Compile Include="StreamDeck\CustomLayers\SRS\SRSAction.cs" />
-    <Compile Include="StreamDeck\CustomLayers\SRS\SRSLayer.cs" />
-    <Compile Include="StreamDeck\CustomLayers\SRS\StreamDeckSRSButton.cs" />
+    <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />
     <Compile Include="StreamDeck\DCSBIOSFaceBindingStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />

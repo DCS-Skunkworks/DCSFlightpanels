@@ -15,7 +15,7 @@ namespace DCSFlightpanels.Bills
     public class BillStreamDeckFace : BillBaseOutput
     {
         public EnumStreamDeckButtonNames StreamDeckButtonName;
-        private DCSBIOSFaceBindingStreamDeck _dcsbiosOutputBinding;
+        private DCSBIOSFaceBindingStreamDeck _dcsbiosFaceBinding;
         private StreamDeckTargetLayer _streamDeckTargetLayer;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
@@ -33,13 +33,13 @@ namespace DCSFlightpanels.Bills
         public override bool IsEmpty()
         {
             return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) &&
-                   (_dcsbiosOutputBinding == null) &&
+                   (_dcsbiosFaceBinding == null) &&
                    _streamDeckTargetLayer == null;
         }
 
         public override void Consume(DCSBIOSFaceBindingStreamDeck dcsBiosFaceBindingStreamDeck)
         {
-            _dcsbiosOutputBinding = dcsBiosFaceBindingStreamDeck;
+            _dcsbiosFaceBinding = dcsBiosFaceBindingStreamDeck;
         }
 
 
@@ -68,7 +68,7 @@ namespace DCSFlightpanels.Bills
         
         public override bool ContainsDCSBIOS()
         {
-            return _dcsbiosOutputBinding != null;
+            return _dcsbiosFaceBinding != null;
         }
 
         public bool ContainsStreamDeckLayer()
@@ -136,16 +136,16 @@ namespace DCSFlightpanels.Bills
 
         public override void ClearAll()
         {
-            _dcsbiosOutputBinding = null;
+            _dcsbiosFaceBinding = null;
             _bipLinkStreamDeck = null;
             TextBox.Background = Brushes.LightSteelBlue;
             TextBox.Text = "";
         }
 
-        public DCSBIOSFaceBindingStreamDeck DCSBIOSOutputBinding
+        public DCSBIOSFaceBindingStreamDeck DCSBIOSFaceBinding
         {
-            get => _dcsbiosOutputBinding;
-            set => _dcsbiosOutputBinding = value;
+            get => _dcsbiosFaceBinding;
+            set => _dcsbiosFaceBinding = value;
         }
     }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
-using NonVisuals.StreamDeck.CustomLayers;
 
 namespace NonVisuals.StreamDeck
 {
@@ -146,15 +145,5 @@ namespace NonVisuals.StreamDeck
         }
 
 
-        public void AddButton(EnumStreamDeckButtonNames streamDeckButtonName, ButtonFunction buttonFunction)
-        {
-            //Do nothing
-        }
-
-        public ButtonFunctionList GetCustomButtonList()
-        {
-            var result = new ButtonFunctionList();
-            return result;
-        }
     }
 }

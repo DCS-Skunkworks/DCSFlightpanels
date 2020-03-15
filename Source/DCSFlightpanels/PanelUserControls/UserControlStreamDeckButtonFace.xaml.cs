@@ -492,7 +492,18 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        //här ska den göras. facetype dcsbios
+                        var result = new FaceTypeText();
+
+                        result.StreamDeckButtonName = streamDeckButtonName;
+                        result.Text = TextBoxButtonTextFace.Text;
+                        result.TextFont = TextBoxButtonTextFace.Bill.TextFont;
+                        result.FontColor = TextBoxButtonTextFace.Bill.FontColor;
+                        result.BackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
+                        result.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
+                        result.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
+
+                        result.DCSBIOSFaceBinding = TextBoxDCSBIOSFaceButton.Bill.DCSBIOSFaceBinding;
+                        break;
                     }
             }
 
@@ -686,7 +697,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSOutputBinding.DCSBIOSOutputObject);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSFaceBinding.DCSBIOSOutputObject);
                 }
                 else
                 {
@@ -698,15 +709,15 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult == true)
                 {
-                    textBox.Bill.DCSBIOSOutputBinding = new DCSBIOSFaceBindingStreamDeck();
+                    textBox.Bill.DCSBIOSFaceBinding = new DCSBIOSFaceBindingStreamDeck();
                     
                     if (dcsBiosOutputFormulaWindow.UseFormula())
                     {
-                        textBox.Bill.DCSBIOSOutputBinding.DCSBIOSOutputFormulaObject = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
+                        textBox.Bill.DCSBIOSFaceBinding.DCSBIOSOutputFormulaObject = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
                     }
                     else
                     {
-                        textBox.Bill.DCSBIOSOutputBinding.DCSBIOSOutputObject = dcsBiosOutputFormulaWindow.DCSBiosOutput;
+                        textBox.Bill.DCSBIOSFaceBinding.DCSBIOSOutputObject = dcsBiosOutputFormulaWindow.DCSBiosOutput;
                     }
                     var text = string.IsNullOrWhiteSpace(dcsBiosOutputFormulaWindow.UserDescription) ? "DCS-BIOS" : dcsBiosOutputFormulaWindow.UserDescription;
                     //1 appropriate text to textbox
