@@ -188,8 +188,8 @@
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\StreamDeckJaceDecodeFormulaWindow.xaml.cs">
-      <DependentUpon>StreamDeckJaceDecodeFormulaWindow.xaml</DependentUpon>
+    <Compile Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml.cs">
+      <DependentUpon>StreamDeckDCSBIOSDecoderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\JaceSandboxWindow.xaml.cs">
       <DependentUpon>JaceSandboxWindow.xaml</DependentUpon>
@@ -376,7 +376,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\StreamDeckJaceDecodeFormulaWindow.xaml">
+    <Page Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

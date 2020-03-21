@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using DCS_BIOS;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.Windows;
@@ -1042,6 +1043,12 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 streamDeckImage.IsEnabled = enabled;
             }
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var window = new StreamDeckDCSBIOSDecoderWindow(_streamDeck, EnumStreamDeckButtonNames.BUTTON1, DCSBIOS.GetInstance());
+            window.ShowDialog();
         }
     }
 }

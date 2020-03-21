@@ -10,6 +10,6 @@ namespace NonVisuals.StreamDeck
     {
         private List<string> _formulas = new List<string>();
 
-        alla texter bilder måste finnas i denna klass inte någonannanstans
+        //alla texter bilder måste finnas i denna klass inte någonannanstans
     }
 }

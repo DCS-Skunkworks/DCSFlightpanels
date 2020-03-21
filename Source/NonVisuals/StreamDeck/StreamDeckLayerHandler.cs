@@ -363,7 +363,6 @@ namespace NonVisuals.StreamDeck
 
         private void ShowLayer(string layerName)
         {
-            Common.LogStackTrace(Constants.ProjectsInSolution);
             ClearAllFaces();
 
             var layer = GetStreamDeckLayer(layerName);

@@ -240,7 +240,7 @@ namespace ClassLibraryCommon
                 using (var streamReader = new StreamReader(_errorLog))
                 {
                     streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
-                    streamWriter.Write(message);
+                    streamWriter.Write(message + Environment.NewLine);
                     while (!streamReader.EndOfStream)
                     {
                         streamWriter.WriteLine(streamReader.ReadLine());

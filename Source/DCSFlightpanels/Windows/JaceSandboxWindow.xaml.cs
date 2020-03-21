@@ -329,7 +329,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                string formula = TextBoxFormula.Text;
+                var formula = TextBoxFormula.Text;
                 var variables = new Dictionary<string, double>();
 
                 if (_dcsbiosOutput1 != null)
