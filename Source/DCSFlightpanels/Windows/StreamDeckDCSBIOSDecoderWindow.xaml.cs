@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -32,7 +32,6 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window, IDcsBiosDataListener
     {
-        private EnumStreamDeckButtonNames _streamDeckButton;
         private StreamDeckPanel _streamDeck;
         private DCSBIOSOutput _dcsbiosOutput1 = null;
         private volatile uint _value1 = 0;
@@ -52,22 +51,32 @@ namespace DCSFlightpanels.Windows
         private string _decoderResult;
         private bool _isDirty = false;
 
+        private DCSBIOSDecoder _dcsbiosDecoder = new DCSBIOSDecoder();
 
 
 
-
-
-        public StreamDeckDCSBIOSDecoderWindow(StreamDeckPanel streamDeck, EnumStreamDeckButtonNames streamDeckButton, DCSBIOS dcsbios)
+        public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeck, DCSBIOS dcsbios)
         {
             InitializeComponent();
             _dcsbios = dcsbios;
             _dcsbios.AttachDataReceivedListener(this);
+            _dcsbiosDecoder = dcsbiosDecoder;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _streamDeckButton = streamDeckButton;
             _streamDeck = streamDeck;
         }
 
+        public StreamDeckDCSBIOSDecoderWindow(StreamDeckPanel streamDeck, EnumStreamDeckButtonNames streamDeckButton, DCSBIOS dcsbios)
+        {
+            InitializeComponent();
+            _dcsbiosDecoder = new DCSBIOSDecoder();
+            _dcsbios = dcsbios;
+            _dcsbios.AttachDataReceivedListener(this);
+            DCSBIOSControlLocator.LoadControls();
+            _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+            _dcsbiosDecoder.StreamDeckButtonName = streamDeckButton;
+            _streamDeck = streamDeck;
+        }
 
         private void StreamDeckDCSBIOSDecoderWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -79,6 +88,11 @@ namespace DCSFlightpanels.Windows
                 }
                 //LoadFontSettings();
                 SetBills();
+
+                
+                ListBoxDecoders.Items.Clear();
+                ListBoxDecoders.ItemsSource = _dcsbiosDecoder.DCSBIOSDecoders;
+                
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
                 _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));
@@ -90,7 +104,23 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(1001, ex);
             }
         }
+        
+        private void SetFormState()
+        {
+            if (!_formLoaded)
+            {
+                return;
+            }
 
+            StackPanelNumberConversion.Visibility = RadioButtonOutputString.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
+            StackPanelNumberConversion.IsEnabled = RadioButtonOutputString.IsChecked == true;
+            ButtonAddNumberConversion.IsEnabled = RadioButtonOutputString.IsChecked == true;
+
+            ButtonEditNumberConversion.IsEnabled = ListBoxDecoders.SelectedItems.Count == 1;
+            ButtonDeleteNumberConversion.IsEnabled = ListBoxDecoders.SelectedItems.Count == 1;
+            ButtonTestFormula.IsEnabled = !string.IsNullOrEmpty(TextBoxId1.Text) && !string.IsNullOrEmpty(TextBoxFormula.Text);
+            ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxId1.Text) && !string.IsNullOrEmpty(TextBoxFormula.Text) && !_formulaHadErrors;
+        }
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -261,7 +291,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
                 var bitmap = BitMapCreator.CreateStreamDeckBitmap(TextBoxButtonTextFace.Text, TextBoxButtonTextFace.Bill.TextFont, TextBoxButtonTextFace.Bill.FontColor, TextBoxButtonTextFace.Bill.BackgroundColor, TextBoxButtonTextFace.Bill.OffsetX, TextBoxButtonTextFace.Bill.OffsetY);
-                _streamDeck.SetImage(_streamDeckButton, bitmap);
+                _streamDeck.SetImage(_dcsbiosDecoder.StreamDeckButtonName, bitmap);
             }
             catch (Exception ex)
             {
@@ -287,17 +317,6 @@ namespace DCSFlightpanels.Windows
         {
             _changesMade = true;
             SetFormState();
-        }
-
-        private void SetFormState()
-        {
-            if (!_formLoaded)
-            {
-                return;
-            }
-
-            ButtonTestFormula.IsEnabled = !string.IsNullOrEmpty(TextBoxId1.Text) && !string.IsNullOrEmpty(TextBoxFormula.Text);
-            ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxId1.Text) && !string.IsNullOrEmpty(TextBoxFormula.Text) && !_formulaHadErrors;
         }
 
 
@@ -505,5 +524,79 @@ namespace DCSFlightpanels.Windows
             textbox.Text = _typeToSearch;
             textbox.Foreground = new SolidColorBrush(Colors.Gainsboro);
         }
+
+        private void ButtonAddNumberConversion_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var window = new DCSBIOSComparatorWindow();
+                window.ShowDialog();
+                if (window.DialogResult == true)
+                {
+                    _dcsbiosDecoder.Add(window.DCSBIOSComparator);
+                }
+                TestImage();
+                
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonEditNumberConversion_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var window = new DCSBIOSComparatorWindow((DCSBIOSNumberToText)ListBoxDecoders.SelectedItems[0]);
+                window.ShowDialog();
+                if (window.DialogResult == true)
+                {
+                    _dcsbiosDecoder.Remove((DCSBIOSNumberToText) ListBoxDecoders.SelectedItems[0]);
+                    _dcsbiosDecoder.Add(window.DCSBIOSComparator);
+                }
+                TestImage();
+                
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonDeleteNumberConversion_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _dcsbiosDecoder.Remove((DCSBIOSNumberToText)ListBoxDecoders.SelectedItems[0]);
+                TestImage();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void RadioButtonOutput_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public List<DCSBIOSNumberToText> DCSBIOSDecoders
+        {
+            get => _dcsbiosDecoder.DCSBIOSDecoders;
+        }
+
+
     }
 }
