@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using System.Windows.Markup;
+
+namespace NonVisuals.StreamDeck
 {
     public enum EnumComparator
     {
@@ -17,9 +19,10 @@
         private uint _referenceValue;
         private string _outputText;
 
-        public string GetText(uint comparisonValue)
+        public string ConvertNumber(uint comparisonValue, out bool resultFound)
         {
             string result = null;
+            resultFound = false; 
 
             switch (_comparator)
             {
@@ -28,6 +31,7 @@
                         if (comparisonValue == _referenceValue)
                         {
                             result = _outputText;
+                            resultFound = true;
                         }
                         break;
                     }
@@ -36,6 +40,7 @@
                         if (comparisonValue != _referenceValue)
                         {
                             result = _outputText;
+                            resultFound = true;
                         }
                         break;
                     }
@@ -44,6 +49,7 @@
                         if (comparisonValue < _referenceValue)
                         {
                             result = _outputText;
+                            resultFound = true;
                         }
                         break;
                     }
@@ -52,6 +58,7 @@
                         if (comparisonValue <= _referenceValue)
                         {
                             result = _outputText;
+                            resultFound = true;
                         }
                         break;
                     }
@@ -60,6 +67,7 @@
                         if (comparisonValue > _referenceValue)
                         {
                             result = _outputText;
+                            resultFound = true;
                         }
                         break;
                     }
@@ -68,6 +76,7 @@
                         if (comparisonValue >= _referenceValue)
                         {
                             result = _outputText;
+                            resultFound = true;
                         }
                         break;
                     }
@@ -76,7 +85,7 @@
             return result;
         }
 
-        public string GetFriendlyInfo
+        public string FriendlyInfo
         {
             get
             {
@@ -115,7 +124,7 @@
                         break;
                     }
                 }
-                return " {dcsbios} " + " " + comparator + _referenceValue + " ==> " + OutputText;
+                return "IF {dcsbios} " + " " + comparator + " " + _referenceValue + " THEN " + OutputText;
             }
         }
 

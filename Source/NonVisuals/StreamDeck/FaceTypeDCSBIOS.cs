@@ -35,7 +35,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        private void ShowButtonFace(IStreamDeckBoard streamDeckBoard)
+        protected void ShowButtonFace(IStreamDeckBoard streamDeckBoard)
         {
             if (_streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
             {
@@ -53,7 +53,7 @@ namespace NonVisuals.StreamDeck
             streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(_streamDeckButtonName) - 1, keyBitmap);
         }
 
-        private void ShowButtonFace(StreamDeckPanel streamDeckPanel)
+        protected void ShowButtonFace(StreamDeckPanel streamDeckPanel)
         {
             if (_refreshBitmap)
             {
@@ -153,5 +153,10 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public uint DCSBiosValue
+        {
+            get => _dcsBiosValue;
+            set => _dcsBiosValue = value;
+        }
     }
 }

@@ -33,7 +33,7 @@
                               SelectionMode="Single" 
                               SelectionUnit="FullRow" 
                               HorizontalAlignment="Stretch" 
-                              Name="DataGridValues" 
+                              Name="PopupDataGrid" 
                               VerticalAlignment="Stretch" 
                               VerticalScrollBarVisibility="Visible" 
                               MouseDoubleClick="Control_OnMouseDoubleClick" 
@@ -74,6 +74,9 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
+            <GroupBox>
+                <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnChange" Checked="CheckBoxUseFormula_OnChange"/>
+            </GroupBox>
             <GroupBox Name="GroupBoxFormula" Header="Formula" >
                 <StackPanel>
                     <TextBlock Margin="10,10,10,10">
@@ -81,6 +84,7 @@
                                 Click here for a list of Math functions.
                             </Hyperlink>
                     </TextBlock>
+                    <Label Name="LabelFormula" Content="Copy DCS-BIOS control name directly as is into the formula" Margin="10,0,10,0"/>
                     <TextBox x:Name="TextBoxFormula" Height="100" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" TextChanged="TextBoxFormula_OnTextChanged"/>
                     <Label Name="LabelErrors" Content="Errors :"  Margin="10,10,10,0" />
                     <StackPanel Orientation="Horizontal">
@@ -101,17 +105,24 @@
                         <RadioButton Name="RadioButtonOutputString" GroupName="OutputType" Content="Text" Margin="10,0,0,0" Click="RadioButtonOutput_OnClick"></RadioButton>
                     </StackPanel>
                     <StackPanel Name="StackPanelNumberConversion">
-                        <Label Content="Number Conversions:"></Label>
-                        <ListBox Name="ListBoxDecoders" Height="200" >
-                            <DataTemplate>
-                                <Grid Margin="0,2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding GetFriendlyText}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox>
+                        <DataGrid AutoGenerateColumns="false" 
+                                  ItemsSource="{Binding}" 
+                                  SelectionMode="Single" 
+                                  SelectionUnit="FullRow" 
+                                  HorizontalAlignment="Stretch" 
+                                  Name="DataGridDecoders" 
+                                  VerticalAlignment="Stretch" 
+                                  VerticalScrollBarVisibility="Visible" 
+                                  SelectionChanged="DataGridDecoders_OnSelectionChanged" 
+                                  CanUserReorderColumns="False" 
+                                  CanUserResizeRows="False" 
+                                  CanUserSortColumns="False" 
+                                  CanUserAddRows="False"
+                                  Height="250">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Number to Text Decoders" IsReadOnly="True" Binding="{Binding Path=FriendlyInfo}"  Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <Button Name="ButtonAddNumberConversion" Width="60"  Margin="0,0,5,0" Content="Add" Click="ButtonAddNumberConversion_OnClick"></Button>
                             <Button Name="ButtonEditNumberConversion" Width="60"  Margin="0,0,5,0" Content="Edit" Click="ButtonEditNumberConversion_OnClick"></Button>
