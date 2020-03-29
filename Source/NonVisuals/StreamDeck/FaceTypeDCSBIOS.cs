@@ -13,7 +13,7 @@ namespace NonVisuals.StreamDeck
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private string _text;
+        private string _buttonText;
         private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor;
         private Color _backgroundColor;
@@ -44,7 +44,7 @@ namespace NonVisuals.StreamDeck
 
             if (_refreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
                 _refreshBitmap = false;
             }
 
@@ -57,7 +57,7 @@ namespace NonVisuals.StreamDeck
         {
             if (_refreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
                 _refreshBitmap = false;
             }
             streamDeckPanel.SetImage(_streamDeckButtonName, _bitmap);
@@ -97,13 +97,13 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public string Text
+        public string ButtonText
         {
-            get => _text;
+            get => _buttonText;
             set
             {
                 _refreshBitmap = true;
-                _text = value;
+                _buttonText = value;
             }
         }
 

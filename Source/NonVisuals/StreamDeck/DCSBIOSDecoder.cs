@@ -12,7 +12,6 @@ namespace NonVisuals.StreamDeck
         private StreamDeckPanel _streamDeck;
         private DCSBIOSOutput _dcsbiosOutput = null;
         private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
-        private bool _dataChanged = false;
         private readonly DCSBIOS _dcsbios;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosPopupControls;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
@@ -40,7 +39,6 @@ namespace NonVisuals.StreamDeck
                 if (!Equals(DCSBiosValue, e.Data))
                 {
                     DCSBiosValue = e.Data;
-                    _dataChanged = true;
                     if (_useFormula)
                     {
                         var formulaResult = EvaluateFormula();
@@ -60,6 +58,7 @@ namespace NonVisuals.StreamDeck
                             {
                                 ButtonText = ButtonText.Replace(DCSBIOS_PLACE_HOLDER,  formulaResult.ToString(CultureInfo.InvariantCulture));
                             }
+                            Show(new StreamDeckRequisites(){StreamDeck = _streamDeck});
                         }
                     }
                 }

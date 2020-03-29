@@ -214,7 +214,7 @@ namespace DCSFlightpanels.Windows
 
         private void UpdateDecoderThreaded()
         {
-            _dcsbiosDecoder.
+            
         }
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
