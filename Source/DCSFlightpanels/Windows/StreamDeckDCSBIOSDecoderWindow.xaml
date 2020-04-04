@@ -8,8 +8,13 @@
         xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
-        Title="DCS-BIOS Decoder" Height="400" Width="1200" WindowStartupLocation="CenterScreen" Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
-        Closing="StreamDeckDCSBIOSDecoderWindow_OnClosing" KeyDown="StreamDeckDCSBIOSDecoderWindow_OnKeyDown" Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico"
+        Title="DCS-BIOS Decoder" 
+        Height="500" Width="1200" 
+        WindowStartupLocation="CenterScreen" 
+        Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
+        Closing="StreamDeckDCSBIOSDecoderWindow_OnClosing" 
+        KeyDown="StreamDeckDCSBIOSDecoderWindow_OnKeyDown" 
+        Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico"
         d:DataContext="{d:DesignInstance streamDeck:DCSBIOSDecoder}">
     <Window.Resources>
         <Image x:Key="UpArrow" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
@@ -161,18 +166,22 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="10,5,10,0" >
-                <StackPanel Orientation="Vertical" Margin="0,15,0,0" HorizontalAlignment="Left" >
-                    <CheckBox Name="CheckBoxShowUnitAfterDCSBIOSFace" Content="Show Units" Margin="0,2,2,0"></CheckBox>
-                    <Label Content="Unit" Margin="0,2,2,0"/>
-                    <customControl:StreamDeckFaceTextBox x:Name="TextBoxDCSBIOSFaceUnit" Width="100" Margin="0,2,2,0"></customControl:StreamDeckFaceTextBox>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="0,15,0,0" HorizontalAlignment="Left" >
-                    <CheckBox Name="CheckBoxUnitAboveDCSBIOSFace" Content="Show Above" Margin="15,2,2,0"></CheckBox>
-                    <CheckBox Name="CheckBoxUnitBelowDCSBIOSFace" Content="Show Below" Margin="15,2,2,0"></CheckBox>
-                    <CheckBox Name="CheckBoxUnitLeftDCSBIOSFace" Content="Show Left" Margin="15,2,2,0"></CheckBox>
-                    <CheckBox Name="CheckBoxUnitRightDCSBIOSFace" Content="Show Right" Margin="15,2,2,0"></CheckBox>
+                <StackPanel Background="WhiteSmoke">
+                    <TextBlock Margin="10,20,0,0" FontSize="15">
+                        <Bold>Information</Bold><LineBreak/><LineBreak/>
+                    </TextBlock>
+                    <TextBlock Margin="10,0,10,0" FontSize="9">
+                        <Bold>
+                            Start DCS and open a mission in the plane you want to configure.<LineBreak/>
+                            This way you will see real-time values from DCS-BIOS.
+                            <LineBreak/>
+                            <LineBreak/>
+                            1) Select DCS-BIOS Output you want (e.g. Compass Heading)<LineBreak/>
+                            2) Choose whether to format the DCS-BIOS value using a formula<LineBreak/>
+                            3) Choose if to translate it into text, adding unit info also possible here<LineBreak/>
+                            3) Select font, font size and color<LineBreak/>
+                        </Bold>
+                    </TextBlock>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

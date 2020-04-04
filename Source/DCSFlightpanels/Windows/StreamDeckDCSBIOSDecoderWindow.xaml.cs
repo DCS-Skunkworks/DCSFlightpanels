@@ -30,12 +30,9 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for JaceSandbox.xaml
     /// </summary>
-    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IDcsBiosDataListener
+    public partial class StreamDeckDCSBIOSDecoderWindow : Window 
     {
         private StreamDeckPanel _streamDeck;
-        //private DCSBIOSOutput _dcsbiosOutput1 = null;
-        private volatile uint _value1 = 0;
-        private bool _dataChanged;
         private bool _formLoaded;
         private readonly string _typeToSearch = "Type to search control";
         private readonly DCSBIOS _dcsbios;
@@ -61,7 +58,6 @@ namespace DCSFlightpanels.Windows
         {
             InitializeComponent();
             _dcsbios = dcsbios;
-            _dcsbios.AttachDataReceivedListener(this);
             _dcsbiosDecoder = dcsbiosDecoder;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
@@ -75,7 +71,6 @@ namespace DCSFlightpanels.Windows
             InitializeComponent();
             _dcsbiosDecoder = new DCSBIOSDecoder(streamDeck, streamDeckButton, dcsbios);
             _dcsbios = dcsbios;
-            _dcsbios.AttachDataReceivedListener(this);
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             _dcsbiosDecoder.StreamDeckButtonName = streamDeckButton;
@@ -96,7 +91,6 @@ namespace DCSFlightpanels.Windows
 
             if (!e.Cancel)
             {
-                _dcsbios.DetachDataReceivedListener(this);
                 _exitThread = true;
                 _isLooping = false;
                 _autoResetEvent.Set();
@@ -139,7 +133,6 @@ namespace DCSFlightpanels.Windows
 
             ButtonEditNumberConversion.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
             ButtonDeleteNumberConversion.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
-            ButtonTestFormula.IsEnabled = !string.IsNullOrEmpty(TextBoxId1.Text) && !string.IsNullOrEmpty(TextBoxFormula.Text);
             ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxId1.Text) && !string.IsNullOrEmpty(TextBoxFormula.Text) && !_formulaHadErrors;
 
             GroupBoxFormula.IsEnabled = CheckBoxUseFormula.IsChecked == true;
@@ -148,6 +141,8 @@ namespace DCSFlightpanels.Windows
         private void ShowDecoder()
         {
             CheckBoxUseFormula.IsChecked = _dcsbiosDecoder.UseFormula == true;
+            TextBoxFormula.Text = _dcsbiosDecoder.Formula;
+            asd
         }
 
         private void ThreadLoop()
@@ -157,49 +152,19 @@ namespace DCSFlightpanels.Windows
                 while (!_exitThread)
                 {
                     _autoResetEvent.WaitOne();
-                    string formula = null;
 
-                    var variables = new Dictionary<string, double>();
-
-                    if (_dcsbiosDecoder.DCSBIOSOutput != null)
-                    {
-                        variables.Add(_dcsbiosDecoder.DCSBIOSOutput.ControlId, 0);
-                    }
                     while (_isLooping)
                     {
-                        if (_dataChanged)
+                        if (_dcsbiosDecoder.ValueUpdated)
                         {
                             try
                             {
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LabelErrors.Content = "";
-                                    });
-                                Dispatcher?.Invoke(() =>
-                                {
-                                    formula = TextBoxFormula.Text;
-                                });
-                                if (_dcsbiosDecoder.DCSBIOSOutput != null)
-                                {
-                                    variables[_dcsbiosDecoder.DCSBIOSOutput.ControlId] = GetVariableValues(_dcsbiosDecoder.DCSBIOSOutput.ControlId);
-                                }
-
-                                var result = _jaceExtended.CalculationEngine.Calculate(formula, variables);
-
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LabelResult.Content = "Result : " + result;
-                                    });
+                                SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : "");
+                                SetFormulaResult(_dcsbiosDecoder.FormulaResult);
                             }
                             catch (Exception e)
                             {
-                                Dispatcher?.BeginInvoke(
-                                    (Action)delegate
-                                    {
-                                        LabelErrors.Content = e.Message;
-                                    });
+                                SetFormulaError(e.Message);
                             }
                         }
                         Thread.Sleep(10);
@@ -243,23 +208,6 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
-        {
-            if (_dcsbiosDecoder.DCSBIOSOutput?.Address == e.Address)
-            {
-                if (!Equals(_value1, e.Data))
-                {
-                    _value1 = e.Data;
-                    _dataChanged = true;
-                    Dispatcher?.BeginInvoke(
-                        (Action)delegate
-                        {
-                            LabelSourceRawValue1.Content = "Value : " + _value1;
-                        });
-                }
-            }
-        }
-
         private void AdjustShownPopupData(TextBox textBox)
         {
             _popupSearch.PlacementTarget = textBox;
@@ -297,40 +245,6 @@ namespace DCSFlightpanels.Windows
             {
                 Common.ShowErrorMessageBox(1005, ex);
             }
-        }
-
-        private void ButtonTestFormula_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var formula = TextBoxFormula.Text;
-                var variables = new Dictionary<string, double>();
-
-                if (_dcsbiosDecoder.DCSBIOSOutput != null)
-                {
-                    variables.Add(_dcsbiosDecoder.DCSBIOSOutput.ControlId, 0);
-                    variables[_dcsbiosDecoder.DCSBIOSOutput.ControlId] = GetVariableValues(_dcsbiosDecoder.DCSBIOSOutput.ControlId);
-                }
-                _decoderResult = _jaceExtended.CalculationEngine.Calculate(formula, variables).ToString(CultureInfo.InvariantCulture);
-
-                LabelErrors.Content = "";
-                LabelResult.Content = "Result : " + _decoderResult;
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                LabelErrors.Content = ex.Message;
-                _formulaHadErrors = true;
-            }
-        }
-
-        private double GetVariableValues(string controlId)
-        {
-            if (Equals(controlId, _dcsbiosDecoder.DCSBIOSOutput.ControlId))
-            {
-                return _value1;
-            }
-            throw new Exception("Failed to pair DCSBIOSOutput " + controlId);
         }
 
         private void RepeatButtonActionPressUp_OnClick(object sender, RoutedEventArgs e)
@@ -710,6 +624,24 @@ namespace DCSFlightpanels.Windows
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void SetFormulaError(string error)
+        {
+            Dispatcher?.BeginInvoke(
+                (Action)delegate
+                {
+                    LabelErrors.Content = error;
+                });
+        }
+
+        private void SetFormulaResult(double result)
+        {
+            Dispatcher?.BeginInvoke(
+                (Action)delegate
+                {
+                    LabelResult.Content = result.ToString(CultureInfo.InvariantCulture);
+                });
         }
     }
 }

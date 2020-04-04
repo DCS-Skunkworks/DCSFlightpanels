@@ -52,7 +52,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                ButtonOk.IsEnabled = !string.IsNullOrEmpty(TextBoxValue.Text) && !string.IsNullOrEmpty(TextBoxOutputText.Text) && !string.IsNullOrEmpty(ComboBoxComparisonType.Text);
+                ButtonOk.IsEnabled = !string.IsNullOrEmpty(TextBoxValue.Text) && double.TryParse(TextBoxValue.Text, out var value) && !string.IsNullOrEmpty(TextBoxOutputText.Text) && !string.IsNullOrEmpty(ComboBoxComparisonType.Text);
             }
             catch (Exception ex)
             {

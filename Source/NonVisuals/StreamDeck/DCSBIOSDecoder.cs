@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using DCS_BIOS;
 
@@ -16,6 +17,12 @@ namespace NonVisuals.StreamDeck
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosPopupControls;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private const string DCSBIOS_PLACE_HOLDER = "{dcsbios}";
+        private bool _valueUpdated;
+        private string _lastFormulaException = "";
+
+
+
+
 
         public DCSBIOSDecoder(StreamDeckPanel streamDeck, EnumStreamDeckButtonNames streamDeckButton, DCSBIOS dcsbios)
         {
@@ -39,28 +46,39 @@ namespace NonVisuals.StreamDeck
                 if (!Equals(DCSBiosValue, e.Data))
                 {
                     DCSBiosValue = e.Data;
-                    if (_useFormula)
+                    try
                     {
-                        var formulaResult = EvaluateFormula();
-                        if (_decodeToString)
+
+                        if (_useFormula)
                         {
-                            var resultFound = false;
-                            foreach (var dcsbiosNumberToText in _dcsbiosNumberToTexts)
+                            var formulaResult = EvaluateFormula();
+                            if (_decodeToString)
                             {
-                                ButtonText = dcsbiosNumberToText.ConvertNumber(DCSBiosValue, out resultFound);
-                                if (resultFound)
+                                var resultFound = false;
+                                foreach (var dcsbiosNumberToText in _dcsbiosNumberToTexts)
                                 {
-                                    break;
+                                    ButtonText = dcsbiosNumberToText.ConvertNumber(DCSBiosValue, out resultFound);
+                                    if (resultFound)
+                                    {
+                                        break;
+                                    }
                                 }
+                                //"Course {dcsbios}°
+                                if (resultFound && ButtonText.Contains(DCSBIOS_PLACE_HOLDER))
+                                {
+                                    ButtonText = ButtonText.Replace(DCSBIOS_PLACE_HOLDER, formulaResult.ToString(CultureInfo.InvariantCulture));
+                                }
+                                Show(new StreamDeckRequisites() { StreamDeck = _streamDeck });
                             }
-                            //"Course {dcsbios}°
-                            if (resultFound && ButtonText.Contains(DCSBIOS_PLACE_HOLDER))
-                            {
-                                ButtonText = ButtonText.Replace(DCSBIOS_PLACE_HOLDER,  formulaResult.ToString(CultureInfo.InvariantCulture));
-                            }
-                            Show(new StreamDeckRequisites(){StreamDeck = _streamDeck});
                         }
+
+                        _lastFormulaException = "";
                     }
+                    catch (Exception exception)
+                    {
+                        _lastFormulaException = exception.Message;
+                    }
+                    _valueUpdated = true;
                 }
             }
         }
@@ -78,7 +96,7 @@ namespace NonVisuals.StreamDeck
             get => _formula;
             set => _formula = value;
         }
-        
+
         public StreamDeckPanel StreamDeck
         {
             get => _streamDeck;
@@ -123,6 +141,21 @@ namespace NonVisuals.StreamDeck
         {
             get => _useFormula;
             set => _useFormula = value;
+        }
+
+        public bool ValueUpdated
+        {
+            get
+            {
+                var result = false;
+                if (_valueUpdated)
+                {
+                    result = true;
+                    _valueUpdated = false; // Reset so next read without update will give false
+                }
+
+                return result;
+            }
         }
     }
 }
