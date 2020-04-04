@@ -72,10 +72,10 @@
             <GroupBox Header="Select DCS-BIOS Control" >
                 <StackPanel Margin="0,10,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Clear" Height="23" VerticalAlignment="Bottom" Margin="10,10,10,10"  x:Name="ButtonClear1" Width="75" Click="ButtonClear1_OnClick"/>
-                        <TextBox Name="TextBoxSearch1" Text="Type to search control" Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
-                        <TextBox FontSize="10" Height="18" Width="150" IsReadOnly="True" Margin="10,10,10,10" Name="TextBoxId1" IsEnabled="False"/>
-                        <Label Name="LabelSourceRawValue1" Content="Value : " Margin="10,10,10,0"/>
+                        <Button Content="Clear" Height="23" VerticalAlignment="Bottom" Margin="10,10,10,10"  x:Name="ButtonClear1" Width="75" Click="ButtonClear_OnClick"/>
+                        <TextBox Name="TextBoxSearch" Text="Type to search control" Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
+                        <TextBox FontSize="10" Height="18" Width="150" IsReadOnly="True" Margin="10,10,10,10" Name="TextBoxDCSBIOSId" IsEnabled="False"/>
+                        <Label Name="LabelSourceRawValue" Content="Value : " Margin="10,10,10,0"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
@@ -90,11 +90,10 @@
                             </Hyperlink>
                     </TextBlock>
                     <Label Name="LabelFormula" Content="Copy DCS-BIOS control name directly as is into the formula" Margin="10,0,10,0"/>
-                    <TextBox x:Name="TextBoxFormula" Height="100" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" TextChanged="TextBoxFormula_OnTextChanged"/>
+                    <TextBox x:Name="TextBoxFormula" Height="100" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" KeyUp="TextBoxFormula_OnKeyUp" TextChanged="TextBoxFormula_OnTextChanged"/>
                     <Label Name="LabelErrors" Content="Errors :"  Margin="10,10,10,0" />
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
-                            <Button Name="ButtonTestFormula" Height="23"  Content="Test" Width="75" HorizontalAlignment="Right" Margin="10,10,10,10" Click="ButtonTestFormula_OnClick" />
                             <Label Name="LabelResult" Content="Result :" Margin="10,10,10,0"/>
                         </DockPanel>
                     </StackPanel>
@@ -168,7 +167,7 @@
                 </GroupBox>
                 <StackPanel Background="WhiteSmoke">
                     <TextBlock Margin="10,20,0,0" FontSize="15">
-                        <Bold>Information</Bold><LineBreak/><LineBreak/>
+                        <Bold>Information</Bold><LineBreak/>
                     </TextBlock>
                     <TextBlock Margin="10,0,10,0" FontSize="9">
                         <Bold>
@@ -179,7 +178,7 @@
                             1) Select DCS-BIOS Output you want (e.g. Compass Heading)<LineBreak/>
                             2) Choose whether to format the DCS-BIOS value using a formula<LineBreak/>
                             3) Choose if to translate it into text, adding unit info also possible here<LineBreak/>
-                            3) Select font, font size and color<LineBreak/>
+                            4) Select font, font size and color<LineBreak/>
                         </Bold>
                     </TextBlock>
                 </StackPanel>

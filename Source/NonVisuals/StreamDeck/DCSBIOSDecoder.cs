@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
+using System.Windows.Navigation;
 using DCS_BIOS;
 
 namespace NonVisuals.StreamDeck
@@ -14,13 +16,13 @@ namespace NonVisuals.StreamDeck
         private DCSBIOSOutput _dcsbiosOutput = null;
         private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
         private readonly DCSBIOS _dcsbios;
-        private readonly IEnumerable<DCSBIOSControl> _dcsbiosPopupControls;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private const string DCSBIOS_PLACE_HOLDER = "{dcsbios}";
-        private bool _valueUpdated;
-        private string _lastFormulaException = "";
-
-
+        private volatile bool _valueUpdated;
+        private string _lastFormulaError = "";
+        private double _formulaResult = 0;
+        private bool _isVisible = false;
+        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
 
 
@@ -28,8 +30,6 @@ namespace NonVisuals.StreamDeck
         {
             _dcsbios = dcsbios;
             _dcsbios.AttachDataReceivedListener(this);
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosPopupControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             StreamDeckButtonName = streamDeckButton;
             _streamDeck = streamDeck;
         }
@@ -46,12 +46,12 @@ namespace NonVisuals.StreamDeck
                 if (!Equals(DCSBiosValue, e.Data))
                 {
                     DCSBiosValue = e.Data;
+                    _autoResetEvent.Set();
                     try
                     {
-
                         if (_useFormula)
                         {
-                            var formulaResult = EvaluateFormula();
+                            _formulaResult = EvaluateFormula();
                             if (_decodeToString)
                             {
                                 var resultFound = false;
@@ -66,23 +66,49 @@ namespace NonVisuals.StreamDeck
                                 //"Course {dcsbios}°
                                 if (resultFound && ButtonText.Contains(DCSBIOS_PLACE_HOLDER))
                                 {
-                                    ButtonText = ButtonText.Replace(DCSBIOS_PLACE_HOLDER, formulaResult.ToString(CultureInfo.InvariantCulture));
+                                    ButtonText = ButtonText.Replace(DCSBIOS_PLACE_HOLDER, _formulaResult.ToString(CultureInfo.InvariantCulture));
                                 }
-                                Show(new StreamDeckRequisites() { StreamDeck = _streamDeck });
+
+                                if (_isVisible)
+                                {
+                                    Show();
+                                }
                             }
                         }
 
-                        _lastFormulaException = "";
+                        _lastFormulaError = "";
                     }
                     catch (Exception exception)
                     {
-                        _lastFormulaException = exception.Message;
+                        _lastFormulaError = exception.Message;
                     }
                     _valueUpdated = true;
                 }
             }
         }
 
+        public void Show()
+        {
+            ShowButtonFace(_streamDeck);
+        }
+
+        public void RemoveDCSBIOSOutput()
+        {
+            _dcsbiosOutput = null;
+        }
+
+        public void Clear()
+        {
+            _formula = "";
+            _useFormula = false;
+            _decodeToString = false;
+            _dcsbiosOutput = null;
+            _dcsbiosNumberToTexts.Clear();
+            _valueUpdated = false;
+            _lastFormulaError = "";
+            _formulaResult = 0;
+        }
+        
         private double EvaluateFormula()
         {
             var variables = new Dictionary<string, double>();
@@ -106,7 +132,12 @@ namespace NonVisuals.StreamDeck
         public DCSBIOSOutput DCSBIOSOutput
         {
             get => _dcsbiosOutput;
-            set => _dcsbiosOutput = value;
+            set
+            {
+                _valueUpdated = true;
+                _dcsbiosOutput = value;
+                DCSBiosValue = UInt32.MaxValue;
+            }
         }
 
         public void Add(DCSBIOSNumberToText dcsbiosNumberToText)
@@ -157,5 +188,17 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
+
+        public bool HasErrors => !string.IsNullOrEmpty(_lastFormulaError);
+        public string LastFormulaError => _lastFormulaError;
+        public double FormulaResult => _formulaResult;
+
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set => _isVisible = value;
+        }
+
+        public AutoResetEvent AutoResetEvent => _autoResetEvent;
     }
 }
