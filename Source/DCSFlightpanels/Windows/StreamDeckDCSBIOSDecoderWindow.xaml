@@ -166,7 +166,7 @@
                     <StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                            <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonTextFace" FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="0,0,0,0"    />
+                            <Image Name="ButtonImage" Height="72" Width="72" HorizontalAlignment="Left" Margin="0,0,0,0"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
                                 <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
@@ -184,7 +184,7 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Margin="0,5,0,0" >
-                            <TextBox Name="TextBoxFontInfo" Height="30" IsReadOnly="True" Background="Transparent"></TextBox>
+                            <TextBox Name="TextBoxFontInfo" Height="60" IsReadOnly="True" Background="Transparent"></TextBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

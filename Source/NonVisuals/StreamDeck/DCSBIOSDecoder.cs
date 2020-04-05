@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Navigation;
@@ -10,8 +11,6 @@ namespace NonVisuals.StreamDeck
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener
     {
         private string _formula = "";
-        private bool _useFormula = false;
-        private bool _decodeToString = false;
         private StreamDeckPanel _streamDeck;
         private DCSBIOSOutput _dcsbiosOutput = null;
         private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
@@ -46,16 +45,16 @@ namespace NonVisuals.StreamDeck
                     DCSBiosValue = e.Data;
                     try
                     {
-                        if (_useFormula)
+                        if (!string.IsNullOrEmpty(_formula))
                         {
                             _formulaResult = EvaluateFormula();
                             ButtonText = _formulaResult.ToString(CultureInfo.InvariantCulture); //In case string converter not used
                         }
-                        if (_decodeToString)
+                        if (_dcsbiosNumberToTexts.Count > 0)
                         {
                             foreach (var dcsbiosNumberToText in _dcsbiosNumberToTexts)
                             {
-                                var tmp = dcsbiosNumberToText.ConvertNumber((_useFormula ? _formulaResult : DCSBiosValue), out var resultFound);
+                                var tmp = dcsbiosNumberToText.ConvertNumber((string.IsNullOrEmpty(_formula) == false ? _formulaResult : DCSBiosValue), out var resultFound);
                                 if (resultFound)
                                 {
                                     ButtonText = tmp;
@@ -77,7 +76,7 @@ namespace NonVisuals.StreamDeck
                 }
             }
         }
-
+        
         public void Show()
         {
             ShowButtonFace(_streamDeck);
@@ -91,8 +90,6 @@ namespace NonVisuals.StreamDeck
         public void Clear()
         {
             _formula = "";
-            _useFormula = false;
-            _decodeToString = false;
             _dcsbiosOutput = null;
             _dcsbiosNumberToTexts.Clear();
             _valueUpdated = false;
@@ -152,18 +149,6 @@ namespace NonVisuals.StreamDeck
         {
             get => _dcsbiosNumberToTexts;
             set => _dcsbiosNumberToTexts = value;
-        }
-
-        public bool DecodeToString
-        {
-            get => _decodeToString;
-            set => _decodeToString = value;
-        }
-
-        public bool UseFormula
-        {
-            get => _useFormula;
-            set => _useFormula = value;
         }
 
         public bool ValueUpdated

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,7 +29,7 @@ namespace DCSFlightpanels.Windows
             InitializeComponent();
             _dcsbiosComparator = dcsbiosNumberToText;
             TextBoxOutputText.Text = dcsbiosNumberToText.OutputText;
-            TextBoxReferenceValue.Text = dcsbiosNumberToText.ReferenceValue.ToString();
+            TextBoxReferenceValue.Text = dcsbiosNumberToText.ReferenceValue.ToString(CultureInfo.InvariantCulture);
         }
 
         private void DCSBIOSComparatorWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -41,8 +42,9 @@ namespace DCSFlightpanels.Windows
                 }
 
                 SetFormState();
-                _isLoaded = true;
+                SetComboBoxValue();
                 TextBoxReferenceValue.Focus();
+                _isLoaded = true;
             }
             catch (Exception ex)
             {
@@ -154,17 +156,63 @@ namespace DCSFlightpanels.Windows
             }
             if (ComboBoxComparisonType.Text == ">")
             {
-                return EnumComparator.BiggerThan;
+                return EnumComparator.GreaterThan;
             }
             if (ComboBoxComparisonType.Text == ">=")
             {
-                return EnumComparator.BiggerThanEqual;
+                return EnumComparator.GreaterThanEqual;
             }
             if (ComboBoxComparisonType.Text == "Always")
             {
                 return EnumComparator.Always;
             }
             throw new Exception("Failed to decode comparison type.");
+        }
+
+        private void SetComboBoxValue()
+        {
+            switch (_dcsbiosComparator.Comparator)
+            {
+                case EnumComparator.Equals:
+                    {
+                        ComboBoxComparisonType.Text = "==";
+                        break;
+                    }
+                case EnumComparator.NotEquals:
+                    {
+                        ComboBoxComparisonType.Text = "!=";
+                        break;
+                    }
+                case EnumComparator.LessThan:
+                    {
+                        ComboBoxComparisonType.Text = "<";
+                        break;
+                    }
+                case EnumComparator.LessThanEqual:
+                    {
+                        ComboBoxComparisonType.Text = "<=";
+                        break;
+                    }
+                case EnumComparator.GreaterThan:
+                    {
+                        ComboBoxComparisonType.Text = ">";
+                        break;
+                    }
+                case EnumComparator.GreaterThanEqual:
+                    {
+                        ComboBoxComparisonType.Text = ">=";
+                        break;
+                    }
+                case EnumComparator.Always:
+                    {
+                        ComboBoxComparisonType.Text = "Always";
+                        break;
+                    }
+                default:
+                    {
+                        throw new Exception("Failed to decode comparison type.");
+                    }
+            }
         }
 
         public DCSBIOSNumberToText DCSBIOSComparator
@@ -223,6 +271,7 @@ namespace DCSFlightpanels.Windows
                 if (!TextBoxOutputText.Text.Contains(CommonStreamDeck.DCSBIOS_PLACE_HOLDER))
                 {
                     TextBoxOutputText.Text = string.IsNullOrEmpty(TextBoxOutputText.Text) ? CommonStreamDeck.DCSBIOS_PLACE_HOLDER : CommonStreamDeck.DCSBIOS_PLACE_HOLDER + " " + TextBoxOutputText.Text;
+                    TextBoxOutputText.CaretIndex = TextBoxOutputText.Text.Length;
                     SetFormState();
                 }
             }

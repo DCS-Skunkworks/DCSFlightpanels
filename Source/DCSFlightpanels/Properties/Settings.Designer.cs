@@ -406,5 +406,29 @@ namespace DCSFlightpanels.Properties {
                 this["ButtonTextFaceBackgroundColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ButtonFaceOffsetX {
+            get {
+                return ((int)(this["ButtonFaceOffsetX"]));
+            }
+            set {
+                this["ButtonFaceOffsetX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ButtonFaceOffsetY {
+            get {
+                return ((int)(this["ButtonFaceOffsetY"]));
+            }
+            set {
+                this["ButtonFaceOffsetY"] = value;
+            }
+        }
     }
 }
