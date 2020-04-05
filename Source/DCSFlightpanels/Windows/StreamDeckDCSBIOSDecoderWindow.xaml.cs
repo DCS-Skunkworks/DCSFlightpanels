@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Media;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
@@ -21,9 +22,12 @@ using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Properties;
 using NonVisuals;
 using NonVisuals.StreamDeck;
+using Clipboard = System.Windows.Clipboard;
+using Cursors = System.Windows.Input.Cursors;
 using DataGrid = System.Windows.Controls.DataGrid;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 
 namespace DCSFlightpanels.Windows
@@ -52,6 +56,11 @@ namespace DCSFlightpanels.Windows
 
         private bool _exitThread;
         private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        
+        private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
+
+
+
 
 
         public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeck, DCSBIOS dcsbios)
@@ -149,26 +158,21 @@ namespace DCSFlightpanels.Windows
             {
                 while (!_exitThread)
                 {
-                    _autoResetEvent.WaitOne();
-                    fixa denna så det är vettig
-                    while (true)
+                    if (_dcsbiosDecoder.ValueUpdated)
                     {
-                        if (_dcsbiosDecoder.ValueUpdated)
+                        try
                         {
-                            try
-                            {
-                                SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : "");
-                                SetFormulaResult(_dcsbiosDecoder.FormulaResult);
-                                SetRawDCSBIOSValue(_dcsbiosDecoder.DCSBiosValue);
-                                _dcsbiosDecoder.Show();
-                            }
-                            catch (Exception e)
-                            {
-                                SetFormulaError(e.Message);
-                            }
+                            SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : "");
+                            SetFormulaResult(_dcsbiosDecoder.FormulaResult);
+                            SetRawDCSBIOSValue(_dcsbiosDecoder.DCSBiosValue);
+                            _dcsbiosDecoder.Show();
                         }
-                        Thread.Sleep(10);
+                        catch (Exception e)
+                        {
+                            SetFormulaError(e.Message);
+                        }
                     }
+                    Thread.Sleep(10);
                 }
             }
             catch (Exception ex)
@@ -310,8 +314,9 @@ namespace DCSFlightpanels.Windows
             try
             {
                 TextBoxDCSBIOSId.Text = "";
-                LabelSourceRawValue.Content = "Value : ";
-                LabelResult.Content = "Result :";
+                LabelSourceRawValue.Content = "";
+                LabelResult.Content = "";
+                LabelErrors.Content = "";
                 TextBoxSearch.Text = _typeToSearch;
                 TextBoxSearch.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosDecoder.RemoveDCSBIOSOutput();
@@ -582,6 +587,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                _dcsbiosDecoder.UseFormula = CheckBoxUseFormula.IsChecked == true;
                 SetFormState();
             }
             catch (Exception ex)
@@ -621,7 +627,61 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosDecoder.Formula = TextBoxFormula.Text;
+                _dcsbiosDecoder.Formula = TextBoxFormula.Text.Replace(Environment.NewLine, "");
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
+        private void TextBlockFormulas_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                Process.Start(_formulaFile);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void Control_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Hand;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void Control_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelInsert_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(TextBoxDCSBIOSId.Text))
+                {
+                    CheckBoxUseFormula.IsChecked = true;
+                    TextBoxFormula.Text = TextBoxDCSBIOSId.Text + " " + TextBoxFormula.Text;
+                    SystemSounds.Asterisk.Play();
+                }
                 SetFormState();
             }
             catch (Exception ex)

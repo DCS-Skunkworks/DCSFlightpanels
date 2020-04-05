@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Documents;
 using ClassLibraryCommon;
 
 namespace DCSFlightpanels.Windows
@@ -11,16 +12,33 @@ namespace DCSFlightpanels.Windows
     {
         private readonly string _message;
 
+        public InformationTextBlockWindow()
+        {
+            InitializeComponent();
+        }
+
         public InformationTextBlockWindow(string message)
         {
             InitializeComponent();
             _message = message;
         }
 
+        public void AddInline(string text)
+        {
+            TextBlockInformation.Inlines.Add(text);
+        }
+
+        public void AddInline(Inline inline)
+        {
+            TextBlockInformation.Inlines.Add(inline);
+        }
+
         private void InformationWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
+                TextBlockInformation.TextWrapping = TextWrapping.Wrap;
+                TextBlockInformation.Margin = new Thickness(10);
                 if (string.IsNullOrWhiteSpace(_message))
                 {
                     return;

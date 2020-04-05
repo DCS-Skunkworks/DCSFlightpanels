@@ -5,39 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Set comparison and output text value" Height="150" Width="480"  Loaded="DCSBIOSComparatorWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Decode" Height="250" Width="540"  Loaded="DCSBIOSComparatorWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50*" />
-            <RowDefinition Height="40*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="20*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="5,5,5,0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                 <Label Content="IF {dcsbios}" Margin="5,0,0,0"/>
                 <StackPanel VerticalAlignment="Top">
-                    <ComboBox Name="ComboBoxComparisonType" Margin="5,0,5,0" Width="50">
+                    <ComboBox Name="ComboBoxComparisonType" Margin="5,0,5,0" Width="100" DropDownClosed="ComboBoxComparisonType_OnDropDownClosed">
                         <ComboBoxItem IsSelected="True">==</ComboBoxItem>
                         <ComboBoxItem>!=</ComboBoxItem>
                         <ComboBoxItem>&lt;</ComboBoxItem>
                         <ComboBoxItem>&lt;=</ComboBoxItem>
                         <ComboBoxItem>&gt;</ComboBoxItem>
                         <ComboBoxItem>&gt;=</ComboBoxItem>
+                        <ComboBoxItem>Always</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
-                <TextBox Name="TextBoxValue" Width="40" Height="23" VerticalAlignment="Top" KeyUp="TextBoxValue_OnKeyUp"/>
+                <TextBox Name="TextBoxReferenceValue" Width="40" Height="23" VerticalAlignment="Top" KeyUp="TextBoxReferenceValue_OnKeyUp"/>
                 <Label Content=" THEN (Output Text):" Margin="5,0,0,0"/>
+                <StackPanel>
                 <TextBox Name="TextBoxOutputText" Width="120" Height="50" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                <Label Name="LabelInsert" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Row="1" Margin="5,5,5,0" >
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <StackPanel>
-                    <Label FontSize="10" Content="Use {dcsbios} as placemarker in textbox if you" Margin="0,0,40,0"/>
-                    <Label FontSize="10" Content="also want to show DCS-BIOS value." Margin="0,0,0,0"/>
-                </StackPanel>
-                <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
-                <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
-            </StackPanel>
+        <StackPanel Grid.Row="1" Margin="5,5,5,0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Name="ButtonHelp" Content="Help" Click="ButtonHelp_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
+            <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
+            <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
         </StackPanel>
     </Grid>
 </Window>

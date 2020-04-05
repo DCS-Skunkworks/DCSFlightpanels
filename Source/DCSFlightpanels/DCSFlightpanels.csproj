@@ -1001,7 +1001,11 @@
   <ItemGroup>
     <Resource Include="StreamDeckGallery\CockpitButtons\rf.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="formulas.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-164_uhf.png" />
     <Resource Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-186_vhf_am.png" />

@@ -1,4 +1,6 @@
-﻿using System.Windows.Markup;
+﻿using System;
+using System.Globalization;
+using System.Windows.Markup;
 
 namespace NonVisuals.StreamDeck
 {
@@ -9,37 +11,37 @@ namespace NonVisuals.StreamDeck
         LessThan = 2,
         LessThanEqual = 3,
         BiggerThan = 4,
-        BiggerThanEqual = 5
-
+        BiggerThanEqual = 5,
+        Always = 6
     }
 
     public class DCSBIOSNumberToText
     {
         private EnumComparator _comparator;
-        private uint _referenceValue;
+        private double _referenceValue = 0;
         private string _outputText;
 
-        public string ConvertNumber(uint comparisonValue, out bool resultFound)
+        public string ConvertNumber(double comparisonValue, out bool resultFound)
         {
             string result = null;
-            resultFound = false; 
+            resultFound = false;
 
             switch (_comparator)
             {
                 case EnumComparator.Equals:
                     {
-                        if (comparisonValue == _referenceValue)
+                        if (Math.Abs(comparisonValue - _referenceValue) < 1)
                         {
-                            result = _outputText;
+                            result = ReplacePlaceHolder(_outputText);
                             resultFound = true;
                         }
                         break;
                     }
                 case EnumComparator.NotEquals:
                     {
-                        if (comparisonValue != _referenceValue)
+                        if (Math.Abs(comparisonValue - _referenceValue) > 0.001)
                         {
-                            result = _outputText;
+                            result = ReplacePlaceHolder(_outputText);
                             resultFound = true;
                         }
                         break;
@@ -48,7 +50,7 @@ namespace NonVisuals.StreamDeck
                     {
                         if (comparisonValue < _referenceValue)
                         {
-                            result = _outputText;
+                            result = ReplacePlaceHolder(_outputText);
                             resultFound = true;
                         }
                         break;
@@ -57,7 +59,7 @@ namespace NonVisuals.StreamDeck
                     {
                         if (comparisonValue <= _referenceValue)
                         {
-                            result = _outputText;
+                            result = ReplacePlaceHolder(_outputText);
                             resultFound = true;
                         }
                         break;
@@ -66,7 +68,7 @@ namespace NonVisuals.StreamDeck
                     {
                         if (comparisonValue > _referenceValue)
                         {
-                            result = _outputText;
+                            result = ReplacePlaceHolder(_outputText);
                             resultFound = true;
                         }
                         break;
@@ -75,14 +77,31 @@ namespace NonVisuals.StreamDeck
                     {
                         if (comparisonValue >= _referenceValue)
                         {
-                            result = _outputText;
+                            result = ReplacePlaceHolder(_outputText);
                             resultFound = true;
                         }
+                        break;
+                    }
+                case EnumComparator.Always:
+                    {
+                        result = ReplacePlaceHolder(_outputText);
+                        resultFound = true;
                         break;
                     }
             }
 
             return result;
+        }
+
+        private string ReplacePlaceHolder(string output)
+        {
+            //"Course {dcsbios}°
+            if (output.Contains(CommonStreamDeck.DCSBIOS_PLACE_HOLDER))
+            {
+                output = output.Replace(CommonStreamDeck.DCSBIOS_PLACE_HOLDER, ReferenceValue.ToString(CultureInfo.InvariantCulture));
+            }
+
+            return output;
         }
 
         public string FriendlyInfo
@@ -94,35 +113,40 @@ namespace NonVisuals.StreamDeck
                 switch (_comparator)
                 {
                     case EnumComparator.Equals:
-                    {
-                        comparator = "==";
-                        break;
-                    }
+                        {
+                            comparator = "==";
+                            break;
+                        }
                     case EnumComparator.NotEquals:
-                    {
-                        comparator = "!=";
-                        break;
-                    }
+                        {
+                            comparator = "!=";
+                            break;
+                        }
                     case EnumComparator.LessThan:
-                    {
-                        comparator = "<";
-                        break;
-                    }
+                        {
+                            comparator = "<";
+                            break;
+                        }
                     case EnumComparator.LessThanEqual:
-                    {
-                        comparator = "<=";
-                        break;
-                    }
+                        {
+                            comparator = "<=";
+                            break;
+                        }
                     case EnumComparator.BiggerThan:
-                    {
-                        comparator = ">";
-                        break;
-                    }
+                        {
+                            comparator = ">";
+                            break;
+                        }
                     case EnumComparator.BiggerThanEqual:
-                    {
-                        comparator = ">=";
-                        break;
-                    }
+                        {
+                            comparator = ">=";
+                            break;
+                        }
+                    case EnumComparator.Always:
+                        {
+                            comparator = "Always";
+                            break;
+                        }
                 }
                 return "IF {dcsbios} " + " " + comparator + " " + _referenceValue + " THEN " + OutputText;
             }
@@ -134,7 +158,7 @@ namespace NonVisuals.StreamDeck
             set => _comparator = value;
         }
 
-        public uint ReferenceValue
+        public double ReferenceValue
         {
             get => _referenceValue;
             set => _referenceValue = value;

@@ -17,12 +17,10 @@ namespace NonVisuals.StreamDeck
         private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
         private readonly DCSBIOS _dcsbios;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
-        private const string DCSBIOS_PLACE_HOLDER = "{dcsbios}";
         private volatile bool _valueUpdated;
         private string _lastFormulaError = "";
         private double _formulaResult = 0;
         private bool _isVisible = false;
-        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
 
 
@@ -46,36 +44,29 @@ namespace NonVisuals.StreamDeck
                 if (!Equals(DCSBiosValue, e.Data))
                 {
                     DCSBiosValue = e.Data;
-                    _autoResetEvent.Set();
                     try
                     {
                         if (_useFormula)
                         {
                             _formulaResult = EvaluateFormula();
-                            if (_decodeToString)
+                            ButtonText = _formulaResult.ToString(CultureInfo.InvariantCulture); //In case string converter not used
+                        }
+                        if (_decodeToString)
+                        {
+                            foreach (var dcsbiosNumberToText in _dcsbiosNumberToTexts)
                             {
-                                var resultFound = false;
-                                foreach (var dcsbiosNumberToText in _dcsbiosNumberToTexts)
+                                var tmp = dcsbiosNumberToText.ConvertNumber((_useFormula ? _formulaResult : DCSBiosValue), out var resultFound);
+                                if (resultFound)
                                 {
-                                    ButtonText = dcsbiosNumberToText.ConvertNumber(DCSBiosValue, out resultFound);
-                                    if (resultFound)
-                                    {
-                                        break;
-                                    }
-                                }
-                                //"Course {dcsbios}°
-                                if (resultFound && ButtonText.Contains(DCSBIOS_PLACE_HOLDER))
-                                {
-                                    ButtonText = ButtonText.Replace(DCSBIOS_PLACE_HOLDER, _formulaResult.ToString(CultureInfo.InvariantCulture));
-                                }
-
-                                if (_isVisible)
-                                {
-                                    Show();
+                                    ButtonText = tmp;
+                                    break;
                                 }
                             }
                         }
-
+                        if (_isVisible)
+                        {
+                            Show();
+                        }
                         _lastFormulaError = "";
                     }
                     catch (Exception exception)
@@ -111,6 +102,7 @@ namespace NonVisuals.StreamDeck
         
         private double EvaluateFormula()
         {
+            //360 - floor((HSI_HDG / 65535) * 360)
             var variables = new Dictionary<string, double>();
             variables.Add(_dcsbiosOutput.ControlId, 0);
             variables[_dcsbiosOutput.ControlId] = DCSBiosValue;
@@ -199,6 +191,5 @@ namespace NonVisuals.StreamDeck
             set => _isVisible = value;
         }
 
-        public AutoResetEvent AutoResetEvent => _autoResetEvent;
     }
 }

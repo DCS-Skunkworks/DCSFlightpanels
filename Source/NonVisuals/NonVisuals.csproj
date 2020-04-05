@@ -112,6 +112,7 @@
     <Compile Include="CommonVK.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
+    <Compile Include="StreamDeck\CommonStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />
     <Compile Include="StreamDeck\DCSBIOSFaceBindingStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
