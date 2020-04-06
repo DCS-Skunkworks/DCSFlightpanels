@@ -5,13 +5,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
+using NonVisuals.Interfaces;
 
 namespace DCSFlightpanels.Windows
 {
     /// <summary>
     /// Interaction logic for KeyPressWindow.xaml
     /// </summary>
-    public partial class KeyPressWindow : Window
+    public partial class KeyPressWindow : Window, IIsDirty
     {
         private bool _isDirty;
 
@@ -48,10 +49,6 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        public bool IsDirty
-        {
-            get { return _isDirty; }
-        }
 
         private void ButtonCancelClick(object sender, RoutedEventArgs e)
         {
@@ -99,7 +96,7 @@ namespace DCSFlightpanels.Windows
                     }
                 }
                 textBox.Text = result;
-                _isDirty = true;
+                SetIsDirty();
                 SetFormState();
             }
             catch (Exception ex)
@@ -116,7 +113,7 @@ namespace DCSFlightpanels.Windows
                 {
                     ((TextBox)sender).Text = "";
                     ((TextBox)sender).Tag = null;
-                    _isDirty = true;
+                    SetIsDirty();
                     SetFormState();
                 }
                 else if (e.ChangedButton == MouseButton.Left)
@@ -139,7 +136,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -168,6 +165,17 @@ namespace DCSFlightpanels.Windows
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set => _isDirty = value;
         }
     }
 }

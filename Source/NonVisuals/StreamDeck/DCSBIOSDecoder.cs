@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
-using System.Threading;
-using System.Windows.Navigation;
 using DCS_BIOS;
 
 namespace NonVisuals.StreamDeck
@@ -33,7 +30,7 @@ namespace NonVisuals.StreamDeck
 
         ~DCSBIOSDecoder()
         {
-            _dcsbios.DetachDataReceivedListener(this);
+            _dcsbios?.DetachDataReceivedListener(this);
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -176,5 +173,9 @@ namespace NonVisuals.StreamDeck
             set => _isVisible = value;
         }
 
+        public string GetFriendlyInfo()
+        {
+            return _dcsbiosOutput.ControlId;
+        }
     }
 }

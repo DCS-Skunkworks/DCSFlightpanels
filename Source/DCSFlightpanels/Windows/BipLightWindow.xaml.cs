@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Windows
@@ -10,7 +11,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// Interaction logic for BipLightWindow.xaml
     /// </summary>
-    public partial class BipLightWindow : Window
+    public partial class BipLightWindow : Window, IIsDirty
     {
         private readonly string _description;
         private bool _formLoaded;
@@ -225,6 +226,11 @@ namespace DCSFlightpanels.Windows
             }
         }
         public bool IsDirty => _isDirty;
+
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
 
         private void BipLightWindow_OnKeyDown(object sender, KeyEventArgs e)
         {

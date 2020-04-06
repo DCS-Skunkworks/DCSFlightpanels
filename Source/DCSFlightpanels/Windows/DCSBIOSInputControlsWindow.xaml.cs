@@ -5,13 +5,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
 
 namespace DCSFlightpanels.Windows
 {
     /// <summary>
     /// Interaction logic for DCSBIOSInputControlsWindow.xaml
     /// </summary>
-    public partial class DCSBIOSInputControlsWindow : Window
+    public partial class DCSBIOSInputControlsWindow : Window, IIsDirty
     {
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private readonly string _header;
@@ -113,7 +114,7 @@ namespace DCSFlightpanels.Windows
                 }
                 var dcsBIOSInput = (DCSBIOSInput)DataGridValues.SelectedItem;
                 _dcsbiosInputs.Remove(dcsBIOSInput);
-                _isDirty = true;
+                SetIsDirty();
                 ShowItems();
                 SetFormState();
             }
@@ -134,7 +135,7 @@ namespace DCSFlightpanels.Windows
                     _dcsbiosInputs.Remove(dcsBIOSInput);
                     var tmpdcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
                     _dcsbiosInputs.Add(tmpdcsBiosInput);
-                    _isDirty = true;
+                    SetIsDirty();
                     ShowItems();
                 }
                 ShowItems();
@@ -159,7 +160,7 @@ namespace DCSFlightpanels.Windows
                     //1 appropriate text to textbox
                     //2 update bindings
                     _dcsbiosInputs.Add(dcsBiosInput);
-                    _isDirty = true;
+                    SetIsDirty();
                 }
                 SetFormState();
                 ShowItems();
@@ -205,8 +206,19 @@ namespace DCSFlightpanels.Windows
 
         private void TextBoxDescription_OnKeyDown(object sender, KeyEventArgs e)
         {
-            _isDirty = true;
+            SetIsDirty();
             SetFormState();
+        }
+
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set => _isDirty = value;
         }
     }
 }

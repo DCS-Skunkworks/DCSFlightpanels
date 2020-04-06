@@ -12,8 +12,6 @@
         Height="500" Width="1200" 
         WindowStartupLocation="CenterScreen" 
         Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
-        Closing="StreamDeckDCSBIOSDecoderWindow_OnClosing" 
-        KeyDown="StreamDeckDCSBIOSDecoderWindow_OnKeyDown" 
         Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico"
         d:DataContext="{d:DesignInstance streamDeck:DCSBIOSDecoder}">
     <Window.Resources>
@@ -212,8 +210,8 @@
         </StackPanel>
 
         <StackPanel Grid.Column="2" Grid.Row="4" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,10,0,0">
-            <Button Content="Save" Height="23" HorizontalAlignment="Right" x:Name="ButtonSave" Width="75" Margin="10,0,10,0" Click="ButtonClose_OnClick" />
-            <Button Content="Cancel" Height="23" HorizontalAlignment="Right" x:Name="ButtonCancel" Width="75" Margin="10,0,10,0" Click="ButtonClose_OnClick" />
+            <Button Content="Save" Height="23" HorizontalAlignment="Right" x:Name="ButtonSave" Width="75" Margin="10,0,10,0" Click="ButtonSave_OnClick" />
+            <Button Content="Cancel" Height="23" HorizontalAlignment="Right" x:Name="ButtonCancel" Width="75" Margin="10,0,10,0" Click="ButtonCancel_OnClick" />
             <Button Name="ButtonFormulaHelp" Height="23"  Content="Help" Width="75" Margin="10,0,10,0" Click="ButtonFormulaHelp_OnClick" />
         </StackPanel>
 

@@ -596,7 +596,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItemStreamDeck = new TabItem();
                                     tabItemStreamDeck.Header = "StreamDeck";
-                                    var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton, tabItemStreamDeck, this);
+                                    var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton, tabItemStreamDeck, this, _dcsBios);
                                     _panelUserControls.Add(streamDeckUserControl);
                                     _profileHandler.Attach(streamDeckUserControl);
                                     tabItemStreamDeck.Content = streamDeckUserControl;

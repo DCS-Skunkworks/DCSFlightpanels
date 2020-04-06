@@ -73,7 +73,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-
+        [JsonIgnore]
         public DCSBIOSFaceBindingStreamDeck DCSBIOSFaceBinding
         {
             get

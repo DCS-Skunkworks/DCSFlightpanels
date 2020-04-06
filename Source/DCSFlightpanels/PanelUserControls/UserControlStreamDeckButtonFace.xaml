@@ -41,18 +41,12 @@
                 <StackPanel >
                     <Label Content="Image Content" Margin="0,2,0,0"/>
                     <RadioButton GroupName="ButtonImageType" Name="RadioButtonTextFace" Content="Static Text" Margin="0,2,0,2" Click="RadioButtonFaceType_OnClick"/>
-                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonImageFace" Content="Image File" Margin="0,2,0,2" Click="RadioButtonFaceType_OnClick"/>
                     <RadioButton GroupName="ButtonImageType" Name="RadioButtonDCSBIOSFace" Content="DCS-BIOS Data" Margin="0,2,0,2" Click="RadioButtonFaceType_OnClick"/>
-                </StackPanel>
-                <StackPanel Name="StackPanelDCSBIOSBackgroundTypeSelection" Margin="0,12,2,0" Visibility="Collapsed">
-                    <Label Content="Background Image"/>
-                    <RadioButton GroupName="ButtonDCSBIOSImageType" Name="RadioButtonDCSBIOSBackgroundGenerated" Content="Simple" Margin="0,2,0,2" Click="RadioButtonDCSBIOSImage_OnClick"/>
-                    <RadioButton GroupName="ButtonDCSBIOSImageType" Name="RadioButtonDCSBIOSBackgroundExisting" Content="Image" Margin="0,2,0,2" Click="RadioButtonDCSBIOSImage_OnClick"/>
                 </StackPanel>
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonTextAndStyle"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="10,5,10,0" Visibility="Visible">
+            <StackPanel Name="StackPanelButtonTextAndStyle"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="10,5,10,0" Visibility="Collapsed">
                 <Label Content="Choose Button Text and Color" Background="#e6e6e6" HorizontalContentAlignment="Center" Margin="0,5,0,0"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonTextFace" FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0"   KeyUp="TextBoxButtonTextFace_OnKeyUp" />
@@ -78,66 +72,17 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Hidden">
-                <Label Content="DCSBIOS Control Data to show" FontSize="10" Height="23"   />
-                <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDCSBIOSFaceButton"  IsEnabled="False" Background="LightSteelBlue" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+            <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Visible">
+                <Label Content="DCS-BIOS Decoder based on :" FontSize="10" Height="23"/>
+                <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDCSBIOSDecoder"  IsEnabled="False" Background="Gainsboro" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <Button Name="ButtonAddEditDCSBIOSFaceButton" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonSelectDCSBIOSFaceButton_OnClick"/>
-                    <Button Name="ButtonDeleteDCSBIOSFaceButton" Width="45" Content="Delete" Margin="0,2,2,0"/>
-                    <Button x:Name="ButtonDecodeDCSBIOSFaceButton" Width="50" Content="Decode" Margin="0,2,2,0" ToolTip="{StaticResource DecodeToolTip}"></Button>
-
-                    <Button Name="ButtonFontDCSBIOSFaceButton" Width="40" Content="Font" Margin="10,2,2,0"/>
-                    <Button Name="ButtonTestDCSBIOSFaceButton" Width="40" Content="Test" Margin="0,2,2,0"/>
+                    <Button Name="ButtonDeleteDCSBIOSFaceButton" Width="45" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSFaceButton_OnClick"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical" Margin="0,15,0,0" HorizontalAlignment="Left" >
-                        <CheckBox Name="CheckBoxShowUnitAfterDCSBIOSFace" Content="Show Units" Margin="0,2,2,0"></CheckBox>
-                        <Label Content="Unit" Margin="0,2,2,0"/>
-                        <customControl:StreamDeckFaceTextBox x:Name="TextBoxDCSBIOSFaceUnit" Width="100" Margin="0,2,2,0"></customControl:StreamDeckFaceTextBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical" Margin="0,15,0,0" HorizontalAlignment="Left" >
-                        <CheckBox Name="CheckBoxUnitAboveDCSBIOSFace" Content="Show Above" Margin="15,2,2,0"></CheckBox>
-                        <CheckBox Name="CheckBoxUnitBelowDCSBIOSFace" Content="Show Below" Margin="15,2,2,0"></CheckBox>
-                        <CheckBox Name="CheckBoxUnitLeftDCSBIOSFace" Content="Show Left" Margin="15,2,2,0"></CheckBox>
-                        <CheckBox Name="CheckBoxUnitRightDCSBIOSFace" Content="Show Right" Margin="15,2,2,0"></CheckBox>
-                    </StackPanel>
-                </StackPanel>
-
+                
                 <Button Name="ButtonFocus" Width="10" Height="1" Background="Transparent" Content=" " Margin="0,10,0,0"/>
             </StackPanel>
 
-
-            <StackPanel Name="StackPanelDCSBIOSBackgroundType" Margin="10,0,10,0" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">
-                <StackPanel Name="StackPanelButtonDCSBIOSBackgroundGeneratedImage" Visibility="Visible">
-                    <StackPanel Orientation="Horizontal" Margin="0,20,2,0">
-                        <Button Name="ButtonChooseColorPressed" Content="Select Color when Pressed"></Button>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,20,2,0">
-                        <Button Name="ButtonChooseColorReleased" Content="Select Color when Released"></Button>
-                    </StackPanel>
-                </StackPanel>
-
-                <StackPanel Name="StackPanelButtonDCSBIOSBackgroundExistingImage" Visibility="Collapsed">
-                    <Label Content="Background Image when Button Pressed" FontSize="10" Height="23" Margin="0,5,2,0" />
-                    <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDCSBIOSBackgroundImageButton"  IsEnabled="False" Background="LightSteelBlue"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                        <Button Name="ButtonSelectDCSBIOSImageFromComputerButton" Width="65" Content="Browse PC" Margin="0,2,2,0"/>
-                        <Button Name="ButtonSelectDCSBIOSImageGalleryButton" Width="65" Content="Open Gallery" Margin="0,2,2,0"/>
-                        <Button Name="ButtonTestDCSBIOSImageGalleryButton" Width="65" Content="Test" Margin="0,2,2,0"/>
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
-
-
-            <StackPanel Name="StackPanelButtonImageToShow"   Margin="10,0,10,0" Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Visibility="Visible">
-                <Label Content="Selected Image" FontSize="10" Height="23" Margin="0,5,2,0" />
-                <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxSelectedImageFaceButton"  IsEnabled="False" Background="LightSteelBlue"/>
-                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                    <Button Name="ButtonSelectImageFromComputerButton" Width="65" Content="Browse PC" Margin="0,2,2,0"/>
-                    <Button Name="ButtonSelectImageGalleryButton" Width="80" Content="Open Gallery" Margin="0,2,2,0"/>
-                    <Button Name="ButtonTestSelectImageGalleryButton" Width="65" Content="Test"  Margin="0,2,2,0"/>
-                </StackPanel>
-            </StackPanel>
         </Grid>
     </GroupBox>
 </panelUserControls:UserControlBase>

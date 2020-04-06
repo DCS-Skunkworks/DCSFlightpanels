@@ -28,7 +28,7 @@ using TextBox = System.Windows.Controls.TextBox;
 namespace DCSFlightpanels.Windows
 {
     /// <summary>
-    /// Interaction logic for JaceSandbox.xaml
+    /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window
     {
@@ -43,14 +43,12 @@ namespace DCSFlightpanels.Windows
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
         private bool _formulaHadErrors = false;
-        private bool _changesMade = false;
         private string _decoderResult;
         private bool _isDirty = false;
 
         private DCSBIOSDecoder _dcsbiosDecoder = null;
 
         private bool _exitThread;
-        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
 
@@ -83,24 +81,7 @@ namespace DCSFlightpanels.Windows
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }
-
-        private void StreamDeckDCSBIOSDecoderWindow_OnClosing(object sender, CancelEventArgs e)
-        {
-            if (_changesMade)
-            {
-                if (MessageBox.Show("Discard changes?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-                {
-                    e.Cancel = true;
-                }
-            }
-
-            if (!e.Cancel)
-            {
-                _exitThread = true;
-                _autoResetEvent.Set();
-            }
-        }
-
+        
         private void StreamDeckDCSBIOSDecoderWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
@@ -110,6 +91,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
 
+                ShowDecoder();
                 _dcsbiosDecoder.IsVisible = true;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
@@ -136,14 +118,19 @@ namespace DCSFlightpanels.Windows
 
             ButtonEditNumberConversion.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
             ButtonDeleteNumberConversion.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
-            ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text) && !string.IsNullOrEmpty(TextBoxFormula.Text) && !_formulaHadErrors;
+            ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
 
             GroupBoxFormula.IsEnabled = CheckBoxUseFormula.IsChecked == true;
         }
 
         private void ShowDecoder()
         {
-            TextBoxFormula.Text = _dcsbiosDecoder.Formula;
+            if (!string.IsNullOrEmpty(_dcsbiosDecoder.Formula))
+            {
+                TextBoxFormula.Text = _dcsbiosDecoder.Formula;
+            }
+            ShowDecoders();
+            UpdateFontInfo();
         }
 
         private void ThreadLoop()
@@ -187,6 +174,7 @@ namespace DCSFlightpanels.Windows
 
                     TextBoxDCSBIOSId.Text = _dcsbiosControl.identifier;
                     TextBoxSearch.Text = _typeToSearch;
+                    SetIsDirty();
                     SetFormState();
                 }
                 _popupSearch.IsOpen = false;
@@ -242,6 +230,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetY -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                SetIsDirty();
                 Settings.Default.ButtonFaceOffsetY = _dcsbiosDecoder.OffsetY;
                 Settings.Default.Save();
             }
@@ -256,6 +245,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetY += Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                SetIsDirty();
                 Settings.Default.ButtonFaceOffsetY = _dcsbiosDecoder.OffsetY;
                 Settings.Default.Save();
             }
@@ -270,6 +260,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetX -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                SetIsDirty();
                 Settings.Default.ButtonFaceOffsetX = _dcsbiosDecoder.OffsetX;
                 Settings.Default.Save();
             }
@@ -284,6 +275,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetX += Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                SetIsDirty();
                 Settings.Default.ButtonFaceOffsetX = _dcsbiosDecoder.OffsetX;
                 Settings.Default.Save();
             }
@@ -295,7 +287,7 @@ namespace DCSFlightpanels.Windows
 
         private void TextBoxFormula_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            _changesMade = true;
+            SetIsDirty();
             SetFormState();
         }
 
@@ -445,11 +437,6 @@ namespace DCSFlightpanels.Windows
             _isDirty = true;
         }
 
-        private void ButtonClose_OnClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
@@ -460,15 +447,6 @@ namespace DCSFlightpanels.Windows
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void StreamDeckDCSBIOSDecoderWindow_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                e.Handled = true;
-                Close();
             }
         }
 
@@ -523,7 +501,7 @@ namespace DCSFlightpanels.Windows
                 {
                     _dcsbiosDecoder.Remove((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
                     _dcsbiosDecoder.Add(window.DCSBIOSComparator);
-
+                    SetIsDirty();
                     ShowDecoders();
                 }
 
@@ -540,6 +518,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.Remove((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
+                SetIsDirty();
                 ShowDecoders();
                 SetFormState();
             }
@@ -641,6 +620,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.Formula = TextBoxFormula.Text.Replace(Environment.NewLine, "");
+                SetIsDirty();
                 SetFormState();
             }
             catch (Exception ex)
@@ -702,5 +682,48 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+
+        private void CloseWindow()
+        {
+            _exitThread = true;
+            Close();
+        }
+
+        private void ButtonSave_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DialogResult = true;
+                CloseWindow();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_isDirty)
+                {
+                    if (MessageBox.Show("Discard changes?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
+
+                DialogResult = false;
+                CloseWindow();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public DCSBIOSDecoder DCSBIOSDecoder => _dcsbiosDecoder;
     }
 }

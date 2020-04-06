@@ -26,7 +26,7 @@ namespace DCSFlightpanels.Bills
         public TextBox ParentTextBox { get; set; }
         public BitmapImage SelectedImage { get; set; }
         public BitmapImage DeselectedImage { get; set; }
-
+        private DCSBIOSDecoder _dcsbiosDecoder;        
 
 
 
@@ -146,6 +146,21 @@ namespace DCSFlightpanels.Bills
         {
             get => _dcsbiosFaceBinding;
             set => _dcsbiosFaceBinding = value;
+        }
+
+        public bool ContainsDCSBIOSDecoder
+        {
+            get => DCSBIOSDecoder != null;
+        }
+
+        public DCSBIOSDecoder DCSBIOSDecoder
+        {
+            get => _dcsbiosDecoder;
+            set
+            {
+                _dcsbiosDecoder = value;
+                TextBox.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
+            }
         }
     }
 

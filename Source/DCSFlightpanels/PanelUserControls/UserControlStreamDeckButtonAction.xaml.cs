@@ -16,7 +16,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonAction : UserControlBase
+    public partial class UserControlStreamDeckButtonAction : UserControlBase, IIsDirty
     {
         private List<StreamDeckActionTextBox> _textBoxes = new List<StreamDeckActionTextBox>();
 
@@ -123,11 +123,11 @@ namespace DCSFlightpanels.PanelUserControls
             _isDirty = false;
         }
 
-        private void SetIsDirty()
+        public void SetIsDirty()
         {
             _isDirty = true;
         }
-
+        
         public bool IsDirty
         {
             get => _isDirty;

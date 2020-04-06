@@ -8,12 +8,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClassLibraryCommon;
 using NonVisuals;
+using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.Windows
 {
-
-    public partial class DCSBIOSComparatorWindow : Window
+    public partial class DCSBIOSComparatorWindow : Window, IIsDirty
     {
         private bool _isLoaded = false;
         private DCSBIOSNumberToText _dcsbiosComparator = new DCSBIOSNumberToText();
@@ -96,7 +96,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
                 SetFormState();
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -229,7 +229,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
                 SetFormState();
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -239,6 +239,10 @@ namespace DCSFlightpanels.Windows
 
         public bool IsDirty => _isDirty;
 
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
 
         private void LabelInsert_OnMouseEnter(object sender, MouseEventArgs e)
         {

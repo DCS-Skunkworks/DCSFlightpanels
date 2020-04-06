@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using ClassLibraryCommon;
-using Newtonsoft.Json;
 using NonVisuals.Interfaces;
-using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {

@@ -6,13 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
+using NonVisuals.Interfaces;
 
 namespace DCSFlightpanels.Windows
 {
     /// <summary>
     /// Interaction logic for SequenceWindow.xaml
     /// </summary>
-    public partial class KeySequenceWindow : Window
+    public partial class KeySequenceWindow : Window, IIsDirty
     {
 
         private readonly SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
@@ -39,6 +40,11 @@ namespace DCSFlightpanels.Windows
         public bool IsDirty
         {
             get { return _isDirty; }
+        }
+
+        public void SetIsDirty()
+        {
+            _isDirty = true;
         }
 
         public SortedList<int, KeyPressInfo> GetSequence
@@ -90,7 +96,7 @@ namespace DCSFlightpanels.Windows
                     DataGridSequences.DataContext = _sortedList;
                     DataGridSequences.ItemsSource = _sortedList;
                     DataGridSequences.Items.Refresh();
-                    _isDirty = true;
+                    SetIsDirty();
                     SetFormState();
                 }
             }
@@ -116,7 +122,7 @@ namespace DCSFlightpanels.Windows
                 var value = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
                 _sortedList.Remove(value.Key);
                 DataGridSequences.Items.Refresh();
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -145,7 +151,7 @@ namespace DCSFlightpanels.Windows
                     DataGridSequences.DataContext = _sortedList;
                     DataGridSequences.ItemsSource = _sortedList;
                     DataGridSequences.Items.Refresh();
-                    _isDirty = true;
+                    SetIsDirty();
                 }
             }
             catch (Exception ex)
@@ -228,7 +234,7 @@ namespace DCSFlightpanels.Windows
             _sortedList.Add(key + 1, itemToBeMovedDown);
             _sortedList.Add(key, itemToBeMovedUp);
             DataGridSequences.Items.Refresh();
-            _isDirty = true;
+            SetIsDirty();
         }
 
         private void MoveItemUp(int key)
@@ -241,14 +247,14 @@ namespace DCSFlightpanels.Windows
             _sortedList.Add(key - 1, itemToBeMovedUp);
             _sortedList.Add(key, itemToBeMovedDown);
             DataGridSequences.Items.Refresh();
-            _isDirty = true;
+            SetIsDirty();
         }
 
         private void TextBoxInformationTextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {

@@ -14,7 +14,7 @@ using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 namespace NonVisuals
 {
 
-    public class ProfileHandler : IProfileHandlerListener
+    public class ProfileHandler : IProfileHandlerListener, IIsDirty
     {
         //Both directory and filename
         private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
@@ -545,7 +545,7 @@ namespace NonVisuals
                 stringBuilder.AppendLine(GetFooter());
                 //}
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
-                _isDirty = false;
+                SetIsDirty();
                 _isNewProfile = false;
                 LoadProfile(_filename);
             }
@@ -574,6 +574,11 @@ namespace NonVisuals
             set => _isDirty = value;
         }
 
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
+
         public DCSAirframe Airframe
         {
             get => _airframe;
@@ -582,7 +587,7 @@ namespace NonVisuals
                 //Called only when user creates a new profile
                 if (value != _airframe)
                 {
-                    _isDirty = true;
+                    SetIsDirty();
                 }
                 _airframe = value;
                 Common.ResetOperationModeFlag();
@@ -621,7 +626,7 @@ namespace NonVisuals
                 {
                     Common.ClearOperationModeFlag(OperationFlag.NS430Enabled);
                 }
-                _isDirty = true;
+                SetIsDirty();
             }
         }
 

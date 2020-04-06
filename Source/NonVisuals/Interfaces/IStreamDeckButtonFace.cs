@@ -8,9 +8,7 @@ namespace NonVisuals.Interfaces
     {
         Unknown = 0,
         Text = 1,
-        ImageFile = 2,
-        DCSBIOS = 4,
-        Custom = 8
+        DCSBIOS = 4
     }
 
 

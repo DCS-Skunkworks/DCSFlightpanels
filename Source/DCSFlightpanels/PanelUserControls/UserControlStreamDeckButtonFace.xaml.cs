@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using DCS_BIOS;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
@@ -23,16 +24,16 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonFace : UserControlBase, UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener
+    public partial class UserControlStreamDeckButtonFace : UserControlBase, UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty
     {
         private IGlobalHandler _globalHandler;
         private bool _isDirty = false;
         private bool _isLoaded = false;
         private List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
         private List<RadioButton> _radioButtonList = new List<RadioButton>();
-
-
-
+        private StreamDeckPanel _streamDeckPanel;
+        private DCSBIOS _dcsbios;
+        private EnumStreamDeckButtonNames _streamDeckButton;
 
 
 
@@ -62,6 +63,22 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        public void SetEssentials(StreamDeckPanel streamDeckPanel, DCSBIOS dcsbios)
+        {
+            _streamDeckPanel = streamDeckPanel;
+            _dcsbios = dcsbios;
+        }
+
+        public void SetDecoder(DCSBIOSDecoder dcsbiosDecoder)
+        {
+            TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = dcsbiosDecoder;
+        }
+
+        public void SetButton(EnumStreamDeckButtonNames streamDeckButton)
+        {
+            _streamDeckButton = streamDeckButton;
+        }
+
         public void SetFormState()
         {
             try
@@ -73,19 +90,9 @@ namespace DCSFlightpanels.PanelUserControls
                 RadioButtonDCSBIOSFace.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelButtonTextAndStyle.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonImageToShow.Visibility = RadioButtonImageFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelDCSBIOSBackgroundType.Visibility = RadioButtonDCSBIOSFace?.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-
-                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-
                 StackPanelButtonImageType.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.Unknown ? Visibility.Visible : Visibility.Collapsed;
-
-                StackPanelDCSBIOSBackgroundTypeSelection.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundGeneratedImage.Visibility = RadioButtonDCSBIOSBackgroundGenerated.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-                StackPanelButtonDCSBIOSBackgroundExistingImage.Visibility = RadioButtonDCSBIOSBackgroundExisting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
                 ButtonTextFaceFont.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
@@ -97,6 +104,8 @@ namespace DCSFlightpanels.PanelUserControls
                                                     TextBoxButtonTextFace.Bill.TextFont.Size + " " +
                                                     (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
                 TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
+
+                ButtonDeleteDCSBIOSFaceButton.IsEnabled = TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOSDecoder;
             }
             catch (Exception ex)
             {
@@ -238,10 +247,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 return EnumStreamDeckFaceType.Text;
             }
-            if (RadioButtonImageFace.IsChecked == true)
-            {
-                return EnumStreamDeckFaceType.ImageFile;
-            }
             if (RadioButtonDCSBIOSFace.IsChecked == true)
             {
                 return EnumStreamDeckFaceType.DCSBIOS;
@@ -254,7 +259,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             SetFormState();
         }
-
+        isdirty är det fel på samt att en tom layer dyker upp
         public IGlobalHandler GlobalHandler
         {
             get => _globalHandler;
@@ -266,7 +271,7 @@ namespace DCSFlightpanels.PanelUserControls
             _isDirty = false;
         }
 
-        private void SetIsDirty()
+        public void SetIsDirty()
         {
             _isDirty = true;
         }
@@ -280,16 +285,9 @@ namespace DCSFlightpanels.PanelUserControls
         private void FillControlLists()
         {
             _textBoxList.Add(TextBoxButtonTextFace);
-            _textBoxList.Add(TextBoxDCSBIOSFaceButton);
-            _textBoxList.Add(TextBoxDCSBIOSBackgroundImageButton);
-            _textBoxList.Add(TextBoxDCSBIOSFaceUnit);
-            _textBoxList.Add(TextBoxSelectedImageFaceButton);
-
+            _textBoxList.Add(TextBoxDCSBIOSDecoder);
             _radioButtonList.Add(RadioButtonTextFace);
-            _radioButtonList.Add(RadioButtonImageFace);
             _radioButtonList.Add(RadioButtonDCSBIOSFace);
-            _radioButtonList.Add(RadioButtonDCSBIOSBackgroundGenerated);
-            _radioButtonList.Add(RadioButtonDCSBIOSBackgroundExisting);
         }
 
         private void SetBills()
@@ -375,10 +373,6 @@ namespace DCSFlightpanels.PanelUserControls
                         {
                             return TextBoxButtonTextFace.Bill.ContainsTextFace();
                         }
-                    case EnumStreamDeckFaceType.ImageFile:
-                        {
-                            return false;
-                        }
                     case EnumStreamDeckFaceType.DCSBIOS:
                         {
                             return false;
@@ -402,11 +396,6 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckFaceType.Text:
                     {
                         RadioButtonTextFace.IsChecked = true;
-                        break;
-                    }
-                case EnumStreamDeckFaceType.ImageFile:
-                    {
-                        RadioButtonImageFace.IsChecked = true;
                         break;
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
@@ -446,11 +435,6 @@ namespace DCSFlightpanels.PanelUserControls
                         SetFormState();
                         return;
                     }
-                case EnumStreamDeckFaceType.ImageFile:
-                    {
-                        SetFormState();
-                        return;
-                    }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
 
@@ -486,10 +470,6 @@ namespace DCSFlightpanels.PanelUserControls
 
                         return null;
                     }
-                case EnumStreamDeckFaceType.ImageFile:
-                    {
-                        throw new NotImplementedException("GetStreamDeckButtonFace for ImageFile has not been developed");
-                    }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
                         var result = new FaceTypeText();
@@ -502,7 +482,7 @@ namespace DCSFlightpanels.PanelUserControls
                         result.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
                         result.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
 
-                        result.DCSBIOSFaceBinding = TextBoxDCSBIOSFaceButton.Bill.DCSBIOSFaceBinding;
+                        //result.DCSBIOSFaceBinding = TextBoxDCSBIOSFaceButton.Bill.DCSBIOSFaceBinding;
                         break;
                     }
             }
@@ -675,7 +655,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                AddEditDCSBIOS(TextBoxDCSBIOSFaceButton);
+                AddEditDCSBIOS();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -684,48 +664,42 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void AddEditDCSBIOS(StreamDeckFaceTextBox textBox)
+        private void AddEditDCSBIOS()
         {
             try
             {
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
+                StreamDeckDCSBIOSDecoderWindow streamDeckDCSBIOSDecoderWindow = null;
 
-                DCSBiosOutputFormulaWindow dcsBiosOutputFormulaWindow;
-
-                if (textBox.Bill.ContainsDCSBIOS())
+                if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOSDecoder)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSFaceBinding.DCSBIOSOutputObject);
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, _streamDeckPanel, _dcsbios);
                 }
                 else
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""));
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(_streamDeckPanel, _streamDeckButton, _dcsbios);
                 }
 
-                dcsBiosOutputFormulaWindow.ShowDialog();
+                streamDeckDCSBIOSDecoderWindow.ShowDialog();
 
-
-                if (dcsBiosOutputFormulaWindow.DialogResult.HasValue && dcsBiosOutputFormulaWindow.DialogResult == true)
+                if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
-                    textBox.Bill.DCSBIOSFaceBinding = new DCSBIOSFaceBindingStreamDeck();
-                    
-                    if (dcsBiosOutputFormulaWindow.UseFormula())
-                    {
-                        textBox.Bill.DCSBIOSFaceBinding.DCSBIOSOutputFormulaObject = dcsBiosOutputFormulaWindow.DCSBIOSOutputFormula;
-                    }
-                    else
-                    {
-                        textBox.Bill.DCSBIOSFaceBinding.DCSBIOSOutputObject = dcsBiosOutputFormulaWindow.DCSBiosOutput;
-                    }
-                    var text = string.IsNullOrWhiteSpace(dcsBiosOutputFormulaWindow.UserDescription) ? "DCS-BIOS" : dcsBiosOutputFormulaWindow.UserDescription;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    textBox.Text = text;
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder;
                     SetIsDirty();
-                    SDUIParent.ChildChangesMade();
                 }
+                ButtonFocus.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(442044, ex);
+            }
+        }
+
+        private void ButtonDeleteDCSBIOSFaceButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
+                SetIsDirty();
                 ButtonFocus.Focus();
             }
             catch (Exception ex)

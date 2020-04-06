@@ -4,13 +4,14 @@ using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals;
+using NonVisuals.Interfaces;
 
 namespace DCSFlightpanels.Windows
 {
     /// <summary>
     /// Interaction logic for OSCommandWindow.xaml
     /// </summary>
-    public partial class OSCommandWindow : Window
+    public partial class OSCommandWindow : Window, IIsDirty
     {
         private bool _isLoaded = false;
         private OSCommand _osCommand;
@@ -70,7 +71,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
                 SetFormState();
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -133,7 +134,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
                 SetFormState();
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -150,7 +151,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
                 SetFormState();
-                _isDirty = true;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -159,5 +160,10 @@ namespace DCSFlightpanels.Windows
         }
 
         public bool IsDirty => _isDirty;
+
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
     }
 }

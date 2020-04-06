@@ -23,6 +23,7 @@ namespace DCSFlightpanels.PanelUserControls
     public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckUIParent
     {
         private readonly StreamDeckPanel _streamDeck;
+        private readonly DCSBIOS _dcsbios;
         private readonly TabItem _parentTabItem;
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
@@ -32,7 +33,7 @@ namespace DCSFlightpanels.PanelUserControls
         private List<System.Windows.Controls.Image> _dotImages = new List<System.Windows.Controls.Image>();
 
         private CancellationTokenSource _cancellationTokenSource;
-        Random _random = new Random();
+        private Random _random = new Random();
         private Thread _identificationThread;
 
         private const int IMAGE_HEIGHT = 50;
@@ -40,7 +41,7 @@ namespace DCSFlightpanels.PanelUserControls
         private const int FONT_SIZE = 30;
 
 
-        public StreamDeckUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public StreamDeckUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -49,6 +50,8 @@ namespace DCSFlightpanels.PanelUserControls
             _streamDeck.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_streamDeck);
             _globalHandler = globalHandler;
+
+            _dcsbios = dcsbios;
 
             FillControlLists();
             SetImageBills();
@@ -65,10 +68,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             if (!_userControlLoaded)
             {
-                _userControlLoaded = true;
                 ShowGraphicConfiguration();
                 UCStreamDeckButtonAction.Update();
                 UCStreamDeckButtonAction.AttachListener(UCStreamDeckButtonFace);
+                UCStreamDeckButtonFace.SetEssentials(_streamDeck, _dcsbios);
+                _userControlLoaded = true;
             }
             SetFormState();
         }
@@ -80,9 +84,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var selectedButtonNumber = GetSelectedButtonNumber();
 
                 SetButtonGridStatus(_streamDeck.HasLayers);
-
-                LabelCreateLayer.Visibility = _streamDeck.HasLayers ? Visibility.Collapsed : Visibility.Visible;
-
+                
                 RadioButtonDCSBIOS.Visibility = _globalHandler.GetAirframe() != DCSAirframe.KEYEMULATOR ? Visibility.Visible : Visibility.Collapsed;
 
                 UCStreamDeckButtonAction.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
@@ -103,7 +105,6 @@ namespace DCSFlightpanels.PanelUserControls
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
                 ButtonDeleteLayer.IsEnabled = ComboBoxLayers.IsEnabled && ComboBoxLayers.Text != null;
-                //CheckBoxMarkHomeLayer.IsEnabled = ComboBoxLayers.IsEnabled;
             }
             catch (Exception ex)
             {
@@ -652,6 +653,8 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
+
+                UCStreamDeckButtonFace.SetButton(GetSelectedButtonName());
 
                 var image = (StreamDeckImage)sender;
 

@@ -7,7 +7,7 @@ using NonVisuals.Interfaces;
 namespace NonVisuals
 {
 
-    public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener
+    public abstract class GamingPanel : IProfileHandlerListener, IDcsBiosDataListener, IIsDirty
     {
         private int _vendorId;
         private int _productId;
