@@ -259,7 +259,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             SetFormState();
         }
-        isdirty är det fel på samt att en tom layer dyker upp
+        
         public IGlobalHandler GlobalHandler
         {
             get => _globalHandler;

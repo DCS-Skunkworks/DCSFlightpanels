@@ -10,7 +10,7 @@ namespace NonVisuals.StreamDeck
     {
         public const string DCSBIOS_PLACE_HOLDER = "{dcsbios}";
 
-
+        public const string HOME_LAYER_NAME = "Home";
 
 
 

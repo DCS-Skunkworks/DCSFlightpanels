@@ -224,10 +224,10 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
 
-                if (!_userControlLoaded)
+                /*if (!_userControlLoaded)
                 {
                     return;
-                }
+                }*/
 
                 if (string.IsNullOrEmpty(layerName) || ComboBoxLayers.Text == null)
                 {
@@ -427,6 +427,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                if (1 == 1)
+                {
+
+                }
                 /*if (e.UniqueId.Equals(_streamDeck.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.StreamDeckMultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
@@ -467,10 +471,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_streamDeck.HasLayers)
-                {
-                    _streamDeck.AddHomeLayer();
-                }
                 UIShowLayer(_streamDeck.HomeLayer.Name);
             }
             catch (Exception ex)

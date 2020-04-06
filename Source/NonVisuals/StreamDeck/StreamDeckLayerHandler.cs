@@ -15,10 +15,9 @@ namespace NonVisuals.StreamDeck
         private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
         private volatile string _activeLayer = "";
-        private string _homeLayer = "";
         private IStreamDeckBoard _streamDeckBoard;
         private StreamDeckRequisites _streamDeckRequisite = new StreamDeckRequisites();
-
+        
 
 
 
@@ -69,20 +68,26 @@ namespace NonVisuals.StreamDeck
             };
 
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
+            
+            CheckHomeLayerStatus();
 
             if (!string.IsNullOrEmpty(_activeLayer) && _layerList.FindAll(o => o.Name == _activeLayer).Count == 1)
             {
                 SetActiveLayer(_activeLayer);
             }
-            CheckHomeLayerStatus();
+            else
+            {
+                SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
+            }
         }
 
         private void CheckHomeLayerStatus()
         {
             var found = false;
+
             foreach (var streamDeckLayer in _layerList)
             {
-                if (streamDeckLayer.IsHomeLayer)
+                if (streamDeckLayer.Name == CommonStreamDeck.HOME_LAYER_NAME)
                 {
                     found = true;
                     break;
@@ -91,35 +96,12 @@ namespace NonVisuals.StreamDeck
 
             if (!found)
             {
-                _homeLayer = "";
-            }
-
-            if (_layerList.Count > 0)
-            {
-                _homeLayer = _layerList[0].Name;
-                _layerList[0].IsHomeLayer = true;
+                var streamDeckLayer = new StreamDeckLayer();
+                streamDeckLayer.Name = CommonStreamDeck.HOME_LAYER_NAME;
+                _layerList.Insert(0, streamDeckLayer);
             }
         }
-
-        public void SetHomeStatus(bool isHomeLayer, string layerName)
-        {
-            if (string.IsNullOrEmpty(layerName))
-            {
-                throw new Exception("SetHomeLayer : No layer name specified.");
-            }
-
-            foreach (var deckLayer in _layerList)
-            {
-                deckLayer.IsHomeLayer = false;
-                if (isHomeLayer && deckLayer.Name == layerName)
-                {
-                    deckLayer.IsHomeLayer = true;
-                }
-            }
-
-            CheckHomeLayerStatus();
-        }
-        
+       
 
         public bool AddLayer(StreamDeckLayer streamDeckLayer)
         {
@@ -127,20 +109,14 @@ namespace NonVisuals.StreamDeck
             {
                 return false;
             }
-
-            var result = streamDeckLayer.IsHomeLayer;
-
+            
             if (!LayerList.Contains(streamDeckLayer))
             {
-                if (LayerList.Count == 0)
-                {
-                    streamDeckLayer.IsHomeLayer = true;
-                }
                 LayerList.Add(streamDeckLayer);
             }
 
             SetActiveLayer(streamDeckLayer.Name);
-            return result;
+            return true;
         }
 
         public void DeleteLayer(string layerName)
@@ -179,18 +155,18 @@ namespace NonVisuals.StreamDeck
             {
                 VerifyHomeLayer();
 
-                return _layerList.Find(o => o.IsHomeLayer);
+                return _layerList.Find(o => o.Name == CommonStreamDeck.HOME_LAYER_NAME);
             }
         }
 
         public void VerifyHomeLayer()
         {
-            if(_layerList.Find(o => o.IsHomeLayer) == null)
+            if(_layerList.Find(o => o.Name == CommonStreamDeck.HOME_LAYER_NAME) == null)
             {
                 throw new Exception(Constants.NO_HOME_LAYER_FOUND);
             }
 
-            if (_layerList.FindAll(o => o.IsHomeLayer).Count > 1)
+            if (_layerList.FindAll(o => o.Name == CommonStreamDeck.HOME_LAYER_NAME).Count > 1)
             {
                 throw new Exception(Constants.SEVERAL_HOME_LAYER_FOUND);
             }
@@ -358,7 +334,7 @@ namespace NonVisuals.StreamDeck
 
         public void ShowHomeLayer()
         {
-            ShowLayer(_homeLayer);
+            ShowLayer(CommonStreamDeck.HOME_LAYER_NAME);
         }
 
         private void ShowLayer(string layerName)

@@ -157,13 +157,7 @@ namespace DCSFlightpanels
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewDCSFPRelease();
-
-                if (Settings.Default.ShowBugReportInfo)
-                {
-                    MessageBox.Show("Remember to use the built in\nfunctionality to report bugs!\n[Options] -> [Report Bug]", "Bug related", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                    Settings.Default.ShowBugReportInfo = false;
-                }
-
+                
                 _isLoaded = true;
             }
             catch (Exception ex)
@@ -594,13 +588,16 @@ namespace DCSFlightpanels
                                 }
                             case GamingPanelEnum.StreamDeck:
                                 {
-                                    var tabItemStreamDeck = new TabItem();
-                                    tabItemStreamDeck.Header = "StreamDeck";
-                                    var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton, tabItemStreamDeck, this, _dcsBios);
-                                    _panelUserControls.Add(streamDeckUserControl);
-                                    _profileHandler.Attach(streamDeckUserControl);
-                                    tabItemStreamDeck.Content = streamDeckUserControl;
-                                    TabControlPanels.Items.Add(tabItemStreamDeck);
+                                    if (_profileHandler.Airframe != DCSAirframe.KEYEMULATOR)
+                                    {
+                                        var tabItemStreamDeck = new TabItem();
+                                        tabItemStreamDeck.Header = "StreamDeck";
+                                        var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton, tabItemStreamDeck, this, _dcsBios);
+                                        _panelUserControls.Add(streamDeckUserControl);
+                                        _profileHandler.Attach(streamDeckUserControl);
+                                        tabItemStreamDeck.Content = streamDeckUserControl;
+                                        TabControlPanels.Items.Add(tabItemStreamDeck);
+                                    }
                                     break;
                                 }
                         }
@@ -1784,19 +1781,6 @@ namespace DCSFlightpanels
             // GC.SuppressFinalize(this);
         }
         #endregion
-
-        private void MenuItemReportBug_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var bugWindow = new BugReportWindow();
-                bugWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(20297, ex);
-            }
-        }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {

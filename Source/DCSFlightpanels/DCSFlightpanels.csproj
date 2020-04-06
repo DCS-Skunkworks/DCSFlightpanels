@@ -276,9 +276,6 @@
     <Compile Include="Windows\BIPLinkWindow.xaml.cs">
       <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\BugReportWindow.xaml.cs">
-      <DependentUpon>BugReportWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\KeySequenceWindow.xaml.cs">
       <DependentUpon>KeySequenceWindow.xaml</DependentUpon>
     </Compile>
@@ -502,10 +499,6 @@
     <Page Include="Windows\BIPLinkWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\BugReportWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\KeySequenceWindow.xaml">
       <SubType>Designer</SubType>

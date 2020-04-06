@@ -86,9 +86,6 @@
     <Setting Name="LastDCSBIOSRelease" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ShowBugReportInfo" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="ButtonTextFaceFont" Type="System.Drawing.Font" Scope="User">
       <Value Profile="(Default)">Consolas, 12pt</Value>
     </Setting>

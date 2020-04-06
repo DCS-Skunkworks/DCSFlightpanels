@@ -8,7 +8,6 @@ namespace NonVisuals.StreamDeck
 {
     public class StreamDeckLayer
     {
-        private bool _isHomeLayer = false;
         private string _name = "";
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
         private Font _textFont;
@@ -67,12 +66,6 @@ namespace NonVisuals.StreamDeck
         public void AddButton(StreamDeckButton streamDeckButton)
         {
             _streamDeckButtons.Add(streamDeckButton);
-        }
-
-        public bool IsHomeLayer
-        {
-            get => _isHomeLayer;
-            set => _isHomeLayer = value;
         }
 
         public string Name

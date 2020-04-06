@@ -148,7 +148,7 @@ namespace NonVisuals.StreamDeck
                             break;
                         }
                 }
-                return "IF {dcsbios} " + Comparator + (Comparator == EnumComparator.Always ? "" : " " + _referenceValue) + " THEN " + OutputText;
+                return "IF {dcsbios} " + comparator + (Comparator == EnumComparator.Always ? "" : " " + _referenceValue) + " THEN " + OutputText;
             }
         }
 

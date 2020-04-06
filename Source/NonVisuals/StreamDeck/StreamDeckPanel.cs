@@ -58,19 +58,7 @@ namespace NonVisuals.StreamDeck
                 SetLastException(e);
             }
         }
-
-        public void AddHomeLayer()
-        {
-            if (!HasLayers)
-            {
-                var homeLayer = new StreamDeckLayer();
-                homeLayer.Name = "Home";
-                homeLayer.IsHomeLayer = true;
-                AddLayer(homeLayer);
-                ActiveLayer = "Home";
-            }
-        }
-
+        
         public void AddStreamDeckButtonToActiveLayer(StreamDeckButton streamDeckButton)
         {
             _streamDeckLayerHandler.AddStreamDeckButtonToActiveLayer(streamDeckButton);
@@ -120,31 +108,6 @@ namespace NonVisuals.StreamDeck
                 return;
             }
             UpdateCounter(e.Address, e.Data);
-            
-        }
-
-        public override void ImportSettings(List<string> settings)
-        {
-            SettingsLoading = true;
-            //Clear current bindings
-            ClearSettings();
-            if (settings == null || settings.Count == 0)
-            {
-                return;
-            }
-
-            var stringBuilder = new StringBuilder();
-
-            foreach (var setting in settings)
-            {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
-                {
-                    stringBuilder.Append(setting.Replace(Constants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "") + Environment.NewLine);
-                }
-            }
-            _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
-            SettingsLoading = false;
-            SettingsApplied();
         }
 
         public void SetImage(int streamDeckButtonNumber, Bitmap bitmap)
@@ -175,7 +138,31 @@ namespace NonVisuals.StreamDeck
             }
             return new List<string>();
         }
+        
+        public override void ImportSettings(List<string> settings)
+        {
+            SettingsLoading = true;
+            //Clear current bindings
+            ClearSettings();
+            if (settings == null || settings.Count == 0)
+            {
+                return;
+            }
 
+            var stringBuilder = new StringBuilder();
+
+            foreach (var setting in settings)
+            {
+                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                {
+                    stringBuilder.Append(setting.Replace(Constants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "") + Environment.NewLine);
+                }
+            }
+            _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
+            SettingsLoading = false;
+            SettingsApplied();
+        }
+        
         private string ExportJSONSettings()
         {
             if (Closed)
@@ -229,50 +216,6 @@ namespace NonVisuals.StreamDeck
             if (!ForwardPanelEvent)
             {
                 return;
-            }
-
-            foreach (var o in hashSet)
-            {
-                var streamDeckButton = (StreamDeckButton)o;
-
-                var found = false;
-                /*foreach (var keyBinding in _keyBindings)
-                {
-                    if (keyBinding.OSKeyPress != null && keyBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)
-                    {
-                        keyBinding.OSKeyPress.Execute();
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    foreach (var dcsBiosBinding in _dcsBiosBindings)
-                    {
-                        if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && dcsBiosBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)
-                        {
-                            dcsBiosBinding.SendDCSBIOSCommands();
-                            break;
-                        }
-                    }
-                }
-                foreach (var osCommand in _osCommandBindings)
-                {
-                    if (osCommand.OSCommandObject != null && osCommand.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && osCommand.WhenTurnedOn == enumStreamDeckButton.IsPressed)
-                    {
-                        osCommand.OSCommandObject.Execute();
-                        found = true;
-                        break;
-                    }
-                }
-                foreach (var bipLinkStreamDeck in _bipLinks)
-                {
-                    if (bipLinkStreamDeck.BIPLights.Count > 0 && bipLinkStreamDeck.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && bipLinkStreamDeck.WhenTurnedOn == enumStreamDeckButton.IsPressed)
-                    {
-                        bipLinkStreamDeck.Execute();
-                        break;
-                    }
-                }*/
             }
         }
         
@@ -341,18 +284,7 @@ namespace NonVisuals.StreamDeck
         {
             get => _streamDeckLayerHandler.HomeLayer;
         }
-
-        public void SetHomeStatus(bool isHomeLayer, string layerName)
-        {
-            _streamDeckLayerHandler.SetHomeStatus(isHomeLayer, layerName);
-            SetIsDirty();
-        }
-
-        public void SetHomeStatus(bool isHomeLayer, StreamDeckLayer streamDeckLayer)
-        {
-            SetHomeStatus(isHomeLayer, streamDeckLayer.Name);
-        }
-
+        
         public List<string> GetStreamDeckLayerNames()
         {
             return _streamDeckLayerHandler.GetStreamDeckLayerNames();

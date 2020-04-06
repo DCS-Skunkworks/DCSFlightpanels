@@ -361,18 +361,6 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowBugReportInfo {
-            get {
-                return ((bool)(this["ShowBugReportInfo"]));
-            }
-            set {
-                this["ShowBugReportInfo"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Consolas, 12pt")]
         public global::System.Drawing.Font ButtonTextFaceFont {
             get {

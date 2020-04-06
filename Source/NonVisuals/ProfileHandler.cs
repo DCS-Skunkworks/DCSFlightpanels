@@ -127,14 +127,7 @@ namespace NonVisuals
         public bool LoadProfile(string filename)
         {
             try
-            {
-                Common.DebugP("LoadProfile filename : " + filename);
-                if (!string.IsNullOrEmpty(filename))
-                {
-                    _filename = filename;
-                    _lastProfileUsed = filename;
-                }
-                /*
+            {/*
                  * 0 Open specified filename (parameter) if not null
                  * 1 If exists open last profile used (settings)
                  * 2 Try and open default profile located in My Documents
@@ -142,7 +135,14 @@ namespace NonVisuals
                  */
                 _isNewProfile = false;
                 ClearAll();
-                if (string.IsNullOrEmpty(_filename))
+
+                Common.DebugP("LoadProfile filename : " + filename);
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    _filename = filename;
+                    _lastProfileUsed = filename;
+                }
+                else
                 {
                     if (!string.IsNullOrEmpty(_lastProfileUsed) && File.Exists(_lastProfileUsed))
                     {
@@ -154,7 +154,7 @@ namespace NonVisuals
                         _lastProfileUsed = filename;
                     }
                 }
-
+                
                 Common.DebugP("LoadProfile _lastProfileUsed : " + _lastProfileUsed);
                 Common.DebugP("LoadProfile _filename : " + _filename);
 
@@ -309,7 +309,7 @@ namespace NonVisuals
                 return false;
             }
         }
-
+        
         private void SetOperationLevelFlag()
         {
             if (_airframe == DCSAirframe.KEYEMULATOR)
@@ -545,7 +545,7 @@ namespace NonVisuals
                 stringBuilder.AppendLine(GetFooter());
                 //}
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
-                SetIsDirty();
+                _isDirty = false;
                 _isNewProfile = false;
                 LoadProfile(_filename);
             }
