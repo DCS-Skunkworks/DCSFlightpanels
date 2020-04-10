@@ -418,5 +418,17 @@ namespace DCSFlightpanels.Properties {
                 this["ButtonFaceOffsetY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastFileDialogLocation {
+            get {
+                return ((string)(this["LastFileDialogLocation"]));
+            }
+            set {
+                this["LastFileDialogLocation"] = value;
+            }
+        }
     }
 }

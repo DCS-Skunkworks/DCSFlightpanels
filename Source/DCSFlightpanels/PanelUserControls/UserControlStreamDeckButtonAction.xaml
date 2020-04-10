@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Collapsed" Margin="0,10,0,0">
+            <StackPanel Name="StackPanelButtonKeyPressSettings"  Visibility="Visible" Margin="0,10,0,0">
                 <Label Content="Key Press / Sequence when Button Pressed" FontSize="10" Height="23"   />
                 <customControl:StreamDeckActionTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxKeyPressButtonOn" Background="LightSteelBlue" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -37,7 +37,7 @@
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonDCSBIOSSettings"  Visibility="Visible"  Margin="0,10,0,0">
+            <StackPanel Name="StackPanelButtonDCSBIOSSettings"  Visibility="Collapsed"  Margin="0,10,0,0">
                 <Label Content="DCSBIOS Action when Button Pressed" FontSize="10" Height="23"   />
                 <customControl:StreamDeckActionTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDCSBIOSActionButtonOn"  IsEnabled="False" Background="LightSteelBlue"  />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -76,10 +76,6 @@
             </StackPanel>
 
 
-            <StackPanel Name="StackPanelButtonCustomAction"  Visibility="Collapsed"  Margin="0,10,0,0">
-                <Label Content="Custom Action" FontSize="10" Height="23"   />
-                <TextBox Name="TextBoxCustomActionInformation" Height="200" IsReadOnly="True" Text="" TextWrapping="Wrap"></TextBox>
-            </StackPanel>
 
         </Grid>
     </GroupBox>

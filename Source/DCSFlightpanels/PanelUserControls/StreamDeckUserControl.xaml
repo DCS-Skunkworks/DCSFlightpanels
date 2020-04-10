@@ -227,19 +227,21 @@
                                     <RadioButton GroupName="ButtonType" Name="RadioButtonDCSBIOS" Content="DCS-BIOS" Margin="4,2,0,2"  Click="RadioButtonButtonActionTypePress_OnClick"/>
                                     <RadioButton GroupName="ButtonType" Name="RadioButtonOSCommand" Content="OS Command" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
                                     <RadioButton GroupName="ButtonType" Name="RadioButtonLayerNav" Content="Layer Navigation" Margin="4,2,0,2" Click="RadioButtonButtonActionTypePress_OnClick"/>
-                                    <RadioButton GroupName="ButtonType" Name="RadioButtonCustom" Content="Custom Function" Margin="4,2,0,2" IsEnabled="False"/>
-                                    <Button Name="ButtonAcceptActionConfiguration" Content="Accept Action Conf."  Margin="4,15,4,2" Click="ButtonAcceptActionConfiguration_OnClick"/>
+
+                                    <!--<Button Name="ButtonAcceptActionConfiguration" Content="Accept Action Conf."  Margin="4,15,4,2" Click="ButtonAcceptActionConfiguration_OnClick"/>
                                     <Button Name="ButtonDeleteActionConfiguration" Content="Delete Action Conf."  Margin="4,5,4,2" Click="ButtonDeleteActionConfiguration_OnClick"/>
-                                    <Button Name="ButtonCancelActionConfigurationChanges" Content="Cancel Action Changes"  Margin="4,5,4,2" Click="ButtonCancelActionConfigurationChanges_OnClick"/>
+                                    <Button Name="ButtonCancelActionConfigurationChanges" Content="Cancel Action Changes"  Margin="4,5,4,2" Click="ButtonCancelActionConfigurationChanges_OnClick"/>-->
                                 </StackPanel>
                             </GroupBox>
                         </StackPanel>
                         <StackPanel Name="StackPanelChooseButtonFaceType">
-                            <GroupBox Header="Button Image">
+                            <GroupBox Header="Modify Button" Margin="0,40,0,0">
                                 <StackPanel >
-                                    <Button Name="ButtonAcceptFaceConfiguration" Content="Accept Image Conf."  Margin="4,2,4,2" Click="ButtonAcceptFaceConfiguration_OnClick"/>
-                                    <Button Name="ButtonDeleteFaceConfiguration" Content="Delete Image Conf."  Margin="4,5,4,2" Click="ButtonDeleteFaceConfiguration_OnClick"/>
-                                    <Button Name="ButtonCancelFaceConfigurationChanges" Content="Cancel Image Changes"  Margin="4,5,4,2" Click="ButtonCancelFaceConfigurationChanges_OnClick"/>
+                                    <Button Name="ButtonAcceptButtonChanges" Content="Accept Changes"  Margin="4,10,4,2" Click="ButtonAcceptButtonChanges_OnClick"/>
+                                    <Button Name="ButtonDeleteAction" Content="Delete Action"  Margin="4,15,4,2" Click="ButtonDeleteAction_OnClick"/>
+                                    <Button Name="ButtonCancelAction" Content="Cancel Action Changes"  Margin="4,5,4,2" Click="ButtonCancelAction_OnClick"/>
+                                    <Button Name="ButtonDeleteFace" Content="Delete Image"  Margin="4,5,4,2" Click="ButtonDeleteFace_OnClick"/>
+                                    <Button Name="ButtonCancelFace" Content="Cancel Image Changes"  Margin="4,5,4,2" Click="ButtonCancelFace_OnClick"/>
                                 </StackPanel>
                             </GroupBox>
                         </StackPanel>

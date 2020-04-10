@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 

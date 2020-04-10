@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using NonVisuals.StreamDeck;
+﻿using NonVisuals.StreamDeck;
 
 namespace NonVisuals.Interfaces
 {
@@ -10,8 +9,7 @@ namespace NonVisuals.Interfaces
         KeyPress = 1,
         DCSBIOS = 2,
         OSCommand = 4,
-        LayerNavigation = 16,
-        Custom = 32
+        LayerNavigation = 16
     }
 
     public interface IStreamDeckButtonAction

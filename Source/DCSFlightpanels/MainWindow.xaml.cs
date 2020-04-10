@@ -583,9 +583,6 @@ namespace DCSFlightpanels
                                 }
                             case GamingPanelEnum.StreamDeckMini:
                             case GamingPanelEnum.StreamDeckXL:
-                                {
-                                    break;
-                                }
                             case GamingPanelEnum.StreamDeck:
                                 {
                                     if (_profileHandler.Airframe != DCSAirframe.KEYEMULATOR)

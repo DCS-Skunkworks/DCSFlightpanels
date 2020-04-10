@@ -115,7 +115,6 @@
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\CommonStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />
-    <Compile Include="StreamDeck\DCSBIOSFaceBindingStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ69.cs" />
@@ -125,7 +124,6 @@
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ70.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ55.cs" />
     <Compile Include="Saitek\DcsOutputAndColorBinding.cs" />
-    <Compile Include="Saitek\GenericRadioPanelKnob.cs" />
     <Compile Include="HIDHandler.cs" />
     <Compile Include="HIDSkeleton.cs" />
     <Compile Include="Interfaces\IGlobalHandler.cs" />
@@ -141,6 +139,7 @@
     <Compile Include="StreamDeck\DCSBIOSNumberToText.cs" />
     <Compile Include="StreamDeck\FaceFactory.cs" />
     <Compile Include="StreamDeck\FaceTypeDCSBIOS.cs" />
+    <Compile Include="StreamDeck\FaceTypeImage.cs" />
     <Compile Include="StreamDeck\KeyBindingStreamDeck.cs" />
     <Compile Include="Saitek\KeyBindingPZ70.cs" />
     <Compile Include="Saitek\KeyBindingPZ55.cs" />

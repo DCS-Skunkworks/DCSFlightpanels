@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
-using System.Windows;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using Jace.Operations;
 using NonVisuals.Saitek;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -331,12 +329,4 @@ namespace NonVisuals.StreamDeck
         }*/
     }
 
-
-    public enum ControlListStreamDeck : byte
-    {
-        ALL,
-        DCSBIOS,
-        KEYS,
-        BIPS
-    }
 }

@@ -6,22 +6,17 @@ using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
-    public class FaceTypeText : IStreamDeckButtonFace
+    public class FaceTypeImage : IStreamDeckButtonFace
     {
         public EnumStreamDeckFaceType FaceType
         {
-            get { return EnumStreamDeckFaceType.Text; }
+            get { return EnumStreamDeckFaceType.Image; }
         }
+
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private string _text;
-        private Font _textFont = Constants.DefaultStreamDeckFont;
-        private Color _fontColor;
-        private Color _backgroundColor;
-        private int _offsetX;
-        private int _offsetY;
-
+        private string _imageFile;
 
 
         public void Show(StreamDeckRequisites streamDeckRequisite)
@@ -45,7 +40,7 @@ namespace NonVisuals.StreamDeck
 
             if (_refreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _bitmap = new Bitmap(_imageFile);
                 _refreshBitmap = false;
             }
 
@@ -58,7 +53,7 @@ namespace NonVisuals.StreamDeck
         {
             if (_refreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _bitmap = new Bitmap(_imageFile);
                 _refreshBitmap = false;
             }
             streamDeckPanel.SetImage(_streamDeckButtonName, _bitmap);
@@ -80,70 +75,36 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckButtonName;
             set
             {
-                _refreshBitmap = true;
                 _streamDeckButtonName = value;
             }
         }
 
-        public string Text
+        [JsonIgnore]
+        public string Text { get; set; }
+
+        [JsonIgnore]
+        public Font TextFont { get; set; } = Constants.DefaultStreamDeckFont;
+
+        [JsonIgnore]
+        public Color FontColor { get; set; }
+
+        [JsonIgnore]
+        public Color BackgroundColor { get; set; }
+
+        [JsonIgnore]
+        public int OffsetX { get; set; }
+
+        [JsonIgnore]
+        public int OffsetY { get; set; }
+
+        public string ImageFile
         {
-            get => _text;
+            get => _imageFile;
             set
             {
                 _refreshBitmap = true;
-                _text = value;
+                _imageFile = value;
             }
         }
-
-        public Font TextFont
-        {
-            get => _textFont;
-            set
-            {
-                _refreshBitmap = true;
-                _textFont = value;
-            }
-        }
-
-        public Color FontColor
-        {
-            get => _fontColor;
-            set
-            {
-                _refreshBitmap = true;
-                _fontColor = value;
-            }
-        }
-
-        public Color BackgroundColor
-        {
-            get => _backgroundColor;
-            set
-            {
-                _refreshBitmap = true;
-                _backgroundColor = value;
-            }
-        }
-
-        public int OffsetX
-        {
-            get => _offsetX;
-            set
-            {
-                _refreshBitmap = true;
-                _offsetX = value;
-            }
-        }
-
-        public int OffsetY
-        {
-            get => _offsetY;
-            set
-            {
-                _refreshBitmap = true;
-                _offsetY = value;
-            }
-        }
-
     }
 }

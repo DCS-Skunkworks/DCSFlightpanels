@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 using OpenMacroBoard.SDK;
@@ -9,7 +8,10 @@ namespace NonVisuals.StreamDeck
 {
     public class FaceTypeDCSBIOS : IStreamDeckButtonFace
     {
-        public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
+        public EnumStreamDeckFaceType FaceType
+        {
+            get { return EnumStreamDeckFaceType.DCSBIOS; }
+        }
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
@@ -19,7 +21,6 @@ namespace NonVisuals.StreamDeck
         private Color _backgroundColor;
         private int _offsetX;
         private int _offsetY;
-        private DCSBIOSFaceBindingStreamDeck _dcsbiosFaceBindingStreamDeck;
         private uint _dcsBiosValue = 0;
         
 
@@ -74,18 +75,6 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-
-        public DCSBIOSFaceBindingStreamDeck DCSBIOSFaceBinding
-        {
-            get
-            {
-                return _dcsbiosFaceBindingStreamDeck;
-            }
-            set
-            {
-                _dcsbiosFaceBindingStreamDeck = DCSBIOSFaceBinding;
-            }
-        }
 
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {

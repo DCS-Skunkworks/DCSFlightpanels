@@ -94,13 +94,11 @@ namespace DCSFlightpanels.PanelUserControls
                 UCStreamDeckButtonAction.SetFormState();
                 UCStreamDeckButtonFace.SetFormState();
 
-                ButtonAcceptActionConfiguration.IsEnabled = UCStreamDeckButtonAction.IsDirty;
-                ButtonCancelActionConfigurationChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty && UCStreamDeckButtonAction.HasConfig;
-                ButtonDeleteActionConfiguration.IsEnabled = UCStreamDeckButtonAction.HasConfig;
-
-                ButtonAcceptFaceConfiguration.IsEnabled = UCStreamDeckButtonFace.IsDirty;
-                ButtonCancelFaceConfigurationChanges.IsEnabled = UCStreamDeckButtonFace.IsDirty && UCStreamDeckButtonFace.HasConfig;
-                ButtonDeleteFaceConfiguration.IsEnabled = UCStreamDeckButtonFace.HasConfig;
+                ButtonAcceptButtonChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty;
+                ButtonCancelAction.IsEnabled = UCStreamDeckButtonAction.IsDirty && UCStreamDeckButtonAction.HasConfig;
+                ButtonDeleteAction.IsEnabled = UCStreamDeckButtonAction.HasConfig;
+                ButtonCancelFace.IsEnabled = UCStreamDeckButtonFace.IsDirty && UCStreamDeckButtonFace.HasConfig;
+                ButtonDeleteFace.IsEnabled = UCStreamDeckButtonFace.HasConfig;
 
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
@@ -760,11 +758,6 @@ namespace DCSFlightpanels.PanelUserControls
                         RadioButtonLayerNav.IsChecked = true;
                         break;
                     }
-                case EnumStreamDeckActionType.Custom:
-                    {
-                        RadioButtonCustom.IsChecked = true;
-                        break;
-                    }
             }
         }
 
@@ -796,33 +789,48 @@ namespace DCSFlightpanels.PanelUserControls
             SetFormState();
         }
 
-        private void ButtonAcceptActionConfiguration_OnClick(object sender, RoutedEventArgs e)
+
+        private void ButtonAcceptButtonChanges_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var streamDeckButton = _streamDeck.GetActiveLayer().GetStreamDeckButton(GetSelectedButtonName());
-                var actionPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
-                var actionRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
-                var added = false;
-
-                if (actionPress != null)
+                try
                 {
-                    streamDeckButton.ActionForPress = actionPress;
-                    added = true;
-                }
+                    var streamDeckButton = _streamDeck.GetActiveLayer().GetStreamDeckButton(GetSelectedButtonName());
+                    var buttonFace = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
+                    var actionPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
+                    var actionRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
+                    var added = false;
 
-                if (actionRelease != null)
-                {
-                    streamDeckButton.ActionForRelease = actionRelease;
-                    added = true;
-                }
+                    if (actionPress != null)
+                    {
+                        streamDeckButton.ActionForPress = actionPress;
+                        added = true;
+                    }
 
-                if (added)
-                {
-                    _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
+                    if (actionRelease != null)
+                    {
+                        streamDeckButton.ActionForRelease = actionRelease;
+                        added = true;
+                    }
+
+                    if (buttonFace != null)
+                    {
+                        streamDeckButton.Face = buttonFace;
+                        added = true;
+                    }
+
+                    if (added)
+                    {
+                        _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
+                    }
+                    UCStreamDeckButtonAction.StateSaved();
+                    SetFormState();
                 }
-                UCStreamDeckButtonAction.StateSaved();
-                SetFormState();
+                catch (Exception ex)
+                {
+                    Common.ShowErrorMessageBox(ex);
+                }
             }
             catch (Exception ex)
             {
@@ -830,7 +838,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonDeleteActionConfiguration_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonDeleteAction_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -853,7 +861,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonCancelActionConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonCancelAction_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -866,37 +874,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonAcceptFaceConfiguration_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                try
-                {
-                    var streamDeckButton = _streamDeck.GetActiveLayer().GetStreamDeckButton(GetSelectedButtonName());
-                    var faceType = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
-
-                    if (faceType != null)
-                    {
-                        streamDeckButton.Face = faceType;
-                        _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
-                    }
-
-                    UCStreamDeckButtonFace.StateSaved();
-
-                    SetFormState();
-                }
-                catch (Exception ex)
-                {
-                    Common.ShowErrorMessageBox(ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonDeleteFaceConfiguration_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonDeleteFace_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -912,12 +890,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonCancelFaceConfigurationChanges_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonCancelFace_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 UCStreamDeckButtonFace.Clear();
                 UCStreamDeckButtonFace.ShowFaceConfiguration(GetSelectedStreamDeckButton());
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -936,7 +915,6 @@ namespace DCSFlightpanels.PanelUserControls
             _radioButtonActionsList.Add(RadioButtonDCSBIOS);
             _radioButtonActionsList.Add(RadioButtonOSCommand);
             _radioButtonActionsList.Add(RadioButtonLayerNav);
-            _radioButtonActionsList.Add(RadioButtonCustom);
 
             _buttonImages.Add(ButtonImage1);
             _buttonImages.Add(ButtonImage2);

@@ -1,22 +1,21 @@
-﻿using System;
+﻿using ClassLibraryCommon;
+using DCS_BIOS;
+using DCSFlightpanels.Bills;
+using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Properties;
+using DCSFlightpanels.Windows;
+using NonVisuals;
+using NonVisuals.Interfaces;
+using NonVisuals.StreamDeck;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using DCSFlightpanels.Properties;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Windows;
-using NonVisuals;
-using NonVisuals.Interfaces;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using TextBox = System.Windows.Controls.TextBox;
-using NonVisuals.StreamDeck;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace DCSFlightpanels.PanelUserControls
@@ -91,8 +90,9 @@ namespace DCSFlightpanels.PanelUserControls
 
                 StackPanelButtonTextAndStyle.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonImage.Visibility = RadioButtonImageFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelButtonImageType.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.Unknown ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelRadioButtonsImageType.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.Unknown ? Visibility.Visible : Visibility.Collapsed;
 
                 ButtonTextFaceFont.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
@@ -105,7 +105,9 @@ namespace DCSFlightpanels.PanelUserControls
                                                     (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
                 TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
 
-                ButtonDeleteDCSBIOSFaceButton.IsEnabled = TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOSDecoder;
+                ButtonDeleteDCSBIOSFaceButton.IsEnabled = TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS();
+
+                ButtonTestSelectImageGalleryButton.IsEnabled = TextBoxImageFace.Bill.ContainsImageFace();
             }
             catch (Exception ex)
             {
@@ -251,6 +253,10 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 return EnumStreamDeckFaceType.DCSBIOS;
             }
+            if (RadioButtonImageFace.IsChecked == true)
+            {
+                return EnumStreamDeckFaceType.Image;
+            }
 
             return EnumStreamDeckFaceType.Unknown;
         }
@@ -259,7 +265,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             SetFormState();
         }
-        
+
         public IGlobalHandler GlobalHandler
         {
             get => _globalHandler;
@@ -286,6 +292,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             _textBoxList.Add(TextBoxButtonTextFace);
             _textBoxList.Add(TextBoxDCSBIOSDecoder);
+            _textBoxList.Add(TextBoxImageFace);
+
             _radioButtonList.Add(RadioButtonTextFace);
             _radioButtonList.Add(RadioButtonDCSBIOSFace);
         }
@@ -295,7 +303,7 @@ namespace DCSFlightpanels.PanelUserControls
             foreach (var textBox in _textBoxList)
             {
                 textBox.Bill = new BillStreamDeckFace();
-                textBox.Bill.ParentTextBox = textBox;
+                textBox.Bill.TextBox = textBox;
             }
         }
 
@@ -403,8 +411,9 @@ namespace DCSFlightpanels.PanelUserControls
                         RadioButtonDCSBIOSFace.IsChecked = true;
                         break;
                     }
-                case EnumStreamDeckFaceType.Unknown:
+                case EnumStreamDeckFaceType.Image:
                     {
+                        RadioButtonImageFace.IsChecked = true;
                         return;
                     }
                 default:
@@ -437,7 +446,15 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-
+                        var dcsbiosDecoder = (DCSBIOSDecoder)streamDeckButtonFace;
+                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = dcsbiosDecoder;
+                        SetFormState();
+                        return;
+                    }
+                case EnumStreamDeckFaceType.Image:
+                    {
+                        var faceTypeImage = (FaceTypeImage)streamDeckButtonFace;
+                        TextBoxDCSBIOSDecoder.Bill.ImageFilePath = faceTypeImage.ImageFile;
                         SetFormState();
                         return;
                     }
@@ -472,18 +489,21 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        var result = new FaceTypeText();
+                        return TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder;
+                    }
+                case EnumStreamDeckFaceType.Image:
+                    {
+                        if (TextBoxButtonTextFace.Bill.ContainsImageFace())
+                        {
+                            var result = new FaceTypeImage();
 
-                        result.StreamDeckButtonName = streamDeckButtonName;
-                        result.Text = TextBoxButtonTextFace.Text;
-                        result.TextFont = TextBoxButtonTextFace.Bill.TextFont;
-                        result.FontColor = TextBoxButtonTextFace.Bill.FontColor;
-                        result.BackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
-                        result.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
-                        result.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
+                            result.StreamDeckButtonName = streamDeckButtonName;
+                            result.ImageFile = TextBoxButtonTextFace.Bill.ImageFilePath;
 
-                        //result.DCSBIOSFaceBinding = TextBoxDCSBIOSFaceButton.Bill.DCSBIOSFaceBinding;
-                        break;
+                            return result;
+                        }
+
+                        return null;
                     }
             }
 
@@ -655,22 +675,9 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                AddEditDCSBIOS();
-                SDUIParent.ChildChangesMade();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void AddEditDCSBIOS()
-        {
-            try
-            {
                 StreamDeckDCSBIOSDecoderWindow streamDeckDCSBIOSDecoderWindow = null;
 
-                if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOSDecoder)
+                if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                 {
                     streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, _streamDeckPanel, _dcsbios);
                 }
@@ -684,13 +691,14 @@ namespace DCSFlightpanels.PanelUserControls
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder;
+                    SDUIParent.ChildChangesMade();
                     SetIsDirty();
                 }
                 ButtonFocus.Focus();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -699,8 +707,53 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
+                SDUIParent.ChildChangesMade();
                 SetIsDirty();
                 ButtonFocus.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(442044, ex);
+            }
+        }
+
+        private void ButtonBrowse_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                FileDialog fileDialog = new OpenFileDialog();
+                fileDialog.CheckPathExists = true;
+                fileDialog.CheckFileExists = true;
+                fileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastFileDialogLocation) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastFileDialogLocation;
+                fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
+
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    TextBoxImageFace.Bill.ImageFilePath = fileDialog.FileName;
+                    Settings.Default.LastFileDialogLocation = Path.GetDirectoryName(fileDialog.FileName);
+                    TextBoxImageFace.Text = fileDialog.FileName;
+                }
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
+                SetFormState();
+                ButtonFocus.Focus();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(442044, ex);
+            }
+        }
+
+        private void ButtonTestSelectImageGalleryButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!TextBoxImageFace.Bill.ContainsImageFace())
+                {
+                    return;
+                }
+                var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFilePath);
+                SDUIParent.TestImage(bitmap);
             }
             catch (Exception ex)
             {

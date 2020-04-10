@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using NonVisuals.DCSBIOSBindings;
+﻿using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck

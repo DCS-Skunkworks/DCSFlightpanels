@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClassLibraryCommon;
 using Newtonsoft.Json;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;

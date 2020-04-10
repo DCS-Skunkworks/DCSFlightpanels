@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using DCS_BIOS;
 using NonVisuals;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;
@@ -15,7 +13,6 @@ namespace DCSFlightpanels.Bills
     public class BillStreamDeckFace : BillBaseOutput
     {
         public EnumStreamDeckButtonNames StreamDeckButtonName;
-        private DCSBIOSFaceBindingStreamDeck _dcsbiosFaceBinding;
         private StreamDeckTargetLayer _streamDeckTargetLayer;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
@@ -23,30 +20,25 @@ namespace DCSFlightpanels.Bills
         private Color _fontColor = Color.Black;
         private Color _backgroundColor = ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE);
         private bool _isSelected = false;
-        public TextBox ParentTextBox { get; set; }
         public BitmapImage SelectedImage { get; set; }
         public BitmapImage DeselectedImage { get; set; }
-        private DCSBIOSDecoder _dcsbiosDecoder;        
-
-
+        private DCSBIOSDecoder _dcsbiosDecoder;
+        private string _imageFilePath;
 
         public override bool IsEmpty()
         {
-            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) &&
-                   (_dcsbiosFaceBinding == null) &&
+            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
                    _streamDeckTargetLayer == null;
         }
-
-        public override void Consume(DCSBIOSFaceBindingStreamDeck dcsBiosFaceBindingStreamDeck)
-        {
-            _dcsbiosFaceBinding = dcsBiosFaceBindingStreamDeck;
-        }
-
-
-
+        
         public bool ContainsTextFace()
         {
-            return _textFont != null && !string.IsNullOrEmpty(ParentTextBox.Text); 
+            return _textFont != null && !string.IsNullOrEmpty(TextBox.Text); 
+        }
+
+        public bool ContainsImageFace()
+        {
+            return !string.IsNullOrEmpty(ImageFilePath);
         }
 
         public Font TextFont
@@ -55,20 +47,20 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _textFont = value;
-                ParentTextBox.FontFamily = new System.Windows.Media.FontFamily(_textFont.Name);
-                ParentTextBox.FontWeight = _textFont.Bold ? FontWeights.Bold : FontWeights.Regular;
-                ParentTextBox.FontSize = _textFont.Size * 96.0 / 72.0;
-                ParentTextBox.FontStyle = _textFont.Italic ? FontStyles.Italic : FontStyles.Normal;
+                TextBox.FontFamily = new System.Windows.Media.FontFamily(_textFont.Name);
+                TextBox.FontWeight = _textFont.Bold ? FontWeights.Bold : FontWeights.Regular;
+                TextBox.FontSize = _textFont.Size * 96.0 / 72.0;
+                TextBox.FontStyle = _textFont.Italic ? FontStyles.Italic : FontStyles.Normal;
                 var textDecorationCollection = new TextDecorationCollection();
                 if (_textFont.Underline) textDecorationCollection.Add(TextDecorations.Underline);
                 if (_textFont.Strikeout) textDecorationCollection.Add(TextDecorations.Strikethrough);
-                ParentTextBox.TextDecorations = textDecorationCollection;
+                TextBox.TextDecorations = textDecorationCollection;
             }
         }
         
         public override bool ContainsDCSBIOS()
         {
-            return _dcsbiosFaceBinding != null;
+            return _dcsbiosDecoder != null;
         }
 
         public bool ContainsStreamDeckLayer()
@@ -87,7 +79,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _fontColor = value;
-                ParentTextBox.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(_fontColor.A, _fontColor.R, _fontColor.G, _fontColor.B)); ;
+                TextBox.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(_fontColor.A, _fontColor.R, _fontColor.G, _fontColor.B)); ;
             }
         }
 
@@ -97,7 +89,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _backgroundColor = value;
-                ParentTextBox.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(_backgroundColor.A, _backgroundColor.R, _backgroundColor.G, _backgroundColor.B)); ;
+                TextBox.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(_backgroundColor.A, _backgroundColor.R, _backgroundColor.G, _backgroundColor.B)); ;
             }
         }
 
@@ -130,27 +122,16 @@ namespace DCSFlightpanels.Bills
         public void Clear()
         {
             Button = null;
-            ParentTextBox?.Clear();
+            TextBox?.Clear();
         }
 
 
         public override void ClearAll()
         {
-            _dcsbiosFaceBinding = null;
+            _dcsbiosDecoder = null;
             _bipLinkStreamDeck = null;
             TextBox.Background = Brushes.LightSteelBlue;
             TextBox.Text = "";
-        }
-
-        public DCSBIOSFaceBindingStreamDeck DCSBIOSFaceBinding
-        {
-            get => _dcsbiosFaceBinding;
-            set => _dcsbiosFaceBinding = value;
-        }
-
-        public bool ContainsDCSBIOSDecoder
-        {
-            get => DCSBIOSDecoder != null;
         }
 
         public DCSBIOSDecoder DCSBIOSDecoder
@@ -160,6 +141,17 @@ namespace DCSFlightpanels.Bills
             {
                 _dcsbiosDecoder = value;
                 TextBox.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
+            }
+        }
+
+
+        public string ImageFilePath
+        {
+            get => _imageFilePath;
+            set
+            {
+                _imageFilePath = value;
+                TextBox.Text = _imageFilePath;
             }
         }
     }

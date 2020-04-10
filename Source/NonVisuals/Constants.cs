@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Media;
 using Color = System.Drawing.Color;
 
 namespace NonVisuals

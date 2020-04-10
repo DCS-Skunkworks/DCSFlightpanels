@@ -139,9 +139,6 @@
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillBaseOutput.cs" />
-    <Compile Include="Windows\ColorPickerWindow.xaml.cs">
-      <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckImage.cs" />
@@ -321,10 +318,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PanelUserControls\UCDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ColorPickerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

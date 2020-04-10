@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using NonVisuals.Interfaces;
+﻿using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
 {

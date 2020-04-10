@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
-using CommonClassLibraryJD;
 using DCS_BIOS;
 using EnumEx = CommonClassLibraryJD.EnumEx;
 
