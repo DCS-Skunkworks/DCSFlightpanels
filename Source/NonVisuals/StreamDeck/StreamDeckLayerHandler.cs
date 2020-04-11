@@ -45,8 +45,9 @@ namespace NonVisuals.StreamDeck
             const Formatting indented = Formatting.Indented;
             var settings = new JsonSerializerSettings()
             {
-                TypeNameHandling = TypeNameHandling.All
-            };
+                TypeNameHandling = TypeNameHandling.All,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
 
             CleanLayers();
 
@@ -70,14 +71,7 @@ namespace NonVisuals.StreamDeck
             
             CheckHomeLayerStatus();
 
-            if (!string.IsNullOrEmpty(_activeLayer) && _layerList.FindAll(o => o.Name == _activeLayer).Count == 1)
-            {
-                SetActiveLayer(_activeLayer);
-            }
-            else
-            {
-                SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
-            }
+            CheckActiveLayer();
         }
 
         private void CheckHomeLayerStatus()
@@ -99,8 +93,21 @@ namespace NonVisuals.StreamDeck
                 streamDeckLayer.Name = CommonStreamDeck.HOME_LAYER_NAME;
                 _layerList.Insert(0, streamDeckLayer);
             }
+
+            CheckActiveLayer();
         }
-       
+
+        public void CheckActiveLayer()
+        {
+            if (!string.IsNullOrEmpty(_activeLayer) && _layerList.FindAll(o => o.Name == _activeLayer).Count == 1)
+            {
+                SetActiveLayer(_activeLayer);
+            }
+            else
+            {
+                SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
+            }
+        }
 
         public bool AddLayer(StreamDeckLayer streamDeckLayer)
         {
@@ -152,22 +159,8 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                VerifyHomeLayer();
-
+                CheckHomeLayerStatus();
                 return _layerList.Find(o => o.Name == CommonStreamDeck.HOME_LAYER_NAME);
-            }
-        }
-
-        public void VerifyHomeLayer()
-        {
-            if(_layerList.Find(o => o.Name == CommonStreamDeck.HOME_LAYER_NAME) == null)
-            {
-                throw new Exception(Constants.NO_HOME_LAYER_FOUND);
-            }
-
-            if (_layerList.FindAll(o => o.Name == CommonStreamDeck.HOME_LAYER_NAME).Count > 1)
-            {
-                throw new Exception(Constants.SEVERAL_HOME_LAYER_FOUND);
             }
         }
 
@@ -185,6 +178,7 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckLayer GetActiveStreamDeckLayer()
         {
+            CheckHomeLayerStatus();
             return GetStreamDeckLayer(_activeLayer);
         }
 

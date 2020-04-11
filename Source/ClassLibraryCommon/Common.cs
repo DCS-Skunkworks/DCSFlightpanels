@@ -227,17 +227,13 @@ namespace ClassLibraryCommon
         {
             lock (ErrorLogLockObject)
             {
-                if (!File.Exists(_errorLog))
-                {
-                    File.Create(_errorLog);
-                }
                 var assembly = Assembly.GetExecutingAssembly();
                 var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 var version = fileVersionInfo.FileVersion;
 
                 var tempFile = Path.GetTempFileName();
                 using (var streamWriter = new StreamWriter(tempFile))
-                using (var streamReader = new StreamReader(_errorLog))
+                using (var streamReader = File.OpenText(_errorLog))
                 {
                     streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
                     streamWriter.Write(message + Environment.NewLine);

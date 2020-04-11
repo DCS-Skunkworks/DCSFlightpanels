@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using DCS_BIOS;
+using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
 {
@@ -19,7 +20,7 @@ namespace NonVisuals.StreamDeck
         private bool _isVisible = false;
 
 
-
+        här hur satan ska man spara detta i json??
         public DCSBIOSDecoder(StreamDeckPanel streamDeck, EnumStreamDeckButtonNames streamDeckButton, DCSBIOS dcsbios)
         {
             _dcsbios = dcsbios;
@@ -40,6 +41,7 @@ namespace NonVisuals.StreamDeck
                 if (!Equals(DCSBiosValue, e.Data))
                 {
                     DCSBiosValue = e.Data;
+                    ButtonText = e.Data.ToString(CultureInfo.InvariantCulture);
                     try
                     {
                         if (!string.IsNullOrEmpty(_formula))
@@ -109,6 +111,7 @@ namespace NonVisuals.StreamDeck
             set => _formula = value;
         }
 
+        [JsonIgnore]
         public StreamDeckPanel StreamDeck
         {
             get => _streamDeck;
@@ -148,6 +151,7 @@ namespace NonVisuals.StreamDeck
             set => _dcsbiosNumberToTexts = value;
         }
 
+        [JsonIgnore]
         public bool ValueUpdated
         {
             get
@@ -163,16 +167,23 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonIgnore]
         public bool HasErrors => !string.IsNullOrEmpty(_lastFormulaError);
+
+        [JsonIgnore]
         public string LastFormulaError => _lastFormulaError;
+
+        [JsonIgnore]
         public double FormulaResult => _formulaResult;
 
+        [JsonIgnore]
         public bool IsVisible
         {
             get => _isVisible;
             set => _isVisible = value;
         }
 
+        
         public string GetFriendlyInfo()
         {
             return _dcsbiosOutput.ControlId;

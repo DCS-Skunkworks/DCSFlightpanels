@@ -33,7 +33,7 @@ namespace DCSFlightpanels.PanelUserControls
         private StreamDeckPanel _streamDeckPanel;
         private DCSBIOS _dcsbios;
         private EnumStreamDeckButtonNames _streamDeckButton;
-
+        private UserControlStreamDeckButtonAction _userControlStreamDeckButtonAction;
 
 
 
@@ -86,13 +86,13 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                RadioButtonDCSBIOSFace.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
+                RadioButtonDCSBIOSFace.Visibility = UserControlStreamDeckButtonAction.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelButtonTextAndStyle.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonImage.Visibility = RadioButtonImageFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelRadioButtonsImageType.Visibility = SDUIParent.GetSelectedActionType() != EnumStreamDeckActionType.Unknown ? Visibility.Visible : Visibility.Collapsed;
+                //StackPanelRadioButtonsImageType.Visibility = UserControlStreamDeckButtonAction.GetSelectedActionType() != EnumStreamDeckActionType.Unknown ? Visibility.Visible : Visibility.Collapsed;
 
                 ButtonTextFaceFont.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
@@ -243,6 +243,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        private void ClearRadioButtons()
+        {
+            RadioButtonTextFace.IsChecked = false;
+            RadioButtonDCSBIOSFace.IsChecked = false;
+            RadioButtonImageFace.IsChecked = false;
+        }
+
         public EnumStreamDeckFaceType GetSelectedFaceType()
         {
             if (RadioButtonTextFace.IsChecked == true)
@@ -383,8 +390,12 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                     case EnumStreamDeckFaceType.DCSBIOS:
                         {
-                            return false;
+                            return TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS();
                         }
+                    case EnumStreamDeckFaceType.Image:
+                    {
+                        return TextBoxImageFace.Bill.ContainsImageFace();
+                    }
                 }
                 return false;
             }
@@ -393,11 +404,15 @@ namespace DCSFlightpanels.PanelUserControls
         public void ShowFaceConfiguration(StreamDeckButton streamDeckButton)
         {
             Clear();
+            
             if (streamDeckButton == null)
             {
                 return;
             }
 
+            _streamDeckButton = streamDeckButton.StreamDeckButtonName;
+
+            ClearRadioButtons();
 
             switch (streamDeckButton.FaceType)
             {
@@ -414,7 +429,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckFaceType.Image:
                     {
                         RadioButtonImageFace.IsChecked = true;
-                        return;
+                        break;
                     }
                 default:
                     {
@@ -454,8 +469,15 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckFaceType.Image:
                     {
                         var faceTypeImage = (FaceTypeImage)streamDeckButtonFace;
-                        TextBoxDCSBIOSDecoder.Bill.ImageFilePath = faceTypeImage.ImageFile;
+                        TextBoxImageFace.Bill.ImageFilePath = faceTypeImage.ImageFile;
                         SetFormState();
+                        return;
+                    }
+                case EnumStreamDeckFaceType.Unknown:
+                    {
+                        TextBoxButtonTextFace.Bill.ClearAll();
+                        TextBoxDCSBIOSDecoder.Bill.ClearAll();
+                        TextBoxImageFace.Bill.ClearAll();
                         return;
                     }
             }
@@ -493,18 +515,22 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.Image:
                     {
-                        if (TextBoxButtonTextFace.Bill.ContainsImageFace())
+                        if (TextBoxImageFace.Bill.ContainsImageFace())
                         {
                             var result = new FaceTypeImage();
 
                             result.StreamDeckButtonName = streamDeckButtonName;
-                            result.ImageFile = TextBoxButtonTextFace.Bill.ImageFilePath;
+                            result.ImageFile = TextBoxImageFace.Bill.ImageFilePath;
 
                             return result;
                         }
 
                         return null;
                     }
+                case EnumStreamDeckFaceType.Unknown:
+                {
+                    return null;
+                }
             }
 
             throw new ArgumentException("GetStreamDeckButtonFace, failed to determine Face Type");
@@ -691,8 +717,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder;
-                    SDUIParent.ChildChangesMade();
                     SetIsDirty();
+                    SDUIParent.ChildChangesMade();
                 }
                 ButtonFocus.Focus();
             }
@@ -707,8 +733,8 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
-                SDUIParent.ChildChangesMade();
                 SetIsDirty();
+                SDUIParent.ChildChangesMade();
                 ButtonFocus.Focus();
             }
             catch (Exception ex)
@@ -731,7 +757,6 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     TextBoxImageFace.Bill.ImageFilePath = fileDialog.FileName;
                     Settings.Default.LastFileDialogLocation = Path.GetDirectoryName(fileDialog.FileName);
-                    TextBoxImageFace.Text = fileDialog.FileName;
                 }
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -759,6 +784,12 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 Common.ShowErrorMessageBox(442044, ex);
             }
+        }
+
+        public UserControlStreamDeckButtonAction UserControlStreamDeckButtonAction
+        {
+            get => _userControlStreamDeckButtonAction;
+            set => _userControlStreamDeckButtonAction = value;
         }
     }
 }

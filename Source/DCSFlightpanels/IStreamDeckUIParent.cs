@@ -11,7 +11,6 @@ namespace DCSFlightpanels
         EnumStreamDeckButtonNames GetSelectedButtonName();
         StreamDeckLayer GetUISelectedLayer();
         List<string> GetStreamDeckLayerNames();
-        EnumStreamDeckActionType GetSelectedActionType();
         void TestImage(Bitmap bitmap);
         void ChildChangesMade();
     }

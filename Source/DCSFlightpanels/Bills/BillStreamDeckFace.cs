@@ -116,7 +116,7 @@ namespace DCSFlightpanels.Bills
         }
 
         public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE) && FontColor == Color.Black && TextFont.Name == Constants.DEFAULT_FONT;
-
+        
         public string BackgroundHex => "#" + _backgroundColor.R.ToString("X2") + _backgroundColor.G.ToString("X2") + _backgroundColor.B.ToString("X2");
 
         public void Clear()
@@ -132,6 +132,7 @@ namespace DCSFlightpanels.Bills
             _bipLinkStreamDeck = null;
             TextBox.Background = Brushes.LightSteelBlue;
             TextBox.Text = "";
+            ImageFilePath = "";
         }
 
         public DCSBIOSDecoder DCSBIOSDecoder

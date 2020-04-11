@@ -148,6 +148,7 @@ namespace NonVisuals.StreamDeck
             set => _dcsBiosValue = value;
         }
 
+        [JsonIgnore]
         public Bitmap ButtonBitmap
         {
             get => BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);

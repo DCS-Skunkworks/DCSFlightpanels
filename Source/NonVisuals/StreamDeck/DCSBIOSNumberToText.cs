@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace NonVisuals.StreamDeck
 {
@@ -103,6 +104,7 @@ namespace NonVisuals.StreamDeck
             return output;
         }
 
+        [JsonIgnore]
         public string FriendlyInfo
         {
             get

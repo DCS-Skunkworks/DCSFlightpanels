@@ -146,7 +146,6 @@ namespace DCSFlightpanels.Windows
                             SetFormulaResult(_dcsbiosDecoder.FormulaResult);
                             SetRawDCSBIOSValue(_dcsbiosDecoder.DCSBiosValue);
                             DisplayButtonImage();
-                            _dcsbiosDecoder.Show();
                         }
                         catch (Exception e)
                         {

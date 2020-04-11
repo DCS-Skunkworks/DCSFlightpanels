@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Local", "Local", "{8AC11BE6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryCommon", "ClassLibraryCommon\ClassLibraryCommon.csproj", "{66514CA6-6E8E-407C-8CFE-E108A95FEBC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNonVisuals", "TestNonVisuals\TestNonVisuals.csproj", "{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,14 +63,6 @@ Global
 		{66514CA6-6E8E-407C-8CFE-E108A95FEBC2}.Release|x64.ActiveCfg = Release|x64
 		{66514CA6-6E8E-407C-8CFE-E108A95FEBC2}.Release|x64.Build.0 = Release|x64
 		{66514CA6-6E8E-407C-8CFE-E108A95FEBC2}.Release|x86.ActiveCfg = Release|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Debug|x64.ActiveCfg = Debug|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Debug|x64.Build.0 = Debug|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Debug|x86.ActiveCfg = Debug|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Release|Any CPU.ActiveCfg = Release|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Release|x64.ActiveCfg = Release|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Release|x64.Build.0 = Release|x64
-		{211CB6A9-7CE0-4AC3-B451-65A63BC159C8}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

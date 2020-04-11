@@ -28,7 +28,6 @@ namespace DCSFlightpanels.PanelUserControls
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
-        private List<RadioButton> _radioButtonActionsList = new List<RadioButton>();
         private List<StreamDeckImage> _buttonImages = new List<StreamDeckImage>();
         private List<System.Windows.Controls.Image> _dotImages = new List<System.Windows.Controls.Image>();
 
@@ -60,7 +59,8 @@ namespace DCSFlightpanels.PanelUserControls
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
             UCStreamDeckButtonFace.SDUIParent = this;
             UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
-
+            UCStreamDeckButtonFace.UserControlStreamDeckButtonAction = UCStreamDeckButtonAction;
+            UCStreamDeckButtonAction.UserControlStreamDeckButtonFace = UCStreamDeckButtonFace;
             HideAllDotImages();
         }
 
@@ -84,12 +84,9 @@ namespace DCSFlightpanels.PanelUserControls
                 var selectedButtonNumber = GetSelectedButtonNumber();
 
                 SetButtonGridStatus(_streamDeck.HasLayers);
-                
-                RadioButtonDCSBIOS.Visibility = _globalHandler.GetAirframe() != DCSAirframe.KEYEMULATOR ? Visibility.Visible : Visibility.Collapsed;
 
                 UCStreamDeckButtonAction.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
                 UCStreamDeckButtonFace.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
-                StackPanelChooseButtonActionType.IsEnabled = selectedButtonNumber != 0;
 
                 UCStreamDeckButtonAction.SetFormState();
                 UCStreamDeckButtonFace.SetFormState();
@@ -114,20 +111,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (UCStreamDeckButtonAction.IsDirty)
-                {
-                    foreach (var radioButton in _radioButtonActionsList)
-                    {
-                        radioButton.IsEnabled = radioButton.IsChecked == true;
-                    }
-                }
-                else
-                {
-                    foreach (var radioButton in _radioButtonActionsList)
-                    {
-                        radioButton.IsEnabled = true;
-                    }
-                }
                 SetFormState();
             }
             catch (Exception ex)
@@ -377,12 +360,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
 
             HideAllDotImages();
-
-            RadioButtonKeyPress.IsChecked = false;
-            RadioButtonDCSBIOS.IsChecked = false;
-            RadioButtonOSCommand.IsChecked = false;
-            RadioButtonLayerNav.IsChecked = false;
-
+            
             foreach (var buttonImage in _buttonImages)
             {
                 buttonImage.Bill.Clear();
@@ -693,8 +671,8 @@ namespace DCSFlightpanels.PanelUserControls
                     var streamDeckButton = image.Bill.Button;
                     if (streamDeckButton != null)
                     {
-                        SetButtonActionType();
                         UCStreamDeckButtonAction.ShowActionConfiguration(streamDeckButton);
+                        
                         UCStreamDeckButtonFace.ShowFaceConfiguration(streamDeckButton);
                     }
                 }
@@ -721,74 +699,6 @@ namespace DCSFlightpanels.PanelUserControls
                 }
             }
         }
-
-        public void SetButtonActionType()
-        {
-            var streamDeckButton = GetSelectedStreamDeckButton();
-
-            if (streamDeckButton == null)
-            {
-                return;
-            }
-
-            foreach (var radioButton in _radioButtonActionsList)
-            {
-                radioButton.IsChecked = false;
-            }
-
-            switch (streamDeckButton.ActionType)
-            {
-                case EnumStreamDeckActionType.KeyPress:
-                    {
-                        RadioButtonKeyPress.IsChecked = true;
-                        break;
-                    }
-                case EnumStreamDeckActionType.DCSBIOS:
-                    {
-                        RadioButtonDCSBIOS.IsChecked = true;
-                        break;
-                    }
-                case EnumStreamDeckActionType.OSCommand:
-                    {
-                        RadioButtonOSCommand.IsChecked = true;
-                        break;
-                    }
-                case EnumStreamDeckActionType.LayerNavigation:
-                    {
-                        RadioButtonLayerNav.IsChecked = true;
-                        break;
-                    }
-            }
-        }
-
-        public EnumStreamDeckActionType GetSelectedActionType()
-        {
-            if (RadioButtonKeyPress.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.KeyPress;
-            }
-            if (RadioButtonDCSBIOS.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.DCSBIOS;
-            }
-            if (RadioButtonOSCommand.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.OSCommand;
-            }
-            if (RadioButtonLayerNav.IsChecked == true)
-            {
-                return EnumStreamDeckActionType.LayerNavigation;
-            }
-
-            return EnumStreamDeckActionType.Unknown;
-        }
-
-
-        private void RadioButtonButtonActionTypePress_OnClick(object sender, RoutedEventArgs e)
-        {
-            SetFormState();
-        }
-
 
         private void ButtonAcceptButtonChanges_OnClick(object sender, RoutedEventArgs e)
         {
@@ -825,6 +735,7 @@ namespace DCSFlightpanels.PanelUserControls
                         _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
                     }
                     UCStreamDeckButtonAction.StateSaved();
+                    UCStreamDeckButtonFace.StateSaved();
                     SetFormState();
                 }
                 catch (Exception ex)
@@ -911,11 +822,6 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void FillControlLists()
         {
-            _radioButtonActionsList.Add(RadioButtonKeyPress);
-            _radioButtonActionsList.Add(RadioButtonDCSBIOS);
-            _radioButtonActionsList.Add(RadioButtonOSCommand);
-            _radioButtonActionsList.Add(RadioButtonLayerNav);
-
             _buttonImages.Add(ButtonImage1);
             _buttonImages.Add(ButtonImage2);
             _buttonImages.Add(ButtonImage3);
@@ -1026,10 +932,5 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            var window = new StreamDeckDCSBIOSDecoderWindow(_streamDeck, EnumStreamDeckButtonNames.BUTTON1, DCSBIOS.GetInstance());
-            window.ShowDialog();
-        }
     }
 }
