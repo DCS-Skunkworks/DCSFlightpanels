@@ -266,7 +266,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 case EnumStreamDeckActionType.KeyPress:
                     {
-                        var keyBindingStreamDeck = (KeyBindingStreamDeck)streamDeckButtonAction;
+                        var keyBindingStreamDeck = (ActionTypeKey)streamDeckButtonAction;
                         var textBoxKeyPress = keyBindingStreamDeck.WhenTurnedOn ? TextBoxKeyPressButtonOn : TextBoxKeyPressButtonOff;
                         textBoxKeyPress.Bill.KeyPress = keyBindingStreamDeck.OSKeyPress;
                         SetFormState();
@@ -274,7 +274,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckActionType.DCSBIOS:
                     {
-                        var dcsBIOSBinding = (DCSBIOSActionBindingStreamDeck)streamDeckButtonAction;
+                        var dcsBIOSBinding = (ActionTypeDCSBIOS)streamDeckButtonAction;
                         var textBoxDCSBIOS = dcsBIOSBinding.WhenTurnedOn ? TextBoxDCSBIOSActionButtonOn : TextBoxDCSBIOSActionButtonOff;
                         textBoxDCSBIOS.Bill.DCSBIOSBinding = dcsBIOSBinding;
                         SetFormState();
@@ -282,7 +282,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckActionType.OSCommand:
                     {
-                        var osCommandBindingStreamDeck = (OSCommandBindingStreamDeck)streamDeckButtonAction;
+                        var osCommandBindingStreamDeck = (ActionTypeOS)streamDeckButtonAction;
                         var textBoxOSCommand = osCommandBindingStreamDeck.WhenTurnedOn ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
                         textBoxOSCommand.Bill.OSCommandObject = osCommandBindingStreamDeck.OSCommandObject;
                         SetFormState();
@@ -290,7 +290,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckActionType.LayerNavigation:
                     {
-                        var layerBindingStreamDeck = (LayerBindingStreamDeck)streamDeckButtonAction;
+                        var layerBindingStreamDeck = (ActionTypeLayer)streamDeckButtonAction;
                         TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck.LayerTarget;
                         SetFormState();
                         return;
@@ -313,11 +313,11 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 case EnumStreamDeckActionType.KeyPress:
                     {
-                        KeyBindingStreamDeck result;
+                        ActionTypeKey result;
 
                         if (textBoxKeyPress.Bill.ContainsKeyPress())
                         {
-                            result = new KeyBindingStreamDeck();
+                            result = new ActionTypeKey();
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSKeyPress = textBoxKeyPress.Bill.KeyPress;
 
@@ -340,7 +340,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         if (textBoxOSCommand.Bill.ContainsOSCommand())
                         {
-                            var result = new OSCommandBindingStreamDeck();
+                            var result = new ActionTypeOS();
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSCommandObject = textBoxOSCommand.Bill.OSCommandObject;
 
@@ -356,7 +356,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                         if (TextBoxLayerNavButton.Bill.ContainsStreamDeckLayer())
                         {
-                            var result = new LayerBindingStreamDeck();
+                            var result = new ActionTypeLayer();
                             result.LayerTarget = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
                             return result;
                         }

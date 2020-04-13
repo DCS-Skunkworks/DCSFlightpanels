@@ -1,4 +1,5 @@
-﻿using NonVisuals.StreamDeck;
+﻿using System.Threading;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals.Interfaces
 {
@@ -16,7 +17,7 @@ namespace NonVisuals.Interfaces
     {
         EnumStreamDeckActionType ActionType { get; }
         string Description { get; }
-        void Execute(StreamDeckRequisites streamDeckRequisites);
+        void Execute(CancellationToken threadCancellationToken);
         bool IsRunning();
         bool IsRepeatable();
     }

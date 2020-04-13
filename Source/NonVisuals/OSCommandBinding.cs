@@ -1,4 +1,6 @@
-﻿namespace NonVisuals
+﻿using NonVisuals.StreamDeck;
+
+namespace NonVisuals
 {
     public abstract class OSCommandBinding
     {

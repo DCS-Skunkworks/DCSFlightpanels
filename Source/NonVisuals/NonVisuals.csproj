@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
     <Compile Include="Interfaces\IIsDirty.cs" />
     <Compile Include="Interfaces\ISRSHandler.cs" />
     <Compile Include="KeyPressInfo.cs" />
@@ -137,7 +138,7 @@
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\CommonStreamDeck.cs" />
     <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />
-    <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\ActionTypeDCSBIOS.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ69.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ70.cs" />
@@ -160,15 +161,16 @@
     <Compile Include="Saitek\KeyBindingTPM.cs" />
     <Compile Include="StreamDeck\DCSBIOSNumberToText.cs" />
     <Compile Include="StreamDeck\FaceFactory.cs" />
+    <Compile Include="StreamDeck\FaceTypeBase.cs" />
     <Compile Include="StreamDeck\FaceTypeDCSBIOS.cs" />
     <Compile Include="StreamDeck\FaceTypeImage.cs" />
-    <Compile Include="StreamDeck\KeyBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\ActionTypeKey.cs" />
     <Compile Include="Saitek\KeyBindingPZ70.cs" />
     <Compile Include="Saitek\KeyBindingPZ55.cs" />
     <Compile Include="ClickSpeedDetector.cs" />
     <Compile Include="GamingPanel.cs" />
-    <Compile Include="StreamDeck\LayerBindingStreamDeck.cs" />
-    <Compile Include="StreamDeck\OSCommandBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\ActionTypeLayer.cs" />
+    <Compile Include="StreamDeck\ActionTypeOS.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonAction.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonFace.cs" />
     <Compile Include="StreamDeck\FaceTypeText.cs" />
@@ -233,7 +235,6 @@
     <Compile Include="Radios\SRSRadioInformation.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
-    <Compile Include="StreamDeck\StreamDeckRequisites.cs" />
     <Compile Include="StreamDeck\StreamDeckTargetLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckPanel.cs" />
     <Compile Include="Saitek\TPMPanelSwitch.cs" />

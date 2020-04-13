@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.StreamDeck
 {
-    public class KeyBindingStreamDeck : KeyBinding, IStreamDeckButtonAction
+    public class ActionTypeKey : KeyBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
         public bool IsRepeatable() => true;
+        private EnumStreamDeckButtonNames _streamDeckButtonName;
+        private StreamDeckPanel _streamDeck;
+        private StreamDeckButton _streamDeckButton;
 
 
         public string Description { get => "Key press"; }
@@ -18,14 +23,32 @@ namespace NonVisuals.StreamDeck
             return OSKeyPress.IsRunning();
         }
 
-        public void Execute(StreamDeckRequisites streamDeckRequisite)
+        public void Execute(CancellationToken threadCancellationToken)
         {
-            OSKeyPress.Execute(streamDeckRequisite.ThreadCancellationToken);
+            OSKeyPress.Execute(threadCancellationToken);
         }
 
 
+        public EnumStreamDeckButtonNames StreamDeckButtonName
+        {
+            get => _streamDeckButtonName;
+            set => _streamDeckButtonName = value;
+        }
 
-        public static HashSet<KeyBindingStreamDeck> SetNegators(HashSet<KeyBindingStreamDeck> keyBindings)
+        [JsonIgnore]
+        public StreamDeckPanel StreamDeck
+        {
+            get => _streamDeck;
+            set => _streamDeck = value;
+        }
+
+        [JsonIgnore]
+        public StreamDeckButton StreamDeckButton
+        {
+            get => _streamDeckButton;
+            set => _streamDeckButton = value;
+        }
+        public static HashSet<ActionTypeKey> SetNegators(HashSet<ActionTypeKey> keyBindings)
         {
             /*if (keyBindings == null)
             {

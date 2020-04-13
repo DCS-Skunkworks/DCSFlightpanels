@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Globalization;
 using DCS_BIOS;
 using Newtonsoft.Json;
+using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener
     {
         private string _formula = "";
-        private StreamDeckPanel _streamDeck;
+        private string _streamDeckInstance;
+        private IStreamDeckBoard _streamDeckBoard;
         private DCSBIOSOutput _dcsbiosOutput = null;
         private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
-        private readonly DCSBIOS _dcsbios;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private volatile bool _valueUpdated;
         private string _lastFormulaError = "";
@@ -20,18 +21,20 @@ namespace NonVisuals.StreamDeck
         private bool _isVisible = false;
 
 
-        här hur satan ska man spara detta i json??
-        public DCSBIOSDecoder(StreamDeckPanel streamDeck, EnumStreamDeckButtonNames streamDeckButton, DCSBIOS dcsbios)
+        public DCSBIOSDecoder()
         {
-            _dcsbios = dcsbios;
-            _dcsbios.AttachDataReceivedListener(this);
-            StreamDeckButtonName = streamDeckButton;
-            _streamDeck = streamDeck;
+            DCSBIOS.GetInstance().AttachDataReceivedListener(this);
         }
 
         ~DCSBIOSDecoder()
         {
-            _dcsbios?.DetachDataReceivedListener(this);
+            DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
+        }
+
+        public void SetEssentials(string streamDeckInstance, EnumStreamDeckButtonNames streamDeckButton)
+        {
+            StreamDeckButtonName = streamDeckButton;
+            _streamDeckInstance = streamDeckInstance;
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -78,7 +81,7 @@ namespace NonVisuals.StreamDeck
         
         public void Show()
         {
-            ShowButtonFace(_streamDeck);
+            ShowButtonFace();
         }
 
         public void RemoveDCSBIOSOutput()
@@ -110,14 +113,7 @@ namespace NonVisuals.StreamDeck
             get => _formula;
             set => _formula = value;
         }
-
-        [JsonIgnore]
-        public StreamDeckPanel StreamDeck
-        {
-            get => _streamDeck;
-            set => _streamDeck = value;
-        }
-
+        
         public DCSBIOSOutput DCSBIOSOutput
         {
             get => _dcsbiosOutput;

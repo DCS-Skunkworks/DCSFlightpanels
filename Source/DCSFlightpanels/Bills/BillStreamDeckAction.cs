@@ -11,7 +11,7 @@ namespace DCSFlightpanels.Bills
     public class BillStreamDeckAction : BillBaseInput
     {
         private StreamDeckButtonOnOff _button;
-        private DCSBIOSActionBindingStreamDeck _dcsbiosBindingStreamDeck;
+        private ActionTypeDCSBIOS _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         private StreamDeckTargetLayer _streamDeckTargetLayer;
 
@@ -48,13 +48,13 @@ namespace DCSFlightpanels.Bills
         {
             if (_dcsbiosBindingStreamDeck == null)
             {
-                _dcsbiosBindingStreamDeck = new DCSBIOSActionBindingStreamDeck();
+                _dcsbiosBindingStreamDeck = new ActionTypeDCSBIOS();
             }
 
             _dcsbiosBindingStreamDeck.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSActionBindingStreamDeck DCSBIOSBinding
+        public ActionTypeDCSBIOS DCSBIOSBinding
         {
             get => _dcsbiosBindingStreamDeck;
             set

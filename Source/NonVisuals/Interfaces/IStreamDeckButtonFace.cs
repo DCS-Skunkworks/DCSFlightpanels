@@ -16,11 +16,6 @@ namespace NonVisuals.Interfaces
     public interface IStreamDeckButtonFace
     {
         EnumStreamDeckFaceType FaceType { get; }
-        Font TextFont { get; set; }
-        Color FontColor { get; set; }
-        Color BackgroundColor { get; set; }
-        int OffsetX { get; set; }
-        int OffsetY { get; set; }
-        void Show(StreamDeckRequisites streamDeckRequisites);
+        void Show();
     }
 }

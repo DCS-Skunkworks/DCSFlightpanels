@@ -6,7 +6,7 @@ using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
-    public class FaceTypeImage : IStreamDeckButtonFace
+    public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
         public EnumStreamDeckFaceType FaceType
         {
@@ -19,16 +19,16 @@ namespace NonVisuals.StreamDeck
         private string _imageFile;
 
 
-        public void Show(StreamDeckRequisites streamDeckRequisite)
+        public void Show()
         {
-            if (streamDeckRequisite.StreamDeck != null)
+            /*if (streamDeckRequisite.StreamDeck != null)
             {
                 ShowButtonFace(streamDeckRequisite.StreamDeck);
             }
             else if (streamDeckRequisite.StreamDeckBoard != null)
             {
                 ShowButtonFace(streamDeckRequisite.StreamDeckBoard);
-            }
+            }*/
         }
 
         private void ShowButtonFace(IStreamDeckBoard streamDeckBoard)

@@ -6,11 +6,11 @@ using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
-    public class FaceTypeDCSBIOS : IStreamDeckButtonFace
+    public class FaceTypeDCSBIOS : FaceTypeBase, IStreamDeckButtonFace
     {
-        public EnumStreamDeckFaceType FaceType
+        public new EnumStreamDeckFaceType FaceType
         {
-            get { return EnumStreamDeckFaceType.DCSBIOS; }
+            get  => EnumStreamDeckFaceType.DCSBIOS;
         }
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
@@ -19,24 +19,24 @@ namespace NonVisuals.StreamDeck
         private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor;
         private Color _backgroundColor;
-        private int _offsetX;
-        private int _offsetY;
+        private StreamDeckPanel _streamDeck;
+        private StreamDeckButton _streamDeckButton;
+        private bool _isVisible;
         private uint _dcsBiosValue = 0;
         
-
-        public void Show(StreamDeckRequisites streamDeckRequisite)
+        public void Show()
         {
-            if (streamDeckRequisite.StreamDeck != null)
+            /*if (streamDeckRequisite.StreamDeck != null)
             {
                 ShowButtonFace(streamDeckRequisite.StreamDeck);
             }
             else if (streamDeckRequisite.StreamDeckBoard != null)
             {
                 ShowButtonFace(streamDeckRequisite.StreamDeckBoard);
-            }
+            }*/
         }
 
-        protected void ShowButtonFace(IStreamDeckBoard streamDeckBoard)
+        /*protected void ShowButtonFace(IStreamDeckBoard streamDeckBoard)
         {
             if (_streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
             {
@@ -52,16 +52,16 @@ namespace NonVisuals.StreamDeck
             var keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
 
             streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(_streamDeckButtonName) - 1, keyBitmap);
-        }
+        }*/
 
-        protected void ShowButtonFace(StreamDeckPanel streamDeckPanel)
+        protected void ShowButtonFace()
         {
             if (_refreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
                 _refreshBitmap = false;
             }
-            streamDeckPanel.SetImage(_streamDeckButtonName, _bitmap);
+            StreamDeck.SetImage(_streamDeckButtonName, _bitmap);
         }
 
         [JsonIgnore]
@@ -122,26 +122,6 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public int OffsetX
-        {
-            get => _offsetX;
-            set
-            {
-                _refreshBitmap = true;
-                _offsetX = value;
-            }
-        }
-
-        public int OffsetY
-        {
-            get => _offsetY;
-            set
-            {
-                _refreshBitmap = true;
-                _offsetY = value;
-            }
-        }
-
         public uint DCSBiosValue
         {
             get => _dcsBiosValue;
@@ -151,8 +131,28 @@ namespace NonVisuals.StreamDeck
         [JsonIgnore]
         public Bitmap ButtonBitmap
         {
-            get => BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+            get => BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
         }
-        
+
+        [JsonIgnore]
+        public StreamDeckPanel StreamDeck
+        {
+            get => _streamDeck;
+            set => _streamDeck = value;
+        }
+
+        [JsonIgnore]
+        public StreamDeckButton StreamDeckButton
+        {
+            get => _streamDeckButton;
+            set => _streamDeckButton = value;
+        }
+
+        [JsonIgnore]
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set => _isVisible = value;
+        }
     }
 }

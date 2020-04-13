@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using DCS_BIOS;
 using Newtonsoft.Json;
+using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
 {
@@ -60,6 +62,17 @@ namespace NonVisuals.StreamDeck
                 }
 
                 _backgroundColor = value;
+            }
+        }
+
+        public void SetEssentials(StreamDeckPanel streamDeckPanel)
+        {
+            foreach (var streamDeckButton in StreamDeckButtons)
+            {
+                if (streamDeckButton.FaceType == EnumStreamDeckFaceType.DCSBIOS)
+                {
+                    ((DCSBIOSDecoder)streamDeckButton.Face).SetEssentials(streamDeckPanel.InstanceId, streamDeckButton.StreamDeckButtonName);
+                }
             }
         }
 

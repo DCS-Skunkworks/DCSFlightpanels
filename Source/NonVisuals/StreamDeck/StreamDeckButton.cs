@@ -16,13 +16,14 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonAction _buttonActionForRelease = null;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private Thread _keyPressedThread;
+        private instanceid
 
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {
             _enumStreamDeckButtonName = enumStreamDeckButton;
         }
 
-        public void DoPress(StreamDeckRequisites streamDeckRequisites)
+        public void DoPress()
         {
             if (ActionForPress == null)
             {
@@ -37,17 +38,17 @@ namespace NonVisuals.StreamDeck
             if (ActionForPress.IsRepeatable())
             {
                 _cancellationTokenSource = new CancellationTokenSource();
-                streamDeckRequisites.ThreadCancellationToken = _cancellationTokenSource.Token;
-                _keyPressedThread = new Thread(() => ThreadedPress(streamDeckRequisites));
+                var threadCancellationToken = _cancellationTokenSource.Token;
+                _keyPressedThread = new Thread(() => ThreadedPress(threadCancellationToken));
                 _keyPressedThread.Start();
             }
             else
             {
-                ActionForPress.Execute(streamDeckRequisites);
+                ActionForPress.Execute(threadCancellationToken);
             }
         }
 
-        private void ThreadedPress(StreamDeckRequisites streamDeckRequisites)
+        private void ThreadedPress(CancellationToken threadCancellationToken)
         {
             var first = true;
             while (true)
@@ -59,7 +60,7 @@ namespace NonVisuals.StreamDeck
 
                 if (!ActionForPress.IsRunning())
                 {
-                    ActionForPress?.Execute(streamDeckRequisites);
+                    ActionForPress?.Execute(threadCancellationToken);
                 }
 
 
@@ -75,7 +76,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void DoRelease(StreamDeckRequisites streamDeckRequisites)
+        public void DoRelease(CancellationToken threadCancellationToken)
         {
             _cancellationTokenSource.Cancel();
 
@@ -86,13 +87,13 @@ namespace NonVisuals.StreamDeck
 
             if (!ActionForRelease.IsRunning())
             {
-                ActionForRelease?.Execute(streamDeckRequisites);
+                ActionForRelease?.Execute(threadCancellationToken);
             }
         }
 
-        public void Show(StreamDeckRequisites streamDeckRequisites)
+        public void Show()
         {
-            Face?.Show(streamDeckRequisites);
+            Face?.Show();
         }
 
         public EnumStreamDeckButtonNames StreamDeckButtonName

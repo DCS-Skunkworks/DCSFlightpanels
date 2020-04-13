@@ -19,17 +19,37 @@ namespace NonVisuals.StreamDeck
         private readonly object _lcdDataVariablesLockObject = new object();
         private StreamDeckRequisites _streamDeckRequisite = new StreamDeckRequisites();
 
+        private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
+
         private long _doUpdatePanelLCD;
-
-
+        
 
         public StreamDeckPanel(HIDSkeleton hidSkeleton):base(GamingPanelEnum.StreamDeck, hidSkeleton)
         {
             Startup();
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
-            _streamDeckLayerHandler =  new StreamDeckLayerHandler(_streamDeckBoard);
+            _streamDeckLayerHandler =  new StreamDeckLayerHandler(this);
             _streamDeckRequisite = new StreamDeckRequisites{ StreamDeck = this };
+            StreamDeckPanels.Add(this);
+        }
+
+        ~StreamDeckPanel()
+        {
+            StreamDeckPanels.Remove(this);
+        }
+
+        public static StreamDeckPanel GetInstance(string instanceId)
+        {
+            foreach (var streamDeckPanel in StreamDeckPanels)
+            {
+                if (streamDeckPanel.InstanceId == instanceId)
+                {
+                    return streamDeckPanel;
+                }
+            }
+
+            return null;
         }
 
         public sealed override void Startup()
@@ -327,6 +347,8 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckLayerHandler.ShowLayer(layerName);
         }*/
+
+        public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
     }
 
 }

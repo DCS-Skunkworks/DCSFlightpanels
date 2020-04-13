@@ -11,6 +11,8 @@
     {
         public LayerNavType NavigationType;
         public string TargetLayer;
+        private string _streamDeckInstanceId;
+
 
         public void Navigate(StreamDeckRequisites streamDeckRequisite)
         {

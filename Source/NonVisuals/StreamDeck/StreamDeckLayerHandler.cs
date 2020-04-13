@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DCS_BIOS;
 using Newtonsoft.Json;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -10,6 +11,7 @@ namespace NonVisuals.StreamDeck
 {
     public class StreamDeckLayerHandler
     {
+        private StreamDeckPanel _streamDeckPanel = null;
         private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
@@ -23,9 +25,10 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public StreamDeckLayerHandler(IStreamDeckBoard streamDeckBoard)
+        public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
-            _streamDeckBoard = streamDeckBoard;
+            _streamDeckPanel = streamDeckPanel; 
+            _streamDeckBoard = streamDeckPanel.StreamDeckBoard;
             _streamDeckRequisite.StreamDeckBoard = _streamDeckBoard;
         }
 
@@ -72,6 +75,8 @@ namespace NonVisuals.StreamDeck
             CheckHomeLayerStatus();
 
             CheckActiveLayer();
+
+            SetEssentials();
         }
 
         private void CheckHomeLayerStatus()
@@ -106,6 +111,14 @@ namespace NonVisuals.StreamDeck
             else
             {
                 SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
+            }
+        }
+
+        private void SetEssentials()
+        {
+            foreach (var streamDeckLayer in _layerList)
+            {
+                streamDeckLayer.SetEssentials(_streamDeckPanel);
             }
         }
 
