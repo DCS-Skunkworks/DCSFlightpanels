@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DCS_BIOS;
 using Newtonsoft.Json;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -335,11 +334,16 @@ namespace NonVisuals.StreamDeck
         {
             ClearAllFaces();
 
+            foreach (var streamDeckButton in StreamDeckButton.GetButtons())
+            {
+                streamDeckButton.IsVisible = false;
+            }
+            
             var layer = GetStreamDeckLayer(layerName);
 
             foreach (var streamDeckButton in layer.StreamDeckButtons)
             {
-                streamDeckButton.Show();
+                streamDeckButton.IsVisible = true;
             }
         }
 
@@ -352,7 +356,6 @@ namespace NonVisuals.StreamDeck
              */
             if (string.IsNullOrEmpty(layerName))
             {
-                
                 throw  new Exception("StreamDeckLayerHandler : Trying to set an empty or null layer active.");
             }
 

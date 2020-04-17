@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 
@@ -11,8 +10,6 @@ namespace NonVisuals.StreamDeck
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;
         public bool IsRepeatable() => true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private StreamDeckPanel _streamDeck;
-        private StreamDeckButton _streamDeckButton;
         private string _streamDeckInstanceId;
 
 
@@ -39,19 +36,6 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckButtonName = value;
         }
 
-        [JsonIgnore]
-        public StreamDeckPanel StreamDeck
-        {
-            get => _streamDeck;
-            set => _streamDeck = value;
-        }
-
-        [JsonIgnore]
-        public StreamDeckButton StreamDeckButton
-        {
-            get => _streamDeckButton;
-            set => _streamDeckButton = value;
-        }
         public static HashSet<ActionTypeKey> SetNegators(HashSet<ActionTypeKey> keyBindings)
         {
             /*if (keyBindings == null)

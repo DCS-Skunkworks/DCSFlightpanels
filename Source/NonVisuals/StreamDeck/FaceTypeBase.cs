@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
@@ -6,24 +7,29 @@ namespace NonVisuals.StreamDeck
 {
     public class FaceTypeBase
     {
-        public EnumStreamDeckFaceType FaceType
-        {
-            get { return EnumStreamDeckFaceType.Unknown; }
-        }
+        public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Unknown;
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private string _streamDeckPanelInstance;
+        private string _streamDeckInstanceId;
         private StreamDeckButton _streamDeckButton;
         private bool _isVisible;
         private int _offsetX;
         private int _offsetY;
 
+        protected virtual void Show()
+        {
+        }
+
         [JsonIgnore]
         public Bitmap Bitmap
         {
             get => _bitmap;
-            set => _bitmap = value;
+            set
+            {
+                _bitmap = value;
+                _refreshBitmap = true;
+            }
         }
 
         [JsonIgnore]
@@ -40,10 +46,10 @@ namespace NonVisuals.StreamDeck
         }
         
         
-        public string StreamDeckPanelInstance
+        public string StreamDeckInstanceId
         {
-            get => _streamDeckPanelInstance;
-            set => _streamDeckPanelInstance = value;
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
         }
 
         [JsonIgnore]
@@ -57,7 +63,14 @@ namespace NonVisuals.StreamDeck
         public bool IsVisible
         {
             get => _isVisible;
-            set => _isVisible = value;
+            set
+            {
+                _isVisible = value;
+                if (IsVisible)
+                {
+                    Show();
+                }
+            }
         }
 
         public int OffsetX
@@ -79,5 +92,7 @@ namespace NonVisuals.StreamDeck
                 _offsetY = value;
             }
         }
+
+
     }
 }

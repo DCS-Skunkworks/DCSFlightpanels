@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using Newtonsoft.Json;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 
@@ -10,8 +9,6 @@ namespace NonVisuals.StreamDeck
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.DCSBIOS;
         public bool IsRepeatable() => true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private StreamDeckPanel _streamDeck;
-        private StreamDeckButton _streamDeckButton;
         private string _streamDeckInstanceId;
 
 
@@ -37,19 +34,6 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckButtonName = value;
         }
 
-        [JsonIgnore]
-        public StreamDeckPanel StreamDeck
-        {
-            get => _streamDeck;
-            set => _streamDeck = value;
-        }
-
-        [JsonIgnore]
-        public StreamDeckButton StreamDeckButton
-        {
-            get => _streamDeckButton;
-            set => _streamDeckButton = value;
-        }
 
         public string StreamDeckInstanceId
         {

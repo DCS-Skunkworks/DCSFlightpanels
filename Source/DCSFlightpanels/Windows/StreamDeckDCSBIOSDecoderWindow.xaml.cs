@@ -143,7 +143,6 @@ namespace DCSFlightpanels.Windows
                             SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : "");
                             SetFormulaResult(_dcsbiosDecoder.FormulaResult);
                             SetRawDCSBIOSValue(_dcsbiosDecoder.DCSBiosValue);
-                            DisplayButtonImage();
                         }
                         catch (Exception e)
                         {
@@ -574,7 +573,7 @@ namespace DCSFlightpanels.Windows
             _dcsbiosDecoder.BackgroundColor = Settings.Default.ButtonTextFaceBackgroundColor;
         }
 
-
+        /*
         private void DisplayButtonImage()
         {
             Dispatcher?.BeginInvoke(
@@ -583,7 +582,7 @@ namespace DCSFlightpanels.Windows
                     ButtonImage.Source = CommonStreamDeck.ConvertBitMap(_dcsbiosDecoder.Bitmap);
                 });
         }
-        
+        */
         private void SetFormulaError(string error)
         {
             Dispatcher?.BeginInvoke(

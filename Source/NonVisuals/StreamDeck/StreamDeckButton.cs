@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -18,6 +19,7 @@ namespace NonVisuals.StreamDeck
         private Thread _keyPressedThread;
         private string _streamDeckInstanceId;
         private static List<StreamDeckButton> streamDeckButtons = new List<StreamDeckButton>();
+        private bool _isVisible = false;
 
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {
@@ -33,6 +35,11 @@ namespace NonVisuals.StreamDeck
         public static StreamDeckButton Get(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return streamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
+        }
+
+        public static List<StreamDeckButton> GetButtons()
+        {
+            return streamDeckButtons;
         }
 
         public void DoPress()
@@ -103,9 +110,18 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void Show()
+        [JsonIgnore]
+        public bool IsVisible
         {
-            Face?.Show();
+            get => _isVisible;
+            set
+            {
+                _isVisible = value;
+                if (_buttonFace != null)
+                {
+                    _buttonFace.IsVisible = value;
+                }
+            }
         }
 
         public EnumStreamDeckButtonNames StreamDeckButtonName
@@ -205,6 +221,8 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckInstanceId;
             set => _streamDeckInstanceId = value;
         }
+
+
     }
 
 

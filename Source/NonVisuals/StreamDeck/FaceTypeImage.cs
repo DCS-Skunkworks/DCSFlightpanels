@@ -2,26 +2,20 @@
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
-        public EnumStreamDeckFaceType FaceType
-        {
-            get { return EnumStreamDeckFaceType.Image; }
-        }
+        public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Image;
 
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
-        private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _imageFile;
-        private string _streamDeckInstanceId;
 
-        public void Show()
+        protected override void Show()
         {
-            if (_streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            if (StreamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
             {
                 return;
             }
@@ -34,27 +28,7 @@ namespace NonVisuals.StreamDeck
 
             var keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
 
-            StreamDeckPanel.GetInstance(_streamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(_streamDeckButtonName) - 1, keyBitmap);
-        }
-
-        [JsonIgnore]
-        public Bitmap Bitmap
-        {
-            get => _bitmap;
-            set
-            {
-                _refreshBitmap = true;
-                _bitmap = value;
-            }
-        }
-
-        public EnumStreamDeckButtonNames StreamDeckButtonName
-        {
-            get => _streamDeckButtonName;
-            set
-            {
-                _streamDeckButtonName = value;
-            }
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(StreamDeckButtonName) - 1, keyBitmap);
         }
 
         [JsonIgnore]
@@ -69,12 +43,6 @@ namespace NonVisuals.StreamDeck
         [JsonIgnore]
         public Color BackgroundColor { get; set; }
 
-        [JsonIgnore]
-        public int OffsetX { get; set; }
-
-        [JsonIgnore]
-        public int OffsetY { get; set; }
-
         public string ImageFile
         {
             get => _imageFile;
@@ -85,10 +53,5 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public string StreamDeckInstanceId
-        {
-            get => _streamDeckInstanceId;
-            set => _streamDeckInstanceId = value;
-        }
     }
 }

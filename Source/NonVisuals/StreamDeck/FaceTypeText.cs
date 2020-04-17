@@ -6,51 +6,23 @@ namespace NonVisuals.StreamDeck
 {
     public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
-        public EnumStreamDeckFaceType FaceType
-        {
-            get { return EnumStreamDeckFaceType.Text; }
-        }
+        public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
-        private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _text;
         private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor;
         private Color _backgroundColor;
-        private int _offsetX;
-        private int _offsetY;
-        private string _streamDeckInstanceId;
 
 
-        public void Show()
+        protected override void Show()
         {
             if (_refreshBitmap)
             {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
                 _refreshBitmap = false;
             }
-            StreamDeckPanel.GetInstance(_streamDeckInstanceId).SetImage(_streamDeckButtonName, _bitmap);
-        }
-        
-        [JsonIgnore]
-        public Bitmap Bitmap
-        {
-            get => _bitmap;
-            set
-            {
-                _refreshBitmap = true;
-                _bitmap = value;
-            }
-        }
-
-        public EnumStreamDeckButtonNames StreamDeckButtonName
-        {
-            get => _streamDeckButtonName;
-            set
-            {
-                _refreshBitmap = true;
-                _streamDeckButtonName = value;
-            }
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, _bitmap);
         }
 
         public string Text
@@ -93,30 +65,5 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public int OffsetX
-        {
-            get => _offsetX;
-            set
-            {
-                _refreshBitmap = true;
-                _offsetX = value;
-            }
-        }
-
-        public int OffsetY
-        {
-            get => _offsetY;
-            set
-            {
-                _refreshBitmap = true;
-                _offsetY = value;
-            }
-        }
-
-        public string StreamDeckInstanceId
-        {
-            get => _streamDeckInstanceId;
-            set => _streamDeckInstanceId = value;
-        }
     }
 }

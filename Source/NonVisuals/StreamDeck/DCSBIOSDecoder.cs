@@ -17,7 +17,6 @@ namespace NonVisuals.StreamDeck
         private volatile bool _valueUpdated;
         private string _lastFormulaError = "";
         private double _formulaResult = 0;
-        private bool _isVisible = false;
 
 
         public DCSBIOSDecoder()
@@ -63,7 +62,7 @@ namespace NonVisuals.StreamDeck
                                 }
                             }
                         }
-                        if (_isVisible)
+                        if (IsVisible)
                         {
                             Show();
                         }
@@ -165,14 +164,6 @@ namespace NonVisuals.StreamDeck
 
         [JsonIgnore]
         public double FormulaResult => _formulaResult;
-
-        [JsonIgnore]
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => _isVisible = value;
-        }
-
         
         public string GetFriendlyInfo()
         {

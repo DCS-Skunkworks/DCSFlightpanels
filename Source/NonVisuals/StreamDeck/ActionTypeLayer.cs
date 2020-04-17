@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -17,8 +16,6 @@ namespace NonVisuals.StreamDeck
         public bool IsRepeatable() => false;
         private volatile bool _isRunning;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private StreamDeckPanel _streamDeck;
-        private StreamDeckButton _streamDeckButton;
         public LayerNavType NavigationType;
         public string TargetLayer;
         private string _streamDeckInstanceId;
@@ -66,20 +63,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        [JsonIgnore]
-        public StreamDeckPanel StreamDeck
-        {
-            get => _streamDeck;
-            set => _streamDeck = value;
-        }
-
-        [JsonIgnore]
-        public StreamDeckButton StreamDeckButton
-        {
-            get => _streamDeckButton;
-            set => _streamDeckButton = value;
-        }
-
+        
         public string StreamDeckInstanceId
         {
             get => _streamDeckInstanceId;

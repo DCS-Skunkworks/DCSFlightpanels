@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using NonVisuals.StreamDeck;
+﻿using NonVisuals.StreamDeck;
 
 namespace NonVisuals.Interfaces
 {
@@ -18,6 +17,6 @@ namespace NonVisuals.Interfaces
         EnumStreamDeckFaceType FaceType { get; }
         string StreamDeckInstanceId { get; set; }
         EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
-        void Show();
+        bool IsVisible { get; set; }
     }
 }

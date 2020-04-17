@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using DCS_BIOS;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 

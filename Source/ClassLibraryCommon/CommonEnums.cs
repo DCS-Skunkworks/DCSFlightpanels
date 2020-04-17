@@ -87,6 +87,8 @@ namespace ClassLibraryCommon
         F5E,
         [Description("F-14B")]
         F14B,
+        [Description("F-16C_50")]
+        F16C,
         [Description("FA-18C_hornet")]
         FA18C,
         [Description("F-86F Sabre")]
@@ -99,6 +101,8 @@ namespace ClassLibraryCommon
         Fw190d9,
         [Description("I-16")]
         I16,
+        [Description("JF-17")]
+        JF17,
         [Description("Ka-50")]
         Ka50,
         [Description("L-39ZA")]

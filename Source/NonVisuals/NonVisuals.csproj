@@ -161,7 +161,6 @@
     <Compile Include="Saitek\KeyBindingPZ69.cs" />
     <Compile Include="Saitek\KeyBindingTPM.cs" />
     <Compile Include="StreamDeck\DCSBIOSNumberToText.cs" />
-    <Compile Include="StreamDeck\FaceFactory.cs" />
     <Compile Include="StreamDeck\FaceTypeBase.cs" />
     <Compile Include="StreamDeck\FaceTypeDCSBIOS.cs" />
     <Compile Include="StreamDeck\FaceTypeImage.cs" />

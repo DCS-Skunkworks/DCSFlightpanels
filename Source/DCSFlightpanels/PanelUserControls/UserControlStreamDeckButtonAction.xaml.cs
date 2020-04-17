@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
@@ -313,10 +312,9 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 case EnumStreamDeckActionType.KeyPress:
                     {
-                        ActionTypeKey result;
-
                         if (textBoxKeyPress.Bill.ContainsKeyPress())
                         {
+                            ActionTypeKey result;
                             result = new ActionTypeKey();
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
                             result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();

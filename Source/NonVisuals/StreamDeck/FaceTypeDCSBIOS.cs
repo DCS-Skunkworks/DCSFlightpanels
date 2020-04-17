@@ -1,58 +1,28 @@
 ﻿using System.Drawing;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
-using OpenMacroBoard.SDK;
-using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
     public class FaceTypeDCSBIOS : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
-        public new EnumStreamDeckFaceType FaceType
-        {
-            get  => EnumStreamDeckFaceType.DCSBIOS;
-        }
+        public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOS;
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
-        private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _buttonText;
         private Font _textFont = Constants.DefaultStreamDeckFont;
         private Color _fontColor;
         private Color _backgroundColor;
-        private bool _isVisible;
         private uint _dcsBiosValue = 0;
-        private string _streamDeckInstanceId;
 
-        public void Show()
+        protected override void Show()
         {
             if (_refreshBitmap)
             {
                 _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
                 _refreshBitmap = false;
             }
-            StreamDeckPanel.GetInstance(_streamDeckInstanceId).SetImage(_streamDeckButtonName, _bitmap);
-        }
-        
-        [JsonIgnore]
-        public Bitmap Bitmap
-        {
-            get => _bitmap;
-            set
-            {
-                _refreshBitmap = true;
-                _bitmap = value;
-            }
-        }
-
-
-        public EnumStreamDeckButtonNames StreamDeckButtonName
-        {
-            get => _streamDeckButtonName;
-            set
-            {
-                _refreshBitmap = true;
-                _streamDeckButtonName = value;
-            }
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, _bitmap);
         }
 
         public string ButtonText
@@ -102,18 +72,6 @@ namespace NonVisuals.StreamDeck
         {
             get => BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
         }
-
-        [JsonIgnore]
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => _isVisible = value;
-        }
-
-        public string StreamDeckInstanceId
-        {
-            get => _streamDeckInstanceId;
-            set => _streamDeckInstanceId = value;
-        }
+        
     }
 }

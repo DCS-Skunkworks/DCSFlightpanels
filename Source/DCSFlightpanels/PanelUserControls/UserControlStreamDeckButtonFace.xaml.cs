@@ -1,5 +1,4 @@
 ﻿using ClassLibraryCommon;
-using DCS_BIOS;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Properties;

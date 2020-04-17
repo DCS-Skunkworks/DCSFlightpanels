@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels
