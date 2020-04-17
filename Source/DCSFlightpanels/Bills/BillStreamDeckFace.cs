@@ -118,20 +118,16 @@ namespace DCSFlightpanels.Bills
         
         public string BackgroundHex => "#" + _backgroundColor.R.ToString("X2") + _backgroundColor.G.ToString("X2") + _backgroundColor.B.ToString("X2");
 
-        public void Clear()
-        {
-            Button = null;
-            TextBox?.Clear();
-        }
-
-
-        public override void ClearAll()
+        public override void Clear()
         {
             _dcsbiosDecoder = null;
             _bipLinkStreamDeck = null;
-            TextBox.Background = Brushes.LightSteelBlue;
-            TextBox.Text = "";
-            ImageFilePath = "";
+            if (TextBox != null)
+            {
+                TextBox.Background = Brushes.LightSteelBlue;
+                TextBox.Text = "";
+            }
+            _imageFilePath = "";
         }
 
         public DCSBIOSDecoder DCSBIOSDecoder

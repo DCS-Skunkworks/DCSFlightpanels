@@ -466,9 +466,9 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.Unknown:
                     {
-                        TextBoxButtonTextFace.Bill.ClearAll();
-                        TextBoxDCSBIOSDecoder.Bill.ClearAll();
-                        TextBoxImageFace.Bill.ClearAll();
+                        TextBoxButtonTextFace.Bill.Clear();
+                        TextBoxDCSBIOSDecoder.Bill.Clear();
+                        TextBoxImageFace.Bill.Clear();
                         return;
                     }
             }

@@ -96,7 +96,7 @@ namespace DCSFlightpanels.Bills
             set => _key = value;
         }
 
-        public override void ClearAll()
+        public override void Clear()
         {
             _dcsbiosBindingPZ70 = null;
             _bipLinkPZ70 = null;

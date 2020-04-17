@@ -58,7 +58,7 @@ namespace DCSFlightpanels.Bills
 
         public RadioPanelPZ69KeyOnOff Knob => _knob;
 
-        public override void ClearAll()
+        public override void Clear()
         {
             _bipLinkPZ69 = null;
             KeyPress = null;

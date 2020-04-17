@@ -111,7 +111,7 @@ namespace DCSFlightpanels.Bills
             set => _actionTypeLayer = value;
         }
 
-        public override void ClearAll()
+        public override void Clear()
         {
             _dcsbiosBindingStreamDeck = null;
             _bipLinkStreamDeck = null;

@@ -93,7 +93,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public override void ClearAll()
+        public override void Clear()
         {
             _bipLinkPZ69 = null;
             KeyPress = null;

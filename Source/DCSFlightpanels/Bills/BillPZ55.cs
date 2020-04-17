@@ -91,7 +91,7 @@ namespace DCSFlightpanels.Bills
         public SwitchPanelPZ55KeyOnOff Key { get; set; }
 
 
-        public override void ClearAll()
+        public override void Clear()
         {
             _dcsbiosBindingPZ55 = null;
             _bipLinkPZ55 = null;

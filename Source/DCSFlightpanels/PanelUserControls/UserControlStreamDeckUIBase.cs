@@ -192,15 +192,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        protected void CheckIfNoneSelected()
-        {
-            if (!ButtonImages.Exists(o => o.Bill.IsSelected == true))
-            {
-                SDUIParent.ActionPanel.Clear();
-                SDUIParent.FacePanel.Clear();
-            }
-        }
-
         protected void ButtonImage_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
@@ -231,6 +222,15 @@ namespace DCSFlightpanels.PanelUserControls
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+
+        protected void CheckIfNoneSelected()
+        {
+            if (!ButtonImages.Exists(o => o.Bill.IsSelected == true))
+            {
+                SDUIParent.ActionPanel.Clear();
+                SDUIParent.FacePanel.Clear();
             }
         }
 

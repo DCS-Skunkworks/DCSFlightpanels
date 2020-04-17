@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Interfaces;
 using NonVisuals.StreamDeck;
-using Color = System.Drawing.Color;
 
 namespace DCSFlightpanels.PanelUserControls
 {

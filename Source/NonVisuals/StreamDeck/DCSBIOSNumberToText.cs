@@ -149,7 +149,12 @@ namespace NonVisuals.StreamDeck
                             break;
                         }
                 }
-                return "IF {dcsbios} " + comparator + (Comparator == EnumComparator.Always ? "" : " " + _referenceValue) + " THEN " + OutputText;
+                //if formula > 1 then x
+                //always x
+                return (Comparator == EnumComparator.Always ? "always " : "IF {dcsbios} ") + 
+                       (Comparator == EnumComparator.Always ? " " : comparator) + 
+                       (Comparator == EnumComparator.Always ? "" : " " + _referenceValue) +
+                       (Comparator == EnumComparator.Always ? "" : " THEN ") + OutputText;
             }
         }
 

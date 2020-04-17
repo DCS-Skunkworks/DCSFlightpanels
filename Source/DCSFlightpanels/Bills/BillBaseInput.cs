@@ -16,7 +16,7 @@ namespace DCSFlightpanels.Bills
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
-        public abstract void ClearAll();
+        public abstract void Clear();
 
 
         public bool ContainsOSCommand()

@@ -58,7 +58,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in _textBoxes)
             {
-                textBox.Bill.ClearAll();
+                textBox.Bill.Clear();
             }
 
             RadioButtonKeyPress.IsChecked = false;
@@ -499,7 +499,7 @@ namespace DCSFlightpanels.PanelUserControls
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        textBox.Bill.ClearAll();
+                        textBox.Bill.Clear();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         textBox.Bill.KeyPress = keyPress;
                         textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
@@ -521,7 +521,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxKeyPressButtonOn.Bill.ClearAll();
+                TextBoxKeyPressButtonOn.Bill.Clear();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -534,7 +534,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxKeyPressButtonOff.Bill.ClearAll();
+                TextBoxKeyPressButtonOff.Bill.Clear();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -618,7 +618,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxDCSBIOSActionButtonOn.Bill.ClearAll();
+                TextBoxDCSBIOSActionButtonOn.Bill.Clear();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -644,7 +644,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxDCSBIOSActionButtonOff.Bill.ClearAll();
+                TextBoxDCSBIOSActionButtonOff.Bill.Clear();
                 SetFormState();
             }
             catch (Exception ex)
@@ -710,7 +710,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxOSCommandButtonOn.Bill.ClearAll();
+                TextBoxOSCommandButtonOn.Bill.Clear();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -736,7 +736,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxOSCommandButtonOff.Bill.ClearAll();
+                TextBoxOSCommandButtonOff.Bill.Clear();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)

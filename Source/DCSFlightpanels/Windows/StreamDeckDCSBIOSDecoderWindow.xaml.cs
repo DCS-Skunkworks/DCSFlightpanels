@@ -43,6 +43,7 @@ namespace DCSFlightpanels.Windows
         private bool _formulaHadErrors = false;
         private string _decoderResult;
         private bool _isDirty = false;
+        private bool _populatingData = false;
 
         private DCSBIOSDecoder _dcsbiosDecoder = null;
 
@@ -122,15 +123,20 @@ namespace DCSFlightpanels.Windows
 
         private void ShowDecoder()
         {
+            _populatingData = true;
             if (!string.IsNullOrEmpty(_dcsbiosDecoder.Formula))
             {
                 CheckBoxUseFormula.IsChecked = true;
                 TextBoxFormula.Text = _dcsbiosDecoder.Formula;
             }
 
-            TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
+            if (_dcsbiosDecoder.DCSBIOSOutput != null)
+            {
+                TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
+            }
             ShowDecoders();
             UpdateFontInfo();
+            _populatingData = false;
         }
 
         private void ThreadLoop()
@@ -432,6 +438,10 @@ namespace DCSFlightpanels.Windows
 
         private void SetIsDirty()
         {
+            if (_populatingData)
+            {
+                return;
+            }
             _isDirty = true;
         }
 
@@ -464,6 +474,7 @@ namespace DCSFlightpanels.Windows
 
         private void ShowDecoders()
         {
+            RadioButtonOutputString.IsChecked = DCSBIOSDecoders.Count > 0;
             DataGridDecoders.DataContext = DCSBIOSDecoders;
             DataGridDecoders.ItemsSource = DCSBIOSDecoders;
             DataGridDecoders.Items.Refresh();
@@ -516,6 +527,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.Remove((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
+                RadioButtonOutputNumber.IsChecked = DCSBIOSDecoders.Count == 0;
                 SetIsDirty();
                 ShowDecoders();
                 SetFormState();

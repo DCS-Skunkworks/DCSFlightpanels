@@ -213,7 +213,7 @@ namespace DCSFlightpanels.Radios
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        textBox.Bill.ClearAll();
+                        textBox.Bill.Clear();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         textBox.Bill.KeyPress = keyPress;
                         textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
@@ -499,7 +499,7 @@ namespace DCSFlightpanels.Radios
                 {
                     continue;
                 }
-                textBox.Bill.ClearAll();
+                textBox.Bill.Clear();
             }
             if (clearAlsoProfile)
             {
@@ -1886,7 +1886,7 @@ namespace DCSFlightpanels.Radios
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                textBox.Bill.ClearAll();
+                textBox.Bill.Clear();
                 var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {

@@ -9,7 +9,7 @@ namespace DCSFlightpanels.Bills
         public abstract bool ContainsDCSBIOS();
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
-        public abstract void ClearAll();
+        public abstract void Clear();
 
         public TextBox TextBox
         {
