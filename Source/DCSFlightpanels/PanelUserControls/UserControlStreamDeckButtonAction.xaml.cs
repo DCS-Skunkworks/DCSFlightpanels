@@ -85,7 +85,7 @@ namespace DCSFlightpanels.PanelUserControls
                 StackPanelButtonOSCommandSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.OSCommand ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonLayerNavigationSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelChooseButtonActionType.IsEnabled = SDUIParent.GetSelectedButtonName() != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                StackPanelChooseButtonActionType.IsEnabled = SDUIParent.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
                 ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
                                                             TextBoxKeyPressButtonOn.Bill.ContainsKeyPress();
@@ -188,7 +188,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in _textBoxes)
             {
-                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckUIParent.GetSelectedButtonName(), !textBox.Name.Contains("Off")));
+                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, !textBox.Name.Contains("Off")));
             }
         }
 
@@ -399,11 +399,11 @@ namespace DCSFlightpanels.PanelUserControls
                         {
                             if (textBox.Equals(TextBoxKeyPressButtonOn))
                             {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetSelectedButtonName(), true);
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxKeyPressButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetSelectedButtonName(), false);
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
                             }
 
                             break;
@@ -412,11 +412,11 @@ namespace DCSFlightpanels.PanelUserControls
                         {
                             if (textBox.Equals(TextBoxDCSBIOSActionButtonOn))
                             {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetSelectedButtonName(), true);
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxDCSBIOSActionButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetSelectedButtonName(), false);
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
                             }
 
                             break;
@@ -425,11 +425,11 @@ namespace DCSFlightpanels.PanelUserControls
                         {
                             if (textBox.Equals(TextBoxOSCommandButtonOn))
                             {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetSelectedButtonName(), true);
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxOSCommandButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetSelectedButtonName(), false);
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
                             }
 
                             break;

@@ -124,8 +124,11 @@ namespace DCSFlightpanels.Windows
         {
             if (!string.IsNullOrEmpty(_dcsbiosDecoder.Formula))
             {
+                CheckBoxUseFormula.IsChecked = true;
                 TextBoxFormula.Text = _dcsbiosDecoder.Formula;
             }
+
+            TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
             ShowDecoders();
             UpdateFontInfo();
         }

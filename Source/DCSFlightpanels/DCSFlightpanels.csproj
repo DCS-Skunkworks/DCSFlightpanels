@@ -165,9 +165,17 @@
     <Compile Include="CustomControls\StreamDeckActionTextBox.cs" />
     <Compile Include="CustomControls\PZ55TextBox.cs" />
     <Compile Include="Event Propagators\SettingsChangedPropagator.cs" />
+    <Compile Include="Interfaces\IStreamDeckUI.cs" />
     <Compile Include="IStreamDeckUIParent.cs" />
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\UserControlStreamDeckUIBase.cs" />
+    <Compile Include="PanelUserControls\UserControlStreamDeckUIXL.xaml.cs">
+      <DependentUpon>UserControlStreamDeckUIXL.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\UserControlStreamDeckUINormal.xaml.cs">
+      <DependentUpon>UserControlStreamDeckUINormal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
       <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
@@ -337,6 +345,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PanelUserControls\BackLitPanelUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelUserControls\UserControlStreamDeckUIXL.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PanelUserControls\UserControlStreamDeckUINormal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1014,6 +1030,7 @@
     <Resource Include="StreamDeckGallery\CockpitButtons\Radio\ils.png" />
     <Resource Include="StreamDeckGallery\CockpitButtons\Radio\tacan.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

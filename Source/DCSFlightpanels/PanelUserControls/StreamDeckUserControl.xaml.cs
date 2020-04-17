@@ -9,6 +9,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Bills;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -28,8 +29,6 @@ namespace DCSFlightpanels.PanelUserControls
         private string _parentTabItemHeader;
         private readonly IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
-        private List<StreamDeckImage> _buttonImages = new List<StreamDeckImage>();
-        private List<System.Windows.Controls.Image> _dotImages = new List<System.Windows.Controls.Image>();
 
         private CancellationTokenSource _cancellationTokenSource;
         private Random _random = new Random();
@@ -39,8 +38,9 @@ namespace DCSFlightpanels.PanelUserControls
         private const int IMAGE_WIDTH = 50;
         private const int FONT_SIZE = 30;
 
+        private IStreamDeckUI _streamDeckUI;
 
-        public StreamDeckUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
+        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -52,16 +52,36 @@ namespace DCSFlightpanels.PanelUserControls
 
             _dcsbios = dcsbios;
 
-            FillControlLists();
-            SetImageBills();
+            StackPanelButtonUI.Children.Clear();
+            switch (panelType)
+            {
+                case GamingPanelEnum.StreamDeckMini:
+                case GamingPanelEnum.StreamDeck:
+                    {
+                        var child = new UserControlStreamDeckUINormal();
+                        _streamDeckUI = child;
+                        child.SetSDUIParent(this);
+                        StackPanelButtonUI.Children.Add(child);
 
+                        break;
+                    }
+                case GamingPanelEnum.StreamDeckXL:
+                    {
+                        var child = new UserControlStreamDeckUIXL();
+                        _streamDeckUI = child;
+                        child.SetSDUIParent(this);
+                        StackPanelButtonUI.Children.Add(child);
+                        break;
+                    }
+            }
+            
             UCStreamDeckButtonAction.SDUIParent = this;
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
             UCStreamDeckButtonFace.SDUIParent = this;
             UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
             UCStreamDeckButtonFace.UserControlStreamDeckButtonAction = UCStreamDeckButtonAction;
             UCStreamDeckButtonAction.UserControlStreamDeckButtonFace = UCStreamDeckButtonFace;
-            HideAllDotImages();
+            _streamDeckUI.HideAllDotImages();
         }
 
         private void StreamDeckUserControl_OnLoaded(object sender, RoutedEventArgs e)
@@ -76,13 +96,16 @@ namespace DCSFlightpanels.PanelUserControls
             SetFormState();
         }
 
-        private void SetFormState()
+        public int SelectedButtonNumber => _streamDeckUI.SelectedButtonNumber;
+        public EnumStreamDeckButtonNames SelectedButtonName => _streamDeckUI.SelectedButtonName;
+
+        public void SetFormState()
         {
             try
             {
-                var selectedButtonNumber = GetSelectedButtonNumber();
+                var selectedButtonNumber = _streamDeckUI.SelectedButtonNumber;
 
-                SetButtonGridStatus(_streamDeck.HasLayers);
+                _streamDeckUI.SetButtonGridStatus(_streamDeck.HasLayers);
 
                 UCStreamDeckButtonAction.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
                 UCStreamDeckButtonFace.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
@@ -130,67 +153,30 @@ namespace DCSFlightpanels.PanelUserControls
             return _streamDeck;
         }
 
+        public UserControlStreamDeckButtonAction ActionPanel
+        {
+            get => UCStreamDeckButtonAction;
+        }
+
+        public UserControlStreamDeckButtonFace FacePanel
+        {
+            get => UCStreamDeckButtonFace;
+        }
+
+        public IStreamDeckUI UIPanel
+        {
+            get => null;//UCStreamDeckButtonFace;
+        }
+
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
-
-        private void SetImageBills()
-        {
-            foreach (var buttonImage in _buttonImages)
-            {
-                if (buttonImage.Bill != null)
-                {
-                    continue;
-                }
-                buttonImage.Bill = new BillStreamDeckFace();
-                buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
-                buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Green);
-                buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
-                buttonImage.Source = buttonImage.Bill.DeselectedImage;
-            }
-        }
-
-        private void UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames selectedButtonName)
-        {
-
-            //System.Diagnostics.Debugger.Break();
-
-            foreach (var buttonImage in _buttonImages)
-            {
-                try
-                {
-                    if (selectedButtonName == buttonImage.Bill.StreamDeckButtonName)
-                    {
-                        if (buttonImage.Bill.IsSelected)
-                        {
-                            buttonImage.Source = buttonImage.Bill.DeselectedImage;
-                            buttonImage.Bill.IsSelected = false;
-                        }
-                        else
-                        {
-                            buttonImage.Source = buttonImage.Bill.SelectedImage;
-                            buttonImage.Bill.IsSelected = true;
-                        }
-                    }
-                    else
-                    {
-                        buttonImage.Source = buttonImage.Bill.DeselectedImage;
-                        buttonImage.Bill.IsSelected = false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Common.ShowErrorMessageBox(ex);
-                }
-            }
-        }
-
 
         public void TestImage(Bitmap bitmap)
         {
             try
             {
-                if (GetSelectedButtonName() != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+                if (_streamDeckUI.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
                 {
-                    _streamDeck.SetImage(GetSelectedButtonName(), bitmap);
+                    _streamDeck.SetImage(_streamDeckUI.SelectedButtonName, bitmap);
                 }
             }
             catch (Exception ex)
@@ -203,12 +189,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-
-                /*if (!_userControlLoaded)
-                {
-                    return;
-                }*/
-
                 if (string.IsNullOrEmpty(layerName) || ComboBoxLayers.Text == null)
                 {
                     ClearAll();
@@ -222,29 +202,12 @@ namespace DCSFlightpanels.PanelUserControls
                  */
                 LoadComboBoxLayers("");
 
-
-
-                HideAllDotImages();
+                _streamDeckUI.HideAllDotImages();
                 _streamDeck.ActiveLayer = ComboBoxLayers.Text;
 
-                HideAllDotImages();
-
-                var selectedLayer = _streamDeck.GetLayer(layerName);
-
-                foreach (var buttonImage in _buttonImages)
-                {
-                    buttonImage.Bill.Clear();
-
-                    var streamDeckButton = selectedLayer.GetStreamDeckButton(buttonImage.Bill.StreamDeckButtonName);
-
-                    buttonImage.Bill.Button = streamDeckButton;
-
-                    if (streamDeckButton.HasConfig)
-                    {
-                        SetDotImageStatus(true, StreamDeckFunction.ButtonNumber(streamDeckButton.StreamDeckButtonName));
-                    }
-                    SetFormState();
-                }
+                _streamDeckUI.UIShowLayer(layerName);
+                
+                SetFormState();
 
                 SetApplicationMode();
             }
@@ -254,46 +217,9 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private BillStreamDeckFace GetSelectedImageBill()
-        {
-            foreach (var image in _buttonImages)
-            {
-                if (image.Bill.IsSelected)
-                {
-                    return image.Bill;
-                }
-            }
-            return null;
-        }
-
-        public int GetSelectedButtonNumber()
-        {
-            return GetSelectedImageBill()?.ButtonNumber() ?? 0;
-        }
-
-        public EnumStreamDeckButtonNames GetSelectedButtonName()
-        {
-            var bill = GetSelectedImageBill();
-            if (bill == null)
-            {
-                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
-            }
-            return bill.StreamDeckButtonName;
-        }
-
         public string GetStreamDeckInstanceId()
         {
             return _streamDeck.InstanceId;
-        }
-
-        public StreamDeckButton GetSelectedStreamDeckButton()
-        {
-            var bill = GetSelectedImageBill();
-            if (bill == null)
-            {
-                return null;
-            }
-            return _streamDeck.GetActiveLayerStreamDeckButton(bill.StreamDeckButtonName);
         }
 
         public string GetName()
@@ -363,12 +289,7 @@ namespace DCSFlightpanels.PanelUserControls
         private void ClearAll()
         {
 
-            HideAllDotImages();
-            
-            foreach (var buttonImage in _buttonImages)
-            {
-                buttonImage.Bill.Clear();
-            }
+            _streamDeckUI.Clear();
 
             UCStreamDeckButtonAction.Clear();
             UCStreamDeckButtonFace.Clear();
@@ -574,7 +495,7 @@ namespace DCSFlightpanels.PanelUserControls
                 UIShowLayer(ComboBoxLayers.Text);
 
                 //De-select if whatever button is selected
-                UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
+                _streamDeckUI. UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
 
                 SetFormState();
             }
@@ -625,92 +546,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonImage_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                if (GetSelectedButtonName() == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-                {
-                    return;
-                }
-
-                UCStreamDeckButtonFace.SetButton(GetSelectedButtonName());
-
-                var image = (StreamDeckImage)sender;
-
-                if (GetSelectedButtonName() != image.Bill.StreamDeckButtonName && (UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty))
-                {
-                    if (MessageBox.Show("Discard Changes to " + GetSelectedButtonName() + " ?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        UCStreamDeckButtonAction.Clear();
-                        UCStreamDeckButtonFace.Clear();
-                        SetFormState();
-                    }
-                    else
-                    {
-                        e.Handled = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(20135444, ex);
-            }
-        }
-
-        private void ButtonImage_OnMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                /*
-                 * bselect 
-                 */
-                var image = (StreamDeckImage)sender;
-
-
-                UpdateAllButtonsSelectedStatus(image.Bill.StreamDeckButtonName);
-
-                if (image.Bill.IsSelected)
-                {
-                    var streamDeckButton = image.Bill.Button;
-                    if (streamDeckButton != null)
-                    {
-                        UCStreamDeckButtonAction.ShowActionConfiguration(streamDeckButton);
-                        
-                        UCStreamDeckButtonFace.ShowFaceConfiguration(streamDeckButton);
-                    }
-                }
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(20135444, ex);
-            }
-        }
-
-        private void SetDotImageStatus(bool show, int number, bool allOthersNegated = false)
-        {
-            foreach (var dotImage in _dotImages)
-            {
-                if (allOthersNegated)
-                {
-                    dotImage.Visibility = show ? Visibility.Collapsed : Visibility.Visible;
-                }
-
-                if (dotImage.Name == "DotImage" + number)
-                {
-                    dotImage.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
-        }
-
         private void ButtonAcceptButtonChanges_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 try
                 {
-                    var streamDeckButton = _streamDeck.GetActiveLayer().GetStreamDeckButton(GetSelectedButtonName());
+                    var streamDeckButton = _streamDeck.GetActiveLayer().GetStreamDeckButton(_streamDeckUI.SelectedButtonName);
                     var buttonFace = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
                     var actionPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
                     var actionRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
@@ -757,7 +599,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var streamDeckButton = _streamDeck.GetActiveLayerStreamDeckButton(GetSelectedButtonName());
+                var streamDeckButton = _streamDeck.GetActiveLayerStreamDeckButton(_streamDeckUI.SelectedButtonName);
                 if (streamDeckButton.ActionForPress != null && streamDeckButton.ActionForPress.ActionType == EnumStreamDeckActionType.LayerNavigation)
                 {
                     streamDeckButton.Face = null;
@@ -781,7 +623,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 UCStreamDeckButtonAction.Clear();
-                UCStreamDeckButtonAction.ShowActionConfiguration(GetSelectedStreamDeckButton());
+                UCStreamDeckButtonAction.ShowActionConfiguration(_streamDeckUI.StreamDeckButton);
             }
             catch (Exception ex)
             {
@@ -793,7 +635,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var streamDeckButton = _streamDeck.GetActiveLayerStreamDeckButton(GetSelectedButtonName());
+                var streamDeckButton = _streamDeck.GetActiveLayerStreamDeckButton(_streamDeckUI.SelectedButtonName);
                 streamDeckButton.Face = null;
                 UCStreamDeckButtonFace.Clear();
                 _streamDeck.SignalPanelChange(); //todo fix event propagation
@@ -810,7 +652,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 UCStreamDeckButtonFace.Clear();
-                UCStreamDeckButtonFace.ShowFaceConfiguration(GetSelectedStreamDeckButton());
+                UCStreamDeckButtonFace.ShowFaceConfiguration(_streamDeckUI.StreamDeckButton);
                 SetFormState();
             }
             catch (Exception ex)
@@ -822,49 +664,6 @@ namespace DCSFlightpanels.PanelUserControls
         public List<string> GetStreamDeckLayerNames()
         {
             return _streamDeck.GetStreamDeckLayerNames();
-        }
-
-        private void FillControlLists()
-        {
-            _buttonImages.Add(ButtonImage1);
-            _buttonImages.Add(ButtonImage2);
-            _buttonImages.Add(ButtonImage3);
-            _buttonImages.Add(ButtonImage4);
-            _buttonImages.Add(ButtonImage5);
-            _buttonImages.Add(ButtonImage6);
-            _buttonImages.Add(ButtonImage7);
-            _buttonImages.Add(ButtonImage8);
-            _buttonImages.Add(ButtonImage9);
-            _buttonImages.Add(ButtonImage10);
-            _buttonImages.Add(ButtonImage11);
-            _buttonImages.Add(ButtonImage12);
-            _buttonImages.Add(ButtonImage13);
-            _buttonImages.Add(ButtonImage14);
-            _buttonImages.Add(ButtonImage15);
-
-            _dotImages.Add(DotImage1);
-            _dotImages.Add(DotImage2);
-            _dotImages.Add(DotImage3);
-            _dotImages.Add(DotImage4);
-            _dotImages.Add(DotImage5);
-            _dotImages.Add(DotImage6);
-            _dotImages.Add(DotImage7);
-            _dotImages.Add(DotImage8);
-            _dotImages.Add(DotImage9);
-            _dotImages.Add(DotImage10);
-            _dotImages.Add(DotImage11);
-            _dotImages.Add(DotImage12);
-            _dotImages.Add(DotImage13);
-            _dotImages.Add(DotImage14);
-            _dotImages.Add(DotImage15);
-        }
-
-        private void HideAllDotImages()
-        {
-            foreach (var dotImage in _dotImages)
-            {
-                dotImage.Visibility = Visibility.Collapsed;
-            }
         }
 
         private void ButtonClearImages_OnClick(object sender, RoutedEventArgs e)
@@ -928,13 +727,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void SetButtonGridStatus(bool enabled)
-        {
-            foreach (var streamDeckImage in _buttonImages)
-            {
-                streamDeckImage.IsEnabled = enabled;
-            }
-        }
+        
 
     }
 }
