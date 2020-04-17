@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using ClassLibraryCommon;
+using Newtonsoft.Json;
+
 // ReSharper disable All
 /*
  * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
@@ -381,6 +383,7 @@ namespace DCS_BIOS
             set { _dcsBiosOutputComparison = value; }
         }
 
+        [JsonIgnore]
         public uint SpecifiedValueInt
         {
             get
@@ -397,6 +400,7 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonIgnore]
         public string SpecifiedValueString
         {
             get
@@ -447,6 +451,7 @@ namespace DCS_BIOS
             }
         }
         */
+        [JsonIgnore]
         public uint LastIntValue
         {
             get { return _lastIntValue; }

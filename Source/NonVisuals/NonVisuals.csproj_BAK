@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{54C2DD8F-259C-41B7-94ED-88F51F698595}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NonVisuals</RootNamespace>
+    <AssemblyName>NonVisuals</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommonClassLibraryJD">
+      <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
+    </Reference>
+    <Reference Include="HidLibrary, Version=3.3.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\hidlibrary.3.3.24\lib\net45\HidLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Jace, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jace.1.0.0\lib\netstandard1.6\Jace.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenMacroBoard.SDK">
+      <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\OpenMacroBoard.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="StreamDeckSharp">
+      <HintPath>..\..\..\StreamDeckSharp\src\StreamDeckSharp\bin\x64\Release\net40\StreamDeckSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.NonGeneric.4.0.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Formatters.4.3.0\lib\net46\System.Runtime.Serialization.Formatters.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Interfaces\ISRSHandler.cs" />
+    <Compile Include="KeyPressInfo.cs" />
+    <Compile Include="Saitek\BacklitPanelBIP.cs" />
+    <Compile Include="Saitek\BIPFactory.cs" />
+    <Compile Include="Saitek\BIPLink.cs" />
+    <Compile Include="Saitek\BIPLinkPZ55.cs" />
+    <Compile Include="Saitek\BIPLinkPZ69.cs" />
+    <Compile Include="Saitek\BIPLinkPZ70.cs" />
+    <Compile Include="Saitek\BIPLinkTPM.cs" />
+    <Compile Include="CommonVK.cs" />
+    <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
+    <Compile Include="StreamDeck\BitMapCreator.cs" />
+    <Compile Include="StreamDeck\CustomLayers\A10C\Radios.cs" />
+    <Compile Include="StreamDeck\CustomLayers\ButtonFunctionClass.cs" />
+    <Compile Include="StreamDeck\CustomLayers\SRS\SRSAction.cs" />
+    <Compile Include="StreamDeck\CustomLayers\SRS\SRSLayer.cs" />
+    <Compile Include="StreamDeck\CustomLayers\SRS\StreamDeckSRSButton.cs" />
+    <Compile Include="StreamDeck\DCSBIOSOutputBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\DCSBIOSActionBindingStreamDeck.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ69.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSOutputBindingPZ70.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingBase.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingTPM.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ70.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ55.cs" />
+    <Compile Include="Saitek\DcsOutputAndColorBinding.cs" />
+    <Compile Include="Saitek\GenericRadioPanelKnob.cs" />
+    <Compile Include="HIDHandler.cs" />
+    <Compile Include="HIDSkeleton.cs" />
+    <Compile Include="Interfaces\IGlobalHandler.cs" />
+    <Compile Include="Interfaces\IProfileHandlerListener.cs" />
+    <Compile Include="Interfaces\IRadioPanel.cs" />
+    <Compile Include="Interfaces\ISaitekPanelKnob.cs" />
+    <Compile Include="Interfaces\IGamingPanelListener.cs" />
+    <Compile Include="Interfaces\IUserMessageHandler.cs" />
+    <Compile Include="Saitek\KeyBinding.cs" />
+    <Compile Include="Saitek\KeyBindingPZ69DialPosition.cs" />
+    <Compile Include="Saitek\KeyBindingPZ69.cs" />
+    <Compile Include="Saitek\KeyBindingTPM.cs" />
+    <Compile Include="StreamDeck\FaceFactory.cs" />
+    <Compile Include="StreamDeck\KeyBindingStreamDeck.cs" />
+    <Compile Include="Saitek\KeyBindingPZ70.cs" />
+    <Compile Include="Saitek\KeyBindingPZ55.cs" />
+    <Compile Include="ClickSpeedDetector.cs" />
+    <Compile Include="GamingPanel.cs" />
+    <Compile Include="StreamDeck\LayerBindingStreamDeck.cs" />
+    <Compile Include="StreamDeck\OSCommandBindingStreamDeck.cs" />
+    <Compile Include="Interfaces\IStreamDeckButtonAction.cs" />
+    <Compile Include="Interfaces\IStreamDeckButtonFace.cs" />
+    <Compile Include="StreamDeck\FaceTypeText.cs" />
+    <Compile Include="StreamDeck\StreamDeckButton.cs" />
+    <Compile Include="Saitek\MultiPanelKnob.cs" />
+    <Compile Include="Saitek\MultiPanelPZ70.cs" />
+    <Compile Include="KeyPress.cs" />
+    <Compile Include="Saitek\BIPLight.cs" />
+    <Compile Include="Saitek\PanelKeyOnOff.cs" />
+    <Compile Include="PerformanceTimer.cs" />
+    <Compile Include="ProfileHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Radios\RadioPanelKnobAV8BNA.cs" />
+    <Compile Include="Radios\RadioPanelKnobF14B.cs" />
+    <Compile Include="Radios\RadioPanelKnobF5E.cs" />
+    <Compile Include="Radios\RadioPanelKnobM2000C.cs" />
+    <Compile Include="Radios\RadioPanelKnobFA18C.cs" />
+    <Compile Include="Radios\RadioPanelKnobSRS.cs" />
+    <Compile Include="Radios\RadioPanelPZ69AV8BNA.cs" />
+    <Compile Include="Radios\RadioPanelPZ69F14B.cs" />
+    <Compile Include="Radios\RadioPanelPZ69F5E.cs" />
+    <Compile Include="Radios\RadioPanelPZ69DisplayValue.cs" />
+    <Compile Include="Radios\RadioPanelPZ69EmulatorFull.cs" />
+    <Compile Include="Radios\RadioPanelPZ69M2000C.cs" />
+    <Compile Include="Radios\RadioPanelPZ69FA18C.cs" />
+    <Compile Include="Radios\RadioPanelPZ69KnobEmulator.cs" />
+    <Compile Include="Radios\RadioPanelKnobSA342.cs" />
+    <Compile Include="Radios\RadioPanelKnobAJS37.cs" />
+    <Compile Include="Radios\RadioPanelKnobBf109.cs" />
+    <Compile Include="Radios\RadioPanelKnobF86F.cs" />
+    <Compile Include="Radios\RadioPanelKnobKa50.cs" />
+    <Compile Include="Radios\RadioPanelKnobMi8.cs" />
+    <Compile Include="Radios\RadioPanelKnobMiG21Bis.cs" />
+    <Compile Include="Radios\RadioPanelKnobA10C.cs" />
+    <Compile Include="Radios\RadioPanelKnobP51D.cs" />
+    <Compile Include="Radios\RadiopanelKnobSpitfireLFMkIX.cs" />
+    <Compile Include="Radios\RadioPanelKnobUH1H.cs" />
+    <Compile Include="Radios\RadioPanelPZ69SA342.cs" />
+    <Compile Include="Radios\RadioPanelPZ69AJS37.cs" />
+    <Compile Include="Radios\RadioPanelPZ69Bf109.cs" />
+    <Compile Include="Radios\RadioPanelPZ69F86F.cs" />
+    <Compile Include="Radios\RadioPanelPZ69Fw190.cs" />
+    <Compile Include="Radios\RadioPanelPZ69Ka50.cs" />
+    <Compile Include="Radios\RadioPanelKnobFw190.cs" />
+    <Compile Include="Radios\RadioPanelPZ69Mi8.cs" />
+    <Compile Include="Radios\RadioPanelPZ69MiG21Bis.cs" />
+    <Compile Include="Radios\RadioPanelPZ69A10C.cs" />
+    <Compile Include="Radios\RadioPanelPZ69Base.cs" />
+    <Compile Include="Radios\RadioPanelPZ69P51D.cs" />
+    <Compile Include="Radios\RadioPanelPZ69SRS.cs" />
+    <Compile Include="Radios\RadioPanelPZ69UH1H.cs" />
+    <Compile Include="Radios\RadiopanelSpitfireLFMkIX.cs" />
+    <Compile Include="Saitek\SaitekPanel.cs" />
+    <Compile Include="Radios\RadioPanelPZ69Emulator.cs" />
+    <Compile Include="Radios\SRSRadio.cs" />
+    <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
+    <Compile Include="Radios\SRSRadioInformation.cs" />
+    <Compile Include="StreamDeck\StreamDeckLayer.cs" />
+    <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
+    <Compile Include="StreamDeck\StreamDeckRequisites.cs" />
+    <Compile Include="StreamDeck\StreamDeckTargetLayer.cs" />
+    <Compile Include="StreamDeck\StreamDeckPanel.cs" />
+    <Compile Include="Saitek\TPMPanelSwitch.cs" />
+    <Compile Include="Saitek\SwitchPanelKey.cs" />
+    <Compile Include="Saitek\TPMPanel.cs" />
+    <Compile Include="Saitek\SwitchPanelPZ55.cs" />
+    <Compile Include="VirtualKeyCode.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="OSCommand.cs" />
+    <Compile Include="OSCommandBinding.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ55.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ69Emulator.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ69FullEmulator.cs" />
+    <Compile Include="Saitek\OSCommandBindingPZ70.cs" />
+    <Compile Include="Saitek\OSCommandBindingTPM.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="flightpanels02_8Rc_icon.ico" />
+    <Content Include="huey_icon.ico" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibraryCommon\ClassLibraryCommon.csproj">
+      <Project>{66514ca6-6e8e-407c-8cfe-e108a95febc2}</Project>
+      <Name>ClassLibraryCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj">
+      <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
+      <Name>DCS-BIOS</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
+if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName).cmd $(ProjectDir)
+</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

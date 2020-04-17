@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
@@ -33,9 +34,9 @@ namespace NonVisuals.Radios
         private long _syncOKDelayTimeout = 50000000; //5s
 
 
-        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(SaitekPanelsEnum.PZ69RadioPanel, hidSkeleton)
+        protected RadioPanelPZ69Base(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ69RadioPanel, hidSkeleton)
         {
-            if (hidSkeleton.PanelType != SaitekPanelsEnum.PZ69RadioPanel)
+            if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.PZ69RadioPanel)
             {
                 throw new ArgumentException();
             }
@@ -108,6 +109,8 @@ namespace NonVisuals.Radios
                 i++;
             } while (i < 5);
         }
+
+        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e){}
 
         protected void SetPZ69DisplayBytesUnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
         {

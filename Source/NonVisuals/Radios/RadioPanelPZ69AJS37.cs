@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
     public class RadioPanelPZ69AJS37 : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
-        //TODO Check again how to retrieve frequencies (SRS)
         private CurrentAJS37RadioMode _currentUpperRadioMode = CurrentAJS37RadioMode.FR22;
         private CurrentAJS37RadioMode _currentLowerRadioMode = CurrentAJS37RadioMode.FR22;
 
@@ -26,14 +27,14 @@ namespace NonVisuals.Radios
             Left
         }
         private FR22DialSideSelected _fr22DialSideSelected = FR22DialSideSelected.Right;
-        private const string FR22LeftBigDialIncreaseCommand = "FR22_OUTER_LEFT_KNOB +8000\n";
-        private const string FR22LeftSmallDialIncreaseCommand = "FR22_INNER_LEFT_KNOB +8000\n";
-        private const string FR22LeftBigDialDecreaseCommand = "FR22_OUTER_LEFT_KNOB -8000\n";
-        private const string FR22LeftSmallDialDecreaseCommand = "FR22_INNER_LEFT_KNOB -8000\n";
-        private const string FR22RightBigDialIncreaseCommand = "FR22_OUTER_RIGHT_KNOB +8000\n";
-        private const string FR22RightSmallDialIncreaseCommand = "FR22_INNER_RIGHT_KNOB +8000\n";
-        private const string FR22RightBigDialDecreaseCommand = "FR22_OUTER_RIGHT_KNOB -8000\n";
-        private const string FR22RightSmallDialDecreaseCommand = "FR22_INNER_RIGHT_KNOB -8000\n";
+        private const string FR22_LEFT_BIG_DIAL_INCREASE_COMMAND = "FR22_OUTER_LEFT_KNOB +8000\n";
+        private const string FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND = "FR22_INNER_LEFT_KNOB +8000\n";
+        private const string FR22_LEFT_BIG_DIAL_DECREASE_COMMAND = "FR22_OUTER_LEFT_KNOB -8000\n";
+        private const string FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND = "FR22_INNER_LEFT_KNOB -8000\n";
+        private const string FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND = "FR22_OUTER_RIGHT_KNOB +8000\n";
+        private const string FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND = "FR22_INNER_RIGHT_KNOB +8000\n";
+        private const string FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND = "FR22_OUTER_RIGHT_KNOB -8000\n";
+        private const string FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND = "FR22_INNER_RIGHT_KNOB -8000\n";
 
 
         /*AJS-37 FR24 COM2*/
@@ -49,17 +50,17 @@ namespace NonVisuals.Radios
         private volatile uint _tilsChannelCockpitValue;
         private volatile uint _tilsChannelLayerSelectorCockpitValue;
         private volatile uint _masterModeSelectorCockpitValue;
-        private readonly object _lockTILSChannelSelectorDialObject1 = new object();
-        private readonly object _lockTILSChannelLayerSelectorObject2 = new object();
+        private readonly object _lockTilsChannelSelectorDialObject1 = new object();
+        private readonly object _lockTilsChannelLayerSelectorObject2 = new object();
         private readonly object _lockMasterModeSelectorObject = new object();
         private DCSBIOSOutput _tilsChannelSelectorDcsbiosOutput;
         private DCSBIOSOutput _tilsChannelLayerSelectorDcsbiosOutput;
         private DCSBIOSOutput _masterModeSelectorDcsbiosOutput;
-        private const string TILSChannelDialCommandInc = "TILS_CHANNEL_SELECT INC\n";
-        private const string TILSChannelDialCommandDec = "TILS_CHANNEL_SELECT DEC\n";
-        private const string TILSChannelLayerDialCommandToggle = "TILS_CHANNEL_LAYER TOGGLE\n";
-        private const string MasterModeSelectorCommandInc = "MASTER_MODE_SELECT INC\n";
-        private const string MasterModeSelectorCommandDec = "MASTER_MODE_SELECT DEC\n";
+        private const string TILS_CHANNEL_DIAL_COMMAND_INC = "TILS_CHANNEL_SELECT INC\n";
+        private const string TILS_CHANNEL_DIAL_COMMAND_DEC = "TILS_CHANNEL_SELECT DEC\n";
+        private const string TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE = "TILS_CHANNEL_LAYER TOGGLE\n";
+        private const string MASTER_MODE_SELECTOR_COMMAND_INC = "MASTER_MODE_SELECT INC\n";
+        private const string MASTER_MODE_SELECTOR_COMMAND_DEC = "MASTER_MODE_SELECT DEC\n";
         private int _tilsChannelDialSkipper;
         private int _masterModeSelectorDialSkipper;
 
@@ -113,7 +114,7 @@ namespace NonVisuals.Radios
                 //TILS Channel Selector
                 if (e.Address == _tilsChannelSelectorDcsbiosOutput.Address)
                 {
-                    lock (_lockTILSChannelSelectorDialObject1)
+                    lock (_lockTilsChannelSelectorDialObject1)
                     {
                         var tmp = _tilsChannelCockpitValue;
                         _tilsChannelCockpitValue = _tilsChannelSelectorDcsbiosOutput.GetUIntValue(e.Data);
@@ -127,7 +128,7 @@ namespace NonVisuals.Radios
                 //TILS Channel Mode
                 if (e.Address == _tilsChannelLayerSelectorDcsbiosOutput.Address)
                 {
-                    lock (_lockTILSChannelLayerSelectorObject2)
+                    lock (_lockTilsChannelLayerSelectorObject2)
                     {
                         var tmp = _tilsChannelLayerSelectorCockpitValue;
                         _tilsChannelLayerSelectorCockpitValue = _tilsChannelLayerSelectorDcsbiosOutput.GetUIntValue(e.Data);
@@ -198,7 +199,7 @@ namespace NonVisuals.Radios
                                     }
                                 case CurrentAJS37RadioMode.TILS:
                                     {
-                                        DCSBIOS.Send(TILSChannelLayerDialCommandToggle);
+                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                         break;
                                     }
                                 case CurrentAJS37RadioMode.NOUSE:
@@ -222,7 +223,7 @@ namespace NonVisuals.Radios
                                     }
                                 case CurrentAJS37RadioMode.TILS:
                                     {
-                                        DCSBIOS.Send(TILSChannelLayerDialCommandToggle);
+                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                         break;
                                     }
                                 case CurrentAJS37RadioMode.NOUSE:
@@ -342,7 +343,7 @@ namespace NonVisuals.Radios
                                     }
                                     else if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(TILSChannelLayerDialCommandToggle);
+                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                     }
                                     else if (radioPanelKnob.IsOn)
                                     {
@@ -365,7 +366,7 @@ namespace NonVisuals.Radios
                                     }
                                     else if (_currentLowerRadioMode == CurrentAJS37RadioMode.TILS && radioPanelKnob.IsOn)
                                     {
-                                        DCSBIOS.Send(TILSChannelLayerDialCommandToggle);
+                                        DCSBIOS.Send(TILS_CHANNEL_LAYER_DIAL_COMMAND_TOGGLE);
                                     }
                                     else if (radioPanelKnob.IsOn)
                                     {
@@ -409,7 +410,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -418,9 +419,9 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTILSChannelDialChange())
+                                                if (!SkipTilsChannelDialChange())
                                                 {
-                                                    DCSBIOS.Send(TILSChannelDialCommandInc);
+                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -437,7 +438,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -446,9 +447,9 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTILSChannelDialChange())
+                                                if (!SkipTilsChannelDialChange())
                                                 {
-                                                    DCSBIOS.Send(TILSChannelDialCommandDec);
+                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -465,7 +466,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -476,7 +477,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipMasterModeSelectorChange())
                                                 {
-                                                    DCSBIOS.Send(MasterModeSelectorCommandInc);
+                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -493,7 +494,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -504,7 +505,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipMasterModeSelectorChange())
                                                 {
-                                                    DCSBIOS.Send(MasterModeSelectorCommandDec);
+                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -521,7 +522,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialIncreaseCommand : FR22RightBigDialIncreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_INCREASE_COMMAND : FR22_RIGHT_BIG_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -531,9 +532,9 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTILSChannelDialChange())
+                                                if (!SkipTilsChannelDialChange())
                                                 {
-                                                    DCSBIOS.Send(TILSChannelDialCommandInc);
+                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -550,7 +551,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftBigDialDecreaseCommand : FR22RightBigDialDecreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_BIG_DIAL_DECREASE_COMMAND : FR22_RIGHT_BIG_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -560,9 +561,9 @@ namespace NonVisuals.Radios
                                             }
                                         case CurrentAJS37RadioMode.TILS:
                                             {
-                                                if (!SkipTILSChannelDialChange())
+                                                if (!SkipTilsChannelDialChange())
                                                 {
-                                                    DCSBIOS.Send(TILSChannelDialCommandDec);
+                                                    DCSBIOS.Send(TILS_CHANNEL_DIAL_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -579,7 +580,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialIncreaseCommand : FR22RightSmallDialIncreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_INCREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_INCREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -590,7 +591,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipMasterModeSelectorChange())
                                                 {
-                                                    DCSBIOS.Send(MasterModeSelectorCommandInc);
+                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_INC);
                                                 }
                                                 break;
                                             }
@@ -607,7 +608,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentAJS37RadioMode.FR22:
                                             {
-                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22LeftSmallDialDecreaseCommand : FR22RightSmallDialDecreaseCommand);
+                                                DCSBIOS.Send(_fr22DialSideSelected == FR22DialSideSelected.Left ? FR22_LEFT_SMALL_DIAL_DECREASE_COMMAND : FR22_RIGHT_SMALL_DIAL_DECREASE_COMMAND);
                                                 break;
                                             }
                                         case CurrentAJS37RadioMode.FR24:
@@ -618,7 +619,7 @@ namespace NonVisuals.Radios
                                             {
                                                 if (!SkipMasterModeSelectorChange())
                                                 {
-                                                    DCSBIOS.Send(MasterModeSelectorCommandDec);
+                                                    DCSBIOS.Send(MASTER_MODE_SELECTOR_COMMAND_DEC);
                                                 }
                                                 break;
                                             }
@@ -682,11 +683,11 @@ namespace NonVisuals.Radios
                                 uint layerSelector = 0;
                                 uint channelSelector = 0;
                                 uint masterModeSelector = 0;
-                                lock (_lockTILSChannelSelectorDialObject1)
+                                lock (_lockTilsChannelSelectorDialObject1)
                                 {
                                     channelSelector = _tilsChannelCockpitValue;
                                 }
-                                lock (_lockTILSChannelLayerSelectorObject2)
+                                lock (_lockTilsChannelLayerSelectorObject2)
                                 {
                                     layerSelector = _tilsChannelLayerSelectorCockpitValue;
                                 }
@@ -733,11 +734,11 @@ namespace NonVisuals.Radios
                                 uint layerSelector = 0;
                                 uint channelSelector = 0;
                                 uint masterModeSelector = 0;
-                                lock (_lockTILSChannelSelectorDialObject1)
+                                lock (_lockTilsChannelSelectorDialObject1)
                                 {
                                     channelSelector = _tilsChannelCockpitValue;
                                 }
-                                lock (_lockTILSChannelLayerSelectorObject2)
+                                lock (_lockTilsChannelLayerSelectorObject2)
                                 {
                                     layerSelector = _tilsChannelLayerSelectorCockpitValue;
                                 }
@@ -779,7 +780,7 @@ namespace NonVisuals.Radios
         }
 
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(hashSet);
         }
@@ -805,7 +806,6 @@ namespace NonVisuals.Radios
 
 
                 //ADF
-                //TODO
 
 
                 //XPDR
@@ -834,14 +834,10 @@ namespace NonVisuals.Radios
             Common.DebugP("Leaving AJS-37 Radio Shutdown()");
         }
 
-        public override void ClearSettings()
-        {
-            //todo
-        }
+        public override void ClearSettings() { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            //todo
             var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
             dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
             dcsOutputAndColorBinding.LEDColor = panelLEDColor;
@@ -886,7 +882,7 @@ namespace NonVisuals.Radios
             Common.DebugP("Leaving AJS-37 Radio SetLowerRadioMode()");
         }
 
-        private bool SkipTILSChannelDialChange()
+        private bool SkipTilsChannelDialChange()
         {
             try
             {

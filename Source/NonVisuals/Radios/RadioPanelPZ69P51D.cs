@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 
 namespace NonVisuals.Radios
@@ -23,8 +25,8 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _vhf1DcsbiosOutputPresetButton4;
         private volatile uint _vhf1CockpitPresetActiveButton = 0;
         private int _vhf1PresetDialSkipper;
-        private const string Vhf1VolumeKnobCommandInc = "RADIO_VOLUME +2000\n";
-        private const string Vhf1VolumeKnobCommandDec = "RADIO_VOLUME -2000\n";
+        private const string VHF1_VOLUME_KNOB_COMMAND_INC = "RADIO_VOLUME +2000\n";
+        private const string VHF1_VOLUME_KNOB_COMMAND_DEC = "RADIO_VOLUME -2000\n";
 
         private readonly object _lockShowFrequenciesOnPanelObject = new object();
         private long _doUpdatePanelLCD;
@@ -317,7 +319,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandInc);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                     }
@@ -329,7 +331,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandDec);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                     }
@@ -371,7 +373,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandInc);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
                                     }
@@ -383,7 +385,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentP51DRadioMode.VHF:
                                             {
-                                                DCSBIOS.Send(Vhf1VolumeKnobCommandDec);
+                                                DCSBIOS.Send(VHF1_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
                                     }
@@ -575,7 +577,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(hashSet);
         }
@@ -618,14 +620,10 @@ namespace NonVisuals.Radios
             Common.DebugP("Leaving P-51D Radio Shutdown()");
         }
 
-        public override void ClearSettings()
-        {
-            //todo
-        }
+        public override void ClearSettings() { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            //todo
             var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
             dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
             dcsOutputAndColorBinding.LEDColor = panelLEDColor;

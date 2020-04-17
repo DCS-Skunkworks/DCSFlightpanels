@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace NonVisuals
 {
@@ -8,7 +9,7 @@ namespace NonVisuals
         private string _file;
         private string _arguments;
         private string _name;
-        private const string SEPARATOR_CHARS = "\\o/";
+        private volatile bool _isRunning;
 
         public OSCommand()
         {}
@@ -30,7 +31,7 @@ namespace NonVisuals
             var tmp = value;
             tmp = tmp.Replace("OSCommand{", "").Replace("}", "");
             //FILE\o/ARGUMENTS\o/NAME]
-            var array = tmp.Split(new[] { SEPARATOR_CHARS }, StringSplitOptions.None);
+            var array = tmp.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.None);
             _file = array[0];
             if (array.Length > 1)
             {
@@ -48,10 +49,15 @@ namespace NonVisuals
             {
                 return null;
             }
-            return "OSCommand{" + _file + SEPARATOR_CHARS + _arguments + SEPARATOR_CHARS + _name + "}";
+            return "OSCommand{" + _file + Constants.SEPARATOR_SYMBOL + _arguments + Constants.SEPARATOR_SYMBOL + _name + "}";
         }
 
-        public string Execute()
+        public bool IsRunning()
+        {
+            return _isRunning;
+        }
+
+        public string Execute(CancellationToken cancellationToken)
         {
             var process = new Process
             {
@@ -68,9 +74,15 @@ namespace NonVisuals
             var result = "";
             while (!process.StandardOutput.EndOfStream)
             {
+                _isRunning = true;
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
                 result = result + " " + process.StandardOutput.ReadLine();
             }
 
+            _isRunning = false;
             return result;
         }
 

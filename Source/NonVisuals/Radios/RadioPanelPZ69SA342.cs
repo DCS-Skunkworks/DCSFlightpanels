@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 
 namespace NonVisuals.Radios
@@ -25,36 +27,36 @@ namespace NonVisuals.Radios
 
         private enum AdfDigit
         {
-            Digit100s,
-            Digit10s,
-            Digits1s
+            Digit100S,
+            Digit10S,
+            Digits1S
         }
 
         /*COM1 SA342 VHF AM Radio*/
         //Large dial 118-143
         //Small dial 0-975
         private readonly int[] _dialPositionsWholeNumbers = new int[] { 0, 6553, 13107, 19660, 26214, 32767, 39321, 45874, 52428, 58981 };
-        private readonly int[] _dialPositionsDecial100s = new int[] { 0, 16383, 32767, 49151 };
+        private readonly int[] _dialPositionsDecial100S = new int[] { 0, 16383, 32767, 49151 };
         private double _vhfAmBigFrequencyStandby = 118;
         private double _vhfAmSmallFrequencyStandby;
         private double _vhfAmSavedCockpitBigFrequency;
         private double _vhfAmSavedCockpitSmallFrequency;
-        private DCSBIOSOutput _vhfAmDcsbiosOutputReading10s;           //1[1]8.375
-        private DCSBIOSOutput _vhfAmDcsbiosOutputReading1s;            //11[8].375
-        private DCSBIOSOutput _vhfAmDcsbiosOutputReadingDecimal10s;    //118.[3]75
-        private DCSBIOSOutput _vhfAmDcsbiosOutputReadingDecimal100s;   //118.3[75]
-        private const string VhfAmLeftDialDialCommandInc = "AM_RADIO_FREQUENCY_DIAL_LEFT +3200\n";
-        private const string VhfAmLeftDialDialCommandDec = "AM_RADIO_FREQUENCY_DIAL_LEFT -3200\n";
-        private const string VhfAmRightDialDialCommandInc = "AM_RADIO_FREQUENCY_DIAL_RIGHT +3200\n";
-        private const string VhfAmRightDialDialCommandDec = "AM_RADIO_FREQUENCY_DIAL_RIGHT -3200\n";
-        private readonly object _lockVhfAm10sObject = new object();
-        private readonly object _lockVhfAm1sObject = new object();
-        private readonly object _lockVhfAmDecimal10sObject = new object();
-        private readonly object _lockVhfAmDecimal100sObject = new object();
-        private volatile uint _vhfAmCockpit10sFrequencyValue = 6553;
-        private volatile uint _vhfAmCockpit1sFrequencyValue = 6553;
-        private volatile uint _vhfAmCockpitDecimal10sFrequencyValue = 6553;
-        private volatile uint _vhfAmCockpitDecimal100sFrequencyValue = 6553;
+        private DCSBIOSOutput _vhfAmDcsbiosOutputReading10S;           //1[1]8.375
+        private DCSBIOSOutput _vhfAmDcsbiosOutputReading1S;            //11[8].375
+        private DCSBIOSOutput _vhfAmDcsbiosOutputReadingDecimal10S;    //118.[3]75
+        private DCSBIOSOutput _vhfAmDcsbiosOutputReadingDecimal100S;   //118.3[75]
+        private const string VHF_AM_LEFT_DIAL_DIAL_COMMAND_INC = "AM_RADIO_FREQUENCY_DIAL_LEFT +3200\n";
+        private const string VHF_AM_LEFT_DIAL_DIAL_COMMAND_DEC = "AM_RADIO_FREQUENCY_DIAL_LEFT -3200\n";
+        private const string VHF_AM_RIGHT_DIAL_DIAL_COMMAND_INC = "AM_RADIO_FREQUENCY_DIAL_RIGHT +3200\n";
+        private const string VHF_AM_RIGHT_DIAL_DIAL_COMMAND_DEC = "AM_RADIO_FREQUENCY_DIAL_RIGHT -3200\n";
+        private readonly object _lockVhfAm10SObject = new object();
+        private readonly object _lockVhfAm1SObject = new object();
+        private readonly object _lockVhfAmDecimal10SObject = new object();
+        private readonly object _lockVhfAmDecimal100SObject = new object();
+        private volatile uint _vhfAmCockpit10SFrequencyValue = 6553;
+        private volatile uint _vhfAmCockpit1SFrequencyValue = 6553;
+        private volatile uint _vhfAmCockpitDecimal10SFrequencyValue = 6553;
+        private volatile uint _vhfAmCockpitDecimal100SFrequencyValue = 6553;
         private Thread _vhfAmSyncThread;
         private long _vhfAmThreadNowSynching;
         private long _vhfAmValue1WaitingForFeedback; //10s
@@ -69,8 +71,8 @@ namespace NonVisuals.Radios
         //Small dial 
         private DCSBIOSOutput _fmRadioPresetDcsbiosOutput;
         private volatile uint _fmRadioPresetCockpitDialPos = 1;
-        private const string FmRadioPresetCommandInc = "FM_RADIO_CHANNEL INC\n";
-        private const string FmRadioPresetCommandDec = "FM_RADIO_CHANNEL DEC\n";
+        private const string FM_RADIO_PRESET_COMMAND_INC = "FM_RADIO_CHANNEL INC\n";
+        private const string FM_RADIO_PRESET_COMMAND_DEC = "FM_RADIO_CHANNEL DEC\n";
         private readonly object _lockFmRadioPresetObject = new object();
 
         /*NAV1 SA342 UHF Radio*/
@@ -82,28 +84,28 @@ namespace NonVisuals.Radios
         private readonly ClickSpeedDetector _uhfSmallFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         private double _uhfBigFrequencyStandby = 225;
         private double _uhfSmallFrequencyStandby = 0;
-        private const string UhfButton0CommandOn = "UHF_RADIO_BUTTON_0 1\n";
-        private const string UhfButton0CommandOff = "UHF_RADIO_BUTTON_0 0\n";
-        private const string UhfButton1CommandOn = "UHF_RADIO_BUTTON_1 1\n";
-        private const string UhfButton1CommandOff = "UHF_RADIO_BUTTON_1 0\n";
-        private const string UhfButton2CommandOn = "UHF_RADIO_BUTTON_2 1\n";
-        private const string UhfButton2CommandOff = "UHF_RADIO_BUTTON_2 0\n";
-        private const string UhfButton3CommandOn = "UHF_RADIO_BUTTON_3 1\n";
-        private const string UhfButton3CommandOff = "UHF_RADIO_BUTTON_3 0\n";
-        private const string UhfButton4CommandOn = "UHF_RADIO_BUTTON_4 1\n";
-        private const string UhfButton4CommandOff = "UHF_RADIO_BUTTON_4 0\n";
-        private const string UhfButton5CommandOn = "UHF_RADIO_BUTTON_5 1\n";
-        private const string UhfButton5CommandOff = "UHF_RADIO_BUTTON_5 0\n";
-        private const string UhfButton6CommandOn = "UHF_RADIO_BUTTON_6 1\n";
-        private const string UhfButton6CommandOff = "UHF_RADIO_BUTTON_6 0\n";
-        private const string UhfButton7CommandOn = "UHF_RADIO_BUTTON_7 1\n";
-        private const string UhfButton7CommandOff = "UHF_RADIO_BUTTON_7 0\n";
-        private const string UhfButton8CommandOn = "UHF_RADIO_BUTTON_8 1\n";
-        private const string UhfButton8CommandOff = "UHF_RADIO_BUTTON_8 0\n";
-        private const string UhfButton9CommandOn = "UHF_RADIO_BUTTON_9 1\n";
-        private const string UhfButton9CommandOff = "UHF_RADIO_BUTTON_9 0\n";
-        private const string UhfButtonValidateCommandOn = "UHF_RADIO_BUTTON_VLD 1\n";
-        private const string UhfButtonValidateCommandOff = "UHF_RADIO_BUTTON_VLD 0\n";
+        private const string UHF_BUTTON0_COMMAND_ON = "UHF_RADIO_BUTTON_0 1\n";
+        private const string UHF_BUTTON0_COMMAND_OFF = "UHF_RADIO_BUTTON_0 0\n";
+        private const string UHF_BUTTON1_COMMAND_ON = "UHF_RADIO_BUTTON_1 1\n";
+        private const string UHF_BUTTON1_COMMAND_OFF = "UHF_RADIO_BUTTON_1 0\n";
+        private const string UHF_BUTTON2_COMMAND_ON = "UHF_RADIO_BUTTON_2 1\n";
+        private const string UHF_BUTTON2_COMMAND_OFF = "UHF_RADIO_BUTTON_2 0\n";
+        private const string UHF_BUTTON3_COMMAND_ON = "UHF_RADIO_BUTTON_3 1\n";
+        private const string UHF_BUTTON3_COMMAND_OFF = "UHF_RADIO_BUTTON_3 0\n";
+        private const string UHF_BUTTON4_COMMAND_ON = "UHF_RADIO_BUTTON_4 1\n";
+        private const string UHF_BUTTON4_COMMAND_OFF = "UHF_RADIO_BUTTON_4 0\n";
+        private const string UHF_BUTTON5_COMMAND_ON = "UHF_RADIO_BUTTON_5 1\n";
+        private const string UHF_BUTTON5_COMMAND_OFF = "UHF_RADIO_BUTTON_5 0\n";
+        private const string UHF_BUTTON6_COMMAND_ON = "UHF_RADIO_BUTTON_6 1\n";
+        private const string UHF_BUTTON6_COMMAND_OFF = "UHF_RADIO_BUTTON_6 0\n";
+        private const string UHF_BUTTON7_COMMAND_ON = "UHF_RADIO_BUTTON_7 1\n";
+        private const string UHF_BUTTON7_COMMAND_OFF = "UHF_RADIO_BUTTON_7 0\n";
+        private const string UHF_BUTTON8_COMMAND_ON = "UHF_RADIO_BUTTON_8 1\n";
+        private const string UHF_BUTTON8_COMMAND_OFF = "UHF_RADIO_BUTTON_8 0\n";
+        private const string UHF_BUTTON9_COMMAND_ON = "UHF_RADIO_BUTTON_9 1\n";
+        private const string UHF_BUTTON9_COMMAND_OFF = "UHF_RADIO_BUTTON_9 0\n";
+        private const string UHF_BUTTON_VALIDATE_COMMAND_ON = "UHF_RADIO_BUTTON_VLD 1\n";
+        private const string UHF_BUTTON_VALIDATE_COMMAND_OFF = "UHF_RADIO_BUTTON_VLD 0\n";
         private int _uhfBigFrequencySkipper;
         private int _uhfSmallFrequencySkipper;
 
@@ -111,32 +113,32 @@ namespace NonVisuals.Radios
         /*Large dial Counter Clockwise 100s increase*/
         /*Large dial Clockwise 10s increase*/
         /*Small dial 1s and decimals*/
-        private const string Adf1Unit100sIncrease = "ADF_NAV1_100 +3200\n";
-        private const string Adf1Unit10sIncrease = "ADF_NAV1_10 +3200\n";
-        private const string Adf1Unit1sDecimalsIncrease = "ADF_NAV1_1 +3200\n";
-        private const string Adf1Unit1sDecimalsDecrease = "ADF_NAV1_1 -3200\n";
-        private const string Adf2Unit100sIncrease = "ADF_NAV2_100 +3200\n";
-        private const string Adf2Unit10sIncrease = "ADF_NAV2_10 +3200\n";
-        private const string Adf2Unit1sDecimalsIncrease = "ADF_NAV2_1 +3200\n";
-        private const string Adf2Unit1sDecimalsDecrease = "ADF_NAV2_1 -3200\n";
-        private const string AdfSwitchUnitCommand = "ADF1_ADF2_SELECT TOGGLE\n";
+        private const string ADF1_UNIT100_S_INCREASE = "ADF_NAV1_100 +3200\n";
+        private const string ADF1_UNIT10_S_INCREASE = "ADF_NAV1_10 +3200\n";
+        private const string ADF1_UNIT1_S_DECIMALS_INCREASE = "ADF_NAV1_1 +3200\n";
+        private const string ADF1_UNIT1_S_DECIMALS_DECREASE = "ADF_NAV1_1 -3200\n";
+        private const string ADF2_UNIT100_S_INCREASE = "ADF_NAV2_100 +3200\n";
+        private const string ADF2_UNIT10_S_INCREASE = "ADF_NAV2_10 +3200\n";
+        private const string ADF2_UNIT1_S_DECIMALS_INCREASE = "ADF_NAV2_1 +3200\n";
+        private const string ADF2_UNIT1_S_DECIMALS_DECREASE = "ADF_NAV2_1 -3200\n";
+        private const string ADF_SWITCH_UNIT_COMMAND = "ADF1_ADF2_SELECT TOGGLE\n";
         private readonly object _lockAdfUnitObject = new object();
         private volatile uint _adfCockpitSelectedUnitValue = 1;
         private DCSBIOSOutput _adfSwitchUnitDcsbiosOutput;
-        private int _adf100sDialSkipper;
-        private int _adf10sDialSkipper;
-        private int _adf1sDialSkipper;
+        private int _adf100SDialSkipper;
+        private int _adf10SDialSkipper;
+        private int _adf1SDialSkipper;
 
 
         //DME NADIR
         //Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
         //Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
         //Large
-        private const string NADIRModeCommandInc = "NADIR_PARAMETER INC\n";
-        private const string NADIRModeCommandDec = "NADIR_PARAMETER DEC\n";
+        private const string NADIR_MODE_COMMAND_INC = "NADIR_PARAMETER INC\n";
+        private const string NADIR_MODE_COMMAND_DEC = "NADIR_PARAMETER DEC\n";
         //Small
-        private const string NADIRDopplerCommandInc = "NADIR_DOPPLER_MODE INC\n";
-        private const string NADIRDopplerCommandDec = "NADIR_DOPPLER_MODE DEC\n";
+        private const string NADIR_DOPPLER_COMMAND_INC = "NADIR_DOPPLER_MODE INC\n";
+        private const string NADIR_DOPPLER_COMMAND_DEC = "NADIR_DOPPLER_MODE DEC\n";
         private volatile uint _nadirModeCockpitValue = 0;
         private volatile uint _nadirDopplerModeCockpitValue = 0;
         private DCSBIOSOutput _nadirModeDcsbiosOutput;
@@ -175,17 +177,17 @@ namespace NonVisuals.Radios
              */
 
             //VHF AM
-            if (e.Address == _vhfAmDcsbiosOutputReading10s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReading10S.Address)
             {
-                lock (_lockVhfAm10sObject)
+                lock (_lockVhfAm10SObject)
                 {
                     //When dialing this radio a lot of intermediate (incorrect) raw values are sent. Only trap
                     //know raw values as in the member array _dialPositions
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading10s.GetUIntValue(e.Data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading10S.GetUIntValue(e.Data)))
                     {
-                        var tmp = _vhfAmCockpit10sFrequencyValue;
-                        _vhfAmCockpit10sFrequencyValue = _vhfAmDcsbiosOutputReading10s.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpit10sFrequencyValue)
+                        var tmp = _vhfAmCockpit10SFrequencyValue;
+                        _vhfAmCockpit10SFrequencyValue = _vhfAmDcsbiosOutputReading10S.GetUIntValue(e.Data);
+                        if (tmp != _vhfAmCockpit10SFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpit10sFrequencyValue " + _vhfAmCockpit10sFrequencyValue);
                             Interlocked.Exchange(ref _vhfAmValue1WaitingForFeedback, 0);
@@ -195,15 +197,15 @@ namespace NonVisuals.Radios
             }
 
 
-            if (e.Address == _vhfAmDcsbiosOutputReading1s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReading1S.Address)
             {
-                lock (_lockVhfAm1sObject)
+                lock (_lockVhfAm1SObject)
                 {
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading1s.GetUIntValue(e.Data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReading1S.GetUIntValue(e.Data)))
                     {
-                        var tmp = _vhfAmCockpit1sFrequencyValue;
-                        _vhfAmCockpit1sFrequencyValue = _vhfAmDcsbiosOutputReading1s.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpit1sFrequencyValue)
+                        var tmp = _vhfAmCockpit1SFrequencyValue;
+                        _vhfAmCockpit1SFrequencyValue = _vhfAmDcsbiosOutputReading1S.GetUIntValue(e.Data);
+                        if (tmp != _vhfAmCockpit1SFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpit1sFrequencyValue " + _vhfAmCockpit1sFrequencyValue);
                             Interlocked.Exchange(ref _vhfAmValue2WaitingForFeedback, 0);
@@ -213,16 +215,16 @@ namespace NonVisuals.Radios
             }
 
 
-            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal10s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal10S.Address)
             {
-                lock (_lockVhfAmDecimal10sObject)
+                lock (_lockVhfAmDecimal10SObject)
                 {
                     //Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
-                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReadingDecimal10s.GetUIntValue(e.Data)))
+                    if (CorrectPositionWholeNumbers(_vhfAmDcsbiosOutputReadingDecimal10S.GetUIntValue(e.Data)))
                     {
-                        var tmp = _vhfAmCockpitDecimal10sFrequencyValue;
-                        _vhfAmCockpitDecimal10sFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal10s.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpitDecimal10sFrequencyValue)
+                        var tmp = _vhfAmCockpitDecimal10SFrequencyValue;
+                        _vhfAmCockpitDecimal10SFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal10S.GetUIntValue(e.Data);
+                        if (tmp != _vhfAmCockpitDecimal10SFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpitDecimal10sFrequencyValue " + _vhfAmCockpitDecimal10sFrequencyValue);
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -233,16 +235,16 @@ namespace NonVisuals.Radios
             }
 
 
-            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal100s.Address)
+            if (e.Address == _vhfAmDcsbiosOutputReadingDecimal100S.Address)
             {
                 //Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue (" + _vhfAmDcsbiosOutputReadingDecimal100s.Address + ") " + _vhfAmCockpitDecimal100sFrequencyValue);
-                lock (_lockVhfAmDecimal100sObject)
+                lock (_lockVhfAmDecimal100SObject)
                 {
-                    if (CorrectPositionDecimal100s(_vhfAmDcsbiosOutputReadingDecimal100s.GetUIntValue(e.Data)))
+                    if (CorrectPositionDecimal100S(_vhfAmDcsbiosOutputReadingDecimal100S.GetUIntValue(e.Data)))
                     {
-                        var tmp = _vhfAmCockpitDecimal100sFrequencyValue;
-                        _vhfAmCockpitDecimal100sFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal100s.GetUIntValue(e.Data);
-                        if (tmp != _vhfAmCockpitDecimal100sFrequencyValue)
+                        var tmp = _vhfAmCockpitDecimal100SFrequencyValue;
+                        _vhfAmCockpitDecimal100SFrequencyValue = _vhfAmDcsbiosOutputReadingDecimal100S.GetUIntValue(e.Data);
+                        if (tmp != _vhfAmCockpitDecimal100SFrequencyValue)
                         {
                             //Debug.Print("RECEIVE _vhfAmCockpitDecimal100sFrequencyValue " + _vhfAmCockpitDecimal100sFrequencyValue);
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -363,7 +365,7 @@ namespace NonVisuals.Radios
                                 }
                             case CurrentSA342RadioMode.ADF:
                                 {
-                                    DCSBIOS.Send(AdfSwitchUnitCommand);
+                                    DCSBIOS.Send(ADF_SWITCH_UNIT_COMMAND);
                                     break;
                                 }
                         }
@@ -389,7 +391,7 @@ namespace NonVisuals.Radios
                                 }
                             case CurrentSA342RadioMode.ADF:
                                 {
-                                    DCSBIOS.Send(AdfSwitchUnitCommand);
+                                    DCSBIOS.Send(ADF_SWITCH_UNIT_COMMAND);
                                     break;
                                 }
                         }
@@ -455,11 +457,11 @@ namespace NonVisuals.Radios
                         }
                         if (Interlocked.Read(ref _vhfAmValue1WaitingForFeedback) == 0 || Interlocked.Read(ref _vhfAmValue2WaitingForFeedback) == 0)
                         {
-                            lock (_lockVhfAm10sObject)
+                            lock (_lockVhfAm10SObject)
                             {
-                                lock (_lockVhfAm1sObject)
+                                lock (_lockVhfAm1SObject)
                                 {
-                                    var frequencyWholeNumbers = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit10sFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit1sFrequencyValue);
+                                    var frequencyWholeNumbers = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit10SFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit1SFrequencyValue);
                                     if (int.Parse(frequencyWholeNumbers) != desiredPositionDialWholeNumbers)
                                     {
                                         //Debug.Print("cockpit frequencyWholeNumbers = " + int.Parse(frequencyWholeNumbers));
@@ -470,12 +472,12 @@ namespace NonVisuals.Radios
                                         if (int.Parse(frequencyWholeNumbers) < desiredPositionDialWholeNumbers)
                                         {
                                             //Debug.Print("frequencyWholeNumbers sending INC");
-                                            command = VhfAmLeftDialDialCommandInc;
+                                            command = VHF_AM_LEFT_DIAL_DIAL_COMMAND_INC;
                                         }
                                         if (int.Parse(frequencyWholeNumbers) > desiredPositionDialWholeNumbers)
                                         {
                                             //Debug.Print("frequencyWholeNumbers sending DEC");
-                                            command = VhfAmLeftDialDialCommandDec;
+                                            command = VHF_AM_LEFT_DIAL_DIAL_COMMAND_DEC;
                                         }
                                         DCSBIOS.Send(command);
                                         dial1Time = DateTime.Now.Ticks;
@@ -493,18 +495,18 @@ namespace NonVisuals.Radios
                         }
                         if (Interlocked.Read(ref _vhfAmValue3WaitingForFeedback) == 0 || Interlocked.Read(ref _vhfAmValue4WaitingForFeedback) == 0)
                         {
-                            lock (_lockVhfAmDecimal10sObject)
+                            lock (_lockVhfAmDecimal10SObject)
                             {
-                                lock (_lockVhfAmDecimal100sObject)
+                                lock (_lockVhfAmDecimal100SObject)
                                 {
-                                    var cockpitFrequencyDecimals = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpitDecimal10sFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(1, _vhfAmCockpitDecimal100sFrequencyValue);
+                                    var cockpitFrequencyDecimals = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpitDecimal10SFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(1, _vhfAmCockpitDecimal100SFrequencyValue);
                                     if (int.Parse(cockpitFrequencyDecimals) != desiredPositionDialDecimals)
                                     {
                                         /*Debug.Print("cockpit frequencyDecimals = " + int.Parse(frequencyDecimals));
                                         Debug.Print("desiredPositionDialDecimals = " + desiredPositionDialDecimals);
                                         Debug.Print("cockpit _vhfAmCockpitDecimal10sFrequencyValue RAW = " + _vhfAmCockpitDecimal10sFrequencyValue);
                                         Debug.Print("cockpit _vhfAmCockpitDecimal100sFrequencyValue RAW = " + _vhfAmCockpitDecimal100sFrequencyValue);*/
-                                        DCSBIOS.Send(SwitchVhfAmDecimalDirectionUp(int.Parse(cockpitFrequencyDecimals), desiredPositionDialDecimals) ? VhfAmRightDialDialCommandInc : VhfAmRightDialDialCommandDec);
+                                        DCSBIOS.Send(SwitchVhfAmDecimalDirectionUp(int.Parse(cockpitFrequencyDecimals), desiredPositionDialDecimals) ? VHF_AM_RIGHT_DIAL_DIAL_COMMAND_INC : VHF_AM_RIGHT_DIAL_DIAL_COMMAND_DEC);
                                         dial2Time = DateTime.Now.Ticks;
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _vhfAmValue3WaitingForFeedback, 1);
@@ -559,81 +561,81 @@ namespace NonVisuals.Radios
                     case '0':
                         {
                             //Debug.Print("Sending 0 ");
-                            DCSBIOS.Send(UhfButton0CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON0_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton0CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON0_COMMAND_OFF);
                             break;
                         }
                     case '1':
                         {
                             //Debug.Print("Sending 1 ");
-                            DCSBIOS.Send(UhfButton1CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON1_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton1CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON1_COMMAND_OFF);
                             break;
                         }
                     case '2':
                         {
                             //Debug.Print("Sending 2 ");
-                            DCSBIOS.Send(UhfButton2CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON2_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton2CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON2_COMMAND_OFF);
                             break;
                         }
                     case '3':
                         {
                             //Debug.Print("Sending 3 ");
-                            DCSBIOS.Send(UhfButton3CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON3_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton3CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON3_COMMAND_OFF);
                             break;
                         }
                     case '4':
                         {
                             //Debug.Print("Sending 4 ");
-                            DCSBIOS.Send(UhfButton4CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON4_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton4CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON4_COMMAND_OFF);
                             break;
                         }
                     case '5':
                         {
                             //Debug.Print("Sending 5 ");
-                            DCSBIOS.Send(UhfButton5CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON5_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton5CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON5_COMMAND_OFF);
                             break;
                         }
                     case '6':
                         {
                             //Debug.Print("Sending 6 ");
-                            DCSBIOS.Send(UhfButton6CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON6_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton6CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON6_COMMAND_OFF);
                             break;
                         }
                     case '7':
                         {
                             //Debug.Print("Sending 7 ");
-                            DCSBIOS.Send(UhfButton7CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON7_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton7CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON7_COMMAND_OFF);
                             break;
                         }
                     case '8':
                         {
                             //Debug.Print("Sending 8 ");
-                            DCSBIOS.Send(UhfButton8CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON8_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton8CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON8_COMMAND_OFF);
                             break;
                         }
                     case '9':
                         {
                             //Debug.Print("Sending 9 ");
-                            DCSBIOS.Send(UhfButton9CommandOn);
+                            DCSBIOS.Send(UHF_BUTTON9_COMMAND_ON);
                             Thread.Sleep(sleepLength);
-                            DCSBIOS.Send(UhfButton9CommandOff);
+                            DCSBIOS.Send(UHF_BUTTON9_COMMAND_OFF);
                             break;
                         }
                 }
@@ -641,15 +643,15 @@ namespace NonVisuals.Radios
             if (frequencyAsString.Length == 6)
             {
                 //Debug.Print("Sending 0 ");
-                DCSBIOS.Send(UhfButton0CommandOn);
+                DCSBIOS.Send(UHF_BUTTON0_COMMAND_ON);
                 Thread.Sleep(sleepLength);
-                DCSBIOS.Send(UhfButton0CommandOff);
+                DCSBIOS.Send(UHF_BUTTON0_COMMAND_OFF);
             }
 
             //Debug.Print("Sending VALIDATE ");
-            DCSBIOS.Send(UhfButtonValidateCommandOn);
+            DCSBIOS.Send(UHF_BUTTON_VALIDATE_COMMAND_ON);
             Thread.Sleep(sleepLength);
-            DCSBIOS.Send(UhfButtonValidateCommandOff);
+            DCSBIOS.Send(UHF_BUTTON_VALIDATE_COMMAND_OFF);
         }
 
         private void ShowFrequenciesOnPanel()
@@ -689,22 +691,22 @@ namespace NonVisuals.Radios
                             //      "00" "25" "50" "75", only "00" and "50" used.
                             //Pos     0    1    2    3
                             var frequencyAsString = "";
-                            lock (_lockVhfAm10sObject)
+                            lock (_lockVhfAm10SObject)
                             {
-                                frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10sFrequencyValue);
+                                frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10SFrequencyValue);
                             }
-                            lock (_lockVhfAm1sObject)
+                            lock (_lockVhfAm1SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1sFrequencyValue);
+                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1SFrequencyValue);
                             }
                             frequencyAsString = frequencyAsString + ".";
-                            lock (_lockVhfAmDecimal10sObject)
+                            lock (_lockVhfAmDecimal10SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10sFrequencyValue);
+                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10SFrequencyValue);
                             }
-                            lock (_lockVhfAmDecimal100sObject)
+                            lock (_lockVhfAmDecimal100SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
+                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100SFrequencyValue);
                             }
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                             //Debug.Print("_vhfAmBigFrequencyStandby " + _vhfAmBigFrequencyStandby);
@@ -788,22 +790,22 @@ namespace NonVisuals.Radios
                             //      "00" "25" "50" "75", only "00" and "50" used.
                             //Pos     0    1    2    3
                             var frequencyAsString = "";
-                            lock (_lockVhfAm10sObject)
+                            lock (_lockVhfAm10SObject)
                             {
-                                frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10sFrequencyValue);
+                                frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10SFrequencyValue);
                             }
-                            lock (_lockVhfAm1sObject)
+                            lock (_lockVhfAm1SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1sFrequencyValue);
+                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1SFrequencyValue);
                             }
                             frequencyAsString = frequencyAsString + ".";
-                            lock (_lockVhfAmDecimal10sObject)
+                            lock (_lockVhfAmDecimal10SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10sFrequencyValue);
+                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10SFrequencyValue);
                             }
-                            lock (_lockVhfAmDecimal100sObject)
+                            lock (_lockVhfAmDecimal100SObject)
                             {
-                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
+                                frequencyAsString = frequencyAsString + GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100SFrequencyValue);
                             }
                             SetPZ69DisplayBytesDefault(ref bytes, double.Parse(frequencyAsString, NumberFormatInfoFullDisplay), PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                             SetPZ69DisplayBytesDefault(ref bytes, _vhfAmBigFrequencyStandby + _vhfAmSmallFrequencyStandby, PZ69LCDPosition.LOWER_STBY_RIGHT);
@@ -901,7 +903,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            DCSBIOS.Send(FmRadioPresetCommandInc);
+                                            DCSBIOS.Send(FM_RADIO_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentSA342RadioMode.UHF:
@@ -932,16 +934,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf10sDialChange())
+                                            if (!SkipAdf10SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digit10s, true);
+                                                var command = GetAdfCommand(AdfDigit.Digit10S, true);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRModeCommandInc);
+                                            DCSBIOS.Send(NADIR_MODE_COMMAND_INC);
                                             break;
 
                                         }
@@ -966,7 +968,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            DCSBIOS.Send(FmRadioPresetCommandDec);
+                                            DCSBIOS.Send(FM_RADIO_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentSA342RadioMode.UHF:
@@ -997,16 +999,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf100sDialChange())
+                                            if (!SkipAdf100SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digit100s, true);
+                                                var command = GetAdfCommand(AdfDigit.Digit100S, true);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRModeCommandDec);
+                                            DCSBIOS.Send(NADIR_MODE_COMMAND_DEC);
                                             break;
 
                                         }
@@ -1061,16 +1063,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1sDialChange())
+                                            if (!SkipAdf1SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digits1s, true);
+                                                var command = GetAdfCommand(AdfDigit.Digits1S, true);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRDopplerCommandInc);
+                                            DCSBIOS.Send(NADIR_DOPPLER_COMMAND_INC);
                                             break;
 
                                         }
@@ -1125,16 +1127,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1sDialChange())
+                                            if (!SkipAdf1SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digits1s, false);
+                                                var command = GetAdfCommand(AdfDigit.Digits1S, false);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRDopplerCommandDec);
+                                            DCSBIOS.Send(NADIR_DOPPLER_COMMAND_DEC);
                                             break;
 
                                         }
@@ -1164,7 +1166,7 @@ namespace NonVisuals.Radios
                                                 //@ max value
                                                 break;
                                             }*/
-                                            DCSBIOS.Send(FmRadioPresetCommandInc);
+                                            DCSBIOS.Send(FM_RADIO_PRESET_COMMAND_INC);
                                             break;
                                         }
                                     case CurrentSA342RadioMode.UHF:
@@ -1195,16 +1197,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf10sDialChange())
+                                            if (!SkipAdf10SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digit10s, true);
+                                                var command = GetAdfCommand(AdfDigit.Digit10S, true);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRModeCommandInc);
+                                            DCSBIOS.Send(NADIR_MODE_COMMAND_INC);
                                             break;
 
                                         }
@@ -1229,7 +1231,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.VHFFM:
                                         {
-                                            DCSBIOS.Send(FmRadioPresetCommandDec);
+                                            DCSBIOS.Send(FM_RADIO_PRESET_COMMAND_DEC);
                                             break;
                                         }
                                     case CurrentSA342RadioMode.UHF:
@@ -1260,16 +1262,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf100sDialChange())
+                                            if (!SkipAdf100SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digit100s, true);
+                                                var command = GetAdfCommand(AdfDigit.Digit100S, true);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRModeCommandDec);
+                                            DCSBIOS.Send(NADIR_MODE_COMMAND_DEC);
                                             break;
 
                                         }
@@ -1325,16 +1327,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1sDialChange())
+                                            if (!SkipAdf1SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digits1s, true);
+                                                var command = GetAdfCommand(AdfDigit.Digits1S, true);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRDopplerCommandInc);
+                                            DCSBIOS.Send(NADIR_DOPPLER_COMMAND_INC);
                                             break;
 
                                         }
@@ -1390,16 +1392,16 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentSA342RadioMode.ADF:
                                         {
-                                            if (!SkipAdf1sDialChange())
+                                            if (!SkipAdf1SDialChange())
                                             {
-                                                var command = GetAdfCommand(AdfDigit.Digits1s, false);
+                                                var command = GetAdfCommand(AdfDigit.Digits1S, false);
                                                 DCSBIOS.Send(command);
                                             }
                                             break;
                                         }
                                     case CurrentSA342RadioMode.NADIR:
                                         {
-                                            DCSBIOS.Send(NADIRDopplerCommandDec);
+                                            DCSBIOS.Send(NADIR_DOPPLER_COMMAND_DEC);
                                             break;
 
                                         }
@@ -1599,10 +1601,10 @@ namespace NonVisuals.Radios
                 StartupBase("A-10C");
 
                 //VHF AM
-                _vhfAmDcsbiosOutputReading10s = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_10s");
-                _vhfAmDcsbiosOutputReading1s = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_1s");
-                _vhfAmDcsbiosOutputReadingDecimal10s = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_TENTHS");
-                _vhfAmDcsbiosOutputReadingDecimal100s = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_HUNDREDTHS");
+                _vhfAmDcsbiosOutputReading10S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_10s");
+                _vhfAmDcsbiosOutputReading1S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_1s");
+                _vhfAmDcsbiosOutputReadingDecimal10S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_TENTHS");
+                _vhfAmDcsbiosOutputReadingDecimal100S = DCSBIOSControlLocator.GetDCSBIOSOutput("AM_RADIO_FREQ_HUNDREDTHS");
 
                 //FM PR4G
                 _fmRadioPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("FM_RADIO_CHANNEL");
@@ -1636,14 +1638,10 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void ClearSettings()
-        {
-            //todo
-        }
+        public override void ClearSettings() { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {
-            //todo
             var dcsOutputAndColorBinding = new DcsOutputAndColorBindingPZ55();
             dcsOutputAndColorBinding.DCSBiosOutputLED = dcsBiosOutput;
             dcsOutputAndColorBinding.LEDColor = panelLEDColor;
@@ -1651,7 +1649,7 @@ namespace NonVisuals.Radios
             return dcsOutputAndColorBinding;
         }
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(hashSet);
         }
@@ -1765,22 +1763,22 @@ namespace NonVisuals.Radios
              * Dial 4
              * 00/25/75/50
              */
-            lock (_lockVhfAm10sObject)
+            lock (_lockVhfAm10SObject)
             {
-                lock (_lockVhfAm10sObject)
+                lock (_lockVhfAm10SObject)
                 {
-                    lock (_lockVhfAm1sObject)
+                    lock (_lockVhfAm1SObject)
                     {
-                        lock (_lockVhfAmDecimal10sObject)
+                        lock (_lockVhfAmDecimal10SObject)
                         {
-                            var dial10s = GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10sFrequencyValue);
-                            var dial1s = GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1sFrequencyValue);
-                            var diald10s = GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10sFrequencyValue);
-                            var diald100s = GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100sFrequencyValue);
+                            var dial10S = GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10SFrequencyValue);
+                            var dial1S = GetVhfAmDialFrequencyForPosition(VhfAmDigit.Third, _vhfAmCockpit1SFrequencyValue);
+                            var diald10S = GetVhfAmDialFrequencyForPosition(VhfAmDigit.Fourth, _vhfAmCockpitDecimal10SFrequencyValue);
+                            var diald100S = GetVhfAmDialFrequencyForPosition(VhfAmDigit.LastTwoSpecial, _vhfAmCockpitDecimal100SFrequencyValue);
 
-                            Debug.Print("SaveCockpitFrequencyVhfAm : 0. + diald10s + diald100s -> " + "0." + diald10s + diald100s);
-                            _vhfAmSavedCockpitBigFrequency = double.Parse("1" + dial10s + dial1s, NumberFormatInfoFullDisplay);
-                            _vhfAmSavedCockpitSmallFrequency = double.Parse("0." + diald10s + diald100s, NumberFormatInfoFullDisplay);
+                            Debug.Print("SaveCockpitFrequencyVhfAm : 0. + diald10s + diald100s -> " + "0." + diald10S + diald100S);
+                            _vhfAmSavedCockpitBigFrequency = double.Parse("1" + dial10S + dial1S, NumberFormatInfoFullDisplay);
+                            _vhfAmSavedCockpitSmallFrequency = double.Parse("0." + diald10S + diald100S, NumberFormatInfoFullDisplay);
                         }
                     }
                 }
@@ -1811,11 +1809,11 @@ namespace NonVisuals.Radios
             return false;
         }
 
-        private bool CorrectPositionDecimal100s(uint value)
+        private bool CorrectPositionDecimal100S(uint value)
         {
-            for (int i = 0; i < _dialPositionsDecial100s.Length; i++)
+            for (int i = 0; i < _dialPositionsDecial100S.Length; i++)
             {
-                if (_dialPositionsDecial100s[i] == value)
+                if (_dialPositionsDecial100S[i] == value)
                 {
                     return true;
                 }
@@ -1978,57 +1976,57 @@ namespace NonVisuals.Radios
             {
                 switch (adfDigit)
                 {
-                    case AdfDigit.Digit100s:
+                    case AdfDigit.Digit100S:
                         {
                             if (_adfCockpitSelectedUnitValue == 0)
                             {
-                                return Adf1Unit100sIncrease;
+                                return ADF1_UNIT100_S_INCREASE;
                             }
-                            return Adf2Unit100sIncrease;
+                            return ADF2_UNIT100_S_INCREASE;
                         }
-                    case AdfDigit.Digit10s:
+                    case AdfDigit.Digit10S:
                         {
                             if (_adfCockpitSelectedUnitValue == 0)
                             {
-                                return Adf1Unit10sIncrease;
+                                return ADF1_UNIT10_S_INCREASE;
                             }
-                            return Adf2Unit10sIncrease;
+                            return ADF2_UNIT10_S_INCREASE;
                         }
-                    case AdfDigit.Digits1s:
+                    case AdfDigit.Digits1S:
                         {
                             if (_adfCockpitSelectedUnitValue == 0)
                             {
                                 if (increase)
                                 {
-                                    return Adf1Unit1sDecimalsIncrease;
+                                    return ADF1_UNIT1_S_DECIMALS_INCREASE;
                                 }
-                                return Adf1Unit1sDecimalsDecrease;
+                                return ADF1_UNIT1_S_DECIMALS_DECREASE;
                             }
                             if (increase)
                             {
-                                return Adf2Unit1sDecimalsIncrease;
+                                return ADF2_UNIT1_S_DECIMALS_INCREASE;
                             }
-                            return Adf2Unit1sDecimalsDecrease;
+                            return ADF2_UNIT1_S_DECIMALS_DECREASE;
                         }
                 }
             }
             return "";
         }
 
-        private bool SkipAdf100sDialChange()
+        private bool SkipAdf100SDialChange()
         {
             try
             {
                 Common.DebugP("Entering SA342 Radio SkipAdf100sDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
                 {
-                    if (_adf100sDialSkipper > 2)
+                    if (_adf100SDialSkipper > 2)
                     {
-                        _adf100sDialSkipper = 0;
+                        _adf100SDialSkipper = 0;
                         Common.DebugP("Leaving SA342 Radio SkipAdf100sDialChange()");
                         return false;
                     }
-                    _adf100sDialSkipper++;
+                    _adf100SDialSkipper++;
                     Common.DebugP("Leaving SA342 Radio SkipAdf100sDialChange()");
                     return true;
                 }
@@ -2041,20 +2039,20 @@ namespace NonVisuals.Radios
             return false;
         }
 
-        private bool SkipAdf10sDialChange()
+        private bool SkipAdf10SDialChange()
         {
             try
             {
                 Common.DebugP("Entering SA342 Radio SkipAdf10sDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
                 {
-                    if (_adf10sDialSkipper > 2)
+                    if (_adf10SDialSkipper > 2)
                     {
-                        _adf10sDialSkipper = 0;
+                        _adf10SDialSkipper = 0;
                         Common.DebugP("Leaving SA342 Radio SkipAdf10sDialChange()");
                         return false;
                     }
-                    _adf10sDialSkipper++;
+                    _adf10SDialSkipper++;
                     Common.DebugP("Leaving SA342 Radio SkipAdf10sDialChange()");
                     return true;
                 }
@@ -2067,20 +2065,20 @@ namespace NonVisuals.Radios
             return false;
         }
 
-        private bool SkipAdf1sDialChange()
+        private bool SkipAdf1SDialChange()
         {
             try
             {
                 Common.DebugP("Entering SA342 Radio SkipAdf1sDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
                 {
-                    if (_adf1sDialSkipper > 2)
+                    if (_adf1SDialSkipper > 2)
                     {
-                        _adf1sDialSkipper = 0;
+                        _adf1SDialSkipper = 0;
                         Common.DebugP("Leaving SA342 Radio SkipAdf1sDialChange()");
                         return false;
                     }
-                    _adf1sDialSkipper++;
+                    _adf1SDialSkipper++;
                     Common.DebugP("Leaving SA342 Radio SkipAdf1sDialChange()");
                     return true;
                 }

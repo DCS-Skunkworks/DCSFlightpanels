@@ -5,8 +5,6 @@ namespace ClassLibraryCommon
 
     public enum RadioPanelPZ69Display
     {
-        Active,
-        Standby,
         UpperActive,
         UpperStandby,
         LowerActive,
@@ -17,6 +15,7 @@ namespace ClassLibraryCommon
     {
         //Zero = 0, <-- DCS & keybd_event does not work without delay between key press & release
         Indefinite = 999999999,
+        ThirtyTwoMilliSec = 32,
         FiftyMilliSec = 50,
         HalfSecond = 500,
         Second = 1000,
@@ -39,21 +38,24 @@ namespace ClassLibraryCommon
         SendInput = 1
     }
 
-    public enum SaitekPanelsEnum
+    public enum GamingPanelVendorEnum
     {
-        Unknown = 0,
-        PZ55SwitchPanel = 2,
-        PZ69RadioPanel = 4,
-        PZ70MultiPanel = 8,
-        BackLitPanel = 16,
-        TPM = 32
+        Saitek = 0x6A3,
+        Elgato = 0xFD9
     }
 
-    /*
-     * Keyemulator
-     * DCS-BIOS Profile
-     * Radios : DCS-BIOS || SRS
-     */
+    public enum GamingPanelEnum
+    {
+        Unknown = 0,
+        PZ55SwitchPanel = 0xD67,
+        PZ69RadioPanel = 0xD05,
+        PZ70MultiPanel = 0xD06,
+        BackLitPanel = 0xB4E,
+        TPM = 0xB4D,
+        StreamDeckMini = 0x0063,
+        StreamDeck = 0x0060,
+        StreamDeckXL = 0x006C
+    }
 
     /*
      * Description = What is defined (XYZ) in BIOS.protocol.setExportModuleAircrafts({"XYZ"})
@@ -131,7 +133,4 @@ namespace ClassLibraryCommon
         Yak52
     }
 
-    class CommonEnums
-    {
-    }
 }

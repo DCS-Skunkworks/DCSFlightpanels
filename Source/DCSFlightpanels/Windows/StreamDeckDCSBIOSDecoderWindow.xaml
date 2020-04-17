@@ -1,0 +1,220 @@
+﻿<Window x:Class="DCSFlightpanels.Windows.StreamDeckDCSBIOSDecoderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCSFlightpanels"
+        mc:Ignorable="d"
+        xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
+        Title="DCS-BIOS Decoder" 
+        Height="500" Width="1200" 
+        WindowStartupLocation="CenterScreen" 
+        Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
+        Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico"
+        d:DataContext="{d:DesignInstance streamDeck:DCSBIOSDecoder}">
+    <Window.Resources>
+        <Image x:Key="UpArrow" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/DCSFlightpanels;component/Images/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/DCSFlightpanels;component/Images/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/DCSFlightpanels;component/Images/right_arrow.png"/>
+
+
+        <ToolTip x:Key="DecodeToolTip" >
+            <StackPanel>
+                <TextBlock Text="Decode how DCS-BIOS data should be shown on the button"/>
+            </StackPanel>
+        </ToolTip>
+        <system:Double x:Key="ArrowHeight">18</system:Double>
+
+        <Popup x:Key="PopUpSearchResults" Width="600" Height="150" PlacementTarget="{Binding ElementName=text}" StaysOpen="False">
+            <Grid HorizontalAlignment="Stretch">
+                <DataGrid AutoGenerateColumns="false" 
+                              Background="White" 
+                              ItemsSource="{Binding}" 
+                              SelectionMode="Single" 
+                              SelectionUnit="FullRow" 
+                              HorizontalAlignment="Stretch" 
+                              Name="PopupDataGrid" 
+                              VerticalAlignment="Stretch" 
+                              VerticalScrollBarVisibility="Visible" 
+                              MouseDoubleClick="Control_OnMouseDoubleClick" 
+                              CanUserReorderColumns="False" 
+                              CanUserResizeRows="False" 
+                              CanUserSortColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=identifier}" Width="*" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Path=description}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Popup>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500*"/>
+            <ColumnDefinition Width="350*"/>
+            <ColumnDefinition Width="350*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" Margin="0,10,0,0">
+            <GroupBox Header="Select DCS-BIOS Control" >
+                <StackPanel Margin="0,10,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Clear" Height="23" VerticalAlignment="Bottom" Margin="10,10,10,10"  x:Name="ButtonClear1" Width="75" Click="ButtonClear_OnClick"/>
+                        <TextBox Name="TextBoxSearch" Text="Type to search control" Margin="0,10,10,10"  Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
+                        <TextBox FontSize="10" Height="18" Width="150" Foreground="Blue" Margin="10,10,10,10"   IsReadOnly="True" Name="TextBoxDCSBIOSId" />
+                        <Label Name="LabelInsert" FontSize="9" Margin="10,10,10,10"  Foreground="MediumBlue" Content="Click to insert" MouseEnter="Control_OnMouseEnter" MouseLeave="Control_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox>
+                <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnChange" Checked="CheckBoxUseFormula_OnChange"/>
+            </GroupBox>
+            <GroupBox Name="GroupBoxFormula" Header="Formula" >
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="10,10,10,10">
+                            <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/system.math(v=vs.110).aspx" RequestNavigate="Hyperlink_OnRequestNavigate">
+                                Click here for a list of Math functions
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Name="TextBlockFormulas" Margin="10,10,10,10" Foreground="DodgerBlue" MouseDown="TextBlockFormulas_OnMouseDown" MouseEnter="Control_OnMouseEnter" MouseLeave="Control_OnMouseLeave">
+                                <Underline>Click here for sample formulas</Underline>
+                        </TextBlock>
+                    </StackPanel>
+                    <Label Name="LabelFormula" Content="Copy DCS-BIOS control name directly as is into the formula" Margin="10,0,10,0"/>
+                    <TextBox x:Name="TextBoxFormula" Height="100" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" KeyUp="TextBoxFormula_OnKeyUp" TextChanged="TextBoxFormula_OnTextChanged"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <DockPanel>
+                            <Label Content="DCS-BIOS value :"  Margin="10,10,10,0" />
+                            <Label Name="LabelSourceRawValue" Content="" Margin="10,10,10,0"/>
+                        </DockPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <DockPanel>
+                            <Label Content="Error :"  Margin="10,10,10,0" />
+                            <Label Name="LabelErrors" Margin="10,10,10,0" />
+                        </DockPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <DockPanel>
+                            <Label Content="Formula result :" Margin="10,10,10,0"/>
+                            <Label Name="LabelResult" Margin="10,10,10,0"/>
+                        </DockPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="5" Margin="0,5,0,0">
+            <GroupBox Header="Decode or add unit" >
+                <StackPanel Margin="0,10,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <GroupBox Header="Show as :">
+                            <StackPanel Orientation="Horizontal" Margin="5,5,5,5">
+                                <RadioButton Name="RadioButtonOutputNumber" GroupName="OutputType" Content="Number" IsChecked="True" Click="RadioButtonOutput_OnClick"></RadioButton>
+                                <RadioButton Name="RadioButtonOutputString" GroupName="OutputType" Content="Formatted" Margin="10,0,0,0" Click="RadioButtonOutput_OnClick"></RadioButton>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                    <StackPanel Name="StackPanelNumberConversion">
+                        <DataGrid AutoGenerateColumns="false" 
+                                  ItemsSource="{Binding}" 
+                                  SelectionMode="Single" 
+                                  SelectionUnit="FullRow" 
+                                  HorizontalAlignment="Stretch" 
+                                  Name="DataGridDecoders" 
+                                  VerticalAlignment="Stretch" 
+                                  VerticalScrollBarVisibility="Visible" 
+                                  SelectionChanged="DataGridDecoders_OnSelectionChanged" 
+                                  CanUserReorderColumns="False" 
+                                  CanUserResizeRows="False" 
+                                  CanUserSortColumns="False" 
+                                  CanUserAddRows="False"
+                                  Height="250">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Decoders" IsReadOnly="True" Binding="{Binding Path=FriendlyInfo}"  Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Name="ButtonAddNumberConversion" Width="60"  Margin="0,0,5,0" Content="Add" Click="ButtonAddNumberConversion_OnClick"></Button>
+                            <Button Name="ButtonEditNumberConversion" Width="60"  Margin="0,0,5,0" Content="Edit" Click="ButtonEditNumberConversion_OnClick"></Button>
+                            <Button Name="ButtonDeleteNumberConversion" Width="60"  Margin="0,0,5,0" Content="Delete" Click="ButtonDeleteNumberConversion_OnClick"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="4" Margin="0,5,0,0">
+            <StackPanel Name="StackPanelButtonTextAndStyle"  Margin="10,5,10,0" Visibility="Visible">
+                <GroupBox Header="Choose Font and Color">
+                    <StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <Image Name="ButtonImage" Height="72" Width="72" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+                            <StackPanel>
+                                <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressLeft" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressRight" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Button Name="ButtonTextFaceFont" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
+                                    <Button Name="ButtonTextFaceFontColor" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
+                                    <Button Name="ButtonTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Margin="0,5,0,0" >
+                            <TextBox Name="TextBoxFontInfo" Height="60" IsReadOnly="True" Background="Transparent"></TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <StackPanel Background="WhiteSmoke">
+                    <TextBlock Margin="10,20,0,0" FontSize="15">
+                        <Bold>Information</Bold>
+                    </TextBlock>
+                    <TextBlock  Margin="10,0,10,0" FontSize="9">
+                        <Bold>
+                            <LineBreak/>
+                            Start DCS and open a mission in the plane you want to configure.
+                            <LineBreak/>
+                            This way you will see real-time values from DCS-BIOS.
+                            <LineBreak/>
+                            <LineBreak/>
+                            1) Select DCS-BIOS Output you want (e.g. Compass Heading)<LineBreak/>
+                            2) Choose whether to format the DCS-BIOS value using a formula<LineBreak/>
+                            3) Choose if to decode the value, number to text or <LineBreak/> 
+                               adding unit info also possible here<LineBreak/>
+                            4) Select font, font size and color<LineBreak/>
+                        </Bold>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Grid.Row="4" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,10,0,0">
+            <Button Content="Save" Height="23" HorizontalAlignment="Right" x:Name="ButtonSave" Width="75" Margin="10,0,10,0" Click="ButtonSave_OnClick" />
+            <Button Content="Cancel" Height="23" HorizontalAlignment="Right" x:Name="ButtonCancel" Width="75" Margin="10,0,10,0" Click="ButtonCancel_OnClick" />
+            <Button Name="ButtonFormulaHelp" Height="23"  Content="Help" Width="75" Margin="10,0,10,0" Click="ButtonFormulaHelp_OnClick" />
+        </StackPanel>
+
+
+    </Grid>
+</Window>

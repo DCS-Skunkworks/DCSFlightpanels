@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
@@ -104,7 +106,7 @@ namespace NonVisuals.Radios
             }
 
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            OnSettingsApplied();
+            SettingsApplied();
         }
 
         public override List<string> ExportSettings()
@@ -183,20 +185,6 @@ namespace NonVisuals.Radios
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
-        private void PZ69KnobChanged(RadioPanelPZ69KnobEmulator radioPanelKey)
-        {
-            if (!ForwardPanelEvent)
-            {
-                return;
-            }
-            foreach (var keyBinding in _keyBindings)
-            {
-                if (keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
-                {
-                    keyBinding.OSKeyPress.Execute();
-                }
-            }
-        }
 
         private void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
@@ -225,7 +213,7 @@ namespace NonVisuals.Radios
                     {
                         if (keyBinding.OSKeyPress != null && keyBinding.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && keyBinding.WhenTurnedOn == radioPanelKey.IsOn)
                         {
-                            keyBinding.OSKeyPress.Execute();
+                            keyBinding.OSKeyPress.Execute(new CancellationToken());
                             break;
                         }
                     }
@@ -233,7 +221,7 @@ namespace NonVisuals.Radios
                     {
                         if (osCommand.OSCommandObject != null && osCommand.RadioPanelPZ69Key == radioPanelKey.RadioPanelPZ69Knob && osCommand.WhenTurnedOn == radioPanelKey.IsOn)
                         {
-                            osCommand.OSCommandObject.Execute();
+                            osCommand.OSCommandObject.Execute(new CancellationToken());
                             break;
                         }
                     }
@@ -378,7 +366,7 @@ namespace NonVisuals.Radios
                 displayValue.Value = valueAsString;
                 _displayValues.Add(displayValue);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateSingleKeyBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
@@ -400,8 +388,7 @@ namespace NonVisuals.Radios
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
+                        keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                     }
                     found = true;
                 }
@@ -410,13 +397,13 @@ namespace NonVisuals.Radios
             {
                 var keyBinding = new KeyBindingPZ69();
                 keyBinding.RadioPanelPZ69Key = radioPanelPZ69Knob;
-                keyBinding.OSKeyPress = new OSKeyPress(keys, keyPressLength);
+                keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
             Common.DebugP("RadioPanelPZ69Emulator _keyBindings : " + _keyBindings.Count);
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateOSCommandBinding(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, OSCommand osCommand, bool whenTurnedOn)
@@ -441,7 +428,7 @@ namespace NonVisuals.Radios
                 osCommandBindingPZ69.WhenTurnedOn = whenTurnedOn;
                 _osCommandBindings.Add(osCommandBindingPZ69);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void ClearAllBindings(RadioPanelPZ69KeyOnOff radioPanelPZ69KnobOnOff)
@@ -454,7 +441,7 @@ namespace NonVisuals.Radios
                     keyBinding.OSKeyPress = null;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void ClearDisplayValue(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, RadioPanelPZ69Display radioPanelPZ69Display)
@@ -468,7 +455,7 @@ namespace NonVisuals.Radios
                 }
             }*/
             _displayValues.RemoveWhere(x => x.RadioPanelPZ69Knob == radioPanelPZ69Knob && x.RadioPanelDisplay == radioPanelPZ69Display);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         public void AddOrUpdateSequencedKeyBinding(string information, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
@@ -476,7 +463,7 @@ namespace NonVisuals.Radios
             if (sortedList.Count == 0)
             {
                 RemoveRadioPanelKnobFromList(ControlListPZ69.KEYS, radioPanelPZ69Knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -491,8 +478,7 @@ namespace NonVisuals.Radios
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
-                        keyBinding.WhenTurnedOn = whenTurnedOn;
+                        keyBinding.OSKeyPress = new KeyPress(information, sortedList);
                     }
                     found = true;
                     break;
@@ -502,12 +488,12 @@ namespace NonVisuals.Radios
             {
                 var keyBinding = new KeyBindingPZ69();
                 keyBinding.RadioPanelPZ69Key = radioPanelPZ69Knob;
-                keyBinding.OSKeyPress = new OSKeyPress(information, sortedList);
+                keyBinding.OSKeyPress = new KeyPress(information, sortedList);
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
 
@@ -516,7 +502,7 @@ namespace NonVisuals.Radios
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
                 RemoveRadioPanelKnobFromList(ControlListPZ69.BIPS, radioPanelPZ69Knob, whenTurnedOn);
-                IsDirtyMethod();
+                SetIsDirty();
                 return;
             }
             //This must accept lists
@@ -529,7 +515,6 @@ namespace NonVisuals.Radios
                     bipLink.BIPLights = bipLinkPZ69.BIPLights;
                     bipLink.Description = bipLinkPZ69.Description;
                     bipLink.RadioPanelPZ69Knob = radioPanelPZ69Knob;
-                    bipLink.WhenTurnedOn = whenTurnedOn;
                     found = true;
                     break;
                 }
@@ -540,7 +525,7 @@ namespace NonVisuals.Radios
                 bipLinkPZ69.WhenTurnedOn = whenTurnedOn;
                 _bipLinks.Add(bipLinkPZ69);
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
         private void RemoveRadioPanelKnobFromList(ControlListPZ69 controlListPZ69, RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob, bool whenTurnedOn)
@@ -573,14 +558,8 @@ namespace NonVisuals.Radios
 
             if (found)
             {
-                IsDirtyMethod();
+                SetIsDirty();
             }
-        }
-
-        private void IsDirtyMethod()
-        {
-            OnSettingsChanged();
-            IsDirty = true;
         }
 
         public void Clear(RadioPanelPZ69KnobsEmulator radioPanelPZ69Knob)
@@ -592,10 +571,10 @@ namespace NonVisuals.Radios
                     keyBinding.OSKeyPress = null;
                 }
             }
-            IsDirtyMethod();
+            SetIsDirty();
         }
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(hashSet);
         }

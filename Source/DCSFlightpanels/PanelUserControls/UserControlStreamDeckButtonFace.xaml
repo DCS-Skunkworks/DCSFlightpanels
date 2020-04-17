@@ -1,0 +1,97 @@
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.UserControlStreamDeckButtonFace"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DCSFlightpanels"
+             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             Loaded="UserControlStreamDeckButtonFace_OnLoaded"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Image x:Key="UpArrow" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/DCSFlightpanels;component/Images/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/DCSFlightpanels;component/Images/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/DCSFlightpanels;component/Images/right_arrow.png"/>
+
+
+        <ToolTip x:Key="DecodeToolTip" >
+            <StackPanel>
+                <TextBlock Text="Decode how DCS-BIOS data should be shown on the button"/>
+            </StackPanel>
+        </ToolTip>
+        <system:Double x:Key="ArrowHeight">18</system:Double>
+    </UserControl.Resources>
+    <GroupBox Header="Button Image">
+
+        <Grid Margin="10,0,10,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="10*" />
+            </Grid.ColumnDefinitions>
+
+
+
+            <StackPanel Name="StackPanelRadioButtonsImageType" Grid.Column="0">
+                <StackPanel >
+                    <Label Content="Image Content" Margin="0,2,0,0"/>
+                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonTextFace" Content="Static Text" Margin="0,2,0,2" Click="RadioButtonFaceType_OnClick"/>
+                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonDCSBIOSFace" Content="DCS-BIOS Data" Margin="0,2,0,2" Click="RadioButtonFaceType_OnClick"/>
+                    <RadioButton GroupName="ButtonImageType" Name="RadioButtonImageFace" Content="Image" Margin="0,2,0,2" Click="RadioButtonFaceType_OnClick"/>
+                </StackPanel>
+            </StackPanel>
+
+
+            <StackPanel Name="StackPanelButtonTextAndStyle"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="10,5,10,0" Visibility="Visible">
+                <Label Content="Choose Button Text and Color" Background="#e6e6e6" HorizontalContentAlignment="Center" Margin="0,5,0,0"  />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <customControl:StreamDeckFaceTextBox x:Name="TextBoxButtonTextFace" FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Margin="4,0,0,0"   KeyUp="TextBoxButtonTextFace_OnKeyUp" />
+                    <StackPanel>
+                        <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
+                        <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
+                        <RepeatButton Name="RepeatButtonActionPressLeft" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
+                        <RepeatButton Name="RepeatButtonActionPressRight" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Button Name="ButtonTextFaceFont" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
+                            <Button Name="ButtonTextFaceFontColor" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
+                            <Button Name="ButtonTextFaceBackgroundColor" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
+                            <Button Name="ButtonTestTextFace" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestTextFace_OnClick"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel>
+                    <TextBox Name="TextBoxFontInfo" Height="30" IsReadOnly="True" Background="Transparent"></TextBox>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Visible">
+                <Label Content="DCS-BIOS Decoder based on :" FontSize="10" Height="23"/>
+                <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDCSBIOSDecoder"  IsEnabled="False" Background="Gainsboro" />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonAddEditDCSBIOSFaceButton" Width="65" Content="Add / Edit" Margin="0,2,2,0" Click="ButtonSelectDCSBIOSFaceButton_OnClick"/>
+                    <Button Name="ButtonDeleteDCSBIOSFaceButton" Width="45" Content="Delete" Margin="0,2,2,0" Click="ButtonDeleteDCSBIOSFaceButton_OnClick"/>
+                </StackPanel>
+                
+                <Button Name="ButtonFocus" Width="10" Height="1" Background="Transparent" Content=" " Margin="0,10,0,0"/>
+            </StackPanel>
+
+            <StackPanel Name="StackPanelButtonImage"   Margin="10,0,10,0" Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">
+                <Label Content="Selected Image" FontSize="10" Height="23" Margin="0,5,2,0" />
+                <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxImageFace"  IsEnabled="False" Background="LightSteelBlue"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Name="ButtonBrowse" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowse_OnClick"/>
+                    <Button Name="ButtonTestSelectImageGalleryButton" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestSelectImageGalleryButton_OnClick"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </GroupBox>
+</panelUserControls:UserControlBase>

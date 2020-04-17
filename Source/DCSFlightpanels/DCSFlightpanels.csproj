@@ -32,6 +32,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -62,22 +64,68 @@
     <Reference Include="CommonClassLibraryJD">
       <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
     </Reference>
-    <Reference Include="HidLibrary, Version=3.2.46.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\hidlibrary.3.2.46.0\lib\HidLibrary.dll</HintPath>
+    <Reference Include="HidLibrary, Version=3.3.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\hidlibrary.3.3.28\lib\net45\HidLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="HidSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HidSharp.2.1.0\lib\net35\HidSharp.dll</HintPath>
     </Reference>
     <Reference Include="Jace, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Jace.0.9.2\lib\netstandard1.6\Jace.dll</HintPath>
+      <HintPath>..\packages\Jace.1.0.0\lib\netstandard1.6\Jace.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Octokit, Version=0.32.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.32.0\lib\net45\Octokit.dll</HintPath>
+    <Reference Include="Octokit, Version=0.46.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.46.0\lib\net46\Octokit.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenMacroBoard.SDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenMacroBoard.SDK.1.0.0\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="StreamDeckSharp, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StreamDeckSharp.1.1.0\lib\net40\StreamDeckSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.NonGeneric, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.NonGeneric.4.3.0\lib\net46\System.Collections.NonGeneric.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Formatters.4.3.0\lib\net46\System.Runtime.Serialization.Formatters.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,9 +135,15 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Theraot.Core, Version=3.1.4.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Theraot.Core.3.1.4\lib\net46\Theraot.Core.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\..\C# WPF Includes\Extended.WPF.Toolkit.Binaries.NET.4.x\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -99,50 +153,72 @@
     <Compile Include="AboutFPWindow.xaml.cs">
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BackLitPanelUserControl.xaml.cs">
+    <Compile Include="Bills\BillBaseOutput.cs" />
+    <Compile Include="CustomControls\PZ69FullTextBox.cs" />
+    <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
+    <Compile Include="CustomControls\StreamDeckImage.cs" />
+    <Compile Include="CustomControls\TextBoxBase.cs" />
+    <Compile Include="CustomControls\TPMTextBox.cs" />
+    <Compile Include="CustomControls\PZ70TextBox.cs" />
+    <Compile Include="CustomControls\PZ69Button.cs" />
+    <Compile Include="CustomControls\PZ69TextBox.cs" />
+    <Compile Include="CustomControls\StreamDeckActionTextBox.cs" />
+    <Compile Include="CustomControls\PZ55TextBox.cs" />
+    <Compile Include="Event Propagators\SettingsChangedPropagator.cs" />
+    <Compile Include="IStreamDeckUIParent.cs" />
+    <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChooseProfileModuleWindow.xaml.cs">
+    <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
       <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBIOSControlsConfigsWindow.xaml.cs">
-      <DependentUpon>DCSBIOSControlsConfigsWindow.xaml</DependentUpon>
+    <Compile Include="Windows\DCSBIOSInputControlsWindow.xaml.cs">
+      <DependentUpon>DCSBIOSInputControlsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BipLightWindow.xaml.cs">
+    <Compile Include="Windows\BipLightWindow.xaml.cs">
       <DependentUpon>BipLightWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBiosInputWindow.xaml.cs">
+    <Compile Include="Windows\DCSBiosInputWindow.xaml.cs">
       <DependentUpon>DCSBiosInputWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBIOSNotFoundWindow.xaml.cs">
+    <Compile Include="Windows\DCSBIOSNotFoundWindow.xaml.cs">
       <DependentUpon>DCSBIOSNotFoundWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBiosOutputFormulaWindow.xaml.cs">
+    <Compile Include="Windows\DCSBIOSOutputControlsWindow.xaml.cs">
+      <DependentUpon>DCSBIOSOutputControlsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InformationTextBlockWindow.xaml.cs">
+    <Compile Include="Windows\InformationTextBlockWindow.xaml.cs">
       <DependentUpon>InformationTextBlockWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InformationRichTextWindow.xaml.cs">
+    <Compile Include="Windows\InformationRichTextWindow.xaml.cs">
       <DependentUpon>InformationRichTextWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ISaitekUserControl.cs" />
-    <Compile Include="JaceHelpWindow.xaml.cs">
+    <Compile Include="IGamingPanelUserControl.cs" />
+    <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JaceSandboxWindow.xaml.cs">
+    <Compile Include="Windows\DCSBIOSComparatorWindow.xaml.cs">
+      <DependentUpon>DCSBIOSComparatorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml.cs">
+      <DependentUpon>StreamDeckDCSBIOSDecoderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\JaceSandboxWindow.xaml.cs">
       <DependentUpon>JaceSandboxWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MultiPanelUserControl.xaml.cs">
+    <Compile Include="PanelUserControls\MultiPanelUserControl.xaml.cs">
       <DependentUpon>MultiPanelUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DCSBiosOutputTriggerWindow.xaml.cs">
+    <Compile Include="Windows\DCSBiosOutputTriggerWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputTriggerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="KeyPressWindow.xaml.cs">
+    <Compile Include="Windows\KeyPressWindow.xaml.cs">
       <DependentUpon>KeyPressWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LEDConfigsWindow.xaml.cs">
+    <Compile Include="Windows\LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Radios\RadioPanelPZ69UserControlAV8BNA.xaml.cs">
@@ -209,95 +285,122 @@
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BIPLinkWindow.xaml.cs">
+    <Compile Include="Windows\BIPLinkWindow.xaml.cs">
       <DependentUpon>BIPLinkWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BugReportWindow.xaml.cs">
-      <DependentUpon>BugReportWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="KeySequenceWindow.xaml.cs">
+    <Compile Include="Windows\KeySequenceWindow.xaml.cs">
       <DependentUpon>KeySequenceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SwitchPanelPZ55UserControl.xaml.cs">
+    <Compile Include="Windows\StreamDeckLayerWindow.xaml.cs">
+      <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\StreamDeckUserControl.xaml.cs">
+      <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagDataClassBase.cs" />
-    <Compile Include="TagDataClassPZ69Button.cs" />
-    <Compile Include="TagDataClassPZ69Full.cs" />
-    <Compile Include="TagDataClassTPM.cs" />
-    <Compile Include="TagDataClassPZ69.cs" />
-    <Compile Include="TagDataClassPZ70.cs" />
-    <Compile Include="TextBlockDialogWindow.xaml.cs">
+    <Compile Include="Bills\BillBaseInput.cs" />
+    <Compile Include="Bills\BillStreamDeckFace.cs" />
+    <Compile Include="Bills\BillPZ69Button.cs" />
+    <Compile Include="Bills\BillPZ69Full.cs" />
+    <Compile Include="Bills\BillStreamDeckAction.cs" />
+    <Compile Include="Bills\BillTPM.cs" />
+    <Compile Include="Bills\BillPZ69.cs" />
+    <Compile Include="Bills\BillPZ70.cs" />
+    <Compile Include="Windows\TextBlockDialogWindow.xaml.cs">
       <DependentUpon>TextBlockDialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TagDataClassPZ55.cs" />
-    <Compile Include="TPMPanelUserControl.xaml.cs">
+    <Compile Include="Bills\BillPZ55.cs" />
+    <Compile Include="PanelUserControls\TPMPanelUserControl.xaml.cs">
       <DependentUpon>TPMPanelUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControlBase.cs" />
-    <Compile Include="OSCommandWindow.xaml.cs">
+    <Compile Include="PanelUserControls\UserControlBase.cs" />
+    <Compile Include="Windows\OSCommandWindow.xaml.cs">
       <DependentUpon>OSCommandWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml.cs">
+      <DependentUpon>UserControlStreamDeckButtonAction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\UserControlStreamDeckButtonFace.xaml.cs">
+      <DependentUpon>UserControlStreamDeckButtonFace.xaml</DependentUpon>
     </Compile>
     <Page Include="AboutFPWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BackLitPanelUserControl.xaml">
+    <Page Include="PanelUserControls\UCDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ChooseProfileModuleWindow.xaml">
+    <Page Include="PanelUserControls\BackLitPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DCSBIOSControlsConfigsWindow.xaml">
+    <Page Include="Windows\ChooseProfileModuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BipLightWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DCSBiosInputWindow.xaml">
+    <Page Include="Windows\DCSBIOSInputControlsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DCSBIOSNotFoundWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DCSBiosOutputFormulaWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DCSBiosOutputTriggerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="InformationTextBlockWindow.xaml">
+    <Page Include="Windows\BipLightWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="InformationRichTextWindow.xaml">
+    <Page Include="Windows\DCSBiosInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JaceHelpWindow.xaml">
+    <Page Include="Windows\DCSBIOSNotFoundWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JaceSandboxWindow.xaml">
+    <Page Include="Windows\DCSBIOSOutputControlsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="KeyPressWindow.xaml">
+    <Page Include="Windows\DCSBiosOutputFormulaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LEDConfigsWindow.xaml">
+    <Page Include="Windows\DCSBiosOutputTriggerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\InformationTextBlockWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\InformationRichTextWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\JaceHelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DCSBIOSComparatorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\JaceSandboxWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\KeyPressWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\LEDConfigsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -313,7 +416,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MultiPanelUserControl.xaml">
+    <Page Include="PanelUserControls\MultiPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -401,35 +504,47 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BIPLinkWindow.xaml">
+    <Page Include="Windows\BIPLinkWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BugReportWindow.xaml">
+    <Page Include="Windows\KeySequenceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="KeySequenceWindow.xaml">
+    <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Windows\StreamDeckLayerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SwitchPanelPZ55UserControl.xaml">
+    <Page Include="PanelUserControls\StreamDeckUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TextBlockDialogWindow.xaml">
+    <Page Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TPMPanelUserControl.xaml">
+    <Page Include="Windows\TextBlockDialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="OSCommandWindow.xaml">
+    <Page Include="PanelUserControls\TPMPanelUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\OSCommandWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PanelUserControls\UserControlStreamDeckButtonFace.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -701,6 +816,204 @@
   <ItemGroup>
     <Resource Include="Images\av8bna_comm1_comm2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\streamdeck35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\streamdeck48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default_image_streamdeck_button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\question_mark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\down_arrow.png" />
+    <Resource Include="Images\left_arrow.png" />
+    <Resource Include="Images\right_arrow.png" />
+    <Resource Include="Images\up_arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dot3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\CockpitButtons\wpn_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\CockpitButtons\wpn_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\CockpitButtons\wpn_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\NumberButtons\10_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\10_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\10_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\11_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\11_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\11_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\12_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\12_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\12_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\13_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\13_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\13_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\14_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\14_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\14_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\15_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\15_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\15_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\1_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\1_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\1_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\2_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\2_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\2_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\3_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\3_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\3_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\4_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\4_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\4_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\5_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\5_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\5_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\6_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\6_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\6_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\7_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\7_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\7_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\8_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\8_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\8_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\9_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\9_green.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\NumberButtons\9_red.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\Symbols\back_turkose.png" />
+    <Resource Include="StreamDeckGallery\Symbols\back_white.png" />
+    <Resource Include="StreamDeckGallery\Symbols\home_turkose.png" />
+    <Resource Include="StreamDeckGallery\Symbols\home_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\Symbols\minus_sign.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StreamDeckGallery\Symbols\plus_sign.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\CockpitButtons\rf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="formulas.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-164_uhf.png" />
+    <Resource Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-186_vhf_am.png" />
+    <Resource Include="StreamDeckGallery\CockpitButtons\Radio\an-arc-186_vhf_fm.png" />
+    <Resource Include="StreamDeckGallery\CockpitButtons\Radio\ils.png" />
+    <Resource Include="StreamDeckGallery\CockpitButtons\Radio\tacan.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"
@@ -712,6 +1025,13 @@ if exist pre-build-$(ConfigurationName).cmd call  pre-build-$(ConfigurationName)
 if exist post-build-$(ConfigurationName).cmd call  post-build-$(ConfigurationName).cmd $(ProjectDir)
 </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

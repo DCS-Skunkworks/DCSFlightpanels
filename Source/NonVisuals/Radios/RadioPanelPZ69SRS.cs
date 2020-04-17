@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 
 namespace NonVisuals.Radios
@@ -267,8 +269,7 @@ namespace NonVisuals.Radios
                                         var timeSpan = new TimeSpan(DateTime.Now.Ticks - _upperFreqSwitchPressed);
                                         if (timeSpan.Seconds <= 2)
                                         {
-                                            var message = GetToggleGuardFreqCommand(_currentUpperRadioMode);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(message);
+                                            SRSListenerFactory.GetSRSListener().ToggleBetweenGuardAndFrequency(_currentUpperRadioMode);
                                         }
                                     }
                                     break;
@@ -285,8 +286,7 @@ namespace NonVisuals.Radios
                                         var timeSpan = new TimeSpan(DateTime.Now.Ticks - _lowerFreqSwitchPressed);
                                         if (timeSpan.Seconds <= 2)
                                         {
-                                            var message = GetToggleGuardFreqCommand(_currentLowerRadioMode);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(message);
+                                            SRSListenerFactory.GetSRSListener().ToggleBetweenGuardAndFrequency(_currentLowerRadioMode);
                                         }
                                     }
                                     break;
@@ -328,7 +328,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentUpperRadioMode, true));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, true);
                                         }
                                         else
                                         {
@@ -338,8 +338,7 @@ namespace NonVisuals.Radios
                                                 changeValue = 5.0;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -351,7 +350,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentUpperRadioMode, false));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, false);
                                         }
                                         else
                                         {
@@ -361,8 +360,7 @@ namespace NonVisuals.Radios
                                                 changeValue = -5.0;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -375,7 +373,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentUpperRadioMode, true));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, true);
                                         }
                                         else
                                         {
@@ -390,8 +388,7 @@ namespace NonVisuals.Radios
                                                 changeValue = changeValue * 100;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -404,7 +401,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentUpperRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentUpperRadioMode, false));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentUpperRadioMode, false);
                                         }
                                         else
                                         {
@@ -419,8 +416,7 @@ namespace NonVisuals.Radios
                                                 changeValue = changeValue * 100;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentUpperRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -432,7 +428,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentLowerRadioMode, true));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, true);
                                         }
                                         else
                                         {
@@ -442,8 +438,7 @@ namespace NonVisuals.Radios
                                                 changeValue = 10.0;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -455,7 +450,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentLowerRadioMode, false));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, false);
                                         }
                                         else
                                         {
@@ -465,8 +460,7 @@ namespace NonVisuals.Radios
                                                 changeValue = -10.0;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -479,7 +473,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentLowerRadioMode, true));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, true);
                                         }
                                         else
                                         {
@@ -494,8 +488,7 @@ namespace NonVisuals.Radios
                                                 changeValue = changeValue * 100;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -508,7 +501,7 @@ namespace NonVisuals.Radios
                                     {
                                         if (SRSListenerFactory.GetSRSListener().GetRadioMode(_currentLowerRadioMode) == SRSRadioMode.Channel)
                                         {
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(GetChannelCommand(_currentLowerRadioMode, false));
+                                            SRSListenerFactory.GetSRSListener().ChangeChannel(_currentLowerRadioMode, false);
                                         }
                                         else
                                         {
@@ -523,8 +516,7 @@ namespace NonVisuals.Radios
                                                 changeValue = changeValue * 100;
                                             }
 
-                                            var command = GetFreqChangeSendCommand(_currentLowerRadioMode, changeValue);
-                                            SRSListenerFactory.GetSRSListener().SendDataFunction(command);
+                                            SRSListenerFactory.GetSRSListener().ChangeFrequency(_currentUpperRadioMode, changeValue);
                                         }
                                     }
                                     break;
@@ -540,158 +532,7 @@ namespace NonVisuals.Radios
             Common.DebugP("Leaving SRS Radio AdjustFrequency()");
         }
 
-        private string GetToggleGuardFreqCommand(CurrentSRSRadioMode currentSRSRadioMode)
-        {
-            var radioId = 0;
-            switch (currentSRSRadioMode)
-            {
-                case CurrentSRSRadioMode.COM1:
-                    {
-                        radioId = 1;
-                        break;
-                    }
-                case CurrentSRSRadioMode.COM2:
-                    {
-                        radioId = 2;
-                        break;
-                    }
-                case CurrentSRSRadioMode.NAV1:
-                    {
-                        radioId = 3;
-                        break;
-                    }
-                case CurrentSRSRadioMode.NAV2:
-                    {
-                        radioId = 4;
-                        break;
-                    }
-                case CurrentSRSRadioMode.ADF:
-                    {
-                        radioId = 5;
-                        break;
-                    }
-                case CurrentSRSRadioMode.DME:
-                    {
-                        radioId = 6;
-                        break;
-                    }
-                case CurrentSRSRadioMode.XPDR:
-                    {
-                        radioId = 7;
-                        break;
-                    }
-            }
-            var result = "{\"Command\": 2,\"RadioId\":" + radioId + "}\n";
-            //{ "Command": 2,"RadioId":2} 
-            Common.DebugP(result);
-            return result;
-        }
-
-        private string GetChannelCommand(CurrentSRSRadioMode currentSRSRadioMode, bool increase)
-        {
-            var radioId = 0;
-            switch (currentSRSRadioMode)
-            {
-                case CurrentSRSRadioMode.COM1:
-                    {
-                        radioId = 1;
-                        break;
-                    }
-                case CurrentSRSRadioMode.COM2:
-                    {
-                        radioId = 2;
-                        break;
-                    }
-                case CurrentSRSRadioMode.NAV1:
-                    {
-                        radioId = 3;
-                        break;
-                    }
-                case CurrentSRSRadioMode.NAV2:
-                    {
-                        radioId = 4;
-                        break;
-                    }
-                case CurrentSRSRadioMode.ADF:
-                    {
-                        radioId = 5;
-                        break;
-                    }
-                case CurrentSRSRadioMode.DME:
-                    {
-                        radioId = 6;
-                        break;
-                    }
-                case CurrentSRSRadioMode.XPDR:
-                    {
-                        radioId = 7;
-                        break;
-                    }
-            }
-            /*{ "Command": 3,"RadioId":1}
-            --channel up(if channels have been configured)
-
-            { "Command": 4,"RadioId":1}
-            --channel down(if channels have been configured)*/
-            var result = "";
-            if (increase)
-            {
-                result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";
-            }
-            else
-            {
-                result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
-            }
-            Common.DebugP(result);
-            return result;
-        }
-
-        private string GetFreqChangeSendCommand(CurrentSRSRadioMode currentSRSRadioMode, double value)
-        {
-            var radioId = 0;
-            switch (currentSRSRadioMode)
-            {
-                case CurrentSRSRadioMode.COM1:
-                    {
-                        radioId = 1;
-                        break;
-                    }
-                case CurrentSRSRadioMode.COM2:
-                    {
-                        radioId = 2;
-                        break;
-                    }
-                case CurrentSRSRadioMode.NAV1:
-                    {
-                        radioId = 3;
-                        break;
-                    }
-                case CurrentSRSRadioMode.NAV2:
-                    {
-                        radioId = 4;
-                        break;
-                    }
-                case CurrentSRSRadioMode.ADF:
-                    {
-                        radioId = 5;
-                        break;
-                    }
-                case CurrentSRSRadioMode.DME:
-                    {
-                        radioId = 6;
-                        break;
-                    }
-                case CurrentSRSRadioMode.XPDR:
-                    {
-                        radioId = 7;
-                        break;
-                    }
-            }
-            var result = "{ \"Command\": 0,\"RadioId\":" + radioId + ",\"Frequency\": " + value.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture) + " }\n";
-            Common.DebugP(result);
-            return result;
-        }
-
+        
         private void ShowFrequenciesOnPanel()
         {
             try
@@ -767,7 +608,7 @@ namespace NonVisuals.Radios
         }
 
 
-        protected override void SaitekPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(hashSet);
         }

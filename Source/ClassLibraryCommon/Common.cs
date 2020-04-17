@@ -26,7 +26,17 @@ namespace ClassLibraryCommon
 
     public static class Common
     {
-        public static readonly List<SaitekPanelSkeleton> SaitekPanelSkeletons = new List<SaitekPanelSkeleton> { new SaitekPanelSkeleton(SaitekPanelsEnum.PZ55SwitchPanel, 0x6A3, 0xD67), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ69RadioPanel, 0x6A3, 0xD05), new SaitekPanelSkeleton(SaitekPanelsEnum.PZ70MultiPanel, 0x6A3, 0xD06), new SaitekPanelSkeleton(SaitekPanelsEnum.BackLitPanel, 0x6A3, 0xB4E), new SaitekPanelSkeleton(SaitekPanelsEnum.TPM, 0x6A3, 0xB4D) };
+        public static readonly List<GamingPanelSkeleton> GamingPanelSkeletons = new List<GamingPanelSkeleton>
+        {
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ69RadioPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ70MultiPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.BackLitPanel),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.TPM),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckMini),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeck),
+            new GamingPanelSkeleton(GamingPanelVendorEnum.Elgato, GamingPanelEnum.StreamDeckXL),
+        };
 
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
         private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
@@ -166,10 +176,10 @@ namespace ClassLibraryCommon
         public static string GetDescriptionField(this Enum value)
         {
             var field = value.GetType().GetField(value.ToString());
-            var attribs = field.GetCustomAttributes(typeof(DescriptionAttribute), true);
-            if (attribs.Length > 0)
+            var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), true);
+            if (attributes.Length > 0)
             {
-                return ((DescriptionAttribute)attribs[0]).Description;
+                return ((DescriptionAttribute)attributes[0]).Description;
             }
             return string.Empty;
         }
@@ -177,10 +187,10 @@ namespace ClassLibraryCommon
         public static bool DebugOn { get; set; } = false;
         public static bool DebugToFile = false;
         public static APIModeEnum APIMode = 0;
-        public static object _errorLoglockObject = new object();
-        public static object _debugLoglockObject = new object();
-        public static string ErrorLog = "";
-        public static string DebugLog = "";
+        private static readonly object ErrorLogLockObject = new object();
+        private static readonly object DebugLogLockObject = new object();
+        private static string _errorLog = "";
+        private static string _debugLog = "";
 
         public static void DebugP(string str)
         {
@@ -199,17 +209,40 @@ namespace ClassLibraryCommon
 
         public static void SetErrorLog(string filename)
         {
-            lock (_errorLoglockObject)
+            lock (ErrorLogLockObject)
             {
-                ErrorLog = filename;
+                _errorLog = filename;
             }
         }
 
         public static void SetDebugLog(string filename)
         {
-            lock (_debugLoglockObject)
+            lock (DebugLogLockObject)
             {
-                DebugLog = filename;
+                _debugLog = filename;
+            }
+        }
+
+        public static void Log(string message)
+        {
+            lock (ErrorLogLockObject)
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+                var version = fileVersionInfo.FileVersion;
+
+                var tempFile = Path.GetTempFileName();
+                using (var streamWriter = new StreamWriter(tempFile))
+                using (var streamReader = File.OpenText(_errorLog))
+                {
+                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
+                    streamWriter.Write(message + Environment.NewLine);
+                    while (!streamReader.EndOfStream)
+                    {
+                        streamWriter.WriteLine(streamReader.ReadLine());
+                    }
+                }
+                File.Copy(tempFile, _errorLog, true);
             }
         }
 
@@ -220,59 +253,68 @@ namespace ClassLibraryCommon
 
         public static void LogError(uint location, Exception ex, string message = null)
         {
-            lock (_errorLoglockObject)
-            {
-                if (!File.Exists(ErrorLog))
-                {
-                    File.Create(ErrorLog);
-                }
-                var assembly = Assembly.GetExecutingAssembly();
-                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                var version = fileVersionInfo.FileVersion;
-
-                var streamWriter = File.AppendText(ErrorLog);
-                try
-                {
-                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
-                    streamWriter.Write(Environment.NewLine + location + " Custom message = [" + message + "]" + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
-                }
-                finally
-                {
-                    streamWriter.Close();
-                }
-            }
+            Log(Environment.NewLine + location + " Custom message = [" + message + "]" + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
         }
 
 
         public static void LogError(uint location, string message)
         {
-            lock (_errorLoglockObject)
-            {
-                if (!File.Exists(ErrorLog))
-                {
-                    File.Create(ErrorLog);
-                }
-                var assembly = Assembly.GetExecutingAssembly();
-                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                var version = fileVersionInfo.FileVersion;
-
-                var streamWriter = File.AppendText(ErrorLog);
-                try
-                {
-                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:yy") + "  version : " + version);
-                    streamWriter.Write(Environment.NewLine + location + " Message = [" + message + "]" + Environment.NewLine);
-                }
-                finally
-                {
-                    streamWriter.Close();
-                }
-            }
+            Log(Environment.NewLine + location + " Message = [" + message + "]" + Environment.NewLine);
         }
 
         public static void ShowErrorMessageBox(uint location, Exception ex, string message = null)
         {
             LogError(location, ex, message);
-            MessageBox.Show(location + " " + ex.Message, "Details logged to error log.");
+            MessageBox.Show(location + " " + ex.Message, "Details logged to error log.", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public static void ShowErrorMessageBox(Exception ex, string message = null)
+        {
+            LogError(ex, message);
+            MessageBox.Show(ex.Message, "Details logged to error log.\n" + ex.Source, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public static void ShowMessageBox(string text, string header = "Information")
+        {
+            MessageBox.Show(text, header, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private static string GetStackTrace(string[] traceLineMustInclude, string header = "Stacktrace")
+        {
+            var stacktrace = Environment.StackTrace;
+            var lines = stacktrace.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var result = new StringBuilder();
+
+            foreach (var line in lines)
+            {
+                bool found = false;
+                foreach (var mustIncludeProject in traceLineMustInclude)
+                {
+                    if (line.Contains(mustIncludeProject))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found && !line.Contains("LogStackTrace") && !line.Contains("GetStackTrace") && !line.Contains("ShowStackTraceBox"))
+                {
+                    result.Append(line);
+                }
+            }
+
+            return result.ToString();
+        }
+
+        public static void LogStackTrace(string[] traceLineMustInclude, string header = "Stacktrace")
+        {
+            var stackTrace = GetStackTrace(traceLineMustInclude, header);
+            Log("  This is a logged Stacktrace\n" + stackTrace);
+        }
+
+        public static void ShowStackTraceBox(string[] traceLineMustInclude, string header = "Stacktrace")
+        {
+            MessageBox.Show(GetStackTrace(traceLineMustInclude,header), header, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public static string PrintBitStrings(byte[] array)
@@ -304,19 +346,19 @@ namespace ClassLibraryCommon
 
 
 
-        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
         {
-            if (depObj != null)
+            if (dependencyObject != null) 
             {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
                 {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child is T)
+                    var child = VisualTreeHelper.GetChild(dependencyObject, i);
+                    if (child is T o)
                     {
-                        yield return (T)child;
+                        yield return o;
                     }
 
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    foreach (var childOfChild in FindVisualChildren<T>(child))
                     {
                         yield return childOfChild;
                     }
@@ -326,14 +368,14 @@ namespace ClassLibraryCommon
 
         public static void LogToDebugFile(string message = null)
         {
-            lock (_debugLoglockObject)
+            lock (DebugLogLockObject)
             {
-                if (!File.Exists(DebugLog))
+                if (!File.Exists(_debugLog))
                 {
-                    File.Create(DebugLog);
+                    File.Create(_debugLog);
                 }
 
-                var debugStreamWriter = File.AppendText(DebugLog);
+                var debugStreamWriter = File.AppendText(_debugLog);
                 try
                 {
                     debugStreamWriter.Write(Environment.NewLine + "Message = [" + message + "]" + Environment.NewLine);
@@ -347,25 +389,25 @@ namespace ClassLibraryCommon
     }
 
 
-    public class SaitekPanelSkeleton
+    public class GamingPanelSkeleton
     {
-        private SaitekPanelsEnum _saitekPanelsEnum = SaitekPanelsEnum.Unknown;
+        private GamingPanelEnum _gamingPanelsEnum = GamingPanelEnum.Unknown;
         private int _vendorId;
         private int _productId;
         private string _serialNumber;
 
-        public SaitekPanelSkeleton(SaitekPanelsEnum saitekPanelsEnum, int vendorId, int productId)
+        public GamingPanelSkeleton(GamingPanelVendorEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum)
         {
-            _saitekPanelsEnum = saitekPanelsEnum;
-            _vendorId = vendorId;
-            _productId = productId;
+            _gamingPanelsEnum = gamingPanelsEnum;
+            _vendorId = (int)gamingPanelVendor;
+            _productId = (int)gamingPanelsEnum;
         }
 
-        public SaitekPanelSkeleton(SaitekPanelsEnum saitekPanelsEnum, int vendorId, int productId, string serialNumber)
+        public GamingPanelSkeleton(GamingPanelVendorEnum gamingPanelVendor, GamingPanelEnum gamingPanelsEnum, string serialNumber)
         {
-            _saitekPanelsEnum = saitekPanelsEnum;
-            _vendorId = vendorId;
-            _productId = productId;
+            _gamingPanelsEnum = gamingPanelsEnum;
+            _vendorId = (int)gamingPanelVendor;
+            _productId = (int)gamingPanelsEnum;
             _serialNumber = serialNumber;
         }
 
@@ -374,10 +416,10 @@ namespace ClassLibraryCommon
             return !string.IsNullOrEmpty(_serialNumber) && !_serialNumber.Equals("0");
         }
 
-        public SaitekPanelsEnum SaitekPanelsType
+        public GamingPanelEnum GamingPanelType
         {
-            get { return _saitekPanelsEnum; }
-            set { _saitekPanelsEnum = value; }
+            get { return _gamingPanelsEnum; }
+            set { _gamingPanelsEnum = value; }
         }
 
         public int VendorId

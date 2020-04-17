@@ -1,0 +1,42 @@
+﻿<Window x:Class="DCSFlightpanels.Windows.DCSBIOSComparatorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCSFlightpanels"
+        mc:Ignorable="d"
+        Title="Decode" Height="250" Width="540"  Loaded="DCSBIOSComparatorWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="20*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="5,5,5,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                <Label Content="IF {dcsbios}" Margin="5,0,0,0"/>
+                <StackPanel VerticalAlignment="Top">
+                    <ComboBox Name="ComboBoxComparisonType" Margin="5,0,5,0" Width="100" DropDownClosed="ComboBoxComparisonType_OnDropDownClosed">
+                        <ComboBoxItem IsSelected="True">==</ComboBoxItem>
+                        <ComboBoxItem>!=</ComboBoxItem>
+                        <ComboBoxItem>&lt;</ComboBoxItem>
+                        <ComboBoxItem>&lt;=</ComboBoxItem>
+                        <ComboBoxItem>&gt;</ComboBoxItem>
+                        <ComboBoxItem>&gt;=</ComboBoxItem>
+                        <ComboBoxItem>Always</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+                <TextBox Name="TextBoxReferenceValue" Width="40" Height="23" VerticalAlignment="Top" KeyUp="TextBoxReferenceValue_OnKeyUp"/>
+                <Label Content=" THEN (Output Text):" Margin="5,0,0,0"/>
+                <StackPanel>
+                <TextBox Name="TextBoxOutputText" Width="120" Height="50" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                <Label Name="LabelInsert" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="5,5,5,0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Name="ButtonHelp" Content="Help" Click="ButtonHelp_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
+            <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
+            <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
+        </StackPanel>
+    </Grid>
+</Window>

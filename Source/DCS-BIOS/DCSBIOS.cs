@@ -26,7 +26,7 @@ namespace DCS_BIOS
         //public delegate void DcsDataReceivedEventHandler(byte[] bytes);
         //public event DcsDataReceivedEventHandler OnDcsDataReceived;
 
-        private static DCSBIOS _dcsBIOSSO;
+        private static DCSBIOS _dcsBIOSInstance;
 
         /************************
         **********UDP************
@@ -94,7 +94,7 @@ namespace DCS_BIOS
             _dcsBiosNotificationMode = dcsNoficationMode;
 
             //_tcpIpPort = tcpIpPort;
-            _dcsBIOSSO = this;
+            _dcsBIOSInstance = this;
         }
 
         ~DCSBIOS()
@@ -281,11 +281,16 @@ namespace DCS_BIOS
             }
         }
 
+        public static DCSBIOS GetInstance()
+        {
+            return _dcsBIOSInstance;
+        }
+
         public static void AttachDataReceivedListenerSO(IDcsBiosDataListener iDcsBiosDataListener)
         {
-            if (_dcsBIOSSO != null)
+            if (_dcsBIOSInstance != null)
             {
-                _dcsBIOSSO._dcsProtocolParser.OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
+                _dcsBIOSInstance._dcsProtocolParser.OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
             }
         }
 
@@ -309,7 +314,7 @@ namespace DCS_BIOS
 
         public static int Send(string stringData)
         {
-            return _dcsBIOSSO.SendDataFunction(stringData);
+            return _dcsBIOSInstance.SendDataFunction(stringData);
         }
 
         public static void Send(string[] stringData)
@@ -318,7 +323,7 @@ namespace DCS_BIOS
             {
                 foreach (var s in stringData)
                 {
-                    _dcsBIOSSO.SendDataFunction(s);
+                    _dcsBIOSInstance.SendDataFunction(s);
                 }
             }
         }
@@ -329,7 +334,7 @@ namespace DCS_BIOS
             {
                 foreach (var s in stringList)
                 {
-                    _dcsBIOSSO.SendDataFunction(s);
+                    _dcsBIOSInstance.SendDataFunction(s);
                 }
             }
         }

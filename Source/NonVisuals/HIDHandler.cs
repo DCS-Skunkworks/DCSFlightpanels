@@ -5,65 +5,10 @@ using HidLibrary;
 
 namespace NonVisuals
 {
-    public class HIDSkeleton
+
+    public static class HIDSkeletonIgnore
     {
-        private SaitekPanelsEnum _panelType;
-        private string _instanceId;
-        private HidDevice _hidReadDevice;
-        private HidDevice _hidWriteDevice;
-
-        public HIDSkeleton(SaitekPanelsEnum panelType, string instanceId)
-        {
-            _panelType = panelType;
-            _instanceId = instanceId;
-        }
-
-        public void Close()
-        {
-            try
-            {
-                if (_hidReadDevice.IsOpen)
-                {
-                    _hidReadDevice.CloseDevice();
-                    Common.DebugP(_panelType + " : HidReadDevice has left the building...");
-                }
-                if (_hidWriteDevice.IsOpen)
-                {
-                    _hidWriteDevice.CloseDevice();
-                    Common.DebugP(_panelType + " : HidWriteDevice has left the building...");
-                }
-                _hidReadDevice.Dispose();
-                _hidWriteDevice.Dispose();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(15451073, ex);
-            }
-        }
-
-        public SaitekPanelsEnum PanelType
-        {
-            get => _panelType;
-            set => _panelType = value;
-        }
-
-        public string InstanceId
-        {
-            get => _instanceId;
-            set => _instanceId = value;
-        }
-
-        public HidDevice HIDReadDevice
-        {
-            get => _hidReadDevice;
-            set => _hidReadDevice = value;
-        }
-
-        public HidDevice HIDWriteDevice
-        {
-            get => _hidWriteDevice;
-            set => _hidWriteDevice = value;
-        }
+        public static readonly string HidSkeletonIgnore = "IGNORED_DEVICE_INSTANCE";
     }
 
     public class HIDHandler
@@ -75,51 +20,53 @@ namespace NonVisuals
             try
             {
                 Common.DebugP("Entering HIDHandler.Startup()");
-                foreach (var saitekPanelSkeleton in Common.SaitekPanelSkeletons)
+                foreach (var gamingPanelSkeleton in Common.GamingPanelSkeletons)
                 {
-                    foreach (var hidDevice in HidDevices.Enumerate(saitekPanelSkeleton.VendorId, saitekPanelSkeleton.ProductId))
+                    foreach (var hidDevice in HidDevices.Enumerate(gamingPanelSkeleton.VendorId, gamingPanelSkeleton.ProductId))
                     {
                         if (hidDevice != null)
                         {
                             var instanceId = hidDevice.DevicePath;
                             if (!HIDDeviceAlreadyExists(instanceId))
                             {
-                                var hidSkeleton = new HIDSkeleton(saitekPanelSkeleton.SaitekPanelsType, instanceId);
+                                var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
                                 _hidSkeletons.Add(hidSkeleton);
                             }
                         }
-
                     }
                 }
 
                 foreach (var hidSkeleton in _hidSkeletons)
                 {
-
-                    //Creating read devices
-                    foreach (var hidDevice in HidDevices.Enumerate(hidSkeleton.InstanceId))
+                    if (hidSkeleton.PanelInfo.VendorId == (int) GamingPanelVendorEnum.Saitek)
                     {
-                        if (hidDevice != null)
+
+                        //Creating read devices
+                        foreach (var hidDevice in HidDevices.Enumerate(hidSkeleton.InstanceId))
                         {
-                            hidSkeleton.HIDReadDevice = hidDevice;
-                            hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
-                            //hidSkeleton.HIDReadDevice.Inserted += DeviceAttachedHandler;
-                            //hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-                            hidSkeleton.HIDReadDevice.MonitorDeviceEvents = true;
-                            Common.DebugP(hidSkeleton.PanelType + " HIDReadDevice has entered the building...");
+                            if (hidDevice != null)
+                            {
+                                hidSkeleton.HIDReadDevice = hidDevice;
+                                hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
+                                //hidSkeleton.HIDReadDevice.Inserted += DeviceAttachedHandler;
+                                //hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+                                hidSkeleton.HIDReadDevice.MonitorDeviceEvents = true;
+                                Common.DebugP(hidSkeleton.PanelInfo.GamingPanelType + " [Saitek]HIDReadDevice has entered the building...");
+                            }
                         }
-                    }
 
-                    //Creating write devices
-                    foreach (var hidDevice in HidDevices.Enumerate(hidSkeleton.InstanceId))
-                    {
-                        if (hidDevice != null)
+                        //Creating write devices
+                        foreach (var hidDevice in HidDevices.Enumerate(hidSkeleton.InstanceId))
                         {
-                            hidSkeleton.HIDWriteDevice = hidDevice;
-                            hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
-                            //hidSkeleton.HIDWriteDevice.Inserted += DeviceAttachedHandler;
-                            //hidSkeleton.HIDWriteDevice.Removed += DeviceRemovedHandler;
-                            hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
-                            Common.DebugP(hidSkeleton.PanelType + " HIDWriteDevice has entered the building...");
+                            if (hidDevice != null)
+                            {
+                                hidSkeleton.HIDWriteDevice = hidDevice;
+                                hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
+                                //hidSkeleton.HIDWriteDevice.Inserted += DeviceAttachedHandler;
+                                //hidSkeleton.HIDWriteDevice.Removed += DeviceRemovedHandler;
+                                hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
+                                Common.DebugP(hidSkeleton.PanelInfo.GamingPanelType + " [Saitek]HIDWriteDevice has entered the building...");
+                            }
                         }
                     }
                 }

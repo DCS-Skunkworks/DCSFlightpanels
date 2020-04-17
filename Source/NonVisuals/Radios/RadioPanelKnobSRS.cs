@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios
 {
@@ -41,6 +42,7 @@ namespace NonVisuals.Radios
         DME = 32,
         XPDR = 64
     }
+
 
     public class RadioPanelKnobSRS : ISaitekPanelKnob
     {

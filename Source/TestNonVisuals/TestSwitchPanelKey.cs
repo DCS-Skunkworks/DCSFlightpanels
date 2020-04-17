@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NonVisuals;
+using NonVisuals.Saitek;
 
 namespace TestNonVisuals
 {
