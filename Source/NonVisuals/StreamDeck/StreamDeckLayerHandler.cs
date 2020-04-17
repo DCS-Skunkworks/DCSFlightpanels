@@ -17,7 +17,6 @@ namespace NonVisuals.StreamDeck
         private volatile List<string> _layerHistory = new List<string>();
         private volatile string _activeLayer = "";
         private IStreamDeckBoard _streamDeckBoard;
-        private StreamDeckRequisites _streamDeckRequisite = new StreamDeckRequisites();
         
 
 
@@ -29,7 +28,6 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckPanel = streamDeckPanel; 
             _streamDeckBoard = streamDeckPanel.StreamDeckBoard;
-            _streamDeckRequisite.StreamDeckBoard = _streamDeckBoard;
         }
 
         public List<string> GetLayerNameList()
@@ -75,8 +73,6 @@ namespace NonVisuals.StreamDeck
             CheckHomeLayerStatus();
 
             CheckActiveLayer();
-
-            SetEssentials();
         }
 
         private void CheckHomeLayerStatus()
@@ -111,14 +107,6 @@ namespace NonVisuals.StreamDeck
             else
             {
                 SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
-            }
-        }
-
-        private void SetEssentials()
-        {
-            foreach (var streamDeckLayer in _layerList)
-            {
-                streamDeckLayer.SetEssentials(_streamDeckPanel);
             }
         }
 
@@ -351,7 +339,7 @@ namespace NonVisuals.StreamDeck
 
             foreach (var streamDeckButton in layer.StreamDeckButtons)
             {
-                streamDeckButton.Show(_streamDeckRequisite);
+                streamDeckButton.Show();
             }
         }
 

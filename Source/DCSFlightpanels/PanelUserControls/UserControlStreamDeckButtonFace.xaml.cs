@@ -30,8 +30,6 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _isLoaded = false;
         private List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
         private List<RadioButton> _radioButtonList = new List<RadioButton>();
-        private StreamDeckPanel _streamDeckPanel;
-        private DCSBIOS _dcsbios;
         private EnumStreamDeckButtonNames _streamDeckButton;
         private UserControlStreamDeckButtonAction _userControlStreamDeckButtonAction;
 
@@ -61,13 +59,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public void SetEssentials(StreamDeckPanel streamDeckPanel, DCSBIOS dcsbios)
-        {
-            _streamDeckPanel = streamDeckPanel;
-            _dcsbios = dcsbios;
-        }
-
+        
         public void SetDecoder(DCSBIOSDecoder dcsbiosDecoder)
         {
             TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = dcsbiosDecoder;
@@ -497,6 +489,7 @@ namespace DCSFlightpanels.PanelUserControls
                             var result = new FaceTypeText();
 
                             result.StreamDeckButtonName = streamDeckButtonName;
+                            result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
                             result.Text = TextBoxButtonTextFace.Text;
                             result.TextFont = TextBoxButtonTextFace.Bill.TextFont;
                             result.FontColor = TextBoxButtonTextFace.Bill.FontColor;
@@ -520,6 +513,7 @@ namespace DCSFlightpanels.PanelUserControls
                             var result = new FaceTypeImage();
 
                             result.StreamDeckButtonName = streamDeckButtonName;
+                            result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
                             result.ImageFile = TextBoxImageFace.Bill.ImageFilePath;
 
                             return result;
@@ -631,6 +625,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetY -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
             {
@@ -644,6 +640,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetY += Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
             {
@@ -657,6 +655,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetX -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
             {
@@ -670,6 +670,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetX += Constants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
             {
@@ -705,11 +707,11 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                 {
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, _streamDeckPanel, _dcsbios);
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, SDUIParent.GetStreamDeckInstanceId());
                 }
                 else
                 {
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(_streamDeckPanel, _streamDeckButton, _dcsbios);
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(SDUIParent.GetStreamDeckInstanceId(), _streamDeckButton);
                 }
 
                 streamDeckDCSBIOSDecoderWindow.ShowDialog();

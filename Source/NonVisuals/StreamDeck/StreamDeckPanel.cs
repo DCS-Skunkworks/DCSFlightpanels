@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Saitek;
@@ -17,7 +18,6 @@ namespace NonVisuals.StreamDeck
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
-        private StreamDeckRequisites _streamDeckRequisite = new StreamDeckRequisites();
 
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
 
@@ -30,7 +30,6 @@ namespace NonVisuals.StreamDeck
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler =  new StreamDeckLayerHandler(this);
-            _streamDeckRequisite = new StreamDeckRequisites{ StreamDeck = this };
             StreamDeckPanels.Add(this);
         }
 
@@ -98,12 +97,12 @@ namespace NonVisuals.StreamDeck
             if (e.IsDown)
             {
                 var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
-                streamDeckButton.DoPress(_streamDeckRequisite);
+                streamDeckButton.DoPress();
             }
             else
             {
                 var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
-                streamDeckButton.DoRelease(_streamDeckRequisite);
+                streamDeckButton.DoRelease(CancellationToken.None);
             }
         }
 

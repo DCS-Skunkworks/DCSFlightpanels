@@ -13,7 +13,7 @@ namespace DCSFlightpanels.Bills
     public class BillStreamDeckFace : BillBaseOutput
     {
         public EnumStreamDeckButtonNames StreamDeckButtonName;
-        private StreamDeckTargetLayer _streamDeckTargetLayer;
+        private ActionTypeLayer _streamDeckTargetLayer;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
         private Font _textFont = Constants.DefaultStreamDeckFont;

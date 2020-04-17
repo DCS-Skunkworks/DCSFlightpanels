@@ -7,5 +7,6 @@ namespace NonVisuals.Interfaces
         EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         StreamDeckPanel StreamDeck { get; set; }
         StreamDeckButton StreamDeckButton { get; set; }
+        string StreamDeckInstanceId { get; set; }
     }
 }

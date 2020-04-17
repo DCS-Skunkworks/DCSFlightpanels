@@ -291,7 +291,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckActionType.LayerNavigation:
                     {
                         var layerBindingStreamDeck = (ActionTypeLayer)streamDeckButtonAction;
-                        TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck.LayerTarget;
+                        TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck;
                         SetFormState();
                         return;
                     }
@@ -318,6 +318,8 @@ namespace DCSFlightpanels.PanelUserControls
                         if (textBoxKeyPress.Bill.ContainsKeyPress())
                         {
                             result = new ActionTypeKey();
+                            result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                            result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSKeyPress = textBoxKeyPress.Bill.KeyPress;
 
@@ -331,7 +333,8 @@ namespace DCSFlightpanels.PanelUserControls
                         if (textBoxDCSBIOS.Bill.ContainsDCSBIOS())
                         {
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
-
+                            textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                            textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
                             return textBoxDCSBIOS.Bill.DCSBIOSBinding;
                         }
                         return null;
@@ -343,7 +346,8 @@ namespace DCSFlightpanels.PanelUserControls
                             var result = new ActionTypeOS();
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSCommandObject = textBoxOSCommand.Bill.OSCommandObject;
-
+                            result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                            result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
                             return result;
                         }
                         return null;
@@ -356,8 +360,9 @@ namespace DCSFlightpanels.PanelUserControls
                         }
                         if (TextBoxLayerNavButton.Bill.ContainsStreamDeckLayer())
                         {
-                            var result = new ActionTypeLayer();
-                            result.LayerTarget = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
+                            var result = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
+                            result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                            result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
                             return result;
                         }
 
@@ -751,7 +756,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var target = new StreamDeckTargetLayer();
+                var target = new ActionTypeLayer();
                 target.TargetLayer = ComboBoxLayerNavigationButton.Text;
                 switch (ComboBoxLayerNavigationButton.Text)
                 {

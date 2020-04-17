@@ -16,6 +16,8 @@ namespace NonVisuals.Interfaces
     public interface IStreamDeckButtonFace
     {
         EnumStreamDeckFaceType FaceType { get; }
+        string StreamDeckInstanceId { get; set; }
+        EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         void Show();
     }
 }

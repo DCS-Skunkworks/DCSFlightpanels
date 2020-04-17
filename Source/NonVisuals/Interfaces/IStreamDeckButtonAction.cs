@@ -20,5 +20,6 @@ namespace NonVisuals.Interfaces
         void Execute(CancellationToken threadCancellationToken);
         bool IsRunning();
         bool IsRepeatable();
+        string StreamDeckInstanceId { get; set; }
     }
 }

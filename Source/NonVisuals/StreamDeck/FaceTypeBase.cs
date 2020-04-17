@@ -13,7 +13,7 @@ namespace NonVisuals.StreamDeck
         private Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private StreamDeckPanel _streamDeck;
+        private string _streamDeckPanelInstance;
         private StreamDeckButton _streamDeckButton;
         private bool _isVisible;
         private int _offsetX;
@@ -39,11 +39,11 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckButtonName = value;
         }
         
-        [JsonIgnore]
-        public StreamDeckPanel StreamDeck
+        
+        public string StreamDeckPanelInstance
         {
-            get => _streamDeck;
-            set => _streamDeck = value;
+            get => _streamDeckPanelInstance;
+            set => _streamDeckPanelInstance = value;
         }
 
         [JsonIgnore]

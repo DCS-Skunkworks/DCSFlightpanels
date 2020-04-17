@@ -13,6 +13,10 @@ namespace NonVisuals.StreamDeck
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private StreamDeckPanel _streamDeck;
         private StreamDeckButton _streamDeckButton;
+        private string _streamDeckInstanceId;
+
+
+
 
 
         public string Description { get => "Key press"; }
@@ -75,6 +79,12 @@ namespace NonVisuals.StreamDeck
         public override string ExportSettings()
         {
             return null;
+        }
+
+        public string StreamDeckInstanceId
+        {
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
         }
     }
 }

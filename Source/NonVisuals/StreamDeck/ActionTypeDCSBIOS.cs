@@ -12,7 +12,7 @@ namespace NonVisuals.StreamDeck
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private StreamDeckPanel _streamDeck;
         private StreamDeckButton _streamDeckButton;
-
+        private string _streamDeckInstanceId;
 
 
 
@@ -49,6 +49,12 @@ namespace NonVisuals.StreamDeck
         {
             get => _streamDeckButton;
             set => _streamDeckButton = value;
+        }
+
+        public string StreamDeckInstanceId
+        {
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
         }
     }
 }

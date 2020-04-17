@@ -9,6 +9,7 @@ namespace DCSFlightpanels
     {
         int GetSelectedButtonNumber();
         EnumStreamDeckButtonNames GetSelectedButtonName();
+        string GetStreamDeckInstanceId();
         StreamDeckLayer GetUISelectedLayer();
         List<string> GetStreamDeckLayerNames();
         void TestImage(Bitmap bitmap);

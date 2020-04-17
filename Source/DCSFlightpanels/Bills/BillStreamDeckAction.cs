@@ -13,7 +13,7 @@ namespace DCSFlightpanels.Bills
         private StreamDeckButtonOnOff _button;
         private ActionTypeDCSBIOS _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
-        private StreamDeckTargetLayer _streamDeckTargetLayer;
+        private ActionTypeLayer _actionTypeLayer;
 
         public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button)
         {
@@ -28,7 +28,7 @@ namespace DCSFlightpanels.Bills
 
         public bool ContainsStreamDeckLayer()
         {
-            return _streamDeckTargetLayer != null;
+            return _actionTypeLayer != null;
         }
 
         public override bool ContainsBIPLink()
@@ -41,7 +41,7 @@ namespace DCSFlightpanels.Bills
             return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
                    (_dcsbiosBindingStreamDeck?.DCSBIOSInputs == null || _dcsbiosBindingStreamDeck.DCSBIOSInputs.Count == 0) && 
                    (KeyPress == null || KeyPress.KeySequence.Count == 0) &&
-                   _streamDeckTargetLayer == null;
+                   _actionTypeLayer == null;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -105,10 +105,10 @@ namespace DCSFlightpanels.Bills
             set => _button = value;
         }
 
-        public StreamDeckTargetLayer StreamDeckLayerTarget
+        public ActionTypeLayer StreamDeckLayerTarget
         {
-            get => _streamDeckTargetLayer;
-            set => _streamDeckTargetLayer = value;
+            get => _actionTypeLayer;
+            set => _actionTypeLayer = value;
         }
 
         public override void ClearAll()

@@ -16,11 +16,23 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonAction _buttonActionForRelease = null;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private Thread _keyPressedThread;
-        private instanceid
+        private string _streamDeckInstanceId;
+        private static List<StreamDeckButton> streamDeckButtons = new List<StreamDeckButton>();
 
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {
             _enumStreamDeckButtonName = enumStreamDeckButton;
+            streamDeckButtons.Add(this);
+        }
+
+        ~StreamDeckButton()
+        {
+            streamDeckButtons.Remove(this);
+        }
+
+        public static StreamDeckButton Get(EnumStreamDeckButtonNames streamDeckButtonName)
+        {
+            return streamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
         }
 
         public void DoPress()
@@ -44,7 +56,7 @@ namespace NonVisuals.StreamDeck
             }
             else
             {
-                ActionForPress.Execute(threadCancellationToken);
+                ActionForPress.Execute(CancellationToken.None);
             }
         }
 
@@ -188,7 +200,11 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
-
+        public string StreamDeckInstanceId
+        {
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
+        }
     }
 
 

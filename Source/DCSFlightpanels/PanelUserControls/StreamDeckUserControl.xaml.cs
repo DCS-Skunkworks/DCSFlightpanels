@@ -71,7 +71,6 @@ namespace DCSFlightpanels.PanelUserControls
                 ShowGraphicConfiguration();
                 UCStreamDeckButtonAction.Update();
                 UCStreamDeckButtonAction.AttachListener(UCStreamDeckButtonFace);
-                UCStreamDeckButtonFace.SetEssentials(_streamDeck, _dcsbios);
                 _userControlLoaded = true;
             }
             SetFormState();
@@ -280,6 +279,11 @@ namespace DCSFlightpanels.PanelUserControls
                 return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
             }
             return bill.StreamDeckButtonName;
+        }
+
+        public string GetStreamDeckInstanceId()
+        {
+            return _streamDeck.InstanceId;
         }
 
         public StreamDeckButton GetSelectedStreamDeckButton()

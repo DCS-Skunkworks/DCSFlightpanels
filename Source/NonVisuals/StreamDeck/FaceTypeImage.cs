@@ -17,21 +17,9 @@ namespace NonVisuals.StreamDeck
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _imageFile;
-
+        private string _streamDeckInstanceId;
 
         public void Show()
-        {
-            /*if (streamDeckRequisite.StreamDeck != null)
-            {
-                ShowButtonFace(streamDeckRequisite.StreamDeck);
-            }
-            else if (streamDeckRequisite.StreamDeckBoard != null)
-            {
-                ShowButtonFace(streamDeckRequisite.StreamDeckBoard);
-            }*/
-        }
-
-        private void ShowButtonFace(IStreamDeckBoard streamDeckBoard)
         {
             if (_streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
             {
@@ -46,17 +34,7 @@ namespace NonVisuals.StreamDeck
 
             var keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
 
-            streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(_streamDeckButtonName) - 1, keyBitmap);
-        }
-
-        private void ShowButtonFace(StreamDeckPanel streamDeckPanel)
-        {
-            if (_refreshBitmap)
-            {
-                _bitmap = new Bitmap(_imageFile);
-                _refreshBitmap = false;
-            }
-            streamDeckPanel.SetImage(_streamDeckButtonName, _bitmap);
+            StreamDeckPanel.GetInstance(_streamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(_streamDeckButtonName) - 1, keyBitmap);
         }
 
         [JsonIgnore]
@@ -105,6 +83,12 @@ namespace NonVisuals.StreamDeck
                 _refreshBitmap = true;
                 _imageFile = value;
             }
+        }
+
+        public string StreamDeckInstanceId
+        {
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
         }
     }
 }

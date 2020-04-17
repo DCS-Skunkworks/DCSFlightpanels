@@ -31,10 +31,9 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window
     {
-        private StreamDeckPanel _streamDeck;
+        private string _streamDeckInstanceId;
         private bool _formLoaded;
         private readonly string _typeToSearch = "Type to search control";
-        private readonly DCSBIOS _dcsbios;
         private Popup _popupSearch;
         private DataGrid _popupDataGrid;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
@@ -55,29 +54,27 @@ namespace DCSFlightpanels.Windows
 
 
 
-        public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeck, DCSBIOS dcsbios)
+        public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, string streamDeckInstanceId)
         {
             InitializeComponent();
-            _dcsbios = dcsbios;
             _dcsbiosDecoder = dcsbiosDecoder;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _streamDeck = streamDeck;
+            _streamDeckInstanceId = streamDeckInstanceId;
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }
 
-        public StreamDeckDCSBIOSDecoderWindow(StreamDeckPanel streamDeck, EnumStreamDeckButtonNames streamDeckButton, DCSBIOS dcsbios)
+        public StreamDeckDCSBIOSDecoderWindow(string streamDeckInstanceId, EnumStreamDeckButtonNames streamDeckButton)
         {
             InitializeComponent();
             _dcsbiosDecoder = new DCSBIOSDecoder();
-            _dcsbiosDecoder.SetEssentials(streamDeck.InstanceId, streamDeckButton);
+            _dcsbiosDecoder.SetEssentials(streamDeckInstanceId, streamDeckButton);
             LoadDefaults();
-            _dcsbios = dcsbios;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
             _dcsbiosDecoder.StreamDeckButtonName = streamDeckButton;
-            _streamDeck = streamDeck;
+            _streamDeckInstanceId = streamDeckInstanceId;
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }

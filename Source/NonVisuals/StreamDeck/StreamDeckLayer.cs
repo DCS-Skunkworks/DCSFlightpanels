@@ -25,7 +25,16 @@ namespace NonVisuals.StreamDeck
                 {
                     if (streamDeckButton.Face != null)
                     {
-                        streamDeckButton.Face.TextFont = value;
+                        switch (streamDeckButton.Face.FaceType)
+                        {
+                            case EnumStreamDeckFaceType.DCSBIOS:
+                            case EnumStreamDeckFaceType.Text:
+                                {
+                                    ((IFontFace)streamDeckButton.Face).TextFont = value;
+                                    break;
+                                }
+                        }
+
                     }
                 }
 
@@ -41,7 +50,16 @@ namespace NonVisuals.StreamDeck
                 {
                     if (streamDeckButton.Face != null)
                     {
-                        streamDeckButton.Face.FontColor = value;
+
+                        switch (streamDeckButton.Face.FaceType)
+                        {
+                            case EnumStreamDeckFaceType.DCSBIOS:
+                            case EnumStreamDeckFaceType.Text:
+                                {
+                                    ((IFontFace)streamDeckButton.Face).FontColor = value;
+                                    break;
+                                }
+                        }
                     }
                 }
 
@@ -57,7 +75,15 @@ namespace NonVisuals.StreamDeck
                 {
                     if (streamDeckButton.Face != null)
                     {
-                        streamDeckButton.Face.BackgroundColor = value;
+                        switch (streamDeckButton.Face.FaceType)
+                        {
+                            case EnumStreamDeckFaceType.DCSBIOS:
+                            case EnumStreamDeckFaceType.Text:
+                                {
+                                    ((IFontFace)streamDeckButton.Face).BackgroundColor = value;
+                                    break;
+                                }
+                        }
                     }
                 }
 

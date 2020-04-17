@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
     <Compile Include="Interfaces\IIsDirty.cs" />
     <Compile Include="Interfaces\ISRSHandler.cs" />
@@ -235,7 +236,6 @@
     <Compile Include="Radios\SRSRadioInformation.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
-    <Compile Include="StreamDeck\StreamDeckTargetLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckPanel.cs" />
     <Compile Include="Saitek\TPMPanelSwitch.cs" />
     <Compile Include="Saitek\SwitchPanelKey.cs" />

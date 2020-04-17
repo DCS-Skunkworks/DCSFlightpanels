@@ -1,12 +1,10 @@
 ﻿using System.Drawing;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
-using OpenMacroBoard.SDK;
-using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
-    public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace
+    public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
         public EnumStreamDeckFaceType FaceType
         {
@@ -21,49 +19,19 @@ namespace NonVisuals.StreamDeck
         private Color _backgroundColor;
         private int _offsetX;
         private int _offsetY;
-
+        private string _streamDeckInstanceId;
 
 
         public void Show()
         {
-            /*if (streamDeckRequisite.StreamDeck != null)
-            {
-                ShowButtonFace(streamDeckRequisite.StreamDeck);
-            }
-            else if (streamDeckRequisite.StreamDeckBoard != null)
-            {
-                ShowButtonFace(streamDeckRequisite.StreamDeckBoard);
-            }*/
-        }
-
-        private void ShowButtonFace(IStreamDeckBoard streamDeckBoard)
-        {
-            if (_streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-            {
-                return;
-            }
-
             if (_refreshBitmap)
             {
                 _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
                 _refreshBitmap = false;
             }
-
-            var keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
-
-            streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(_streamDeckButtonName) - 1, keyBitmap);
+            StreamDeckPanel.GetInstance(_streamDeckInstanceId).SetImage(_streamDeckButtonName, _bitmap);
         }
-
-        private void ShowButtonFace(StreamDeckPanel streamDeckPanel)
-        {
-            if (_refreshBitmap)
-            {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, _offsetX, _offsetY);
-                _refreshBitmap = false;
-            }
-            streamDeckPanel.SetImage(_streamDeckButtonName, _bitmap);
-        }
-
+        
         [JsonIgnore]
         public Bitmap Bitmap
         {
@@ -145,5 +113,10 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public string StreamDeckInstanceId
+        {
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
+        }
     }
 }

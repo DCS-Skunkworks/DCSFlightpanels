@@ -10,7 +10,6 @@ namespace NonVisuals.StreamDeck
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener
     {
         private string _formula = "";
-        private string _streamDeckInstance;
         private IStreamDeckBoard _streamDeckBoard;
         private DCSBIOSOutput _dcsbiosOutput = null;
         private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
@@ -34,7 +33,7 @@ namespace NonVisuals.StreamDeck
         public void SetEssentials(string streamDeckInstance, EnumStreamDeckButtonNames streamDeckButton)
         {
             StreamDeckButtonName = streamDeckButton;
-            _streamDeckInstance = streamDeckInstance;
+            StreamDeckInstanceId = streamDeckInstance;
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -79,11 +78,6 @@ namespace NonVisuals.StreamDeck
             }
         }
         
-        public void Show()
-        {
-            ShowButtonFace();
-        }
-
         public void RemoveDCSBIOSOutput()
         {
             _dcsbiosOutput = null;
