@@ -150,7 +150,6 @@ namespace NonVisuals.Radios
                     {
                         var tmp = _uhfPresetCockpitDialPos;
                         _uhfPresetCockpitDialPos = _uhfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        _uhfPresetCockpitDialPos++;
                         if (tmp != _uhfPresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
