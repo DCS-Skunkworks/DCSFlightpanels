@@ -686,14 +686,31 @@ namespace DCSFlightpanels.PanelUserControls
              */
             if (e.ActionType == EnumStreamDeckActionType.LayerNavigation && !string.IsNullOrEmpty(e.TargetLayerName))
             {
-                /*
-                 * Create a basic face containing the name
-                 */
-                Clear();
-                RadioButtonTextFace.IsChecked = true;
-                TextBoxButtonTextFace.Text = e.TargetLayerName;
-                TextBoxButtonTextFace.Bill.FontColor = ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE);
-                TextBoxButtonTextFace.Bill.BackgroundColor = ColorTranslator.FromHtml(Constants.COLOR_GUNSHIP_GREEN);
+                if (e.TargetLayerName == Constants.HOME)
+                {
+                    Clear();
+                    RadioButtonImageFace.IsChecked = true;
+                    TextBoxImageFace.Bill.ImageFilePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryHomeWhite;
+                    SetIsDirty();
+                }
+                else if (e.TargetLayerName == Constants.BACK)
+                {
+                    Clear();
+                    RadioButtonImageFace.IsChecked = true;
+                    TextBoxImageFace.Bill.ImageFilePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryBackWhite;
+                    SetIsDirty();
+                }
+                else
+                {
+                    /*
+                     * Create a basic face containing the name
+                     */
+                    Clear();
+                    RadioButtonTextFace.IsChecked = true;
+                    TextBoxButtonTextFace.Text = e.TargetLayerName;
+                    TextBoxButtonTextFace.Bill.FontColor = ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE);
+                    TextBoxButtonTextFace.Bill.BackgroundColor = ColorTranslator.FromHtml(Constants.COLOR_GUNSHIP_GREEN);
+                }
                 SetIsDirty();
             }
         }

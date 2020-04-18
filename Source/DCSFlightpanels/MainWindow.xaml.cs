@@ -1686,6 +1686,11 @@ namespace DCSFlightpanels
             FixUSBEnhancedPowerManagerIssues();
         }
 
+        private void MenuItemBugReport_OnClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Please file an \"Issue\" on GitHub. This makes tracking and managing bugs easier and will speed up the fix.", "Use GitHub for Bug Reporting", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == WindowState.Minimized && Settings.Default.RunMinimized)

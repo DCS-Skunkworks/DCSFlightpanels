@@ -5,8 +5,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DCSFlightpanels")]
-[assembly: AssemblyDescription("Saitek Pro Flight Keyemulator")]
+[assembly: AssemblyTitle("DCSFlightpanels (DCSFP)")]
+[assembly: AssemblyDescription("Saitek Pro Flight & Streamdeck with DCS-BIOS or as keyemulator")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("DCSFlightpanels")]
@@ -52,5 +52,5 @@ using System.Windows;
 
 
 
-[assembly: AssemblyVersion("4.0.3.7952")]
-[assembly: AssemblyFileVersion("4.0.3.7952")]
+[assembly: AssemblyVersion("4.0.10.5309")]
+[assembly: AssemblyFileVersion("4.0.10.5309")]

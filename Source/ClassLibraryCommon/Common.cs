@@ -44,7 +44,7 @@ namespace ClassLibraryCommon
         private static int _operationLevelFlag = 0;
 
 
-        public static  bool UseGenericRadio = false;
+        public static bool UseGenericRadio = false;
 
         public static void ValidateFlag()
         {
@@ -225,24 +225,31 @@ namespace ClassLibraryCommon
 
         public static void Log(string message)
         {
-            lock (ErrorLogLockObject)
+            try
             {
-                var assembly = Assembly.GetExecutingAssembly();
-                var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                var version = fileVersionInfo.FileVersion;
-
-                var tempFile = Path.GetTempFileName();
-                using (var streamWriter = new StreamWriter(tempFile))
-                using (var streamReader = File.OpenText(_errorLog))
+                lock (ErrorLogLockObject)
                 {
-                    streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
-                    streamWriter.Write(message + Environment.NewLine);
-                    while (!streamReader.EndOfStream)
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+                    var version = fileVersionInfo.FileVersion;
+
+                    var tempFile = Path.GetTempFileName();
+                    using (var streamWriter = new StreamWriter(tempFile))
+                    using (var streamReader = File.OpenText(_errorLog))
                     {
-                        streamWriter.WriteLine(streamReader.ReadLine());
+                        streamWriter.Write(Environment.NewLine + DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + "  version : " + version);
+                        streamWriter.Write(message + Environment.NewLine);
+                        while (!streamReader.EndOfStream)
+                        {
+                            streamWriter.WriteLine(streamReader.ReadLine());
+                        }
                     }
+                    File.Copy(tempFile, _errorLog, true);
                 }
-                File.Copy(tempFile, _errorLog, true);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error writing to error log. Please restart DCSFP. " + e.Message);
             }
         }
 
@@ -314,7 +321,7 @@ namespace ClassLibraryCommon
 
         public static void ShowStackTraceBox(string[] traceLineMustInclude, string header = "Stacktrace")
         {
-            MessageBox.Show(GetStackTrace(traceLineMustInclude,header), header, MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(GetStackTrace(traceLineMustInclude, header), header, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public static string PrintBitStrings(byte[] array)
@@ -348,7 +355,7 @@ namespace ClassLibraryCommon
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
         {
-            if (dependencyObject != null) 
+            if (dependencyObject != null)
             {
                 for (int i = 0; i < VisualTreeHelper.GetChildrenCount(dependencyObject); i++)
                 {

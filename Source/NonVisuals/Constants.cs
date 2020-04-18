@@ -7,8 +7,10 @@ namespace NonVisuals
     public static class Constants
     {
         public static readonly Font DefaultStreamDeckFont = new Font("Lucida Console", 10);
+        public const string BACK = "BACK";
         public const string GO_BACK_ONE_LAYER_STRING = "Go Back";
         public const string GO_TO_HOME_LAYER_STRING = "Go to Home";
+        public const string HOME = "HOME";
         public const string SEPARATOR_SYMBOL = "\\o/";
         public const string NO_HOME_LAYER_FOUND = "No home layer specified. Home layer must be set.";
         public const string SEVERAL_HOME_LAYER_FOUND = "Several layers has been marked as Home Layer.\n Only Home layer must be set.";

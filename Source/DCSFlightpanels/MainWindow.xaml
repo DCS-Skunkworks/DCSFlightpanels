@@ -42,6 +42,8 @@
                 <Separator/>
                 <MenuItem Name ="MenuItemUSBPowerManagement" Header="Disable USB Power Management" Click="MenuItemUSBPowerManagement_OnClick" />
                 <Separator/>
+                <MenuItem Name ="MenuItemBugReport" Header="Report Bug" Click="MenuItemBugReport_OnClick" />
+                <Separator/>
                 <MenuItem Name ="MenuItemSettings" Header="Settings" Click="MenuItemSettings_OnClick" />
             </MenuItem>
             <MenuItem Header="Extras">

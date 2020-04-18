@@ -213,6 +213,23 @@ namespace NonVisuals.StreamDeck
             result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON13));
             result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON14));
             result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON15));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON16));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON17));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON18));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON19));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON20));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON21));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON22));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON23));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON24));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON25));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON26));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON27));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON28));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON29));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON30));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON31));
+            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON32));
             return result;
         }
 
@@ -243,7 +260,24 @@ namespace NonVisuals.StreamDeck
         BUTTON12,
         BUTTON13,
         BUTTON14,
-        BUTTON15
+        BUTTON15,
+        BUTTON16,
+        BUTTON17,
+        BUTTON18,
+        BUTTON19,
+        BUTTON20,
+        BUTTON21,
+        BUTTON22,
+        BUTTON23,
+        BUTTON24,
+        BUTTON25,
+        BUTTON26,
+        BUTTON27,
+        BUTTON28,
+        BUTTON29,
+        BUTTON30,
+        BUTTON31,
+        BUTTON32
     }
 
     public static class StreamDeckFunction
