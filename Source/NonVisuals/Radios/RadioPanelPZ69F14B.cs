@@ -36,6 +36,7 @@ namespace NonVisuals.Radios
         private readonly object _lockUhfBigFreqObject1 = new object();
         private readonly object _lockUhfDial3FreqObject2 = new object();
         private readonly object _lockUhfDial4FreqObject2 = new object();
+        private readonly object _lockUhfPresetObject = new object();
         private DCSBIOSOutput _uhfDcsbiosOutputBigFrequencyNumber;
         private DCSBIOSOutput _uhfDcsbiosOutputDial3FrequencyNumber;
         private DCSBIOSOutput _uhfDcsbiosOutputDial4FrequencyNumber;
@@ -80,6 +81,7 @@ namespace NonVisuals.Radios
         private readonly object _lockVuhfBigFreqObject1 = new object();
         private readonly object _lockVuhfDial3FreqObject2 = new object();
         private readonly object _lockVuhfDial4FreqObject2 = new object();
+        private readonly object _lockVuhfPresetObject = new object();
         private DCSBIOSOutput _vuhfDcsbiosOutputBigFrequencyNumber;
         private DCSBIOSOutput _vuhfDcsbiosOutputDial3FrequencyNumber;
         private DCSBIOSOutput _vuhfDcsbiosOutputDial4FrequencyNumber;
@@ -330,15 +332,6 @@ namespace NonVisuals.Radios
                     Interlocked.Add(ref _doUpdatePanelLCD, 5);
                 }
             }
-            if (e.Address == _vuhfDcsbiosOutputSelectedChannel.Address)
-            {
-                var tmp = _vuhfCockpitPresetChannel;
-                _vuhfCockpitPresetChannel = _vuhfDcsbiosOutputSelectedChannel.GetUIntValue(e.Data) + 1;
-                if (tmp != _vuhfCockpitPresetChannel)
-                {
-                    Interlocked.Add(ref _doUpdatePanelLCD, 5);
-                }
-            }
             if (e.Address == _vuhfDcsbiosOutputMode.Address)
             {
                 var tmp = _vuhfCockpitMode;
@@ -463,7 +456,54 @@ namespace NonVisuals.Radios
         {
             try
             {
-
+                if (string.IsNullOrWhiteSpace(e.StringData))
+                {
+                    return;
+                }
+                if (e.Address.Equals(_vuhfDcsbiosOutputSelectedChannel.Address))
+                {
+                    try
+                    {
+                        lock (_lockVuhfPresetObject)
+                        {
+                            if (!uint.TryParse(e.StringData.Substring(0, 7), out var tmpUint))
+                            {
+                                return;
+                            }
+                            if (tmpUint != _vuhfCockpitPresetChannel)
+                            {
+                                _vuhfCockpitPresetChannel = tmpUint;
+                                Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //TODO Strange values from DCS-BIOS
+                    }
+                }
+                else if (e.Address.Equals(_uhfDcsbiosOutputSelectedChannel.Address))
+                {
+                    try
+                    {
+                        lock (_lockUhfPresetObject)
+                        {
+                            if (!uint.TryParse(e.StringData.Substring(0, 7), out var tmpUint))
+                            {
+                                return;
+                            }
+                            if (tmpUint != _uhfCockpitPresetChannel)
+                            {
+                                _uhfCockpitPresetChannel = tmpUint;
+                                Interlocked.Add(ref _doUpdatePanelLCD, 5);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //TODO Strange values from DCS-BIOS
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -519,7 +559,7 @@ namespace NonVisuals.Radios
                                     {
                                         SaveCockpitFrequencyVuhf();
                                         var freq = _vuhfBigFrequencyStandby * 1000 + _vuhfSmallFrequencyStandby;
-//Debug.WriteLine("Setting freg = > " + "SET_VUHF_FREQ " + freq);
+                                        //Debug.WriteLine("Setting freg = > " + "SET_VUHF_FREQ " + freq);
                                         DCSBIOS.Send("SET_VUHF_FREQ " + freq + "\n");
                                         SwapCockpitStandbyFrequencyVuhf();
                                         Interlocked.Add(ref _doUpdatePanelLCD, 2);
@@ -576,7 +616,7 @@ namespace NonVisuals.Radios
                                     {
                                         SaveCockpitFrequencyVuhf();
                                         var freq = _vuhfBigFrequencyStandby * 1000 + _vuhfSmallFrequencyStandby;
-//Debug.WriteLine("Setting freg = > " + "SET_VUHF_FREQ " + freq);
+                                        //Debug.WriteLine("Setting freg = > " + "SET_VUHF_FREQ " + freq);
                                         DCSBIOS.Send("SET_VUHF_FREQ " + freq + "\n");
                                         SwapCockpitStandbyFrequencyVuhf();
                                         Interlocked.Add(ref _doUpdatePanelLCD, 2);
@@ -2577,15 +2617,18 @@ namespace NonVisuals.Radios
 
                 //UHF
                 _uhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FREQ_MODE");
-                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_PRESETS");
                 _uhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_HIGH_FREQ");
                 _uhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_DIAL3_FREQ");
                 _uhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_DIAL4_FREQ");
                 _uhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FUNCTION");
+                _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_REMOTE_DISP");
+                DCSBIOSStringListenerHandler.AddAddress(_uhfDcsbiosOutputSelectedChannel.Address, 7, this);
 
                 //VUHF
                 _vuhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_FREQ_MODE");
-                _vuhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_PRESETS");
+                _vuhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_VUHF_REMOTE_DISP");
+                DCSBIOSStringListenerHandler.AddAddress(_vuhfDcsbiosOutputSelectedChannel.Address, 7, this);
+
                 _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
                 _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");
                 _vuhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL4_FREQ");
