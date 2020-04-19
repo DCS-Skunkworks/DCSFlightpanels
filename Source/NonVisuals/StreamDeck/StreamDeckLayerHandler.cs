@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using NonVisuals.Interfaces;
+using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
 
@@ -15,8 +17,7 @@ namespace NonVisuals.StreamDeck
         private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
         private volatile string _activeLayer = "";
-        private IStreamDeckBoard _streamDeckBoard;
-        
+        private readonly IStreamDeckBoard _streamDeckBoard;
 
 
 
@@ -301,7 +302,7 @@ namespace NonVisuals.StreamDeck
 
         public void ClearAllFaces()
         {
-            for (var i = 0; i < 15; i++)
+            for (var i = 0; i < _streamDeckPanel.ButtonCount; i++)
             {
                 _streamDeckBoard.ClearKey(i);
             }
@@ -321,35 +322,27 @@ namespace NonVisuals.StreamDeck
             {
                 _activeLayer = _layerHistory.Last();
                 _layerHistory.RemoveAt(_layerHistory.Count -1 );
-                ShowLayer(_activeLayer);
+                SetActiveLayer(_activeLayer);
             }
         }
 
         public void ShowHomeLayer()
         {
-            ShowLayer(CommonStreamDeck.HOME_LAYER_NAME);
+            SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
         }
-
-        private void ShowLayer(string layerName)
+        
+        private void HideAllButtonsAndClearFace()
         {
-            ClearAllFaces();
-
             foreach (var streamDeckButton in StreamDeckButton.GetButtons())
             {
                 streamDeckButton.IsVisible = false;
             }
-            
-            var layer = GetStreamDeckLayer(layerName);
-
-            foreach (var streamDeckButton in layer.StreamDeckButtons)
-            {
-                streamDeckButton.IsVisible = true;
-            }
+            ClearAllFaces();
         }
 
         private void SetActiveLayer(string layerName)
         {
-            ClearAllFaces();
+            HideAllButtonsAndClearFace();
 
             /*
              * Something is wrong
@@ -367,7 +360,34 @@ namespace NonVisuals.StreamDeck
                 _layerHistory.Add(_activeLayer);
             }
             _activeLayer = layerName;
-            ShowLayer(_activeLayer);
+
+            var activeLayer = GetStreamDeckLayer(_activeLayer);
+            foreach (var streamDeckButtons in activeLayer.StreamDeckButtons)
+            {
+                streamDeckButtons.IsVisible = true;
+            }
+
+            OnOnLayerChangedA(new StreamDeckLayerChange(){ActiveLayerName = _activeLayer });
+        }
+
+
+        public delegate void LayerChangedEventHandler(object sender, StreamDeckLayerChange e);
+        public event LayerChangedEventHandler OnLayerChangedA;
+
+        public virtual void Attach(IStreamDeckListener streamDeckListener)
+        {
+            OnLayerChangedA += streamDeckListener.LayerChanged;
+        }
+
+        //For those that wants to listen to this panel
+        public virtual void Detach(IStreamDeckListener streamDeckListener)
+        {
+            OnLayerChangedA -= streamDeckListener.LayerChanged;
+        }
+
+        protected virtual void OnOnLayerChangedA(StreamDeckLayerChange e)
+        {
+            OnLayerChangedA?.Invoke(this, e);
         }
     }
 }

@@ -12,13 +12,14 @@ using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
+using NonVisuals.StreamDeck.Events;
 
 namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckUIParent
+    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckUIParent, IStreamDeckListener
     {
         private readonly StreamDeckPanel _streamDeck;
         private readonly DCSBIOS _dcsbios;
@@ -37,12 +38,15 @@ namespace DCSFlightpanels.PanelUserControls
 
         private IStreamDeckUI _streamDeckUI;
 
+        private bool _layerChangedViaUI = true;
+        private string _lastLayer = "";
+
         public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _streamDeck = new StreamDeckPanel(hidSkeleton);
+            _streamDeck = new StreamDeckPanel(this, panelType, hidSkeleton);
             _streamDeck.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_streamDeck);
             _globalHandler = globalHandler;
@@ -175,38 +179,6 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     _streamDeck.SetImage(_streamDeckUI.SelectedButtonName, bitmap);
                 }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UIShowLayer(string layerName)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(layerName) || ComboBoxLayers.Text == null)
-                {
-                    ClearAll();
-                    return;
-                }
-
-                /*
-                 * Two choices.
-                 * Settings has been read from the config file => Set current layer to whatever the combobox shows.
-                 * StreamDeck has a current layer => 
-                 */
-                LoadComboBoxLayers("");
-                
-                _streamDeckUI.HideAllDotImages();
-                _streamDeck.ActiveLayer = ComboBoxLayers.Text;
-
-                _streamDeckUI.UIShowLayer(layerName);
-                
-                SetFormState();
-
-                SetApplicationMode();
             }
             catch (Exception ex)
             {
@@ -378,6 +350,81 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+
+        private void UIShowLayer(string layerName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(layerName) || ComboBoxLayers.Text == null)
+                {
+                    ClearAll();
+                    return;
+                }
+
+                /*
+                 * Two choices.
+                 * Settings has been read from the config file => Set current layer to whatever the combobox shows.
+                 * StreamDeck has a current layer => 
+                 */
+                LoadComboBoxLayers("");
+
+                _streamDeckUI.HideAllDotImages();
+
+                _streamDeckUI.UIShowLayer(layerName);
+
+                SetFormState();
+
+                SetApplicationMode();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+
+        private string _comboBoxLayerTextComparison;
+        private void ComboBoxLayers_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            _comboBoxLayerTextComparison = ComboBoxLayers.Text;
+        }
+
+        private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_comboBoxLayerTextComparison == ComboBoxLayers.Text)
+                {
+                    return;
+                }
+                ClearAll();
+                _streamDeck.ActiveLayer = ComboBoxLayers.Text;
+                _layerChangedViaUI = true;
+                ChangeLayerUI(ComboBoxLayers.Text);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+
+        private void ChangeLayerUI(string layerName)
+        {
+            try
+            {
+                UIShowLayer(layerName);
+
+                //De-select if whatever button is selected
+                _streamDeckUI.UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
+
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+
         private void NotifyButtonChanges(HashSet<object> buttons)
         {
             try
@@ -437,11 +484,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void Clear()
-        {
-
-        }
-
         private void ButtonDeleteLayer_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -472,36 +514,6 @@ namespace DCSFlightpanels.PanelUserControls
             return _streamDeck.GetLayer(ComboBoxLayers.Text);
         }
 
-
-        private string _comboBoxLayerTextComparison;
-        private void ComboBoxLayers_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            _comboBoxLayerTextComparison = ComboBoxLayers.Text;
-        }
-
-        private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
-        {
-            try
-            {
-                if (_comboBoxLayerTextComparison == ComboBoxLayers.Text)
-                {
-                    return;
-                }
-
-                ClearAll();
-
-                UIShowLayer(ComboBoxLayers.Text);
-
-                //De-select if whatever button is selected
-                _streamDeckUI. UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
-
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(20135444, ex);
-            }
-        }
 
         private void LoadComboBoxLayers(string selectedLayerName)
         {
@@ -536,11 +548,6 @@ namespace DCSFlightpanels.PanelUserControls
             else if (_streamDeck.LayerList.Count > 0)
             {
                 ComboBoxLayers.SelectedIndex = 0;
-            }
-
-            if (!_userControlLoaded)
-            {
-                _streamDeck.ActiveLayer = ComboBoxLayers.Text;
             }
         }
 
@@ -711,7 +718,7 @@ namespace DCSFlightpanels.PanelUserControls
                 while (true)
                 {
                     var bitmap = BitMapCreator.CreateEmtpyStreamDeckBitmap(_colors[_random.Next(0, 20)]);
-                    _streamDeck.SetImage(_random.Next(1, 15), bitmap);
+                    _streamDeck.SetImage(_random.Next(1, _streamDeck.ButtonCount), bitmap);
                     Thread.Sleep(50);
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -725,7 +732,32 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        
+        public void LayerChanged(object sender, StreamDeckLayerChange e)
+        {
+            try
+            {
+                if (_layerChangedViaUI)
+                {
+                    _layerChangedViaUI = false;
+                    return;
+                }
 
+                if (e.ActiveLayerName == _lastLayer)
+                {
+                    return;
+                }
+
+                _lastLayer = e.ActiveLayerName;
+
+                //Dispatcher?.BeginInvoke((Action)(ClearAll)); 
+                Dispatcher?.BeginInvoke((Action)(() => ComboBoxLayers.Text = e.ActiveLayerName));
+
+                Dispatcher?.BeginInvoke((Action)(() => ChangeLayerUI(e.ActiveLayerName)));
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -22,14 +23,33 @@ namespace NonVisuals.StreamDeck
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
 
         private long _doUpdatePanelLCD;
-        
+        private int _buttonCount = 0;
 
-        public StreamDeckPanel(HIDSkeleton hidSkeleton):base(GamingPanelEnum.StreamDeck, hidSkeleton)
+        public StreamDeckPanel(IStreamDeckListener streamDeckListener, GamingPanelEnum panelType, HIDSkeleton hidSkeleton):base(GamingPanelEnum.StreamDeck, hidSkeleton)
         {
+            switch (panelType)
+            {
+                case GamingPanelEnum.StreamDeckMini:
+                {
+                    _buttonCount = 6;
+                    break;
+                }
+                case GamingPanelEnum.StreamDeck:
+                {
+                    _buttonCount = 15;
+                    break;
+                }
+                case GamingPanelEnum.StreamDeckXL:
+                {
+                    _buttonCount = 32;
+                    break;
+                }
+            }
             Startup();
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler =  new StreamDeckLayerHandler(this);
+            _streamDeckLayerHandler.Attach(streamDeckListener);
             StreamDeckPanels.Add(this);
         }
 
@@ -341,13 +361,10 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckLayerHandler.ShowPreviousLayer();
         }
-        /*
-        public void ShowLayer(string layerName)
-        {
-            _streamDeckLayerHandler.ShowLayer(layerName);
-        }*/
 
         public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
+
+        public int ButtonCount => _buttonCount;
     }
 
 }
