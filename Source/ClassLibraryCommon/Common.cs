@@ -233,6 +233,11 @@ namespace ClassLibraryCommon
                     var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                     var version = fileVersionInfo.FileVersion;
 
+                    if (!File.Exists(_errorLog))
+                    {
+                        var fileStream = File.Create(_errorLog);
+                        fileStream.Close();
+                    }
                     var tempFile = Path.GetTempFileName();
                     using (var streamWriter = new StreamWriter(tempFile))
                     using (var streamReader = File.OpenText(_errorLog))

@@ -16,7 +16,6 @@ namespace NonVisuals.StreamDeck
 
 
 
-
         public void Execute(CancellationToken threadCancellationToken)
         {
             SendDCSBIOSCommands(threadCancellationToken);
@@ -33,12 +32,12 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckButtonName;
             set => _streamDeckButtonName = value;
         }
-
-
+        
         public string StreamDeckInstanceId
         {
             get => _streamDeckInstanceId;
             set => _streamDeckInstanceId = value;
         }
+
     }
 }

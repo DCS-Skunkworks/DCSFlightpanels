@@ -198,7 +198,7 @@ namespace DCSFlightpanels.PanelUserControls
                  * StreamDeck has a current layer => 
                  */
                 LoadComboBoxLayers("");
-
+                
                 _streamDeckUI.HideAllDotImages();
                 _streamDeck.ActiveLayer = ComboBoxLayers.Text;
 
@@ -259,6 +259,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                _streamDeckUI.UnSelect();
                 ShowGraphicConfiguration();
             }
             catch (Exception ex)
@@ -405,7 +406,7 @@ namespace DCSFlightpanels.PanelUserControls
                              TextBoxLogStreamDeck.Text = TextBoxLogStreamDeck.Text.Insert(0, "No action taken, panel events Disabled.\n")));
                     }
                 }
-                //SetGraphicsState(buttons);
+                _streamDeckUI.UnSelect();
             }
             catch (Exception ex)
             {

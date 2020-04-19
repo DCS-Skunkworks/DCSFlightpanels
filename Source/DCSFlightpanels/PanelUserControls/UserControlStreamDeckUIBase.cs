@@ -58,6 +58,18 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        public void UnSelect()
+        {
+            try
+            {
+                UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         public void Clear()
         {
 

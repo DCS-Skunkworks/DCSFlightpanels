@@ -387,72 +387,6 @@ namespace DCSFlightpanels.PanelUserControls
 
 
 
-        public StreamDeckButtonOnOff GetStreamDeckButtonOnOff(StreamDeckActionTextBox textBox)
-        {
-            try
-            {
-                switch (GetSelectedActionType())
-                {
-                    case EnumStreamDeckActionType.KeyPress:
-                        {
-                            if (textBox.Equals(TextBoxKeyPressButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
-                            }
-                            if (textBox.Equals(TextBoxKeyPressButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
-                            }
-
-                            break;
-                        }
-                    case EnumStreamDeckActionType.DCSBIOS:
-                        {
-                            if (textBox.Equals(TextBoxDCSBIOSActionButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
-                            }
-                            if (textBox.Equals(TextBoxDCSBIOSActionButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
-                            }
-
-                            break;
-                        }
-                    case EnumStreamDeckActionType.OSCommand:
-                        {
-                            if (textBox.Equals(TextBoxOSCommandButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
-                            }
-                            if (textBox.Equals(TextBoxOSCommandButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
-                            }
-
-                            break;
-                        }
-                    case EnumStreamDeckActionType.LayerNavigation:
-                        {
-                            /*if (textBox.Equals(ComboBoxLayerNavigationButtonOn))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), true);
-                            }
-                            if (textBox.Equals(ComboBoxLayerNavigationButtonOff))
-                            {
-                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), false);
-                            }
-                            */
-                            break;
-                        }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(3012, ex);
-            }
-            throw new Exception("Failed to determine focused component (GetStreamDeckButtonOnOff) ");
-        }
 
         private void ButtonAddEditKeySequenceButtonOn_OnClick(object sender, RoutedEventArgs e)
         {
@@ -541,19 +475,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         private void AddEditDCSBIOS(StreamDeckActionTextBox textBox)
         {
             try
@@ -569,11 +490,15 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(),
                         textBox.Name.Replace("TextBox", ""),
-                        textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                        textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
+                        textBox.Text,
+                        true);
+
+                    dcsbiosControlsConfigsWindow.IsSequenced = textBox.Bill.DCSBIOSBinding.IsSequenced; //Add on, not optimal structure
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();
@@ -588,6 +513,7 @@ namespace DCSFlightpanels.PanelUserControls
                     textBox.Text = text;
                     textBox.Bill.Consume(dcsBiosInputs);
                     textBox.Bill.DCSBIOSBinding.WhenTurnedOn = !textBox.Name.Contains("Off");
+                    textBox.Bill.DCSBIOSBinding.IsSequenced = dcsbiosControlsConfigsWindow.IsSequenced;
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
                 }
@@ -865,6 +791,74 @@ namespace DCSFlightpanels.PanelUserControls
         {
             get => _userControlStreamDeckButtonFace;
             set => _userControlStreamDeckButtonFace = value;
+        }
+
+
+        public StreamDeckButtonOnOff GetStreamDeckButtonOnOff(StreamDeckActionTextBox textBox)
+        {
+            try
+            {
+                switch (GetSelectedActionType())
+                {
+                    case EnumStreamDeckActionType.KeyPress:
+                        {
+                            if (textBox.Equals(TextBoxKeyPressButtonOn))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
+                            }
+                            if (textBox.Equals(TextBoxKeyPressButtonOff))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
+                            }
+
+                            break;
+                        }
+                    case EnumStreamDeckActionType.DCSBIOS:
+                        {
+                            if (textBox.Equals(TextBoxDCSBIOSActionButtonOn))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
+                            }
+                            if (textBox.Equals(TextBoxDCSBIOSActionButtonOff))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
+                            }
+
+                            break;
+                        }
+                    case EnumStreamDeckActionType.OSCommand:
+                        {
+                            if (textBox.Equals(TextBoxOSCommandButtonOn))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, true);
+                            }
+                            if (textBox.Equals(TextBoxOSCommandButtonOff))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.SelectedButtonName, false);
+                            }
+
+                            break;
+                        }
+                    case EnumStreamDeckActionType.LayerNavigation:
+                        {
+                            /*if (textBox.Equals(ComboBoxLayerNavigationButtonOn))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), true);
+                            }
+                            if (textBox.Equals(ComboBoxLayerNavigationButtonOff))
+                            {
+                                return new StreamDeckButtonOnOff(_streamDeckUIParent.GetButton(), false);
+                            }
+                            */
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(3012, ex);
+            }
+            throw new Exception("Failed to determine focused component (GetStreamDeckButtonOnOff) ");
         }
     }
 }

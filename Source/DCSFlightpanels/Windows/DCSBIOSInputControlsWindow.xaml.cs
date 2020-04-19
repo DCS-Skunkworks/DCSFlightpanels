@@ -19,18 +19,21 @@ namespace DCSFlightpanels.Windows
         private string _description;
         private readonly DCSAirframe _dcsAirframe = DCSAirframe.A10C;
         private bool _isDirty = false;
+        private bool _showSequenced = false;
+        private bool _isSequenced = false;
 
-        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, string description)
+        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, string description, bool showSequenced = false)
         {
             InitializeComponent();
             _dcsAirframe = dcsAirframe;
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
+            _showSequenced = showSequenced;
             ShowItems();
         }
 
-        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool showSequenced = false)
         {
             InitializeComponent();
             _dcsAirframe = dcsAirframe;
@@ -41,18 +44,23 @@ namespace DCSFlightpanels.Windows
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
+            _showSequenced = showSequenced;
+            
             ShowItems();
         }
 
         private void DCSBIOSInputControlsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             TextBoxHeader.Text = _header;
+            SetFormState();
         }
 
         private void SetFormState()
         {
             EditButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
             DeleteButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
+            CheckBoxIsSequenced.Visibility = _showSequenced ? Visibility.Visible : Visibility.Collapsed;
+            LabelSequencedInfo.Visibility = _showSequenced ? Visibility.Visible : Visibility.Collapsed;
             ButtonOk.IsEnabled = _isDirty;
         }
 
@@ -189,10 +197,6 @@ namespace DCSFlightpanels.Windows
             set { _description = value; }
         }
 
-        private void NewDelayButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void DCSBIOSInputControlsWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
@@ -219,6 +223,72 @@ namespace DCSFlightpanels.Windows
         {
             get => _isDirty;
             set => _isDirty = value;
+        }
+
+        private void CheckBoxIsSequenced_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _isSequenced = CheckBoxIsSequenced.IsChecked == true;
+                SetIsDirty();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(1016, ex);
+            }
+        }
+
+        public bool IsSequenced
+        {
+            get => _isSequenced;
+            set
+            {
+                if (value)
+                {
+                    CheckBoxIsSequenced.IsChecked = true;
+                }
+                _isSequenced = value;
+            }
+        }
+
+        private void LabelSequencedInfo_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var text = "Sequenced means that for each press of the button one of these DCS-BIOS commands are sent sequentially. \n\n" +
+                           "First press first DCS-BIOS command, second press second DCS-BIOS command and so  on.\nUntil it starts over.";
+                MessageBox.Show(text, "Sequenced execution", MessageBoxButton.OK, MessageBoxImage.Information);
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(1016, ex);
+            }
+        }
+
+        private void LabelSequencedInfo_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Hand;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(1016, ex);
+            }
+        }
+
+        private void LabelSequencedInfo_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(1016, ex);
+            }
         }
     }
 }

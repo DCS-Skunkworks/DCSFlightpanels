@@ -12,5 +12,6 @@ namespace DCSFlightpanels.Interfaces
         void UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames selectedButtonName);
         void HideAllDotImages();
         void SetButtonGridStatus(bool enabled);
+        void UnSelect();
     }
 }

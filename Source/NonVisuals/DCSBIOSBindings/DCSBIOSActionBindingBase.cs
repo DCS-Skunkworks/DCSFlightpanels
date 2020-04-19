@@ -15,7 +15,9 @@ namespace NonVisuals.DCSBIOSBindings
         
         internal abstract void ImportSettings(string settings);
         public abstract string ExportSettings();
-        
+
+        private bool _isSequenced = false;
+        private int _sequenceIndex = 0;
 
 
         public bool IsRunning()
@@ -49,19 +51,45 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 try
                 {
-                    foreach (var dcsbiosInput in dcsbiosInputs)
+                    if (_isSequenced)
                     {
-                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                        if (dcsbiosInputs.Count == 0)
                         {
                             return;
                         }
-                        var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
-                        Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
-                        if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                        if (_sequenceIndex <= dcsbiosInputs.Count - 1)
                         {
-                            return;
+                            var command = dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.GetDCSBIOSCommand();
+                            Thread.Sleep(dcsbiosInputs[_sequenceIndex].SelectedDCSBIOSInput.Delay);
+                            if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                            {
+                                return;
+                            }
+                            DCSBIOS.Send(command);
+                            _sequenceIndex++;
+
+                            if (_sequenceIndex >= dcsbiosInputs.Count)
+                            {
+                                _sequenceIndex = 0;
+                            }
                         }
-                        DCSBIOS.Send(command);
+                    }
+                    else
+                    {
+                        foreach (var dcsbiosInput in dcsbiosInputs)
+                        {
+                            if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                            {
+                                return;
+                            }
+                            var command = dcsbiosInput.SelectedDCSBIOSInput.GetDCSBIOSCommand();
+                            Thread.Sleep(dcsbiosInput.SelectedDCSBIOSInput.Delay);
+                            if (CancelSendDCSBIOSCommands || cancellationToken.IsCancellationRequested)
+                            {
+                                return;
+                            }
+                            DCSBIOS.Send(command);
+                        }
                     }
                 }
                 catch (ThreadAbortException)
@@ -106,6 +134,11 @@ namespace NonVisuals.DCSBIOSBindings
             return DCSBIOSInputs != null && DCSBIOSInputs.Count > 0;
         }
 
+        public bool IsSequenced
+        {
+            get => _isSequenced;
+            set => _isSequenced = value;
+        }
         /*
          * 
          * Cannot use this, if a switch is toggled which includes a long delay then all subsequent switch toggles will have to wait for the first one before being executed.
