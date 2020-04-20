@@ -90,17 +90,6 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void SetEssentials(StreamDeckPanel streamDeckPanel)
-        {
-            foreach (var streamDeckButton in StreamDeckButtons)
-            {
-                if (streamDeckButton.FaceType == EnumStreamDeckFaceType.DCSBIOS)
-                {
-                    ((DCSBIOSDecoder)streamDeckButton.Face).SetEssentials(streamDeckPanel.InstanceId, streamDeckButton.StreamDeckButtonName);
-                }
-            }
-        }
-
         public void AddButton(StreamDeckButton streamDeckButton)
         {
             _streamDeckButtons.Add(streamDeckButton);

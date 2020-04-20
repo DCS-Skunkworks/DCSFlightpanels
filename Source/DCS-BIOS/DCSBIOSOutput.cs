@@ -28,6 +28,7 @@ namespace DCS_BIOS
         NotEquals
     }
 
+    [Serializable]
     public class DCSBIOSOutput
     {
         //These are loaded and saved, all the rest are fetched from DCS-BIOS
@@ -49,7 +50,7 @@ namespace DCS_BIOS
         //private String _formula;
         //private Expression _expression;
         private bool _debug;
-        private readonly object _lockObject = new object();
+        [NonSerialized]private readonly object _lockObject = new object();
 
         public static DCSBIOSOutput GetUpdateCounter()
         {

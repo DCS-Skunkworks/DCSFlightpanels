@@ -689,6 +689,10 @@ namespace NonVisuals
             OnUserMessageEventHandler -= userMessageHandler.UserMessage;
         }
 
+        public void StateSaved()
+        {
+
+        }
     }
 
     public class AirframeEventArgs : EventArgs

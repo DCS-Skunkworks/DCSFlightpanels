@@ -10,6 +10,10 @@
                                    d:DesignHeight="235" d:DesignWidth="400">
 
     <UserControl.Resources>
+        <ContextMenu x:Key="ButtonContextMenu" Opened="ButtonContextMenu_OnOpened" >
+            <MenuItem Name="MenuItemCopy" Header="Copy" Click="ButtonContextMenuCopy_OnClick"/>
+            <MenuItem Name="MenuItemPaste" Header="Paste" Click="ButtonContextMenuPaste_OnClick"/>
+        </ContextMenu>
         <Style TargetType="Border" x:Key="BorderMouseHoover">
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="2"/>
@@ -26,6 +30,7 @@
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <EventSetter Event="MouseUp" Handler="ButtonImage_OnMouseUp"/>
             <EventSetter Event="PreviewMouseDown" Handler="ButtonImage_PreviewMouseDown"/>
+            <Setter Property="ContextMenu" Value="{StaticResource ButtonContextMenu}"/>
         </Style>
 
         <Style TargetType="Image" x:Key="DotImageStyle">

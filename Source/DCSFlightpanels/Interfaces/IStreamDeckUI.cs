@@ -5,6 +5,7 @@ namespace DCSFlightpanels.Interfaces
     public interface IStreamDeckUI
     {
         StreamDeckButton StreamDeckButton { get; }
+        StreamDeckButton PastedStreamDeckButton { get; set; }
         EnumStreamDeckButtonNames SelectedButtonName { get; }
         int SelectedButtonNumber { get; }
         void UIShowLayer(string layerName);
@@ -13,5 +14,6 @@ namespace DCSFlightpanels.Interfaces
         void HideAllDotImages();
         void SetButtonGridStatus(bool enabled);
         void UnSelect();
+        void Refresh();
     }
 }

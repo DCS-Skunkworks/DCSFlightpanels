@@ -7,17 +7,22 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
+using StreamDeckSharp;
 
 namespace DCSFlightpanels.PanelUserControls
 {
-    public abstract class UserControlStreamDeckUIBase : UserControl
+    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty
     {
         protected IStreamDeckUIParent SDUIParent;
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
         protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
         protected bool UserControlLoaded;
         protected StreamDeckButton StreamDeckButtonInstance;
+        protected bool _isDirty = false;
+        private StreamDeckButton _pastedStreamDeckButton;
+
 
 
         public void SetSDUIParent(IStreamDeckUIParent sduiParent)
@@ -168,6 +173,22 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        public void SetIsDirty()
+        {
+            _isDirty = true;
+        }
+
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set => _isDirty = value;
+        }
+        
+        public void StateSaved()
+        {
+            _isDirty = false;
+        }
+
         protected void ButtonImage_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             try
@@ -294,5 +315,81 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        protected void Copy()
+        {
+            var streamDeckButton = StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).GetActiveLayer().GetStreamDeckButton(SelectedButtonName);
+            if (streamDeckButton != null)
+            {
+                Clipboard.SetDataObject(streamDeckButton);
+            }
+        }
+
+        protected bool Paste()
+        {
+            var iDataObject = Clipboard.GetDataObject();
+            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton"))
+            {
+                return false;
+            }
+
+            var result = false;
+            var newStreamDeckButton = (StreamDeckButton)iDataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
+            var oldStreamDeckButton = StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).GetActiveLayer().GetStreamDeckButton(SelectedButtonName);
+            if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton))
+            {
+                if (MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    result = oldStreamDeckButton.Consume(true, newStreamDeckButton);
+                }
+            }
+            else
+            {
+                result = oldStreamDeckButton.Consume(true, newStreamDeckButton);
+            }
+
+            if (result)
+            {
+                _pastedStreamDeckButton = oldStreamDeckButton;
+                Refresh();
+                SetIsDirty();
+                SDUIParent.ChildChangesMade();
+            }
+            return result;
+        }
+
+        public void Refresh()
+        {
+            try
+            {
+                HideAllDotImages();
+                UnSelect();
+                var selectedLayer = StreamDeckPanelInstance.GetLayer(SDUIParent.GetUISelectedLayer().Name);
+
+                foreach (var buttonImage in ButtonImages)
+                {
+                    buttonImage.Bill.Clear();
+
+                    var streamDeckButton = selectedLayer.GetStreamDeckButton(buttonImage.Bill.StreamDeckButtonName);
+
+                    buttonImage.Bill.Button = streamDeckButton;
+
+                    if (streamDeckButton.HasConfig)
+                    {
+                        SetDotImageStatus(true, StreamDeckFunction.ButtonNumber(streamDeckButton.StreamDeckButtonName));
+                    }
+                }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(20135444, ex);
+            }
+        }
+
+        public StreamDeckButton PastedStreamDeckButton
+        {
+            get => _pastedStreamDeckButton;
+            set => _pastedStreamDeckButton = value;
+        }
     }
 }

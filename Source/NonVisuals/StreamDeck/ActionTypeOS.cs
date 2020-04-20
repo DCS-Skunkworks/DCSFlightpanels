@@ -1,8 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
 {
+
+    [Serializable]
     public class ActionTypeOS : OSCommandBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;

@@ -1,5 +1,8 @@
-﻿namespace NonVisuals.Saitek
+﻿using System;
+
+namespace NonVisuals.Saitek
 {
+    [Serializable]
     public abstract class KeyBinding
     {
         /*
@@ -10,7 +13,6 @@
         private KeyPress _keyPress;
         private bool _whenOnTurnedOn = true;
         
-
         internal abstract void ImportSettings(string settings);
 
         public KeyPress OSKeyPress

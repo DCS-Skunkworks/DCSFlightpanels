@@ -8,38 +8,38 @@ namespace NonVisuals.StreamDeck
 {
 
 
-
+    [Serializable]
     public class StreamDeckButton
     {
-        private EnumStreamDeckButtonNames _enumStreamDeckButtonName;
+        private EnumStreamDeckButtonNames _streamDeckButtonName;
         private IStreamDeckButtonFace _buttonFace = null;
         private IStreamDeckButtonAction _buttonActionForPress = null;
         private IStreamDeckButtonAction _buttonActionForRelease = null;
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private Thread _keyPressedThread;
+        [NonSerialized] private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        [NonSerialized] private Thread _keyPressedThread;
         private string _streamDeckInstanceId;
-        private static List<StreamDeckButton> streamDeckButtons = new List<StreamDeckButton>();
+        [NonSerialized] private static List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
         private bool _isVisible = false;
 
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {
-            _enumStreamDeckButtonName = enumStreamDeckButton;
-            streamDeckButtons.Add(this);
+            _streamDeckButtonName = enumStreamDeckButton;
+            _streamDeckButtons.Add(this);
         }
 
         ~StreamDeckButton()
         {
-            streamDeckButtons.Remove(this);
+            _streamDeckButtons.Remove(this);
         }
 
         public static StreamDeckButton Get(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return streamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
+            return _streamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
         }
 
         public static List<StreamDeckButton> GetButtons()
         {
-            return streamDeckButtons;
+            return _streamDeckButtons;
         }
 
         public void DoPress()
@@ -110,6 +110,73 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public bool CheckIfWouldOverwrite(StreamDeckButton newStreamDeckButton)
+        {
+            var result = _buttonFace != null && newStreamDeckButton.Face != null || 
+                         _buttonActionForPress != null && newStreamDeckButton.ActionForPress != null || 
+                         _buttonActionForRelease != null && newStreamDeckButton.ActionForRelease != null;
+            return result;
+        }
+        
+        public void Consume(StreamDeckButton newStreamDeckButton)
+        {
+            ActionForPress = newStreamDeckButton.ActionForPress;
+            ActionForRelease = newStreamDeckButton.ActionForRelease;
+            Face = newStreamDeckButton.Face;
+        }
+
+        public bool Consume(bool overwrite, StreamDeckButton streamDeckButton)
+        {
+            var result = false;
+
+            if (_buttonFace != null && streamDeckButton.Face != null)
+            {
+                if (overwrite)
+                {
+                    Face = streamDeckButton.Face;
+                    Face.StreamDeckButtonName = _streamDeckButtonName;
+                    result = true;
+                }
+            }
+            else if (_buttonFace == null && streamDeckButton.Face != null)
+            {
+                Face = streamDeckButton.Face;
+                Face.StreamDeckButtonName = _streamDeckButtonName;
+                result = true;
+            }
+
+            if (_buttonActionForPress != null && streamDeckButton.ActionForPress != null)
+            {
+                if (overwrite)
+                {
+                    _buttonActionForPress = streamDeckButton.ActionForPress;
+                    result = true;
+                }
+            }
+            else if (_buttonActionForPress == null && streamDeckButton.ActionForPress != null)
+            {
+                _buttonActionForPress = streamDeckButton.ActionForPress;
+                result = true;
+            }
+
+
+            if (_buttonActionForRelease != null && streamDeckButton.ActionForRelease != null)
+            {
+                if (overwrite)
+                {
+                    _buttonActionForRelease = streamDeckButton.ActionForRelease;
+                    result = true;
+                }
+            }
+            else if (_buttonActionForRelease == null && streamDeckButton.ActionForRelease != null)
+            {
+                _buttonActionForRelease = streamDeckButton.ActionForRelease;
+                result = true;
+            }
+
+            return result;
+        }
+
         [JsonIgnore]
         public bool IsVisible
         {
@@ -126,8 +193,8 @@ namespace NonVisuals.StreamDeck
 
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {
-            get => _enumStreamDeckButtonName;
-            set => _enumStreamDeckButtonName = value;
+            get => _streamDeckButtonName;
+            set => _streamDeckButtonName = value;
         }
 
         public IStreamDeckButtonFace Face
@@ -140,15 +207,6 @@ namespace NonVisuals.StreamDeck
         {
             get => _buttonActionForPress;
             set => _buttonActionForPress = value;
-        }
-
-        public void Consume(StreamDeckButton streamDeckButton)
-        {
-            StreamDeckButtonName = streamDeckButton.StreamDeckButtonName;
-            ActionForPress = streamDeckButton.ActionForPress;
-            ActionForRelease = streamDeckButton.ActionForRelease;
-
-            Face = streamDeckButton.Face;
         }
 
         public IStreamDeckButtonAction ActionForRelease

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace NonVisuals
 {
+    [Serializable]
     public class KeyPressInfo
     {
         private KeyPressLength _lengthOfBreak = KeyPressLength.FiftyMilliSec;

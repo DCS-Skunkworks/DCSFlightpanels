@@ -1,9 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
 {
+
+    [Serializable]
     public class ActionTypeDCSBIOS : DCSBIOSActionBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.DCSBIOS;

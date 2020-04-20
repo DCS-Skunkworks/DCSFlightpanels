@@ -9,11 +9,12 @@ using Newtonsoft.Json;
 
 namespace NonVisuals
 {
+    [Serializable]
     public class KeyPress
     {
         private SortedList<int, KeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
         private string _information = "Key press sequence";
-        private Thread _executingThread;
+        [NonSerialized]private Thread _executingThread;
 
         /*
          * When this OSKeyPress Executes it should cancel any execution _negatorOSKeyPress does.
@@ -22,7 +23,6 @@ namespace NonVisuals
          * It is the binding class that must make sure to set these.
          */
         private List<KeyPress> _negatorOSKeyPresses = new List<KeyPress>();
-        private CancellationToken _cancellationToken = new CancellationToken();
         private volatile bool _abort;
         private const int _sleepValue = 32;
 

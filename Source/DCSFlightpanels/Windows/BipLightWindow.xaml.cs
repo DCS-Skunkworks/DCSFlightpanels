@@ -46,8 +46,6 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-
-
         private void SetFormState()
         {
             if (!_formLoaded)
@@ -230,6 +228,11 @@ namespace DCSFlightpanels.Windows
         public void SetIsDirty()
         {
             _isDirty = true;
+        }
+        
+        public void StateSaved()
+        {
+            _isDirty = false;
         }
 
         private void BipLightWindow_OnKeyDown(object sender, KeyEventArgs e)

@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
 {
+    [Serializable]
     public class FaceTypeBase
     {
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Unknown;

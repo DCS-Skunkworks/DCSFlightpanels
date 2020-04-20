@@ -241,6 +241,11 @@ namespace DCSFlightpanels.Windows
             _isDirty = true;
         }
 
+        public void StateSaved()
+        {
+            _isDirty = false;
+        }
+
         private void LabelInsert_OnMouseEnter(object sender, MouseEventArgs e)
         {
             try

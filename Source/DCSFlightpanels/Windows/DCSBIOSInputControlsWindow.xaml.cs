@@ -225,6 +225,11 @@ namespace DCSFlightpanels.Windows
             set => _isDirty = value;
         }
 
+        public void StateSaved()
+        {
+            _isDirty = false;
+        }
+
         private void CheckBoxIsSequenced_OnClick(object sender, RoutedEventArgs e)
         {
             try

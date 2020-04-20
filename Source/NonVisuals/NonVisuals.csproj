@@ -127,7 +127,9 @@
     <Compile Include="Interfaces\IIsDirty.cs" />
     <Compile Include="Interfaces\ISRSHandler.cs" />
     <Compile Include="Interfaces\IStreamDeckListener.cs" />
+    <Compile Include="JaceExtendedFactory.cs" />
     <Compile Include="KeyPressInfo.cs" />
+    <Compile Include="RandomFactory.cs" />
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
     <Compile Include="Saitek\BIPLink.cs" />

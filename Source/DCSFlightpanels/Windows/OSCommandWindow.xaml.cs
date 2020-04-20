@@ -165,5 +165,10 @@ namespace DCSFlightpanels.Windows
         {
             _isDirty = true;
         }
+
+        public void StateSaved()
+        {
+            _isDirty = false;
+        }
     }
 }

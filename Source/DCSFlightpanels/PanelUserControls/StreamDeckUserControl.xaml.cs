@@ -108,6 +108,13 @@ namespace DCSFlightpanels.PanelUserControls
 
                 _streamDeckUI.SetButtonGridStatus(_streamDeck.HasLayers);
 
+                if (_streamDeckUI.PastedStreamDeckButton != null)
+                {
+                    _streamDeck.AddStreamDeckButtonToActiveLayer(_streamDeckUI.PastedStreamDeckButton);
+                    _streamDeckUI.PastedStreamDeckButton = null;
+                    _streamDeckUI.Refresh();
+                }
+
                 UCStreamDeckButtonAction.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
                 UCStreamDeckButtonFace.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
 
@@ -558,30 +565,11 @@ namespace DCSFlightpanels.PanelUserControls
                 try
                 {
                     var streamDeckButton = _streamDeck.GetActiveLayer().GetStreamDeckButton(_streamDeckUI.SelectedButtonName);
-                    var buttonFace = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
-                    var actionPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
-                    var actionRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
-                    var added = false;
+                    streamDeckButton.Face = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
+                    streamDeckButton.ActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
+                    streamDeckButton.ActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
 
-                    if (actionPress != null)
-                    {
-                        streamDeckButton.ActionForPress = actionPress;
-                        added = true;
-                    }
-
-                    if (actionRelease != null)
-                    {
-                        streamDeckButton.ActionForRelease = actionRelease;
-                        added = true;
-                    }
-
-                    if (buttonFace != null)
-                    {
-                        streamDeckButton.Face = buttonFace;
-                        added = true;
-                    }
-
-                    if (added)
+                    if (streamDeckButton.HasConfig)
                     {
                         _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
                     }

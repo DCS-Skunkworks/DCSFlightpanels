@@ -70,7 +70,6 @@ namespace DCSFlightpanels.Windows
         {
             InitializeComponent();
             _dcsbiosDecoder = new DCSBIOSDecoder();
-            _dcsbiosDecoder.SetEssentials(streamDeckInstanceId, streamDeckButton);
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();

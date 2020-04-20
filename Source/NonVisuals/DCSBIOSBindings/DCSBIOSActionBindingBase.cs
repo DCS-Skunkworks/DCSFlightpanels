@@ -6,11 +6,12 @@ using DCS_BIOS;
 
 namespace NonVisuals.DCSBIOSBindings
 {
+    [Serializable]
     public abstract class DCSBIOSActionBindingBase
     {
         private bool _whenOnTurnedOn = true;
         private string _description;
-        private Thread _sendDCSBIOSCommandsThread;
+        [NonSerialized] private Thread _sendDCSBIOSCommandsThread;
         private volatile List<DCSBIOSInput> _dcsbiosInputs;
         
         internal abstract void ImportSettings(string settings);

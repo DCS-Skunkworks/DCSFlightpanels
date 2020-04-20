@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.StreamDeck
 {
+    [Serializable]
     public class ActionTypeKey : KeyBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.KeyPress;

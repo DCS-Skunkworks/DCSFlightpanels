@@ -47,6 +47,11 @@ namespace DCSFlightpanels.Windows
             _isDirty = true;
         }
 
+        public void StateSaved()
+        {
+            _isDirty = false;
+        }
+
         public SortedList<int, KeyPressInfo> GetSequence
         {
             get { return _sortedList; }

@@ -15,6 +15,7 @@ namespace NonVisuals.StreamDeck
         Always = 6
     }
 
+    [Serializable]
     public class DCSBIOSNumberToText
     {
         private EnumComparator _comparator = EnumComparator.Equals;

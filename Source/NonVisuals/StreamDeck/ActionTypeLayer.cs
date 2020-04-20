@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -10,6 +11,7 @@ namespace NonVisuals.StreamDeck
         Home = 2
     }
 
+    [Serializable]
     public class ActionTypeLayer : IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.LayerNavigation;

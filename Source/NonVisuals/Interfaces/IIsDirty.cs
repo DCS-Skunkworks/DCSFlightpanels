@@ -4,5 +4,6 @@
     {
         void SetIsDirty();
         bool IsDirty { get;}
+        void StateSaved();
     }
 }

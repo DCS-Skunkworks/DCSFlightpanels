@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using ClassLibraryCommon;
+using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Interfaces;
 using NonVisuals.StreamDeck;
 
@@ -75,6 +77,74 @@ namespace DCSFlightpanels.PanelUserControls
             DotImages.Add(DotImage13);
             DotImages.Add(DotImage14);
             DotImages.Add(DotImage15);
+        }
+
+
+
+
+        private void ButtonContextMenuCopy_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Copy();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonContextMenuPaste_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Paste();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonContextMenu_OnOpened(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                /*
+                 * Can't get context menu [ContextMenuOpening] events to work. Workaround.
+                 */
+                var contextMenu = (ContextMenu) sender;
+                MenuItem menuItemCopy = null;
+                MenuItem menuItemPaste = null;
+                foreach (MenuItem contextMenuItem in contextMenu.Items)
+                {
+                    if (contextMenuItem.Name == "MenuItemCopy")
+                    {
+                        menuItemCopy = contextMenuItem;
+                    }
+                }
+                foreach (MenuItem contextMenuItem in contextMenu.Items)
+                {
+                    if (contextMenuItem.Name == "MenuItemPaste")
+                    {
+                        menuItemPaste = contextMenuItem;
+                    }
+                }
+
+                if (menuItemCopy == null || menuItemPaste == null)
+                {
+                    return;
+                }
+                var selectedStreamDeckButton = StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).GetActiveLayer().GetStreamDeckButton(SelectedButtonName); 
+                menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
+
+                var iDataObject = Clipboard.GetDataObject();
+                menuItemPaste.IsEnabled = iDataObject != null && iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

@@ -3,38 +3,31 @@ using System.Collections.Generic;
 using System.Globalization;
 using DCS_BIOS;
 using Newtonsoft.Json;
-using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
+    [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener
     {
         private string _formula = "";
-        private IStreamDeckBoard _streamDeckBoard;
         private DCSBIOSOutput _dcsbiosOutput = null;
         private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
-        private readonly JaceExtended _jaceExtended = new JaceExtended();
         private volatile bool _valueUpdated;
         private string _lastFormulaError = "";
         private double _formulaResult = 0;
-
+        [NonSerialized]private int _jaceId = 0;
 
         public DCSBIOSDecoder()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
+            _jaceId = RandomFactory.Get();
         }
 
         ~DCSBIOSDecoder()
         {
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
         }
-
-        public void SetEssentials(string streamDeckInstance, EnumStreamDeckButtonNames streamDeckButton)
-        {
-            StreamDeckButtonName = streamDeckButton;
-            StreamDeckInstanceId = streamDeckInstance;
-        }
-
+        
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
             if (_dcsbiosOutput?.Address == e.Address)
@@ -98,7 +91,7 @@ namespace NonVisuals.StreamDeck
             var variables = new Dictionary<string, double>();
             variables.Add(_dcsbiosOutput.ControlId, 0);
             variables[_dcsbiosOutput.ControlId] = DCSBiosValue;
-            return _jaceExtended.CalculationEngine.Calculate(_formula, variables);
+            return JaceExtendedFactory.Instance(ref _jaceId).CalculationEngine.Calculate(_formula, variables);
         }
 
         public string Formula
@@ -169,5 +162,7 @@ namespace NonVisuals.StreamDeck
         {
             return _dcsbiosOutput.ControlId;
         }
+
+
     }
 }

@@ -179,6 +179,11 @@ namespace NonVisuals
             set => _isDirty = value;
         }
 
+        public void StateSaved()
+        {
+            _isDirty = false;
+        }
+
         public bool SettingsLoading
         {
             get => _settingsLoading;

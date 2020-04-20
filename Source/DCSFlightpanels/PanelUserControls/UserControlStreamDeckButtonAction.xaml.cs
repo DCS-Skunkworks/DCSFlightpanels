@@ -454,6 +454,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxKeyPressButtonOn.Bill.Clear();
+                SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)
@@ -467,6 +468,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxKeyPressButtonOff.Bill.Clear();
+                SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
             catch (Exception ex)

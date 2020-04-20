@@ -22,6 +22,7 @@ namespace DCS_BIOS
         VARIABLE_STEP
     }
 
+    [Serializable]
     public class DCSBIOSInputObject
     {
         private string _controlId;
@@ -165,6 +166,7 @@ namespace DCS_BIOS
         }
     }
 
+    [Serializable]
     public static class DCSBIOSInputHandler
     {
         public static DCSBIOSInput GetDCSBIOSInput(string controlId)
@@ -176,6 +178,7 @@ namespace DCS_BIOS
         }
     }
 
+    [Serializable]
     public class DCSBIOSInput
     {
         //These are loaded and saved, all the rest are fetched from DCS-BIOS

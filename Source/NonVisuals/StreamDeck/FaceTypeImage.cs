@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 using OpenMacroBoard.SDK;
 
 namespace NonVisuals.StreamDeck
 {
+    [Serializable]
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Image;
