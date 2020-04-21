@@ -5,7 +5,9 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Properties;
+using DCSFlightpanels.Shared;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using ComboBox = System.Windows.Controls.ComboBox;
@@ -21,15 +23,23 @@ namespace DCSFlightpanels.Windows
         private DCSBIOSValueToFaceConverter _dcsbiosConverter = new DCSBIOSValueToFaceConverter();
         private bool _isDirty;
         private bool _isPopulatingData = false;
+        private StreamDeckPanel _streamDeckPanel;
+        private EnumStreamDeckButtonNames _streamDeckButtonName;
 
-        public DCSBIOSConverterWindow()
+
+
+        public DCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel)
         {
             InitializeComponent();
+            _streamDeckButtonName = streamDeckButtonName;
+            _streamDeckPanel = streamDeckPanel;
         }
 
-        public DCSBIOSConverterWindow(DCSBIOSValueToFaceConverter dcsbiosConverter)
+        public DCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel, DCSBIOSValueToFaceConverter dcsbiosConverter)
         {
             InitializeComponent();
+            _streamDeckButtonName = streamDeckButtonName;
+            _streamDeckPanel = streamDeckPanel;
             _dcsbiosConverter = dcsbiosConverter;
         }
 
@@ -519,7 +529,19 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                FileDialog fileDialog = new OpenFileDialog();
+                fileDialog.CheckPathExists = true;
+                fileDialog.CheckFileExists = true;
+                fileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastFileDialogLocation) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastFileDialogLocation;
+                fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
 
+                if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    TextBoxOverlayImage.Bill.ImageFilePath = fileDialog.FileName;
+                    Settings.Default.LastFileDialogLocation = Path.GetDirectoryName(fileDialog.FileName);
+                }
+                SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -531,7 +553,8 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-
+                var bitmap = BitMapCreator.CreateStreamDeckBitmap("", TextBoxOverlayImage.Bill.TextFont, TextBoxOverlayImage.Bill.FontColor, TextBoxOverlayImage.Bill.BackgroundColor, TextBoxOverlayImage.Bill.OffsetX, TextBoxOverlayImage.Bill.OffsetY);
+                _streamDeckPanel.SetImage(_streamDeckButtonName, bitmap);
             }
             catch (Exception ex)
             {
@@ -543,7 +566,8 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-
+                TextBoxOutputTextAsIs.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TestImage(TextBoxOutputTextAsIs);
             }
             catch (Exception ex)
             {
@@ -555,7 +579,8 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-
+                TextBoxOutputTextAsIs.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TestImage(TextBoxOutputTextAsIs);
             }
             catch (Exception ex)
             {
@@ -567,7 +592,8 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-
+                TextBoxOutputTextAsIs.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TestImage(TextBoxOutputTextAsIs);
             }
             catch (Exception ex)
             {
@@ -579,7 +605,8 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-
+                TextBoxOutputTextAsIs.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TestImage(TextBoxOutputTextAsIs);
             }
             catch (Exception ex)
             {
@@ -587,11 +614,27 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void TestImage(StreamDeckFaceTextBox textBox)
+        {
+            var bitmap = BitMapCreator.CreateStreamDeckBitmap(textBox.Text, textBox.Bill.TextFont, textBox.Bill.FontColor, textBox.Bill.BackgroundColor, textBox.Bill.OffsetX, textBox.Bill.OffsetY);
+            _streamDeckPanel.SetImage(_streamDeckButtonName, bitmap);
+        }
+
         private void ButtonTextFaceFontAsIs_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
+                var font = Settings.Default.ButtonTextFaceFont;
 
+                if (StreamDeckCommon.SetFontStyle(font) == System.Windows.Forms.DialogResult.OK)
+                {
+                    _dcsbiosDecoder.TextFont = font;
+                }
+                SetFontStyle(TextBoxButtonTextFace);
+
+                _dcsbiosDecoder.TextFont = fontDialog.Font;
+                TestImage(TextBoxButtonTextFace);
+                SetFormState();
             }
             catch (Exception ex)
             {

@@ -15,8 +15,9 @@ using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.Properties;
-using NonVisuals;
+using DCSFlightpanels.Shared;
 using NonVisuals.StreamDeck;
+using Color = System.Drawing.Color;
 using Cursors = System.Windows.Input.Cursors;
 using DataGrid = System.Windows.Controls.DataGrid;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -133,7 +134,7 @@ namespace DCSFlightpanels.Windows
             {
                 TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
             }
-            ShowDecoders();
+            ShowConverters();
             UpdateFontInfo();
             _populatingData = false;
         }
@@ -330,9 +331,15 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                SetFontStyle();
-                UpdateFontInfo();
-                SetFormState();
+                var font = Settings.Default.ButtonTextFaceFont;
+
+                if (StreamDeckCommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
+                {
+                    _dcsbiosDecoder.TextFont = font;
+                    SetIsDirty();
+                    UpdateFontInfo();
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -344,9 +351,15 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                SetFontColor();
-                UpdateFontInfo();
-                SetFormState();
+                var color = Color.Transparent;
+
+                if (StreamDeckCommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
+                {
+                    _dcsbiosDecoder.FontColor = color;
+                    SetIsDirty();
+                    UpdateFontInfo();
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -358,9 +371,15 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                SetBackgroundColor();
-                UpdateFontInfo();
-                SetFormState();
+                var color = Color.Transparent;
+
+                if (StreamDeckCommon.SetBackgroundColor(ref color) == System.Windows.Forms.DialogResult.OK)
+                {
+                    _dcsbiosDecoder.BackgroundColor = color;
+                    SetIsDirty();
+                    UpdateFontInfo();
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -376,65 +395,7 @@ namespace DCSFlightpanels.Windows
             TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Font Color : " + _dcsbiosDecoder.FontColor.ToString();
             TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Background Color : " + _dcsbiosDecoder.BackgroundColor.ToString();
         }
-
-        private void SetFontStyle()
-        {
-            var fontDialog = new FontDialog();
-
-            fontDialog.FixedPitchOnly = true;
-            fontDialog.FontMustExist = true;
-            fontDialog.MinSize = 6;
-
-            if (Settings.Default.ButtonTextFaceFont != null)
-            {
-                fontDialog.Font = Settings.Default.ButtonTextFaceFont;
-            }
-
-            if (fontDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                _dcsbiosDecoder.TextFont = fontDialog.Font;
-
-                Settings.Default.ButtonTextFaceFont = fontDialog.Font;
-                Settings.Default.Save();
-
-                SetIsDirty();
-            }
-        }
-
-        private void SetFontColor()
-        {
-            var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
-            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
-
-            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                _dcsbiosDecoder.FontColor = colorDialog.Color;
-
-                Settings.Default.ButtonTextFaceFontColor = colorDialog.Color;
-                Settings.Default.Save();
-
-                SetIsDirty();
-            }
-        }
-
-        private void SetBackgroundColor()
-        {
-            var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
-            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
-
-            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                _dcsbiosDecoder.BackgroundColor = colorDialog.Color;
-
-                Settings.Default.ButtonTextFaceBackgroundColor = colorDialog.Color;
-                Settings.Default.Save();
-
-                SetIsDirty();
-            }
-        }
-
+        
         private void SetIsDirty()
         {
             if (_populatingData)
@@ -471,7 +432,7 @@ namespace DCSFlightpanels.Windows
             textbox.Foreground = new SolidColorBrush(Colors.Gainsboro);
         }
 
-        private void ShowDecoders()
+        private void ShowConverters()
         {
             /*RadioButtonOutputString.IsChecked = DCSBIOSDecoders.Count > 0;
             DataGridDecoders.DataContext = DCSBIOSDecoders;
@@ -488,7 +449,7 @@ namespace DCSFlightpanels.Windows
                 if (window.DialogResult == true)
                 {
                     //_dcsbiosDecoder.Add(window.DCSBIOSComparator);
-                    ShowDecoders();
+                    ShowConverters();
                 }
 
                 SetFormState();

@@ -85,11 +85,11 @@
                 </StackPanel>
             </GroupBox>
 
-            <StackPanel Name="StackPanelAsIs" HorizontalAlignment="Left" Margin="0,0,5,0" Visibility="Collapsed">
+            <StackPanel Name="StackPanelAsIs" HorizontalAlignment="Left" Margin="0,0,5,0" Visibility="Visible">
                 <GroupBox Header="Settings" HorizontalAlignment="Stretch">
                     <StackPanel HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Name="TextBoxOutputTextAsIs" Width="72" Height="72" KeyUp="TextBoxOutputTextAsIs_OnKeyUp"/>
+                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputTextAsIs" Width="72" Height="72" KeyUp="TextBoxOutputTextAsIs_OnKeyUp"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonActionPressUpAsIs" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUpAsIs_OnClick"/>
                                 <RepeatButton Name="RepeatButtonActionPressDownAsIs" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDownAsIs_OnClick"/>
@@ -125,7 +125,7 @@
                 </GroupBox>
             </StackPanel>
 
-            <StackPanel Name="StackPanelOverlayImage" Margin="0,0,5,0"  Visibility="Visible" HorizontalAlignment="Left">
+            <StackPanel Name="StackPanelOverlayImage" Margin="0,0,5,0"  Visibility="Collapsed" HorizontalAlignment="Left">
                 <GroupBox Header="Settings">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal">

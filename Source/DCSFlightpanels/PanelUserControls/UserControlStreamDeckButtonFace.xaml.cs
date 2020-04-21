@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using DCSFlightpanels.Shared;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 
@@ -309,8 +310,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetFontStyle(TextBoxButtonTextFace);
-                TestImage(TextBoxButtonTextFace);
+                if (StreamDeckCommon.SetFontStyle(TextBoxButtonTextFace) == DialogResult.OK)
+                {
+                    SetIsDirty();
+                    SDUIParent.ChildChangesMade();
+                }
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent);
                 SetFormState();
             }
             catch (Exception ex)
@@ -323,8 +328,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetFontColor(TextBoxButtonTextFace);
-                TestImage(TextBoxButtonTextFace);
+                if (StreamDeckCommon.SetFontColor(TextBoxButtonTextFace) == DialogResult.OK)
+                {
+                    SetIsDirty();
+                    SDUIParent.ChildChangesMade();
+                }
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent); 
                 SetFormState();
             }
             catch (Exception ex)
@@ -337,8 +346,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetBackgroundColor(TextBoxButtonTextFace);
-                TestImage(TextBoxButtonTextFace);
+                if (StreamDeckCommon.SetBackgroundColor(TextBoxButtonTextFace) == DialogResult.OK)
+                {
+                    SetIsDirty();
+                    SDUIParent.ChildChangesMade();
+                }
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent);
                 SetFormState();
             }
             catch (Exception ex)
@@ -351,7 +364,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TestImage(TextBoxButtonTextFace);
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent);
                 SetFormState();
             }
             catch (Exception ex)
@@ -529,84 +542,14 @@ namespace DCSFlightpanels.PanelUserControls
             throw new ArgumentException("GetStreamDeckButtonFace, failed to determine Face Type");
         }
 
-        private void SetFontStyle(StreamDeckFaceTextBox textBox)
-        {
-            var fontDialog = new FontDialog();
-
-            fontDialog.FixedPitchOnly = true;
-            fontDialog.FontMustExist = true;
-            fontDialog.MinSize = 6;
-
-            if (Settings.Default.ButtonTextFaceFont != null)
-            {
-                fontDialog.Font = Settings.Default.ButtonTextFaceFont;
-            }
-
-            var result = fontDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                textBox.Bill.TextFont = fontDialog.Font;
-
-                Settings.Default.ButtonTextFaceFont = fontDialog.Font;
-                Settings.Default.Save();
-
-                SetIsDirty();
-                SDUIParent.ChildChangesMade();
-            }
-        }
-
-        private void SetFontColor(StreamDeckFaceTextBox textBox)
-        {
-            var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
-            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
-
-            var result = colorDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                textBox.Bill.FontColor = colorDialog.Color;
-
-                Settings.Default.ButtonTextFaceFontColor = colorDialog.Color;
-                Settings.Default.Save();
-
-                SetIsDirty();
-                SDUIParent.ChildChangesMade();
-            }
-        }
-
-        private void SetBackgroundColor(StreamDeckFaceTextBox textBox)
-        {
-            var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
-            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
-            var result = colorDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                textBox.Bill.BackgroundColor = colorDialog.Color;
-
-                Settings.Default.ButtonTextFaceBackgroundColor = colorDialog.Color;
-                Settings.Default.Save();
-
-                SetIsDirty();
-                SDUIParent.ChildChangesMade();
-            }
-        }
-
-        private void TestImage(StreamDeckFaceTextBox textBox)
-        {
-            var bitmap = BitMapCreator.CreateStreamDeckBitmap(textBox.Text, textBox.Bill.TextFont, textBox.Bill.FontColor, textBox.Bill.BackgroundColor, textBox.Bill.OffsetX, textBox.Bill.OffsetY);
-            SDUIParent.TestImage(bitmap);
-        }
-
         public IStreamDeckUIParent SDUIParent { get; set; }
-
 
         private void TextBoxButtonTextFace_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
                 var textBox = (StreamDeckFaceTextBox)sender;
-                TestImage(textBox);
+                StreamDeckCommon.TestImage(textBox, SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
                 SetFormState();
@@ -623,7 +566,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TestImage(TextBoxButtonTextFace);
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
@@ -638,7 +581,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TestImage(TextBoxButtonTextFace);
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
@@ -653,7 +596,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TestImage(TextBoxButtonTextFace);
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
@@ -668,7 +611,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                TestImage(TextBoxButtonTextFace);
+                StreamDeckCommon.TestImage(TextBoxButtonTextFace, SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }

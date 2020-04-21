@@ -23,6 +23,7 @@ namespace DCSFlightpanels.Bills
         public BitmapImage DeselectedImage { get; set; }
         private DCSBIOSDecoder _dcsbiosDecoder;
         private string _imageFilePath;
+        private string _overlayImagePath;
 
         public override bool IsEmpty()
         {
