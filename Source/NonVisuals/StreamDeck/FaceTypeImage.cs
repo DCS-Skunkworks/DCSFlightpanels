@@ -10,34 +10,39 @@ namespace NonVisuals.StreamDeck
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Image;
-
-        private Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private string _imageFile;
+        private KeyBitmap _keyBitmap;
+
+
+
+
+
+        protected override void DrawBitmap()
+        {
+            if (Bitmap == null || RefreshBitmap)
+            {
+                Bitmap = new Bitmap(_imageFile);
+                RefreshBitmap = false;
+            }
+
+            if (_keyBitmap == null)
+            {
+                _keyBitmap = KeyBitmap.Create.FromBitmap(Bitmap);
+            }
+        }
 
         protected override void Show()
         {
-            if (StreamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-            {
-                return;
-            }
-
-            if (_refreshBitmap)
-            {
-                _bitmap = new Bitmap(_imageFile);
-                _refreshBitmap = false;
-            }
-
-            var keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
-
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(StreamDeckButtonName) - 1, keyBitmap);
+            DrawBitmap();
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
         }
 
         [JsonIgnore]
         public string Text { get; set; }
 
         [JsonIgnore]
-        public Font TextFont { get; set; } = Constants.DefaultStreamDeckFont;
+        public Font TextFont { get; set; } = StreamDeckConstants.DefaultStreamDeckFont;
 
         [JsonIgnore]
         public Color FontColor { get; set; }

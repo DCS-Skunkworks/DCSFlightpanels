@@ -33,7 +33,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("MultiPanelDCSBIOSControlLCD{") && settings.Contains("DCSBiosOutput{"))
             {
                 //MultiPanelDCSBIOSControlLCD{ALT}\o/{LowerLCD}\o/DCSBiosOutput{ANT_EGIHQTOD|Equals|0}
-                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
                 //MultiPanelDCSBIOSControlLCD{ALT}
@@ -53,7 +53,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("MultiPanelDCSBIOSControlLCD{") && settings.Contains("DCSBiosOutputFormula{"))
             {
                 //MultiPanelDCSBIOSControlLCD{ALT}\o/{UpperLCD}\o/DCSBiosOutputFormula{ANT_EGIHQTOD+10}
-                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //[0]
                 //MultiPanelDCSBIOSFormulaLCD{ALT}
@@ -114,9 +114,9 @@ namespace NonVisuals.DCSBIOSBindings
             if (_dcsbiosOutputFormula != null)
             {
                 //MultiPanelDCSBIOSControlLCD{ALT}\o/{UpperLCDLeft}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
-                return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + Constants.SEPARATOR_SYMBOL + "{" + _pz70LCDPosition + "}" + Constants.SEPARATOR_SYMBOL + _dcsbiosOutputFormula.ToString();
+                return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz70LCDPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + _dcsbiosOutputFormula.ToString();
             }
-            return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + Constants.SEPARATOR_SYMBOL + "{" + _pz70LCDPosition + "}" + Constants.SEPARATOR_SYMBOL + _dcsbiosOutput.ToString();
+            return "MultiPanelDCSBIOSControlLCD{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + _pz70LCDPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + _dcsbiosOutput.ToString();
         }
 
         public PZ70LCDPosition PZ70LCDPosition

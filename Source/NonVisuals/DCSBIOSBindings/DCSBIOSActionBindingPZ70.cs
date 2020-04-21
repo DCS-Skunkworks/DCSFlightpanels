@@ -4,6 +4,7 @@ using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Saitek;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals.DCSBIOSBindings
 {
@@ -31,7 +32,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("MultiPanelDCSBIOSControl{"))
             {
                 //MultiPanelDCSBIOSControl{HDG}\\o/{1LCD_WHEEL_DEC|DCS-BIOS}\\o/\\o/DCSBIOSInput{AAP_CDUPWR|SET_STATE|1|0}\\o/\\\\?\\hid#vid_06a3&pid_0d06#9&244b4bcc&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}\\o/PanelSettingsVersion=2X"
-                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //MultiPanelDCSBIOSControl{ALT}
                 var param0 = parameters[0].Replace("MultiPanelDCSBIOSControl{", "").Replace("}", "");
@@ -97,14 +98,14 @@ namespace NonVisuals.DCSBIOSBindings
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
-                stringBuilder.Append(Constants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
+                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
                 //MultiPanelDCSBIOSControl{0ALT_BUTTON|Oxygen System Test}\o/\o/DCSBIOSInput{ENVCP_OXY_TEST|SET_STATE|0}
-                return "MultiPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + Constants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "|" + Description + "}" + Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
+                return "MultiPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder.ToString();
             }
-            return "MultiPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + Constants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
+            return "MultiPanelDCSBIOSControl{" + Enum.GetName(typeof(PZ70DialPosition), _pz70DialPosition) + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder.ToString();
         }
 
     }

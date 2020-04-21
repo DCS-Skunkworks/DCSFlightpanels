@@ -1,5 +1,6 @@
 ﻿using System;
 using ClassLibraryCommon;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
@@ -35,7 +36,7 @@ namespace NonVisuals.Radios
                 throw new Exception("Invalid setting for RadioPanelPZ69DisplayValue, cannot import.");
             }
             //PZ69DisplayValue{UpperCom1|UpperActive|124.12}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-            var tmp = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries)[0].Replace("PZ69DisplayValue{", "");
+            var tmp = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries)[0].Replace("PZ69DisplayValue{", "");
             tmp = tmp.Replace("}", "");
             //UpperCom1|UpperActive|124.12
             var array = tmp.Split('|');

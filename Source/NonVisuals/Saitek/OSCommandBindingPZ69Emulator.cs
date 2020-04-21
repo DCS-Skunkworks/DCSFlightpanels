@@ -23,7 +23,7 @@ namespace NonVisuals.Saitek
             if (settings.StartsWith("RadioPanelOSPZ69{"))
             {
                 //RadioPanelOSPZ69{1UpperCOM1}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //RadioPanelOSPZ69{1UpperCOM1}
                 var param0 = parameters[0].Replace("RadioPanelOSPZ69{", "").Replace("}", "");
@@ -52,7 +52,7 @@ namespace NonVisuals.Saitek
             }
             Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "RadioPanelOSPZ69{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + Constants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
+            return "RadioPanelOSPZ69{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
         }
 
     }

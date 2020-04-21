@@ -111,10 +111,10 @@ namespace DCSFlightpanels.Windows
 
             StackPanelNumberConversion.Visibility = RadioButtonOutputString.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
             StackPanelNumberConversion.IsEnabled = RadioButtonOutputString.IsChecked == true;
-            ButtonAddNumberConversion.IsEnabled = RadioButtonOutputString.IsChecked == true;
+            ButtonAddConverter.IsEnabled = RadioButtonOutputString.IsChecked == true;
 
-            ButtonEditNumberConversion.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
-            ButtonDeleteNumberConversion.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
+            ButtonEditConverter.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
+            ButtonDeleteConverter.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
             ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
 
             GroupBoxFormula.IsEnabled = CheckBoxUseFormula.IsChecked == true;
@@ -150,7 +150,7 @@ namespace DCSFlightpanels.Windows
                         {
                             SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : "");
                             SetFormulaResult(_dcsbiosDecoder.FormulaResult);
-                            SetRawDCSBIOSValue(_dcsbiosDecoder.DCSBiosValue);
+                            SetRawDCSBIOSValue(_dcsbiosDecoder.UintDcsBiosValue);
                         }
                         catch (Exception e)
                         {
@@ -232,7 +232,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosDecoder.OffsetY -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                _dcsbiosDecoder.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SetIsDirty();
                 Settings.Default.ButtonFaceOffsetY = _dcsbiosDecoder.OffsetY;
                 Settings.Default.Save();
@@ -247,7 +247,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosDecoder.OffsetY += Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                _dcsbiosDecoder.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SetIsDirty();
                 Settings.Default.ButtonFaceOffsetY = _dcsbiosDecoder.OffsetY;
                 Settings.Default.Save();
@@ -262,7 +262,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosDecoder.OffsetX -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                _dcsbiosDecoder.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SetIsDirty();
                 Settings.Default.ButtonFaceOffsetX = _dcsbiosDecoder.OffsetX;
                 Settings.Default.Save();
@@ -277,7 +277,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosDecoder.OffsetX += Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                _dcsbiosDecoder.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SetIsDirty();
                 Settings.Default.ButtonFaceOffsetX = _dcsbiosDecoder.OffsetX;
                 Settings.Default.Save();
@@ -405,7 +405,7 @@ namespace DCSFlightpanels.Windows
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
-            colorDialog.CustomColors = Constants.GetOLEColors();
+            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
 
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -422,7 +422,7 @@ namespace DCSFlightpanels.Windows
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
-            colorDialog.CustomColors = Constants.GetOLEColors();
+            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
 
             if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -473,21 +473,21 @@ namespace DCSFlightpanels.Windows
 
         private void ShowDecoders()
         {
-            RadioButtonOutputString.IsChecked = DCSBIOSDecoders.Count > 0;
+            /*RadioButtonOutputString.IsChecked = DCSBIOSDecoders.Count > 0;
             DataGridDecoders.DataContext = DCSBIOSDecoders;
-            DataGridDecoders.ItemsSource = DCSBIOSDecoders;
+            DataGridDecoders.ItemsSource = DCSBIOSDecoders;*/
             DataGridDecoders.Items.Refresh();
         }
 
-        private void ButtonAddNumberConversion_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonAddConverter_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var window = new DCSBIOSComparatorWindow();
+                var window = new DCSBIOSConverterWindow();
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
-                    _dcsbiosDecoder.Add(window.DCSBIOSComparator);
+                    //_dcsbiosDecoder.Add(window.DCSBIOSComparator);
                     ShowDecoders();
                 }
 
@@ -499,11 +499,11 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void ButtonEditNumberConversion_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonEditConverter_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var window = new DCSBIOSComparatorWindow((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
+                /*var window = new DCSBIOSComparatorWindow((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
@@ -511,7 +511,7 @@ namespace DCSFlightpanels.Windows
                     _dcsbiosDecoder.Add(window.DCSBIOSComparator);
                     SetIsDirty();
                     ShowDecoders();
-                }
+                }*/
 
                 SetFormState();
             }
@@ -521,15 +521,15 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void ButtonDeleteNumberConversion_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonDeleteConverter_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                _dcsbiosDecoder.Remove((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
+                /*_dcsbiosDecoder.Remove((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
                 RadioButtonOutputNumber.IsChecked = DCSBIOSDecoders.Count == 0;
                 SetIsDirty();
                 ShowDecoders();
-                SetFormState();
+                SetFormState();*/
             }
             catch (Exception ex)
             {
@@ -548,12 +548,12 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
+        /*
         public List<DCSBIOSNumberToText> DCSBIOSDecoders
         {
             get => _dcsbiosDecoder.DCSBIOSDecoders;
         }
-
+        */
         private void DataGridDecoders_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -734,5 +734,38 @@ namespace DCSFlightpanels.Windows
         }
 
         public DCSBIOSDecoder DCSBIOSDecoder => _dcsbiosDecoder;
+
+        private void RadioButtonIntegerSource_OnChecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void RadioButtonStringSource_OnChecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void CheckBoxStringAsNumber_OnChecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

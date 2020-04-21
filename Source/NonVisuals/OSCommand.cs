@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using NonVisuals.Saitek;
 
 namespace NonVisuals
 {
@@ -31,7 +32,7 @@ namespace NonVisuals
             var tmp = value;
             tmp = tmp.Replace("OSCommand{", "").Replace("}", "");
             //FILE\o/ARGUMENTS\o/NAME]
-            var array = tmp.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.None);
+            var array = tmp.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.None);
             _file = array[0];
             if (array.Length > 1)
             {
@@ -49,7 +50,7 @@ namespace NonVisuals
             {
                 return null;
             }
-            return "OSCommand{" + _file + Constants.SEPARATOR_SYMBOL + _arguments + Constants.SEPARATOR_SYMBOL + _name + "}";
+            return "OSCommand{" + _file + SaitekConstants.SEPARATOR_SYMBOL + _arguments + SaitekConstants.SEPARATOR_SYMBOL + _name + "}";
         }
 
         public bool IsRunning()

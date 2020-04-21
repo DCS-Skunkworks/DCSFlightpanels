@@ -4,6 +4,7 @@ using System.Text;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Saitek;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals.DCSBIOSBindings
 {
@@ -30,7 +31,7 @@ namespace NonVisuals.DCSBIOSBindings
             if (settings.StartsWith("SwitchPanelDCSBIOSControl{"))
             {
                 //SwitchPanelDCSBIOSControl{1KNOB_ENGINE_OFF}\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //SwitchPanelDCSBIOSControl{1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Substring(parameters[0].IndexOf("{", StringComparison.InvariantCulture) + 1);
@@ -78,13 +79,13 @@ namespace NonVisuals.DCSBIOSBindings
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
-                stringBuilder.Append(Constants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
+                stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
             }
             if (!string.IsNullOrWhiteSpace(Description))
             {
-                return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "|" + Description + "}" + Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
+                return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "|" + Description + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder.ToString();
             }
-            return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + Constants.SEPARATOR_SYMBOL + stringBuilder.ToString();
+            return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder.ToString();
         }
         
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key

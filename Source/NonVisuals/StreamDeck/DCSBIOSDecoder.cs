@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.Threading;
+using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 
@@ -11,11 +14,16 @@ namespace NonVisuals.StreamDeck
     {
         private string _formula = "";
         private DCSBIOSOutput _dcsbiosOutput = null;
-        private List<DCSBIOSNumberToText> _dcsbiosNumberToTexts = new List<DCSBIOSNumberToText>();
+        private List<DCSBIOSValueToFaceConverter> _dcsbiosValueToFaceConverters = new List<DCSBIOSValueToFaceConverter>();
         private volatile bool _valueUpdated;
         private string _lastFormulaError = "";
         private double _formulaResult = 0;
-        [NonSerialized]private int _jaceId = 0;
+        [NonSerialized] private int _jaceId = 0;
+        private DCSBiosOutputType _dcsBiosOutputType;
+        private bool _treatStringAsNumber = false;
+
+
+
 
         public DCSBIOSDecoder()
         {
@@ -27,49 +35,122 @@ namespace NonVisuals.StreamDeck
         {
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
         }
-        
+
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {
-            if (_dcsbiosOutput?.Address == e.Address)
+            try
             {
-                if (!Equals(DCSBiosValue, e.Data))
+                if (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE)
                 {
-                    DCSBiosValue = e.Data;
-                    ButtonText = e.Data.ToString(CultureInfo.InvariantCulture);
-                    try
+                    return;
+                }
+
+                if (_dcsbiosOutput?.Address == e.Address)
+                {
+                    if (!Equals(UintDcsBiosValue, e.Data))
                     {
-                        if (!string.IsNullOrEmpty(_formula))
-                        {
-                            _formulaResult = EvaluateFormula();
-                            ButtonText = _formulaResult.ToString(CultureInfo.InvariantCulture); //In case string converter not used
-                        }
-                        if (_dcsbiosNumberToTexts.Count > 0)
-                        {
-                            foreach (var dcsbiosNumberToText in _dcsbiosNumberToTexts)
-                            {
-                                var tmp = dcsbiosNumberToText.ConvertNumber((string.IsNullOrEmpty(_formula) == false ? _formulaResult : DCSBiosValue), out var resultFound);
-                                if (resultFound)
-                                {
-                                    ButtonText = tmp;
-                                    break;
-                                }
-                            }
-                        }
-                        if (IsVisible)
-                        {
-                            Show();
-                        }
-                        _lastFormulaError = "";
+                        UintDcsBiosValue = e.Data;
+                        ButtonText = e.Data.ToString(CultureInfo.InvariantCulture);
+                        HandleNewDCSBIOSValue();
+                        _valueUpdated = true;
                     }
-                    catch (Exception exception)
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "DcsBiosDataReceived()");
+            }
+        }
+
+
+        public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
+        {
+            try
+            {
+                if ((!_treatStringAsNumber && _dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE) || string.IsNullOrWhiteSpace(e.StringData))
+                {
+                    return;
+                }
+
+                if (_dcsbiosOutput?.Address == e.Address)
+                {
+                    StringDcsBiosValue = e.StringData;
+                    ButtonText = e.StringData;
+
+                    if (_treatStringAsNumber && _dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && uint.TryParse(e.StringData.Substring(0, _dcsbiosOutput.MaxLength), out var tmpUint))
                     {
-                        _lastFormulaError = exception.Message;
+                        UintDcsBiosValue = tmpUint;
+                        HandleNewDCSBIOSValue();
                     }
                     _valueUpdated = true;
                 }
             }
+            catch (Exception ex)
+            {
+                Common.LogError(ex, "DCSBIOSStringReceived()");
+            }
         }
-        
+
+        /*
+         * 1) integer
+         * 2) string but treat as integer
+         * 3) string and treat it as string (no formulas, no converters)
+         */
+        public void HandleNewDCSBIOSValue()
+        {
+            try
+            {
+
+                Bitmap converterBitmap = null;
+
+                if (UseFormula)
+                {
+                    _formulaResult = EvaluateFormula();
+                    ButtonText = _formulaResult.ToString(CultureInfo.InvariantCulture);
+                }
+
+                if (_dcsbiosValueToFaceConverters.Count > 0 && (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber || _dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE))
+                {
+                    foreach (var dcsbiosValueToFaceConverter in _dcsbiosValueToFaceConverters)
+                    {
+                        dcsbiosValueToFaceConverter.Set(UseFormula ? FormulaResult : UintDcsBiosValue);
+                        if (dcsbiosValueToFaceConverter.CriteriaFulfilled)
+                        {
+                            converterBitmap = dcsbiosValueToFaceConverter.Get();
+                            break;
+                        }
+                    }
+                }
+
+                if (IsVisible)
+                {
+                    if (converterBitmap != null)
+                    {
+                        ShowBitmap(converterBitmap);
+                    }
+                    else
+                    {
+                        Show();
+                    }
+                }
+                _lastFormulaError = "";
+            }
+            catch (Exception exception)
+            {
+                _lastFormulaError = exception.Message;
+            }
+        }
+
+        private bool UseFormula
+        {
+            get => !string.IsNullOrEmpty(_formula) && (_dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE || _dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber);
+        }
+
+        private void ShowBitmap(Bitmap bitmap)
+        {
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, bitmap);
+        }
+
         public void RemoveDCSBIOSOutput()
         {
             _dcsbiosOutput = null;
@@ -79,18 +160,18 @@ namespace NonVisuals.StreamDeck
         {
             _formula = "";
             _dcsbiosOutput = null;
-            _dcsbiosNumberToTexts.Clear();
+            _dcsbiosValueToFaceConverters.Clear();
             _valueUpdated = false;
             _lastFormulaError = "";
             _formulaResult = 0;
         }
-        
+
         private double EvaluateFormula()
         {
             //360 - floor((HSI_HDG / 65535) * 360)
             var variables = new Dictionary<string, double>();
             variables.Add(_dcsbiosOutput.ControlId, 0);
-            variables[_dcsbiosOutput.ControlId] = DCSBiosValue;
+            variables[_dcsbiosOutput.ControlId] = UintDcsBiosValue;
             return JaceExtendedFactory.Instance(ref _jaceId).CalculationEngine.Calculate(_formula, variables);
         }
 
@@ -99,7 +180,7 @@ namespace NonVisuals.StreamDeck
             get => _formula;
             set => _formula = value;
         }
-        
+
         public DCSBIOSOutput DCSBIOSOutput
         {
             get => _dcsbiosOutput;
@@ -107,32 +188,32 @@ namespace NonVisuals.StreamDeck
             {
                 _valueUpdated = true;
                 _dcsbiosOutput = value;
-                DCSBiosValue = UInt32.MaxValue;
+                UintDcsBiosValue = UInt32.MaxValue;
             }
         }
-
-        public void Add(DCSBIOSNumberToText dcsbiosNumberToText)
+        
+        public void Add(DCSBIOSValueToFaceConverter dcsbiosValueToFaceConverter)
         {
-            _dcsbiosNumberToTexts.Add(dcsbiosNumberToText);
+            _dcsbiosValueToFaceConverters.Add(dcsbiosValueToFaceConverter);
         }
 
-        public void Replace(DCSBIOSNumberToText oldDCSBIOSNumberToText, DCSBIOSNumberToText newDCSBIOSNumberToText)
+        public void Replace(DCSBIOSValueToFaceConverter oldDcsBiosValueToFaceConverter, DCSBIOSValueToFaceConverter newDcsBiosValueToFaceConverter)
         {
-            Remove(oldDCSBIOSNumberToText);
-            Add(newDCSBIOSNumberToText);
+            Remove(oldDcsBiosValueToFaceConverter);
+            Add(newDcsBiosValueToFaceConverter);
         }
 
-        public void Remove(DCSBIOSNumberToText dcsbiosNumberToText)
+        public void Remove(DCSBIOSValueToFaceConverter dcsbiosValueToFaceConverter)
         {
-            _dcsbiosNumberToTexts.Remove(dcsbiosNumberToText);
+            _dcsbiosValueToFaceConverters.Remove(dcsbiosValueToFaceConverter);
         }
 
-        public List<DCSBIOSNumberToText> DCSBIOSDecoders
+        public List<DCSBIOSValueToFaceConverter> DCSBIOSConverters
         {
-            get => _dcsbiosNumberToTexts;
-            set => _dcsbiosNumberToTexts = value;
+            get => _dcsbiosValueToFaceConverters;
+            set => _dcsbiosValueToFaceConverters = value;
         }
-
+        
         [JsonIgnore]
         public bool ValueUpdated
         {
@@ -157,12 +238,16 @@ namespace NonVisuals.StreamDeck
 
         [JsonIgnore]
         public double FormulaResult => _formulaResult;
-        
+
         public string GetFriendlyInfo()
         {
             return _dcsbiosOutput.ControlId;
         }
 
-
+        public bool TreatStringAsNumber
+        {
+            get => _treatStringAsNumber;
+            set => _treatStringAsNumber = value;
+        }
     }
 }

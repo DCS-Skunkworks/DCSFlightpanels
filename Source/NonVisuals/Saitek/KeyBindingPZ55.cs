@@ -20,7 +20,7 @@ namespace NonVisuals.Saitek
             if (settings.StartsWith("SwitchPanelKey{"))
             {
                 //SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                var parameters = settings.Split(new[] { Constants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //SwitchPanelKey{1KNOB_ENGINE_LEFT}
                 var param0 = parameters[0].Trim().Substring(15);
@@ -51,7 +51,7 @@ namespace NonVisuals.Saitek
             }
             Common.DebugP(Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
-            return "SwitchPanelKey{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + Constants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
+            return "SwitchPanelKey{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }
 
         public static HashSet<KeyBindingPZ55> SetNegators(HashSet<KeyBindingPZ55> knobBindings)

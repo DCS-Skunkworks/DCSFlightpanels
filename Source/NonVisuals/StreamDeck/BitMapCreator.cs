@@ -13,7 +13,7 @@ namespace NonVisuals.StreamDeck
     {
         public static BitmapImage GetButtonNumberImage(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
         {
-            return   new BitmapImage(new Uri( Constants.NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
+            return   new BitmapImage(new Uri( StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
         }
 
         public static Bitmap CreateBitmapImage(string text, int fontSize, int height, int width, Color fontColor, Color backgroundColor)
@@ -23,26 +23,38 @@ namespace NonVisuals.StreamDeck
 
         public static Bitmap CreateBitmapImage(string text, Font font, Color fontColor, Color backgroundColor)
         {
-            return CreateBitmapImage(text, font, 0, 0, 0, 0, fontColor, backgroundColor, true);
+            return CreateBitmapImage(text, font, 0, 0, 0, 0, fontColor, backgroundColor, null,true);
         }
 
         public static Bitmap CreateBitmapImage(string text, int fontSize, FontStyle fontStyle, int height, int width, Color fontColor, Color backgroundColor)
         {
             // Create the Font object for the image text drawing.
-            var font = new Font(Constants.DEFAULT_FONT, fontSize, fontStyle, GraphicsUnit.Pixel);
+            var font = new Font(StreamDeckConstants.DEFAULT_FONT, fontSize, fontStyle, GraphicsUnit.Pixel);
             return CreateBitmapImage(text, font, 0, 0, height, width, fontColor, backgroundColor);
+        }
+
+        public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, int offsetX, int offsetY, Bitmap backgroundBitmap)
+        {
+            return CreateBitmapImage(text, font, offsetX, offsetY, StreamDeckConstants.STREAMDECK_ICON_HEIGHT, StreamDeckConstants.STREAMDECK_ICON_WIDTH, fontColor, Color.Transparent, backgroundBitmap);
         }
 
         public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, Color backgroundColor, int offsetX, int offsetY)
         {
-            return CreateBitmapImage(text, font, offsetX, offsetY, Constants.STREAMDECK_ICON_HEIGHT, Constants.STREAMDECK_ICON_WIDTH, fontColor, backgroundColor);
+            return CreateBitmapImage(text, font, offsetX, offsetY, StreamDeckConstants.STREAMDECK_ICON_HEIGHT, StreamDeckConstants.STREAMDECK_ICON_WIDTH, fontColor, backgroundColor);
         }
 
-        public static Bitmap CreateBitmapImage(string text, Font font, int offsetX, int offsetY, int height, int width, Color fontColor, Color backgroundColor, bool setBitmapSizeToTextSize = false)
+        public static Bitmap CreateBitmapImage(string text, Font font, int offsetX, int offsetY, int height, int width, Color fontColor, Color backgroundColor, Bitmap backgroundBitmap = null, bool setBitmapSizeToTextSize = false)
         {
             Bitmap createdBitmap;
 
-            createdBitmap = setBitmapSizeToTextSize ? new Bitmap(2, 2) : new Bitmap(width, height);
+            if (backgroundBitmap == null)
+            {
+                createdBitmap = setBitmapSizeToTextSize ? new Bitmap(2, 2) : new Bitmap(width, height);
+            }
+            else
+            {
+                createdBitmap = backgroundBitmap;
+            }
 
             // Create a graphics object to measure the text's width and height.
             var graphicsObject = Graphics.FromImage(createdBitmap);

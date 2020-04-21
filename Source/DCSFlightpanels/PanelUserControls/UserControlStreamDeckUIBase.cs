@@ -86,6 +86,102 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        protected void SetContextMenus()
+        {
+            /*
+                <ContextMenu x:Key="ButtonContextMenu" Opened="ButtonContextMenu_OnOpened" >
+                    <MenuItem Name="MenuItemCopy" Header="Copy" Click="ButtonContextMenuCopy_OnClick"/>
+                    <MenuItem Name="MenuItemPaste" Header="Paste" Click="ButtonContextMenuPaste_OnClick"/>
+                </ContextMenu>
+             */
+            var contextMenu = new ContextMenu();
+            contextMenu.Name = "ButtonContextMenu";
+            contextMenu.Opened += ButtonContextMenu_OnOpened;
+
+            var menuItem = new MenuItem();
+            menuItem.Name = "MenuItemCopy";
+            menuItem.Header = "Copy";
+            menuItem.Click += ButtonContextMenuCopy_OnClick;
+            contextMenu.Items.Add(menuItem);
+
+            menuItem = new MenuItem();
+            menuItem.Name = "MenuItemPaste";
+            menuItem.Header = "Paste";
+            menuItem.Click += ButtonContextMenuPaste_OnClick;
+            contextMenu.Items.Add(menuItem);
+
+            foreach (var streamDeckImage in ButtonImages)
+            {
+                streamDeckImage.ContextMenu = contextMenu;
+            }
+        }
+
+
+        private void ButtonContextMenuCopy_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Copy();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonContextMenuPaste_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Paste();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonContextMenu_OnOpened(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                /*
+                 * Can't get context menu [ContextMenuOpening] events to work. Workaround.
+                 */
+                var contextMenu = (ContextMenu)sender;
+                MenuItem menuItemCopy = null;
+                MenuItem menuItemPaste = null;
+                foreach (MenuItem contextMenuItem in contextMenu.Items)
+                {
+                    if (contextMenuItem.Name == "MenuItemCopy")
+                    {
+                        menuItemCopy = contextMenuItem;
+                    }
+                }
+                foreach (MenuItem contextMenuItem in contextMenu.Items)
+                {
+                    if (contextMenuItem.Name == "MenuItemPaste")
+                    {
+                        menuItemPaste = contextMenuItem;
+                    }
+                }
+
+                if (menuItemCopy == null || menuItemPaste == null)
+                {
+                    return;
+                }
+                var selectedStreamDeckButton = StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).GetActiveLayer().GetStreamDeckButton(SelectedButtonName);
+                menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
+
+                var iDataObject = Clipboard.GetDataObject();
+                menuItemPaste.IsEnabled = iDataObject != null && iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         protected void SetDotImageStatus(bool show, int number, bool allOthersNegated = false)
         {
             foreach (var dotImage in DotImages)

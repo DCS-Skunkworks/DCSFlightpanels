@@ -43,6 +43,16 @@
                     <Bold>Json.NET by James Newton-King</Bold>
                 </Hyperlink>
                 <LineBreak/>
+                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/OpenMacroBoard/StreamDeckSharp">
+                    -
+                    <Bold>StreamDeckSharp by wischi-chr</Bold>
+                </Hyperlink>
+                <LineBreak/>
+                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/pieterderycke/Jace">
+                    -
+                    <Bold>Jace by Pieter De Rycke</Bold>
+                </Hyperlink>
+                <LineBreak/>
                 <LineBreak/>
                 <Bold>Special thanks to :</Bold>
                 <LineBreak/>

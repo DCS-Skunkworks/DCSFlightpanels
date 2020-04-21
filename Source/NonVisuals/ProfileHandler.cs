@@ -7,6 +7,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -272,23 +273,23 @@ namespace NonVisuals
                                     //and that old settings won't be loaded.
                                     if (currentPanelSettingsVersion.EndsWith("0X"))
                                     {
-                                        _listPanelSettingsData.Add(line + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID);
+                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
                                     }
                                     else
                                     {
-                                        _listPanelSettingsData.Add(line + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID + Constants.SEPARATOR_SYMBOL + currentPanelSettingsVersion);
+                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.SEPARATOR_SYMBOL + currentPanelSettingsVersion);
                                     }
                                 }
                                 else
                                 {
-                                    _listPanelSettingsData.Add(line + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID);
+                                    _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
                                 }
                             }
 
 
                             if (insideJSONPanel)
                             {
-                                _listPanelSettingsData.Add(fileLine + Constants.SEPARATOR_SYMBOL + currentPanelInstanceID);
+                                _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
                             }
                         }
                     }

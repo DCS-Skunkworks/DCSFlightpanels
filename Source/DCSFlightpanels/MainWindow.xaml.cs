@@ -157,7 +157,11 @@ namespace DCSFlightpanels
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewDCSFPRelease();
-                
+
+                if (Process.GetProcessesByName("StreamDeck").Length >= 1)
+                {
+                    MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
                 _isLoaded = true;
             }
             catch (Exception ex)

@@ -121,7 +121,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
     <Compile Include="Interfaces\IIsDirty.cs" />
@@ -138,6 +137,7 @@
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="Saitek\SaitekConstants.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\CommonStreamDeck.cs" />
@@ -163,9 +163,10 @@
     <Compile Include="Saitek\KeyBindingPZ69DialPosition.cs" />
     <Compile Include="Saitek\KeyBindingPZ69.cs" />
     <Compile Include="Saitek\KeyBindingTPM.cs" />
-    <Compile Include="StreamDeck\DCSBIOSNumberToText.cs" />
+    <Compile Include="StreamDeck\DCSBIOSValueToFaceConverter.cs" />
     <Compile Include="StreamDeck\Events\StreamDeckPanelEvents.cs" />
     <Compile Include="StreamDeck\FaceTypeBase.cs" />
+    <Compile Include="StreamDeck\FaceTypeDCSBIOSOverlay.cs" />
     <Compile Include="StreamDeck\FaceTypeDCSBIOS.cs" />
     <Compile Include="StreamDeck\FaceTypeImage.cs" />
     <Compile Include="StreamDeck\ActionTypeKey.cs" />

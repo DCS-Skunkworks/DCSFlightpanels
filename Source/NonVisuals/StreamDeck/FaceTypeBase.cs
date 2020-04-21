@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
 {
     [Serializable]
-    public class FaceTypeBase
+    public abstract class FaceTypeBase
     {
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Unknown;
-        private Bitmap _bitmap;
+        [NonSerialized]private Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _streamDeckInstanceId;
@@ -19,14 +18,20 @@ namespace NonVisuals.StreamDeck
         private int _offsetX;
         private int _offsetY;
 
-        protected virtual void Show()
-        {
-        }
+
+
+
+        protected abstract void DrawBitmap();
+        protected virtual void Show() {}
 
         [JsonIgnore]
         public Bitmap Bitmap
         {
-            get => _bitmap;
+            get
+            {
+                DrawBitmap();
+                return _bitmap;
+            }
             set
             {
                 _bitmap = value;

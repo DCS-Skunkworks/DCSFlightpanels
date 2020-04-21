@@ -9,22 +9,28 @@ namespace NonVisuals.StreamDeck
     public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
-        private Bitmap _bitmap;
-        private bool _refreshBitmap = true;
         private string _text;
-        private Font _textFont = Constants.DefaultStreamDeckFont;
+        private Font _textFont = StreamDeckConstants.DefaultStreamDeckFont;
         private Color _fontColor;
         private Color _backgroundColor;
 
 
+
+
+
+        protected override void DrawBitmap()
+        {
+            if (Bitmap == null || RefreshBitmap)
+            {
+                Bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                RefreshBitmap = false;
+            }
+        }
+
         protected override void Show()
         {
-            if (_refreshBitmap)
-            {
-                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
-                _refreshBitmap = false;
-            }
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, _bitmap);
+            DrawBitmap();
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, Bitmap);
         }
 
         public string Text
@@ -32,7 +38,7 @@ namespace NonVisuals.StreamDeck
             get => _text;
             set
             {
-                _refreshBitmap = true;
+                RefreshBitmap = true;
                 _text = value;
             }
         }
@@ -42,7 +48,7 @@ namespace NonVisuals.StreamDeck
             get => _textFont;
             set
             {
-                _refreshBitmap = true;
+                RefreshBitmap = true;
                 _textFont = value;
             }
         }
@@ -52,7 +58,7 @@ namespace NonVisuals.StreamDeck
             get => _fontColor;
             set
             {
-                _refreshBitmap = true;
+                RefreshBitmap = true;
                 _fontColor = value;
             }
         }
@@ -62,7 +68,7 @@ namespace NonVisuals.StreamDeck
             get => _backgroundColor;
             set
             {
-                _refreshBitmap = true;
+                RefreshBitmap = true;
                 _backgroundColor = value;
             }
         }

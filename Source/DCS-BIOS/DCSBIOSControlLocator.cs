@@ -370,7 +370,7 @@ namespace DCS_BIOS
             LoadControls();
             return _dcsbiosControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.INTEGER_TYPE);
         }
-
+        
         public static IEnumerable<DCSBIOSControl> GetInputControls()
         {
             if (!Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled))

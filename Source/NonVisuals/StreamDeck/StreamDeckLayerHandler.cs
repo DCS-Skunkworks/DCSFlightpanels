@@ -81,7 +81,7 @@ namespace NonVisuals.StreamDeck
 
             foreach (var streamDeckLayer in _layerList)
             {
-                if (streamDeckLayer.Name == CommonStreamDeck.HOME_LAYER_NAME)
+                if (streamDeckLayer.Name == StreamDeckConstants.HOME_LAYER_NAME)
                 {
                     found = true;
                     break;
@@ -91,7 +91,7 @@ namespace NonVisuals.StreamDeck
             if (!found)
             {
                 var streamDeckLayer = new StreamDeckLayer();
-                streamDeckLayer.Name = CommonStreamDeck.HOME_LAYER_NAME;
+                streamDeckLayer.Name = StreamDeckConstants.HOME_LAYER_NAME;
                 _layerList.Insert(0, streamDeckLayer);
             }
 
@@ -106,7 +106,7 @@ namespace NonVisuals.StreamDeck
             }
             else
             {
-                SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
+                SetActiveLayer(StreamDeckConstants.HOME_LAYER_NAME);
             }
         }
 
@@ -161,7 +161,7 @@ namespace NonVisuals.StreamDeck
             get
             {
                 CheckHomeLayerStatus();
-                return _layerList.Find(o => o.Name == CommonStreamDeck.HOME_LAYER_NAME);
+                return _layerList.Find(o => o.Name == StreamDeckConstants.HOME_LAYER_NAME);
             }
         }
 
@@ -328,7 +328,7 @@ namespace NonVisuals.StreamDeck
 
         public void ShowHomeLayer()
         {
-            SetActiveLayer(CommonStreamDeck.HOME_LAYER_NAME);
+            SetActiveLayer(StreamDeckConstants.HOME_LAYER_NAME);
         }
         
         private void HideAllButtonsAndClearFace()

@@ -24,6 +24,7 @@ namespace DCSFlightpanels.PanelUserControls
                 FillControlLists();
                 SetImageBills();
                 ShowGraphicConfiguration();
+                SetContextMenus();
                 UserControlLoaded = true;
             }
             SetFormState();

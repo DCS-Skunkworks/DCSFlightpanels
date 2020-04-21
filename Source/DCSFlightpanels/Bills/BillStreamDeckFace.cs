@@ -15,9 +15,9 @@ namespace DCSFlightpanels.Bills
         private ActionTypeLayer _streamDeckTargetLayer;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
-        private Font _textFont = Constants.DefaultStreamDeckFont;
+        private Font _textFont = StreamDeckConstants.DefaultStreamDeckFont;
         private Color _fontColor = Color.Black;
-        private Color _backgroundColor = ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE);
+        private Color _backgroundColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE);
         private bool _isSelected = false;
         public BitmapImage SelectedImage { get; set; }
         public BitmapImage DeselectedImage { get; set; }
@@ -114,7 +114,7 @@ namespace DCSFlightpanels.Bills
             
         }
 
-        public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE) && FontColor == Color.Black && TextFont.Name == Constants.DEFAULT_FONT;
+        public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE) && FontColor == Color.Black && TextFont.Name == StreamDeckConstants.DEFAULT_FONT;
         
         public string BackgroundHex => "#" + _backgroundColor.R.ToString("X2") + _backgroundColor.G.ToString("X2") + _backgroundColor.B.ToString("X2");
 

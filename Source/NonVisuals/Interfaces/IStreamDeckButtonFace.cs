@@ -8,7 +8,8 @@ namespace NonVisuals.Interfaces
         Unknown = 0,
         Text = 1,
         Image = 2,
-        DCSBIOS = 4
+        DCSBIOS = 4,
+        DCSBIOSOverlay = 8
     }
 
 

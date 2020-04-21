@@ -73,7 +73,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Visible">
+            <StackPanel Name="StackPanelButtonDCSBIOSImage"  Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Visibility="Collapsed">
                 <Label Content="DCS-BIOS Decoder based on :" FontSize="10" Height="23"/>
                 <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDCSBIOSDecoder"  IsEnabled="False" Background="Gainsboro" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">

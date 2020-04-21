@@ -8,16 +8,6 @@ namespace NonVisuals.StreamDeck
 {
     public static class CommonStreamDeck
     {
-        public const string DCSBIOS_PLACE_HOLDER = "{dcsbios}";
-
-        public const string HOME_LAYER_NAME = "Home";
-
-
-
-
-
-
-
         public static BitmapImage ConvertBitMap(Bitmap bitmap)
         {
             try

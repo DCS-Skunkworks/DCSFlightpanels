@@ -559,7 +559,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
-            colorDialog.CustomColors = Constants.GetOLEColors();
+            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
 
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
@@ -578,7 +578,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             var colorDialog = new ColorDialog();
             colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
-            colorDialog.CustomColors = Constants.GetOLEColors();
+            colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -622,7 +622,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetY -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -637,7 +637,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetY += Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -652,7 +652,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetX -= Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -667,7 +667,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.Bill.OffsetX += Constants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxButtonTextFace.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TestImage(TextBoxButtonTextFace);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -686,14 +686,14 @@ namespace DCSFlightpanels.PanelUserControls
              */
             if (e.ActionType == EnumStreamDeckActionType.LayerNavigation && !string.IsNullOrEmpty(e.TargetLayerName))
             {
-                if (e.TargetLayerName == Constants.HOME)
+                if (e.TargetLayerName == StreamDeckConstants.HOME)
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
                     TextBoxImageFace.Bill.ImageFilePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryHomeWhite;
                     SetIsDirty();
                 }
-                else if (e.TargetLayerName == Constants.BACK)
+                else if (e.TargetLayerName == StreamDeckConstants.BACK)
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
@@ -708,8 +708,8 @@ namespace DCSFlightpanels.PanelUserControls
                     Clear();
                     RadioButtonTextFace.IsChecked = true;
                     TextBoxButtonTextFace.Text = e.TargetLayerName;
-                    TextBoxButtonTextFace.Bill.FontColor = ColorTranslator.FromHtml(Constants.COLOR_DEFAULT_WHITE);
-                    TextBoxButtonTextFace.Bill.BackgroundColor = ColorTranslator.FromHtml(Constants.COLOR_GUNSHIP_GREEN);
+                    TextBoxButtonTextFace.Bill.FontColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE);
+                    TextBoxButtonTextFace.Bill.BackgroundColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_GUNSHIP_GREEN);
                 }
                 SetIsDirty();
             }

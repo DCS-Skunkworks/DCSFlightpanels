@@ -684,12 +684,12 @@ namespace DCSFlightpanels.PanelUserControls
                 target.TargetLayer = ComboBoxLayerNavigationButton.Text;
                 switch (ComboBoxLayerNavigationButton.Text)
                 {
-                    case Constants.GO_TO_HOME_LAYER_STRING:
+                    case StreamDeckConstants.GO_TO_HOME_LAYER_STRING:
                         {
                             target.NavigationType = LayerNavType.Home;
                             break;
                         }
-                    case Constants.GO_BACK_ONE_LAYER_STRING:
+                    case StreamDeckConstants.GO_BACK_ONE_LAYER_STRING:
                         {
                             target.NavigationType = LayerNavType.Back;
                             break;
@@ -702,7 +702,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = target;
-                ActionTypeChangedLayerNavigation(Constants.TranslateLayerName(ComboBoxLayerNavigationButton.Text));
+                ActionTypeChangedLayerNavigation(StreamDeckConstants.TranslateLayerName(ComboBoxLayerNavigationButton.Text));
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
             }
@@ -729,8 +729,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 return;
             }
-            list.Insert(0, Constants.GO_BACK_ONE_LAYER_STRING);
-            list.Insert(0, Constants.GO_TO_HOME_LAYER_STRING);
+            list.Insert(0, StreamDeckConstants.GO_BACK_ONE_LAYER_STRING);
+            list.Insert(0, StreamDeckConstants.GO_TO_HOME_LAYER_STRING);
             ComboBoxLayerNavigationButton.ItemsSource = list;
             ComboBoxLayerNavigationButton.Items.Refresh();
 

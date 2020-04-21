@@ -208,8 +208,8 @@
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DCSBIOSComparatorWindow.xaml.cs">
-      <DependentUpon>DCSBIOSComparatorWindow.xaml</DependentUpon>
+    <Compile Include="Windows\DCSBIOSConverterWindow.xaml.cs">
+      <DependentUpon>DCSBIOSConverterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml.cs">
       <DependentUpon>StreamDeckDCSBIOSDecoderWindow.xaml</DependentUpon>
@@ -400,7 +400,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DCSBIOSComparatorWindow.xaml">
+    <Page Include="Windows\DCSBIOSConverterWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
