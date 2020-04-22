@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using ClassLibraryCommon;
-using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Interfaces;
 using NonVisuals.StreamDeck;
 

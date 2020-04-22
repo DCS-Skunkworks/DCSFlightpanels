@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using NonVisuals;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Drawing.Color;
@@ -22,14 +21,16 @@ namespace DCSFlightpanels.Bills
         public BitmapImage SelectedImage { get; set; }
         public BitmapImage DeselectedImage { get; set; }
         private DCSBIOSDecoder _dcsbiosDecoder;
-        private string _imageFilePath;
+        private string _imageFileRelativePath;
         private string _overlayImagePath;
+        private string _streamDeckInstanceId;
 
         public override bool IsEmpty()
         {
             return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
                    _streamDeckTargetLayer == null;
         }
+        
         
         public bool ContainsTextFace()
         {
@@ -38,7 +39,7 @@ namespace DCSFlightpanels.Bills
 
         public bool ContainsImageFace()
         {
-            return !string.IsNullOrEmpty(ImageFilePath);
+            return !string.IsNullOrEmpty(ImageFileRelativePath);
         }
 
         public Font TextFont
@@ -96,7 +97,14 @@ namespace DCSFlightpanels.Bills
         public bool IsSelected
         {
             get => _isSelected;
-            set => _isSelected = value;
+            set
+            {
+                _isSelected = value;
+                if (_isSelected)
+                {
+                    StreamDeckPanel.GetInstance(_streamDeckInstanceId).SelectedDeckButton = StreamDeckButtonName;
+                }
+            }
         }
 
 
@@ -128,7 +136,7 @@ namespace DCSFlightpanels.Bills
                 TextBox.Background = Brushes.LightSteelBlue;
                 TextBox.Text = "";
             }
-            _imageFilePath = "";
+            _imageFileRelativePath = "";
         }
 
         public DCSBIOSDecoder DCSBIOSDecoder
@@ -142,14 +150,20 @@ namespace DCSFlightpanels.Bills
         }
 
 
-        public string ImageFilePath
+        public string ImageFileRelativePath
         {
-            get => _imageFilePath;
+            get => _imageFileRelativePath;
             set
             {
-                _imageFilePath = value;
-                TextBox.Text = _imageFilePath;
+                _imageFileRelativePath = value;
+                TextBox.Text = _imageFileRelativePath;
             }
+        }
+
+        public string StreamDeckInstanceId
+        {
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
         }
     }
 

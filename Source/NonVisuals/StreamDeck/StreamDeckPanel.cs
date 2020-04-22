@@ -365,6 +365,12 @@ namespace NonVisuals.StreamDeck
         public IStreamDeckBoard StreamDeckBoard => _streamDeckBoard;
 
         public int ButtonCount => _buttonCount;
+
+        public EnumStreamDeckButtonNames SelectedDeckButton
+        {
+            get => _streamDeckLayerHandler.SelectedButton;
+            set => _streamDeckLayerHandler.SelectedButton = value;
+        }
     }
 
 }

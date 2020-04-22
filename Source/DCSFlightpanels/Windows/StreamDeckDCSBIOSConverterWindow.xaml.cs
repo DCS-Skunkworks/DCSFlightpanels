@@ -17,29 +17,32 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace DCSFlightpanels.Windows
 {
-    public partial class DCSBIOSConverterWindow : Window, IIsDirty
+    public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
     {
         private bool _isLoaded = false;
-        private DCSBIOSValueToFaceConverter _dcsbiosConverter = new DCSBIOSValueToFaceConverter();
+        private DCSBIOSConverter _dcsbiosConverter = new DCSBIOSConverter();
         private bool _isDirty;
         private bool _isPopulatingData = false;
         private StreamDeckPanel _streamDeckPanel;
+        private string _streamDeckPanelInstanceId;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
 
 
 
-        public DCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel)
+        public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, string streamDeckPanelInstanceId)
         {
             InitializeComponent();
             _streamDeckButtonName = streamDeckButtonName;
-            _streamDeckPanel = streamDeckPanel;
+            _streamDeckPanelInstanceId = streamDeckPanelInstanceId;
+            _streamDeckPanel = StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId);
         }
 
-        public DCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel, DCSBIOSValueToFaceConverter dcsbiosConverter)
+        public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, string streamDeckPanelInstanceId, DCSBIOSConverter dcsbiosConverter)
         {
             InitializeComponent();
             _streamDeckButtonName = streamDeckButtonName;
-            _streamDeckPanel = streamDeckPanel;
+            _streamDeckPanelInstanceId = streamDeckPanelInstanceId;
+            _streamDeckPanel = StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId);
             _dcsbiosConverter = dcsbiosConverter;
         }
 
@@ -66,10 +69,20 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                ButtonOk.IsEnabled = false;
+                if (ComboBoxItemAlways1.IsVisible)
+                {
+                    StackPanelSecondCriteria.Visibility = Visibility.Collapsed;
+                    StackPanelAddSecondCriteria.Visibility = Visibility.Visible;
+                }
+
+                var criteria1DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue1.Text) && SelectedComparator1 != EnumComparator.None;
+                var criteria2DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue2.Text) && SelectedComparator2 != EnumComparator.None;
+
+                var criteriaOK = (Use2Criteria ? criteria2DataOK : true) && criteria1DataOK;
 
 
-
+                //if(Use2Criteria)
+                //ButtonOk.IsEnabled = ;
                 /*TextBoxReferenceValue.IsEnabled = GetEnumValue() != EnumComparator.Always;
                 TextBoxReferenceValue.Background = GetEnumValue() != EnumComparator.Always ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Colors.LightGray);
 
@@ -233,7 +246,7 @@ namespace DCSFlightpanels.Windows
             }
         }
         
-        public DCSBIOSValueToFaceConverter DCSBIOSConverter
+        public DCSBIOSConverter DCSBIOSConverter
         {
             get => _dcsbiosConverter;
         }
@@ -322,21 +335,21 @@ namespace DCSFlightpanels.Windows
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                         break;
                     }
-                case EnumConverterOutputType.OutputAsIs:
+                case EnumConverterOutputType.Raw:
                     {
                         StackPanelAsIs.Visibility = Visibility.Visible;
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                         break;
                     }
-                case EnumConverterOutputType.OutputImage:
+                case EnumConverterOutputType.Image:
                     {
                         StackPanelAsIs.Visibility = Visibility.Collapsed;
                         StackPanelImage.Visibility = Visibility.Visible;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                         break;
                     }
-                case EnumConverterOutputType.OutputImageOverlay:
+                case EnumConverterOutputType.ImageOverlay:
                     {
                         StackPanelAsIs.Visibility = Visibility.Collapsed;
                         StackPanelImage.Visibility = Visibility.Collapsed;
@@ -425,6 +438,7 @@ namespace DCSFlightpanels.Windows
                 StackPanelAsIs.Visibility = Visibility.Visible;
                 StackPanelImage.Visibility = Visibility.Collapsed;
                 StackPanelOverlayImage.Visibility = Visibility.Collapsed;
+                _
             }
             catch (Exception ex)
             {
@@ -464,14 +478,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var path = "";
+                var imageRelativePath = "";
                 var directory = Settings.Default.LastFileDialogLocation;
 
-                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref path);
+                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref imageRelativePath);
 
                 if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextBoxImage.Bill.ImageFilePath = path;
+                    TextBoxImage.Bill.ImageFileRelativePath = imageRelativePath;
                     Settings.Default.LastFileDialogLocation = directory;
                     SetIsDirty();
                     SetFormState();
@@ -528,14 +542,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var path = "";
+                var imageRelativePath = "";
                 var directory = Settings.Default.LastFileDialogLocation;
 
-                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref path);
+                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref imageRelativePath);
 
                 if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextBoxOverlayImage.Bill.ImageFilePath = path;
+                    TextBoxOverlayImage.Bill.ImageFileRelativePath = imageRelativePath;
                     Settings.Default.LastFileDialogLocation = directory;
                     SetIsDirty();
                     SetFormState();
@@ -774,6 +788,40 @@ namespace DCSFlightpanels.Windows
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private bool Use2Criteria
+        {
+            get => StackPanelSecondCriteria.Visibility == Visibility.Visible;
+        }
+
+        private EnumComparator SelectedComparator1 => (EnumComparator)ComboBoxComparisonType1.SelectedItem;
+
+        private EnumComparator SelectedComparator2 => (EnumComparator)ComboBoxComparisonType2.SelectedItem;
+
+        private EnumConverterOutputType OutputType
+        {
+            get
+            {
+                if (RadioButtonDCSBIOSValue.IsChecked == true)
+                {
+                    return EnumConverterOutputType.Raw;
+                }
+                if (RadioButtonImage.IsChecked == true)
+                {
+                    return EnumConverterOutputType.Image;
+                }
+                if (RadioButtonDCSBIOSValue.IsChecked == true)
+                {
+                    return EnumConverterOutputType.ImageOverlay;
+                }
+                return EnumConverterOutputType.NotSet;
+            }
+        }
+
+        private bool FaceConfigurationIsOK()
+        {
+            här
         }
     }
 }

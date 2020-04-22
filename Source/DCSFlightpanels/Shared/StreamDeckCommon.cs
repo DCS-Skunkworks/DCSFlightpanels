@@ -15,9 +15,11 @@ namespace DCSFlightpanels.Shared
 
         public static DialogResult BrowseForImage(ref string initialDirectory, ref string imageRelativePath)
         {
+            
             FileDialog fileDialog = new OpenFileDialog();
             fileDialog.CheckPathExists = true;
             fileDialog.CheckFileExists = true;
+            
             fileDialog.InitialDirectory = string.IsNullOrEmpty(initialDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : initialDirectory;
             fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
 

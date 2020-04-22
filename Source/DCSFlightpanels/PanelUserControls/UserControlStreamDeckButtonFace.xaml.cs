@@ -3,13 +3,11 @@ using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
-using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -473,7 +471,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case EnumStreamDeckFaceType.Image:
                     {
                         var faceTypeImage = (FaceTypeImage)streamDeckButtonFace;
-                        TextBoxImageFace.Bill.ImageFilePath = faceTypeImage.ImageFile;
+                        TextBoxImageFace.Bill.ImageFileRelativePath = faceTypeImage.ImageFile;
                         SetFormState();
                         return;
                     }
@@ -526,7 +524,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                             result.StreamDeckButtonName = streamDeckButtonName;
                             result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
-                            result.ImageFile = TextBoxImageFace.Bill.ImageFilePath;
+                            result.ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath;
 
                             return result;
                         }
@@ -633,14 +631,14 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
-                    TextBoxImageFace.Bill.ImageFilePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryHomeWhite;
+                    TextBoxImageFace.Bill.ImageFileRelativePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryHomeWhite;
                     SetIsDirty();
                 }
                 else if (e.TargetLayerName == StreamDeckConstants.BACK)
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
-                    TextBoxImageFace.Bill.ImageFilePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryBackWhite;
+                    TextBoxImageFace.Bill.ImageFileRelativePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryBackWhite;
                     SetIsDirty();
                 }
                 else
@@ -670,7 +668,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 else
                 {
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(SDUIParent.GetStreamDeckInstanceId(), _streamDeckButton);
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(SDUIParent.GetStreamDeckInstanceId());
                 }
 
                 streamDeckDCSBIOSDecoderWindow.ShowDialog();
@@ -708,14 +706,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var path = "";
+                var imageRelativePath = "";
                 var directory = Settings.Default.LastFileDialogLocation;
 
-                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref path);
+                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref imageRelativePath);
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    TextBoxImageFace.Bill.ImageFilePath = path;
+                    TextBoxImageFace.Bill.ImageFileRelativePath = imageRelativePath;
                     Settings.Default.LastFileDialogLocation = directory;
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
@@ -737,7 +735,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFilePath);
+                var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
                 SDUIParent.TestImage(bitmap);
             }
             catch (Exception ex)

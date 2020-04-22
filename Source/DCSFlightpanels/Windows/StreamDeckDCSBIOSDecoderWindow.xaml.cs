@@ -8,7 +8,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
@@ -67,14 +66,14 @@ namespace DCSFlightpanels.Windows
             thread.Start();
         }
 
-        public StreamDeckDCSBIOSDecoderWindow(string streamDeckInstanceId, EnumStreamDeckButtonNames streamDeckButton)
+        public StreamDeckDCSBIOSDecoderWindow(string streamDeckInstanceId)
         {
             InitializeComponent();
             _dcsbiosDecoder = new DCSBIOSDecoder();
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _dcsbiosDecoder.StreamDeckButtonName = streamDeckButton;
+            _dcsbiosDecoder.StreamDeckButtonName = StreamDeckPanel.GetInstance(streamDeckInstanceId).SelectedDeckButton;
             _streamDeckInstanceId = streamDeckInstanceId;
             var thread = new Thread(ThreadLoop);
             thread.Start();
@@ -110,12 +109,12 @@ namespace DCSFlightpanels.Windows
                 return;
             }
 
-            StackPanelNumberConversion.Visibility = RadioButtonOutputString.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
-            StackPanelNumberConversion.IsEnabled = RadioButtonOutputString.IsChecked == true;
-            ButtonAddConverter.IsEnabled = RadioButtonOutputString.IsChecked == true;
+            StackPanelConverters.Visibility = RadioButtonOutputConvert.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
+            StackPanelConverters.IsEnabled = RadioButtonOutputConvert.IsChecked == true;
+            ButtonAddConverter.IsEnabled = RadioButtonOutputConvert.IsChecked == true;
 
-            ButtonEditConverter.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
-            ButtonDeleteConverter.IsEnabled = DataGridDecoders.SelectedItems.Count == 1;
+            ButtonEditConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
+            ButtonDeleteConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
             ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
 
             GroupBoxFormula.IsEnabled = CheckBoxUseFormula.IsChecked == true;
@@ -434,25 +433,25 @@ namespace DCSFlightpanels.Windows
 
         private void ShowConverters()
         {
-            /*RadioButtonOutputString.IsChecked = DCSBIOSDecoders.Count > 0;
-            DataGridDecoders.DataContext = DCSBIOSDecoders;
-            DataGridDecoders.ItemsSource = DCSBIOSDecoders;*/
-            DataGridDecoders.Items.Refresh();
+            RadioButtonOutputConvert.IsChecked = DCSBIOSConverters.Count > 0;
+            DataGridConverters.DataContext = DCSBIOSConverters;
+            DataGridConverters.ItemsSource = DCSBIOSConverters;
+            DataGridConverters.Items.Refresh();
         }
 
         private void ButtonAddConverter_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var window = new DCSBIOSConverterWindow();
+                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _streamDeckInstanceId);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
-                    //_dcsbiosDecoder.Add(window.DCSBIOSComparator);
+                    _dcsbiosDecoder.Add(window.DCSBIOSConverter);
                     ShowConverters();
+                    SetFormState();
                 }
 
-                SetFormState();
             }
             catch (Exception ex)
             {
@@ -464,17 +463,18 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                /*var window = new DCSBIOSComparatorWindow((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
+                var converter = (DCSBIOSConverter) DataGridConverters.SelectedItems[0];
+                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _streamDeckInstanceId, converter);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
-                    _dcsbiosDecoder.Remove((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
-                    _dcsbiosDecoder.Add(window.DCSBIOSComparator);
+                    _dcsbiosDecoder.Remove((DCSBIOSConverter)DataGridConverters.SelectedItems[0]);
+                    _dcsbiosDecoder.Add(window.DCSBIOSConverter);
                     SetIsDirty();
-                    ShowDecoders();
-                }*/
+                    ShowConverters();
+                    SetFormState();
+                }
 
-                SetFormState();
             }
             catch (Exception ex)
             {
@@ -486,11 +486,11 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                /*_dcsbiosDecoder.Remove((DCSBIOSNumberToText)DataGridDecoders.SelectedItems[0]);
-                RadioButtonOutputNumber.IsChecked = DCSBIOSDecoders.Count == 0;
+                _dcsbiosDecoder.Remove((DCSBIOSConverter)DataGridConverters.SelectedItems[0]);
+                RadioButtonOutputRaw.IsChecked = DCSBIOSConverters.Count == 0;
                 SetIsDirty();
-                ShowDecoders();
-                SetFormState();*/
+                ShowConverters();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -502,6 +502,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                StackPanelRawTextAndStyle.Visibility = RadioButtonOutputRaw.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 SetFormState();
             }
             catch (Exception ex)
@@ -509,13 +510,13 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        /*
-        public List<DCSBIOSNumberToText> DCSBIOSDecoders
+        
+        public List<DCSBIOSConverter> DCSBIOSConverters
         {
-            get => _dcsbiosDecoder.DCSBIOSDecoders;
+            get => _dcsbiosDecoder.DCSBIOSConverters;
         }
-        */
-        private void DataGridDecoders_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        private void DataGridConverters_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {

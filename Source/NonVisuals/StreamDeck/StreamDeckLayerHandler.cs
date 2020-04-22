@@ -18,7 +18,7 @@ namespace NonVisuals.StreamDeck
         private volatile List<string> _layerHistory = new List<string>();
         private volatile string _activeLayer = "";
         private readonly IStreamDeckBoard _streamDeckBoard;
-
+        private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
 
 
@@ -388,6 +388,12 @@ namespace NonVisuals.StreamDeck
         protected virtual void OnOnLayerChangedA(StreamDeckLayerChange e)
         {
             OnLayerChangedA?.Invoke(this, e);
+        }
+
+        public EnumStreamDeckButtonNames SelectedButton
+        {
+            get => _selectedButtonName;
+            set => _selectedButtonName = value;
         }
     }
 }

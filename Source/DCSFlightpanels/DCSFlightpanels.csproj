@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DCSFlightpanels</RootNamespace>
-    <AssemblyName>DCSFlightpanels</AssemblyName>
+    <AssemblyName>dcsfp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -209,8 +209,8 @@
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\DCSBIOSConverterWindow.xaml.cs">
-      <DependentUpon>DCSBIOSConverterWindow.xaml</DependentUpon>
+    <Compile Include="Windows\StreamDeckDCSBIOSConverterWindow.xaml.cs">
+      <DependentUpon>StreamDeckDCSBIOSConverterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml.cs">
       <DependentUpon>StreamDeckDCSBIOSDecoderWindow.xaml</DependentUpon>
@@ -401,7 +401,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\DCSBIOSConverterWindow.xaml">
+    <Page Include="Windows\StreamDeckDCSBIOSConverterWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

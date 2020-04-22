@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace NonVisuals.StreamDeck
 {
     [Serializable]
-    public class DCSBIOSValueToFaceConverter : FaceTypeText
+    public class DCSBIOSConverter : FaceTypeText
     {
         private EnumComparator _comparator1 = EnumComparator.None;
         private EnumComparator _comparator2 = EnumComparator.None;
@@ -59,7 +59,7 @@ namespace NonVisuals.StreamDeck
                         result = _faceTypeDCSBIOSOverlay.Bitmap;
                         break;
                     }
-                case EnumConverterOutputType.OutputAsIs:
+                case EnumConverterOutputType.OutputRaw:
                     {
                         result = _faceTypeText.Bitmap;
                         break;
@@ -181,7 +181,7 @@ namespace NonVisuals.StreamDeck
                         result = "not set";
                         break;
                     }
-                case EnumConverterOutputType.OutputAsIs:
+                case EnumConverterOutputType.OutputRaw:
                     {
                         result = "number";
                         break;
@@ -262,9 +262,9 @@ namespace NonVisuals.StreamDeck
     public enum EnumConverterOutputType
     {
         NotSet,
-        OutputAsIs,
-        OutputImage,
-        OutputImageOverlay
+        Raw,
+        Image,
+        ImageOverlay
     }
 
     public enum EnumComparator

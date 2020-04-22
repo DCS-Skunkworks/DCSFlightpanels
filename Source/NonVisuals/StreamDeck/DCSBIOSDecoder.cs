@@ -14,7 +14,7 @@ namespace NonVisuals.StreamDeck
     {
         private string _formula = "";
         private DCSBIOSOutput _dcsbiosOutput = null;
-        private List<DCSBIOSValueToFaceConverter> _dcsbiosValueToFaceConverters = new List<DCSBIOSValueToFaceConverter>();
+        private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated;
         private string _lastFormulaError = "";
         private double _formulaResult = 0;
@@ -109,14 +109,14 @@ namespace NonVisuals.StreamDeck
                     ButtonText = _formulaResult.ToString(CultureInfo.InvariantCulture);
                 }
 
-                if (_dcsbiosValueToFaceConverters.Count > 0 && (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber || _dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE))
+                if (_dcsbiosConverters.Count > 0 && (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber || _dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE))
                 {
-                    foreach (var dcsbiosValueToFaceConverter in _dcsbiosValueToFaceConverters)
+                    foreach (var dcsbiosConverter in _dcsbiosConverters)
                     {
-                        dcsbiosValueToFaceConverter.Set(UseFormula ? FormulaResult : UintDcsBiosValue);
-                        if (dcsbiosValueToFaceConverter.CriteriaFulfilled)
+                        dcsbiosConverter.Set(UseFormula ? FormulaResult : UintDcsBiosValue);
+                        if (dcsbiosConverter.CriteriaFulfilled)
                         {
-                            converterBitmap = dcsbiosValueToFaceConverter.Get();
+                            converterBitmap = dcsbiosConverter.Get();
                             break;
                         }
                     }
@@ -160,7 +160,7 @@ namespace NonVisuals.StreamDeck
         {
             _formula = "";
             _dcsbiosOutput = null;
-            _dcsbiosValueToFaceConverters.Clear();
+            _dcsbiosConverters.Clear();
             _valueUpdated = false;
             _lastFormulaError = "";
             _formulaResult = 0;
@@ -192,26 +192,26 @@ namespace NonVisuals.StreamDeck
             }
         }
         
-        public void Add(DCSBIOSValueToFaceConverter dcsbiosValueToFaceConverter)
+        public void Add(DCSBIOSConverter dcsbiosConverter)
         {
-            _dcsbiosValueToFaceConverters.Add(dcsbiosValueToFaceConverter);
+            _dcsbiosConverters.Add(dcsbiosConverter);
         }
 
-        public void Replace(DCSBIOSValueToFaceConverter oldDcsBiosValueToFaceConverter, DCSBIOSValueToFaceConverter newDcsBiosValueToFaceConverter)
+        public void Replace(DCSBIOSConverter oldDcsBiosValueToFaceConverter, DCSBIOSConverter newDcsBiosValueToFaceConverter)
         {
             Remove(oldDcsBiosValueToFaceConverter);
             Add(newDcsBiosValueToFaceConverter);
         }
 
-        public void Remove(DCSBIOSValueToFaceConverter dcsbiosValueToFaceConverter)
+        public void Remove(DCSBIOSConverter dcsbiosConverter)
         {
-            _dcsbiosValueToFaceConverters.Remove(dcsbiosValueToFaceConverter);
+            _dcsbiosConverters.Remove(dcsbiosConverter);
         }
 
-        public List<DCSBIOSValueToFaceConverter> DCSBIOSConverters
+        public List<DCSBIOSConverter> DCSBIOSConverters
         {
-            get => _dcsbiosValueToFaceConverters;
-            set => _dcsbiosValueToFaceConverters = value;
+            get => _dcsbiosConverters;
+            set => _dcsbiosConverters = value;
         }
         
         [JsonIgnore]
@@ -248,6 +248,24 @@ namespace NonVisuals.StreamDeck
         {
             get => _treatStringAsNumber;
             set => _treatStringAsNumber = value;
+        }
+
+        public Font RawTextFont
+        {
+            get => TextFont;
+            set => TextFont = value;
+        }
+
+        public Color RawFontColor
+        {
+            get => FontColor;
+            set => FontColor = value;
+        }
+
+        public Color RawBackgroundColor
+        {
+            get => BackgroundColor;
+            set => BackgroundColor = value;
         }
     }
 }

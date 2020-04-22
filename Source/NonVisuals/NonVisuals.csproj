@@ -163,7 +163,7 @@
     <Compile Include="Saitek\KeyBindingPZ69DialPosition.cs" />
     <Compile Include="Saitek\KeyBindingPZ69.cs" />
     <Compile Include="Saitek\KeyBindingTPM.cs" />
-    <Compile Include="StreamDeck\DCSBIOSValueToFaceConverter.cs" />
+    <Compile Include="StreamDeck\DCSBIOSConverter.cs" />
     <Compile Include="StreamDeck\Events\StreamDeckPanelEvents.cs" />
     <Compile Include="StreamDeck\FaceTypeBase.cs" />
     <Compile Include="StreamDeck\FaceTypeDCSBIOSOverlay.cs" />
