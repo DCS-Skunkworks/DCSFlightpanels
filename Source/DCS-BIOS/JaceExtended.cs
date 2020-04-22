@@ -21,7 +21,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                Common.LogError(1933494, ex, "JaceExtended.Evaluate() function");
+                Common.LogError( ex, "JaceExtended.Evaluate() function");
                 throw;
             }
         }

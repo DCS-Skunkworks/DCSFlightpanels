@@ -136,7 +136,7 @@ namespace DCS_BIOS
                     }
                     catch (Exception e)
                     {
-                        Common.LogError(9243, e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
+                        Common.LogError( e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
                     }
                     _autoResetEvent.WaitOne();
                 }
@@ -145,7 +145,7 @@ namespace DCS_BIOS
             catch (ThreadAbortException) { }
             catch (Exception e)
             {
-                Common.LogError(9244, e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
+                Common.LogError( e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
             }
         }
 
@@ -257,7 +257,7 @@ namespace DCS_BIOS
             }
             catch (Exception e)
             {
-                Common.LogError(924094, e, "DCSBIOSProtocolParser.ProcessByte()");
+                Common.LogError( e, "DCSBIOSProtocolParser.ProcessByte()");
             }
         }
     }

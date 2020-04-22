@@ -107,7 +107,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -190,7 +190,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83001, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -334,7 +334,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83006, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Fw 190 Radio PZ69KnobChanged()");
         }
@@ -604,7 +604,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83007, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Fw 190 Radio AdjustFrequency()");
         }
@@ -748,7 +748,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83011, ex);
+                Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
             Common.DebugP("Leaving Fw 190 Radio ShowFrequenciesOnPanel()");
@@ -784,7 +784,7 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69Fw190.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -828,7 +828,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83014, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Fw 190 Radio SetUpperRadioMode()");
         }
@@ -845,7 +845,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83015, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Fw 190 Radio SetLowerRadioMode()");
         }
@@ -871,7 +871,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83009, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -897,7 +897,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83015, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -923,7 +923,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83110, ex);
+                Common.LogError( ex);
             }
             return false;
         }

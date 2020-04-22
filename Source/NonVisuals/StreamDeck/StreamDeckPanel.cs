@@ -80,7 +80,7 @@ namespace NonVisuals.StreamDeck
             catch (Exception ex)
             {
                 Common.DebugP("StreamDeck.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 

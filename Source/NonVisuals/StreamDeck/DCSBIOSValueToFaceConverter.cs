@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace NonVisuals.StreamDeck
 {
     [Serializable]
-    public class DCSBIOSValueToFaceConverter
+    public class DCSBIOSValueToFaceConverter : FaceTypeText
     {
         private EnumComparator _comparator1 = EnumComparator.None;
         private EnumComparator _comparator2 = EnumComparator.None;

@@ -97,7 +97,7 @@ namespace NonVisuals.DCSBIOSBindings
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(34912, ex);
+                    Common.LogError( ex);
                 }
             }
             finally

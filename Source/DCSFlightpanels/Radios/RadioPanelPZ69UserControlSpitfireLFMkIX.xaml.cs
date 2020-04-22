@@ -64,7 +64,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1064, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -345,7 +345,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2019, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
         private void RadioPanelPZ69UserControlSpitfireLFMkIX_OnLoaded(object sender, RoutedEventArgs e)
@@ -362,7 +362,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(204331, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -380,7 +380,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2030, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -397,7 +397,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(244331, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -414,7 +414,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(204330, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -431,7 +431,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(244331, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -448,7 +448,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(244331, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

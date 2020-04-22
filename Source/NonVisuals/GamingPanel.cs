@@ -148,7 +148,7 @@ namespace NonVisuals
                 {
                     return;
                 }
-                Common.LogError(666, ex, "Via GamingPanel.SetLastException()");
+                Common.LogError( ex, "Via GamingPanel.SetLastException()");
                 lock (_exceptionLockObject)
                 {
                     _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);

@@ -68,7 +68,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -183,7 +183,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception e)
             {
-                Common.ShowErrorMessageBox(1030771, e, "Error in CopyValues() : ");
+                Common.ShowErrorMessageBox( e, "Error in CopyValues() : ");
             }
         }
 
@@ -203,7 +203,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1002, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -217,7 +217,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1003, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -261,7 +261,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1005, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -289,7 +289,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -308,7 +308,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -337,7 +337,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

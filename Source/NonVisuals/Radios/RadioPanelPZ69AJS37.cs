@@ -90,7 +90,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
             }
             ShowFrequenciesOnPanel();
         }
@@ -160,7 +160,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -237,7 +237,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78002, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Common.DebugP("Leaving AJS-37 Radio SendFrequencyToDCSBIOS()");
         }
@@ -381,7 +381,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Common.DebugP("Leaving AJS-37 Radio PZ69KnobChanged()");
         }
@@ -637,7 +637,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Common.DebugP("Leaving AJS-37 Radio AdjustFrequency()");
         }
@@ -773,7 +773,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
             Common.DebugP("Leaving AJS-37 Radio ShowFrequenciesOnPanel()");
@@ -816,7 +816,7 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69AJS37.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -860,7 +860,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78014, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving AJS-37 Radio SetUpperRadioMode()");
         }
@@ -877,7 +877,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78015, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving AJS-37 Radio SetLowerRadioMode()");
         }
@@ -903,7 +903,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78009, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -929,7 +929,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78009, ex);
+                Common.LogError( ex);
             }
             return false;
         }

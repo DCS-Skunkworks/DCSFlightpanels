@@ -46,7 +46,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -58,7 +58,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -75,7 +75,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -88,7 +88,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -101,7 +101,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -115,7 +115,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -138,7 +138,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -155,7 +155,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(23060, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

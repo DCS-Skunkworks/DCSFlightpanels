@@ -323,7 +323,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77001, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -408,7 +408,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77002, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio SendFrequencyToDCSBIOS()");
         }
@@ -433,7 +433,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77003, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio SendR800L1ToDCSBIOS()");
         }
@@ -659,7 +659,7 @@ namespace NonVisuals.Radios
                     { }
                     catch (Exception ex)
                     {
-                        Common.LogError(56443, ex);
+                        Common.ShowErrorMessageBox( ex);
                     }
                 }
                 finally
@@ -670,7 +670,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77004, ex);
+                Common.LogError( ex);
             }
             //Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -687,7 +687,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77005, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio SwapCockpitStandbyFrequencyR800L1()");
         }
@@ -913,7 +913,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77006, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio PZ69KnobChanged()");
         }
@@ -1391,7 +1391,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77007, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio AdjustFrequency()");
         }
@@ -1426,7 +1426,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77008, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio CheckFrequenciesForValidity()");
         }
@@ -1452,7 +1452,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77009, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -1478,7 +1478,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77010, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -1504,7 +1504,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77010, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -1530,7 +1530,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77010, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -1796,7 +1796,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77011, ex);
+                Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
             Common.DebugP("Leaving Ka-50 Radio ShowFrequenciesOnPanel()");
@@ -1840,7 +1840,7 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69Ka50.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -1884,7 +1884,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77014, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio SetUpperRadioMode()");
         }
@@ -1901,7 +1901,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77015, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio SetLowerRadioMode()");
         }
@@ -1968,7 +1968,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77016, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Ka-50 Radio SaveCockpitFrequencyR800L1()");
         }
@@ -2037,7 +2037,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77017, ex);
+                Common.LogError( ex);
             }
             return inc;
         }
@@ -2385,7 +2385,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77018, ex);
+                Common.LogError( ex);
             }
             throw new Exception("Should reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
@@ -2424,7 +2424,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(77019, ex);
+                Common.LogError( ex);
             }
             return "";
         }

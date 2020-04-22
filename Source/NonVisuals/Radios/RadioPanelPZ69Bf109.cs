@@ -110,7 +110,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -193,7 +193,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82001, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -337,7 +337,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82006, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Bf 109 Radio PZ69KnobChanged()");
         }
@@ -630,7 +630,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82007, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Bf 109 Radio AdjustFrequency()");
         }
@@ -774,7 +774,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82011, ex);
+                Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
             Common.DebugP("Leaving Bf 109 Radio ShowFrequenciesOnPanel()");
@@ -809,7 +809,7 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69Bf109.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -853,7 +853,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82014, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Bf 109 Radio SetUpperRadioMode()");
         }
@@ -870,7 +870,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82015, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Bf 109 Radio SetLowerRadioMode()");
         }
@@ -896,7 +896,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82009, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -922,7 +922,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82015, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -948,7 +948,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(82110, ex);
+                Common.LogError( ex);
             }
             return false;
         }

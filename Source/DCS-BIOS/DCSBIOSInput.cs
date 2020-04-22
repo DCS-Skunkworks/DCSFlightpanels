@@ -297,7 +297,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                Common.LogError(78311, ex, "Error in DCSBIOSInput.ToString(), ControlId = " + _controlId);
+                Common.LogError( ex, "Error in DCSBIOSInput.ToString(), ControlId = " + _controlId);
                 throw;
             }
             return "SHOULD NEVER ARRIVE HERE";

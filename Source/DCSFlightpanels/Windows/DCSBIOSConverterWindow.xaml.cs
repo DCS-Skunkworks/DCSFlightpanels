@@ -464,19 +464,18 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                FileDialog fileDialog = new OpenFileDialog();
-                fileDialog.CheckPathExists = true;
-                fileDialog.CheckFileExists = true;
-                fileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastFileDialogLocation) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastFileDialogLocation;
-                fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
+                var path = "";
+                var directory = Settings.Default.LastFileDialogLocation;
 
-                if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref path);
+
+                if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextBoxImage.Bill.ImageFilePath = fileDialog.FileName;
-                    Settings.Default.LastFileDialogLocation = Path.GetDirectoryName(fileDialog.FileName);
+                    TextBoxImage.Bill.ImageFilePath = path;
+                    Settings.Default.LastFileDialogLocation = directory;
+                    SetIsDirty();
+                    SetFormState();
                 }
-                SetIsDirty();
-                SetFormState();
             }
             catch (Exception ex)
             {
@@ -529,19 +528,18 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                FileDialog fileDialog = new OpenFileDialog();
-                fileDialog.CheckPathExists = true;
-                fileDialog.CheckFileExists = true;
-                fileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastFileDialogLocation) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastFileDialogLocation;
-                fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
+                var path = "";
+                var directory = Settings.Default.LastFileDialogLocation;
 
-                if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref path);
+
+                if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextBoxOverlayImage.Bill.ImageFilePath = fileDialog.FileName;
-                    Settings.Default.LastFileDialogLocation = Path.GetDirectoryName(fileDialog.FileName);
+                    TextBoxOverlayImage.Bill.ImageFilePath = path;
+                    Settings.Default.LastFileDialogLocation = directory;
+                    SetIsDirty();
+                    SetFormState();
                 }
-                SetIsDirty();
-                SetFormState();
             }
             catch (Exception ex)
             {
@@ -626,14 +624,11 @@ namespace DCSFlightpanels.Windows
             {
                 var font = Settings.Default.ButtonTextFaceFont;
 
-                if (StreamDeckCommon.SetFontStyle(font) == System.Windows.Forms.DialogResult.OK)
+                if (StreamDeckCommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
                 {
-                    _dcsbiosDecoder.TextFont = font;
+                    _dcsbiosConverter.TextFont = font;
                 }
-                SetFontStyle(TextBoxButtonTextFace);
-
-                _dcsbiosDecoder.TextFont = fontDialog.Font;
-                TestImage(TextBoxButtonTextFace);
+                TestImage(TextBoxOutputTextAsIs);
                 SetFormState();
             }
             catch (Exception ex)
@@ -646,7 +641,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                var font = Settings.Default.ButtonTextFaceFont;
 
+                if (StreamDeckCommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
+                {
+                    _dcsbiosConverter.TextFont = font;
+                }
+                TestImage(TextBoxOutputTextAsIs);
+                SetFormState();
             }
             catch (Exception ex)
             {

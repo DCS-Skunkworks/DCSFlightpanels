@@ -166,7 +166,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1017, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -182,7 +182,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(19909017, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -203,7 +203,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(19909017, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -271,7 +271,7 @@ namespace DCSFlightpanels
             if (closedItemCount != itemCount)
             {
                 //Something isn't right
-                Common.LogError(8911, "SetApplicationMode(). Error closing tab items. Items to close was " + itemCount + ", items actually closed was " + closedItemCount);
+                Common.LogError("SetApplicationMode(). Error closing tab items. Items to close was " + itemCount + ", items actually closed was " + closedItemCount);
             }
             else if (itemCount > 0)
             {
@@ -316,7 +316,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471072, ex);
+                Common.ShowErrorMessageBox( ex);
             }
 
             return closedItemCount;
@@ -328,11 +328,11 @@ namespace DCSFlightpanels
             {
                 var str = "DCS-BIOS UPDATES MISSED = " + e.GamingPanelEnum + "  " + e.Count;
                 ShowStatusBarMessage(str);
-                Common.LogError(471072, str);
+                Common.LogError( str);
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471072, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -613,7 +613,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1073, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -773,7 +773,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1093, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -785,7 +785,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -798,7 +798,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2035, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -812,7 +812,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2037, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -838,7 +838,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471673, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -857,7 +857,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2038, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -869,7 +869,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2039, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -892,7 +892,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2043, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -975,7 +975,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.LogError(9011, "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
+                Common.LogError( "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
                 LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                 LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }
@@ -1026,7 +1026,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1044,7 +1044,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2100, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1059,7 +1059,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(22100, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1076,7 +1076,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2013, ex);
+                Common.ShowErrorMessageBox( ex);
             }
 
             try
@@ -1088,7 +1088,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2016, ex);
+                Common.ShowErrorMessageBox( ex);
             }
 
             Common.DebugP("Mainwindow Shutdown() saitekUserControls shutdown");
@@ -1099,7 +1099,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(32018, ex);
+                Common.ShowErrorMessageBox( ex);
             }
 
             Common.DebugP("Mainwindow Shutdown() _hidHandler shutdown");
@@ -1109,7 +1109,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2018, ex);
+                Common.ShowErrorMessageBox( ex);
             }
 
             Common.DebugP("Mainwindow Shutdown() _dcsBios shutdown");
@@ -1137,7 +1137,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2019, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1149,7 +1149,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2020, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1171,7 +1171,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2021, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1188,7 +1188,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(237022, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1201,7 +1201,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(237022, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1221,7 +1221,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2022, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1254,7 +1254,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2021, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
@@ -1266,7 +1266,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2027, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1278,7 +1278,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2028, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1290,7 +1290,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2029, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1302,7 +1302,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2030167, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1320,7 +1320,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2031, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1343,7 +1343,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2032, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1402,7 +1402,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2047, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1427,7 +1427,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2063, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1477,7 +1477,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2064, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1494,7 +1494,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(206411, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1506,7 +1506,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2066, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1519,7 +1519,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(288067, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1532,7 +1532,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2027, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1648,7 +1648,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(0011, ex, "Error disabling Enhanced USB Power Management.");
+                Common.ShowErrorMessageBox( ex, "Error disabling Enhanced USB Power Management.");
                 return;
             }
 
@@ -1714,7 +1714,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(20297, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1739,7 +1739,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(20297, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1809,7 +1809,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(20297, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
     }

@@ -42,7 +42,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -90,7 +90,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1002, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -104,7 +104,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1003, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -202,7 +202,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(100906, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -220,7 +220,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(10906, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
         public bool IsDirty => _isDirty;

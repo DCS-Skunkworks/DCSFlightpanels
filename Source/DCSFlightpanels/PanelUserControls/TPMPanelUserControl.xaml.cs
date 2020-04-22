@@ -69,7 +69,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(400003, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -104,7 +104,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1066, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -116,7 +116,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1067, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -129,7 +129,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1068, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -153,7 +153,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2032, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -165,7 +165,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2010, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -177,7 +177,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2014, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -237,7 +237,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -274,7 +274,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -308,7 +308,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -346,7 +346,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2061, ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -575,7 +575,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2081, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -602,7 +602,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2082, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -659,7 +659,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -675,7 +675,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3003, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -688,7 +688,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3004, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -708,7 +708,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3005, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -755,7 +755,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -777,7 +777,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -820,7 +820,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3008, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -862,7 +862,7 @@ namespace DCSFlightpanels.PanelUserControls
                     (Action)
                     (() =>
                      TextBoxLogTPM.Text = TextBoxLogTPM.Text.Insert(0, "0x16" + ex.Message + ".\n")));
-                Common.ShowErrorMessageBox(3009, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -979,7 +979,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3010, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -991,7 +991,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1003,7 +1003,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1024,7 +1024,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1036,7 +1036,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1048,7 +1048,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(345012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1099,7 +1099,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3013, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1117,7 +1117,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3015, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1201,7 +1201,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(345012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             throw new Exception("Failed to find TPM switch for TextBox : " + textBox.Name);
         }
@@ -1285,7 +1285,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(345012, ex);
+                Common.ShowErrorMessageBox(ex);
             }
             throw new Exception("Failed to find TextBox for TPM switch : " + key);
         }
@@ -1315,7 +1315,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2039, ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1355,7 +1355,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

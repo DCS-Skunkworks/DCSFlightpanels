@@ -102,7 +102,7 @@ namespace DCS_BIOS
                     message = message + dupe + "\n";
                 }
                 message = message + "---------------------------------------------\n";
-                Common.LogError(2000, message);
+                Common.LogError( message);
             }
         }
 

@@ -258,28 +258,16 @@ namespace ClassLibraryCommon
             }
         }
 
+        public static void LogError(string message)
+        {
+            Log(Environment.NewLine + message );
+        }
+
         public static void LogError(Exception ex, string message = null)
         {
-            LogError(0, ex, message);
+            Log(Environment.NewLine + (string.IsNullOrEmpty(message) ? "" : " Custom message = [" + message + "]") + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
         }
-
-        public static void LogError(uint location, Exception ex, string message = null)
-        {
-            Log(Environment.NewLine + location + " Custom message = [" + message + "]" + Environment.NewLine + ex.GetBaseException().GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
-        }
-
-
-        public static void LogError(uint location, string message)
-        {
-            Log(Environment.NewLine + location + " Message = [" + message + "]" + Environment.NewLine);
-        }
-
-        public static void ShowErrorMessageBox(uint location, Exception ex, string message = null)
-        {
-            LogError(location, ex, message);
-            MessageBox.Show(location + " " + ex.Message, "Details logged to error log.", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
+        
         public static void ShowErrorMessageBox(Exception ex, string message = null)
         {
             LogError(ex, message);
@@ -355,7 +343,21 @@ namespace ClassLibraryCommon
             return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
+        public static string GetApplicationPath()
+        {
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
 
+        public static string GetRelativePath(string relativeTo, string path)
+        {
+            var uri = new Uri(relativeTo);
+            var rel = Uri.UnescapeDataString(uri.MakeRelativeUri(new Uri(path)).ToString()).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            if (rel.Contains(Path.DirectorySeparatorChar.ToString()) == false)
+            {
+                rel = $".{ Path.DirectorySeparatorChar }{ rel }";
+            }
+            return rel;
+        }
 
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
@@ -451,6 +453,8 @@ namespace ClassLibraryCommon
             get { return _serialNumber; }
             set { _serialNumber = value; }
         }
+
+
     }
 
 }

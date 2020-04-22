@@ -345,7 +345,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(349998, ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
             }
             ShowFrequenciesOnPanel();
         }
@@ -745,7 +745,7 @@ namespace NonVisuals.Radios
             { }
             catch (Exception ex)
             {
-                Common.LogError(564523, ex);
+                Common.LogError( ex);
             }
         }
         */
@@ -871,7 +871,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(564523, ex);
+                    Common.LogError( ex);
                 }
             }
             finally
@@ -1046,7 +1046,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(564523, ex);
+                    Common.LogError( ex);
                 }
             }
             finally
@@ -1177,7 +1177,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(564523, ex);
+                    Common.LogError( ex);
                 }
             }
             finally
@@ -1436,7 +1436,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(56453, ex);
+                    Common.ShowErrorMessageBox( ex);
                 }
             }
             finally
@@ -1555,7 +1555,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(564523, ex);
+                    Common.LogError( ex);
                 }
             }
             finally
@@ -1593,7 +1593,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(564523, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -2817,7 +2817,7 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69UH1H.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 

@@ -279,7 +279,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

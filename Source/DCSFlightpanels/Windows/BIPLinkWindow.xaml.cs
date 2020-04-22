@@ -80,7 +80,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1065, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -105,7 +105,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1082, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -134,7 +134,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1083, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -147,7 +147,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1084, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -160,7 +160,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2003, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -174,7 +174,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2004, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -187,7 +187,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2005, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -199,7 +199,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -237,7 +237,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

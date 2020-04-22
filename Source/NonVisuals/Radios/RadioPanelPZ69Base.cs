@@ -254,7 +254,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception e)
                 {
-                    Common.LogError(38410, e, "SetPZ69DisplayBytesDefault()");
+                    Common.LogError( e, "SetPZ69DisplayBytesDefault()");
                 }
                 if (digits.Length > i + 1 && digits[i + 1] == '.')
                 {
@@ -295,7 +295,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception e)
                 {
-                    Common.LogError(38410, e, "SetPZ69DisplayBytesDefault()");
+                    Common.LogError( e, "SetPZ69DisplayBytesDefault()");
                 }
                 if (digits.Length > i + 1 && digits[i + 1] == '.')
                 {
@@ -343,7 +343,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception e)
                 {
-                    Common.LogError(38410, e, "SetPZ69DisplayBytesDefault() digitsAsString.Length = " + digitsAsString.Length);
+                    Common.LogError( e, "SetPZ69DisplayBytesDefault() digitsAsString.Length = " + digitsAsString.Length);
                 }
 
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')

@@ -367,7 +367,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78030, ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
             }
             ShowFrequenciesOnPanel();
         }
@@ -580,7 +580,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -684,7 +684,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78002, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SendFrequencyToDCSBIOS()");
         }
@@ -709,7 +709,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78003, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SendR863ManualToDCSBIOS()");
         }
@@ -931,11 +931,11 @@ namespace NonVisuals.Radios
                     }
                     catch (ThreadAbortException ex)
                     {
-                        Common.LogError(56442, ex);
+                        Common.LogError( ex);
                     }
                     catch (Exception ex)
                     {
-                        Common.LogError(56443, ex);
+                        Common.ShowErrorMessageBox( ex);
                     }
                 }
                 finally
@@ -946,7 +946,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78004, ex);
+                Common.LogError( ex);
             }
             //Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -967,7 +967,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78005, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SwapCockpitStandbyFrequencyR863Manual()");
         }
@@ -991,7 +991,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78003, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SendYaDRO1AToDCSBIOS()");
         }
@@ -1186,7 +1186,7 @@ namespace NonVisuals.Radios
                     { }
                     catch (Exception ex)
                     {
-                        Common.LogError(56443, ex);
+                        Common.ShowErrorMessageBox( ex);
                     }
                 }
                 finally
@@ -1197,7 +1197,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78704, ex);
+                Common.LogError( ex);
             }
             //Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -1214,7 +1214,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78055, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SwapCockpitStandbyFrequencyYaDRO1A()");
         }
@@ -1410,7 +1410,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio PZ69KnobChanged()");
         }
@@ -2104,7 +2104,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio AdjustFrequency()");
         }
@@ -2139,7 +2139,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78008, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio CheckFrequenciesForValidity()");
         }
@@ -2524,7 +2524,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
             Common.DebugP("Leaving Mi-8 Radio ShowFrequenciesOnPanel()");
@@ -2580,7 +2580,7 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69Mi8.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -2624,7 +2624,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78014, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SetUpperRadioMode()");
         }
@@ -2641,7 +2641,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78015, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SetLowerRadioMode()");
         }
@@ -2695,7 +2695,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78016, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SaveCockpitFrequencyR863Manual()");
         }
@@ -2741,7 +2741,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78036, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving Mi-8 Radio SaveCockpitFrequencyYaDRO1A()");
         }
@@ -2810,7 +2810,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78017, ex);
+                Common.LogError( ex);
             }
             return inc;
         }
@@ -2870,7 +2870,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78018, ex);
+                Common.LogError( ex);
             }
             throw new Exception("Should not reach this code. private String GetCommandDirectionFor0To9Dials(uint desiredDialPosition, uint actualDialPosition) -> " + desiredDialPosition + "   " + actualDialPosition);
         }
@@ -2935,7 +2935,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78009, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -2961,7 +2961,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78015, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -2987,7 +2987,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78010, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -3013,7 +3013,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78010, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -3039,7 +3039,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78110, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -3065,7 +3065,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78110, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -3091,7 +3091,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(78110, ex);
+                Common.LogError( ex);
             }
             return false;
         }

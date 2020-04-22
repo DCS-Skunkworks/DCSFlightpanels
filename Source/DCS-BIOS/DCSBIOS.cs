@@ -139,7 +139,7 @@ namespace DCS_BIOS
             catch (Exception e)
             {
                 SetLastException(e);
-                Common.LogError(9213, e, "DCSBIOS.ReceiveData()");
+                Common.LogError(e, "DCSBIOS.ReceiveData()");
             }
         }
 
@@ -194,7 +194,7 @@ namespace DCS_BIOS
             catch (Exception e)
             {
                 SetLastException(e);
-                Common.LogError(9211, e, "DCSBIOS.Startup()");
+                Common.LogError(e, "DCSBIOS.Startup()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -231,12 +231,12 @@ namespace DCS_BIOS
                     }
                     catch (Exception e)
                     {
-                        Common.LogError(9231, e, "Encoding.Default.GetString(readArray)");
+                        Common.LogError(e, "Encoding.Default.GetString(readArray)");
                     }
                 }
                 catch (Exception e)
                 {
-                    Common.LogError(93211, e, "ServerReadThreadProc()");
+                    Common.LogError(e, "ServerReadThreadProc()");
                 }
             }
             Debug.Print("TCP Listener ServerReadThreadProc returning");
@@ -277,7 +277,7 @@ namespace DCS_BIOS
             catch (Exception ex)
             {
                 SetLastException(ex);
-                Common.LogError(9212, ex, "DCSBIOS.Shutdown()");
+                Common.LogError(ex, "DCSBIOS.Shutdown()");
             }
         }
 
@@ -358,7 +358,7 @@ namespace DCS_BIOS
                 {
                     Common.DebugP("Error sending data to DCS-BIOS. " + e.Message + Environment.NewLine + e.StackTrace);
                     SetLastException(e);
-                    Common.LogError(9216, e, "DCSBIOS.SendDataFunction()");
+                    Common.LogError(e, "DCSBIOS.SendDataFunction()");
                 }
             }
             return result;
@@ -386,7 +386,7 @@ namespace DCS_BIOS
                 {
                     return;
                 }
-                Common.LogError(666, ex, "Via DCSBIOS.SetLastException()");
+                Common.LogError(ex, "Via DCSBIOS.SetLastException()");
                 var message = ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace;
                 Common.DebugP(message);
                 lock (_lockExceptionObject)

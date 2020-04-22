@@ -98,7 +98,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471473, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -445,7 +445,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -523,7 +523,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -615,7 +615,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -858,7 +858,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             throw new Exception("Failed to determine focused component (GetStreamDeckButtonOnOff) ");
         }

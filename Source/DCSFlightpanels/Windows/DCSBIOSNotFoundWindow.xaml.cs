@@ -25,7 +25,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(19909017, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -37,7 +37,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(19909017, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
     }

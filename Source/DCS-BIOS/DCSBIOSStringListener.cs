@@ -315,7 +315,7 @@ namespace DCS_BIOS
                             }
                             catch (Exception ex)
                             {
-                                Common.LogError(123, "**********Received (0x" + data.ToString("x") + ") Exception = " + ex.Message + Environment.NewLine + ex.StackTrace);
+                                Common.LogError( "**********Received (0x" + data.ToString("x") + ") Exception = " + ex.Message + Environment.NewLine + ex.StackTrace);
                             }
                         }
                     }

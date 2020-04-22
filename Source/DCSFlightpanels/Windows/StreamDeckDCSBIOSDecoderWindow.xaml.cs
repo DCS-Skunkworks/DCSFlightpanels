@@ -99,7 +99,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -186,7 +186,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -225,7 +225,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1005, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

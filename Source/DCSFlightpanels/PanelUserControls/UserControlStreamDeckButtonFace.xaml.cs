@@ -103,7 +103,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471473, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -700,7 +700,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -708,25 +708,24 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                FileDialog fileDialog = new OpenFileDialog();
-                fileDialog.CheckPathExists = true;
-                fileDialog.CheckFileExists = true;
-                fileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastFileDialogLocation) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastFileDialogLocation;
-                fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
+                var path = "";
+                var directory = Settings.Default.LastFileDialogLocation;
 
-                if (fileDialog.ShowDialog() == DialogResult.OK)
+                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref path);
+
+                if (dialogResult == DialogResult.OK)
                 {
-                    TextBoxImageFace.Bill.ImageFilePath = fileDialog.FileName;
-                    Settings.Default.LastFileDialogLocation = Path.GetDirectoryName(fileDialog.FileName);
+                    TextBoxImageFace.Bill.ImageFilePath = path;
+                    Settings.Default.LastFileDialogLocation = directory;
+                    SetIsDirty();
+                    SDUIParent.ChildChangesMade();
+                    SetFormState();
+                    ButtonFocus.Focus();
                 }
-                SetIsDirty();
-                SDUIParent.ChildChangesMade();
-                SetFormState();
-                ButtonFocus.Focus();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -743,7 +742,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

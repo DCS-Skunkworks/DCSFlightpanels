@@ -131,14 +131,14 @@ namespace NonVisuals.Radios
                     }
                     catch (Exception e)
                     {
-                        Common.LogError(242352375, e, "SRSListener.ReceiveDataUdp()");
+                        Common.LogError( e, "SRSListener.ReceiveDataUdp()");
                     }
                 }
             }
             catch (ThreadAbortException) { }
             catch (Exception e)
             {
-                Common.LogError(94413, e, "SRSListener.ReceiveDataUdp()");
+                Common.LogError( e, "SRSListener.ReceiveDataUdp()");
             }
             IsRunning = false;
             Common.DebugP("SRSListener exiting threaded receive data loop");
@@ -160,7 +160,7 @@ namespace NonVisuals.Radios
                 catch (Exception e)
                 {
                     Common.DebugP("Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
-                    Common.LogError(9216101, e, "Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
+                    Common.LogError( e, "Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
                 }
             }
             return result;
@@ -203,7 +203,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception e)
             {
-                Common.LogError(9211101, e, "SRSListener.StartupRP()");
+                Common.LogError( e, "SRSListener.StartupRP()");
                 if (_udpReceiveClient != null && _udpReceiveClient.Client.Connected)
                 {
                     _udpReceiveClient.Close();
@@ -659,7 +659,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(9212, ex, "SRSListener.ShutdownRP()");
+                Common.LogError( ex, "SRSListener.ShutdownRP()");
             }
         }
 

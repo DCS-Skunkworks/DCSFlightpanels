@@ -58,7 +58,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(204331, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -94,7 +94,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1064, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -122,7 +122,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2032, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -134,7 +134,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2010, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -146,7 +146,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2014, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -225,7 +225,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -262,7 +262,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(442044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -276,7 +276,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -290,7 +290,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -313,7 +313,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -325,7 +325,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3011, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -449,7 +449,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -487,7 +487,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2061, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -670,7 +670,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2081, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -697,7 +697,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2082, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -742,7 +742,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -757,7 +757,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3003, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -770,7 +770,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3004, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -830,7 +830,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -867,7 +867,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3006, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -879,7 +879,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -893,7 +893,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(31007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -996,7 +996,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3001, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1009,7 +1009,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3008, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1037,7 +1037,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3007, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1080,7 +1080,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3008, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1123,7 +1123,7 @@ namespace DCSFlightpanels.Radios
                     (Action)
                     (() =>
                      TextBoxLogPZ69.Text = TextBoxLogPZ69.Text.Insert(0, "0x16" + ex.Message + ".\n")));
-                Common.ShowErrorMessageBox(3009, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1319,7 +1319,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(3013, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1577,7 +1577,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2019, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1623,7 +1623,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2030, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1640,7 +1640,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(204330, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1755,7 +1755,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(345012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             throw new Exception("Failed to find Radiopanel knob for TextBox " + textBox.Name);
         }
@@ -1871,7 +1871,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(345012, ex);
+                Common.ShowErrorMessageBox( ex);
             }
             throw new Exception("Failed to find TextBox for Radiopanel knob " + knob);
         }
@@ -1900,7 +1900,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2039, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -1940,7 +1940,7 @@ namespace DCSFlightpanels.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2044, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

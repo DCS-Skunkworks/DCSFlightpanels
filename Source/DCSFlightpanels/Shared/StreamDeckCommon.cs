@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using System.Windows.Media;
+using ClassLibraryCommon;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Properties;
 using NonVisuals.StreamDeck;
@@ -10,6 +12,24 @@ namespace DCSFlightpanels.Shared
 {
     public static class StreamDeckCommon
     {
+
+        public static DialogResult BrowseForImage(ref string initialDirectory, ref string imageRelativePath)
+        {
+            FileDialog fileDialog = new OpenFileDialog();
+            fileDialog.CheckPathExists = true;
+            fileDialog.CheckFileExists = true;
+            fileDialog.InitialDirectory = string.IsNullOrEmpty(initialDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : initialDirectory;
+            fileDialog.Filter = @"Image files|*.jpg;*.jpeg;*.png";
+
+            var result = fileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                imageRelativePath = Common.GetRelativePath(Common.GetApplicationPath(), fileDialog.FileName);
+                initialDirectory = Path.GetDirectoryName(fileDialog.FileName);
+            }
+
+            return result;
+        }
 
         public static DialogResult SetFontStyle(StreamDeckFaceTextBox textBox)
         {
@@ -78,7 +98,7 @@ namespace DCSFlightpanels.Shared
 
             return result;
         }
-        
+
         public static DialogResult SetBackgroundColor(StreamDeckFaceTextBox textBox)
         {
             var color = Color.Transparent;
@@ -86,7 +106,7 @@ namespace DCSFlightpanels.Shared
 
             if (result == DialogResult.OK)
             {
-                textBox.Bill.BackgroundColor =  color;
+                textBox.Bill.BackgroundColor = color;
             }
 
             return result;

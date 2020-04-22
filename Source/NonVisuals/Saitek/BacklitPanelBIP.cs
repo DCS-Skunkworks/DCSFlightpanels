@@ -342,7 +342,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1000, ex);
+                Common.LogError( ex);
             }
             return PanelLEDColor.RED;
         }
@@ -564,7 +564,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1070, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

@@ -38,7 +38,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471473, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

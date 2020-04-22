@@ -318,7 +318,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(349998, ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -705,7 +705,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(56453, ex);
+                    Common.ShowErrorMessageBox( ex);
                 }
             }
             finally
@@ -877,7 +877,7 @@ namespace NonVisuals.Radios
                 { }
                 catch (Exception ex)
                 {
-                    Common.LogError(56873, ex);
+                    Common.ShowErrorMessageBox( ex);
                 }
             }
             finally
@@ -2046,7 +2046,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(83244, ex, "SaveCockpitFrequencyUhf()");
+                Common.ShowErrorMessageBox( ex, "SaveCockpitFrequencyUhf()");
                 throw;
             }
         }

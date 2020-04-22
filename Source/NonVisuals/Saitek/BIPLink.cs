@@ -46,7 +46,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1027, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

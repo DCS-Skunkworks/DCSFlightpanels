@@ -47,7 +47,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                Common.LogError(1955594, ex, "ExtractDCSBIOSOutputsInFormula() function");
+                Common.LogError( ex, "ExtractDCSBIOSOutputsInFormula() function");
                 throw;
             }
         }
@@ -74,7 +74,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                Common.LogError(1933494, ex, "CheckForMatch() function");
+                Common.LogError( ex, "CheckForMatch() function");
                 throw;
             }
         }
@@ -93,7 +93,7 @@ namespace DCS_BIOS
             }
             catch (Exception ex)
             {
-                Common.LogError(1033494, ex, "Evaluate() function");
+                Common.LogError( ex, "Evaluate() function");
             }
             return 99;
         }

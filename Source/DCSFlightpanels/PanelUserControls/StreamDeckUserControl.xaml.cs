@@ -133,7 +133,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471473, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -211,7 +211,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(471573, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -230,7 +230,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1018, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -243,7 +243,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1019, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -259,7 +259,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1020, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -285,7 +285,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1022, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -297,7 +297,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1023, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -317,7 +317,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(992032, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -339,7 +339,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2000, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -353,7 +353,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(993013, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -411,7 +411,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(20135444, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -428,7 +428,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(20135444, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -468,7 +468,7 @@ namespace DCSFlightpanels.PanelUserControls
                     (Action)
                     (() =>
                      TextBoxLogStreamDeck.Text = TextBoxLogStreamDeck.Text.Insert(0, "0x16" + ex.Message + ".\n")));
-                Common.ShowErrorMessageBox(3009, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -487,7 +487,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(20235442, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -512,7 +512,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(20235443, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -667,7 +667,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2019, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -689,7 +689,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2019, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

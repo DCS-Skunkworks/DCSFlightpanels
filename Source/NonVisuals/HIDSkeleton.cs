@@ -38,7 +38,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(15451073, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

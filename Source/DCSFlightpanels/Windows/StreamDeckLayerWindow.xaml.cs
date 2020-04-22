@@ -37,7 +37,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(556, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -50,7 +50,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(558, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -62,7 +62,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(558, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -74,7 +74,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(557, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -86,7 +86,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(555, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -131,7 +131,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(565, ex);
+                Common.ShowErrorMessageBox( ex);
             }
 
         }

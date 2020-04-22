@@ -151,7 +151,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(84001, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -260,7 +260,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(84006, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving P-51D Radio PZ69KnobChanged()");
         }
@@ -398,7 +398,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(84007, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving P-51D Radio AdjustFrequency()");
         }
@@ -425,7 +425,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(84009, ex);
+                Common.LogError( ex);
             }
             return false;
         }
@@ -501,7 +501,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(84011, ex);
+                Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
             Common.DebugP("Leaving P-51D Radio ShowFrequenciesOnPanel()");
@@ -602,7 +602,7 @@ namespace NonVisuals.Radios
             catch (Exception ex)
             {
                 Common.DebugP("RadioPanelPZ69P51D.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -646,7 +646,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(84014, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving P-51D Radio SetUpperRadioMode()");
         }
@@ -663,7 +663,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError(84015, ex);
+                Common.LogError( ex);
             }
             Common.DebugP("Leaving P-51D Radio SetLowerRadioMode()");
         }

@@ -86,7 +86,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1051, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -306,7 +306,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1061, ex);
+                Common.ShowErrorMessageBox( ex);
                 return false;
             }
         }
@@ -347,7 +347,7 @@ namespace NonVisuals
                         }
                         catch (Exception ex)
                         {
-                            Common.ShowErrorMessageBox(7931061, ex);
+                            Common.ShowErrorMessageBox( ex);
                         }
                     }
                 }
@@ -396,7 +396,7 @@ namespace NonVisuals
             }
             catch (Exception e)
             {
-                Common.ShowErrorMessageBox(12061, e);
+                Common.ShowErrorMessageBox( e);
             }
         }
 
@@ -477,7 +477,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1062, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -503,7 +503,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1062, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -552,7 +552,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1063, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

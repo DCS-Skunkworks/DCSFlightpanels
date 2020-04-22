@@ -88,7 +88,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(21999, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
         
@@ -171,7 +171,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(2082, ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
     }

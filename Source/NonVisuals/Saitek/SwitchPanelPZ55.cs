@@ -60,7 +60,7 @@ namespace NonVisuals.Saitek
             catch (Exception ex)
             {
                 Common.DebugP("SwitchPanelPZ55.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
@@ -272,7 +272,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError(90234, ex, "SetLandingGearLedsManually");
+                Common.LogError( ex, "SetLandingGearLedsManually");
                 throw;
             }
         }
@@ -395,7 +395,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError(981234, ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
+                Common.LogError( ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
                 throw;
             }
         }

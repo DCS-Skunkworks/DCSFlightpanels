@@ -87,7 +87,7 @@ namespace NonVisuals
                 }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(1073, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 
@@ -103,13 +103,13 @@ namespace NonVisuals
                     }
                     catch (Exception ex)
                     {
-                        Common.ShowErrorMessageBox(107123, ex);
+                        Common.ShowErrorMessageBox( ex);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(107333, ex);
+                Common.ShowErrorMessageBox( ex);
             }
         }
 

@@ -45,7 +45,7 @@ namespace NonVisuals.Saitek
             catch (Exception ex)
             {
                 Common.DebugP("TPMPanel.StartUp() : " + ex.Message);
-                Common.LogError(321654, ex);
+                Common.LogError( ex);
             }
         }
 
