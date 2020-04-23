@@ -16,6 +16,7 @@ namespace NonVisuals.StreamDeck
         private uint _uintDcsBiosValue = 0;
         private string _stringDcsBiosValue = "";
 
+        public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
 
         protected override void DrawBitmap()
         {

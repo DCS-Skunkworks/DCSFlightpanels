@@ -51,29 +51,29 @@
             <ColumnDefinition Width="301*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
-            <Image Height="200" Stretch="UniformToFill" Source="/DCSFlightpanels;component/Images/TPM.jpg"  MouseDown="MouseDownFocusLogTextBox" />
+            <Image Height="200" Stretch="UniformToFill" Source="/dcsfp;component/Images/TPM.jpg"  MouseDown="MouseDownFocusLogTextBox" />
 
 
-            <Image Height="5" Width="5" x:Name="ImageG1Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="24" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG1On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="50" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG2Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="24" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG2On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="50" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG3Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="24" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG3On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="50" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG1Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="24" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG1On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="50" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG2Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="24" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG2On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="50" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG3Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="24" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG3On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="50" Visibility="Collapsed"/>
 
-            <Image Height="5" Width="5" x:Name="ImageG4Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="83" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG4On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="109" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG5Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="83" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG5On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="109" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG6Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="83" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG6On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="109" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG4Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="83" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG4On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="109" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG5Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="83" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG5On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="109" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG6Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="83" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG6On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="109" Visibility="Collapsed"/>
 
-            <Image Height="5" Width="5" x:Name="ImageG7Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="143" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG7On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="169" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG8Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="143" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG8On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="169" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG9Off" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="143" Visibility="Collapsed"/>
-            <Image Height="5" Width="5" x:Name="ImageG9On" Stretch="Fill" Source="/DCSFlightpanels;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="169" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG7Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="143" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG7On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="449" Canvas.Top="169" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG8Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="143" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG8On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="519" Canvas.Top="169" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG9Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="143" Visibility="Collapsed"/>
+            <Image Height="5" Width="5" x:Name="ImageG9On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="169" Visibility="Collapsed"/>
 
             <Button x:Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="20" Canvas.Top="15" Click="ButtonGetId_OnClick"/>
         </Canvas>

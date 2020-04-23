@@ -36,7 +36,7 @@ namespace DCSFlightpanels.Windows
         private readonly string _typeToSearch = "Type to search control";
         private Popup _popupSearch;
         private DataGrid _popupDataGrid;
-        private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
+        private IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private DCSBIOSControl _dcsbiosControl;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
@@ -70,6 +70,7 @@ namespace DCSFlightpanels.Windows
         {
             InitializeComponent();
             _dcsbiosDecoder = new DCSBIOSDecoder();
+            _dcsbiosDecoder.StreamDeckInstanceId = streamDeckInstanceId;
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
@@ -109,6 +110,8 @@ namespace DCSFlightpanels.Windows
                 return;
             }
 
+            StackPanelRawTextAndStyle.Visibility = RadioButtonOutputRaw.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+
             StackPanelConverters.Visibility = RadioButtonOutputConvert.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
             StackPanelConverters.IsEnabled = RadioButtonOutputConvert.IsChecked == true;
             ButtonAddConverter.IsEnabled = RadioButtonOutputConvert.IsChecked == true;
@@ -117,12 +120,49 @@ namespace DCSFlightpanels.Windows
             ButtonDeleteConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
             ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
 
+
             GroupBoxFormula.IsEnabled = CheckBoxUseFormula.IsChecked == true;
+
+            CheckBoxStringAsNumber.IsEnabled = RadioButtonStringSource.IsChecked == true;
+            CheckBoxUseFormula.IsEnabled = (RadioButtonIntegerSource.IsChecked == true) ||
+                                           (RadioButtonStringSource.IsChecked == true && CheckBoxStringAsNumber.IsChecked == true);
+
+            if (RadioButtonIntegerSource.IsChecked == true)
+            {
+                CheckBoxStringAsNumber.IsChecked = false;
+            }
+
+            if (RadioButtonStringSource.IsChecked == true && CheckBoxStringAsNumber.IsChecked == false)
+            {
+                CheckBoxUseFormula.IsChecked = false;
+            }
         }
 
         private void ShowDecoder()
         {
             _populatingData = true;
+
+            if (_dcsbiosDecoder.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            {
+                RadioButtonIntegerSource.IsChecked = true;
+            }
+            else if (_dcsbiosDecoder.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            {
+
+                RadioButtonStringSource.IsChecked = true;
+            }
+
+            CheckBoxStringAsNumber.IsChecked = _dcsbiosDecoder.TreatStringAsNumber;
+
+            if (_dcsbiosDecoder.DCSBIOSConverters.Count == 0)
+            {
+                RadioButtonOutputRaw.IsChecked = true;
+            }
+            else
+            {
+                RadioButtonOutputConvert.IsChecked = true;
+            }
+
             if (!string.IsNullOrEmpty(_dcsbiosDecoder.Formula))
             {
                 CheckBoxUseFormula.IsChecked = true;
@@ -181,7 +221,6 @@ namespace DCSFlightpanels.Windows
                     SetFormState();
                 }
                 _popupSearch.IsOpen = false;
-                SetFormState();
             }
             catch (Exception ex)
             {
@@ -228,7 +267,7 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void RepeatButtonActionPressUp_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -243,7 +282,7 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void RepeatButtonActionPressDown_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressDown_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -258,7 +297,7 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void RepeatButtonActionPressLeft_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -273,7 +312,7 @@ namespace DCSFlightpanels.Windows
             }
         }
         
-        private void RepeatButtonActionPressRight_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -502,7 +541,6 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                StackPanelRawTextAndStyle.Visibility = RadioButtonOutputRaw.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 SetFormState();
             }
             catch (Exception ex)
@@ -678,16 +716,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (_isDirty)
-                {
-                    if (MessageBox.Show("Discard changes?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-                    {
-                        return;
-                    }
-                }
-
-                DialogResult = false;
-                CloseWindow();
+                CancelWindow();
             }
             catch (Exception ex)
             {
@@ -695,12 +724,27 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void CancelWindow()
+        {
+            if (_isDirty)
+            {
+                if (MessageBox.Show("Discard changes?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            DialogResult = false;
+            CloseWindow();
+        }
         public DCSBIOSDecoder DCSBIOSDecoder => _dcsbiosDecoder;
 
         private void RadioButtonIntegerSource_OnChecked(object sender, RoutedEventArgs e)
         {
             try
             {
+                _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -712,6 +756,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -719,10 +764,11 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void CheckBoxStringAsNumber_OnChecked(object sender, RoutedEventArgs e)
+        private void CheckBoxStringAsNumber_Changed(object sender, RoutedEventArgs e)
         {
             try
             {
+                SetFormState();
             }
             catch (Exception ex)
             {

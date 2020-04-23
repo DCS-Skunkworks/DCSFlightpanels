@@ -19,7 +19,7 @@ namespace NonVisuals.StreamDeck
         private string _lastFormulaError = "";
         private double _formulaResult = 0;
         [NonSerialized] private int _jaceId = 0;
-        private DCSBiosOutputType _dcsBiosOutputType;
+        private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
         private bool _treatStringAsNumber = false;
 
 
@@ -266,6 +266,12 @@ namespace NonVisuals.StreamDeck
         {
             get => BackgroundColor;
             set => BackgroundColor = value;
+        }
+
+        public DCSBiosOutputType DCSBiosOutputType
+        {
+            get => _dcsBiosOutputType;
+            set => _dcsBiosOutputType = value;
         }
     }
 }

@@ -24,10 +24,10 @@ namespace DCSFlightpanels.PanelUserControls
         private string _parentTabItemHeader;
         private readonly List<Image> _colorImages = new List<Image>();
         private readonly List<Image> _configurationIndicatorImages = new List<Image>();
-        private readonly BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/black.png"));
-        private readonly BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/red.png"));
-        private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/green.png"));
-        private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/DCSFlightpanels;component/Images/yellow1.png"));
+        private readonly BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
+        private readonly BitmapImage _redImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/red.png"));
+        private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
+        private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
         private bool _loaded;
         private readonly IGlobalHandler _globalHandler;

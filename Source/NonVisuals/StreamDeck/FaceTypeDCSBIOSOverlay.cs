@@ -18,7 +18,7 @@ namespace NonVisuals.StreamDeck
         {
             if (_backgroundBitmap == null)
             {
-                _backgroundBitmap = new Bitmap(_backgroundBitmapPath);
+                _backgroundBitmap = StreamDeckPanel.Validate(_backgroundBitmapPath);
                 RefreshBitmap = true;
             }
             

@@ -55,93 +55,93 @@
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="0">
             <Canvas Name="Canvas1">
                 <customControls:StreamDeckImage x:Name="ButtonImage1" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage1" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage1" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="0">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage2" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage2" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage2" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="0">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage3" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage3" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage3" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="0">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage4" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage4" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage4" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="0">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage5" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage5" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage5" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
 
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="1">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage6" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage6" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage6" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="1">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage7" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage7" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage7" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="1">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage8" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage8" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage8" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="1">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage9" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage9" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage9" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="1">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage10" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage10" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage10" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
 
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="2">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage11" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage11" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage11" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="1" Grid.Row="2">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage12" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage12" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage12" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="2" Grid.Row="2">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage13" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage13" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage13" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="3" Grid.Row="2">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage14" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage14" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage14" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="4" Grid.Row="2">
             <Canvas>
                 <customControls:StreamDeckImage x:Name="ButtonImage15" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
-                <Image Height="76" Name="DotImage15" Source="/DCSFlightpanels;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
+                <Image Height="76" Name="DotImage15" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>
         </Border>
 

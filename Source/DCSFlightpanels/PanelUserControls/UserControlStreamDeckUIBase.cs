@@ -22,7 +22,7 @@ namespace DCSFlightpanels.PanelUserControls
         protected StreamDeckButton StreamDeckButtonInstance;
         protected bool _isDirty = false;
         private StreamDeckButton _pastedStreamDeckButton;
-
+        public string StreamDeckInstanceId;
 
 
         public void SetSDUIParent(IStreamDeckUIParent sduiParent)
@@ -407,6 +407,7 @@ namespace DCSFlightpanels.PanelUserControls
                 buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
                 buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
                 buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
+                buttonImage.Bill.StreamDeckInstanceId = StreamDeckInstanceId;
                 buttonImage.Source = buttonImage.Bill.DeselectedImage;
             }
         }

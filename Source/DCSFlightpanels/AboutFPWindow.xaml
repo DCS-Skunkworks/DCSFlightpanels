@@ -4,7 +4,7 @@
         xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        Title="About FlightPanels" Height="828" Width="865" Loaded="WindowLoaded" Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
+        Title="About FlightPanels" Height="828" Width="865" Loaded="WindowLoaded" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
 
     <controls:Grid>
         <StackPanel VerticalAlignment="Top" Width="860" Height="800">
@@ -72,10 +72,10 @@
                 </Hyperlink>
             </controls:TextBlock>
             <Canvas>
-                <controls:Image Height="382" HorizontalAlignment="Center" Name="Screenshots" Stretch="Uniform" VerticalAlignment="Center" Source="/DCSFlightpanels;component/Images/about_image.jpg" Canvas.Top="6" Canvas.Left="6" Width="843" />
+                <controls:Image Height="382" HorizontalAlignment="Center" Name="Screenshots" Stretch="Uniform" VerticalAlignment="Center" Source="/dcsfp;component/Images/about_image.jpg" Canvas.Top="6" Canvas.Left="6" Width="843" />
             </Canvas>
         </StackPanel>
-        <controls:Image Height="51" HorizontalAlignment="Center" Margin="486,93,109,0" Name="ResharperImage" Stretch="Uniform" VerticalAlignment="Top" Width="264" Source="/DCSFlightpanels;component/Images/resharper_ultimate.jpg" />
-        <controls:Image Height="200" HorizontalAlignment="Center" Margin="617,157,42,0" Stretch="Uniform" VerticalAlignment="Top"  Source="/DCSFlightpanels;component/Images/FlightPanels01.png" />
+        <controls:Image Height="51" HorizontalAlignment="Center" Margin="486,93,109,0" Name="ResharperImage" Stretch="Uniform" VerticalAlignment="Top" Width="264" Source="/dcsfp;component/Images/resharper_ultimate.jpg" />
+        <controls:Image Height="200" HorizontalAlignment="Center" Margin="617,157,42,0" Stretch="Uniform" VerticalAlignment="Top"  Source="/dcsfp;component/Images/FlightPanels01.png" />
     </controls:Grid>
 </windows:Window>

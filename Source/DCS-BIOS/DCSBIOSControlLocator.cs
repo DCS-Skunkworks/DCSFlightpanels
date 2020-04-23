@@ -16,6 +16,8 @@ namespace DCS_BIOS
         private static List<DCSBIOSControl> _dcsbiosControls = new List<DCSBIOSControl>();
         private static bool _listOnce = true;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
+
+
         public static void Reset()
         {
             DCSBIOSProfileLoadStatus.Clear();

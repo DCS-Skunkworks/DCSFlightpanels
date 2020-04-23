@@ -131,10 +131,17 @@ namespace DCSFlightpanels.Shared
             return result;
         }
 
-        public static void TestImage(StreamDeckFaceTextBox textBox, IStreamDeckUIParent sdUIParent)
+
+
+        public static Bitmap FileNotFoundBitmap
         {
-            var bitmap = BitMapCreator.CreateStreamDeckBitmap(textBox.Text, textBox.Bill.TextFont, textBox.Bill.FontColor, textBox.Bill.BackgroundColor, textBox.Bill.OffsetX, textBox.Bill.OffsetY);
-            sdUIParent.TestImage(bitmap);
+            get
+            {
+                var uri = new Uri("pack://application:,,,/dcsfp;component/Images/filenotfound.png");
+                return new Bitmap(uri.AbsolutePath);
+            }
         }
+
+
     }
 }

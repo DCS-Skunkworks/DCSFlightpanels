@@ -60,6 +60,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case GamingPanelEnum.StreamDeck:
                     {
                         var child = new UserControlStreamDeckUINormal();
+                        child.StreamDeckInstanceId = _streamDeck.InstanceId;
                         _streamDeckUI = child;
                         child.SetSDUIParent(this);
                         StackPanelButtonUI.Children.Add(child);
@@ -69,6 +70,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case GamingPanelEnum.StreamDeckXL:
                     {
                         var child = new UserControlStreamDeckUIXL();
+                        child.StreamDeckInstanceId = _streamDeck.InstanceId;
                         _streamDeckUI = child;
                         child.SetSDUIParent(this);
                         StackPanelButtonUI.Children.Add(child);

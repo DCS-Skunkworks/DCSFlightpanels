@@ -25,7 +25,7 @@ namespace NonVisuals.StreamDeck
         public const string DEFAULT_FONT = "Lucida Console";
         public const int STREAMDECK_ICON_HEIGHT = 72;
         public const int STREAMDECK_ICON_WIDTH = 72;
-        public const string NUMBER_BUTTON_LOCATION = @"pack://application:,,,/DCSFlightpanels;component/StreamDeckGallery/NumberButtons/";
+        public const string NUMBER_BUTTON_LOCATION = @"pack://application:,,,/dcsfp;component/StreamDeckGallery/NumberButtons/";
 
         public const string COLOR_MILITARY_GRAY = "#e6e6e6";
         public const string COLOR_DEFAULT_WHITE = "#f0e9ee";

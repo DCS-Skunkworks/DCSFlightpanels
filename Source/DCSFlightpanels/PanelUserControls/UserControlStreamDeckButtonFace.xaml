@@ -12,10 +12,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <Image x:Key="UpArrow" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
-        <Image x:Key="DownArrow" Source="/DCSFlightpanels;component/Images/down_arrow.png"/>
-        <Image x:Key="LeftArrow" Source="/DCSFlightpanels;component/Images/left_arrow.png"/>
-        <Image x:Key="RightArrow" Source="/DCSFlightpanels;component/Images/right_arrow.png"/>
+        <Image x:Key="UpArrow" Source="/dcsfp;component/Images/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/dcsfp;component/Images/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/dcsfp;component/Images/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/dcsfp;component/Images/right_arrow.png"/>
 
 
         <ToolTip x:Key="DecodeToolTip" >

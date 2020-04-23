@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Set command to execute" Height="350" Width="600"  Loaded="OSCommandWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Set command to execute" Height="350" Width="600"  Loaded="OSCommandWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*" />

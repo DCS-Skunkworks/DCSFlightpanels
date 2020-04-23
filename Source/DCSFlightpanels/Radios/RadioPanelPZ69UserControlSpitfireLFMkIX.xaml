@@ -25,41 +25,41 @@
             <ColumnDefinition Width="301*" />
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
-            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/DCSFlightpanels;component/Images/PZ69_Radiopanel.jpg" />
+            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel.jpg" />
 
             <!-- UPPER LEFT SELECTOR -->
-            <Image Height="76" Name="TopLeftCom1" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="34" />
-            <Image Height="76" Name="TopLeftCom2" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="36" />
-            <Image Height="76" Name="TopLeftNav1" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="45" />
-            <Image Height="76" Name="TopLeftNav2" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="57" />
-            <Image Height="76" Name="TopLeftADF" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="69"  />
-            <Image Height="76" Name="TopLeftDME" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="77" />
-            <Image Height="76" Name="TopLeftXPDR" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="81" />
+            <Image Height="76" Name="TopLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="34" />
+            <Image Height="76" Name="TopLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="36" />
+            <Image Height="76" Name="TopLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="45" />
+            <Image Height="76" Name="TopLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="57" />
+            <Image Height="76" Name="TopLeftADF" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="69"  />
+            <Image Height="76" Name="TopLeftDME" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="77" />
+            <Image Height="76" Name="TopLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="81" />
 
             <!-- LOWER LEFT SELECTOR -->
-            <Image Height="76" Name="LowerLeftCom1" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="112" />
-            <Image Height="76" Name="LowerLeftCom2" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="114" />
-            <Image Height="76" Name="LowerLeftNav1" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="45" Canvas.Top="122" />
-            <Image Height="76" Name="LowerLeftNav2" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="134" />
-            <Image Height="76" Name="LowerLeftADF" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="147"  />
-            <Image Height="76" Name="LowerLeftDME" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="156" />
-            <Image Height="76" Name="LowerLeftXPDR" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="159" />
+            <Image Height="76" Name="LowerLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="65" Canvas.Top="112" />
+            <Image Height="76" Name="LowerLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="54" Canvas.Top="114" />
+            <Image Height="76" Name="LowerLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="45" Canvas.Top="122" />
+            <Image Height="76" Name="LowerLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="43" Canvas.Top="134" />
+            <Image Height="76" Name="LowerLeftADF" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="46" Canvas.Top="147"  />
+            <Image Height="76" Name="LowerLeftDME" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="156" />
+            <Image Height="76" Name="LowerLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="66" Canvas.Top="159" />
 
             <!-- UPPER LCD KNOB -->
-            <Image Height="76" Name="UpperSmallerLCDKnobInc" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="60" />
-            <Image Height="76" Name="UpperSmallerLCDKnobDec" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="60" />
-            <Image Height="76" Name="UpperLargerLCDKnobInc" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="60" />
-            <Image Height="76" Name="UpperLargerLCDKnobDec" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="60" />
+            <Image Height="76" Name="UpperSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="60" />
+            <Image Height="76" Name="UpperSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="60" />
+            <Image Height="76" Name="UpperLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="60" />
+            <Image Height="76" Name="UpperLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="60" />
 
             <!-- LOWER LCD KNOB -->
-            <Image Height="76" Name="LowerSmallerLCDKnobInc" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="136" />
-            <Image Height="76" Name="LowerSmallerLCDKnobDec" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="136" />
-            <Image Height="76" Name="LowerLargerLCDKnobInc" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="136" />
-            <Image Height="76" Name="LowerLargerLCDKnobDec" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="136" />
+            <Image Height="76" Name="LowerSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="484" Canvas.Top="136" />
+            <Image Height="76" Name="LowerSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="469" Canvas.Top="136" />
+            <Image Height="76" Name="LowerLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="498" Canvas.Top="136" />
+            <Image Height="76" Name="LowerLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="447" Canvas.Top="136" />
 
             <!-- Right Switches -->
-            <Image Height="76" Name="UpperRightSwitch" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="58" />
-            <Image Height="76" Name="LowerRightSwitch" Source="/DCSFlightpanels;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="131" />
+            <Image Height="76" Name="UpperRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="58" />
+            <Image Height="76" Name="LowerRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="131" />
 
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
@@ -106,7 +106,7 @@
         <StackPanel Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="5">
             <Label Name="LabelAirframe" Content="Spitfire LF Mk IX" FontSize="30" FontWeight="Bold" Grid.Column="4" Grid.Row="0"/>
             <Label Content="Radio" FontWeight="Bold"/>
-            <Image Height="300" Source="/DCSFlightpanels;component/Images/Spitfire_ARI1063.png" />
+            <Image Height="300" Source="/dcsfp;component/Images/Spitfire_ARI1063.png" />
         </StackPanel>
         <DockPanel Grid.Column="6" Grid.Row="4" Grid.RowSpan="3" >
             <GroupBox DockPanel.Dock="Bottom" Header="Log"  FontSize="10"  Margin="0,0.5,0,-1">

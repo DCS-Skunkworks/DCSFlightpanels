@@ -6,8 +6,11 @@
 <a href="https://www.paypal.me/jerkerdahlblom"><img src="./Documentation/support_dcsflightpanels2.png" width="200"></a>
 </p>
 <br/>
+DCSFlightpanels Supports :
+* Saitek/Logitech Pro Flight Panels
+* Stream Deck
 
-DCSFlightpanels primary use is for using Saitek/Logitech panels in DCS World.
+DCSFlightpanels primary use is for using Saitek/Logitech panels and Stream Deck in DCS World.
 Together with DCS-BIOS you can manage every control for the aircraft and use
 the Radio Panel to operate cockpit radio equipment and also show data from the
 aircraft in the Multipanel & Backlit Panel.
@@ -32,6 +35,12 @@ Saitek / Logitech Panels Supported:
 * TPM (DCS-BIOS & KeyEmulator)
 * PZ69 Radio Panel (DCS-BIOS & KeyEmulator** & KeyEmulator_SRS***)
 * BIP Back Lit Information Panel (DCS-BIOS & KeyEmulator****)
+
+Stream Deck Panels Supported:
+---------------------------------------------
+* Mini
+* Stream Deck
+* XL
 
 - **	LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
 - ***	Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.

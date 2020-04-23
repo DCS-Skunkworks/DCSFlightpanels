@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace NonVisuals.StreamDeck
 {
     [Serializable]
-    public class DCSBIOSConverter : FaceTypeText
+    public class DCSBIOSConverter
     {
         private EnumComparator _comparator1 = EnumComparator.None;
         private EnumComparator _comparator2 = EnumComparator.None;
@@ -49,17 +49,17 @@ namespace NonVisuals.StreamDeck
                     {
                         throw new Exception("Cannot call get when OutputType == NotSet. DCSBIOSValueToFaceConverter()");
                     }
-                case EnumConverterOutputType.OutputImage:
+                case EnumConverterOutputType.Image:
                     {
                         result = _faceTypeImage.Bitmap;
                         break;
                     }
-                case EnumConverterOutputType.OutputImageOverlay:
+                case EnumConverterOutputType.ImageOverlay:
                     {
                         result = _faceTypeDCSBIOSOverlay.Bitmap;
                         break;
                     }
-                case EnumConverterOutputType.OutputRaw:
+                case EnumConverterOutputType.Raw:
                     {
                         result = _faceTypeText.Bitmap;
                         break;
@@ -141,7 +141,7 @@ namespace NonVisuals.StreamDeck
                 }
 
                 stringBuilder.Append("then output " + GetOutputAsString(OutputType));
-                
+
                 return stringBuilder.ToString();
             }
         }
@@ -181,19 +181,19 @@ namespace NonVisuals.StreamDeck
                         result = "not set";
                         break;
                     }
-                case EnumConverterOutputType.OutputRaw:
+                case EnumConverterOutputType.Raw:
                     {
-                        result = "number";
+                        result = "raw";
                         break;
                     }
-                case EnumConverterOutputType.OutputImage:
+                case EnumConverterOutputType.Image:
                     {
                         result = "image";
                         break;
                     }
-                case EnumConverterOutputType.OutputImageOverlay:
+                case EnumConverterOutputType.ImageOverlay:
                     {
-                        result = "dcsbios image overlay";
+                        result = "image overlay";
                         break;
                     }
                 default:
@@ -256,7 +256,496 @@ namespace NonVisuals.StreamDeck
 
             return result;
         }
+
+        public string ImageFileRelativePath
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.Raw:
+                        {
+                            throw new Exception("DCSBIOSConverter.ImageFileRelativePath: FaceTypeText have no property ImageFileRelativePath. DCSBIOSConverter.ImageFileRelativePath.");
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.ImageFile;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.BackgroundBitmapPath;
+                        }
+                }
+                throw new Exception("DCSBIOSConverter.ImageFileRelativePath: Exception. OutputType not known " + _outputType);
+            }
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.ImageFileRelativePath:  OutputType is [NotSet]. Can not add ImageFileRelativePath.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            throw new Exception("DCSBIOSConverter.ImageFileRelativePath: FaceTypeText have no property ImageFileRelativePath. DCSBIOSConverter.ImageFileRelativePath.");
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.ImageFile = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.ImageFileRelativePath: OutputType not known " + _outputType);
+                        }
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string ButtonText
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            return "";
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.ButtonText;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.Text;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.ButtonText;
+                        }
+                }
+                return "";
+            }
+
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.ButtonText: OutputType is [NotSet]. Can not add Text.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            _faceTypeText.ButtonText = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.Text = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.ButtonText = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.ButtonText: OutputType not known " + _outputType + ".");
+                        }
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public int OffsetX
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            return 0;
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.OffsetX;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.OffsetX;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.OffsetX;
+                        }
+                }
+                return 0;
+            }
+
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.OffsetX:  OutputType is [NotSet]. Can not add OffsetX.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            _faceTypeText.OffsetX = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.OffsetX = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.OffsetX = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.OffsetX: OutputType not known " + _outputType + ".");
+                        }
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public int OffsetY
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            return 0;
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.OffsetY;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.OffsetY;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.OffsetY;
+                        }
+                }
+                return 0;
+            }
+
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.OffsetY:  OutputType is [NotSet]. Can not add OffsetY.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            _faceTypeText.OffsetY = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.OffsetY = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.OffsetY = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.OffsetY: Exception. OutputType not known " + _outputType + ".");
+                        }
+                }
+            }
+        }
+
+
+        [JsonIgnore]
+        public Color FontColor
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            return Color.Transparent;
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.FontColor;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.FontColor;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.FontColor;
+                        }
+                }
+                return Color.Transparent;
+            }
+
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.FontColor:  OutputType is [NotSet]. Can not add FontColor.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            _faceTypeText.FontColor = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.FontColor = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.FontColor = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.FontColor:  FaceTypeText OutputType not known " + _outputType + ".");
+                        }
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public Color BackgroundColor
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            return Color.Transparent;
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.BackgroundColor;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.BackgroundColor;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.BackgroundColor;
+                        }
+                }
+                return Color.Transparent;
+            }
+
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.BackgroundColor: OutputType is [NotSet]. Can not add BackgroundColor.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            _faceTypeText.BackgroundColor = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.BackgroundColor = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.BackgroundColor: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                        }
+                }
+            }
+        }
+
+
+        [JsonIgnore]
+        public Font TextFont
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.TextFont:  OutputType is [NotSet]. Can not retrieve Font.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.TextFont;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.TextFont;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.TextFont;
+                        }
+                }
+                throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+            }
+
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.TextFont:  OutputType is [NotSet]. Can not add TextFont.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            _faceTypeText.TextFont = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.TextFont = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.TextFont = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                        }
+                }
+            }
+        }
+
+
+        [JsonIgnore]
+        public Bitmap Bitmap
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.Bitmap: OutputType is [NotSet]. Can not retrieve Bitmap.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.Bitmap;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.Bitmap;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.Bitmap;
+                        }
+                }
+                throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+            }
+
+            set
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter OutputType is [NotSet]. Can not add Bitmap.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            _faceTypeText.Bitmap = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            _faceTypeImage.Bitmap = value;
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.Bitmap = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                        }
+                }
+            }
+        }
+
+
+        [JsonIgnore]
+        public bool FaceConfigurationIsOK
+        {
+            get
+            {
+                switch (OutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            return false;
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            return _faceTypeText.ConfigurationOK;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            return _faceTypeImage.ConfigurationOK;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.ConfigurationOK;
+                        }
+                }
+                throw new Exception("FaceConfigurationIsOK: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+            }
+        }
     }
+
 
 
     public enum EnumConverterOutputType

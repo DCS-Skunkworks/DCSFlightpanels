@@ -13,7 +13,7 @@ namespace NonVisuals
 
     public class HIDHandler
     {
-        private readonly List<HIDSkeleton> _hidSkeletons = new List<HIDSkeleton>();
+        public List<HIDSkeleton> HIDSkeletons { get; } = new List<HIDSkeleton>();
 
         public void Startup()
         {
@@ -30,8 +30,8 @@ namespace NonVisuals
                             if (!HIDDeviceAlreadyExists(instanceId))
                             {
                                 var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
-                                _hidSkeletons.Add(hidSkeleton);
-                                if (hidSkeleton.PanelInfo.VendorId == (int) GamingPanelVendorEnum.Saitek)
+                                HIDSkeletons.Add(hidSkeleton);
+                                if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek)
                                 {
                                     hidSkeleton.HIDReadDevice = hidDevice;
                                     hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
@@ -49,45 +49,10 @@ namespace NonVisuals
                         }
                     }
                 }
-
-                /*foreach (var hidSkeleton in _hidSkeletons)
-                {
-                    if (hidSkeleton.PanelInfo.VendorId == (int) GamingPanelVendorEnum.Saitek)
-                    {
-
-                        //Creating read devices
-                        foreach (var hidDevice in HidDevices.Enumerate(hidSkeleton.InstanceId))
-                        {
-                            if (hidDevice != null)
-                            {
-                                hidSkeleton.HIDReadDevice = hidDevice;
-                                hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
-                                //hidSkeleton.HIDReadDevice.Inserted += DeviceAttachedHandler;
-                                //hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
-                                hidSkeleton.HIDReadDevice.MonitorDeviceEvents = true;
-                                Common.DebugP(hidSkeleton.PanelInfo.GamingPanelType + " [Saitek]HIDReadDevice has entered the building...");
-                            }
-                        }
-
-                        //Creating write devices
-                        foreach (var hidDevice in HidDevices.Enumerate(hidSkeleton.InstanceId))
-                        {
-                            if (hidDevice != null)
-                            {
-                                hidSkeleton.HIDWriteDevice = hidDevice;
-                                hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
-                                //hidSkeleton.HIDWriteDevice.Inserted += DeviceAttachedHandler;
-                                //hidSkeleton.HIDWriteDevice.Removed += DeviceRemovedHandler;
-                                hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
-                                Common.DebugP(hidSkeleton.PanelInfo.GamingPanelType + " [Saitek]HIDWriteDevice has entered the building...");
-                            }
-                        }
-                    }
-                }*/
-                }
+            }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -95,7 +60,7 @@ namespace NonVisuals
         {
             try
             {
-                foreach (var hidSkeleton in _hidSkeletons)
+                foreach (var hidSkeleton in HIDSkeletons)
                 {
                     try
                     {
@@ -103,13 +68,13 @@ namespace NonVisuals
                     }
                     catch (Exception ex)
                     {
-                        Common.ShowErrorMessageBox( ex);
+                        Common.ShowErrorMessageBox(ex);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -122,7 +87,7 @@ namespace NonVisuals
             }
             Common.DebugP("---------------");
             Common.DebugP("Looking for : " + instanceId + "   " + instanceId);
-            foreach (var hidskeleton in _hidSkeletons)
+            foreach (var hidskeleton in HIDSkeletons)
             {
                 if (hidskeleton.InstanceId.Equals(instanceId))
                 {
@@ -135,8 +100,6 @@ namespace NonVisuals
             Common.DebugP("---------------");
             return false;
         }
-
-        public List<HIDSkeleton> HIDSkeletons => _hidSkeletons;
     }
 
 }

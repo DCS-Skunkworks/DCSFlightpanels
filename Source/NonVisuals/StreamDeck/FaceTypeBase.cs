@@ -29,7 +29,6 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                DrawBitmap();
                 return _bitmap;
             }
             set

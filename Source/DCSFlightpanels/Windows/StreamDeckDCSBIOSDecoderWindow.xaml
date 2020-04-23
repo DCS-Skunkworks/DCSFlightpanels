@@ -12,13 +12,13 @@
         Height="500" Width="1200" 
         WindowStartupLocation="CenterScreen" 
         Loaded="StreamDeckDCSBIOSDecoderWindow_OnLoaded" 
-        Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico"
+        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
         d:DataContext="{d:DesignInstance streamDeck:DCSBIOSDecoder}">
     <Window.Resources>
-        <Image x:Key="UpArrow" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
-        <Image x:Key="DownArrow" Source="/DCSFlightpanels;component/Images/down_arrow.png"/>
-        <Image x:Key="LeftArrow" Source="/DCSFlightpanels;component/Images/left_arrow.png"/>
-        <Image x:Key="RightArrow" Source="/DCSFlightpanels;component/Images/right_arrow.png"/>
+        <Image x:Key="UpArrow" Source="/dcsfp;component/Images/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/dcsfp;component/Images/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/dcsfp;component/Images/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/dcsfp;component/Images/right_arrow.png"/>
 
 
         <ToolTip x:Key="DecodeToolTip" >
@@ -69,11 +69,13 @@
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" Margin="0,10,0,0">
             <GroupBox Header="Select DCS-BIOS Control" >
                 <StackPanel Margin="0,10,0,0">
-                    <StackPanel Orientation="Horizontal" >
-                        <RadioButton Name="RadioButtonIntegerSource" Content="Integer" GroupName="OutputType" Margin="10,0,0,0" IsChecked="True" Checked="RadioButtonIntegerSource_OnChecked"/>
-                        <RadioButton Name="RadioButtonStringSource" Content="String" GroupName="OutputType" Margin="10,0,0,0" Checked="RadioButtonStringSource_OnChecked"/>
-                        <CheckBox Name="CheckBoxStringAsNumber" Content="Treat string as number?"  Margin="10,0,0,0" Checked="CheckBoxStringAsNumber_OnChecked"/>
-                    </StackPanel>
+                    <GroupBox Header="DCS-BIOS Control Type">
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <RadioButton Name="RadioButtonIntegerSource" Content="Integer" GroupName="InputType"  Margin="10,0,0,0" IsChecked="True" Checked="RadioButtonIntegerSource_OnChecked"/>
+                            <RadioButton Name="RadioButtonStringSource" Content="String" GroupName="InputType" Margin="10,0,0,0" Checked="RadioButtonStringSource_OnChecked"/>
+                            <CheckBox Name="CheckBoxStringAsNumber" Content="Treat string as number?"  Margin="10,0,0,0" Unchecked="CheckBoxStringAsNumber_Changed" Checked="CheckBoxStringAsNumber_Changed"/>
+                        </StackPanel>
+                    </GroupBox>
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Clear" Height="23" VerticalAlignment="Bottom" Margin="10,10,10,10"  x:Name="ButtonClear1" Width="75" Click="ButtonClear_OnClick"/>
                         <TextBox Name="TextBoxSearch" Text="Type to search control" Margin="0,10,10,10"  Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
@@ -83,40 +85,43 @@
                 </StackPanel>
             </GroupBox>
             <GroupBox>
-                <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnChange" Checked="CheckBoxUseFormula_OnChange"/>
+                <StackPanel>
+                    <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnChange" Checked="CheckBoxUseFormula_OnChange"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="10,10,10,10">
+                        <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/system.math(v=vs.110).aspx" RequestNavigate="Hyperlink_OnRequestNavigate">
+                            Click here for a list of Math functions
+                        </Hyperlink>
+                        </TextBlock>
+                        <TextBlock Name="TextBlockFormulas" Margin="10,10,10,10" Foreground="DodgerBlue" MouseDown="TextBlockFormulas_OnMouseDown" MouseEnter="Control_OnMouseEnter" MouseLeave="Control_OnMouseLeave">
+                        <Underline>Click here for sample formulas</Underline>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
             </GroupBox>
             <GroupBox Name="GroupBoxFormula" Header="Formula" >
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="10,10,10,10">
-                            <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/system.math(v=vs.110).aspx" RequestNavigate="Hyperlink_OnRequestNavigate">
-                                Click here for a list of Math functions
-                            </Hyperlink>
-                        </TextBlock>
-                        <TextBlock Name="TextBlockFormulas" Margin="10,10,10,10" Foreground="DodgerBlue" MouseDown="TextBlockFormulas_OnMouseDown" MouseEnter="Control_OnMouseEnter" MouseLeave="Control_OnMouseLeave">
-                                <Underline>Click here for sample formulas</Underline>
-                        </TextBlock>
-                    </StackPanel>
                     <Label Name="LabelFormula" Content="Copy DCS-BIOS control name directly as is into the formula" Margin="10,0,10,0"/>
                     <TextBox x:Name="TextBoxFormula" Height="100" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap" Text="" Margin="10,0,10,0" KeyUp="TextBoxFormula_OnKeyUp" TextChanged="TextBoxFormula_OnTextChanged"/>
 
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
-                            <Label Content="DCS-BIOS value :"  Margin="10,10,10,0" />
-                            <Label Name="LabelSourceRawValue" Content="" Margin="10,10,10,0"/>
+                            <Label Content="DCS-BIOS value :"  Margin="10,0,10,0" />
+                            <Label Name="LabelSourceRawValue" Content="" Margin="10,0,10,0"/>
                         </DockPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
-                            <Label Content="Error :"  Margin="10,10,10,0" />
-                            <Label Name="LabelErrors" Margin="10,10,10,0" />
+                            <Label Content="Error :"  Margin="10,0,10,0" />
+                            <Label Name="LabelErrors" Margin="10,0,10,0" />
                         </DockPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <DockPanel>
-                            <Label Content="Formula result :" Margin="10,10,10,0"/>
-                            <Label Name="LabelResult" Margin="10,10,10,0"/>
+                            <Label Content="Formula result :" Margin="10,0,10,0"/>
+                            <Label Name="LabelResult" Margin="10,0,10,0"/>
                         </DockPanel>
                     </StackPanel>
                 </StackPanel>
@@ -124,7 +129,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="5" Margin="0,5,0,0">
-            <GroupBox Header="Show raw DCS-BIOS or use Rule Formatting"  >
+            <GroupBox Header="Rule Formatting enables multiple images, formatting"  >
                 <StackPanel Margin="0,10,0,0">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <GroupBox Header="Show as :">
@@ -165,16 +170,16 @@
 
         <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="4" Margin="0,5,0,0">
             <StackPanel Name="StackPanelRawTextAndStyle"  Margin="10,5,10,0" Visibility="Visible">
-                <GroupBox Header="Choose Font and Color">
-                    <StackPanel>
+                <GroupBox Header="Raw DCS-BIOS value Font and Color">
+                    <StackPanel  Margin="0,10,0,0">
 
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Image Name="ButtonImage" Height="72" Width="72" HorizontalAlignment="Left" Margin="0,0,0,0"/>
                             <StackPanel>
-                                <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressLeft" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressRight" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressUp" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressDown" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressLeft" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressLeft_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressRight" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressRight_OnClick"/>
                             </StackPanel>
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" >
@@ -191,26 +196,25 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-                <StackPanel Background="WhiteSmoke">
-                    <TextBlock Margin="10,20,0,0" FontSize="15">
-                        <Bold>Information</Bold>
-                    </TextBlock>
-                    <TextBlock  Margin="10,0,10,0" FontSize="9">
-                        <Bold>
-                            <LineBreak/>
-                            Start DCS and open a mission in the plane you want to configure.
-                            <LineBreak/>
-                            This way you will see real-time values from DCS-BIOS.
-                            <LineBreak/>
-                            <LineBreak/>
-                            1) Select DCS-BIOS Output you want (e.g. Compass Heading)<LineBreak/>
-                            2) Choose whether to format the DCS-BIOS value using a formula<LineBreak/>
-                            3) Choose if to decode the value, number to text or <LineBreak/> 
-                               adding unit info also possible here<LineBreak/>
-                            4) Select font, font size and color<LineBreak/>
-                        </Bold>
-                    </TextBlock>
-                </StackPanel>
+            </StackPanel>
+            <StackPanel Margin="10,5,10,0" Background="WhiteSmoke">
+                <TextBlock Margin="10,20,0,0" FontSize="15">
+                    <Bold>Information</Bold>
+                </TextBlock>
+                <TextBlock  Margin="10,0,10,0" FontSize="9">
+                    <Bold>
+                        <LineBreak/>
+                        Start DCS and open a mission in the plane you want to configure.
+                        <LineBreak/>
+                        This way you will see real-time values from DCS-BIOS.
+                        <LineBreak/>
+                        <LineBreak/>
+                        1) Select DCS-BIOS Output you want (e.g. Compass Heading)<LineBreak/>
+                        2) Choose whether to format the DCS-BIOS value using a formula<LineBreak/>
+                        3) Choose if to convert the value
+                        4) Select font, font size and color<LineBreak/>
+                    </Bold>
+                </TextBlock>
             </StackPanel>
         </StackPanel>
 

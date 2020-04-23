@@ -9,20 +9,20 @@ namespace NonVisuals.StreamDeck
     public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
-        private string _text;
+        private string _buttonText;
         private Font _textFont = StreamDeckConstants.DefaultStreamDeckFont;
         private Color _fontColor;
         private Color _backgroundColor;
 
 
-
+        public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
 
 
         protected override void DrawBitmap()
         {
             if (Bitmap == null || RefreshBitmap)
             {
-                Bitmap = BitMapCreator.CreateStreamDeckBitmap(_text, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                Bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
                 RefreshBitmap = false;
             }
         }
@@ -33,13 +33,13 @@ namespace NonVisuals.StreamDeck
             StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, Bitmap);
         }
 
-        public string Text
+        public string ButtonText
         {
-            get => _text;
+            get => _buttonText;
             set
             {
                 RefreshBitmap = true;
-                _text = value;
+                _buttonText = value;
             }
         }
 

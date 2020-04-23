@@ -16,13 +16,14 @@ namespace NonVisuals.StreamDeck
 
 
 
+        public bool ConfigurationOK => !string.IsNullOrEmpty(_imageFile);
 
 
         protected override void DrawBitmap()
         {
             if (Bitmap == null || RefreshBitmap)
             {
-                Bitmap = new Bitmap(_imageFile);
+                Bitmap = StreamDeckPanel.Validate(_imageFile);
                 RefreshBitmap = false;
             }
 

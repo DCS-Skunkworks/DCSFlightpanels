@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DCSFlightpanels.Windows"
         mc:Ignorable="d"
         Title="DCS-BIOS Output Controls Configuration" Height="400" Width="800"
-        Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico"
+        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
         Loaded="DCSBIOSOutputControlsWindow_OnLoaded"  
         WindowStartupLocation="CenterScreen" KeyDown="DCSBIOSOutputControlsWindow_OnKeyDown">
     <Grid>

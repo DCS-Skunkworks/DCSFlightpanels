@@ -7,17 +7,17 @@
         xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Comparator" Height="350" Width="800"  Loaded="DCSBIOSComparatorWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Converter" Height="350" Width="800"  Loaded="StreamDeckDCSBIOSConverterWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
     <Window.Resources>
-        <Image x:Key="UpArrow" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
-        <Image x:Key="DownArrow" Source="/DCSFlightpanels;component/Images/down_arrow.png"/>
-        <Image x:Key="LeftArrow" Source="/DCSFlightpanels;component/Images/left_arrow.png"/>
-        <Image x:Key="RightArrow" Source="/DCSFlightpanels;component/Images/right_arrow.png"/>
+        <Image x:Key="UpArrow" Source="/dcsfp;component/Images/up_arrow.png"/>
+        <Image x:Key="DownArrow" Source="/dcsfp;component/Images/down_arrow.png"/>
+        <Image x:Key="LeftArrow" Source="/dcsfp;component/Images/left_arrow.png"/>
+        <Image x:Key="RightArrow" Source="/dcsfp;component/Images/right_arrow.png"/>
 
-        <Image x:Key="UpArrow2" Source="/DCSFlightpanels;component/Images/up_arrow.png"/>
-        <Image x:Key="DownArrow2" Source="/DCSFlightpanels;component/Images/down_arrow.png"/>
-        <Image x:Key="LeftArrow2" Source="/DCSFlightpanels;component/Images/left_arrow.png"/>
-        <Image x:Key="RightArrow2" Source="/DCSFlightpanels;component/Images/right_arrow.png"/>
+        <Image x:Key="UpArrow2" Source="/dcsfp;component/Images/up_arrow.png"/>
+        <Image x:Key="DownArrow2" Source="/dcsfp;component/Images/down_arrow.png"/>
+        <Image x:Key="LeftArrow2" Source="/dcsfp;component/Images/left_arrow.png"/>
+        <Image x:Key="RightArrow2" Source="/dcsfp;component/Images/right_arrow.png"/>
 
         <system:Double x:Key="ArrowHeight">18</system:Double>
     </Window.Resources>
@@ -89,25 +89,25 @@
                 <GroupBox Header="Settings" HorizontalAlignment="Stretch">
                     <StackPanel HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputTextAsIs" Width="72" Height="72" KeyUp="TextBoxOutputTextAsIs_OnKeyUp"/>
+                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputTextAsIs" Width="72" Height="72" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
-                                <RepeatButton Name="RepeatButtonActionPressUpAsIs" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUpAsIs_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressDownAsIs" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDownAsIs_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressLeftAsIs" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeftAsIs_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressRightAsIs" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRightAsIs_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressUpAsIs" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressDownAsIs" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressLeftAsIs" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressRightAsIs" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
                             </StackPanel>
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" >
-                                    <Button Name="ButtonTextFaceFontAsIs" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFontAsIs_OnClick"/>
-                                    <Button Name="ButtonTextFaceFontColorAsIs" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColorAsIs_OnClick"/>
+                                    <Button Name="ButtonTextFaceFontAsIs" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
+                                    <Button Name="ButtonTextFaceFontColorAsIs" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
-                                    <Button Name="ButtonTextFaceBackgroundColorAsIs" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColorAsIs_OnClick"/>
-                                    <Button Name="ButtonTestTextFaceAsIs" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestTextFaceAsIs_OnClick"/>
+                                    <Button Name="ButtonTextFaceBackgroundColorAsIs" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
+                                    <Button Name="ButtonTestTextFaceAsIs" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                        <Label Name="LabelInsertAsIs" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsertAsIs_OnMouseDown"/>
+                        <Label Name="LabelInsertAsIs" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
@@ -119,7 +119,7 @@
                         <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" IsReadOnly="True" x:Name="TextBoxImage"  IsEnabled="False" Background="LightSteelBlue"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Button Name="ButtonBrowseImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseImage_OnClick"/>
-                            <Button Name="ButtonTestSelectImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestSelectImage_OnClick"/>
+                            <Button Name="ButtonTestSelectImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -129,34 +129,38 @@
                 <GroupBox Header="Settings">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Name="TextBoxOutputTextOverlayImage" Width="72" Height="72" HorizontalAlignment="Left" KeyUp="TextBoxOutputTextOverlayImage_OnKeyUp"/>
+                            <TextBox Name="TextBoxOutputTextOverlayImage" Width="72" Height="72" HorizontalAlignment="Left" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
-                                <RepeatButton Name="RepeatButtonActionPressUpOverlay" Content="{StaticResource UpArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUpOverlay_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDownOverlay_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressLeftOverlay" Content="{StaticResource LeftArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeftOverlay_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressRightOverlay" Content="{StaticResource RightArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRightOverlay_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressUpOverlay" Content="{StaticResource UpArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressLeftOverlay" Content="{StaticResource LeftArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressRightOverlay" Content="{StaticResource RightArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
                             </StackPanel>
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" >
-                                    <Button Name="ButtonTextFaceFontOverlay" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFontOverlay_OnClick"/>
-                                    <Button Name="ButtonTextFaceFontColorOverlay" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColorOverlay_OnClick"/>
+                                    <Button Name="ButtonTextFaceFontOverlay" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
+                                    <Button Name="ButtonTextFaceFontColorOverlay" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
-                                    <Button Name="ButtonTextFaceBackgroundColorOverlay" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColorOverlay_OnClick"/>
-                                    <Button Name="ButtonTestTextFaceOverlay" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestTextFaceOverlay_OnClick"/>
+                                    <Button Name="ButtonTextFaceBackgroundColorOverlay" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
+                                    <Button Name="ButtonTestTextFaceOverlay" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                        <Label Name="LabelInsertOverlayImage" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsertOverlayImage_OnMouseDown"/>
+                        <Label Name="LabelInsertOverlayImage" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
 
                         <Label Content="Selected Image" FontSize="10" Height="23" Margin="0,5,2,0" />
                         <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" Width="300" IsReadOnly="True" x:Name="TextBoxOverlayImage"  IsEnabled="False" Background="LightSteelBlue"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                            <Button Name="ButtonBrowseOverlayImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseOverlayImage_OnClick"/>
-                            <Button Name="ButtonTestSelectOverlayImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestSelectOverlayImage_OnClick"/>
+                            <Button Name="ButtonBrowseOverlayImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseImage_OnClick"/>
+                            <Button Name="ButtonTestSelectOverlayImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
+            </StackPanel>
+
+            <StackPanel Margin="0,5,0,0" >
+                <TextBox Name="TextBoxFontInfo" Height="60" IsReadOnly="True" Background="Transparent"></TextBox>
             </StackPanel>
         </StackPanel>
 

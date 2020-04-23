@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
@@ -25,30 +26,30 @@ namespace NonVisuals.StreamDeck
         private long _doUpdatePanelLCD;
         private int _buttonCount = 0;
 
-        public StreamDeckPanel(IStreamDeckListener streamDeckListener, GamingPanelEnum panelType, HIDSkeleton hidSkeleton):base(GamingPanelEnum.StreamDeck, hidSkeleton)
+        public StreamDeckPanel(IStreamDeckListener streamDeckListener, GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.StreamDeck, hidSkeleton)
         {
             switch (panelType)
             {
                 case GamingPanelEnum.StreamDeckMini:
-                {
-                    _buttonCount = 6;
-                    break;
-                }
+                    {
+                        _buttonCount = 6;
+                        break;
+                    }
                 case GamingPanelEnum.StreamDeck:
-                {
-                    _buttonCount = 15;
-                    break;
-                }
+                    {
+                        _buttonCount = 15;
+                        break;
+                    }
                 case GamingPanelEnum.StreamDeckXL:
-                {
-                    _buttonCount = 32;
-                    break;
-                }
+                    {
+                        _buttonCount = 32;
+                        break;
+                    }
             }
             Startup();
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
-            _streamDeckLayerHandler =  new StreamDeckLayerHandler(this);
+            _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
             _streamDeckLayerHandler.Attach(streamDeckListener);
             StreamDeckPanels.Add(this);
         }
@@ -80,7 +81,7 @@ namespace NonVisuals.StreamDeck
             catch (Exception ex)
             {
                 Common.DebugP("StreamDeck.StartUp() : " + ex.Message);
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -95,7 +96,7 @@ namespace NonVisuals.StreamDeck
                 SetLastException(e);
             }
         }
-        
+
         public void AddStreamDeckButtonToActiveLayer(StreamDeckButton streamDeckButton)
         {
             _streamDeckLayerHandler.AddStreamDeckButtonToActiveLayer(streamDeckButton);
@@ -130,7 +131,7 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
-                
+
             }
             catch (Exception ex)
             {
@@ -175,7 +176,7 @@ namespace NonVisuals.StreamDeck
             }
             return new List<string>();
         }
-        
+
         public override void ImportSettings(List<string> settings)
         {
             SettingsLoading = true;
@@ -199,7 +200,7 @@ namespace NonVisuals.StreamDeck
             SettingsLoading = false;
             SettingsApplied();
         }
-        
+
         private string ExportJSONSettings()
         {
             if (Closed)
@@ -222,8 +223,8 @@ namespace NonVisuals.StreamDeck
             }*/
             return result;
         }
-        
-        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e){        }
+
+        public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e) { }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e)
         {
@@ -255,7 +256,7 @@ namespace NonVisuals.StreamDeck
                 return;
             }
         }
-        
+
         private void DeviceAttachedHandler()
         {
             Startup();
@@ -316,12 +317,12 @@ namespace NonVisuals.StreamDeck
             _streamDeckLayerHandler.DeleteLayer(streamDeckLayerName);
             SetIsDirty();
         }
-        
+
         public StreamDeckLayer HomeLayer
         {
             get => _streamDeckLayerHandler.HomeLayer;
         }
-        
+
         public List<string> GetStreamDeckLayerNames()
         {
             return _streamDeckLayerHandler.GetStreamDeckLayerNames();
@@ -341,7 +342,7 @@ namespace NonVisuals.StreamDeck
         {
             return _streamDeckLayerHandler.GetStreamDeckLayer(layerName);
         }
-        
+
         public StreamDeckLayer GetActiveLayer()
         {
             return _streamDeckLayerHandler.GetActiveStreamDeckLayer();
@@ -370,6 +371,17 @@ namespace NonVisuals.StreamDeck
         {
             get => _streamDeckLayerHandler.SelectedButton;
             set => _streamDeckLayerHandler.SelectedButton = value;
+        }
+
+        public static Bitmap Validate(string imagePath)
+        {
+            if (File.Exists(imagePath))
+            {
+                return new Bitmap(imagePath);
+            }
+
+            var uri = new Uri("pack://application:,,,/NonVisuals;component/Images/filenotfound.png");
+            return new Bitmap(uri.AbsolutePath);
         }
     }
 

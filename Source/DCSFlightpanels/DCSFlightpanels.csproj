@@ -154,6 +154,7 @@
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillBaseOutput.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Shared\StreamDeckCommon.cs" />
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
@@ -855,6 +856,7 @@
     <Resource Include="Images\dot3.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\filenotfound.png" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

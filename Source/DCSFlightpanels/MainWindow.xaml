@@ -6,7 +6,7 @@
         Width="1300" 
         Loaded="WindowLoaded" 
         WindowStartupLocation="CenterScreen"  
-        Icon="/DCSFlightpanels;component/Images/flightpanels02_8Rc_icon.ico" 
+        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" 
         Name="DCSFlightpanelsMainWindow" 
         Closing="MainWindowClosing" 
         Closed="MainWindow_OnClosed" 
@@ -55,10 +55,10 @@
         </Menu>
         <ToolBar Height="35" HorizontalAlignment="Stretch" Name="ToolBarMain" VerticalAlignment="Top" Grid.Column="0" Grid.Row="1" >
             <Button>
-                <Image Source="/DCSFlightpanels;component/Images/NewDocument_32x32.png" Name="ButtonImageNew" MouseDown="ButtonImageNewMouseDown" ToolTip="New"/>
+                <Image Source="/dcsfp;component/Images/NewDocument_32x32.png" Name="ButtonImageNew" MouseDown="ButtonImageNewMouseDown" ToolTip="New"/>
             </Button>
             <Button>
-                <Image Source="/DCSFlightpanels;component/Images/SaveHL.bmp" Name="ButtonImageSave" MouseDown="ButtonImageSaveMouseDown" ToolTip="Save">
+                <Image Source="/dcsfp;component/Images/SaveHL.bmp" Name="ButtonImageSave" MouseDown="ButtonImageSaveMouseDown" ToolTip="Save">
                     <Image.Style>
                         <Style TargetType="Image">
                             <Style.Triggers>
@@ -71,10 +71,10 @@
                 </Image>
             </Button>
             <Button>
-                <Image Source="/DCSFlightpanels;component/Images/OpenPL.bmp" Name="ButtonImageOpen" MouseDown="ButtonImageOpenMouseDown"  ToolTip="Open"/>
+                <Image Source="/dcsfp;component/Images/OpenPL.bmp" Name="ButtonImageOpen" MouseDown="ButtonImageOpenMouseDown"  ToolTip="Open"/>
             </Button>
             <Button>
-                <Image Source="/DCSFlightpanels;component/Images/112_RefreshArrow_Green_32x32_72.png" Name="ButtonImageRefresh" MouseDown="ButtonImageRefreshMouseDown"  ToolTip="Refresh">
+                <Image Source="/dcsfp;component/Images/112_RefreshArrow_Green_32x32_72.png" Name="ButtonImageRefresh" MouseDown="ButtonImageRefreshMouseDown"  ToolTip="Refresh">
                     <Image.Style>
                         <Style TargetType="Image">
                             <Style.Triggers>
@@ -87,7 +87,7 @@
                 </Image>
             </Button>
             <Button>
-                <Image Source="/DCSFlightpanels;component/Images/Notepad_32x32.png" Name="ButtonImageNotepad" MouseDown="ButtonImageNotepadMouseDown"  ToolTip="Open text editor">
+                <Image Source="/dcsfp;component/Images/Notepad_32x32.png" Name="ButtonImageNotepad" MouseDown="ButtonImageNotepadMouseDown"  ToolTip="Open text editor">
                     <Image.Style>
                         <Style TargetType="Image">
                             <Style.Triggers>
@@ -100,7 +100,7 @@
                 </Image>
             </Button>
             <Button>
-                <Image Source="/DCSFlightpanels;component/Images/109_AllAnnotations_RedWarning_256.png" Name="ButtonImageDisable" MouseDown="ButtonImageDisableMouseDown"  ToolTip="Disable" Tag="False">
+                <Image Source="/dcsfp;component/Images/109_AllAnnotations_RedWarning_256.png" Name="ButtonImageDisable" MouseDown="ButtonImageDisableMouseDown"  ToolTip="Disable" Tag="False">
                     <Image.Style>
                         <Style TargetType="Image">
                             <Style.Triggers>
@@ -113,7 +113,7 @@
                 </Image>
             </Button>
 
-            <Image Name="ImageDcsBiosConnected"  Source="/DCSFlightpanels;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
+            <Image Name="ImageDcsBiosConnected"  Source="/dcsfp;component/Images/gear-image.png" Tag="False" RenderOptions.BitmapScalingMode="Fant" Width="18" IsEnabled="False" ToolTip="Rotates when receiving data from DCS-BIOS" >
                 <Image.RenderTransform>
                     <RotateTransform CenterX="9" CenterY="9" />
                 </Image.RenderTransform>
