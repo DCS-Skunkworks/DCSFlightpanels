@@ -360,7 +360,8 @@ namespace DCS_BIOS
                 return null;
             }
             LoadControls();
-            return _dcsbiosControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.STRING_TYPE);
+            var result = _dcsbiosControls.Where(controlObject => (controlObject.outputs.Count > 0) && controlObject.outputs[0].OutputDataType == DCSBiosOutputType.STRING_TYPE);
+            return result;
         }
 
         public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()

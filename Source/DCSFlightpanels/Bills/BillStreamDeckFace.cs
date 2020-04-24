@@ -23,7 +23,6 @@ namespace DCSFlightpanels.Bills
         public BitmapImage DeselectedImage { get; set; }
         private DCSBIOSDecoder _dcsbiosDecoder;
         private string _imageFileRelativePath;
-        private string _overlayImagePath;
         private string _streamDeckInstanceId;
 
         public override bool IsEmpty()
@@ -49,6 +48,10 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _textFont = value;
+                if (_textFont == null)
+                {
+                    return;
+                }
                 TextBox.FontFamily = new System.Windows.Media.FontFamily(_textFont.Name);
                 TextBox.FontWeight = _textFont.Bold ? FontWeights.Bold : FontWeights.Regular;
                 TextBox.FontSize = _textFont.Size * 96.0 / 72.0;
@@ -109,8 +112,8 @@ namespace DCSFlightpanels.Bills
         }
 
 
-        public int OffsetX { get; set; } = 10;
-        public int OffsetY { get; set; } = 24;
+        public int OffsetX { get; set; } = SettingsManager.OffsetX;
+        public int OffsetY { get; set; } = SettingsManager.OffsetX;
         
 
         public int ButtonNumber()
@@ -146,7 +149,10 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _dcsbiosDecoder = value;
-                TextBox.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
+                if (_dcsbiosDecoder?.DCSBIOSOutput != null)
+                {
+                    TextBox.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
+                }
             }
         }
 

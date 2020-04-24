@@ -1,7 +1,6 @@
 ﻿using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
@@ -565,6 +564,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
                 TextBoxButtonTextFace.TestImage( SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -580,6 +580,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
                 TextBoxButtonTextFace.TestImage( SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -595,6 +596,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
                 TextBoxButtonTextFace.TestImage( SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -610,6 +612,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
                 TextBoxButtonTextFace.TestImage( SDUIParent);
                 SetIsDirty();
                 SDUIParent.ChildChangesMade();
@@ -714,6 +717,8 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     TextBoxImageFace.Bill.ImageFileRelativePath = imageRelativePath;
                     SettingsManager.LastImageFileDirectory = directory;
+                    var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
+                    SDUIParent.TestImage(bitmap);
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
                     SetFormState();

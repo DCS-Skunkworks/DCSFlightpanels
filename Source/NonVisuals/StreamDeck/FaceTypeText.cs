@@ -18,10 +18,6 @@ namespace NonVisuals.StreamDeck
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
 
 
-        protected override void Initialise()
-        {
-            throw new NotImplementedException();
-        }
 
         protected override void DrawBitmap()
         {

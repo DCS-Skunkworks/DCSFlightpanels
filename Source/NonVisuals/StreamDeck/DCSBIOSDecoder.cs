@@ -5,12 +5,11 @@ using System.Globalization;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
-using NonVisuals.Saitek;
 
 namespace NonVisuals.StreamDeck
 {
     [Serializable]
-    public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener
+    public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener
     {
         private string _formula = "";
         private DCSBIOSOutput _dcsbiosOutput = null;
@@ -29,11 +28,13 @@ namespace NonVisuals.StreamDeck
         public DCSBIOSDecoder()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
+            
             _jaceId = RandomFactory.Get();
         }
 
         ~DCSBIOSDecoder()
         {
+            DCSBIOSStringManager.Detach(this);
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
         }
 

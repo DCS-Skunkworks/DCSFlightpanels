@@ -575,6 +575,10 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         _streamDeck.AddStreamDeckButtonToActiveLayer(streamDeckButton);
                     }
+                    else
+                    {
+                        _streamDeck.måste läggas till funktion för att radera en knapp i layer handler
+                    }
                     UCStreamDeckButtonAction.StateSaved();
                     UCStreamDeckButtonFace.StateSaved();
                     SetFormState();

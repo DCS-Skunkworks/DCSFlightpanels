@@ -6,8 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using ClassLibraryCommon;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Properties;
 using DCSFlightpanels.Shared;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -469,6 +467,7 @@ namespace DCSFlightpanels.Windows
                 if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.ImageFileRelativePath = imageRelativePath;
+                    TextBoxOutputTextOverlayImage.Text = imageRelativePath;
                     SettingsManager.LastImageFileDirectory = directory;
                     SetIsDirty();
                     SetFormState();

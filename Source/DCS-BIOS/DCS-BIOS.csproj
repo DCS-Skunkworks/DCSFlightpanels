@@ -124,8 +124,10 @@
     <Compile Include="DCSBIOSInput.cs" />
     <Compile Include="DCSBIOSOutput.cs" />
     <Compile Include="DCSBIOSOutputFormula.cs" />
+    <Compile Include="DCSBIOSString.cs" />
     <Compile Include="DCSBIOSStringListener.cs" />
     <Compile Include="DCSBIOSProtocolParser.cs" />
+    <Compile Include="DCSBIOSStringManager.cs" />
     <Compile Include="IDcsBiosListener.cs" />
     <Compile Include="IDCSBIOSStringListener.cs" />
     <Compile Include="JaceExtended.cs" />

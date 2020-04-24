@@ -13,7 +13,6 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using DCSFlightpanels.Properties;
 using DCSFlightpanels.Shared;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -151,7 +150,6 @@ namespace DCSFlightpanels.Windows
             }
             else if (_dcsbiosDecoder.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
             {
-
                 RadioButtonStringSource.IsChecked = true;
             }
 
@@ -277,8 +275,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                SetIsDirty();
                 SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
+                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -291,8 +289,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
-                SetIsDirty();
                 SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
+                SetIsDirty();
             }
             catch (Exception ex)
             {

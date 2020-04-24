@@ -2787,16 +2787,16 @@ namespace NonVisuals.Radios
 
                 //VHF COMM
                 _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_vhfCommDcsbiosOutputCockpitFrequency.Address, 7, this);
+                DCSBIOSStringManager.AddAddress(_vhfCommDcsbiosOutputCockpitFrequency.Address, 7, this);
 
                 //UHF
                 _uhfDcsbiosOutputCockpitPresetChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_PRESET");
                 _uhfDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("UHF_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_uhfDcsbiosOutputCockpitFrequency.Address, 6, this);
+                DCSBIOSStringManager.AddAddress(_uhfDcsbiosOutputCockpitFrequency.Address, 6, this);
 
                 //VHF NAV
                 _vhfNavDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFNAV_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_vhfNavDcsbiosOutputCockpitFrequency.Address, 6, this);
+                DCSBIOSStringManager.AddAddress(_vhfNavDcsbiosOutputCockpitFrequency.Address, 6, this);
 
                 //INTERCOMM
                 _intercommDcsbiosOutputCockpitPos = DCSBIOSControlLocator.GetDCSBIOSOutput("INT_MODE");

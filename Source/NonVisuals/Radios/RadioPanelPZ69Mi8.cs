@@ -2544,7 +2544,7 @@ namespace NonVisuals.Radios
 
                 //COM1
                 _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_r863ManualDcsbiosOutputCockpitFrequency.Address, 7, this);
+                DCSBIOSStringManager.AddAddress(_r863ManualDcsbiosOutputCockpitFrequency.Address, 7, this);
 
                 //COM2
                 _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_CNL_SEL");
@@ -2552,7 +2552,7 @@ namespace NonVisuals.Radios
 
                 //NAV1
                 _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("YADRO1A_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_yadro1ADcsbiosOutputCockpitFrequency.Address, 7, this);
+                DCSBIOSStringManager.AddAddress(_yadro1ADcsbiosOutputCockpitFrequency.Address, 7, this);
 
                 //NAV2
                 _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_PRST_CHAN_SEL");

@@ -2622,12 +2622,12 @@ namespace NonVisuals.Radios
                 _uhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_DIAL4_FREQ");
                 _uhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FUNCTION");
                 _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_REMOTE_DISP");
-                DCSBIOSStringListenerHandler.AddAddress(_uhfDcsbiosOutputSelectedChannel.Address, 7, this);
+                DCSBIOSStringManager.AddAddress(_uhfDcsbiosOutputSelectedChannel.Address, 7, this);
 
                 //VUHF
                 _vuhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_FREQ_MODE");
                 _vuhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_VUHF_REMOTE_DISP");
-                DCSBIOSStringListenerHandler.AddAddress(_vuhfDcsbiosOutputSelectedChannel.Address, 7, this);
+                DCSBIOSStringManager.AddAddress(_vuhfDcsbiosOutputSelectedChannel.Address, 7, this);
 
                 _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
                 _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");

@@ -10,7 +10,6 @@ using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Shared;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
-using StreamDeckSharp;
 
 namespace DCSFlightpanels.PanelUserControls
 {

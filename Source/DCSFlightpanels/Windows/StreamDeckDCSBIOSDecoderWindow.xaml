@@ -75,7 +75,7 @@
                     <GroupBox Header="DCS-BIOS Control Type">
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <RadioButton Name="RadioButtonIntegerSource" Content="Integer" GroupName="InputType"  Margin="10,0,0,0" IsChecked="True" Checked="RadioButtonIntegerSource_OnChecked"/>
-                            <RadioButton Name="RadioButtonStringSource" Content="String" GroupName="InputType" Margin="10,0,0,0" Checked="RadioButtonStringSource_OnChecked"/>
+                            <RadioButton Name="RadioButtonStringSource" Content="String NOT WORKING" GroupName="InputType" Margin="10,0,0,0" Checked="RadioButtonStringSource_OnChecked"/>
                             <CheckBox Name="CheckBoxStringAsNumber" Content="Treat string as number?"  Margin="10,0,0,0" Unchecked="CheckBoxStringAsNumber_Changed" Checked="CheckBoxStringAsNumber_Changed"/>
                         </StackPanel>
                     </GroupBox>

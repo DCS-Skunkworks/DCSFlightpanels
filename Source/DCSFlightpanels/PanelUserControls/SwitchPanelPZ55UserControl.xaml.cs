@@ -14,7 +14,6 @@ using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls
 {

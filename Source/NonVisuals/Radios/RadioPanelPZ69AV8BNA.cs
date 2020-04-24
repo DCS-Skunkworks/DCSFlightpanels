@@ -618,11 +618,11 @@ namespace NonVisuals.Radios
 
                 //V/UHF COMM1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_comm1DcsbiosOutputFreq.Address, 4, this);
+                DCSBIOSStringManager.AddAddress(_comm1DcsbiosOutputFreq.Address, 4, this);
 
                 //V/UHF COMM2
                 _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
-                DCSBIOSStringListenerHandler.AddAddress(_comm2DcsbiosOutputFreq.Address, 4, this);
+                DCSBIOSStringManager.AddAddress(_comm2DcsbiosOutputFreq.Address, 4, this);
 
                 StartListeningForPanelChanges();
                 //IsAttached = true;
