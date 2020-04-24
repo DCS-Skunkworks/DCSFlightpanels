@@ -10,13 +10,18 @@ namespace NonVisuals.StreamDeck
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
         private string _buttonText;
-        private Font _textFont = StreamDeckConstants.DefaultStreamDeckFont;
-        private Color _fontColor;
-        private Color _backgroundColor;
+        private Font _textFont = SettingsManager.DefaultFont;
+        private Color _fontColor = SettingsManager.DefaultFontColor;
+        private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
 
 
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
 
+
+        protected override void Initialise()
+        {
+            throw new NotImplementedException();
+        }
 
         protected override void DrawBitmap()
         {

@@ -112,6 +112,8 @@
                 <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobAll" IsReadOnly="True" KeyDown="TextBoxShortcutKeyDown" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
                 <Label Content="START" Height="23"  FontSize="10" />
                 <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobStart" IsReadOnly="True" KeyDown="TextBoxShortcutKeyDown" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                <customControl:StreamDeckFaceTextBox x:Name="TextBoxDCSBIOSDecoder"></customControl:StreamDeckFaceTextBox>
+                <Button Name="ButtonTEXT" Height="30" Click="ButtonTEXT_OnClick"></Button>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Lower Row"  FontSize="10" Grid.Column="2" Grid.Row="2" Grid.RowSpan="4">

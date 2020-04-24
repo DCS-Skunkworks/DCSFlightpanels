@@ -4,7 +4,14 @@
         xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
-        Title="About FlightPanels" Height="828" Width="865" Loaded="WindowLoaded" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
+        Title="About FlightPanels" 
+        Height="828" 
+        Width="865" 
+        Loaded="WindowLoaded" 
+        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" 
+        ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen"
+        KeyDown="AboutWindow_OnKeyDown">
 
     <controls:Grid>
         <StackPanel VerticalAlignment="Top" Width="860" Height="800">

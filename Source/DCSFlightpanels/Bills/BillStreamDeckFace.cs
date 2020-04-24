@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using NonVisuals;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Drawing.Color;
@@ -14,7 +15,7 @@ namespace DCSFlightpanels.Bills
         private ActionTypeLayer _streamDeckTargetLayer;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
-        private Font _textFont = StreamDeckConstants.DefaultStreamDeckFont;
+        private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = Color.Black;
         private Color _backgroundColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE);
         private bool _isSelected = false;
@@ -123,7 +124,7 @@ namespace DCSFlightpanels.Bills
             
         }
 
-        public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE) && FontColor == Color.Black && TextFont.Name == StreamDeckConstants.DEFAULT_FONT;
+        //public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE) && FontColor == Color.Black && TextFont.Name == StreamDeckConstants.DEFAULT_FONT;
         
         public string BackgroundHex => "#" + _backgroundColor.R.ToString("X2") + _backgroundColor.G.ToString("X2") + _backgroundColor.B.ToString("X2");
 

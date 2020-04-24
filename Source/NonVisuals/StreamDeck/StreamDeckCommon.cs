@@ -7,7 +7,7 @@ using ClassLibraryCommon;
 
 namespace NonVisuals.StreamDeck
 {
-    public static class CommonStreamDeck
+    public static class StreamDeckCommon
     {
         public static BitmapImage ConvertBitMap(Bitmap bitmap)
         {
@@ -36,6 +36,10 @@ namespace NonVisuals.StreamDeck
 
         public static EnumComparator ComparatorValue(string text)
         {
+            if (text == "NotSet")
+            {
+                return EnumComparator.NotSet;
+            }
             if (text == "==")
             {
                 return EnumComparator.Equals;
@@ -71,6 +75,11 @@ namespace NonVisuals.StreamDeck
         {
             switch (comparator)
             {
+                case EnumComparator.NotSet:
+                    {
+                        comboBox.Text = "NotSet";
+                        break;
+                    }
                 case EnumComparator.Equals:
                     {
                         comboBox.Text = "==";

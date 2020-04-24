@@ -86,6 +86,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
@@ -129,6 +130,11 @@
     <Compile Include="Interfaces\IStreamDeckListener.cs" />
     <Compile Include="JaceExtendedFactory.cs" />
     <Compile Include="KeyPressInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="RandomFactory.cs" />
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
@@ -139,9 +145,10 @@
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
     <Compile Include="Saitek\SaitekConstants.cs" />
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
-    <Compile Include="StreamDeck\CommonStreamDeck.cs" />
+    <Compile Include="StreamDeck\StreamDeckCommon.cs" />
     <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />
     <Compile Include="StreamDeck\ActionTypeDCSBIOS.cs" />
     <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingPZ69.cs" />
@@ -282,6 +289,10 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

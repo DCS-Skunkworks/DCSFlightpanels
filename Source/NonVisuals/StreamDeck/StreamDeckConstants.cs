@@ -12,7 +12,6 @@ namespace NonVisuals.StreamDeck
         public static readonly string StreamDeckGalleryBackWhite = "back_white.png";
         public static readonly string DCSBIOSValuePlaceHolder = "{dcsbios}";
 
-        public static readonly Font DefaultStreamDeckFont = new Font("Lucida Console", 10);
         public const string BACK = "BACK";
         public const string GO_BACK_ONE_LAYER_STRING = "Go Back";
         public const string GO_TO_HOME_LAYER_STRING = "Go to Home";
@@ -22,7 +21,7 @@ namespace NonVisuals.StreamDeck
         public const string SEVERAL_HOME_LAYER_FOUND = "Several layers has been marked as Home Layer.\n Only Home layer must be set.";
 
         public const int ADJUST_OFFSET_CHANGE_VALUE = 2;
-        public const string DEFAULT_FONT = "Lucida Console";
+        //public const string DEFAULT_FONT = "Lucida Console";
         public const int STREAMDECK_ICON_HEIGHT = 72;
         public const int STREAMDECK_ICON_WIDTH = 72;
         public const string NUMBER_BUTTON_LOCATION = @"pack://application:,,,/dcsfp;component/StreamDeckGallery/NumberButtons/";

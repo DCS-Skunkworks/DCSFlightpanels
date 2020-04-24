@@ -15,23 +15,23 @@ namespace NonVisuals.StreamDeck
         {
             return   new BitmapImage(new Uri( StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
         }
-
+        /*
         public static Bitmap CreateBitmapImage(string text, int fontSize, int height, int width, Color fontColor, Color backgroundColor)
         {
             return CreateBitmapImage(text, fontSize, FontStyle.Regular, height, width, fontColor, backgroundColor);
         }
-
+        */
         public static Bitmap CreateBitmapImage(string text, Font font, Color fontColor, Color backgroundColor)
         {
             return CreateBitmapImage(text, font, 0, 0, 0, 0, fontColor, backgroundColor, null,true);
         }
 
-        public static Bitmap CreateBitmapImage(string text, int fontSize, FontStyle fontStyle, int height, int width, Color fontColor, Color backgroundColor)
+        /*public static Bitmap CreateBitmapImage(string text, int fontSize, FontStyle fontStyle, int height, int width, Color fontColor, Color backgroundColor)
         {
             // Create the Font object for the image text drawing.
             var font = new Font(StreamDeckConstants.DEFAULT_FONT, fontSize, fontStyle, GraphicsUnit.Pixel);
             return CreateBitmapImage(text, font, 0, 0, height, width, fontColor, backgroundColor);
-        }
+        }*/
 
         public static Bitmap CreateStreamDeckBitmap(string text, Font font, Color fontColor, int offsetX, int offsetY, Bitmap backgroundBitmap)
         {

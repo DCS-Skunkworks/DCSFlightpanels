@@ -14,6 +14,7 @@ using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -1874,6 +1875,38 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        
+
+        private void ButtonTEXT_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                StreamDeckDCSBIOSDecoderWindow streamDeckDCSBIOSDecoderWindow = null;
+
+                TextBoxDCSBIOSDecoder.Bill = new BillStreamDeckFace();
+                TextBoxDCSBIOSDecoder.Bill.TextBox = TextBoxDCSBIOSDecoder;
+
+                var instanceId = @"\\?\hid#vid_0fd9&pid_0060#6&25d3ea36&1&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}";
+                if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
+                {
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, instanceId);
+                }
+                else
+                {
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(instanceId);
+                }
+
+                streamDeckDCSBIOSDecoderWindow.ShowDialog();
+
+                if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
+                {
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
     }
 }

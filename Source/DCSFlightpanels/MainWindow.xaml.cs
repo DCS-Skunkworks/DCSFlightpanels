@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
+using DCSFlightpanels.Shared;
 using DCSFlightpanels.Windows;
 using Microsoft.Win32;
 using NonVisuals;
@@ -1034,13 +1035,15 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (_profileHandler.IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                if (CommonUI.DoDiscardAfterMessage(_profileHandler.IsDirty))
+                {
+                    Settings.Default.LastProfileFileUsed = _profileHandler.LastProfileUsed;
+                    Settings.Default.Save();
+                }
+                else
                 {
                     e.Cancel = true;
                 }
-
-                Settings.Default.LastProfileFileUsed = _profileHandler.LastProfileUsed;
-                Settings.Default.Save();
             }
             catch (Exception ex)
             {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
+using NonVisuals.Saitek;
 
 namespace NonVisuals.StreamDeck
 {
@@ -17,11 +17,12 @@ namespace NonVisuals.StreamDeck
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated;
         private string _lastFormulaError = "";
+        private bool _useFormula = false;
         private double _formulaResult = 0;
         [NonSerialized] private int _jaceId = 0;
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
         private bool _treatStringAsNumber = false;
-
+        private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
 
 
 
@@ -141,9 +142,15 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        private bool UseFormula
+        /*private bool UseFormula
         {
             get => !string.IsNullOrEmpty(_formula) && (_dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE || _dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber);
+        }*/
+
+        public bool UseFormula
+        {
+            get => _useFormula;
+            set => _useFormula = value;
         }
 
         private void ShowBitmap(Bitmap bitmap)
@@ -273,5 +280,34 @@ namespace NonVisuals.StreamDeck
             get => _dcsBiosOutputType;
             set => _dcsBiosOutputType = value;
         }
+
+        public EnumDCSBIOSDecoderOutputType DecoderOutputType
+        {
+            get => _decoderOutputType;
+            set => _decoderOutputType = value;
+        }
+
+
+        /*
+         * It can have integer | string + treat as number | string input
+         * It can have raw / converter output
+         */
+        public bool ConfigurationIsOK()
+        {
+            var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
+            var outputIsOK = _decoderOutputType == EnumDCSBIOSDecoderOutputType.Raw ? base.ConfigurationOK : convertersOK;
+            var formulaIsOK = _useFormula ? !string.IsNullOrEmpty(_formula) : true;
+            var sourceIsOK = _dcsbiosOutput != null;
+
+            return convertersOK && outputIsOK && formulaIsOK && sourceIsOK;
+        }
+
+
+    }
+
+    public enum EnumDCSBIOSDecoderOutputType
+    {
+        Raw,
+        Converter
     }
 }

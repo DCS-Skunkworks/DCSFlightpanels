@@ -10,13 +10,21 @@ namespace NonVisuals.StreamDeck
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOS;
         private string _buttonText;
-        private Font _textFont = StreamDeckConstants.DefaultStreamDeckFont;
-        private Color _fontColor;
-        private Color _backgroundColor;
+        private Font _textFont = SettingsManager.DefaultFont;
+        private Color _fontColor = SettingsManager.DefaultFontColor;
+        private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
         private uint _uintDcsBiosValue = 0;
         private string _stringDcsBiosValue = "";
 
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
+
+        protected override void Initialise()
+        {
+            if (_fontColor == null)
+            {
+
+            }
+        }
 
         protected override void DrawBitmap()
         {

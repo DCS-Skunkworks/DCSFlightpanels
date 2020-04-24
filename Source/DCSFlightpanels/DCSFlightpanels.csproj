@@ -155,7 +155,8 @@
     </Compile>
     <Compile Include="Bills\BillBaseOutput.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Shared\StreamDeckCommon.cs" />
+    <Compile Include="Shared\CommonUI.cs" />
+    <Compile Include="Shared\StreamDeckUICommon.cs" />
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckImage.cs" />

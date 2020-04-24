@@ -13,11 +13,20 @@ namespace NonVisuals.StreamDeck
         private bool _refreshBitmap = true;
         private string _imageFile;
         private KeyBitmap _keyBitmap;
+        private Font _font = SettingsManager.DefaultFont;
+        private Color _fontColor = SettingsManager.DefaultFontColor;
+        private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
+
 
 
 
         public bool ConfigurationOK => !string.IsNullOrEmpty(_imageFile);
 
+
+        protected override void Initialise()
+        {
+            throw new NotImplementedException();
+        }
 
         protected override void DrawBitmap()
         {
@@ -41,15 +50,36 @@ namespace NonVisuals.StreamDeck
 
         [JsonIgnore]
         public string Text { get; set; }
+        
+        public Font TextFont
+        {
+            get => _font;
+            set
+            {
+                SettingsManager.DefaultFont = value;
+                _font = value;
+            }
+        }
 
-        [JsonIgnore]
-        public Font TextFont { get; set; } = StreamDeckConstants.DefaultStreamDeckFont;
+        public Color FontColor
+        {
+            get => _fontColor;
+            set
+            {
+                SettingsManager.DefaultFontColor = value;
+                _fontColor = value;
+            }
+        }
 
-        [JsonIgnore]
-        public Color FontColor { get; set; }
-
-        [JsonIgnore]
-        public Color BackgroundColor { get; set; }
+        public Color BackgroundColor
+        {
+            get => _backgroundColor;
+            set
+            {
+                SettingsManager.DefaultBackgroundColor = value;
+                _backgroundColor = value;
+            }
+        }
 
         public string ImageFile
         {

@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
+        xmlns:commonCodeUI="clr-namespace:DCSFlightpanels.Shared"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Converter" Height="350" Width="800"  Loaded="StreamDeckDCSBIOSConverterWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        KeyDown="StreamDeckDCSBIOSConverterWindow_OnKeyDown"
+        Title="Converter" Height="400" Width="800"  Loaded="StreamDeckDCSBIOSConverterWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
     <Window.Resources>
         <Image x:Key="UpArrow" Source="/dcsfp;component/Images/up_arrow.png"/>
         <Image x:Key="DownArrow" Source="/dcsfp;component/Images/down_arrow.png"/>
@@ -44,14 +46,17 @@
                         <ComboBoxItem>&gt;</ComboBoxItem>
                         <ComboBoxItem>&gt;=</ComboBoxItem>
                         <ComboBoxItem Name="ComboBoxItemAlways1">Always</ComboBoxItem>
+                        <ComboBoxItem>NotSet</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
                 <TextBox Name="TextBoxReferenceValue1" Width="40" Height="23" VerticalAlignment="Top" KeyUp="TextBoxReferenceValue_OnKeyUp"/>
+
+                <StackPanel Name="StackPanelAddSecondCriteria" Orientation="Horizontal" HorizontalAlignment="Left" Margin="21,0,0,0">
+                    <Button Name="ButtonAddSecondCriteria" ToolTip="Add 2nd criteria" Content="+" FontSize="15" FontWeight="Bold" Width="25" Height="25" VerticalContentAlignment="Center" Click="ButtonAddSecondCriteria_OnClick"/>
+                </StackPanel>
             </StackPanel>
 
-            <StackPanel Name="StackPanelAddSecondCriteria" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,5,5,0">
-                <Button Name="ButtonAddSecondCriteria" ToolTip="Add 2nd criteria" Content="+" FontSize="15" FontWeight="Bold" Width="25" Height="25" VerticalContentAlignment="Center" Click="ButtonAddSecondCriteria_OnClick"/>
-            </StackPanel>
+
 
             <StackPanel Name="StackPanelSecondCriteria" Orientation="Horizontal" Margin="0,5,5,0">
                 <Label Content="and {dcsbios}" Margin="5,0,0,0" FontWeight="DemiBold" />
@@ -63,6 +68,7 @@
                         <ComboBoxItem>&lt;=</ComboBoxItem>
                         <ComboBoxItem>&gt;</ComboBoxItem>
                         <ComboBoxItem>&gt;=</ComboBoxItem>
+                        <ComboBoxItem>NotSet</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
                 <TextBox Name="TextBoxReferenceValue2" Width="40" Height="23" VerticalAlignment="Top" KeyUp="TextBoxReferenceValue_OnKeyUp"/>
@@ -85,29 +91,29 @@
                 </StackPanel>
             </GroupBox>
 
-            <StackPanel Name="StackPanelAsIs" HorizontalAlignment="Left" Margin="0,0,5,0" Visibility="Visible">
+            <StackPanel Name="StackPanelRaw" HorizontalAlignment="Left" Margin="0,0,5,0" Visibility="Visible">
                 <GroupBox Header="Settings" HorizontalAlignment="Stretch">
                     <StackPanel HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputTextAsIs" Width="72" Height="72" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputTextRaw" Width="72" Height="72" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
-                                <RepeatButton Name="RepeatButtonActionPressUpAsIs" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressDownAsIs" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressLeftAsIs" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressRightAsIs" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
+                                <RepeatButton Name="RepeatButtonPressUpRaw" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
+                                <RepeatButton Name="RepeatButtonPressDownRaw" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
+                                <RepeatButton Name="RepeatButtonPressLeftRaw" Content="{StaticResource LeftArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressLeft_OnClick"/>
+                                <RepeatButton Name="RepeatButtonPressRightRaw" Content="{StaticResource RightArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressRight_OnClick"/>
                             </StackPanel>
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" >
-                                    <Button Name="ButtonTextFaceFontAsIs" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
-                                    <Button Name="ButtonTextFaceFontColorAsIs" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
+                                    <Button Name="ButtonTextFaceFontRaw" Width="40" Height="20" Content="Font" Margin="10,2,2,0" Click="ButtonTextFaceFont_OnClick"/>
+                                    <Button Name="ButtonTextFaceFontColorRaw" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
-                                    <Button Name="ButtonTextFaceBackgroundColorAsIs" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
-                                    <Button Name="ButtonTestTextFaceAsIs" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
+                                    <Button Name="ButtonTextFaceBackgroundColorRaw" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
+                                    <Button Name="ButtonTestTextFaceRaw" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/> 
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                        <Label Name="LabelInsertAsIs" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
+                        <Label Name="LabelInsertRaw" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
@@ -119,7 +125,7 @@
                         <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" IsReadOnly="True" x:Name="TextBoxImage"  IsEnabled="False" Background="LightSteelBlue"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Button Name="ButtonBrowseImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseImage_OnClick"/>
-                            <Button Name="ButtonTestSelectImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
+                            <Button Name="ButtonTestSelectImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -131,10 +137,10 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBox Name="TextBoxOutputTextOverlayImage" Width="72" Height="72" HorizontalAlignment="Left" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
-                                <RepeatButton Name="RepeatButtonActionPressUpOverlay" Content="{StaticResource UpArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressUp_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressDown_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressLeftOverlay" Content="{StaticResource LeftArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressLeft_OnClick"/>
-                                <RepeatButton Name="RepeatButtonActionPressRightOverlay" Content="{StaticResource RightArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonActionPressRight_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressUpOverlay" Content="{StaticResource UpArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressLeftOverlay" Content="{StaticResource LeftArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressLeft_OnClick"/>
+                                <RepeatButton Name="RepeatButtonActionPressRightOverlay" Content="{StaticResource RightArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressRight_OnClick"/>
                             </StackPanel>
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal" >
@@ -143,7 +149,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
                                     <Button Name="ButtonTextFaceBackgroundColorOverlay" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
-                                    <Button Name="ButtonTestTextFaceOverlay" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
+                                    <Button Name="ButtonTestTextFaceOverlay" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -153,7 +159,7 @@
                         <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" Width="300" IsReadOnly="True" x:Name="TextBoxOverlayImage"  IsEnabled="False" Background="LightSteelBlue"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Button Name="ButtonBrowseOverlayImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseImage_OnClick"/>
-                            <Button Name="ButtonTestSelectOverlayImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestImage_OnClick"/>
+                            <Button Name="ButtonTestSelectOverlayImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

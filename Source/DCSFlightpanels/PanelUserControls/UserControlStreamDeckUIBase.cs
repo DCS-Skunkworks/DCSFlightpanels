@@ -7,6 +7,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Shared;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using StreamDeckSharp;
@@ -336,7 +337,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (SelectedButtonName != image.Bill.StreamDeckButtonName && (SDUIParent.ActionPanel.IsDirty || SDUIParent.FacePanel.IsDirty))
                 {
-                    if (MessageBox.Show("Discard Changes to " + SelectedButtonName + " ?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    if (CommonUI.DoDiscardAfterMessage(true, "Discard Changes to " + SelectedButtonName + " ?"))
                     {
                         SDUIParent.ActionPanel.Clear();
                         SDUIParent.FacePanel.Clear();

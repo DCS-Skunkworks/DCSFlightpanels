@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -8,6 +9,7 @@ using ClassLibraryCommon;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Shared;
+using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using ComboBox = System.Windows.Controls.ComboBox;
@@ -56,8 +58,8 @@ namespace DCSFlightpanels.Windows
                 }
 
                 ShowConverter();
-                SetFormState();
                 _isLoaded = true;
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -69,42 +71,37 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (ComboBoxItemAlways1.IsEnabled)
+                if (!_isLoaded)
+                {
+                    return;
+                }
+
+                if (_dcsbiosConverter.OutputType == EnumConverterOutputType.NotSet)
+                {
+                    StackPanelRaw.Visibility = Visibility.Collapsed;
+                    StackPanelImage.Visibility = Visibility.Collapsed;
+                    StackPanelOverlayImage.Visibility = Visibility.Collapsed;
+                }
+
+                if (StreamDeckCommon.ComparatorValue(ComboBoxComparisonType1.Text) == EnumComparator.NotSet || StreamDeckCommon.ComparatorValue(ComboBoxComparisonType1.Text) == EnumComparator.Always)
                 {
                     StackPanelSecondCriteria.Visibility = Visibility.Collapsed;
                     StackPanelAddSecondCriteria.Visibility = Visibility.Visible;
                 }
+                ButtonAddSecondCriteria.IsEnabled = ComboBoxComparisonType1.SelectedItem.Equals(ComboBoxItemAlways1) == false;
 
-                var criteria1DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue1.Text) && SelectedComparator1 != EnumComparator.None;
-                var criteria2DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue2.Text) && SelectedComparator2 != EnumComparator.None;
+                var criteria1DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue1.Text) && SelectedComparator1 != EnumComparator.NotSet;
+                var criteria2DataOK = !string.IsNullOrEmpty(TextBoxReferenceValue2.Text) && SelectedComparator2 != EnumComparator.NotSet;
 
-                var criteriaOK = (Use2Criteria ? criteria2DataOK : true) && criteria1DataOK;
+                var referenceValuesOK = Use2Criteria ? double.TryParse(TextBoxReferenceValue1.Text, out var result1) && double.TryParse(TextBoxReferenceValue2.Text, out var result2) : double.TryParse(TextBoxReferenceValue1.Text, out var result3);
 
 
-                //if(Use2Criteria)
-                //ButtonOk.IsEnabled = ;
-                /*TextBoxReferenceValue.IsEnabled = GetEnumValue() != EnumComparator.Always;
-                TextBoxReferenceValue.Background = GetEnumValue() != EnumComparator.Always ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Colors.LightGray);
 
-                switch (GetEnumValue())
-                {
-                    case EnumComparator.Always:
-                        {
-                            ButtonOk.IsEnabled = !string.IsNullOrEmpty(TextBoxOutputText.Text) &&
-                                                 !string.IsNullOrEmpty(ComboBoxComparisonType.Text);
-                            break;
-                        }
-                    default:
-                        {
-                            ButtonOk.IsEnabled = !string.IsNullOrEmpty(TextBoxReferenceValue.Text) &&
-                                                 double.TryParse(TextBoxReferenceValue.Text, out var value) &&
-                                                 !string.IsNullOrEmpty(TextBoxOutputText.Text) &&
-                                                 !string.IsNullOrEmpty(ComboBoxComparisonType.Text);
-                            break;
-                        }
-                }
-                */
+                var criteriaOK = (Use2Criteria ? criteria2DataOK : true) && criteria1DataOK && referenceValuesOK;
 
+                ButtonOk.IsEnabled = criteriaOK && _dcsbiosConverter.FaceConfigurationIsOK && IsDirty;
+
+                UpdateFontInfo();
             }
             catch (Exception ex)
             {
@@ -117,12 +114,20 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                DialogResult = false;
-                Close();
+                CancelWindow();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
+        private void CancelWindow()
+        {
+            if (CommonUI.DoDiscardAfterMessage(_isDirty))
+            {
+                DialogResult = false;
+                Close();
             }
         }
 
@@ -130,14 +135,8 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                /*_dcsbiosConverter.OutputText = TextBoxOutputText.Text;
-                if (GetEnumValue() != EnumComparator.Always)
-                {
-                    _dcsbiosConverter.ReferenceValue = UInt32.Parse(TextBoxReferenceValue.Text);
-                }
-                _dcsbiosConverter.Comparator = GetEnumValue();
                 DialogResult = true;
-                Close();*/
+                Close();
             }
             catch (Exception ex)
             {
@@ -153,6 +152,8 @@ namespace DCSFlightpanels.Windows
 
         public DCSBIOSConverter DCSBIOSConverter => _dcsbiosConverter;
 
+        private string lastChecked1 = "";
+        private string lastChecked2 = "";
         private void TextBoxReferenceValue_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -164,25 +165,36 @@ namespace DCSFlightpanels.Windows
 
                 if (sender.Equals(TextBoxReferenceValue1))
                 {
-                    if (!TextBoxReferenceValue1.ValidateDouble(true))
+                    if (lastChecked1 != TextBoxReferenceValue1.Text && !TextBoxReferenceValue1.ValidateDouble(true))
                     {
+                        lastChecked1 = TextBoxReferenceValue1.Text;
                         SetIsDirty();
                         return;
                     }
-                    _dcsbiosConverter.ReferenceValue1 = double.Parse(TextBoxReferenceValue1.Text);
+
+                    if (!double.TryParse(TextBoxReferenceValue1.Text, out var result))
+                    {
+                        _dcsbiosConverter.ReferenceValue1 = result;
+                        SetIsDirty();
+                    }
+
                     SetFormState();
-                    SetIsDirty();
+
                 }
                 if (sender.Equals(TextBoxReferenceValue2))
                 {
-                    if (!TextBoxReferenceValue2.ValidateDouble(true ))
+                    if (lastChecked2 != TextBoxReferenceValue2.Text && !TextBoxReferenceValue2.ValidateDouble(true))
                     {
+                        lastChecked2 = TextBoxReferenceValue2.Text;
                         SetIsDirty();
                         return;
                     }
-                    _dcsbiosConverter.ReferenceValue2 = double.Parse(TextBoxReferenceValue2.Text);
-                    SetFormState();
-                    SetIsDirty();
+
+                    if (!double.TryParse(TextBoxReferenceValue2.Text, out var result))
+                    {
+                        _dcsbiosConverter.ReferenceValue2 = result;
+                        SetIsDirty();
+                    }
                 }
             }
             catch (Exception ex)
@@ -232,9 +244,9 @@ namespace DCSFlightpanels.Windows
             try
             {
                 TextBox textBox = null;
-                if (sender.Equals(LabelInsertAsIs))
+                if (sender.Equals(LabelInsertRaw))
                 {
-                    textBox = TextBoxOutputTextAsIs;
+                    textBox = TextBoxOutputTextRaw;
                 }
                 if (sender.Equals(LabelInsertOverlayImage))
                 {
@@ -244,6 +256,9 @@ namespace DCSFlightpanels.Windows
                 {
                     textBox.Text = string.IsNullOrEmpty(textBox.Text) ? StreamDeckConstants.DCSBIOSValuePlaceHolder : StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + textBox.Text;
                     textBox.CaretIndex = textBox.Text.Length;
+                    
+                    _dcsbiosConverter.ButtonText = textBox.Text;
+                    SetIsDirty();
                     SetFormState();
                 }
             }
@@ -257,42 +272,53 @@ namespace DCSFlightpanels.Windows
         private void ShowConverter()
         {
             _isPopulatingData = true;
-            SecondCriteriaVisibility(_dcsbiosConverter.Comparator2 != EnumComparator.None);
+            SecondCriteriaVisibility(_dcsbiosConverter.Comparator1 != EnumComparator.Always);
+
+            TextBoxReferenceValue1.Text = _dcsbiosConverter.ReferenceValue1.ToString(CultureInfo.InvariantCulture);
+            TextBoxReferenceValue2.Text = _dcsbiosConverter.ReferenceValue2.ToString(CultureInfo.InvariantCulture);
+
+            TextBoxOutputTextRaw.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
+            TextBoxOutputTextOverlayImage.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
 
             switch (_dcsbiosConverter.OutputType)
             {
                 case EnumConverterOutputType.NotSet:
                     {
-                        StackPanelAsIs.Visibility = Visibility.Collapsed;
+                        StackPanelRaw.Visibility = Visibility.Collapsed;
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                         break;
                     }
                 case EnumConverterOutputType.Raw:
                     {
-                        StackPanelAsIs.Visibility = Visibility.Visible;
+                        StackPanelRaw.Visibility = Visibility.Visible;
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
+                        RadioButtonDCSBIOSValue.IsChecked = true;
                         break;
                     }
                 case EnumConverterOutputType.Image:
                     {
-                        StackPanelAsIs.Visibility = Visibility.Collapsed;
+                        StackPanelRaw.Visibility = Visibility.Collapsed;
                         StackPanelImage.Visibility = Visibility.Visible;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
+                        RadioButtonImage.IsChecked = true;
                         break;
                     }
                 case EnumConverterOutputType.ImageOverlay:
                     {
-                        StackPanelAsIs.Visibility = Visibility.Collapsed;
+                        StackPanelRaw.Visibility = Visibility.Collapsed;
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Visible;
+                        RadioButtonOverlayImage.IsChecked = true;
                         break;
                     }
             }
 
-
-//            SetComboBoxValue();
+            StreamDeckCommon.SetComparatorValue(ComboBoxComparisonType1, _dcsbiosConverter.Comparator1);
+            StreamDeckCommon.SetComparatorValue(ComboBoxComparisonType2, _dcsbiosConverter.Comparator2);
+            
+            UpdateFontInfo();
             _isPopulatingData = false;
         }
 
@@ -305,20 +331,21 @@ namespace DCSFlightpanels.Windows
                 infoWindow.AddInline("Most DCS-BIOS values must be formatted to human readable values. These values usually range between ");
                 infoWindow.AddInline(new Run("0-65535.\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline("Heading for example must be calculated from this to a proper value ");
-                infoWindow.AddInline(new Run("0-359°.\n") { FontWeight = FontWeights.Bold });
+                infoWindow.AddInline(new Run("0°-359°.\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline("This is the formula for the A-10C HSI heading:\n");
                 infoWindow.AddInline(new Run("360 - truncate(HSI_HDG*360/65535)\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline("\n");
                 infoWindow.AddInline("Some DCS-BIOS values are useless in the number format, one example is a radio's dial position.\n");
                 infoWindow.AddInline("\n");
-                infoWindow.AddInline("Here you can decode values so that the various dial positions will be translated into text like OFF MANUAL PRESET and so on.\n");
+                infoWindow.AddInline("Here you can convert DCS-BIOS values to have unique images / texts based on DCS-BIOS value.\n");
+                infoWindow.AddInline("A radio can based on a dial's position show texts : OFF MANUAL PRESET and so on.\n");
                 infoWindow.AddInline("");
-                infoWindow.AddInline("If you want to show units after the value you can do this here too. Choose comparion mode \"Always\" for this.\n");
+                infoWindow.AddInline("If you want to show units after the value you can do this here too. Choose comparison mode \"Always\" for this.\n");
                 infoWindow.AddInline(new Run("7400 RPM\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline(new Run("242°\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline(new Run("180°C\n") { FontWeight = FontWeights.Bold });
                 infoWindow.AddInline("\n");
-                infoWindow.AddInline("You can have different colors for different temperature ranges.");
+                infoWindow.AddInline("You can also have different colors for different temperature ranges.");
                 infoWindow.Show();
             }
             catch (Exception ex)
@@ -331,6 +358,22 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                ComboBox comboBox;
+                if (sender.Equals(ComboBoxComparisonType1))
+                {
+                    comboBox = ComboBoxComparisonType1;
+                }
+                else
+                {
+                    comboBox = ComboBoxComparisonType2;
+                }
+
+                if (_dcsbiosConverter.Comparator1 != StreamDeckCommon.ComparatorValue(comboBox.Text))
+                {
+                    _dcsbiosConverter.Comparator1 = StreamDeckCommon.ComparatorValue(comboBox.Text);
+                    SetIsDirty();
+                }
+
                 SetFormState();
             }
             catch (Exception ex)
@@ -360,6 +403,8 @@ namespace DCSFlightpanels.Windows
                 StackPanelAddSecondCriteria.Visibility = Visibility.Visible;
                 StackPanelSecondCriteria.Visibility = Visibility.Collapsed;
                 ComboBoxItemAlways1.IsEnabled = true;
+                _dcsbiosConverter.Comparator2 = EnumComparator.NotSet;
+                _dcsbiosConverter.ReferenceValue2 = 0;
             }
             catch (Exception ex)
             {
@@ -371,7 +416,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                StackPanelAsIs.Visibility = Visibility.Visible;
+                StackPanelRaw.Visibility = Visibility.Visible;
                 StackPanelImage.Visibility = Visibility.Collapsed;
                 StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                 _dcsbiosConverter.OutputType = EnumConverterOutputType.Raw;
@@ -386,7 +431,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                StackPanelAsIs.Visibility = Visibility.Collapsed;
+                StackPanelRaw.Visibility = Visibility.Collapsed;
                 StackPanelImage.Visibility = Visibility.Visible;
                 StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                 _dcsbiosConverter.OutputType = EnumConverterOutputType.Image;
@@ -401,7 +446,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                StackPanelAsIs.Visibility = Visibility.Collapsed;
+                StackPanelRaw.Visibility = Visibility.Collapsed;
                 StackPanelImage.Visibility = Visibility.Collapsed;
                 StackPanelOverlayImage.Visibility = Visibility.Visible;
                 _dcsbiosConverter.OutputType = EnumConverterOutputType.ImageOverlay;
@@ -417,14 +462,14 @@ namespace DCSFlightpanels.Windows
             try
             {
                 var imageRelativePath = "";
-                var directory = Settings.Default.LastFileDialogLocation;
+                var directory = SettingsManager.LastImageFileDirectory;
 
-                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref imageRelativePath);
+                var dialogResult = StreamDeckUICommon.BrowseForImage(ref directory, ref imageRelativePath);
 
                 if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.ImageFileRelativePath = imageRelativePath;
-                    Settings.Default.LastFileDialogLocation = directory;
+                    SettingsManager.LastImageFileDirectory = directory;
                     SetIsDirty();
                     SetFormState();
                 }
@@ -435,7 +480,7 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void ButtonTestImage_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonTestDCSBIOSDecoder_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -452,6 +497,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosConverter.ButtonText = ((TextBox) sender).Text;
+                SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -459,12 +506,15 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void RepeatButtonActionPressUp_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _dcsbiosConverter.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetY = _dcsbiosConverter.OffsetY;
                 TestImage();
+                SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -472,12 +522,15 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void RepeatButtonActionPressDown_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressDown_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _dcsbiosConverter.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetY = _dcsbiosConverter.OffsetY;
                 TestImage();
+                SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -485,12 +538,15 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void RepeatButtonActionPressLeft_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _dcsbiosConverter.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetX = _dcsbiosConverter.OffsetX;
                 TestImage();
+                SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -498,12 +554,15 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void RepeatButtonActionPressRight_OnClick(object sender, RoutedEventArgs e)
+        private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _dcsbiosConverter.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetX = _dcsbiosConverter.OffsetX;
                 TestImage();
+                SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -520,11 +579,12 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var font = Settings.Default.ButtonTextFaceFont;
+                var font = SettingsManager.DefaultFont;
 
-                if (StreamDeckCommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
+                if (StreamDeckUICommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.TextFont = font;
+                    SettingsManager.DefaultFont = font;
                     TestImage();
                     UpdateFontInfo();
                     SetFormState();
@@ -542,9 +602,10 @@ namespace DCSFlightpanels.Windows
             {
                 var color = Color.Transparent;
 
-                if (StreamDeckCommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
+                if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.FontColor = color;
+                    SettingsManager.DefaultFontColor = color;
                     SetIsDirty();
                     UpdateFontInfo();
                     SetFormState();
@@ -562,9 +623,10 @@ namespace DCSFlightpanels.Windows
             {
                 var color = Color.Transparent;
 
-                if (StreamDeckCommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
+                if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.BackgroundColor = color;
+                    SettingsManager.DefaultBackgroundColor = color;
                     SetIsDirty();
                     UpdateFontInfo();
                     SetFormState();
@@ -578,6 +640,11 @@ namespace DCSFlightpanels.Windows
 
         private void UpdateFontInfo()
         {
+            if (_dcsbiosConverter.OutputType == EnumConverterOutputType.NotSet)
+            {
+                return;
+            }
+
             TextBoxFontInfo.Text = "Font : " + _dcsbiosConverter.TextFont.Name + " " +
                                    _dcsbiosConverter.TextFont.Size + " " +
                                    (_dcsbiosConverter.TextFont.Bold ? "Bold" : "Regular");
@@ -590,51 +657,18 @@ namespace DCSFlightpanels.Windows
             get => StackPanelSecondCriteria.Visibility == Visibility.Visible;
         }
 
-        private EnumComparator SelectedComparator1 => (EnumComparator)ComboBoxComparisonType1.SelectedItem;
+        private EnumComparator SelectedComparator1 => StreamDeckCommon.ComparatorValue(ComboBoxComparisonType1.Text);
 
-        private EnumComparator SelectedComparator2 => (EnumComparator)ComboBoxComparisonType2.SelectedItem;
+        private EnumComparator SelectedComparator2 => StreamDeckCommon.ComparatorValue(ComboBoxComparisonType2.Text);
 
-        private EnumConverterOutputType OutputType
+
+        private void StreamDeckDCSBIOSConverterWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            get
+            if (e.Key == Key.Escape)
             {
-                if (RadioButtonDCSBIOSValue.IsChecked == true)
-                {
-                    return EnumConverterOutputType.Raw;
-                }
-                if (RadioButtonImage.IsChecked == true)
-                {
-                    return EnumConverterOutputType.Image;
-                }
-                if (RadioButtonDCSBIOSValue.IsChecked == true)
-                {
-                    return EnumConverterOutputType.ImageOverlay;
-                }
-                return EnumConverterOutputType.NotSet;
+                e.Handled = true;
+                CancelWindow();
             }
-        }
-
-        private bool FaceConfigurationIsOK()
-        {
-            var result = false;
-            switch (OutputType)
-            {
-                case EnumConverterOutputType.Raw:
-                {
-
-                    break;
-                }
-                case EnumConverterOutputType.Image:
-                {
-                    break;
-                }
-                case EnumConverterOutputType.ImageOverlay:
-                {
-                    break;
-                }
-            }
-
-            return result;
         }
     }
 }

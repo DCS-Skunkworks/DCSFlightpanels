@@ -5,12 +5,13 @@ using System.Windows.Forms;
 using ClassLibraryCommon;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Properties;
+using NonVisuals;
 using NonVisuals.StreamDeck;
 using Color = System.Drawing.Color;
 
 namespace DCSFlightpanels.Shared
 {
-    public static class StreamDeckCommon
+    public static class StreamDeckUICommon
     {
 
         public static DialogResult BrowseForImage(ref string initialDirectory, ref string imageRelativePath)
@@ -35,7 +36,7 @@ namespace DCSFlightpanels.Shared
 
         public static DialogResult SetFontStyle(StreamDeckFaceTextBox textBox)
         {
-            var font = Settings.Default.ButtonTextFaceFont;
+            var font = SettingsManager.DefaultFont;
             var result = SetFontStyle(ref font);
 
             if (result == DialogResult.OK)
@@ -54,16 +55,14 @@ namespace DCSFlightpanels.Shared
             fontDialog.FontMustExist = true;
             fontDialog.MinSize = 6;
 
-            if (Settings.Default.ButtonTextFaceFont != null)
-            {
-                fontDialog.Font = Settings.Default.ButtonTextFaceFont;
-            }
+            fontDialog.Font = SettingsManager.DefaultFont;
+
 
             var result = fontDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
                 font = fontDialog.Font;
-                Settings.Default.ButtonTextFaceFont = fontDialog.Font;
+                SettingsManager.DefaultFont = fontDialog.Font;
                 Settings.Default.Save();
             }
 
@@ -87,14 +86,14 @@ namespace DCSFlightpanels.Shared
         public static DialogResult SetFontColor(ref Color color)
         {
             var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextFaceFontColor;
+            colorDialog.Color = SettingsManager.DefaultFontColor;
             colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
 
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
                 color = colorDialog.Color;
-                Settings.Default.ButtonTextFaceFontColor = colorDialog.Color;
+                SettingsManager.DefaultFontColor = colorDialog.Color;
                 Settings.Default.Save();
             }
 
@@ -117,14 +116,13 @@ namespace DCSFlightpanels.Shared
         public static DialogResult SetBackgroundColor(ref Color color)
         {
             var colorDialog = new ColorDialog();
-            colorDialog.Color = Settings.Default.ButtonTextFaceBackgroundColor;
+            colorDialog.Color = SettingsManager.DefaultBackgroundColor;
             colorDialog.CustomColors = StreamDeckConstants.GetOLEColors();
             var result = colorDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
                 color = colorDialog.Color;
-
-                Settings.Default.ButtonTextFaceBackgroundColor = colorDialog.Color;
+                SettingsManager.DefaultBackgroundColor = colorDialog.Color;
                 Settings.Default.Save();
             }
 

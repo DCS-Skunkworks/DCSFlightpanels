@@ -15,9 +15,8 @@ namespace NonVisuals.StreamDeck
         private string _streamDeckInstanceId;
         private StreamDeckButton _streamDeckButton;
         private bool _isVisible;
-        private int _offsetX;
-        private int _offsetY;
-
+        private int _offsetX = 0;
+        private int _offsetY = 0;
 
 
 

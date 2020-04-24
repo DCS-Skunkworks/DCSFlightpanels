@@ -86,23 +86,5 @@
     <Setting Name="LastDCSBIOSRelease" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ButtonTextFaceFont" Type="System.Drawing.Font" Scope="User">
-      <Value Profile="(Default)">Consolas, 12pt</Value>
-    </Setting>
-    <Setting Name="ButtonTextFaceFontColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">White</Value>
-    </Setting>
-    <Setting Name="ButtonTextFaceBackgroundColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Black</Value>
-    </Setting>
-    <Setting Name="ButtonFaceOffsetX" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="ButtonFaceOffsetY" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="LastFileDialogLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
   </Settings>
 </SettingsFile>

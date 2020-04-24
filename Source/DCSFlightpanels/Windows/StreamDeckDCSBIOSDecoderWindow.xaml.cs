@@ -15,6 +15,8 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Shared;
+using NonVisuals;
+using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using Color = System.Drawing.Color;
 using Cursors = System.Windows.Input.Cursors;
@@ -29,7 +31,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
-    public partial class StreamDeckDCSBIOSDecoderWindow : Window
+    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty
     {
         private string _streamDeckInstanceId;
         private bool _formLoaded;
@@ -40,7 +42,6 @@ namespace DCSFlightpanels.Windows
         private DCSBIOSControl _dcsbiosControl;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
-        private bool _formulaHadErrors = false;
         private string _decoderResult;
         private bool _isDirty = false;
         private bool _populatingData = false;
@@ -136,6 +137,8 @@ namespace DCSFlightpanels.Windows
             {
                 CheckBoxUseFormula.IsChecked = false;
             }
+
+            ButtonSave.IsEnabled = _dcsbiosDecoder.ConfigurationOK;
         }
 
         private void ShowDecoder()
@@ -154,7 +157,8 @@ namespace DCSFlightpanels.Windows
 
             CheckBoxStringAsNumber.IsChecked = _dcsbiosDecoder.TreatStringAsNumber;
 
-            if (_dcsbiosDecoder.DCSBIOSConverters.Count == 0)
+            
+            if (_dcsbiosDecoder.DecoderOutputType == EnumDCSBIOSDecoderOutputType.Raw)
             {
                 RadioButtonOutputRaw.IsChecked = true;
             }
@@ -163,10 +167,11 @@ namespace DCSFlightpanels.Windows
                 RadioButtonOutputConvert.IsChecked = true;
             }
 
-            if (!string.IsNullOrEmpty(_dcsbiosDecoder.Formula))
+            CheckBoxUseFormula.IsChecked = _dcsbiosDecoder.UseFormula;
+            if (_dcsbiosDecoder.UseFormula)
             {
                 CheckBoxUseFormula.IsChecked = true;
-                TextBoxFormula.Text = _dcsbiosDecoder.Formula;
+                TextBoxFormula.Text = string.IsNullOrEmpty(_dcsbiosDecoder.Formula) ? "" : _dcsbiosDecoder.Formula;
             }
 
             if (_dcsbiosDecoder.DCSBIOSOutput != null)
@@ -273,8 +278,7 @@ namespace DCSFlightpanels.Windows
             {
                 _dcsbiosDecoder.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SetIsDirty();
-                Settings.Default.ButtonFaceOffsetY = _dcsbiosDecoder.OffsetY;
-                Settings.Default.Save();
+                SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
             }
             catch (Exception ex)
             {
@@ -288,8 +292,7 @@ namespace DCSFlightpanels.Windows
             {
                 _dcsbiosDecoder.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SetIsDirty();
-                Settings.Default.ButtonFaceOffsetY = _dcsbiosDecoder.OffsetY;
-                Settings.Default.Save();
+                SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
             }
             catch (Exception ex)
             {
@@ -297,14 +300,29 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        public bool IsDirty => _isDirty;
+
+        public void SetIsDirty()
+        {
+            if (_populatingData)
+            {
+                return;
+            }
+            _isDirty = true;
+        }
+
+        public void StateSaved()
+        {
+            _isDirty = false;
+        }
+
         private void RepeatButtonPressLeft_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _dcsbiosDecoder.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
                 SetIsDirty();
-                Settings.Default.ButtonFaceOffsetX = _dcsbiosDecoder.OffsetX;
-                Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -317,9 +335,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
                 SetIsDirty();
-                Settings.Default.ButtonFaceOffsetX = _dcsbiosDecoder.OffsetX;
-                Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -369,11 +386,12 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var font = Settings.Default.ButtonTextFaceFont;
+                var font = SettingsManager.DefaultFont;
 
-                if (StreamDeckCommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
+                if (StreamDeckUICommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosDecoder.TextFont = font;
+                    SettingsManager.DefaultFont = font;
                     SetIsDirty();
                     UpdateFontInfo();
                     SetFormState();
@@ -391,7 +409,7 @@ namespace DCSFlightpanels.Windows
             {
                 var color = Color.Transparent;
 
-                if (StreamDeckCommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
+                if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosDecoder.FontColor = color;
                     SetIsDirty();
@@ -411,7 +429,7 @@ namespace DCSFlightpanels.Windows
             {
                 var color = Color.Transparent;
 
-                if (StreamDeckCommon.SetBackgroundColor(ref color) == System.Windows.Forms.DialogResult.OK)
+                if (StreamDeckUICommon.SetBackgroundColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosDecoder.BackgroundColor = color;
                     SetIsDirty();
@@ -434,15 +452,6 @@ namespace DCSFlightpanels.Windows
             TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Background Color : " + _dcsbiosDecoder.BackgroundColor.ToString();
         }
         
-        private void SetIsDirty()
-        {
-            if (_populatingData)
-            {
-                return;
-            }
-            _isDirty = true;
-        }
-
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
@@ -541,6 +550,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                if (RadioButtonOutputRaw.IsChecked == true)
+                {
+                    _dcsbiosDecoder.DecoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
+                }
+                if (RadioButtonOutputConvert.IsChecked == true)
+                {
+                    _dcsbiosDecoder.DecoderOutputType = EnumDCSBIOSDecoderOutputType.Converter;
+                }
                 SetFormState();
             }
             catch (Exception ex)
@@ -571,6 +588,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 SetFormState();
+
+                _dcsbiosDecoder.UseFormula = CheckBoxUseFormula.IsChecked == true;
             }
             catch (Exception ex)
             {
@@ -580,11 +599,11 @@ namespace DCSFlightpanels.Windows
         
         private void LoadDefaults()
         {
-            _dcsbiosDecoder.OffsetX = Settings.Default.ButtonFaceOffsetX;
-            _dcsbiosDecoder.OffsetY = Settings.Default.ButtonFaceOffsetY;
-            _dcsbiosDecoder.TextFont = Settings.Default.ButtonTextFaceFont;
-            _dcsbiosDecoder.FontColor = Settings.Default.ButtonTextFaceFontColor;
-            _dcsbiosDecoder.BackgroundColor = Settings.Default.ButtonTextFaceBackgroundColor;
+            _dcsbiosDecoder.OffsetX = SettingsManager.OffsetX;
+            _dcsbiosDecoder.OffsetY = SettingsManager.OffsetY;
+            _dcsbiosDecoder.TextFont = SettingsManager.DefaultFont;
+            _dcsbiosDecoder.FontColor = SettingsManager.DefaultFontColor;
+            _dcsbiosDecoder.BackgroundColor = SettingsManager.DefaultBackgroundColor;
         }
 
         /*
@@ -724,19 +743,6 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        private void CancelWindow()
-        {
-            if (_isDirty)
-            {
-                if (MessageBox.Show("Discard changes?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-                {
-                    return;
-                }
-            }
-
-            DialogResult = false;
-            CloseWindow();
-        }
         public DCSBIOSDecoder DCSBIOSDecoder => _dcsbiosDecoder;
 
         private void RadioButtonIntegerSource_OnChecked(object sender, RoutedEventArgs e)
@@ -756,6 +762,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                _dcsbiosControls = DCSBIOSControlLocator.GetStringOutputControls();
                 SetFormState();
             }
             catch (Exception ex)
@@ -768,6 +775,82 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void CancelWindow()
+        {
+            if (CommonUI.DoDiscardAfterMessage(_isDirty))
+            {
+                DialogResult = false;
+                CloseWindow();
+            }
+        }
+
+
+        private void StreamDeckDCSBIOSDecoderWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                CancelWindow();
+            }
+        }
+
+        private void LabelInsert_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Hand;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelInsert_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LabelInsertRaw_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (!TextBoxOutputTextRaw.Text.Contains(StreamDeckConstants.DCSBIOSValuePlaceHolder))
+                {
+                    TextBoxOutputTextRaw.Text = string.IsNullOrEmpty(TextBoxOutputTextRaw.Text) ? StreamDeckConstants.DCSBIOSValuePlaceHolder : StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + TextBoxOutputTextRaw.Text;
+                    TextBoxOutputTextRaw.CaretIndex = TextBoxOutputTextRaw.Text.Length;
+                    _dcsbiosDecoder.ButtonText = TextBoxOutputTextRaw.Text;
+                    SetIsDirty();
+                    SetFormState();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void TextBoxOutputTextRaw_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                _dcsbiosDecoder.ButtonText = ((TextBox)sender).Text;
+                SetIsDirty();
                 SetFormState();
             }
             catch (Exception ex)

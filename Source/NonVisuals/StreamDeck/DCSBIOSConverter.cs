@@ -10,8 +10,8 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class DCSBIOSConverter
     {
-        private EnumComparator _comparator1 = EnumComparator.None;
-        private EnumComparator _comparator2 = EnumComparator.None;
+        private EnumComparator _comparator1 = EnumComparator.NotSet;
+        private EnumComparator _comparator2 = EnumComparator.NotSet;
         private double _referenceValue1 = 0;
         private double _referenceValue2 = 0;
         private double _dcsbiosValue = 0;
@@ -36,7 +36,7 @@ namespace NonVisuals.StreamDeck
 
         public Bitmap Get()
         {
-            if (!_criteria1IsOk || (_comparator2 != EnumComparator.None && !_criteria2IsOk))
+            if (!_criteria1IsOk || (_comparator2 != EnumComparator.NotSet && !_criteria2IsOk))
             {
                 throw new Exception("Cannot call get when criteria(s) not fulfilled. DCSBIOSValueToFaceConverter()");
             }
@@ -93,7 +93,7 @@ namespace NonVisuals.StreamDeck
                 var result1 = jaceExtended.CalculationEngine.Calculate(formula, variables);
                 _criteria1IsOk = Math.Abs(result1 - 1.0) < 0.0001;
 
-                if (_comparator2 == EnumComparator.None)
+                if (_comparator2 == EnumComparator.NotSet)
                 {
                     return _criteria1IsOk;
                 }
@@ -135,12 +135,22 @@ namespace NonVisuals.StreamDeck
                     stringBuilder.Append("if " + StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(Comparator1) + " " + ReferenceValue1 + " ");
                 }
 
-                if (Comparator2 != EnumComparator.None)
+                if (Comparator2 != EnumComparator.NotSet)
                 {
                     stringBuilder.Append("and " + StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(Comparator2) + ReferenceValue2 + " ");
                 }
 
-                stringBuilder.Append("then output " + GetOutputAsString(OutputType));
+                if (Comparator1 != EnumComparator.Always)
+                {
+                    stringBuilder.Append("then ");
+                }
+
+                stringBuilder.Append("output " + GetOutputAsString(OutputType));
+
+                if (Comparator1 == EnumComparator.Always)
+                {
+                    stringBuilder.Append(" : " + ButtonText.Replace(Environment.NewLine, " "));
+                }
 
                 return stringBuilder.ToString();
             }
@@ -212,9 +222,9 @@ namespace NonVisuals.StreamDeck
 
             switch (comparator)
             {
-                case EnumComparator.None:
+                case EnumComparator.NotSet:
                     {
-                        result = "None";
+                        result = "NotSet";
                         break;
                     }
                 case EnumComparator.Equals:
@@ -257,6 +267,7 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
+        [JsonIgnore]
         public string ImageFileRelativePath
         {
             get
@@ -765,7 +776,7 @@ namespace NonVisuals.StreamDeck
         GreaterThan = 4,
         GreaterThanEqual = 5,
         Always = 6,
-        None = 10
+        NotSet = 10
     }
 }
 

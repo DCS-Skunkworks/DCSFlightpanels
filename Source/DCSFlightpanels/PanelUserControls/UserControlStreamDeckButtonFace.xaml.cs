@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DCSFlightpanels.Shared;
+using NonVisuals;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 
@@ -308,7 +309,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (StreamDeckCommon.SetFontStyle(TextBoxButtonTextFace) == DialogResult.OK)
+                if (StreamDeckUICommon.SetFontStyle(TextBoxButtonTextFace) == DialogResult.OK)
                 {
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
@@ -326,7 +327,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (StreamDeckCommon.SetFontColor(TextBoxButtonTextFace) == DialogResult.OK)
+                if (StreamDeckUICommon.SetFontColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
@@ -344,7 +345,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (StreamDeckCommon.SetBackgroundColor(TextBoxButtonTextFace) == DialogResult.OK)
+                if (StreamDeckUICommon.SetBackgroundColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
@@ -373,9 +374,9 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void LoadFontSettings()
         {
-            if (Settings.Default.ButtonTextFaceFont != null)
+            if (SettingsManager.DefaultFont != null)
             {
-                TextBoxButtonTextFace.Bill.TextFont = Settings.Default.ButtonTextFaceFont;
+                TextBoxButtonTextFace.Bill.TextFont = SettingsManager.DefaultFont;
             }
         }
 
@@ -705,14 +706,14 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var imageRelativePath = "";
-                var directory = Settings.Default.LastFileDialogLocation;
+                var directory = SettingsManager.LastImageFileDirectory;
 
-                var dialogResult = StreamDeckCommon.BrowseForImage(ref directory, ref imageRelativePath);
+                var dialogResult = StreamDeckUICommon.BrowseForImage(ref directory, ref imageRelativePath);
 
                 if (dialogResult == DialogResult.OK)
                 {
                     TextBoxImageFace.Bill.ImageFileRelativePath = imageRelativePath;
-                    Settings.Default.LastFileDialogLocation = directory;
+                    SettingsManager.LastImageFileDirectory = directory;
                     SetIsDirty();
                     SDUIParent.ChildChangesMade();
                     SetFormState();
