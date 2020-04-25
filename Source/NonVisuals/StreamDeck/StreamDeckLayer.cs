@@ -164,6 +164,9 @@ namespace NonVisuals.StreamDeck
             throw new Exception("StreamDeckLayer " + Name + " does not contain button " + streamDeckButtonName + ".");
         }
 
-
+        public void RemoveButton(StreamDeckButton streamDeckButton)
+        {
+            _streamDeckButtons.Remove(streamDeckButton);
+        }
     }
 }

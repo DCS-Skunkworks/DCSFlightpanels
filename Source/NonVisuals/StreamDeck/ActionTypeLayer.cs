@@ -59,7 +59,7 @@ namespace NonVisuals.StreamDeck
                 }
                 case LayerNavType.SwitchToSpecificLayer:
                 {
-                    StreamDeckPanel.GetInstance(_streamDeckInstanceId).ActiveLayer = TargetLayer;
+                    StreamDeckPanel.GetInstance(_streamDeckInstanceId).SelectedLayerName = TargetLayer;
                     break;
                 }
             }

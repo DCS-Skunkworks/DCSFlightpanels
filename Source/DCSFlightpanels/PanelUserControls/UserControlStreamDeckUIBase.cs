@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,34 +11,32 @@ using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Shared;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
+using NonVisuals.StreamDeck.Events;
 
 namespace DCSFlightpanels.PanelUserControls
 {
-    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty
+    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, IStreamDeckListener
     {
-        protected IStreamDeckUIParent SDUIParent;
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
         protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
         protected bool UserControlLoaded;
         protected StreamDeckButton StreamDeckButtonInstance;
-        protected bool _isDirty = false;
         private StreamDeckButton _pastedStreamDeckButton;
         public string StreamDeckInstanceId;
 
-
-        public void SetSDUIParent(IStreamDeckUIParent sduiParent)
-        {
-            SDUIParent = sduiParent;
-        }
-
+        private string _lastShownLayer = "";
+     
         protected virtual void SetFormState()
-        {}
+        { }
 
 
         public void UIShowLayer(string layerName)
         {
             try
             {
+                Debug.WriteLine("UIShowLayer  " + StreamDeckPanelInstance.SelectedButtonName + " " + layerName);
+                var selectedButton = StreamDeckPanelInstance.SelectedButtonName;
+
                 HideAllDotImages();
 
                 var selectedLayer = StreamDeckPanelInstance.GetLayer(layerName);
@@ -54,8 +53,10 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         SetDotImageStatus(true, StreamDeckFunction.ButtonNumber(streamDeckButton.StreamDeckButtonName));
                     }
-                    SetFormState();
                 }
+
+                UpdateAllButtonsSelectedStatus(selectedButton);
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -63,11 +64,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+
         public void UnSelect()
         {
             try
             {
                 UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
+                Debug.WriteLine("UNSELECT " + StreamDeckPanelInstance.SelectedButtonName);
             }
             catch (Exception ex)
             {
@@ -170,7 +173,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                var selectedStreamDeckButton = StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).GetActiveLayer().GetStreamDeckButton(SelectedButtonName);
+                var selectedStreamDeckButton = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
                 menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
 
                 var iDataObject = Clipboard.GetDataObject();
@@ -184,6 +187,8 @@ namespace DCSFlightpanels.PanelUserControls
 
         protected void SetDotImageStatus(bool show, int number, bool allOthersNegated = false)
         {
+            Debug.WriteLine("SetDotImageStatus " + StreamDeckPanelInstance.SelectedButtonName);
+
             foreach (var dotImage in DotImages)
             {
                 if (allOthersNegated)
@@ -206,13 +211,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        protected StreamDeckPanel StreamDeckPanelInstance
-        {
-            get
-            {
-                return StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId());
-            }
-        }
+        protected StreamDeckPanel StreamDeckPanelInstance => StreamDeckPanel.GetInstance(StreamDeckInstanceId);
 
         protected void ShowGraphicConfiguration()
         {
@@ -222,14 +221,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
         public void UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames selectedButtonName)
         {
 
-            //System.Diagnostics.Debugger.Break();
+            Debug.WriteLine("UpdateAllButtonsSelectedStatus " + selectedButtonName);
 
             foreach (var buttonImage in ButtonImages)
             {
@@ -237,21 +236,21 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     if (selectedButtonName == buttonImage.Bill.StreamDeckButtonName)
                     {
-                        if (buttonImage.Bill.IsSelected)
+                        if (buttonImage.IsSelected)
                         {
                             buttonImage.Source = buttonImage.Bill.DeselectedImage;
-                            buttonImage.Bill.IsSelected = false;
+                            buttonImage.IsSelected = false;
                         }
                         else
                         {
                             buttonImage.Source = buttonImage.Bill.SelectedImage;
-                            buttonImage.Bill.IsSelected = true;
+                            buttonImage.IsSelected = true;
                         }
                     }
                     else
                     {
                         buttonImage.Source = buttonImage.Bill.DeselectedImage;
-                        buttonImage.Bill.IsSelected = false;
+                        buttonImage.IsSelected = false;
                     }
                 }
                 catch (Exception ex)
@@ -260,64 +259,41 @@ namespace DCSFlightpanels.PanelUserControls
                 }
             }
         }
-
-        public void SetButtonGridStatus(bool enabled)
-        {
-            foreach (var streamDeckImage in ButtonImages)
-            {
-                streamDeckImage.IsEnabled = enabled;
-            }
-        }
-
+        
         public void SetIsDirty()
         {
-            _isDirty = true;
+            IsDirty = true;
         }
 
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set => _isDirty = value;
-        }
-        
+        public bool IsDirty { get; set; }
+
         public void StateSaved()
         {
-            _isDirty = false;
+            IsDirty = false;
         }
 
         protected void ButtonImage_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                /*
-                 * bselect 
-                 */
                 var image = (StreamDeckImage)sender;
-
-
-                SDUIParent.ActionPanel.Clear();
-                SDUIParent.FacePanel.Clear();
-                SDUIParent.SetFormState();
-
+                
                 UpdateAllButtonsSelectedStatus(image.Bill.StreamDeckButtonName);
 
-                if (image.Bill.IsSelected)
+                if (image.IsSelected)
                 {
-                    StreamDeckButtonInstance = image.Bill.Button;
-                    if (StreamDeckButtonInstance != null)
-                    {
-                        SDUIParent.ActionPanel.ShowActionConfiguration(StreamDeckButtonInstance);
-                        SDUIParent.FacePanel.ShowFaceConfiguration(StreamDeckButtonInstance);
-                    }
+                    StreamDeckPanelInstance.SelectedButtonName = image.Bill.Button.StreamDeckButtonName;
+                }
+                else
+                {
+                    StreamDeckPanelInstance.SelectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
                 }
 
-                CheckIfNoneSelected();
-                SDUIParent.SetFormState();
                 SetFormState();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -329,17 +305,16 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
+                måste få till det att man enkelt kan klicka knapparna utan konstigheter i UI
+                var newlySelectedImage = (StreamDeckImage)sender;
 
-                SDUIParent.FacePanel.SetButton(SelectedButtonName);
-
-                var image = (StreamDeckImage)sender;
-
-                if (SelectedButtonName != image.Bill.StreamDeckButtonName && (SDUIParent.ActionPanel.IsDirty || SDUIParent.FacePanel.IsDirty))
+                /*
+                 * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
+                 */
+                if (!SelectedButtonChangePreview(new StreamDeckSelectedButtonChangePreviewArgs() {ButtonName = newlySelectedImage.Bill.StreamDeckButtonName}))
                 {
                     if (CommonUI.DoDiscardAfterMessage(true, "Discard Changes to " + SelectedButtonName + " ?"))
                     {
-                        SDUIParent.ActionPanel.Clear();
-                        SDUIParent.FacePanel.Clear();
                         SetFormState();
                     }
                     else
@@ -350,27 +325,23 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
-
-        protected void CheckIfNoneSelected()
-        {
-            if (!ButtonImages.Exists(o => o.Bill.IsSelected == true))
-            {
-                SDUIParent.ActionPanel.Clear();
-                SDUIParent.FacePanel.Clear();
-            }
-        }
-
-        public int SelectedButtonNumber => SelectedImageBill?.ButtonNumber() ?? 0;
-
-        public StreamDeckButton StreamDeckButton => StreamDeckButtonInstance;
-
+        
         public EnumStreamDeckButtonNames SelectedButtonName
         {
             get
             {
+                if (SelectedImageBill == null)
+                {
+                    Debug.WriteLine("SelectedButtonName BUTTON0_NO_BUTTON " + StreamDeckPanelInstance.SelectedButtonName);
+                }
+                else
+                {
+                    Debug.WriteLine("SelectedButtonName " + StreamDeckPanelInstance.SelectedButtonName + " " + StreamDeckPanelInstance.SelectedLayerName);
+                }
+
                 if (SelectedImageBill == null)
                 {
                     return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
@@ -379,20 +350,21 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public BillStreamDeckFace SelectedImageBill
+        private BillStreamDeckFace SelectedImageBill
         {
             get
             {
+                Debug.WriteLine("SelectedImageBill " + StreamDeckPanelInstance.SelectedButtonName);
                 foreach (var image in ButtonImages)
                 {
-                    if (image.Bill.IsSelected)
+                    if (image.IsSelected)
                     {
                         return image.Bill;
                     }
                 }
                 return null;
             }
-            
+
         }
 
         protected void SetImageBills()
@@ -414,7 +386,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         protected void Copy()
         {
-            var streamDeckButton = StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).GetActiveLayer().GetStreamDeckButton(SelectedButtonName);
+            var streamDeckButton = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (streamDeckButton != null)
             {
                 Clipboard.SetDataObject(streamDeckButton);
@@ -431,7 +403,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             var result = false;
             var newStreamDeckButton = (StreamDeckButton)iDataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
-            var oldStreamDeckButton = StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).GetActiveLayer().GetStreamDeckButton(SelectedButtonName);
+            var oldStreamDeckButton = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton))
             {
                 if (MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -449,7 +421,6 @@ namespace DCSFlightpanels.PanelUserControls
                 _pastedStreamDeckButton = oldStreamDeckButton;
                 Refresh();
                 SetIsDirty();
-                SDUIParent.ChildChangesMade();
             }
             return result;
         }
@@ -458,9 +429,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                Debug.WriteLine("Refresh " + StreamDeckPanelInstance.SelectedButtonName);
                 HideAllDotImages();
                 UnSelect();
-                var selectedLayer = StreamDeckPanelInstance.GetLayer(SDUIParent.GetUISelectedLayer().Name);
+                var selectedLayer = StreamDeckPanelInstance.SelectedLayer;
 
                 foreach (var buttonImage in ButtonImages)
                 {
@@ -479,14 +451,92 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
         public StreamDeckButton PastedStreamDeckButton
         {
             get => _pastedStreamDeckButton;
-            set => _pastedStreamDeckButton = value;
+            set
+            {
+                _pastedStreamDeckButton = value;
+                Refresh();
+            }
+        }
+
+
+        public void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e)
+        {
+            try
+            {
+                if (_lastShownLayer != e.SelectedLayerName)
+                {
+                    UIShowLayer(e.SelectedLayerName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+        
+        public void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        /********************************************************************************************
+        *             Queries listener in case there are unsaved button configuration
+        ********************************************************************************************/
+        public delegate void ButtonChangePreviewEventHandler(object sender, StreamDeckSelectedButtonChangePreviewArgs e);
+        public event ButtonChangePreviewEventHandler OnButtonChangePreviewEventHandler;
+
+        public virtual void Attach(IStreamDeckListener streamDeckListener)
+        {
+            OnButtonChangePreviewEventHandler += streamDeckListener.SelectedButtonChangePreview;
+        }
+
+        //For those that wants to listen to this panel
+        public virtual void Detach(IStreamDeckListener streamDeckListener)
+        {
+            OnButtonChangePreviewEventHandler -= streamDeckListener.SelectedButtonChangePreview;
+        }
+
+        protected virtual bool SelectedButtonChangePreview(StreamDeckSelectedButtonChangePreviewArgs e)
+        {
+            if (OnButtonChangePreviewEventHandler == null)
+            {
+                return true;
+            }
+            foreach (var @delegate in OnButtonChangePreviewEventHandler.GetInvocationList())
+            {
+                @delegate.DynamicInvoke(this, e);
+
+                if (e.ConfigIsUnsaved)
+                {
+                    return false; //Can not change button
+                }
+            }
+
+            return true;
         }
     }
 }

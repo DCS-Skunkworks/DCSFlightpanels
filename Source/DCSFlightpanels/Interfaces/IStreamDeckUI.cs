@@ -1,19 +1,11 @@
-﻿using NonVisuals.StreamDeck;
+﻿using NonVisuals.Interfaces;
+using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.Interfaces
 {
-    public interface IStreamDeckUI
+    public interface IStreamDeckUI : IStreamDeckListener
     {
-        StreamDeckButton StreamDeckButton { get; }
         StreamDeckButton PastedStreamDeckButton { get; set; }
-        EnumStreamDeckButtonNames SelectedButtonName { get; }
-        int SelectedButtonNumber { get; }
-        void UIShowLayer(string layerName);
-        void Clear();
-        void UpdateAllButtonsSelectedStatus(EnumStreamDeckButtonNames selectedButtonName);
-        void HideAllDotImages();
-        void SetButtonGridStatus(bool enabled);
-        void UnSelect();
-        void Refresh();
+        void Attach(IStreamDeckListener streamDeckListener);
     }
 }

@@ -154,7 +154,9 @@
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillBaseOutput.cs" />
+    <Compile Include="EventHandlers.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Interfaces\IStreamDeckDirtyListener.cs" />
     <Compile Include="Shared\CommonUI.cs" />
     <Compile Include="Shared\StreamDeckUICommon.cs" />
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />
@@ -169,7 +171,6 @@
     <Compile Include="CustomControls\PZ55TextBox.cs" />
     <Compile Include="Event Propagators\SettingsChangedPropagator.cs" />
     <Compile Include="Interfaces\IStreamDeckUI.cs" />
-    <Compile Include="IStreamDeckUIParent.cs" />
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -207,7 +208,7 @@
     <Compile Include="Windows\InformationRichTextWindow.xaml.cs">
       <DependentUpon>InformationRichTextWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IGamingPanelUserControl.cs" />
+    <Compile Include="Interfaces\IGamingPanelUserControl.cs" />
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>

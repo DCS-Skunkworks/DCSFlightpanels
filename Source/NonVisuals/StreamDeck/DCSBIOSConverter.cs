@@ -14,7 +14,7 @@ namespace NonVisuals.StreamDeck
         private double _referenceValue1 = 0;
         private double _referenceValue2 = 0;
         private double _dcsbiosValue = 0;
-        private EnumConverterOutputType _outputType = EnumConverterOutputType.NotSet;
+        private EnumConverterOutputType _converterOutputType = EnumConverterOutputType.NotSet;
         private int _jaceId = 0;
         private bool _criteria1IsOk = false;
         private bool _criteria2IsOk = false;
@@ -27,6 +27,57 @@ namespace NonVisuals.StreamDeck
 
 
 
+
+        /*
+         * Remove settings not relevant based on output type
+         */
+        public void Clean()
+        {
+            switch (ConverterOutputType)
+            {
+                case EnumConverterOutputType.NotSet:
+                    {
+                        _faceTypeText.ButtonText = "";
+                        _faceTypeText.IsVisible = false;
+                        _faceTypeImage.ImageFile = "";
+                        _faceTypeImage.IsVisible = false;
+                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = "";
+                        _faceTypeDCSBIOSOverlay.IsVisible = false;
+                        break;
+                    }
+                case EnumConverterOutputType.Raw:
+                    {
+                        _faceTypeImage.ImageFile = "";
+                        _faceTypeImage.IsVisible = false;
+                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = "";
+                        _faceTypeDCSBIOSOverlay.IsVisible = false;
+                        break;
+                    }
+                case EnumConverterOutputType.Image:
+                    {
+                        _faceTypeText.ButtonText = "";
+                        _faceTypeText.IsVisible = false;
+                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = "";
+                        _faceTypeDCSBIOSOverlay.IsVisible = false;
+                        break;
+                    }
+                case EnumConverterOutputType.ImageOverlay:
+                    {
+                        _faceTypeText.ButtonText = "";
+                        _faceTypeText.IsVisible = false;
+                        _faceTypeImage.ImageFile = "";
+                        _faceTypeImage.IsVisible = false;
+                        break;
+                    }
+            }
+
+            if (Comparator1 == EnumComparator.Always)
+            {
+                _referenceValue1 = 0;
+                _referenceValue2 = 0;
+                _comparator2 = EnumComparator.NotSet;
+            }
+        }
 
         public void Set(double dcsbiosValue)
         {
@@ -42,7 +93,7 @@ namespace NonVisuals.StreamDeck
 
             Bitmap result = null;
 
-            switch (_outputType)
+            switch ( _converterOutputType)
             {
                 case EnumConverterOutputType.NotSet:
                     {
@@ -108,10 +159,10 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public EnumConverterOutputType OutputType
+        public EnumConverterOutputType ConverterOutputType
         {
-            get => _outputType;
-            set => _outputType = value;
+            get => _converterOutputType;
+            set => _converterOutputType = value;
         }
 
         [JsonIgnore]
@@ -144,7 +195,7 @@ namespace NonVisuals.StreamDeck
                     stringBuilder.Append("then ");
                 }
 
-                stringBuilder.Append("output " + GetOutputAsString(OutputType));
+                stringBuilder.Append("output " + GetOutputAsString(_converterOutputType));
 
                 if (Comparator1 == EnumComparator.Always)
                 {
@@ -271,7 +322,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.Raw:
                         {
@@ -286,11 +337,11 @@ namespace NonVisuals.StreamDeck
                             return _faceTypeDCSBIOSOverlay.BackgroundBitmapPath;
                         }
                 }
-                throw new Exception("DCSBIOSConverter.ImageFileRelativePath: Exception. OutputType not known " + _outputType);
+                throw new Exception("DCSBIOSConverter.ImageFileRelativePath: Exception. OutputType not known " + _converterOutputType);
             }
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -312,7 +363,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.ImageFileRelativePath: OutputType not known " + _outputType);
+                            throw new Exception("DCSBIOSConverter.ImageFileRelativePath: OutputType not known " + _converterOutputType);
                         }
                 }
             }
@@ -323,7 +374,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -347,7 +398,7 @@ namespace NonVisuals.StreamDeck
 
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -370,7 +421,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.ButtonText: OutputType not known " + _outputType + ".");
+                            throw new Exception("DCSBIOSConverter.ButtonText: OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -381,7 +432,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -405,7 +456,7 @@ namespace NonVisuals.StreamDeck
 
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -428,7 +479,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.OffsetX: OutputType not known " + _outputType + ".");
+                            throw new Exception("DCSBIOSConverter.OffsetX: OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -439,7 +490,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -463,7 +514,7 @@ namespace NonVisuals.StreamDeck
 
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -486,7 +537,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.OffsetY: Exception. OutputType not known " + _outputType + ".");
+                            throw new Exception("DCSBIOSConverter.OffsetY: Exception. OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -498,7 +549,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -522,7 +573,7 @@ namespace NonVisuals.StreamDeck
 
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -545,7 +596,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.FontColor:  FaceTypeText OutputType not known " + _outputType + ".");
+                            throw new Exception("DCSBIOSConverter.FontColor:  FaceTypeText OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -556,7 +607,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -580,7 +631,7 @@ namespace NonVisuals.StreamDeck
 
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -602,7 +653,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.BackgroundColor: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                            throw new Exception("DCSBIOSConverter.BackgroundColor: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -614,7 +665,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -633,12 +684,12 @@ namespace NonVisuals.StreamDeck
                             return _faceTypeDCSBIOSOverlay.TextFont;
                         }
                 }
-                throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
             }
 
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -661,7 +712,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                            throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -673,7 +724,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -692,12 +743,12 @@ namespace NonVisuals.StreamDeck
                             return _faceTypeDCSBIOSOverlay.Bitmap;
                         }
                 }
-                throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
             }
 
             set
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -720,7 +771,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                            throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -732,7 +783,7 @@ namespace NonVisuals.StreamDeck
         {
             get
             {
-                switch (OutputType)
+                switch (_converterOutputType)
                 {
                     case EnumConverterOutputType.NotSet:
                         {
@@ -751,7 +802,7 @@ namespace NonVisuals.StreamDeck
                             return _faceTypeDCSBIOSOverlay.ConfigurationOK;
                         }
                 }
-                throw new Exception("FaceConfigurationIsOK: Exception. FaceTypeText OutputType not known " + _outputType + ".");
+                throw new Exception("FaceConfigurationIsOK: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
             }
         }
     }

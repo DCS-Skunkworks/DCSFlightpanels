@@ -6,5 +6,6 @@ namespace DCSFlightpanels.CustomControls
     public class StreamDeckImage : Image
     {
         public BillStreamDeckFace Bill { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

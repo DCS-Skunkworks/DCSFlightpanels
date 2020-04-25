@@ -16,7 +16,7 @@ namespace NonVisuals.StreamDeck
         private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
-        private volatile string _activeLayer = "";
+        private volatile string _selectedLayer = StreamDeckConstants.HOME_LAYER_NAME;
         private readonly IStreamDeckBoard _streamDeckBoard;
         private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
@@ -72,7 +72,7 @@ namespace NonVisuals.StreamDeck
             
             CheckHomeLayerStatus();
 
-            CheckActiveLayer();
+            CheckSelectedLayer();
         }
 
         private void CheckHomeLayerStatus()
@@ -95,18 +95,19 @@ namespace NonVisuals.StreamDeck
                 _layerList.Insert(0, streamDeckLayer);
             }
 
-            CheckActiveLayer();
+            CheckSelectedLayer();
         }
 
-        public void CheckActiveLayer()
+        public void CheckSelectedLayer()
         {
-            if (!string.IsNullOrEmpty(_activeLayer) && _layerList.FindAll(o => o.Name == _activeLayer).Count == 1)
+            if (!string.IsNullOrEmpty(_selectedLayer) && _layerList.FindAll(o => o.Name == _selectedLayer).Count == 1)
             {
-                SetActiveLayer(_activeLayer);
+                SetSelectedLayer(_selectedLayer);
             }
             else
             {
-                SetActiveLayer(StreamDeckConstants.HOME_LAYER_NAME);
+                _selectedLayer = StreamDeckConstants.HOME_LAYER_NAME;
+                SetSelectedLayer(StreamDeckConstants.HOME_LAYER_NAME);
             }
         }
 
@@ -122,12 +123,17 @@ namespace NonVisuals.StreamDeck
                 LayerList.Add(streamDeckLayer);
             }
 
-            SetActiveLayer(streamDeckLayer.Name);
+            SetSelectedLayer(streamDeckLayer.Name);
             return true;
         }
 
         public void DeleteLayer(string layerName)
         {
+            if (layerName == StreamDeckConstants.HOME_LAYER_NAME)
+            {
+                throw  new Exception("Home layer can not be deleted.");
+            }
+
             if (string.IsNullOrEmpty(layerName))
             {
                 return;
@@ -135,13 +141,18 @@ namespace NonVisuals.StreamDeck
 
             _layerList.RemoveAll(x => x.Name == layerName);
             _layerHistory.RemoveAll(x => x == layerName);
-            if (_layerList.Count > 0)
+
+            if (_layerHistory.Count > 0)
             {
-                SetActiveLayer(_layerList[0].Name);
+                ShowPreviousLayer();
+            }
+            else if (_layerList.Count > 0)
+            {
+                SetSelectedLayer(_layerList[0].Name);
             }
             else
             {
-                SetActiveLayer(null);
+                SetSelectedLayer(null);
             }
         }
 
@@ -165,87 +176,16 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public List<string> GetStreamDeckLayerNames()
-        {
-            var result = new List<string>();
 
-            foreach (var streamDeckLayer in _layerList)
-            {
-                result.Add(streamDeckLayer.Name);
-            }
-
-            return result;
-        }
-
-        public StreamDeckLayer GetActiveStreamDeckLayer()
-        {
-            CheckHomeLayerStatus();
-            return GetStreamDeckLayer(_activeLayer);
-        }
-
-        public StreamDeckLayer GetStreamDeckLayer(string layerName)
-        {
-            if (string.IsNullOrEmpty(layerName))
-            {
-                return null;
-            }
-
-            foreach (var streamDeckLayer in _layerList)
-            {
-                if (streamDeckLayer.Name == layerName)
-                {
-                    return streamDeckLayer;
-                }
-            }
-
-            throw new Exception("GetStreamDeckLayer : Failed to find layer [" + layerName + "].");
-        }
-
-        public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName, bool throwExceptionIfNotFound = true)
-        {
-            if (string.IsNullOrEmpty(layerName))
-            {
-                return null;
-            }
-
-            foreach (var streamDeckLayer in _layerList)
-            {
-                if (streamDeckLayer.Name == layerName && streamDeckLayer.ContainStreamDeckButton(streamDeckButtonName))
-                {
-                    return streamDeckLayer.GetStreamDeckButtonName(streamDeckButtonName);
-                }
-            }
-
-            if (throwExceptionIfNotFound)
-            {
-                throw new Exception("Button " + streamDeckButtonName + " cannot be found in layer " + layerName + ".");
-            }
-
-            var streamDeckButton = new StreamDeckButton(streamDeckButtonName);
-            GetStreamDeckLayer(layerName).AddButton(streamDeckButton);
-            return streamDeckButton;
-        }
-
-        public StreamDeckButton GetActiveLayerStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
-        {
-            return GetStreamDeckButton(streamDeckButtonName, ActiveLayer, false);
-        }
-
-        public StreamDeckButton GetActiveLayerStreamDeckButton(int streamDeckButtonNumber)
-        {
-            var streamDeckButtonName = StreamDeckFunction.ButtonName(streamDeckButtonNumber);
-            return GetStreamDeckButton(streamDeckButtonName, ActiveLayer, false);
-        }
-
-        public StreamDeckButton AddStreamDeckButtonToActiveLayer(StreamDeckButton streamDeckButton)
+        public StreamDeckButton AddButtonToSelectedLayer(StreamDeckButton streamDeckButton)
         {
             StreamDeckButton result = null;
 
-            var activeLayer = GetActiveStreamDeckLayer();
+            var selectedLayer = SelectedLayer;
 
             var found = false;
 
-            foreach (var button in activeLayer.StreamDeckButtons)
+            foreach (var button in selectedLayer.StreamDeckButtons)
             {
                 if (button.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName)
                 {
@@ -258,16 +198,30 @@ namespace NonVisuals.StreamDeck
 
             if (!found)
             {
-                activeLayer.AddButton(streamDeckButton);
+                selectedLayer.AddButton(streamDeckButton);
                 result = streamDeckButton;
             }
 
             return result;
         }
-        
-        public string ActiveLayer
+
+        public StreamDeckLayer SelectedLayer
         {
-            get => _activeLayer;
+            get
+            {
+                CheckHomeLayerStatus();
+                return GetLayer(_selectedLayer);
+            } 
+            set => SetSelectedLayer(value.Name);
+        }
+
+        public string SelectedLayerName
+        {
+            get
+            {
+                CheckHomeLayerStatus();
+                return _selectedLayer;
+            }
             set
             {
                 if (LayerList.Count == 0)
@@ -279,9 +233,9 @@ namespace NonVisuals.StreamDeck
                     return;
                 }
                 var found = false;
-                foreach (var streamDeckLayer in LayerList)
+                foreach (var layer in LayerList)
                 {
-                    if (streamDeckLayer.Name == value)
+                    if (layer.Name == value)
                     {
                         found = true;
                     }
@@ -292,14 +246,12 @@ namespace NonVisuals.StreamDeck
                     throw new Exception("StreamDeckLayerHandler : Failed to find layer " + value + " in order to mark it active.");
                 }
 
-                SetActiveLayer(value);
+                SetSelectedLayer(value);
             }
         }
-        
+
         public bool HasLayers => _layerList.Count > 0;
-
-        public bool HasActiveLayer => _layerList.Count > 0 && !string.IsNullOrEmpty(_activeLayer);
-
+        
         public void ClearAllFaces()
         {
             for (var i = 0; i < _streamDeckPanel.ButtonCount; i++)
@@ -320,15 +272,15 @@ namespace NonVisuals.StreamDeck
         {
             if (_layerHistory.Count > 0)
             {
-                _activeLayer = _layerHistory.Last();
+                _selectedLayer = _layerHistory.Last();
                 _layerHistory.RemoveAt(_layerHistory.Count -1 );
-                SetActiveLayer(_activeLayer);
+                SetSelectedLayer(_selectedLayer);
             }
         }
 
         public void ShowHomeLayer()
         {
-            SetActiveLayer(StreamDeckConstants.HOME_LAYER_NAME);
+            SetSelectedLayer(StreamDeckConstants.HOME_LAYER_NAME);
         }
         
         private void HideAllButtonsAndClearFace()
@@ -340,7 +292,7 @@ namespace NonVisuals.StreamDeck
             ClearAllFaces();
         }
 
-        private void SetActiveLayer(string layerName)
+        private void SetSelectedLayer(string layerName)
         {
             HideAllButtonsAndClearFace();
 
@@ -349,51 +301,167 @@ namespace NonVisuals.StreamDeck
              */
             if (string.IsNullOrEmpty(layerName))
             {
-                throw  new Exception("StreamDeckLayerHandler : Trying to set an empty or null layer active.");
+                throw  new Exception("Internal Error : StreamDeckLayerHandler : Trying to set an empty or null layer active.");
             }
 
             /*
              * There are already layers, add last only if name differs
              */
-            if (_activeLayer != layerName)
+            if (_selectedLayer != layerName)
             {
-                _layerHistory.Add(_activeLayer);
+                _layerHistory.Add(_selectedLayer);
             }
-            _activeLayer = layerName;
+            _selectedLayer = layerName;
 
-            var activeLayer = GetStreamDeckLayer(_activeLayer);
-            foreach (var streamDeckButtons in activeLayer.StreamDeckButtons)
+            var selectedLayer = GetLayer(_selectedLayer);
+            foreach (var streamDeckButtons in selectedLayer.StreamDeckButtons)
             {
                 streamDeckButtons.IsVisible = true;
             }
 
-            OnOnLayerChangedA(new StreamDeckLayerChange(){ActiveLayerName = _activeLayer });
+            LayerSwitched(new StreamDeckLayerSwitchArgs(){SelectedLayerName = _selectedLayer });
+        }
+
+        public int SelectedButtonNumber
+        {
+            get => _selectedButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON ? 999 : int.Parse(_selectedButtonName.ToString().Replace(StreamDeckConstants.NUMBER_BUTTON_PREFIX,""));
+            set
+            {
+                if (SelectedButtonNumber  != value)
+                {
+                    var selectedButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), StreamDeckConstants.NUMBER_BUTTON_PREFIX + value, true);
+                    _selectedButtonName = selectedButtonName;
+                    SelectedButtonChanged(new StreamDeckSelectedButtonChangeArgs() { Button = GetSelectedLayerButton(_selectedButtonName) });
+                }
+            }
+        }
+
+        public EnumStreamDeckButtonNames SelectedButtonName
+        {
+            get => _selectedButtonName;
+            set
+            {
+                if (_selectedButtonName != value)
+                {
+                    _selectedButtonName = value;
+                    SelectedButtonChanged(new StreamDeckSelectedButtonChangeArgs(){Button = GetSelectedLayerButton(_selectedButtonName)});
+                    return;
+                }
+                _selectedButtonName = value;
+            }
+        }
+
+        public StreamDeckButton SelectedButton
+        {
+            get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+        }
+
+        public void RemoveButton(StreamDeckButton streamDeckButton)
+        {
+            SelectedLayer.RemoveButton(streamDeckButton);
         }
 
 
-        public delegate void LayerChangedEventHandler(object sender, StreamDeckLayerChange e);
-        public event LayerChangedEventHandler OnLayerChangedA;
+        public List<string> GetStreamDeckLayerNames()
+        {
+            var result = new List<string>();
+
+            foreach (var streamDeckLayer in _layerList)
+            {
+                result.Add(streamDeckLayer.Name);
+            }
+
+            return result;
+        }
+
+        public StreamDeckLayer GetLayer(string layerName)
+        {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return null;
+            }
+
+            foreach (var streamDeckLayer in _layerList)
+            {
+                if (streamDeckLayer.Name == layerName)
+                {
+                    return streamDeckLayer;
+                }
+            }
+
+            throw new Exception("GetStreamDeckLayer : Failed to find layer [" + layerName + "].");
+        }
+
+        public StreamDeckButton GetButton(EnumStreamDeckButtonNames buttonName, string layerName, bool throwExceptionIfNotFound = true)
+        {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return null;
+            }
+
+            foreach (var layer in _layerList)
+            {
+                if (layer.Name == layerName && layer.ContainStreamDeckButton(buttonName))
+                {
+                    return layer.GetStreamDeckButtonName(buttonName);
+                }
+            }
+
+            if (throwExceptionIfNotFound)
+            {
+                throw new Exception("Button " + buttonName + " cannot be found in layer " + layerName + ".");
+            }
+
+            var button = new StreamDeckButton(buttonName);
+            GetLayer(layerName).AddButton(button);
+            return button;
+        }
+
+        public StreamDeckButton GetSelectedLayerButton(EnumStreamDeckButtonNames streamDeckButtonName)
+        {
+            return GetButton(streamDeckButtonName, SelectedLayerName, false);
+        }
+
+        public StreamDeckButton GetSelectedLayerButton(int streamDeckButtonNumber)
+        {
+            var streamDeckButtonName = StreamDeckFunction.ButtonName(streamDeckButtonNumber);
+            return GetButton(streamDeckButtonName, SelectedLayerName, false);
+        }
+
+        /********************************************************************************************
+         *                                      Layer change
+         ********************************************************************************************/
+        public delegate void LayerSwitchedEventHandler(object sender, StreamDeckLayerSwitchArgs e);
+        public event LayerSwitchedEventHandler OnLayerSwitchedEventHandler;
 
         public virtual void Attach(IStreamDeckListener streamDeckListener)
         {
-            OnLayerChangedA += streamDeckListener.LayerChanged;
+            OnLayerSwitchedEventHandler += streamDeckListener.LayerSwitched;
+            OnSelectedButtonChangedEventHandler += streamDeckListener.SelectedButtonChanged;
         }
 
         //For those that wants to listen to this panel
         public virtual void Detach(IStreamDeckListener streamDeckListener)
         {
-            OnLayerChangedA -= streamDeckListener.LayerChanged;
+            OnLayerSwitchedEventHandler -= streamDeckListener.LayerSwitched;
+            OnSelectedButtonChangedEventHandler -= streamDeckListener.SelectedButtonChanged;
         }
 
-        protected virtual void OnOnLayerChangedA(StreamDeckLayerChange e)
+        protected virtual void LayerSwitched(StreamDeckLayerSwitchArgs e)
         {
-            OnLayerChangedA?.Invoke(this, e);
+            OnLayerSwitchedEventHandler?.Invoke(this, e);
         }
 
-        public EnumStreamDeckButtonNames SelectedButton
+        /********************************************************************************************
+         *                                      Button change
+         ********************************************************************************************/
+        public delegate void SelectedButtonChangedEventHandler(object sender, StreamDeckSelectedButtonChangeArgs e);
+        public event SelectedButtonChangedEventHandler OnSelectedButtonChangedEventHandler;
+        
+        protected virtual void SelectedButtonChanged(StreamDeckSelectedButtonChangeArgs e)
         {
-            get => _selectedButtonName;
-            set => _selectedButtonName = value;
+            OnSelectedButtonChangedEventHandler?.Invoke(this, e);
         }
     }
 }
+    

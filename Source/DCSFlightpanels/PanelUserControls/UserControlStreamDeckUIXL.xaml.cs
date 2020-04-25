@@ -34,7 +34,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetButtonGridStatus(StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).HasLayers);
             }
             catch (Exception ex)
             {

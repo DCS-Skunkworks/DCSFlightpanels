@@ -33,8 +33,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var selectedButtonNumber = SelectedButtonNumber;
-                SetButtonGridStatus(StreamDeckPanel.GetInstance(SDUIParent.GetStreamDeckInstanceId()).HasLayers);
             }
             catch (Exception ex)
             {

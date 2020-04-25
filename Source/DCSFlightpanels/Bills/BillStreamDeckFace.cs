@@ -42,6 +42,11 @@ namespace DCSFlightpanels.Bills
             return !string.IsNullOrEmpty(ImageFileRelativePath);
         }
 
+        public override bool ContainsDCSBIOS()
+        {
+            return _dcsbiosDecoder != null;
+        }
+
         public Font TextFont
         {
             get => _textFont;
@@ -61,11 +66,6 @@ namespace DCSFlightpanels.Bills
                 if (_textFont.Strikeout) textDecorationCollection.Add(TextDecorations.Strikethrough);
                 TextBox.TextDecorations = textDecorationCollection;
             }
-        }
-        
-        public override bool ContainsDCSBIOS()
-        {
-            return _dcsbiosDecoder != null;
         }
 
         public bool ContainsStreamDeckLayer()
@@ -97,21 +97,7 @@ namespace DCSFlightpanels.Bills
                 TextBox.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(_backgroundColor.A, _backgroundColor.R, _backgroundColor.G, _backgroundColor.B)); ;
             }
         }
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                if (_isSelected)
-                {
-                    StreamDeckPanel.GetInstance(_streamDeckInstanceId).SelectedDeckButton = StreamDeckButtonName;
-                }
-            }
-        }
-
-
+        
         public int OffsetX { get; set; } = SettingsManager.OffsetX;
         public int OffsetY { get; set; } = SettingsManager.OffsetX;
         
@@ -149,10 +135,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _dcsbiosDecoder = value;
-                if (_dcsbiosDecoder?.DCSBIOSOutput != null)
-                {
-                    TextBox.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
-                }
+                TextBox.Text = _dcsbiosDecoder?.DCSBIOSOutput != null ? _dcsbiosDecoder.DCSBIOSOutput.ControlId : "";
             }
         }
 
@@ -163,7 +146,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _imageFileRelativePath = value;
-                TextBox.Text = _imageFileRelativePath;
+                TextBox.Text = !string.IsNullOrEmpty(_imageFileRelativePath) ? _imageFileRelativePath : "";
             }
         }
 

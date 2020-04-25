@@ -19,6 +19,8 @@ namespace NonVisuals.StreamDeck
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
 
  
+
+
         protected override void DrawBitmap()
         {
             if (Bitmap == null || RefreshBitmap)

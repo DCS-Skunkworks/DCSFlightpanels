@@ -4,6 +4,8 @@ namespace NonVisuals.Interfaces
 {
     public interface IStreamDeckListener
     {
-        void LayerChanged(object sender, StreamDeckLayerChange e);
+        void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e);
+        void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e);
+        void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e);
     }
 }

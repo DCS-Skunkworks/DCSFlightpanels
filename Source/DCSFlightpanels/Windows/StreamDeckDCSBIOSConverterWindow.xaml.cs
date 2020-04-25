@@ -74,7 +74,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
 
-                if (_dcsbiosConverter.OutputType == EnumConverterOutputType.NotSet)
+                if (_dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.NotSet)
                 {
                     StackPanelRaw.Visibility = Visibility.Collapsed;
                     StackPanelImage.Visibility = Visibility.Collapsed;
@@ -133,6 +133,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                _dcsbiosConverter.Clean();
                 DialogResult = true;
                 Close();
             }
@@ -278,7 +279,7 @@ namespace DCSFlightpanels.Windows
             TextBoxOutputTextRaw.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
             TextBoxOutputTextOverlayImage.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
 
-            switch (_dcsbiosConverter.OutputType)
+            switch (_dcsbiosConverter.ConverterOutputType)
             {
                 case EnumConverterOutputType.NotSet:
                     {
@@ -417,7 +418,7 @@ namespace DCSFlightpanels.Windows
                 StackPanelRaw.Visibility = Visibility.Visible;
                 StackPanelImage.Visibility = Visibility.Collapsed;
                 StackPanelOverlayImage.Visibility = Visibility.Collapsed;
-                _dcsbiosConverter.OutputType = EnumConverterOutputType.Raw;
+                _dcsbiosConverter.ConverterOutputType = EnumConverterOutputType.Raw;
             }
             catch (Exception ex)
             {
@@ -432,7 +433,7 @@ namespace DCSFlightpanels.Windows
                 StackPanelRaw.Visibility = Visibility.Collapsed;
                 StackPanelImage.Visibility = Visibility.Visible;
                 StackPanelOverlayImage.Visibility = Visibility.Collapsed;
-                _dcsbiosConverter.OutputType = EnumConverterOutputType.Image;
+                _dcsbiosConverter.ConverterOutputType = EnumConverterOutputType.Image;
             }
             catch (Exception ex)
             {
@@ -447,7 +448,7 @@ namespace DCSFlightpanels.Windows
                 StackPanelRaw.Visibility = Visibility.Collapsed;
                 StackPanelImage.Visibility = Visibility.Collapsed;
                 StackPanelOverlayImage.Visibility = Visibility.Visible;
-                _dcsbiosConverter.OutputType = EnumConverterOutputType.ImageOverlay;
+                _dcsbiosConverter.ConverterOutputType = EnumConverterOutputType.ImageOverlay;
             }
             catch (Exception ex)
             {
@@ -639,7 +640,7 @@ namespace DCSFlightpanels.Windows
 
         private void UpdateFontInfo()
         {
-            if (_dcsbiosConverter.OutputType == EnumConverterOutputType.NotSet)
+            if (_dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.NotSet)
             {
                 return;
             }

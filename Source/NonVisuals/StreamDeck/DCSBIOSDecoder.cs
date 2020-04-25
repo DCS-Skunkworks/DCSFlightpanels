@@ -11,13 +11,13 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener
     {
-        private string _formula = "";
         private DCSBIOSOutput _dcsbiosOutput = null;
-        private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
-        private volatile bool _valueUpdated;
-        private string _lastFormulaError = "";
+        private string _formula = "";
         private bool _useFormula = false;
         private double _formulaResult = 0;
+        private string _lastFormulaError = "";
+        private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
+        private volatile bool _valueUpdated;
         [NonSerialized] private int _jaceId = 0;
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
         private bool _treatStringAsNumber = false;
@@ -28,7 +28,6 @@ namespace NonVisuals.StreamDeck
         public DCSBIOSDecoder()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
-            
             _jaceId = RandomFactory.Get();
         }
 
@@ -36,6 +35,29 @@ namespace NonVisuals.StreamDeck
         {
             DCSBIOSStringManager.Detach(this);
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
+        }
+
+        /*
+         * Remove settings not relevant based on output type
+         */
+        public void Clean()
+        {
+            switch (DecoderOutputType)
+            {
+                case EnumDCSBIOSDecoderOutputType.Raw:
+                    {
+                        _dcsbiosConverters.Clear();
+                        if (!_useFormula)
+                        {
+                            _formula = "";
+                        }
+                        break;
+                    }
+                case EnumDCSBIOSDecoderOutputType.Converter:
+                    {
+                        break;
+                    }
+            }
         }
 
         public void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -199,7 +221,7 @@ namespace NonVisuals.StreamDeck
                 UintDcsBiosValue = UInt32.MaxValue;
             }
         }
-        
+
         public void Add(DCSBIOSConverter dcsbiosConverter)
         {
             _dcsbiosConverters.Add(dcsbiosConverter);
@@ -221,7 +243,7 @@ namespace NonVisuals.StreamDeck
             get => _dcsbiosConverters;
             set => _dcsbiosConverters = value;
         }
-        
+
         [JsonIgnore]
         public bool ValueUpdated
         {

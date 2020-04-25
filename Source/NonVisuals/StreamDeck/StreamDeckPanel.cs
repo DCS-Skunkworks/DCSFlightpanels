@@ -8,12 +8,13 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
-    public class StreamDeckPanel : GamingPanel
+    public class StreamDeckPanel : GamingPanel, IStreamDeckListener
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
@@ -25,6 +26,10 @@ namespace NonVisuals.StreamDeck
 
         private long _doUpdatePanelLCD;
         private int _buttonCount = 0;
+
+
+
+
 
         public StreamDeckPanel(IStreamDeckListener streamDeckListener, GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.StreamDeck, hidSkeleton)
         {
@@ -99,7 +104,7 @@ namespace NonVisuals.StreamDeck
 
         public void AddStreamDeckButtonToActiveLayer(StreamDeckButton streamDeckButton)
         {
-            _streamDeckLayerHandler.AddStreamDeckButtonToActiveLayer(streamDeckButton);
+            _streamDeckLayerHandler.AddButtonToSelectedLayer(streamDeckButton);
             SetIsDirty();
         }
 
@@ -114,15 +119,15 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
+            
+            var streamDeckButton = _streamDeckLayerHandler.GetSelectedLayerButton(e.Key + 1);
 
             if (e.IsDown)
             {
-                var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
                 streamDeckButton.DoPress();
             }
             else
             {
-                var streamDeckButton = _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(e.Key + 1);
                 streamDeckButton.DoRelease(CancellationToken.None);
             }
         }
@@ -280,15 +285,11 @@ namespace NonVisuals.StreamDeck
             set => _lcdKnobSensitivity = value;
         }
 
-        public bool HasActiveLayer
-        {
-            get => _streamDeckLayerHandler.HasLayers;
-        }
 
-        public string ActiveLayer
+        public string SelectedLayerName
         {
-            get => _streamDeckLayerHandler.ActiveLayer;
-            set => _streamDeckLayerHandler.ActiveLayer = value;
+            get => _streamDeckLayerHandler.SelectedLayerName;
+            set => _streamDeckLayerHandler.SelectedLayerName = value;
         }
 
         public override string SettingsVersion()
@@ -330,22 +331,23 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName)
         {
-            return _streamDeckLayerHandler.GetStreamDeckButton(streamDeckButtonName, layerName);
+            return _streamDeckLayerHandler.GetButton(streamDeckButtonName, layerName);
         }
 
-        public StreamDeckButton GetActiveLayerStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
+        public StreamDeckButton GetCurrentLayerButton(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return _streamDeckLayerHandler.GetActiveLayerStreamDeckButton(streamDeckButtonName);
+            return _streamDeckLayerHandler.GetSelectedLayerButton(streamDeckButtonName);
         }
 
         public StreamDeckLayer GetLayer(string layerName)
         {
-            return _streamDeckLayerHandler.GetStreamDeckLayer(layerName);
+            return _streamDeckLayerHandler.GetLayer(layerName);
         }
 
-        public StreamDeckLayer GetActiveLayer()
+        public StreamDeckLayer SelectedLayer
         {
-            return _streamDeckLayerHandler.GetActiveStreamDeckLayer();
+            get => _streamDeckLayerHandler.SelectedLayer;
+            set => _streamDeckLayerHandler.SelectedLayer = value;
         }
 
         public bool HasLayers
@@ -367,10 +369,21 @@ namespace NonVisuals.StreamDeck
 
         public int ButtonCount => _buttonCount;
 
-        public EnumStreamDeckButtonNames SelectedDeckButton
+        public int SelectedButtonNumber
         {
-            get => _streamDeckLayerHandler.SelectedButton;
-            set => _streamDeckLayerHandler.SelectedButton = value;
+            get => _streamDeckLayerHandler.SelectedButtonNumber;
+            set => _streamDeckLayerHandler.SelectedButtonNumber = value;
+        }
+
+        public EnumStreamDeckButtonNames SelectedButtonName
+        {
+            get => _streamDeckLayerHandler.SelectedButtonName;
+            set => _streamDeckLayerHandler.SelectedButtonName = value;
+        }
+
+        public StreamDeckButton SelectedButton
+        {
+            get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
 
         public static Bitmap Validate(string imagePath)
@@ -382,6 +395,56 @@ namespace NonVisuals.StreamDeck
 
             var uri = new Uri("pack://application:,,,/NonVisuals;component/Images/filenotfound.png");
             return new Bitmap(uri.AbsolutePath);
+        }
+
+        public void RemoveButton(StreamDeckButton streamDeckButton)
+        {
+            _streamDeckLayerHandler.RemoveButton(streamDeckButton);
+            SetIsDirty();
+        }
+
+        public void Attach(IStreamDeckListener streamDeckListener)
+        {
+            _streamDeckLayerHandler.Attach(streamDeckListener);
+        }
+
+        public void Detach(IStreamDeckListener streamDeckListener)
+        {
+            _streamDeckLayerHandler.Detach(streamDeckListener);
+        }
+
+        public void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e)
+        {
+            try
+            {
+                ClearAllFaces();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
         }
     }
 

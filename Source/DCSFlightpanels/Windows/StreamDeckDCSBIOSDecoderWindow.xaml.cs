@@ -74,7 +74,7 @@ namespace DCSFlightpanels.Windows
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _dcsbiosDecoder.StreamDeckButtonName = StreamDeckPanel.GetInstance(streamDeckInstanceId).SelectedDeckButton;
+            _dcsbiosDecoder.StreamDeckButtonName = StreamDeckPanel.GetInstance(streamDeckInstanceId).SelectedButtonName;
             _streamDeckInstanceId = streamDeckInstanceId;
             var thread = new Thread(ThreadLoop);
             thread.Start();
@@ -712,6 +712,7 @@ namespace DCSFlightpanels.Windows
 
         private void CloseWindow()
         {
+            _dcsbiosDecoder.Clean();
             _exitThread = true;
             Close();
         }

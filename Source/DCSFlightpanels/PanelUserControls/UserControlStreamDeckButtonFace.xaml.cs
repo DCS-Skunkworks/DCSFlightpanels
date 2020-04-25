@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using DCSFlightpanels.Shared;
 using NonVisuals;
+using NonVisuals.StreamDeck.Events;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 
@@ -21,7 +22,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonFace : UserControlBase, UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty
+    public partial class UserControlStreamDeckButtonFace : UserControlBase, UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty, IStreamDeckListener
     {
         private IGlobalHandler _globalHandler;
         private bool _isDirty = false;
@@ -29,8 +30,7 @@ namespace DCSFlightpanels.PanelUserControls
         private List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
         private List<RadioButton> _radioButtonList = new List<RadioButton>();
         private EnumStreamDeckButtonNames _streamDeckButton;
-        private UserControlStreamDeckButtonAction _userControlStreamDeckButtonAction;
-
+        public string StreamDeckInstanceId;
 
 
         public UserControlStreamDeckButtonFace()
@@ -57,16 +57,11 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
-        public void SetDecoder(DCSBIOSDecoder dcsbiosDecoder)
-        {
-            TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = dcsbiosDecoder;
-        }
 
-        public void SetButton(EnumStreamDeckButtonNames streamDeckButton)
+        /*public void SetButton(EnumStreamDeckButtonNames streamDeckButton)
         {
-            _streamDeckButton = streamDeckButton;
-        }
+            _streamDeckButton = streamDeckButton;a
+        }*/
 
         public void SetFormState()
         {
@@ -76,7 +71,6 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                RadioButtonDCSBIOSFace.Visibility = UserControlStreamDeckButtonAction.GetSelectedActionType() != EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
                 StackPanelButtonTextAndStyle.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
@@ -101,7 +95,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -133,95 +127,6 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
         private void MouseDownFocusLogTextBox(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void RadioButtonDCSBIOSImage_OnClick(object sender, RoutedEventArgs e)
-        {
-            SetFormState();
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBox_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
             {
@@ -277,6 +182,7 @@ namespace DCSFlightpanels.PanelUserControls
         public void SetIsDirty()
         {
             _isDirty = true;
+            EventHandlers.UserControlIsDirty(this);
         }
 
         public bool IsDirty
@@ -311,9 +217,9 @@ namespace DCSFlightpanels.PanelUserControls
                 if (StreamDeckUICommon.SetFontStyle(TextBoxButtonTextFace) == DialogResult.OK)
                 {
                     SetIsDirty();
-                    SDUIParent.ChildChangesMade();
+
                 }
-                TextBoxButtonTextFace.TestImage(SDUIParent);
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetFormState();
             }
             catch (Exception ex)
@@ -329,9 +235,9 @@ namespace DCSFlightpanels.PanelUserControls
                 if (StreamDeckUICommon.SetFontColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
                     SetIsDirty();
-                    SDUIParent.ChildChangesMade();
+
                 }
-                TextBoxButtonTextFace.TestImage(SDUIParent); 
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetFormState();
             }
             catch (Exception ex)
@@ -347,9 +253,9 @@ namespace DCSFlightpanels.PanelUserControls
                 if (StreamDeckUICommon.SetBackgroundColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
                     SetIsDirty();
-                    SDUIParent.ChildChangesMade();
+
                 }
-                TextBoxButtonTextFace.TestImage( SDUIParent);
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetFormState();
             }
             catch (Exception ex)
@@ -362,7 +268,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                TextBoxButtonTextFace.TestImage( SDUIParent);
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetFormState();
             }
             catch (Exception ex)
@@ -395,9 +301,9 @@ namespace DCSFlightpanels.PanelUserControls
                             return TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS();
                         }
                     case EnumStreamDeckFaceType.Image:
-                    {
-                        return TextBoxImageFace.Bill.ContainsImageFace();
-                    }
+                        {
+                            return TextBoxImageFace.Bill.ContainsImageFace();
+                        }
                 }
                 return false;
             }
@@ -406,7 +312,7 @@ namespace DCSFlightpanels.PanelUserControls
         public void ShowFaceConfiguration(StreamDeckButton streamDeckButton)
         {
             Clear();
-            
+
             if (streamDeckButton == null)
             {
                 return;
@@ -499,7 +405,7 @@ namespace DCSFlightpanels.PanelUserControls
                             var result = new FaceTypeText();
 
                             result.StreamDeckButtonName = streamDeckButtonName;
-                            result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
+                            result.StreamDeckInstanceId = StreamDeckInstanceId;
                             result.ButtonText = TextBoxButtonTextFace.Text;
                             result.TextFont = TextBoxButtonTextFace.Bill.TextFont;
                             result.FontColor = TextBoxButtonTextFace.Bill.FontColor;
@@ -523,7 +429,7 @@ namespace DCSFlightpanels.PanelUserControls
                             var result = new FaceTypeImage();
 
                             result.StreamDeckButtonName = streamDeckButtonName;
-                            result.StreamDeckInstanceId = SDUIParent.GetStreamDeckInstanceId();
+                            result.StreamDeckInstanceId = StreamDeckInstanceId;
                             result.ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath;
 
                             return result;
@@ -532,24 +438,23 @@ namespace DCSFlightpanels.PanelUserControls
                         return null;
                     }
                 case EnumStreamDeckFaceType.Unknown:
-                {
-                    return null;
-                }
+                    {
+                        return null;
+                    }
             }
 
             throw new ArgumentException("GetStreamDeckButtonFace, failed to determine Face Type");
         }
 
-        public IStreamDeckUIParent SDUIParent { get; set; }
 
         private void TextBoxButtonTextFace_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
                 var textBox = (StreamDeckFaceTextBox)sender;
-                textBox.TestImage( SDUIParent);
+                textBox.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
-                SDUIParent.ChildChangesMade();
+
                 SetFormState();
             }
             catch (Exception ex)
@@ -565,9 +470,9 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
-                TextBoxButtonTextFace.TestImage( SDUIParent);
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
-                SDUIParent.ChildChangesMade();
+
             }
             catch (Exception ex)
             {
@@ -581,9 +486,9 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
-                TextBoxButtonTextFace.TestImage( SDUIParent);
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
-                SDUIParent.ChildChangesMade();
+
             }
             catch (Exception ex)
             {
@@ -597,9 +502,9 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
-                TextBoxButtonTextFace.TestImage( SDUIParent);
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
-                SDUIParent.ChildChangesMade();
+
             }
             catch (Exception ex)
             {
@@ -613,9 +518,9 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxButtonTextFace.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
-                TextBoxButtonTextFace.TestImage( SDUIParent);
+                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
-                SDUIParent.ChildChangesMade();
+
             }
             catch (Exception ex)
             {
@@ -666,11 +571,11 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                 {
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, SDUIParent.GetStreamDeckInstanceId());
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, StreamDeckInstanceId);
                 }
                 else
                 {
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(SDUIParent.GetStreamDeckInstanceId());
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(StreamDeckInstanceId);
                 }
 
                 streamDeckDCSBIOSDecoderWindow.ShowDialog();
@@ -679,7 +584,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder;
                     SetIsDirty();
-                    SDUIParent.ChildChangesMade();
+
                 }
                 ButtonFocus.Focus();
             }
@@ -695,12 +600,12 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
                 SetIsDirty();
-                SDUIParent.ChildChangesMade();
+
                 ButtonFocus.Focus();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -718,16 +623,16 @@ namespace DCSFlightpanels.PanelUserControls
                     TextBoxImageFace.Bill.ImageFileRelativePath = imageRelativePath;
                     SettingsManager.LastImageFileDirectory = directory;
                     var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
-                    SDUIParent.TestImage(bitmap);
+                    StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(_streamDeckButton, bitmap);
                     SetIsDirty();
-                    SDUIParent.ChildChangesMade();
+
                     SetFormState();
                     ButtonFocus.Focus();
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -740,18 +645,45 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
                 var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
-                SDUIParent.TestImage(bitmap);
+                StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(_streamDeckButton, bitmap);
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        public UserControlStreamDeckButtonAction UserControlStreamDeckButtonAction
+        public void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e)
         {
-            get => _userControlStreamDeckButtonAction;
-            set => _userControlStreamDeckButtonAction = value;
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
         }
     }
 }
