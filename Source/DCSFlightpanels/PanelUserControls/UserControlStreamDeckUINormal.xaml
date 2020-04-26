@@ -26,6 +26,8 @@
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <EventSetter Event="MouseUp" Handler="ButtonImage_OnMouseUp"/>
             <EventSetter Event="PreviewMouseDown" Handler="ButtonImage_PreviewMouseDown"/>
+            <!--<EventSetter Event="KeyDown" Handler="ButtonImage_OnKeyDown"/>
+            <EventSetter Event="PreviewKeyDown" Handler="ButtonImage_OnPreviewKeyDown"/>-->
         </Style>
 
         <Style TargetType="Image" x:Key="DotImageStyle">
@@ -36,7 +38,7 @@
     </UserControl.Resources>
 
 
-    <Grid Name="GridButtons" Background="Black">
+    <Grid Name="GridButtons" Background="Black" >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="78" />
@@ -53,7 +55,7 @@
 
 
         <Border Style="{StaticResource BorderMouseHoover}" Grid.Column="0" Grid.Row="0">
-            <Canvas Name="Canvas1">
+            <Canvas Name="Canvas1" >
                 <customControls:StreamDeckImage x:Name="ButtonImage1" Width="{Binding Path=ActualWidth, ElementName=Canvas1}" Height="{Binding Path=ActualHeight, ElementName=Canvas1}" Stretch="Uniform" Style="{StaticResource ButtonImageStyle}" />
                 <Image Height="76" Name="DotImage1" Source="/dcsfp;component/Images/dot3.png" Stretch="None" Style="{StaticResource DotImageStyle}"/>
             </Canvas>

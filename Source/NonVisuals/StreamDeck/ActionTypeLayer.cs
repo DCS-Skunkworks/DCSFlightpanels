@@ -23,6 +23,16 @@ namespace NonVisuals.StreamDeck
         private string _streamDeckInstanceId;
 
 
+        public new int GetHash()
+        {
+            unchecked
+            {
+                var result = _streamDeckButtonName.GetHashCode();
+                result = (result * 397) ^ NavigationType.GetHashCode();
+                return result;
+            }
+        }
+
         public string Description { get => "Layer Navigation"; }
 
         public bool IsRunning()

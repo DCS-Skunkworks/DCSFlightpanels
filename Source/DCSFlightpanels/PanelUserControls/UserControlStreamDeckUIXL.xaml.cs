@@ -30,6 +30,11 @@ namespace DCSFlightpanels.PanelUserControls
             SetFormState();
         }
 
+        protected override int ButtonAmount()
+        {
+            return 32;
+        }
+
         protected override void SetFormState()
         {
             try

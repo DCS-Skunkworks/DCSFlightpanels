@@ -12,7 +12,16 @@ namespace NonVisuals.Saitek
          */
         private KeyPress _keyPress;
         private bool _whenOnTurnedOn = true;
-        
+
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = _keyPress?.GetHash() ?? 0;
+                return result;
+            }
+        }
+
         internal abstract void ImportSettings(string settings);
 
         public KeyPress OSKeyPress

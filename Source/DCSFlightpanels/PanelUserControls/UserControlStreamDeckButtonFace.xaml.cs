@@ -6,6 +6,7 @@ using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -182,7 +183,7 @@ namespace DCSFlightpanels.PanelUserControls
         public void SetIsDirty()
         {
             _isDirty = true;
-            EventHandlers.UserControlIsDirty(this);
+            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton, "");
         }
 
         public bool IsDirty
@@ -309,7 +310,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void ShowFaceConfiguration(StreamDeckButton streamDeckButton)
+        public void ShowStreamDeckButton(StreamDeckButton streamDeckButton)
         {
             Clear();
 
@@ -348,7 +349,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         }
 
-        public void ShowFaceConfiguration(IStreamDeckButtonFace streamDeckButtonFace)
+        private void ShowFaceConfiguration(IStreamDeckButtonFace streamDeckButtonFace)
         {
             if (streamDeckButtonFace == null)
             {
@@ -652,8 +653,48 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
+        
+        public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                Clear();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
 
-        public void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e)
+        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
+        {
+            try
+            {
+                ShowStreamDeckButton(StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedButton);
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void IsDirtyQueryReport(object sender, StreamDeckDirtyReportArgs e)
+        {
+            try
+            {
+                if (sender.Equals(this))
+                {
+                    return;
+                }
+                e.Cancel = IsDirty;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SenderIsDirtyNotification(object sender, StreamDeckDirtyNotificationArgs e)
         {
             try
             {
@@ -664,21 +705,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e)
+        public void ClearSettings(object sender, StreamDeckClearSettingsArgs e)
         {
             try
             {
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex);
-            }
-        }
-
-        public void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e)
-        {
-            try
-            {
+                if (e.ClearFaceConfiguration)
+                {
+                    Clear();
+                }
             }
             catch (Exception ex)
             {

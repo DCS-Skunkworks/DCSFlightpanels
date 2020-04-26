@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
 
@@ -24,10 +25,33 @@ namespace NonVisuals
          */
         private List<KeyPress> _negatorOSKeyPresses = new List<KeyPress>();
         private volatile bool _abort;
-        private const int _sleepValue = 32;
+        private const int SLEEP_VALUE = 32;
 
 
 
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = 0;
+                foreach (var tuple in _sortedKeyPressInfoList)
+                {
+                    result = (result * 397) ^ tuple.Key.GetHashCode();
+                    result = (result * 397) ^ tuple.Value.GetHashCode();
+                }
+                foreach (var keyPress in _negatorOSKeyPresses)
+                {
+                    foreach (var tuple in keyPress.KeySequence)
+                    {
+                        result = (result * 397) ^ tuple.Key.GetHashCode();
+                        result = (result * 397) ^ tuple.Value.VirtualKeyCodes.GetHashCode();
+                        result = (result * 397) ^ tuple.Value.VirtualKeyCodesAsString.GetHashCode();
+                    }
+                    result = (result * 397) ^ (string.IsNullOrWhiteSpace(_information) ? 0 : _information.GetHashCode());
+                }
+                return result;
+            }
+        }
 
 
 
@@ -93,7 +117,7 @@ namespace NonVisuals
                     Abort = true;
                     while (IsRunning())
                     {
-                        Thread.Sleep(_sleepValue);
+                        Thread.Sleep(SLEEP_VALUE);
                     }
                 }
 
@@ -172,8 +196,8 @@ namespace NonVisuals
             */
             while (breakLengthConsumed < (int)breakLength)
             {
-                Thread.Sleep(_sleepValue);
-                breakLengthConsumed += _sleepValue;
+                Thread.Sleep(SLEEP_VALUE);
+                breakLengthConsumed += SLEEP_VALUE;
                 if (Abort || cancellationToken.IsCancellationRequested)
                 {
                     return;
@@ -214,8 +238,8 @@ namespace NonVisuals
 
                 if (keyPressLength != KeyPressLength.Indefinite)
                 {
-                    Thread.Sleep(_sleepValue);
-                    keyPressLengthTimeConsumed += _sleepValue;
+                    Thread.Sleep(SLEEP_VALUE);
+                    keyPressLengthTimeConsumed += SLEEP_VALUE;
                 }
                 else
                 {
@@ -556,8 +580,8 @@ namespace NonVisuals
             var breakLengthConsumed = 0;
             while (breakLengthConsumed < (int)breakLength)
             {
-                Thread.Sleep(_sleepValue);
-                breakLengthConsumed += _sleepValue;
+                Thread.Sleep(SLEEP_VALUE);
+                breakLengthConsumed += SLEEP_VALUE;
                 if (Abort || cancellationToken.IsCancellationRequested)
                 {
                     return;
@@ -621,8 +645,8 @@ namespace NonVisuals
 
                 if (keyPressLength != KeyPressLength.Indefinite)
                 {
-                    Thread.Sleep(_sleepValue);
-                    keyPressLengthTimeConsumed += _sleepValue;
+                    Thread.Sleep(SLEEP_VALUE);
+                    keyPressLengthTimeConsumed += SLEEP_VALUE;
                 }
                 else
                 {

@@ -2,7 +2,6 @@
 using System.Windows;
 using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
-using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -27,6 +26,11 @@ namespace DCSFlightpanels.PanelUserControls
                 UserControlLoaded = true;
             }
             SetFormState();
+        }
+
+        protected override int ButtonAmount()
+        {
+            return 15;
         }
 
         protected override void SetFormState()
@@ -75,9 +79,6 @@ namespace DCSFlightpanels.PanelUserControls
             DotImages.Add(DotImage14);
             DotImages.Add(DotImage15);
         }
-
-
-
 
     }
 }

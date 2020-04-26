@@ -11,6 +11,7 @@ using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;
 
+
 namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
@@ -88,7 +89,7 @@ namespace DCSFlightpanels.PanelUserControls
                 StackPanelButtonOSCommandSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.OSCommand ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonLayerNavigationSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                StackPanelChooseButtonActionType.IsEnabled = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                //StackPanelChooseButtonActionType.IsEnabled = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
                 ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
                                                             TextBoxKeyPressButtonOn.Bill.ContainsKeyPress();
@@ -200,7 +201,7 @@ namespace DCSFlightpanels.PanelUserControls
         public void SetIsDirty()
         {
             _isDirty = true;
-            EventHandlers.UserControlIsDirty(this);
+            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, "");
         }
 
         public bool IsDirty
@@ -241,7 +242,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void ShowActionConfiguration(StreamDeckButton streamDeckButton)
+        public void ShowStreamDeckButton(StreamDeckButton streamDeckButton)
         {
             Clear();
             _streamDeckButton = streamDeckButton;
@@ -255,7 +256,7 @@ namespace DCSFlightpanels.PanelUserControls
             ShowActionConfiguration(streamDeckButton.ActionForRelease);
         }
 
-        public void ShowActionConfiguration(IStreamDeckButtonAction streamDeckButtonAction)
+        private void ShowActionConfiguration(IStreamDeckButtonAction streamDeckButtonAction)
         {
             if (streamDeckButtonAction == null)
             {
@@ -845,7 +846,47 @@ namespace DCSFlightpanels.PanelUserControls
             throw new Exception("Failed to determine focused component (GetStreamDeckButtonOnOff) ");
         }
 
-        public void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e)
+        public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                Clear();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
+        {
+            try
+            {
+                ShowStreamDeckButton(StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedButton);
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void IsDirtyQueryReport(object sender, StreamDeckDirtyReportArgs e)
+        {
+            try
+            {
+                if (sender.Equals(this))
+                {
+                    return;
+                }
+                e.Cancel = IsDirty;
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SenderIsDirtyNotification(object sender, StreamDeckDirtyNotificationArgs e)
         {
             try
             {
@@ -856,21 +897,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e)
+        public void ClearSettings(object sender, StreamDeckClearSettingsArgs e)
         {
             try
             {
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex);
-            }
-        }
-
-        public void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e)
-        {
-            try
-            {
+                if (e.ClearActionConfiguration)
+                {
+                    Clear();
+                }
             }
             catch (Exception ex)
             {

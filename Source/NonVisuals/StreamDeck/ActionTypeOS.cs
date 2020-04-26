@@ -15,6 +15,15 @@ namespace NonVisuals.StreamDeck
 
 
 
+        public new int GetHash()
+        {
+            unchecked
+            {
+                var result = OSCommandObject.GetHash();
+                result = (result * 397) ^ _streamDeckButtonName.GetHashCode();
+                return result;
+            }
+        }
 
         public string Description { get => "OS Command"; }
 

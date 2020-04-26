@@ -16,9 +16,19 @@ namespace NonVisuals.StreamDeck
 
 
 
-
-
-
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = _streamDeckButtonName.GetHashCode();
+                foreach (var dcsbiosInput in DCSBIOSInputs)
+                {
+                    result = (result * 397) ^ dcsbiosInput.GetHashCode();
+                }
+                return result;
+            }
+        }
+        
         public void Execute(CancellationToken threadCancellationToken)
         {
             SendDCSBIOSCommands(threadCancellationToken);

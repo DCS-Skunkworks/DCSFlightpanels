@@ -15,12 +15,13 @@ using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;
 
+
 namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckDirtyListener, IStreamDeckListener
+    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckListener
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly DCSBIOS _dcsbios;
@@ -45,13 +46,12 @@ namespace DCSFlightpanels.PanelUserControls
             InitializeComponent();
             _parentTabItem = parentTabItem;
             _parentTabItemHeader = _parentTabItem.Header.ToString();
-            _streamDeckPanel = new StreamDeckPanel(this, panelType, hidSkeleton);
+            _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             _streamDeckPanel.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_streamDeckPanel);
             _globalHandler = globalHandler;
             _dcsbios = dcsbios;
 
-            EventHandlers.AttachDirtyListener(this);
 
             StackPanelButtonUI.Children.Clear();
             switch (panelType)
@@ -76,12 +76,10 @@ namespace DCSFlightpanels.PanelUserControls
                     }
             }
 
-            _streamDeckPanel.Attach(UCStreamDeckButtonAction);
-            _streamDeckPanel.Attach(UCStreamDeckButtonFace);
-            _streamDeckPanel.Attach(_streamDeckUI);
-            _streamDeckPanel.Attach(this);
-            _streamDeckUI.Attach(UCStreamDeckButtonAction);
-            _streamDeckUI.Attach(UCStreamDeckButtonFace);
+            EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonAction);
+            EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonFace);
+            EventHandlers.AttachStreamDeckListener(_streamDeckUI);
+            EventHandlers.AttachStreamDeckListener(this);
 
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
             UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
@@ -277,6 +275,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             _comboBoxLayerTextComparison = ComboBoxLayers.Text;
         }
+        
+        private void ComboBoxLayers_OnDropDownOpened(object sender, EventArgs e)
+        {
+            
+        }
 
         private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
         {
@@ -441,8 +444,9 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                UCStreamDeckButtonAction.Clear();
-                UCStreamDeckButtonAction.ShowActionConfiguration(_streamDeckPanel.SelectedButton);
+                EventHandlers.ClearSettings(this,true,false,false);
+                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButtonName);
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -470,8 +474,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                UCStreamDeckButtonFace.Clear();
-                UCStreamDeckButtonFace.ShowFaceConfiguration(_streamDeckPanel.SelectedButton);
+                EventHandlers.ClearSettings(this, false, true, false);
+                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButtonName);
                 SetFormState();
             }
             catch (Exception ex)
@@ -541,7 +545,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e)
+        public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
             {
@@ -556,7 +560,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e)
+        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
         {
             try
             {
@@ -567,10 +571,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e)
+        public void IsDirtyQueryReport(object sender, StreamDeckDirtyReportArgs e)
         {
             try
             {
+                if (sender.Equals(this))
+                {
+                    return;
+                }
             }
             catch (Exception ex)
             {
@@ -578,11 +586,22 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void IsDirtyControl(object sender, StreamDeckUIControlDirtyChangeArgs e)
+        public void SenderIsDirtyNotification(object sender, StreamDeckDirtyNotificationArgs e)
         {
             try
             {
                 SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void ClearSettings(object sender, StreamDeckClearSettingsArgs e)
+        {
+            try
+            {
             }
             catch (Exception ex)
             {

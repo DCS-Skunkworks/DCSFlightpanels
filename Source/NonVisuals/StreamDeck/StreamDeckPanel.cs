@@ -31,7 +31,7 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public StreamDeckPanel(IStreamDeckListener streamDeckListener, GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.StreamDeck, hidSkeleton)
+        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.StreamDeck, hidSkeleton)
         {
             switch (panelType)
             {
@@ -55,7 +55,7 @@ namespace NonVisuals.StreamDeck
             _streamDeckBoard = StreamDeckSharp.StreamDeck.OpenDevice(hidSkeleton.InstanceId, false);
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
-            _streamDeckLayerHandler.Attach(streamDeckListener);
+            EventHandlers.AttachStreamDeckListener(this);
             StreamDeckPanels.Add(this);
         }
 
@@ -403,17 +403,7 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
-        public void Attach(IStreamDeckListener streamDeckListener)
-        {
-            _streamDeckLayerHandler.Attach(streamDeckListener);
-        }
-
-        public void Detach(IStreamDeckListener streamDeckListener)
-        {
-            _streamDeckLayerHandler.Detach(streamDeckListener);
-        }
-
-        public void LayerSwitched(object sender, StreamDeckLayerSwitchArgs e)
+        public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
             {
@@ -425,7 +415,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangeArgs e)
+        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
         {
             try
             {
@@ -436,7 +426,29 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void SelectedButtonChangePreview(object sender, StreamDeckSelectedButtonChangePreviewArgs e)
+        public void IsDirtyQueryReport(object sender, StreamDeckDirtyReportArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void SenderIsDirtyNotification(object sender, StreamDeckDirtyNotificationArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void ClearSettings(object sender, StreamDeckClearSettingsArgs e)
         {
             try
             {

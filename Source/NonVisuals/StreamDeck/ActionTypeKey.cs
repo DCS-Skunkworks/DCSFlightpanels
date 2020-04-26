@@ -17,6 +17,16 @@ namespace NonVisuals.StreamDeck
 
 
 
+        public new int GetHash()
+        {
+            unchecked
+            {
+                var result = _streamDeckButtonName.GetHashCode();
+                result = (result * 397) ^ base.GetHash();
+                return result;
+            }
+        }
+
 
         public string Description { get => "Key press"; }
 

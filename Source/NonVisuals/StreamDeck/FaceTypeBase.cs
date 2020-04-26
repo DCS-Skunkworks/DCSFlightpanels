@@ -19,7 +19,7 @@ namespace NonVisuals.StreamDeck
         private int _offsetY = 0;
 
 
-
+        public abstract int GetHash();
         protected abstract void DrawBitmap();
         protected virtual void Show() {}
 

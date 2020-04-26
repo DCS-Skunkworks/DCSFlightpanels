@@ -154,9 +154,7 @@
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillBaseOutput.cs" />
-    <Compile Include="EventHandlers.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Interfaces\IStreamDeckDirtyListener.cs" />
     <Compile Include="Shared\CommonUI.cs" />
     <Compile Include="Shared\StreamDeckUICommon.cs" />
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />

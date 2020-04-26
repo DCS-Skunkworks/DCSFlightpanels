@@ -11,7 +11,7 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class StreamDeckButton
     {
-        private EnumStreamDeckButtonNames _streamDeckButtonName;
+        private readonly EnumStreamDeckButtonNames _streamDeckButtonName;
         private IStreamDeckButtonFace _buttonFace = null;
         private IStreamDeckButtonAction _buttonActionForPress = null;
         private IStreamDeckButtonAction _buttonActionForRelease = null;
@@ -20,6 +20,22 @@ namespace NonVisuals.StreamDeck
         private string _streamDeckInstanceId;
         [NonSerialized] private static List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
         private bool _isVisible = false;
+
+
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = _buttonFace?.GetHash() ?? 0;
+                result = (result * 397) ^ (_buttonActionForPress?.GetHash() ?? 0);
+                result = (result * 397) ^ (_buttonActionForRelease?.GetHash() ?? 0);
+                result = (result * 397) ^ StreamDeckButtonName.GetHashCode();
+                return result;
+            }
+        }
+
+
+
 
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
         {

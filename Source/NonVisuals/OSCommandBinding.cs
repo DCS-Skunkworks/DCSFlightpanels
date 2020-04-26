@@ -14,6 +14,16 @@
         
         public abstract string ExportSettings();
 
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = _whenOnTurnedOn.GetHashCode();
+                result = (result * 397) ^ (_osCommand?.GetHash() ?? 0);
+                return result;
+            }
+        }
+
         public bool WhenTurnedOn
         {
             get => _whenOnTurnedOn;

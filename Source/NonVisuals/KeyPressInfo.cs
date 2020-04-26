@@ -13,6 +13,22 @@ namespace NonVisuals
         private KeyPressLength _lengthOfKeyPress = KeyPressLength.FiftyMilliSec;
         private HashSet<VirtualKeyCode> _virtualKeyCodes = new HashSet<VirtualKeyCode>();
 
+
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = 0;
+                foreach (var virtualKeyCode in _virtualKeyCodes)
+                {
+                    result = (result * 397) ^ virtualKeyCode.GetHashCode();
+                }
+                result = (result * 397) ^ _lengthOfBreak.GetHashCode();
+                result = (result * 397) ^ _lengthOfKeyPress.GetHashCode();
+                return result;
+            }
+        }
+
         public KeyPressLength LengthOfBreak
         {
             get => _lengthOfBreak;

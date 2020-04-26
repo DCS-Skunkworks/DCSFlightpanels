@@ -1,28 +1,55 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Controls;
 
 namespace NonVisuals.StreamDeck.Events
 {
-    
-    public class StreamDeckLayerSwitchArgs :  EventArgs
+    /*
+     * Buttons change => update GUI to show new Button's configuration
+     * Layer change => update GUI to show new Layer's configuration
+     *
+     * Before Button change => unsaved configs?
+     * Before Layer change => unsaved configs?
+     *
+     * Pro-active, unsaved configs => show save button
+     */
+     
+    public class StreamDeckShowNewButtonArgs : EventArgs
     {
+        /*
+         * Show new Button's configuration
+         */
+        public EnumStreamDeckButtonNames SelectedButtonName { get; set; }
+    }
+
+    public class StreamDeckShowNewLayerArgs :  EventArgs
+    {
+        /*
+         * Show new Layer's configuration
+         */
         public string SelectedLayerName { get; set; }
     }
 
-    public class StreamDeckSelectedButtonChangeArgs : EventArgs
+    public class StreamDeckDirtyReportArgs : CancelEventArgs
     {
-        public StreamDeckButton Button { get; set; }
+        /*
+         * Before change, unsaved configurations?
+         * Cancel = true means there are...
+         */
     }
 
-    public class StreamDeckSelectedButtonChangePreviewArgs : CancelEventArgs
+    public class StreamDeckDirtyNotificationArgs : CancelEventArgs
     {
-        public bool ConfigIsUnsaved { get; set; }
+        /*
+         * Pro-active
+         */
+        public string LayerName { get; set; }
         public EnumStreamDeckButtonNames ButtonName { get; set; }
     }
 
-    public class StreamDeckUIControlDirtyChangeArgs : EventArgs
+    public class StreamDeckClearSettingsArgs : EventArgs
     {
-        public UserControl UserControl { get; set; }
+        public bool ClearActionConfiguration = false;
+        public bool ClearFaceConfiguration = false;
+        public bool ClearUIConfiguration = false;
     }
 }

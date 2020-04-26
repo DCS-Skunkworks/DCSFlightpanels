@@ -12,6 +12,18 @@ namespace NonVisuals
         private string _name;
         private volatile bool _isRunning;
 
+
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = string.IsNullOrWhiteSpace(_file) ? 0 : _file.GetHashCode();
+                result = (result * 397) ^ (string.IsNullOrWhiteSpace(_arguments) ? 0 : _arguments.GetHashCode());
+                result = (result * 397) ^ (string.IsNullOrWhiteSpace(_name) ? 0 : _name.GetHashCode());
+                return result;
+            }
+        }
+
         public OSCommand()
         {}
         
