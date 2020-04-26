@@ -347,7 +347,7 @@ namespace NonVisuals.StreamDeck
                 if (_selectedButtonName != value)
                 {
                     _selectedButtonName = value;
-                    EventHandlers.SelectedButtonChanged(this, _selectedButtonName);
+                    EventHandlers.SelectedButtonChanged(this, SelectedButton);
                     return;
                 }
                 _selectedButtonName = value;

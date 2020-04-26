@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -34,7 +33,7 @@ namespace DCSFlightpanels.PanelUserControls
         private Random _random = new Random();
         private Thread _identificationThread;
 
-        private IStreamDeckUI _streamDeckUI;
+        private UserControlStreamDeckUIBase _buttonUI;
 
 
 
@@ -61,7 +60,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var child = new UserControlStreamDeckUINormal();
                         child.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
-                        _streamDeckUI = child;
+                        _buttonUI = child;
                         StackPanelButtonUI.Children.Add(child);
 
                         break;
@@ -70,7 +69,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var child = new UserControlStreamDeckUIXL();
                         child.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
-                        _streamDeckUI = child;
+                        _buttonUI = child;
                         StackPanelButtonUI.Children.Add(child);
                         break;
                     }
@@ -78,7 +77,8 @@ namespace DCSFlightpanels.PanelUserControls
 
             EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonAction);
             EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonFace);
-            EventHandlers.AttachStreamDeckListener(_streamDeckUI);
+            EventHandlers.AttachStreamDeckListener(_buttonUI);
+            EventHandlers.AttachStreamDeckConfigListener(_buttonUI);
             EventHandlers.AttachStreamDeckListener(this);
 
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
@@ -104,20 +104,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var selectedButtonNumber = _streamDeckPanel.SelectedButtonNumber;
-                
-                if (_streamDeckUI.PastedStreamDeckButton != null)
-                {
-                    _streamDeckPanel.AddStreamDeckButtonToActiveLayer(_streamDeckUI.PastedStreamDeckButton);
-                    _streamDeckUI.PastedStreamDeckButton = null;
-                }
-
-                UCStreamDeckButtonAction.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
-                UCStreamDeckButtonFace.Visibility = selectedButtonNumber != 0 ? Visibility.Visible : Visibility.Hidden;
-
-                UCStreamDeckButtonAction.SetFormState();
-                UCStreamDeckButtonFace.SetFormState();
-
                 ButtonAcceptButtonChanges.IsEnabled = UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty;
                 ButtonCancelAction.IsEnabled = UCStreamDeckButtonAction.IsDirty && UCStreamDeckButtonAction.HasConfig;
                 ButtonDeleteAction.IsEnabled = UCStreamDeckButtonAction.HasConfig;
@@ -404,6 +390,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                     UCStreamDeckButtonAction.StateSaved();
                     UCStreamDeckButtonFace.StateSaved();
+                    EventHandlers.NotifyToSyncConfiguration(this);
                     SetFormState();
                 }
                 catch (Exception ex)
@@ -432,6 +419,8 @@ namespace DCSFlightpanels.PanelUserControls
 
                 UCStreamDeckButtonAction.Clear();
                 _streamDeckPanel.SignalPanelChange(); //todo fix event propagation
+
+                EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
             }
             catch (Exception ex)
@@ -445,7 +434,8 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 EventHandlers.ClearSettings(this,true,false,false);
-                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButtonName);
+                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton);
+                EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
             }
             catch (Exception ex)
@@ -462,6 +452,7 @@ namespace DCSFlightpanels.PanelUserControls
                 streamDeckButton.Face = null;
                 UCStreamDeckButtonFace.Clear();
                 _streamDeckPanel.SignalPanelChange(); //todo fix event propagation
+                EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
             }
             catch (Exception ex)
@@ -475,7 +466,8 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 EventHandlers.ClearSettings(this, false, true, false);
-                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButtonName);
+                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton);
+                EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
             }
             catch (Exception ex)
@@ -552,6 +544,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (ComboBoxLayers.Text != e.SelectedLayerName)
                 {
                     Dispatcher?.BeginInvoke((Action)LoadComboBoxLayers);
+                    Dispatcher?.BeginInvoke((Action)SetFormState);
                 }
             }
             catch (Exception ex)
@@ -564,6 +557,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -602,6 +596,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                SetFormState();
             }
             catch (Exception ex)
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -29,6 +28,7 @@ namespace NonVisuals.StreamDeck
                 result = (result * 397) ^ OffsetY;
                 result = (result * 397) ^ _fontColor.GetHashCode();
                 result = (result * 397) ^ _backgroundColor.GetHashCode();
+                result = (result * 397) ^ StreamDeckButtonName.GetHashCode();
                 return result;
             }
         }

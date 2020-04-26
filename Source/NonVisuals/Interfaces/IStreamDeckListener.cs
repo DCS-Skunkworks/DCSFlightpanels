@@ -10,4 +10,10 @@ namespace NonVisuals.Interfaces
         void SenderIsDirtyNotification(object sender, StreamDeckDirtyNotificationArgs e);
         void ClearSettings(object sender, StreamDeckClearSettingsArgs e);
     }
+
+    public interface IStreamDeckConfigListener
+    {
+        void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e);
+    }
+    
 }

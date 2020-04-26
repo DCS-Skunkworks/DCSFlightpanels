@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Windows;
 using ClassLibraryCommon;
-using DCSFlightpanels.Interfaces;
 
 namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for UserControlStreamDeckNormal.xaml
     /// </summary>
-    public partial class UserControlStreamDeckUINormal : UserControlStreamDeckUIBase, IStreamDeckUI
+    public partial class UserControlStreamDeckUINormal : UserControlStreamDeckUIBase
     {
         public UserControlStreamDeckUINormal()
         {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using ClassLibraryCommon;
-using DCSFlightpanels.Interfaces;
 using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls
@@ -9,7 +8,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for UserControlStreamDeckNormal.xaml
     /// </summary>
-    public partial class UserControlStreamDeckUIXL : UserControlStreamDeckUIBase, IStreamDeckUI
+    public partial class UserControlStreamDeckUIXL : UserControlStreamDeckUIBase
     {
 
         public UserControlStreamDeckUIXL():base()

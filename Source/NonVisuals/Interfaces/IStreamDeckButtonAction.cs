@@ -20,5 +20,6 @@ namespace NonVisuals.Interfaces
         bool IsRunning();
         bool IsRepeatable();
         string StreamDeckInstanceId { get; set; }
+        int GetHash();
     }
 }

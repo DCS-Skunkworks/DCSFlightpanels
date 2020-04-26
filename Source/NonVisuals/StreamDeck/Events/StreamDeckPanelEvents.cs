@@ -18,7 +18,7 @@ namespace NonVisuals.StreamDeck.Events
         /*
          * Show new Button's configuration
          */
-        public EnumStreamDeckButtonNames SelectedButtonName { get; set; }
+        public StreamDeckButton SelectedButton { get; set; }
     }
 
     public class StreamDeckShowNewLayerArgs :  EventArgs
@@ -52,4 +52,7 @@ namespace NonVisuals.StreamDeck.Events
         public bool ClearFaceConfiguration = false;
         public bool ClearUIConfiguration = false;
     }
+
+    public class StreamDeckSyncConfigurationArgs : EventArgs
+    { }
 }

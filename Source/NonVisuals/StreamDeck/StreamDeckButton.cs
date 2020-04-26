@@ -11,7 +11,7 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class StreamDeckButton
     {
-        private readonly EnumStreamDeckButtonNames _streamDeckButtonName;
+        private EnumStreamDeckButtonNames _streamDeckButtonName;
         private IStreamDeckButtonFace _buttonFace = null;
         private IStreamDeckButtonAction _buttonActionForPress = null;
         private IStreamDeckButtonAction _buttonActionForRelease = null;

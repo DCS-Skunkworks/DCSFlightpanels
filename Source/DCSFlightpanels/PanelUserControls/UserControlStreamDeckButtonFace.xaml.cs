@@ -659,6 +659,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 Clear();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -671,6 +672,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 ShowStreamDeckButton(StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedButton);
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -687,6 +689,7 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
                 e.Cancel = IsDirty;
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -698,6 +701,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -713,6 +717,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     Clear();
                 }
+                SetFormState();
             }
             catch (Exception ex)
             {

@@ -85,9 +85,9 @@ namespace NonVisuals.StreamDeck.Events
         public delegate void StreamDeckShowNewButtonEventHandler(object sender, StreamDeckShowNewButtonArgs e);
         public static event StreamDeckShowNewButtonEventHandler OnStreamDeckShowNewButtonEventHandler;
 
-        public static void SelectedButtonChanged(object sender, EnumStreamDeckButtonNames streamDeckButtonName)
+        public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton)
         {
-            var eventArgs = new StreamDeckShowNewButtonArgs() {SelectedButtonName = streamDeckButtonName};
+            var eventArgs = new StreamDeckShowNewButtonArgs() {SelectedButton = streamDeckButton};
             OnStreamDeckShowNewButtonEventHandler?.Invoke(sender, eventArgs);
         }
 
@@ -106,6 +106,28 @@ namespace NonVisuals.StreamDeck.Events
             newEvent.ClearUIConfiguration = clearUI;
 
             OnStreamDeckClearSettingsEventHandler?.Invoke(sender, newEvent);
+        }
+
+
+        /********************************************************************************************
+        *                            Event to notify listener to sync configuration
+        ********************************************************************************************/
+        public delegate void StreamDeckSyncConfigurationEventHandler(object sender, StreamDeckSyncConfigurationArgs e);
+        public static event StreamDeckSyncConfigurationEventHandler OnStreamDeckSyncConfigurationEventHandler;
+
+        public static void NotifyToSyncConfiguration(object sender)
+        {
+            OnStreamDeckSyncConfigurationEventHandler?.Invoke(sender, new StreamDeckSyncConfigurationArgs());
+        }
+
+        public static void AttachStreamDeckConfigListener(IStreamDeckConfigListener streamDeckConfigListener)
+        {
+            OnStreamDeckSyncConfigurationEventHandler += streamDeckConfigListener.SyncConfiguration;
+        }
+
+        public static void DetachStreamDeckConfigListener(IStreamDeckConfigListener streamDeckConfigListener)
+        {
+            OnStreamDeckSyncConfigurationEventHandler -= streamDeckConfigListener.SyncConfiguration;
         }
     }
 

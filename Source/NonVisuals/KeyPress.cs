@@ -36,23 +36,12 @@ namespace NonVisuals
                 var result = 0;
                 foreach (var tuple in _sortedKeyPressInfoList)
                 {
-                    result = (result * 397) ^ tuple.Key.GetHashCode();
-                    result = (result * 397) ^ tuple.Value.GetHashCode();
+                    result = (result * 397) ^ tuple.Value.GetHash();
                 }
-                foreach (var keyPress in _negatorOSKeyPresses)
-                {
-                    foreach (var tuple in keyPress.KeySequence)
-                    {
-                        result = (result * 397) ^ tuple.Key.GetHashCode();
-                        result = (result * 397) ^ tuple.Value.VirtualKeyCodes.GetHashCode();
-                        result = (result * 397) ^ tuple.Value.VirtualKeyCodesAsString.GetHashCode();
-                    }
-                    result = (result * 397) ^ (string.IsNullOrWhiteSpace(_information) ? 0 : _information.GetHashCode());
-                }
+                result = (result * 397) ^ (string.IsNullOrWhiteSpace(_information) ? 0 : _information.GetHashCode());
                 return result;
             }
         }
-
 
 
 

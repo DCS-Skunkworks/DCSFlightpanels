@@ -168,7 +168,6 @@
     <Compile Include="CustomControls\StreamDeckActionTextBox.cs" />
     <Compile Include="CustomControls\PZ55TextBox.cs" />
     <Compile Include="Event Propagators\SettingsChangedPropagator.cs" />
-    <Compile Include="Interfaces\IStreamDeckUI.cs" />
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
