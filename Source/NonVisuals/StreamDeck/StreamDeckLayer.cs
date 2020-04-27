@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
+using NonVisuals.StreamDeck.Events;
 
 namespace NonVisuals.StreamDeck
 {
@@ -14,7 +15,7 @@ namespace NonVisuals.StreamDeck
         private Font _textFont;
         private Color _fontColor;
         private Color _backgroundColor;
-
+        private bool _isVisible = false;
 
         public Font TextFont
         {
@@ -92,9 +93,27 @@ namespace NonVisuals.StreamDeck
 
         public void AddButton(StreamDeckButton streamDeckButton)
         {
-            _streamDeckButtons.Add(streamDeckButton);
-        }
+            streamDeckButton.IsVisible = _isVisible;
 
+            var found = false;
+            foreach (var button in StreamDeckButtons)
+            {
+                if (button.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName)
+                {
+                    button.Consume(streamDeckButton);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                _streamDeckButtons.Add(streamDeckButton);
+            }
+
+            EventHandlers.NotifyStreamDeckConfigurationChange(this);
+        }
+        
         public string Name
         {
             get => _name;
@@ -167,6 +186,20 @@ namespace NonVisuals.StreamDeck
         public void RemoveButton(StreamDeckButton streamDeckButton)
         {
             _streamDeckButtons.Remove(streamDeckButton);
+            EventHandlers.NotifyStreamDeckConfigurationChange(this);
+        }
+
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                _isVisible = value;
+                foreach (var streamDeckButton in StreamDeckButtons)
+                {
+                    streamDeckButton.IsVisible = _isVisible;
+                }
+            }
         }
     }
 }

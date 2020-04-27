@@ -667,7 +667,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
+        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangedArgs e)
         {
             try
             {

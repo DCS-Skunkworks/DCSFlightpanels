@@ -91,11 +91,11 @@
                 </StackPanel>
             </GroupBox>
 
-            <StackPanel Name="StackPanelRaw" HorizontalAlignment="Left" Margin="0,0,5,0" Visibility="Visible">
+            <StackPanel Name="StackPanelRaw" HorizontalAlignment="Left" Margin="0,0,5,0" Visibility="Collapsed">
                 <GroupBox Header="Settings" HorizontalAlignment="Stretch">
                     <StackPanel HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputTextRaw" Width="72" Height="72" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputButtonTextRaw" Width="72" Height="72" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonPressUpRaw" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
                                 <RepeatButton Name="RepeatButtonPressDownRaw" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
@@ -122,7 +122,7 @@
                 <GroupBox Header="Settings" >
                     <StackPanel >
                         <Label Content="Selected Image" FontSize="10" Height="23" Margin="0,5,2,0" />
-                        <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" IsReadOnly="True" x:Name="TextBoxImage"  IsEnabled="False" Background="LightSteelBlue"/>
+                        <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" IsReadOnly="True" x:Name="TextBoxImagePath"  IsEnabled="False" Background="LightSteelBlue"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Button Name="ButtonBrowseImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseImage_OnClick"/>
                             <Button Name="ButtonTestSelectImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
@@ -131,11 +131,11 @@
                 </GroupBox>
             </StackPanel>
 
-            <StackPanel Name="StackPanelOverlayImage" Margin="0,0,5,0"  Visibility="Collapsed" HorizontalAlignment="Left">
+            <StackPanel Name="StackPanelOverlayImage" Margin="0,0,5,0"  Visibility="Visible" HorizontalAlignment="Left">
                 <GroupBox Header="Settings">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Name="TextBoxOutputTextOverlayImage" Width="72" Height="72" HorizontalAlignment="Left" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                            <TextBox Name="TextBoxOutputButtonTextOverlayImage" Width="72" Height="72" HorizontalAlignment="Left" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonActionPressUpOverlay" Content="{StaticResource UpArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
                                 <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
@@ -156,7 +156,7 @@
                         <Label Name="LabelInsertOverlayImage" FontSize="9" Foreground="MediumBlue" Content="Click to insert {dcsbios}" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
 
                         <Label Content="Selected Image" FontSize="10" Height="23" Margin="0,5,2,0" />
-                        <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" Width="300" IsReadOnly="True" x:Name="TextBoxOverlayImage"  IsEnabled="False" Background="LightSteelBlue"/>
+                        <customControls:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" Width="300" IsReadOnly="True" x:Name="TextBoxOverlayImagePath"  IsEnabled="False" Background="LightSteelBlue"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <Button Name="ButtonBrowseOverlayImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseImage_OnClick"/>
                             <Button Name="ButtonTestSelectOverlayImage" Width="65" Content="Test"  Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>

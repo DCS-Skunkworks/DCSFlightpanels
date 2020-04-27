@@ -385,7 +385,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             if (result)
             {
-                StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.AddButton(oldStreamDeckButton);
+                StreamDeckPanel.GetInstance(StreamDeckInstanceId).AddButtonToSelectedLayer(oldStreamDeckButton);
                 UpdateButtonInfoFromSource();
                 SetIsDirty();
             }
@@ -407,7 +407,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
+        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangedArgs e)
         {
             try
             {
@@ -465,6 +465,18 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
         public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e)
+        {
+            try
+            {
+                UpdateButtonInfoFromSource();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void ConfigurationChanged(object sender, StreamDeckConfigurationChangedArgs e)
         {
             try
             {

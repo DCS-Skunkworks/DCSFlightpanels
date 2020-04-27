@@ -14,7 +14,7 @@ using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
-    public class StreamDeckPanel : GamingPanel, IStreamDeckListener
+    public class StreamDeckPanel : GamingPanel, IStreamDeckListener, IStreamDeckConfigListener
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
@@ -56,6 +56,7 @@ namespace NonVisuals.StreamDeck
             _streamDeckBoard.KeyStateChanged += StreamDeckKeyListener;
             _streamDeckLayerHandler = new StreamDeckLayerHandler(this);
             EventHandlers.AttachStreamDeckListener(this);
+            EventHandlers.AttachStreamDeckConfigListener(this);
             StreamDeckPanels.Add(this);
         }
 
@@ -102,10 +103,9 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void AddStreamDeckButtonToActiveLayer(StreamDeckButton streamDeckButton)
+        public void AddButtonToSelectedLayer(StreamDeckButton streamDeckButton)
         {
-            _streamDeckLayerHandler.AddButtonToSelectedLayer(streamDeckButton);
-            SetIsDirty();
+            _streamDeckLayerHandler.SelectedLayer.AddButton(streamDeckButton);
         }
 
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
@@ -119,7 +119,7 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            
+
             var streamDeckButton = _streamDeckLayerHandler.GetSelectedLayerButton(e.Key + 1);
 
             if (e.IsDown)
@@ -399,15 +399,13 @@ namespace NonVisuals.StreamDeck
 
         public void RemoveButton(StreamDeckButton streamDeckButton)
         {
-            _streamDeckLayerHandler.RemoveButton(streamDeckButton);
-            SetIsDirty();
+            _streamDeckLayerHandler.SelectedLayer.RemoveButton(streamDeckButton);
         }
 
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
             {
-                ClearAllFaces();
             }
             catch (Exception ex)
             {
@@ -415,7 +413,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
+        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangedArgs e)
         {
             try
             {
@@ -452,6 +450,21 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+
+        public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e) { }
+
+        public void ConfigurationChanged(object sender, StreamDeckConfigurationChangedArgs e)
+        {
+            try
+            {
+                SetIsDirty();
             }
             catch (Exception ex)
             {

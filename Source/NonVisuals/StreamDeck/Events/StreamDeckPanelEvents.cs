@@ -12,11 +12,11 @@ namespace NonVisuals.StreamDeck.Events
      *
      * Pro-active, unsaved configs => show save button
      */
-     
-    public class StreamDeckShowNewButtonArgs : EventArgs
+
+    public class StreamDeckSelectedButtonChangedArgs : EventArgs
     {
         /*
-         * Show new Button's configuration
+         * Show selected Button's configuration
          */
         public StreamDeckButton SelectedButton { get; set; }
     }
@@ -53,6 +53,7 @@ namespace NonVisuals.StreamDeck.Events
         public bool ClearUIConfiguration = false;
     }
 
-    public class StreamDeckSyncConfigurationArgs : EventArgs
-    { }
+    public class StreamDeckSyncConfigurationArgs : EventArgs { }
+
+    public class StreamDeckConfigurationChangedArgs : EventArgs { }
 }

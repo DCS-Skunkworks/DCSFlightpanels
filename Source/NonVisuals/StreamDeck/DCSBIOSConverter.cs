@@ -137,8 +137,9 @@ namespace NonVisuals.StreamDeck
                 var jaceExtended = JaceExtendedFactory.Instance(ref _jaceId);
 
                 var formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator1) + " reference";
+                formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
                 var variables = new Dictionary<string, double>();
-                variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolder, _referenceValue1);
+                variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, _referenceValue1);
                 variables.Add("reference", _dcsbiosValue);
                 var result1 = jaceExtended.CalculationEngine.Calculate(formula, variables);
                 _criteria1IsOk = Math.Abs(result1 - 1.0) < 0.0001;
@@ -149,8 +150,9 @@ namespace NonVisuals.StreamDeck
                 }
 
                 formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator2) + " reference";
+                formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
                 variables = new Dictionary<string, double>();
-                variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolder, _referenceValue2);
+                variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, _referenceValue2);
                 variables.Add("reference", _dcsbiosValue);
                 var result2 = jaceExtended.CalculationEngine.Calculate(formula, variables);
                 _criteria2IsOk = Math.Abs(result2 - 1.0) < 0.0001;

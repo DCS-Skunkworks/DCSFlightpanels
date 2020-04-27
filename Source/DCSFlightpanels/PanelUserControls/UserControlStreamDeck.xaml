@@ -1,4 +1,4 @@
-﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.StreamDeckUserControl"
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.UserControlStreamDeck"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,7 @@
              xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
              xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
              mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="1000" Loaded="StreamDeckUserControl_OnLoaded">
+             d:DesignHeight="650" d:DesignWidth="1000" Loaded="UserControlStreamDeck_OnLoaded">
     <UserControl.Resources>
         
     </UserControl.Resources>

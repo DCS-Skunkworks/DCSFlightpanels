@@ -43,6 +43,7 @@ namespace DCSFlightpanels.Windows
             _streamDeckButtonName = streamDeckButtonName;
             _streamDeckPanelInstanceId = streamDeckPanelInstanceId;
             _streamDeckPanel = StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId);
+            //den tappar file path när json laddas igen
             _dcsbiosConverter = dcsbiosConverter;
         }
 
@@ -171,7 +172,7 @@ namespace DCSFlightpanels.Windows
                         return;
                     }
 
-                    if (!double.TryParse(TextBoxReferenceValue1.Text, out var result))
+                    if (!double.TryParse(TextBoxReferenceValue1.Text,NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
                     {
                         _dcsbiosConverter.ReferenceValue1 = result;
                         SetIsDirty();
@@ -245,11 +246,11 @@ namespace DCSFlightpanels.Windows
                 TextBox textBox = null;
                 if (sender.Equals(LabelInsertRaw))
                 {
-                    textBox = TextBoxOutputTextRaw;
+                    textBox = TextBoxOutputButtonTextRaw;
                 }
                 if (sender.Equals(LabelInsertOverlayImage))
                 {
-                    textBox = TextBoxOutputTextOverlayImage;
+                    textBox = TextBoxOutputButtonTextOverlayImage;
                 }
                 if (textBox != null && !textBox.Text.Contains(StreamDeckConstants.DCSBIOSValuePlaceHolder))
                 {
@@ -271,13 +272,13 @@ namespace DCSFlightpanels.Windows
         private void ShowConverter()
         {
             _isPopulatingData = true;
-            SecondCriteriaVisibility(_dcsbiosConverter.Comparator1 != EnumComparator.Always);
+            if (_dcsbiosConverter.Comparator2 == EnumComparator.NotSet)
+            {
+                HideSecondCriteria();
+            }
 
             TextBoxReferenceValue1.Text = _dcsbiosConverter.ReferenceValue1.ToString(CultureInfo.InvariantCulture);
             TextBoxReferenceValue2.Text = _dcsbiosConverter.ReferenceValue2.ToString(CultureInfo.InvariantCulture);
-
-            TextBoxOutputTextRaw.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
-            TextBoxOutputTextOverlayImage.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
 
             switch (_dcsbiosConverter.ConverterOutputType)
             {
@@ -294,6 +295,7 @@ namespace DCSFlightpanels.Windows
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                         RadioButtonDCSBIOSValue.IsChecked = true;
+                        TextBoxOutputButtonTextRaw.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
                         break;
                     }
                 case EnumConverterOutputType.Image:
@@ -302,6 +304,7 @@ namespace DCSFlightpanels.Windows
                         StackPanelImage.Visibility = Visibility.Visible;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                         RadioButtonImage.IsChecked = true;
+                        TextBoxImagePath.Text = _dcsbiosConverter.ImageFileRelativePath;
                         break;
                     }
                 case EnumConverterOutputType.ImageOverlay:
@@ -310,6 +313,8 @@ namespace DCSFlightpanels.Windows
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Visible;
                         RadioButtonOverlayImage.IsChecked = true;
+                        TextBoxOutputButtonTextOverlayImage.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
+                        TextBoxOverlayImagePath.Text = _dcsbiosConverter.ImageFileRelativePath;
                         break;
                     }
             }
@@ -399,16 +404,21 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                StackPanelAddSecondCriteria.Visibility = Visibility.Visible;
-                StackPanelSecondCriteria.Visibility = Visibility.Collapsed;
-                ComboBoxItemAlways1.IsEnabled = true;
-                _dcsbiosConverter.Comparator2 = EnumComparator.NotSet;
-                _dcsbiosConverter.ReferenceValue2 = 0;
+                HideSecondCriteria();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void HideSecondCriteria()
+        {
+            StackPanelAddSecondCriteria.Visibility = Visibility.Visible;
+            StackPanelSecondCriteria.Visibility = Visibility.Collapsed;
+            ComboBoxItemAlways1.IsEnabled = true;
+            _dcsbiosConverter.Comparator2 = EnumComparator.NotSet;
+            _dcsbiosConverter.ReferenceValue2 = 0;
         }
 
         private void RadioButtonDCSBIOSValue_OnChecked(object sender, RoutedEventArgs e)
@@ -460,6 +470,15 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                TextBox textBox;
+                if (sender.Equals(ButtonBrowseImage))
+                {
+                    textBox = TextBoxImagePath;
+                }
+                else
+                {
+                    textBox = TextBoxOverlayImagePath;
+                }
                 var imageRelativePath = "";
                 var directory = SettingsManager.LastImageFileDirectory;
 
@@ -468,7 +487,7 @@ namespace DCSFlightpanels.Windows
                 if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.ImageFileRelativePath = imageRelativePath;
-                    TextBoxOutputTextOverlayImage.Text = imageRelativePath;
+                    textBox.Text = imageRelativePath;
                     SettingsManager.LastImageFileDirectory = directory;
                     SetIsDirty();
                     SetFormState();

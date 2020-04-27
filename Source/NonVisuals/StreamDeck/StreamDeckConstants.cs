@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 
 namespace NonVisuals.StreamDeck
 {
@@ -11,6 +12,8 @@ namespace NonVisuals.StreamDeck
         public static readonly string StreamDeckGalleryHomeWhite = "home_white.png";
         public static readonly string StreamDeckGalleryBackWhite = "back_white.png";
         public static readonly string DCSBIOSValuePlaceHolder = "{dcsbios}";
+        public static readonly string DCSBIOSValuePlaceHolderNoBrackets = "dcsbios";
+        public static readonly CultureInfo DoubleCultureInfo = CultureInfo.CreateSpecificCulture("en-US");
 
         public const string BACK = "BACK";
         public const string GO_BACK_ONE_LAYER_STRING = "Go Back";

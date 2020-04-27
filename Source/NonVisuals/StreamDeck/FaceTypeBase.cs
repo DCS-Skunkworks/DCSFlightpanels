@@ -21,7 +21,7 @@ namespace NonVisuals.StreamDeck
 
         public abstract int GetHash();
         protected abstract void DrawBitmap();
-        protected virtual void Show() {}
+        protected abstract void Show();
 
         [JsonIgnore]
         public Bitmap Bitmap

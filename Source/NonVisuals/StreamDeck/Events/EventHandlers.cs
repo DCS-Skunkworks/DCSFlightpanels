@@ -11,7 +11,7 @@ namespace NonVisuals.StreamDeck.Events
             OnDirtyConfigurationsEventHandler += streamDeckListener.IsDirtyQueryReport;
             OnDirtyNotificationEventHandler += streamDeckListener.SenderIsDirtyNotification;
             OnStreamDeckShowNewLayerEventHandler += streamDeckListener.LayerSwitched;
-            OnStreamDeckShowNewButtonEventHandler += streamDeckListener.SelectedButtonChanged;
+            OnStreamDeckSelectedButtonChangedEventHandler += streamDeckListener.SelectedButtonChanged;
             OnStreamDeckClearSettingsEventHandler += streamDeckListener.ClearSettings;
         }
 
@@ -20,7 +20,7 @@ namespace NonVisuals.StreamDeck.Events
             OnDirtyConfigurationsEventHandler -= streamDeckListener.IsDirtyQueryReport;
             OnDirtyNotificationEventHandler -= streamDeckListener.SenderIsDirtyNotification;
             OnStreamDeckShowNewLayerEventHandler -= streamDeckListener.LayerSwitched;
-            OnStreamDeckShowNewButtonEventHandler -= streamDeckListener.SelectedButtonChanged;
+            OnStreamDeckSelectedButtonChangedEventHandler -= streamDeckListener.SelectedButtonChanged;
             OnStreamDeckClearSettingsEventHandler -= streamDeckListener.ClearSettings;
         }
 
@@ -82,13 +82,13 @@ namespace NonVisuals.StreamDeck.Events
         /********************************************************************************************
          *                                      Button change
          ********************************************************************************************/
-        public delegate void StreamDeckShowNewButtonEventHandler(object sender, StreamDeckShowNewButtonArgs e);
-        public static event StreamDeckShowNewButtonEventHandler OnStreamDeckShowNewButtonEventHandler;
+        public delegate void StreamDeckSelectedButtonChangedEventHandler(object sender, StreamDeckSelectedButtonChangedArgs e);
+        public static event StreamDeckSelectedButtonChangedEventHandler OnStreamDeckSelectedButtonChangedEventHandler;
 
         public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton)
         {
-            var eventArgs = new StreamDeckShowNewButtonArgs() {SelectedButton = streamDeckButton};
-            OnStreamDeckShowNewButtonEventHandler?.Invoke(sender, eventArgs);
+            var eventArgs = new StreamDeckSelectedButtonChangedArgs() {SelectedButton = streamDeckButton};
+            OnStreamDeckSelectedButtonChangedEventHandler?.Invoke(sender, eventArgs);
         }
 
 
@@ -123,11 +123,24 @@ namespace NonVisuals.StreamDeck.Events
         public static void AttachStreamDeckConfigListener(IStreamDeckConfigListener streamDeckConfigListener)
         {
             OnStreamDeckSyncConfigurationEventHandler += streamDeckConfigListener.SyncConfiguration;
+            OnStreamDeckConfigurationChangeEventHandler += streamDeckConfigListener.ConfigurationChanged;
         }
 
         public static void DetachStreamDeckConfigListener(IStreamDeckConfigListener streamDeckConfigListener)
         {
             OnStreamDeckSyncConfigurationEventHandler -= streamDeckConfigListener.SyncConfiguration;
+            OnStreamDeckConfigurationChangeEventHandler -= streamDeckConfigListener.ConfigurationChanged;
+        }
+
+        /********************************************************************************************
+        *                   Event to notify changes in Stream Deck configuration button/layer
+        ********************************************************************************************/
+        public delegate void StreamDeckConfigurationChangeEventHandler(object sender, StreamDeckConfigurationChangedArgs e);
+        public static event StreamDeckConfigurationChangeEventHandler OnStreamDeckConfigurationChangeEventHandler;
+
+        public static void NotifyStreamDeckConfigurationChange(object sender)
+        {
+            OnStreamDeckConfigurationChangeEventHandler?.Invoke(sender, new StreamDeckConfigurationChangedArgs());
         }
     }
 

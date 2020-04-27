@@ -306,8 +306,8 @@
     <Compile Include="Windows\StreamDeckLayerWindow.xaml.cs">
       <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelUserControls\StreamDeckUserControl.xaml.cs">
-      <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
+    <Compile Include="PanelUserControls\UserControlStreamDeck.xaml.cs">
+      <DependentUpon>UserControlStreamDeck.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
@@ -537,7 +537,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelUserControls\StreamDeckUserControl.xaml">
+    <Page Include="PanelUserControls\UserControlStreamDeck.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

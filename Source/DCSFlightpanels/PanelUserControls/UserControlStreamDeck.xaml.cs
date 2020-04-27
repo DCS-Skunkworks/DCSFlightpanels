@@ -20,7 +20,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckListener
+    public partial class UserControlStreamDeck : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckListener
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly DCSBIOS _dcsbios;
@@ -40,7 +40,7 @@ namespace DCSFlightpanels.PanelUserControls
 
 
 
-        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
+        public UserControlStreamDeck(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -89,7 +89,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         }
 
-        private void StreamDeckUserControl_OnLoaded(object sender, RoutedEventArgs e)
+        private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!_userControlLoaded)
             {
@@ -382,7 +382,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                     if (streamDeckButton.HasConfig)
                     {
-                        _streamDeckPanel.AddStreamDeckButtonToActiveLayer(streamDeckButton);
+                        _streamDeckPanel.AddButtonToSelectedLayer(streamDeckButton);
                     }
                     else
                     {
@@ -417,8 +417,8 @@ namespace DCSFlightpanels.PanelUserControls
                 streamDeckButton.ActionForPress = null;
                 streamDeckButton.ActionForRelease = null;
 
+                _streamDeckPanel.AddButtonToSelectedLayer(streamDeckButton); // Add empty button to trigger change events
                 UCStreamDeckButtonAction.Clear();
-                _streamDeckPanel.SignalPanelChange(); //todo fix event propagation
 
                 EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
@@ -451,7 +451,6 @@ namespace DCSFlightpanels.PanelUserControls
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
                 streamDeckButton.Face = null;
                 UCStreamDeckButtonFace.Clear();
-                _streamDeckPanel.SignalPanelChange(); //todo fix event propagation
                 EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
             }
@@ -553,7 +552,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SelectedButtonChanged(object sender, StreamDeckShowNewButtonArgs e)
+        public void SelectedButtonChanged(object sender, StreamDeckSelectedButtonChangedArgs e)
         {
             try
             {

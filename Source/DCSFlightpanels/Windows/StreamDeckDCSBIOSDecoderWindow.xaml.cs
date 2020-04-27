@@ -509,6 +509,10 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                if (DataGridConverters.SelectedItems.Count != 1)
+                {
+                    return;
+                }
                 var converter = (DCSBIOSConverter) DataGridConverters.SelectedItems[0];
                 var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _streamDeckInstanceId, converter);
                 window.ShowDialog();
