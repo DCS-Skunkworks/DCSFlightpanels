@@ -20,7 +20,7 @@ namespace DCSFlightpanels.Windows
     public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
     {
         private bool _isLoaded = false;
-        private DCSBIOSConverter _dcsbiosConverter = new DCSBIOSConverter();
+        private DCSBIOSConverter _dcsbiosConverter = null;
         private bool _isDirty;
         private bool _isPopulatingData = false;
         private StreamDeckPanel _streamDeckPanel;
@@ -35,6 +35,7 @@ namespace DCSFlightpanels.Windows
             _streamDeckButtonName = streamDeckButtonName;
             _streamDeckPanelInstanceId = streamDeckPanelInstanceId;
             _streamDeckPanel = StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId);
+            _dcsbiosConverter = new DCSBIOSConverter();
         }
 
         public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, string streamDeckPanelInstanceId, DCSBIOSConverter dcsbiosConverter)
@@ -43,7 +44,6 @@ namespace DCSFlightpanels.Windows
             _streamDeckButtonName = streamDeckButtonName;
             _streamDeckPanelInstanceId = streamDeckPanelInstanceId;
             _streamDeckPanel = StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId);
-            //den tappar file path när json laddas igen
             _dcsbiosConverter = dcsbiosConverter;
         }
 
@@ -150,7 +150,11 @@ namespace DCSFlightpanels.Windows
             StackPanelSecondCriteria.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public DCSBIOSConverter DCSBIOSConverter => _dcsbiosConverter;
+        public DCSBIOSConverter DCSBIOSConverter
+        {
+            get => _dcsbiosConverter;
+            set => _dcsbiosConverter = value;
+        }
 
         private string lastChecked1 = "";
         private string lastChecked2 = "";
@@ -168,17 +172,16 @@ namespace DCSFlightpanels.Windows
                     if (lastChecked1 != TextBoxReferenceValue1.Text && !TextBoxReferenceValue1.ValidateDouble(true))
                     {
                         lastChecked1 = TextBoxReferenceValue1.Text;
-                        SetIsDirty();
                         return;
                     }
 
-                    if (!double.TryParse(TextBoxReferenceValue1.Text,NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
+                    var validateResult2 = double.TryParse(TextBoxReferenceValue1.Text, NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var resul1t);
+                    if (double.TryParse(TextBoxReferenceValue1.Text,NumberStyles.Number, StreamDeckConstants.DoubleCultureInfo, out var result))
                     {
                         _dcsbiosConverter.ReferenceValue1 = result;
                         SetIsDirty();
                     }
 
-                    SetFormState();
 
                 }
                 if (sender.Equals(TextBoxReferenceValue2))
@@ -186,16 +189,16 @@ namespace DCSFlightpanels.Windows
                     if (lastChecked2 != TextBoxReferenceValue2.Text && !TextBoxReferenceValue2.ValidateDouble(true))
                     {
                         lastChecked2 = TextBoxReferenceValue2.Text;
-                        SetIsDirty();
                         return;
                     }
 
-                    if (!double.TryParse(TextBoxReferenceValue2.Text, out var result))
+                    if (double.TryParse(TextBoxReferenceValue2.Text, out var result))
                     {
                         _dcsbiosConverter.ReferenceValue2 = result;
                         SetIsDirty();
                     }
                 }
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -257,7 +260,7 @@ namespace DCSFlightpanels.Windows
                     textBox.Text = string.IsNullOrEmpty(textBox.Text) ? StreamDeckConstants.DCSBIOSValuePlaceHolder : StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + textBox.Text;
                     textBox.CaretIndex = textBox.Text.Length;
                     
-                    _dcsbiosConverter.ButtonText = textBox.Text;
+                    _dcsbiosConverter.ButtonTextTemplate = textBox.Text;
                     SetIsDirty();
                     SetFormState();
                 }
@@ -295,7 +298,7 @@ namespace DCSFlightpanels.Windows
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Collapsed;
                         RadioButtonDCSBIOSValue.IsChecked = true;
-                        TextBoxOutputButtonTextRaw.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
+                        TextBoxOutputButtonTextRaw.Text = _dcsbiosConverter.ButtonTextTemplate.ToString(CultureInfo.InvariantCulture);
                         break;
                     }
                 case EnumConverterOutputType.Image:
@@ -313,7 +316,7 @@ namespace DCSFlightpanels.Windows
                         StackPanelImage.Visibility = Visibility.Collapsed;
                         StackPanelOverlayImage.Visibility = Visibility.Visible;
                         RadioButtonOverlayImage.IsChecked = true;
-                        TextBoxOutputButtonTextOverlayImage.Text = _dcsbiosConverter.ButtonText.ToString(CultureInfo.InvariantCulture);
+                        TextBoxOutputButtonTextOverlayImage.Text = _dcsbiosConverter.ButtonTextTemplate.ToString(CultureInfo.InvariantCulture);
                         TextBoxOverlayImagePath.Text = _dcsbiosConverter.ImageFileRelativePath;
                         break;
                     }
@@ -366,16 +369,20 @@ namespace DCSFlightpanels.Windows
                 if (sender.Equals(ComboBoxComparisonType1))
                 {
                     comboBox = ComboBoxComparisonType1;
+                    if (_dcsbiosConverter.Comparator1 != StreamDeckCommon.ComparatorValue(comboBox.Text))
+                    {
+                        _dcsbiosConverter.Comparator1 = StreamDeckCommon.ComparatorValue(comboBox.Text);
+                        SetIsDirty();
+                    }
                 }
                 else
                 {
                     comboBox = ComboBoxComparisonType2;
-                }
-
-                if (_dcsbiosConverter.Comparator1 != StreamDeckCommon.ComparatorValue(comboBox.Text))
-                {
-                    _dcsbiosConverter.Comparator1 = StreamDeckCommon.ComparatorValue(comboBox.Text);
-                    SetIsDirty();
+                    if (_dcsbiosConverter.Comparator2 != StreamDeckCommon.ComparatorValue(comboBox.Text))
+                    {
+                        _dcsbiosConverter.Comparator2 = StreamDeckCommon.ComparatorValue(comboBox.Text);
+                        SetIsDirty();
+                    }
                 }
 
                 SetFormState();
@@ -515,7 +522,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosConverter.ButtonText = ((TextBox) sender).Text;
+                _dcsbiosConverter.ButtonTextTemplate = ((TextBox) sender).Text;
                 SetIsDirty();
                 SetFormState();
             }
@@ -529,7 +536,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosConverter.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                _dcsbiosConverter.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SettingsManager.OffsetY = _dcsbiosConverter.OffsetY;
                 TestImage();
                 SetIsDirty();
@@ -545,7 +552,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosConverter.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                _dcsbiosConverter.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 SettingsManager.OffsetY = _dcsbiosConverter.OffsetY;
                 TestImage();
                 SetIsDirty();
@@ -664,11 +671,13 @@ namespace DCSFlightpanels.Windows
                 return;
             }
 
-            TextBoxFontInfo.Text = "Font : " + _dcsbiosConverter.TextFont.Name + " " +
-                                   _dcsbiosConverter.TextFont.Size + " " +
-                                   (_dcsbiosConverter.TextFont.Bold ? "Bold" : "Regular");
-            TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Font Color : " + _dcsbiosConverter.FontColor.ToString();
-            TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Background Color : " + _dcsbiosConverter.BackgroundColor.ToString();
+
+            TextBoxFontInfo.Text = "Font : " + _dcsbiosConverter.TextFont.Name + " " + _dcsbiosConverter.TextFont.Size + " " + (_dcsbiosConverter.TextFont.Bold ? "Bold" : "Regular") + "    OffsetX = " + _dcsbiosConverter.OffsetX + "\n";
+            TextBoxFontInfo.Text = TextBoxFontInfo.Text + "Font Color : " + _dcsbiosConverter.FontColor.ToString() + "    OffsetY = " + _dcsbiosConverter.OffsetY + "\n";
+            if (_dcsbiosConverter.ConverterOutputType != EnumConverterOutputType.ImageOverlay && _dcsbiosConverter.ConverterOutputType != EnumConverterOutputType.NotSet)
+            {
+                TextBoxFontInfo.Text = TextBoxFontInfo.Text + "Background Color : " + _dcsbiosConverter.BackgroundColor.ToString();
+            }
         }
 
         private bool Use2Criteria

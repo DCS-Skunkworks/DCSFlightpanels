@@ -18,6 +18,33 @@ namespace NonVisuals.StreamDeck
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
 
 
+
+        public bool ConfigurationOK => !string.IsNullOrEmpty(_imageFile);
+
+
+        public virtual void Destroy() {}
+
+        protected override void DrawBitmap()
+        {
+            if (_bitmap == null || RefreshBitmap)
+            {
+                _bitmap = StreamDeckPanel.Validate(_imageFile);
+                RefreshBitmap = false;
+            }
+
+            if (_keyBitmap == null)
+            {
+                _keyBitmap = KeyBitmap.Create.FromBitmap(_bitmap);
+            }
+        }
+
+        protected override void Show()
+        {
+            DrawBitmap();
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
+        }
+
+
         public override int GetHash()
         {
             unchecked
@@ -31,30 +58,6 @@ namespace NonVisuals.StreamDeck
                 result = (result * 397) ^ StreamDeckButtonName.GetHashCode();
                 return result;
             }
-        }
-
-        public bool ConfigurationOK => !string.IsNullOrEmpty(_imageFile);
-
-
-
-        protected override void DrawBitmap()
-        {
-            if (Bitmap == null || RefreshBitmap)
-            {
-                Bitmap = StreamDeckPanel.Validate(_imageFile);
-                RefreshBitmap = false;
-            }
-
-            if (_keyBitmap == null)
-            {
-                _keyBitmap = KeyBitmap.Create.FromBitmap(Bitmap);
-            }
-        }
-
-        protected override void Show()
-        {
-            DrawBitmap();
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
         }
 
         [JsonIgnore]

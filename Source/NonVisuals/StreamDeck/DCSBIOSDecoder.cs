@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Threading;
+using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
@@ -23,12 +26,32 @@ namespace NonVisuals.StreamDeck
         private bool _treatStringAsNumber = false;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
 
+        [NonSerialized] private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        [NonSerialized] private Thread _imageUpdateTread = null;
+        private bool _shutdown = false;
+
+
+
+
+
+
+
+
+        public override void Destroy()
+        {
+            _shutdown = true;
+            _autoResetEvent?.Set();
+            _autoResetEvent?.Close();
+        }
+
 
 
         public DCSBIOSDecoder()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
             _jaceId = RandomFactory.Get();
+            _imageUpdateTread = new Thread(ImageRefreshingThread);
+            _imageUpdateTread.Start();
         }
 
         ~DCSBIOSDecoder()
@@ -36,27 +59,31 @@ namespace NonVisuals.StreamDeck
             DCSBIOSStringManager.Detach(this);
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
         }
+        
 
-        /*
-         * Remove settings not relevant based on output type
-         */
-        public void Clean()
+
+        private void ImageRefreshingThread()
         {
-            switch (DecoderOutputType)
+            while (!_shutdown)
             {
-                case EnumDCSBIOSDecoderOutputType.Raw:
-                    {
-                        _dcsbiosConverters.Clear();
-                        if (!_useFormula)
-                        {
-                            _formula = "";
-                        }
-                        break;
-                    }
-                case EnumDCSBIOSDecoderOutputType.Converter:
-                    {
-                        break;
-                    }
+                if (!IsVisible)
+                {
+                    /*
+                     * If decoder isn't visible we end up here until it is visible again
+                     */
+                    _autoResetEvent.WaitOne();
+                }
+
+                if (_shutdown)
+                {
+                    break;
+                }
+
+                if (ValueUpdated)
+                {
+                    HandleNewDCSBIOSValue();
+                }
+                Thread.Sleep(StreamDeckConstants.IMAGE_UPDATING_THREAD_SLEEP_TIME);
             }
         }
 
@@ -74,8 +101,6 @@ namespace NonVisuals.StreamDeck
                     if (!Equals(UintDcsBiosValue, e.Data))
                     {
                         UintDcsBiosValue = e.Data;
-                        ButtonText = e.Data.ToString(CultureInfo.InvariantCulture);
-                        HandleNewDCSBIOSValue();
                         _valueUpdated = true;
                     }
                 }
@@ -99,12 +124,10 @@ namespace NonVisuals.StreamDeck
                 if (_dcsbiosOutput?.Address == e.Address)
                 {
                     StringDcsBiosValue = e.StringData;
-                    ButtonText = e.StringData;
 
                     if (_treatStringAsNumber && _dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && uint.TryParse(e.StringData.Substring(0, _dcsbiosOutput.MaxLength), out var tmpUint))
                     {
                         UintDcsBiosValue = tmpUint;
-                        HandleNewDCSBIOSValue();
                     }
                     _valueUpdated = true;
                 }
@@ -124,43 +147,85 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
-
-                Bitmap converterBitmap = null;
-
                 if (UseFormula)
                 {
                     _formulaResult = EvaluateFormula();
-                    ButtonText = _formulaResult.ToString(CultureInfo.InvariantCulture);
                 }
 
-                if (_dcsbiosConverters.Count > 0 && (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber || _dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE))
+                /*
+                 * 1) Use decoder raw  (formula / no formula) STRING_TYPE or INTEGER_TYPE
+                 * 2) Use converter    (formula / no formula)
+                 * 3) show blank image
+                 */
+
+                var showImage = false;
+                /*   1) Use decoder raw(formula / no formula)  */
+                if (_dcsbiosConverters.Count == 0)
                 {
+                    if (UseFormula)
+                    {
+                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _formulaResult.ToString(CultureInfo.InvariantCulture));
+                        showImage = true;
+                    }
+                    else if (DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
+                    {
+                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StringDcsBiosValue);
+                        showImage = true;
+                    }
+                    else if(!string.IsNullOrEmpty(ButtonTextTemplate))
+                    {
+                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, UintDcsBiosValue.ToString(CultureInfo.InvariantCulture));
+                        showImage = true;
+                    }
+
+                    if (IsVisible)
+                    {
+                        if (showImage)
+                        {
+                            Show();
+                        }
+                        else
+                        {
+                            BlackoutKey();
+                        }
+                    }
+                }
+                /* 2) Use converter    (formula / no formula) */
+                else if (_dcsbiosConverters.Count > 0 && (_dcsBiosOutputType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber || _dcsBiosOutputType == DCSBiosOutputType.INTEGER_TYPE))
+                {
+                    Bitmap converterBitmap = null;
+
                     foreach (var dcsbiosConverter in _dcsbiosConverters)
                     {
-                        dcsbiosConverter.Set(UseFormula ? FormulaResult : UintDcsBiosValue);
-                        if (dcsbiosConverter.CriteriaFulfilled)
+                        if (dcsbiosConverter.CriteriaFulfilled(UseFormula ? FormulaResult : UintDcsBiosValue))
                         {
                             converterBitmap = dcsbiosConverter.Get();
                             break;
                         }
                     }
-                }
 
-                if (IsVisible)
+                    if (IsVisible)
+                    {
+                        if (converterBitmap != null)
+                        {
+                            ShowBitmap(converterBitmap);
+                        }
+                        else
+                        {
+                            BlackoutKey();
+                        }
+                    }
+                }
+                /* 3) show blank image */
+                else
                 {
-                    if (converterBitmap != null)
-                    {
-                        ShowBitmap(converterBitmap);
-                    }
-                    else
-                    {
-                        Show();
-                    }
+                    BlackoutKey();
                 }
                 _lastFormulaError = "";
             }
             catch (Exception exception)
             {
+                //Common.LogError(exception);
                 _lastFormulaError = exception.Message;
             }
         }
@@ -176,9 +241,19 @@ namespace NonVisuals.StreamDeck
             set => _useFormula = value;
         }
 
+        private void BlackoutKey()
+        {
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).ClearFace(StreamDeckButtonName);
+        }
+
         private void ShowBitmap(Bitmap bitmap)
         {
             StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, bitmap);
+        }
+
+        private void ShowBitmapImage(BitmapImage bitmapImage)
+        {
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, bitmapImage);
         }
 
         public void RemoveDCSBIOSOutput()
@@ -315,17 +390,67 @@ namespace NonVisuals.StreamDeck
          * It can have integer | string + treat as number | string input
          * It can have raw / converter output
          */
-        public bool ConfigurationIsOK()
+        public bool DecoderConfigurationOK()
         {
-            var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
-            var outputIsOK = _decoderOutputType == EnumDCSBIOSDecoderOutputType.Raw ? base.ConfigurationOK : convertersOK;
             var formulaIsOK = _useFormula ? !string.IsNullOrEmpty(_formula) : true;
             var sourceIsOK = _dcsbiosOutput != null;
+            var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
+            
 
-            return convertersOK && outputIsOK && formulaIsOK && sourceIsOK;
+            switch (DecoderOutputType)
+            {
+                case EnumDCSBIOSDecoderOutputType.Raw:
+                {
+                    return formulaIsOK && sourceIsOK && ConfigurationOK;
+                }
+                case EnumDCSBIOSDecoderOutputType.Converter:
+                {
+                    return formulaIsOK && sourceIsOK && convertersOK;
+                }
+                default:
+                {
+                    return false;
+                }
+            }
         }
 
+        /*
+         * Remove settings not relevant based on output type
+         */
+        public void Clean()
+        {
+            switch (DecoderOutputType)
+            {
+                case EnumDCSBIOSDecoderOutputType.Raw:
+                {
+                    _dcsbiosConverters.Clear();
+                    if (!_useFormula)
+                    {
+                        _formula = "";
+                    }
+                    break;
+                }
+                case EnumDCSBIOSDecoderOutputType.Converter:
+                {
+                    break;
+                }
+            }
+        }
 
+        [JsonIgnore]
+        public override bool IsVisible
+        {
+            get => base.IsVisible;
+            set
+            {
+                base.IsVisible = value;
+                if (base.IsVisible)
+                {
+                    _autoResetEvent?.Set();
+                    Show();
+                }
+            }
+        }
     }
 
     public enum EnumDCSBIOSDecoderOutputType

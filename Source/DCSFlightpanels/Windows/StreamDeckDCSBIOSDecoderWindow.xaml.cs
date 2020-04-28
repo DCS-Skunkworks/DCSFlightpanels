@@ -48,7 +48,7 @@ namespace DCSFlightpanels.Windows
         private DCSBIOSDecoder _dcsbiosDecoder = null;
 
         private bool _exitThread;
-        
+
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
 
 
@@ -79,7 +79,7 @@ namespace DCSFlightpanels.Windows
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }
-        
+
         private void StreamDeckDCSBIOSDecoderWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
@@ -99,7 +99,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -118,7 +118,6 @@ namespace DCSFlightpanels.Windows
 
             ButtonEditConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
             ButtonDeleteConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
-            ButtonSave.IsEnabled = !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
 
 
             GroupBoxFormula.IsEnabled = CheckBoxUseFormula.IsChecked == true;
@@ -137,7 +136,7 @@ namespace DCSFlightpanels.Windows
                 CheckBoxUseFormula.IsChecked = false;
             }
 
-            ButtonSave.IsEnabled = _dcsbiosDecoder.ConfigurationOK;
+            ButtonSave.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
         }
 
         private void ShowDecoder()
@@ -153,17 +152,21 @@ namespace DCSFlightpanels.Windows
                 RadioButtonStringSource.IsChecked = true;
             }
 
+            switch (_dcsbiosDecoder.DecoderOutputType)
+            {
+                case EnumDCSBIOSDecoderOutputType.Raw:
+                    {
+                        TextBoxOutputTextRaw.Text = _dcsbiosDecoder.ButtonTextTemplate;
+                        RadioButtonOutputRaw.IsChecked = true;
+                        break;
+                    }
+                case EnumDCSBIOSDecoderOutputType.Converter:
+                    {
+                        RadioButtonOutputConvert.IsChecked = true;
+                        break;
+                    }
+            }
             CheckBoxStringAsNumber.IsChecked = _dcsbiosDecoder.TreatStringAsNumber;
-
-            
-            if (_dcsbiosDecoder.DecoderOutputType == EnumDCSBIOSDecoderOutputType.Raw)
-            {
-                RadioButtonOutputRaw.IsChecked = true;
-            }
-            else
-            {
-                RadioButtonOutputConvert.IsChecked = true;
-            }
 
             CheckBoxUseFormula.IsChecked = _dcsbiosDecoder.UseFormula;
             if (_dcsbiosDecoder.UseFormula)
@@ -208,7 +211,7 @@ namespace DCSFlightpanels.Windows
                 LabelErrors.Content = "Failed to start thread " + ex.Message;
             }
         }
-        
+
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -227,7 +230,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -266,7 +269,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -327,7 +330,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void RepeatButtonPressRight_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -379,7 +382,7 @@ namespace DCSFlightpanels.Windows
                 MessageBox.Show(ex.Message);
             }
         }
-        
+
         private void ButtonTextFaceFont_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -449,7 +452,7 @@ namespace DCSFlightpanels.Windows
             TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Font Color : " + _dcsbiosDecoder.FontColor.ToString();
             TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Background Color : " + _dcsbiosDecoder.BackgroundColor.ToString();
         }
-        
+
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
@@ -494,6 +497,7 @@ namespace DCSFlightpanels.Windows
                 if (window.DialogResult == true)
                 {
                     _dcsbiosDecoder.Add(window.DCSBIOSConverter);
+                    window.DCSBIOSConverter = null;
                     ShowConverters();
                     SetFormState();
                 }
@@ -513,13 +517,12 @@ namespace DCSFlightpanels.Windows
                 {
                     return;
                 }
-                var converter = (DCSBIOSConverter) DataGridConverters.SelectedItems[0];
+                var converter = (DCSBIOSConverter)DataGridConverters.SelectedItems[0];
                 var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _streamDeckInstanceId, converter);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
-                    _dcsbiosDecoder.Remove((DCSBIOSConverter)DataGridConverters.SelectedItems[0]);
-                    _dcsbiosDecoder.Add(window.DCSBIOSConverter);
+                    _dcsbiosDecoder.Replace((DCSBIOSConverter)DataGridConverters.SelectedItems[0], window.DCSBIOSConverter);
                     SetIsDirty();
                     ShowConverters();
                     SetFormState();
@@ -567,12 +570,12 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public List<DCSBIOSConverter> DCSBIOSConverters
         {
             get => _dcsbiosDecoder.DCSBIOSConverters;
         }
-        
+
         private void DataGridConverters_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -598,7 +601,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void LoadDefaults()
         {
             _dcsbiosDecoder.OffsetX = SettingsManager.OffsetX;
@@ -626,7 +629,7 @@ namespace DCSFlightpanels.Windows
                     LabelErrors.Content = error;
                 });
         }
-        
+
         private void SetRawDCSBIOSValue(uint value)
         {
             Dispatcher?.BeginInvoke(
@@ -658,7 +661,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void TextBlockFormulas_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             try
@@ -746,7 +749,11 @@ namespace DCSFlightpanels.Windows
             }
         }
 
-        public DCSBIOSDecoder DCSBIOSDecoder => _dcsbiosDecoder;
+        public DCSBIOSDecoder DCSBIOSDecoder
+        {
+            get => _dcsbiosDecoder;
+            set => _dcsbiosDecoder = value;
+        }
 
         private void RadioButtonIntegerSource_OnChecked(object sender, RoutedEventArgs e)
         {
@@ -837,7 +844,7 @@ namespace DCSFlightpanels.Windows
                 {
                     TextBoxOutputTextRaw.Text = string.IsNullOrEmpty(TextBoxOutputTextRaw.Text) ? StreamDeckConstants.DCSBIOSValuePlaceHolder : StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + TextBoxOutputTextRaw.Text;
                     TextBoxOutputTextRaw.CaretIndex = TextBoxOutputTextRaw.Text.Length;
-                    _dcsbiosDecoder.ButtonText = TextBoxOutputTextRaw.Text;
+                    _dcsbiosDecoder.ButtonTextTemplate = TextBoxOutputTextRaw.Text;
                     SetIsDirty();
                     SetFormState();
                 }
@@ -852,7 +859,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _dcsbiosDecoder.ButtonText = ((TextBox)sender).Text;
+                _dcsbiosDecoder.ButtonTextTemplate = ((TextBox)sender).Text;
                 SetIsDirty();
                 SetFormState();
             }

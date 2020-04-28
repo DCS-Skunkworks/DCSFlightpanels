@@ -13,18 +13,18 @@ namespace NonVisuals.StreamDeck
     {
         public static BitmapImage GetButtonNumberImage(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
         {
-            return   new BitmapImage(new Uri( StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckFunction.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
+            return   new BitmapImage(new Uri( StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckCommon.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
         }
         /*
         public static Bitmap CreateBitmapImage(string text, int fontSize, int height, int width, Color fontColor, Color backgroundColor)
         {
             return CreateBitmapImage(text, fontSize, FontStyle.Regular, height, width, fontColor, backgroundColor);
         }
-        */
         public static Bitmap CreateBitmapImage(string text, Font font, Color fontColor, Color backgroundColor)
         {
             return CreateBitmapImage(text, font, 0, 0, 0, 0, fontColor, backgroundColor, null,true);
         }
+        */
 
         /*public static Bitmap CreateBitmapImage(string text, int fontSize, FontStyle fontStyle, int height, int width, Color fontColor, Color backgroundColor)
         {
@@ -43,13 +43,13 @@ namespace NonVisuals.StreamDeck
             return CreateBitmapImage(text, font, offsetX, offsetY, StreamDeckConstants.STREAMDECK_ICON_HEIGHT, StreamDeckConstants.STREAMDECK_ICON_WIDTH, fontColor, backgroundColor);
         }
 
-        public static Bitmap CreateBitmapImage(string text, Font font, int offsetX, int offsetY, int height, int width, Color fontColor, Color backgroundColor, Bitmap backgroundBitmap = null, bool setBitmapSizeToTextSize = false)
+        private static Bitmap CreateBitmapImage(string text, Font font, int offsetX, int offsetY, int height, int width, Color fontColor, Color backgroundColor, Bitmap backgroundBitmap = null, bool setBitmapSizeToTextSize = false)
         {
             Bitmap createdBitmap;
 
             if (backgroundBitmap == null)
             {
-                createdBitmap = setBitmapSizeToTextSize ? new Bitmap(2, 2) : new Bitmap(width, height);
+                createdBitmap = setBitmapSizeToTextSize ? new Bitmap(StreamDeckConstants.STREAMDECK_ICON_WIDTH, StreamDeckConstants.STREAMDECK_ICON_HEIGHT) : new Bitmap(width, height);
             }
             else
             {
@@ -59,7 +59,7 @@ namespace NonVisuals.StreamDeck
             // Create a graphics object to measure the text's width and height.
             var graphicsObject = Graphics.FromImage(createdBitmap);
 
-            if (setBitmapSizeToTextSize && !string.IsNullOrEmpty(text))
+            /*if (setBitmapSizeToTextSize && !string.IsNullOrEmpty(text))
             {
                 // This is where the bitmap size is determined.
                 height = (int)graphicsObject.MeasureString(text, font).Height;
@@ -67,13 +67,16 @@ namespace NonVisuals.StreamDeck
 
                 // Create the bmpImage again with the correct size for the text and font.
                 createdBitmap = new Bitmap(createdBitmap, new Size(width, height));
-            }
+            }*/
 
             // Add the colors to the new bitmap.
-            graphicsObject = Graphics.FromImage(createdBitmap);
+            //graphicsObject = Graphics.FromImage(createdBitmap);
 
             // Set Background color
-            graphicsObject.Clear(backgroundColor);
+            if (backgroundBitmap == null)
+            {
+                graphicsObject.Clear(backgroundColor);
+            }
             graphicsObject.SmoothingMode = SmoothingMode.HighQuality;
 
             if (!string.IsNullOrEmpty(text))

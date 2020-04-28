@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
@@ -102,12 +105,7 @@ namespace NonVisuals.StreamDeck
                 SetLastException(e);
             }
         }
-
-        public void AddButtonToSelectedLayer(StreamDeckButton streamDeckButton)
-        {
-            _streamDeckLayerHandler.SelectedLayer.AddButton(streamDeckButton);
-        }
-
+        
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
         {
             if (!(sender is IMacroBoard))
@@ -155,7 +153,7 @@ namespace NonVisuals.StreamDeck
 
         public void SetImage(int streamDeckButtonNumber, Bitmap bitmap)
         {
-            SetImage(StreamDeckFunction.ButtonName(streamDeckButtonNumber), bitmap);
+            SetImage(StreamDeckCommon.ButtonName(streamDeckButtonNumber), bitmap);
         }
 
         public void SetImage(EnumStreamDeckButtonNames streamDeckButtonName, Bitmap bitmap)
@@ -165,12 +163,27 @@ namespace NonVisuals.StreamDeck
                 return;
             }
             var keyBitmap = KeyBitmap.Create.FromBitmap(bitmap);
-            _streamDeckBoard.SetKeyBitmap(StreamDeckFunction.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
+            _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
+        }
+
+        public void SetImage(EnumStreamDeckButtonNames streamDeckButtonName, BitmapImage bitmapImage)
+        {
+            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            {
+                return;
+            }
+            var keyBitmap = KeyBitmap.Create.FromBitmap(StreamDeckCommon.BitmapImage2Bitmap(bitmapImage));
+            _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
         }
 
         public void ClearAllFaces()
         {
             _streamDeckLayerHandler.ClearAllFaces();
+        }
+
+        public void ClearFace(EnumStreamDeckButtonNames streamDeckButtonName)
+        {
+            _streamDeckLayerHandler.ClearFace(streamDeckButtonName);
         }
 
         public override List<string> ExportSettings()
@@ -393,15 +406,32 @@ namespace NonVisuals.StreamDeck
                 return new Bitmap(imagePath);
             }
 
-            var uri = new Uri("pack://application:,,,/NonVisuals;component/Images/filenotfound.png");
-            return new Bitmap(uri.AbsolutePath);
+            return FileNotFoundBitmap();
         }
 
-        public void RemoveButton(StreamDeckButton streamDeckButton)
+        private static Bitmap _fileNotFoundBitMap = null;
+
+        public static Bitmap FileNotFoundBitmap()
         {
-            _streamDeckLayerHandler.SelectedLayer.RemoveButton(streamDeckButton);
-        }
+            if (_fileNotFoundBitMap != null)
+            {
+                return _fileNotFoundBitMap;
+            }
+            var assembly = Assembly.GetExecutingAssembly();
 
+            var tmpBitMapImage = new BitmapImage();
+            using (var stream = assembly.GetManifestResourceStream(@"NonVisuals.Images.filenotfound.png"))
+            {
+                tmpBitMapImage.BeginInit();
+                tmpBitMapImage.StreamSource = stream;
+                tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
+                tmpBitMapImage.EndInit();
+            }
+
+            _fileNotFoundBitMap = StreamDeckCommon.BitmapImage2Bitmap(tmpBitMapImage);
+            return _fileNotFoundBitMap;
+        }
+        
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -9,6 +10,53 @@ namespace NonVisuals.StreamDeck
 {
     public static class StreamDeckCommon
     {
+
+
+        public static int ButtonNumber(EnumStreamDeckButtonNames streamDeckButtonName)
+        {
+            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            {
+                return -1;
+            }
+
+            return int.Parse(streamDeckButtonName.ToString().Replace("BUTTON", ""));
+        }
+
+        public static EnumStreamDeckButtonNames ButtonName(int streamDeckButtonNumber)
+        {
+            if (streamDeckButtonNumber == 0)
+            {
+                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+            }
+
+            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+        }
+
+        public static EnumStreamDeckButtonNames ButtonName(string streamDeckButtonNumber)
+        {
+            if (string.IsNullOrEmpty(streamDeckButtonNumber) || streamDeckButtonNumber == "0")
+            {
+                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+            }
+
+            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
+        }
+
+
+
+        public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        {
+            using (var outStream = new MemoryStream())
+            {
+                BitmapEncoder bmpBitmapEncoder = new BmpBitmapEncoder();
+                bmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                bmpBitmapEncoder.Save(outStream);
+                var bitmap = new System.Drawing.Bitmap(outStream);
+
+                return new Bitmap(bitmap);
+            }
+        }
+
         public static BitmapImage ConvertBitMap(Bitmap bitmap)
         {
             try

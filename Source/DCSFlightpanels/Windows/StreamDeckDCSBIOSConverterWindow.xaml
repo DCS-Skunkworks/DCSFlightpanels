@@ -95,7 +95,7 @@
                 <GroupBox Header="Settings" HorizontalAlignment="Stretch">
                     <StackPanel HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputButtonTextRaw" Width="72" Height="72" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputButtonTextRaw"  FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonPressUpRaw" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
                                 <RepeatButton Name="RepeatButtonPressDownRaw" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
@@ -135,7 +135,7 @@
                 <GroupBox Header="Settings">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Name="TextBoxOutputButtonTextOverlayImage" Width="72" Height="72" HorizontalAlignment="Left" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                            <TextBox Name="TextBoxOutputButtonTextOverlayImage"  FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonActionPressUpOverlay" Content="{StaticResource UpArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
                                 <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
@@ -148,8 +148,7 @@
                                     <Button Name="ButtonTextFaceFontColorOverlay" Width="40" Height="20" Content="Color" Margin="0,2,2,0" Click="ButtonTextFaceFontColor_OnClick"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0" >
-                                    <Button Name="ButtonTextFaceBackgroundColorOverlay" Width="80" Height="20" Content="Background" Margin="10,2,2,0" Click="ButtonTextFaceBackgroundColor_OnClick"/>
-                                    <Button Name="ButtonTestTextFaceOverlay" Width="40" Height="20" Content="Test" Margin="0,2,2,0" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
+                                    <Button Name="ButtonTestTextFaceOverlay" Margin="10,2,2,0" Width="40" Height="20" Content="Test" Click="ButtonTestDCSBIOSDecoder_OnClick"/>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>

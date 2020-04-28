@@ -63,7 +63,7 @@ namespace DCSFlightpanels.Windows
         ~JaceSandboxWindow()
         {
             // Finalizer calls Dispose(false)  
-            Dispose(false);
+            Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)

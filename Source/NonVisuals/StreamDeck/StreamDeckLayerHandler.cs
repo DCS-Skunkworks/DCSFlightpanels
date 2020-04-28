@@ -135,6 +135,8 @@ namespace NonVisuals.StreamDeck
                 return;
             }
 
+            GetLayer(layerName).IsVisible = false;
+            GetLayer(layerName).RemoveButtons();
             _layerList.RemoveAll(x => x.Name == layerName);
             _layerHistory.RemoveAll(x => x == layerName);
 
@@ -225,6 +227,16 @@ namespace NonVisuals.StreamDeck
             {
                 _streamDeckBoard.ClearKey(i);
             }
+        }
+
+        public void ClearFace(EnumStreamDeckButtonNames streamDeckButtonName)
+        {
+            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
+            {
+                return;
+            }
+
+            _streamDeckBoard.ClearKey(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1);
         }
 
         private void CleanLayers()
@@ -387,7 +399,7 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckButton GetSelectedLayerButton(int streamDeckButtonNumber)
         {
-            var streamDeckButtonName = StreamDeckFunction.ButtonName(streamDeckButtonNumber);
+            var streamDeckButtonName = StreamDeckCommon.ButtonName(streamDeckButtonNumber);
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
         }
 

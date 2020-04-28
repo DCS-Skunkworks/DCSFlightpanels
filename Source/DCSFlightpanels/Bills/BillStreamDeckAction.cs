@@ -15,6 +15,19 @@ namespace DCSFlightpanels.Bills
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         private ActionTypeLayer _actionTypeLayer;
 
+
+
+        public override void Clear()
+        {
+            KeyPress = null;
+            OSCommandObject = null;
+            _button = null;
+            _dcsbiosBindingStreamDeck = null;
+            _bipLinkStreamDeck = null;
+            TextBox.Background = Brushes.LightSteelBlue;
+            TextBox.Text = "";
+        }
+
         public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button)
         {
             TextBox = textBox;
@@ -109,15 +122,6 @@ namespace DCSFlightpanels.Bills
         {
             get => _actionTypeLayer;
             set => _actionTypeLayer = value;
-        }
-
-        public override void Clear()
-        {
-            _dcsbiosBindingStreamDeck = null;
-            _bipLinkStreamDeck = null;
-            KeyPress = null;
-            TextBox.Background = Brushes.LightSteelBlue;
-            TextBox.Text = "";
         }
     }
 }

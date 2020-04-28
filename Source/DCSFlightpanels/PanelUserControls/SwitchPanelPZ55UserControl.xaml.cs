@@ -1874,7 +1874,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-
+        /*
         private void ButtonTEXT_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1905,7 +1905,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
+        }*/
 
     }
 }

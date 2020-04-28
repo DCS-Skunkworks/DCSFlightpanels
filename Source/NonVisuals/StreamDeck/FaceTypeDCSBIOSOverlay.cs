@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -10,18 +11,26 @@ namespace NonVisuals.StreamDeck
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOSOverlay;
         private string _backgroundBitmapPath = "";
         [NonSerialized] private Bitmap _backgroundBitmap = null;
+        private double _dcsbiosValue = 0;
 
 
-
-
-        protected override void Show()
+        protected override void DrawBitmap()
         {
             if (_backgroundBitmap == null)
             {
                 _backgroundBitmap = StreamDeckPanel.Validate(_backgroundBitmapPath);
                 RefreshBitmap = true;
             }
-            
+
+            if (_bitmap == null || RefreshBitmap)
+            {
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(ButtonFinalText, TextFont, FontColor, OffsetX, OffsetY, _backgroundBitmap);
+                RefreshBitmap = false;
+            }
+        }
+
+        protected override void Show()
+        {
             DrawBitmap();
             StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, Bitmap);
         }
@@ -32,10 +41,22 @@ namespace NonVisuals.StreamDeck
             set => _backgroundBitmapPath = value;
         }
         
+        [JsonIgnore]
         public Bitmap BackgroundBitmap
         {
             get => _backgroundBitmap;
             set => _backgroundBitmap = value;
+        }
+
+        [JsonIgnore]
+        public double DCSBIOSValue
+        {
+            get => _dcsbiosValue;
+            set
+            {
+                _dcsbiosValue = value;
+                RefreshBitmap = true;
+            }
         }
     }
 }

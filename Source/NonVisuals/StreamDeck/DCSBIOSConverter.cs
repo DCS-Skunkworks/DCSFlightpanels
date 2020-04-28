@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -24,9 +26,23 @@ namespace NonVisuals.StreamDeck
         private FaceTypeDCSBIOSOverlay _faceTypeDCSBIOSOverlay = new FaceTypeDCSBIOSOverlay();
 
 
+        public FaceTypeText FaceTypeText
+        {
+            get => _faceTypeText;
+            set => _faceTypeText = value;
+        }
 
+        public FaceTypeImage FaceTypeImage
+        {
+            get => _faceTypeImage;
+            set => _faceTypeImage = value;
+        }
 
-
+        public FaceTypeDCSBIOSOverlay FaceTypeDCSBIOSOverlay
+        {
+            get => _faceTypeDCSBIOSOverlay;
+            set => _faceTypeDCSBIOSOverlay = value;
+        }
 
         /*
          * Remove settings not relevant based on output type
@@ -37,7 +53,8 @@ namespace NonVisuals.StreamDeck
             {
                 case EnumConverterOutputType.NotSet:
                     {
-                        _faceTypeText.ButtonText = "";
+                        _faceTypeText.ButtonTextTemplate = "";
+                        _faceTypeText.ButtonFinalText = "";
                         _faceTypeText.IsVisible = false;
                         _faceTypeImage.ImageFile = "";
                         _faceTypeImage.IsVisible = false;
@@ -55,7 +72,8 @@ namespace NonVisuals.StreamDeck
                     }
                 case EnumConverterOutputType.Image:
                     {
-                        _faceTypeText.ButtonText = "";
+                        _faceTypeText.ButtonTextTemplate = "";
+                        _faceTypeText.ButtonFinalText = "";
                         _faceTypeText.IsVisible = false;
                         _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = "";
                         _faceTypeDCSBIOSOverlay.IsVisible = false;
@@ -63,7 +81,8 @@ namespace NonVisuals.StreamDeck
                     }
                 case EnumConverterOutputType.ImageOverlay:
                     {
-                        _faceTypeText.ButtonText = "";
+                        _faceTypeText.ButtonTextTemplate = "";
+                        _faceTypeText.ButtonFinalText = "";
                         _faceTypeText.IsVisible = false;
                         _faceTypeImage.ImageFile = "";
                         _faceTypeImage.IsVisible = false;
@@ -79,11 +98,6 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void Set(double dcsbiosValue)
-        {
-            _dcsbiosValue = dcsbiosValue;
-        }
-
         public Bitmap Get()
         {
             if (!_criteria1IsOk || (_comparator2 != EnumComparator.NotSet && !_criteria2IsOk))
@@ -93,7 +107,7 @@ namespace NonVisuals.StreamDeck
 
             Bitmap result = null;
 
-            switch ( _converterOutputType)
+            switch (_converterOutputType)
             {
                 case EnumConverterOutputType.NotSet:
                     {
@@ -106,11 +120,13 @@ namespace NonVisuals.StreamDeck
                     }
                 case EnumConverterOutputType.ImageOverlay:
                     {
+                        _faceTypeDCSBIOSOverlay.ButtonFinalText = _faceTypeDCSBIOSOverlay.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
                         result = _faceTypeDCSBIOSOverlay.Bitmap;
                         break;
                     }
                 case EnumConverterOutputType.Raw:
                     {
+                        _faceTypeText.ButtonFinalText = _faceTypeText.ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, _dcsbiosValue.ToString(CultureInfo.InvariantCulture));
                         result = _faceTypeText.Bitmap;
                         break;
                     }
@@ -123,42 +139,42 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
-        public bool CriteriaFulfilled
+        public bool CriteriaFulfilled(double dcsbiosValue)
         {
-            get
+            _dcsbiosValue = dcsbiosValue;
+
+            if (_comparator1 == EnumComparator.Always)
             {
-                if (_comparator1 == EnumComparator.Always)
-                {
-                    _criteria1IsOk = true;
-                    return true;
-                }
-
-
-                var jaceExtended = JaceExtendedFactory.Instance(ref _jaceId);
-
-                var formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator1) + " reference";
-                formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
-                var variables = new Dictionary<string, double>();
-                variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, _referenceValue1);
-                variables.Add("reference", _dcsbiosValue);
-                var result1 = jaceExtended.CalculationEngine.Calculate(formula, variables);
-                _criteria1IsOk = Math.Abs(result1 - 1.0) < 0.0001;
-
-                if (_comparator2 == EnumComparator.NotSet)
-                {
-                    return _criteria1IsOk;
-                }
-
-                formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator2) + " reference";
-                formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
-                variables = new Dictionary<string, double>();
-                variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, _referenceValue2);
-                variables.Add("reference", _dcsbiosValue);
-                var result2 = jaceExtended.CalculationEngine.Calculate(formula, variables);
-                _criteria2IsOk = Math.Abs(result2 - 1.0) < 0.0001;
-
-                return _criteria1IsOk && _criteria2IsOk;
+                _criteria1IsOk = true;
+                return true;
             }
+
+
+            var jaceExtended = JaceExtendedFactory.Instance(ref _jaceId);
+
+            var formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator1) + " reference";
+            formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
+            var variables = new Dictionary<string, double>();
+            variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, dcsbiosValue);
+            variables.Add("reference", _referenceValue1);
+            var result1 = jaceExtended.CalculationEngine.Calculate(formula, variables);
+            _criteria1IsOk = Math.Abs(result1 - 1.0) < 0.0001;
+
+            if (_comparator2 == EnumComparator.NotSet)
+            {
+                return _criteria1IsOk;
+            }
+
+            formula = StreamDeckConstants.DCSBIOSValuePlaceHolder + " " + GetComparatorAsString(_comparator2) + " reference";
+            formula = formula.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets);
+            variables = new Dictionary<string, double>();
+            variables.Add(StreamDeckConstants.DCSBIOSValuePlaceHolderNoBrackets, dcsbiosValue);
+            variables.Add("reference", _referenceValue2);
+            var result2 = jaceExtended.CalculationEngine.Calculate(formula, variables);
+            _criteria2IsOk = Math.Abs(result2 - 1.0) < 0.0001;
+
+            return _criteria1IsOk && _criteria2IsOk;
+
         }
 
         public EnumConverterOutputType ConverterOutputType
@@ -201,7 +217,7 @@ namespace NonVisuals.StreamDeck
 
                 if (Comparator1 == EnumComparator.Always)
                 {
-                    stringBuilder.Append(" : " + ButtonText.Replace(Environment.NewLine, " "));
+                    stringBuilder.Append(" : " + ButtonTextTemplate.Replace(Environment.NewLine, " "));
                 }
 
                 return stringBuilder.ToString();
@@ -372,7 +388,7 @@ namespace NonVisuals.StreamDeck
         }
 
         [JsonIgnore]
-        public string ButtonText
+        public string ButtonTextTemplate
         {
             get
             {
@@ -384,7 +400,7 @@ namespace NonVisuals.StreamDeck
                         }
                     case EnumConverterOutputType.Raw:
                         {
-                            return _faceTypeText.ButtonText;
+                            return _faceTypeText.ButtonTextTemplate;
                         }
                     case EnumConverterOutputType.Image:
                         {
@@ -392,7 +408,7 @@ namespace NonVisuals.StreamDeck
                         }
                     case EnumConverterOutputType.ImageOverlay:
                         {
-                            return _faceTypeDCSBIOSOverlay.ButtonText;
+                            return _faceTypeDCSBIOSOverlay.ButtonTextTemplate;
                         }
                 }
                 return "";
@@ -404,11 +420,11 @@ namespace NonVisuals.StreamDeck
                 {
                     case EnumConverterOutputType.NotSet:
                         {
-                            throw new Exception("DCSBIOSConverter.ButtonText: OutputType is [NotSet]. Can not add Text.");
+                            throw new Exception("DCSBIOSConverter.ButtonTextTemplate: OutputType is [NotSet]. Can not add ButtonTextTemplate.");
                         }
                     case EnumConverterOutputType.Raw:
                         {
-                            _faceTypeText.ButtonText = value;
+                            _faceTypeText.ButtonTextTemplate = value;
                             break;
                         }
                     case EnumConverterOutputType.Image:
@@ -418,12 +434,12 @@ namespace NonVisuals.StreamDeck
                         }
                     case EnumConverterOutputType.ImageOverlay:
                         {
-                            _faceTypeDCSBIOSOverlay.ButtonText = value;
+                            _faceTypeDCSBIOSOverlay.ButtonTextTemplate = value;
                             break;
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.ButtonText: OutputType not known " + _converterOutputType + ".");
+                            throw new Exception("DCSBIOSConverter.ButtonTextTemplate: OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -598,7 +614,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.FontColor:  FaceTypeText OutputType not known " + _converterOutputType + ".");
+                            throw new Exception("DCSBIOSConverter.FontColor:  OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -655,7 +671,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.BackgroundColor: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
+                            throw new Exception("DCSBIOSConverter.BackgroundColor: Exception. OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -671,7 +687,7 @@ namespace NonVisuals.StreamDeck
                 {
                     case EnumConverterOutputType.NotSet:
                         {
-                            throw new Exception("DCSBIOSConverter.TextFont:  OutputType is [NotSet]. Can not retrieve Font.");
+                            throw new Exception("DCSBIOSConverter.TextFont:  OutputType is [NotSet]. Can not retrieve TextFont.");
                         }
                     case EnumConverterOutputType.Raw:
                         {
@@ -686,7 +702,7 @@ namespace NonVisuals.StreamDeck
                             return _faceTypeDCSBIOSOverlay.TextFont;
                         }
                 }
-                throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
+                throw new Exception("DCSBIOSConverter.TextFont: Exception. OutputType not known " + _converterOutputType + ".");
             }
 
             set
@@ -714,7 +730,7 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.TextFont: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
+                            throw new Exception("DCSBIOSConverter.TextFont: Exception. OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
@@ -745,7 +761,7 @@ namespace NonVisuals.StreamDeck
                             return _faceTypeDCSBIOSOverlay.Bitmap;
                         }
                 }
-                throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
+                throw new Exception("DCSBIOSConverter.Bitmap: Exception. OutputType not known " + _converterOutputType + ".");
             }
 
             set
@@ -773,12 +789,70 @@ namespace NonVisuals.StreamDeck
                         }
                     default:
                         {
-                            throw new Exception("DCSBIOSConverter.Bitmap: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
+                            throw new Exception("DCSBIOSConverter.Bitmap: Exception. OutputType not known " + _converterOutputType + ".");
                         }
                 }
             }
         }
 
+
+        [JsonIgnore]
+        public double DCSBIOSValue
+        {
+            get
+            {
+                switch (_converterOutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter.DCSBIOSValue: OutputType is [NotSet]. Can not retrieve DCSBIOSValue.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            throw new Exception("DCSBIOSConverter.DCSBIOSValue: OutputType is [Raw]. Can not retrieve DCSBIOSValue.");
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            throw new Exception("DCSBIOSConverter.DCSBIOSValue: OutputType is [Image]. Can not retrieve DCSBIOSValue.");
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            return _faceTypeDCSBIOSOverlay.DCSBIOSValue;
+                        }
+                }
+                throw new Exception("DCSBIOSConverter.Bitmap: Exception. OutputType not known " + _converterOutputType + ".");
+            }
+
+            set
+            {
+                switch (_converterOutputType)
+                {
+                    case EnumConverterOutputType.NotSet:
+                        {
+                            throw new Exception("DCSBIOSConverter OutputType is [NotSet]. Can not add DCSBIOSValue.");
+                        }
+                    case EnumConverterOutputType.Raw:
+                        {
+                            throw new Exception("DCSBIOSConverter OutputType is [Raw]. Can not add DCSBIOSValue.");
+                            break;
+                        }
+                    case EnumConverterOutputType.Image:
+                        {
+                            throw new Exception("DCSBIOSConverter OutputType is [Image]. Can not add DCSBIOSValue.");
+                            break;
+                        }
+                    case EnumConverterOutputType.ImageOverlay:
+                        {
+                            _faceTypeDCSBIOSOverlay.DCSBIOSValue = value;
+                            break;
+                        }
+                    default:
+                        {
+                            throw new Exception("DCSBIOSConverter.DCSBIOSValue: Exception. OutputType not known " + _converterOutputType + ".");
+                        }
+                }
+            }
+        }
 
         [JsonIgnore]
         public bool FaceConfigurationIsOK

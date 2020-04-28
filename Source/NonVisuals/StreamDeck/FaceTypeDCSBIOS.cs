@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -8,21 +10,42 @@ namespace NonVisuals.StreamDeck
     public class FaceTypeDCSBIOS : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOS;
-        private string _buttonText;
+        private string _buttonTextTemplate ="";
+        private string _buttonFinalText = "";
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
         private uint _uintDcsBiosValue = 0;
         private string _stringDcsBiosValue = "";
 
-        public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
+        public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
 
+        public virtual void Destroy()
+        {
+            Debugger.Break();
+        }
+
+        protected override void DrawBitmap()
+        {
+            if (_bitmap == null || RefreshBitmap)
+            {
+                _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                RefreshBitmap = false;
+            }
+        }
+
+        protected override void Show()
+        {
+            DrawBitmap();
+            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, Bitmap);
+        }
+        
         public override int GetHash()
         {
             unchecked
             {
-                var result = string.IsNullOrWhiteSpace(_buttonText) ? 0 : _buttonText.GetHashCode();
+                var result = string.IsNullOrWhiteSpace(_buttonTextTemplate) ? 0 : _buttonTextTemplate.GetHashCode();
                 result = (result * 397) ^ (_textFont?.GetHashCode() ?? 0);
                 result = (result * 397) ^ OffsetX;
                 result = (result * 397) ^ OffsetY;
@@ -33,28 +56,24 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        protected override void DrawBitmap()
+        public string ButtonTextTemplate
         {
-            if (Bitmap == null || RefreshBitmap)
-            {
-                Bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
-                RefreshBitmap = false;
-            }
-        }
-
-        protected override void Show()
-        {
-            DrawBitmap();
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, Bitmap);
-        }
-
-        public string ButtonText
-        {
-            get => _buttonText;
+            get => _buttonTextTemplate;
             set
             {
                 RefreshBitmap = true;
-                _buttonText = value;
+                _buttonTextTemplate = value;
+            }
+        }
+
+        [JsonIgnore]
+        public string ButtonFinalText
+        {
+            get => _buttonFinalText;
+            set
+            {
+                RefreshBitmap = true;
+                _buttonFinalText = value;
             }
         }
 
@@ -87,13 +106,21 @@ namespace NonVisuals.StreamDeck
         public uint UintDcsBiosValue
         {
             get => _uintDcsBiosValue;
-            set => _uintDcsBiosValue = value;
+            set
+            {
+                _uintDcsBiosValue = value;
+                RefreshBitmap = true;
+            }
         }
 
         public string StringDcsBiosValue
         {
             get => _stringDcsBiosValue;
-            set => _stringDcsBiosValue = value;
+            set
+            {
+                _stringDcsBiosValue = value;
+                RefreshBitmap = true;
+            }
         }
     }
 }

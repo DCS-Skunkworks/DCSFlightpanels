@@ -16,25 +16,43 @@ namespace DCSFlightpanels.Bills
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         public StreamDeckButton Button;
         private Font _textFont = SettingsManager.DefaultFont;
-        private Color _fontColor = Color.Black;
-        private Color _backgroundColor = ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE);
-        private bool _isSelected = false;
+        private Color _fontColor = SettingsManager.DefaultFontColor;
+        private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
         public BitmapImage SelectedImage { get; set; }
         public BitmapImage DeselectedImage { get; set; }
         private DCSBIOSDecoder _dcsbiosDecoder;
         private string _imageFileRelativePath;
         private string _streamDeckInstanceId;
 
+        public override void Clear()
+        {
+            _streamDeckTargetLayer = null;
+            _bipLinkStreamDeck = null;
+            Button = null;
+            _textFont = SettingsManager.DefaultFont;
+            _fontColor = SettingsManager.DefaultFontColor;
+            _backgroundColor = SettingsManager.DefaultBackgroundColor;
+            _dcsbiosDecoder = null;
+            _textFont = SettingsManager.DefaultFont;
+
+            if (TextBox != null)
+            {
+                TextBox.Background = Brushes.LightSteelBlue;
+                TextBox.Text = "";
+            }
+            _imageFileRelativePath = "";
+        }
+
         public override bool IsEmpty()
         {
-            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && 
+            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) &&
                    _streamDeckTargetLayer == null;
         }
-        
-        
+
+
         public bool ContainsTextFace()
         {
-            return _textFont != null && !string.IsNullOrEmpty(TextBox.Text); 
+            return _textFont != null && !string.IsNullOrEmpty(TextBox.Text);
         }
 
         public bool ContainsImageFace()
@@ -97,10 +115,10 @@ namespace DCSFlightpanels.Bills
                 TextBox.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(_backgroundColor.A, _backgroundColor.R, _backgroundColor.G, _backgroundColor.B)); ;
             }
         }
-        
+
         public int OffsetX { get; set; } = SettingsManager.OffsetX;
         public int OffsetY { get; set; } = SettingsManager.OffsetX;
-        
+
 
         public int ButtonNumber()
         {
@@ -108,26 +126,16 @@ namespace DCSFlightpanels.Bills
             {
                 return 0;
             }
-            
+
             return int.Parse(StreamDeckButtonName.ToString().Replace("BUTTON", ""));
-            
+
         }
 
         //public bool IsClean => OffsetX == 0 && OffsetY == 0 && BackgroundColor == ColorTranslator.FromHtml(StreamDeckConstants.COLOR_DEFAULT_WHITE) && FontColor == Color.Black && TextFont.Name == StreamDeckConstants.DEFAULT_FONT;
-        
+
         public string BackgroundHex => "#" + _backgroundColor.R.ToString("X2") + _backgroundColor.G.ToString("X2") + _backgroundColor.B.ToString("X2");
 
-        public override void Clear()
-        {
-            _dcsbiosDecoder = null;
-            _bipLinkStreamDeck = null;
-            if (TextBox != null)
-            {
-                TextBox.Background = Brushes.LightSteelBlue;
-                TextBox.Text = "";
-            }
-            _imageFileRelativePath = "";
-        }
+
 
         public DCSBIOSDecoder DCSBIOSDecoder
         {

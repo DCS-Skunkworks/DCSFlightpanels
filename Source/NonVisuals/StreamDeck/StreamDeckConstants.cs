@@ -23,6 +23,7 @@ namespace NonVisuals.StreamDeck
         public const string NO_HOME_LAYER_FOUND = "No home layer specified. Home layer must be set.";
         public const string SEVERAL_HOME_LAYER_FOUND = "Several layers has been marked as Home Layer.\n Only Home layer must be set.";
 
+        public const int IMAGE_UPDATING_THREAD_SLEEP_TIME = 100;
         public const int ADJUST_OFFSET_CHANGE_VALUE = 2;
         //public const string DEFAULT_FONT = "Lucida Console";
         public const int STREAMDECK_ICON_HEIGHT = 72;

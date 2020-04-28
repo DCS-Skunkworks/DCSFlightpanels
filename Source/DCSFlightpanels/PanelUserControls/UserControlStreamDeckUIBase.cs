@@ -70,11 +70,11 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 var newlySelectedImage = (StreamDeckImage)sender;
-
+                
                 /*
                  * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
                  */
-                if (EventHandlers.AreThereDirtyListeners(this))
+                if (newlySelectedImage.Bill.Button != StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedButton && EventHandlers.AreThereDirtyListeners(this))
                 {
                     if (CommonUI.DoDiscardAfterMessage(true, "Discard Changes to " + SelectedButtonName + " ?"))
                     {
@@ -123,7 +123,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (streamDeckButton.HasConfig)
                 {
-                    SetDotImageStatus(true, StreamDeckFunction.ButtonNumber(streamDeckButton.StreamDeckButtonName));
+                    SetDotImageStatus(true, StreamDeckCommon.ButtonNumber(streamDeckButton.StreamDeckButtonName));
                 }
             }
         }
@@ -385,7 +385,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             if (result)
             {
-                StreamDeckPanel.GetInstance(StreamDeckInstanceId).AddButtonToSelectedLayer(oldStreamDeckButton);
+                StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.AddButton(oldStreamDeckButton);
                 UpdateButtonInfoFromSource();
                 SetIsDirty();
             }

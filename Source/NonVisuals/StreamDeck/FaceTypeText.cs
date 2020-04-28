@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -8,37 +9,30 @@ namespace NonVisuals.StreamDeck
     public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
-        private string _buttonText;
+        private string _buttonTextTemplate = "";
+        private string _buttonFinalText = "";
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
 
 
-        public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonText) && _textFont != null;
+        public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
 
-        public override int GetHash()
-        {
-            unchecked
-            {
-                var result = string.IsNullOrWhiteSpace(_buttonText) ? 0 : _buttonText.GetHashCode();
-                result = (result * 397) ^ (_textFont?.GetHashCode() ?? 0);
-                result = (result * 397) ^ OffsetX;
-                result = (result * 397) ^ OffsetY;
-                result = (result * 397) ^ _fontColor.GetHashCode();
-                result = (result * 397) ^ _backgroundColor.GetHashCode();
-                result = (result * 397) ^ StreamDeckButtonName.GetHashCode();
-                return result;
-            }
-        }
-
-
+        public virtual void Destroy() { }
 
         protected override void DrawBitmap()
         {
-            if (Bitmap == null || RefreshBitmap)
+            if (_bitmap == null || RefreshBitmap)
             {
-                Bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                if (string.IsNullOrEmpty(ButtonFinalText) || !_buttonTextTemplate.Contains(StreamDeckConstants.DCSBIOSValuePlaceHolder))
+                {
+                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonTextTemplate, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                }
+                else
+                {
+                    _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
+                }
                 RefreshBitmap = false;
             }
         }
@@ -49,13 +43,39 @@ namespace NonVisuals.StreamDeck
             StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, Bitmap);
         }
 
-        public string ButtonText
+        public override int GetHash()
         {
-            get => _buttonText;
+            unchecked
+            {
+                var result = string.IsNullOrWhiteSpace(_buttonTextTemplate) ? 0 : _buttonTextTemplate.GetHashCode();
+                result = (result * 397) ^ (_textFont?.GetHashCode() ?? 0);
+                result = (result * 397) ^ OffsetX;
+                result = (result * 397) ^ OffsetY;
+                result = (result * 397) ^ _fontColor.GetHashCode();
+                result = (result * 397) ^ _backgroundColor.GetHashCode();
+                result = (result * 397) ^ StreamDeckButtonName.GetHashCode();
+                return result;
+            }
+        }
+
+        public string ButtonTextTemplate
+        {
+            get => _buttonTextTemplate;
             set
             {
                 RefreshBitmap = true;
-                _buttonText = value;
+                _buttonTextTemplate = value;
+            }
+        }
+
+        [JsonIgnore]
+        public string ButtonFinalText
+        {
+            get => _buttonFinalText;
+            set
+            {
+                RefreshBitmap = true;
+                _buttonFinalText = value;
             }
         }
 

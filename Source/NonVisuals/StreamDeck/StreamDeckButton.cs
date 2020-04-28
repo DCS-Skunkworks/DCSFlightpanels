@@ -18,21 +18,13 @@ namespace NonVisuals.StreamDeck
         [NonSerialized] private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         [NonSerialized] private Thread _keyPressedThread;
         private string _streamDeckInstanceId;
-        [NonSerialized] private static List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
         private bool _isVisible = false;
+        
+        [NonSerialized] private static List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
 
 
-        public int GetHash()
-        {
-            unchecked
-            {
-                var result = _buttonFace?.GetHash() ?? 0;
-                result = (result * 397) ^ (_buttonActionForPress?.GetHash() ?? 0);
-                result = (result * 397) ^ (_buttonActionForRelease?.GetHash() ?? 0);
-                result = (result * 397) ^ StreamDeckButtonName.GetHashCode();
-                return result;
-            }
-        }
+
+
 
 
 
@@ -44,7 +36,14 @@ namespace NonVisuals.StreamDeck
         }
 
         ~StreamDeckButton()
+        {}
+
+        public void Remove()
         {
+            IsVisible = false;
+            _buttonFace?.Destroy();
+            _buttonActionForPress = null;
+            _buttonActionForRelease = null;
             _streamDeckButtons.Remove(this);
         }
 
@@ -314,6 +313,19 @@ namespace NonVisuals.StreamDeck
         }
 
 
+
+
+        public int GetHash()
+        {
+            unchecked
+            {
+                var result = _buttonFace?.GetHash() ?? 0;
+                result = (result * 397) ^ (_buttonActionForPress?.GetHash() ?? 0);
+                result = (result * 397) ^ (_buttonActionForRelease?.GetHash() ?? 0);
+                result = (result * 397) ^ StreamDeckButtonName.GetHashCode();
+                return result;
+            }
+        }
     }
 
 
@@ -354,37 +366,5 @@ namespace NonVisuals.StreamDeck
         BUTTON32
     }
 
-    public static class StreamDeckFunction
-    {
-        public static int ButtonNumber(EnumStreamDeckButtonNames streamDeckButtonName)
-        {
-            if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)
-            {
-                return 0;
-            }
-
-            return int.Parse(streamDeckButtonName.ToString().Replace("BUTTON", ""));
-        }
-
-        public static EnumStreamDeckButtonNames ButtonName(int streamDeckButtonNumber)
-        {
-            if (streamDeckButtonNumber == 0)
-            {
-                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
-            }
-
-            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
-        }
-
-        public static EnumStreamDeckButtonNames ButtonName(string streamDeckButtonNumber)
-        {
-            if (string.IsNullOrEmpty(streamDeckButtonNumber) || streamDeckButtonNumber == "0")
-            {
-                return EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
-            }
-
-            return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
-        }
-    }
 
 }

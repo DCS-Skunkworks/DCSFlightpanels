@@ -382,11 +382,11 @@ namespace DCSFlightpanels.PanelUserControls
 
                     if (streamDeckButton.HasConfig)
                     {
-                        _streamDeckPanel.AddButtonToSelectedLayer(streamDeckButton);
+                        _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton);
                     }
                     else
                     {
-                        _streamDeckPanel.RemoveButton(streamDeckButton);
+                        _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
                     }
                     UCStreamDeckButtonAction.StateSaved();
                     UCStreamDeckButtonFace.StateSaved();
@@ -417,7 +417,15 @@ namespace DCSFlightpanels.PanelUserControls
                 streamDeckButton.ActionForPress = null;
                 streamDeckButton.ActionForRelease = null;
 
-                _streamDeckPanel.AddButtonToSelectedLayer(streamDeckButton); // Add empty button to trigger change events
+                if (streamDeckButton.HasConfig)
+                {
+                    _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton); 
+                }
+                else
+                {
+                    _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
+                }
+
                 UCStreamDeckButtonAction.Clear();
 
                 EventHandlers.NotifyToSyncConfiguration(this);
@@ -449,8 +457,21 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
+                var streamDeckButtonName = streamDeckButton.StreamDeckButtonName;
+
+                streamDeckButton.Face.Destroy();
                 streamDeckButton.Face = null;
+
+                if (streamDeckButton.HasConfig)
+                {
+                    _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton);
+                }
+                else
+                {
+                    _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
+                }
                 UCStreamDeckButtonFace.Clear();
+                _streamDeckPanel.ClearFace(streamDeckButtonName);
                 EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
             }

@@ -49,14 +49,7 @@ namespace DCSFlightpanels.Bills
                     throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
                 }
                 _keyPress = value;
-                if (_keyPress != null)
-                {
-                    _textBox.Text = _keyPress.GetKeyPressInformation();
-                }
-                else
-                {
-                    _textBox.Text = "";
-                }
+                _textBox.Text = _keyPress != null ? _keyPress.GetKeyPressInformation() : "";
             }
         }
 
@@ -71,7 +64,7 @@ namespace DCSFlightpanels.Bills
             set
             {
                 _osCommand = value;
-                _textBox.Text = _osCommand.Name;
+                _textBox.Text = _osCommand != null ? _osCommand.Name : "";
             }
         }
 

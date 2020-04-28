@@ -19,6 +19,7 @@ namespace NonVisuals.Interfaces
         string StreamDeckInstanceId { get; set; }
         EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         bool IsVisible { get; set; }
+        void Destroy();
         bool ConfigurationOK { get; }
         int GetHash();
     }

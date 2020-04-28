@@ -9,7 +9,7 @@ namespace NonVisuals.StreamDeck
     public abstract class FaceTypeBase
     {
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Unknown;
-        [NonSerialized]private Bitmap _bitmap;
+        [NonSerialized]protected Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _streamDeckInstanceId;
@@ -23,11 +23,15 @@ namespace NonVisuals.StreamDeck
         protected abstract void DrawBitmap();
         protected abstract void Show();
 
+
+
+
         [JsonIgnore]
         public Bitmap Bitmap
         {
             get
             {
+                DrawBitmap();
                 return _bitmap;
             }
             set
@@ -65,7 +69,7 @@ namespace NonVisuals.StreamDeck
         }
 
         [JsonIgnore]
-        public bool IsVisible
+        public virtual bool IsVisible
         {
             get => _isVisible;
             set

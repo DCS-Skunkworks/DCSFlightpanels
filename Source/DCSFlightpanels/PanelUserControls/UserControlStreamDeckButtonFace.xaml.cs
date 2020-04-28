@@ -362,7 +362,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var faceTypeText = (FaceTypeText)streamDeckButtonFace;
                         TextBoxButtonTextFace.Bill.TextFont = faceTypeText.TextFont;
-                        TextBoxButtonTextFace.Text = faceTypeText.ButtonText;
+                        TextBoxButtonTextFace.Text = faceTypeText.ButtonTextTemplate;
                         TextBoxButtonTextFace.Bill.FontColor = faceTypeText.FontColor;
                         TextBoxButtonTextFace.Bill.BackgroundColor = faceTypeText.BackgroundColor;
                         SetFormState();
@@ -407,7 +407,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                             result.StreamDeckButtonName = streamDeckButtonName;
                             result.StreamDeckInstanceId = StreamDeckInstanceId;
-                            result.ButtonText = TextBoxButtonTextFace.Text;
+                            result.ButtonTextTemplate = TextBoxButtonTextFace.Text;
                             result.TextFont = TextBoxButtonTextFace.Bill.TextFont;
                             result.FontColor = TextBoxButtonTextFace.Bill.FontColor;
                             result.BackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
@@ -584,6 +584,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder;
+                    streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder = null;
                     SetIsDirty();
 
                 }

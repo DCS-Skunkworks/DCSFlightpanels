@@ -122,6 +122,11 @@ namespace NonVisuals.StreamDeck
 
         public void RemoveEmptyButtons()
         {
+            foreach (var streamDeckButton in _streamDeckButtons.Where(o => o.HasConfig == false))
+            {
+                streamDeckButton.Remove();
+            }
+            
             _streamDeckButtons.RemoveAll(o => !o.HasConfig);
         }
 
@@ -185,7 +190,20 @@ namespace NonVisuals.StreamDeck
 
         public void RemoveButton(StreamDeckButton streamDeckButton)
         {
+            streamDeckButton.Remove();
             _streamDeckButtons.Remove(streamDeckButton);
+            EventHandlers.NotifyStreamDeckConfigurationChange(this);
+        }
+
+        public void RemoveButtons()
+        {
+            foreach (var streamDeckButton in _streamDeckButtons)
+            {
+                streamDeckButton.IsVisible = false;
+            }
+
+            _streamDeckButtons.RemoveAll(o => o != null);
+
             EventHandlers.NotifyStreamDeckConfigurationChange(this);
         }
 
