@@ -11,12 +11,13 @@ namespace NonVisuals.StreamDeck
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOSOverlay;
         private string _backgroundBitmapPath = "";
         [NonSerialized] private Bitmap _backgroundBitmap = null;
+        private bool _loadBackground = false;
         private double _dcsbiosValue = 0;
 
 
         protected override void DrawBitmap()
         {
-            if (_backgroundBitmap == null)
+            if (_backgroundBitmap == null || _loadBackground)
             {
                 _backgroundBitmap = StreamDeckPanel.Validate(_backgroundBitmapPath);
                 RefreshBitmap = true;
@@ -38,9 +39,13 @@ namespace NonVisuals.StreamDeck
         public string BackgroundBitmapPath
         {
             get => _backgroundBitmapPath;
-            set => _backgroundBitmapPath = value;
+            set
+            {
+                _backgroundBitmapPath = value;
+                _loadBackground = true;
+            }
         }
-        
+
         [JsonIgnore]
         public Bitmap BackgroundBitmap
         {

@@ -459,8 +459,8 @@ namespace DCSFlightpanels.PanelUserControls
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
                 var streamDeckButtonName = streamDeckButton.StreamDeckButtonName;
 
-                streamDeckButton.Face.Destroy();
-                streamDeckButton.Face = null;
+                streamDeckButton.Face.Destroy(); //todo this must be properly made 
+                streamDeckButton.Face = null; //todo this must be properly made 
 
                 if (streamDeckButton.HasConfig)
                 {
@@ -542,7 +542,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 while (true)
                 {
-                    var bitmap = BitMapCreator.CreateEmtpyStreamDeckBitmap(_colors[_random.Next(0, 20)]);
+                    var bitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(_colors[_random.Next(0, 20)]);
                     _streamDeckPanel.SetImage(_random.Next(1, _streamDeckPanel.ButtonCount), bitmap);
                     Thread.Sleep(50);
                     if (cancellationToken.IsCancellationRequested)

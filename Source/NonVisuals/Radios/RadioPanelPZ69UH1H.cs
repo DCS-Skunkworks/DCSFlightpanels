@@ -68,9 +68,9 @@ namespace NonVisuals.Radios
         private readonly object _lockUhfDialsObject1 = new object();
         private readonly object _lockUhfDialsObject2 = new object();
         private readonly object _lockUhfDialsObject3 = new object();
-        private volatile uint _uhfBigFrequencyStandby = 225;
+        private volatile uint _uhfBigFrequencyStandby = 200;
         private volatile uint _uhfSmallFrequencyStandby;
-        private volatile uint _uhfSavedCockpitBigFrequency = 225;
+        private volatile uint _uhfSavedCockpitBigFrequency = 200;
         private volatile uint _uhfSavedCockpitSmallFrequency;
         private DCSBIOSOutput _uhfDcsbiosOutputCockpitFrequency;
         private double _uhfCockpitFrequency = 225.00;
@@ -1997,7 +1997,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.UHF:
                                         {
-                                            if (_uhfBigFrequencyStandby.Equals(225))
+                                            if (_uhfBigFrequencyStandby.Equals(200))
                                             {
                                                 //@ min value
                                                 break;
@@ -2239,7 +2239,7 @@ namespace NonVisuals.Radios
                                         }
                                     case CurrentUH1HRadioMode.UHF:
                                         {
-                                            if (_uhfBigFrequencyStandby.Equals(225))
+                                            if (_uhfBigFrequencyStandby.Equals(200))
                                             {
                                                 //@ min value
                                                 break;

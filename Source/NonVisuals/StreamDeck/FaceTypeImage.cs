@@ -12,7 +12,7 @@ namespace NonVisuals.StreamDeck
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Image;
         private bool _refreshBitmap = true;
         private string _imageFile;
-        private KeyBitmap _keyBitmap;
+        [NonSerialized]private KeyBitmap _keyBitmap;
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;

@@ -162,7 +162,13 @@ namespace NonVisuals.StreamDeck
 
         public void ClearSettings()
         {
+            foreach (var streamDeckLayer in _layerList)
+            {
+                streamDeckLayer.IsVisible = false;
+                streamDeckLayer.RemoveButtons();
+            }
             _layerList.Clear();
+            ClearAllFaces();
         }
 
         public StreamDeckLayer HomeLayer

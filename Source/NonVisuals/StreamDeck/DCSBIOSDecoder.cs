@@ -26,7 +26,7 @@ namespace NonVisuals.StreamDeck
         private bool _treatStringAsNumber = false;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
 
-        [NonSerialized] private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        [NonSerialized] private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         [NonSerialized] private Thread _imageUpdateTread = null;
         private bool _shutdown = false;
 
@@ -43,9 +43,7 @@ namespace NonVisuals.StreamDeck
             _autoResetEvent?.Set();
             _autoResetEvent?.Close();
         }
-
-
-
+        
         public DCSBIOSDecoder()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
@@ -59,8 +57,24 @@ namespace NonVisuals.StreamDeck
             DCSBIOSStringManager.Detach(this);
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
         }
-        
 
+        public void AfterClone()
+        {
+            DCSBIOS.GetInstance().AttachDataReceivedListener(this);
+            _autoResetEvent = new AutoResetEvent(false);
+            if (_imageUpdateTread != null)
+            {
+                try
+                {
+                    _imageUpdateTread.Abort();
+                }
+                catch (Exception e)
+                {
+                }
+            }
+            _imageUpdateTread = new Thread(ImageRefreshingThread);
+            _imageUpdateTread.Start();
+        }
 
         private void ImageRefreshingThread()
         {

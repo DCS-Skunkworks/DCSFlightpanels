@@ -496,7 +496,7 @@ namespace DCSFlightpanels.Windows
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
-                    _dcsbiosDecoder.Add(window.DCSBIOSConverter);
+                    _dcsbiosDecoder.Add(window.DCSBIOSConverter.DeepClone());
                     window.DCSBIOSConverter = null;
                     ShowConverters();
                     SetFormState();

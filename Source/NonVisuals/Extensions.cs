@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using TextBox = System.Windows.Controls.TextBox;
 using NonVisuals.StreamDeck;
@@ -8,6 +9,20 @@ namespace NonVisuals
 {
     public static class Extensions
     {
+
+
+        public static T DeepClone<T>(this T obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
+
+                return (T)formatter.Deserialize(ms);
+            }
+        }
+
         public static bool ValidateDouble(this TextBox textBox, bool ignoreIfEmpty)
         {
             if (ignoreIfEmpty && string.IsNullOrEmpty(textBox.Text))

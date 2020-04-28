@@ -199,7 +199,7 @@ namespace NonVisuals.StreamDeck
         {
             foreach (var streamDeckButton in _streamDeckButtons)
             {
-                streamDeckButton.IsVisible = false;
+                streamDeckButton.Remove();
             }
 
             _streamDeckButtons.RemoveAll(o => o != null);

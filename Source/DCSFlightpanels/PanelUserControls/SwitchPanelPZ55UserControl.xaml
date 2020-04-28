@@ -112,7 +112,6 @@
                 <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobAll" IsReadOnly="True" KeyDown="TextBoxShortcutKeyDown" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
                 <Label Content="START" Height="23"  FontSize="10" />
                 <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobStart" IsReadOnly="True" KeyDown="TextBoxShortcutKeyDown" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
-                <customControl:StreamDeckFaceTextBox x:Name="TextBoxDCSBIOSDecoder"></customControl:StreamDeckFaceTextBox>
                 <!--<Button Name="ButtonTEXT" Height="30" Click="ButtonTEXT_OnClick" Visibility="Collapsed"></Button>-->
             </StackPanel>
         </GroupBox>
@@ -166,7 +165,7 @@
                 <Button x:Name="ButtonSwitchPanelInfo" Click="ButtonSwitchPanelInfo_OnClick" Margin="5,20,5,0" >
                     <Image Margin="0,8,0,0" Source="/dcsfp;component/Images/info.png" Stretch="Uniform" VerticalAlignment="Center" Width="40"  RenderOptions.BitmapScalingMode="Fant" />
                 </Button>
-                <!-- <Button Content="DEV" Height="25" HorizontalAlignment="Center" Name="ButtonDEV" Width="75" Click="ButtonDEVClick" Margin="5,0" /> -->
+                <Button Content="DEV" Height="25" HorizontalAlignment="Center" Name="ButtonDEV" Width="75" Visibility="Collapsed" Click="ButtonTEXT_OnClick" Margin="5,0" />
             </StackPanel>
         </GroupBox>
 

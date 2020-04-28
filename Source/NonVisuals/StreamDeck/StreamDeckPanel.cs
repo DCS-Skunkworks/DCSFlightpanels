@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -105,7 +104,12 @@ namespace NonVisuals.StreamDeck
                 SetLastException(e);
             }
         }
-        
+
+        public override void SelectedAirframe(object sender, AirframeEventArgs e)
+        {
+            _streamDeckLayerHandler.ClearSettings();
+        }
+
         private void StreamDeckKeyListener(object sender, KeyEventArgs e)
         {
             if (!(sender is IMacroBoard))

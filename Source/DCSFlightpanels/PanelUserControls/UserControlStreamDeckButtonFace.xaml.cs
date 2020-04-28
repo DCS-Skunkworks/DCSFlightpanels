@@ -124,6 +124,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 radioButton.IsChecked = false;
             }
+
+            SetFormState();
             _isDirty = false;
         }
 
@@ -421,7 +423,9 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        return TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder;
+                        var result = TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.DeepClone();
+                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.Destroy();
+                        return result;
                     }
                 case EnumStreamDeckFaceType.Image:
                     {
@@ -583,8 +587,9 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder;
-                    streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder = null;
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.DeepClone();
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
+                    streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.Destroy();
                     SetIsDirty();
 
                 }

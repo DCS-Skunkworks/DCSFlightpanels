@@ -36,10 +36,13 @@ namespace NonVisuals.StreamDeck
         }
 
         ~StreamDeckButton()
-        {}
+        {
+            _streamDeckButtons.Remove(this);
+        }
 
         public void Remove()
         {
+            _streamDeckButtons.Remove(this);
             IsVisible = false;
             _buttonFace?.Destroy();
             _buttonActionForPress = null;
