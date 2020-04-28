@@ -134,7 +134,15 @@ namespace DCS_BIOS
                                 var secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
                                 var firstChar = "";
                                 byte[] firstByte = new byte[10];
-                                if (hex.Length > 2)
+                                if (hex.Length == 3) 
+                                {
+                                    //this is really ugly, will it work ?? keep geting 0x730 from MI-8 R863 where I would except last digit (uneven 7 long frequency)
+                                    //so let's try and just ignore the for number, in this case the 7.
+                                    //28.04.2020 JDA
+                                    firstByte = new[] { Convert.ToByte(hex.Substring(1, 2), 16) };
+                                    firstChar = _iso8859_1.GetString(firstByte);
+                                }
+                                else if (hex.Length == 4)
                                 {
                                     firstByte = new[] { Convert.ToByte(hex.Substring(2, 2), 16) };
                                     firstChar = _iso8859_1.GetString(firstByte);
