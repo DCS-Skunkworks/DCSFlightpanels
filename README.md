@@ -36,17 +36,18 @@ Saitek / Logitech Panels Supported:
 * PZ69 Radio Panel (DCS-BIOS & KeyEmulator** & KeyEmulator_SRS***)
 * BIP Back Lit Information Panel (DCS-BIOS & KeyEmulator****)
 
-Stream Deck Panels Supported:
----------------------------------------------
-* Mini
-* Stream Deck
-* XL
-
 - **	LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
 - ***	Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
 - ****	BIP can be linked to PZ69 (keyemulator), PZ55, PZ70, TPM so that switching changes LEDs.
 
 * For Mods use FC3 Profile
+
+Stream Deck Panels Supported (only with DCS-BIOS):
+---------------------------------------------
+* Mini
+* Stream Deck
+* XL
+
 
 [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
 

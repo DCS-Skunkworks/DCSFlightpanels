@@ -386,7 +386,8 @@ namespace ClassLibraryCommon
             {
                 if (!File.Exists(_debugLog))
                 {
-                    File.Create(_debugLog);
+                    var stream = File.Create(_debugLog);
+                    stream.Close();
                 }
 
                 var debugStreamWriter = File.AppendText(_debugLog);

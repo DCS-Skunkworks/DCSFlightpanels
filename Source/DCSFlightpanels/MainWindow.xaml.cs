@@ -93,12 +93,14 @@ namespace DCSFlightpanels
 
                 if (!File.Exists(_debugLogFile))
                 {
-                    File.Create(_debugLogFile);
+                    var stream = File.Create(_debugLogFile);
+                    stream.Close();
                 }
 
                 if (!File.Exists(_errorLogFile))
                 {
-                    File.Create(_errorLogFile);
+                    var stream = File.Create(_errorLogFile);
+                    stream.Close();
                 }
 
                 Common.SetErrorLog(_errorLogFile);

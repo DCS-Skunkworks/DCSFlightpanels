@@ -5140,7 +5140,7 @@ namespace NonVisuals.Radios
                                     }
                             }
                             _vhfAmSavedCockpitBigFrequency = double.Parse((_vhfAmCockpitFreq1DialPos + 3).ToString() + _vhfAmCockpitFreq2DialPos.ToString(), NumberFormatInfoFullDisplay);
-                            _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos.ToString() + dial4, NumberFormatInfoFullDisplay);
+                            _vhfAmSavedCockpitSmallFrequency = double.Parse(_vhfAmCockpitFreq3DialPos.ToString() + dial4.ToString(NumberFormatInfoFullDisplay).PadLeft(2,'0'), NumberFormatInfoFullDisplay);
                         }
                     }
                 }
