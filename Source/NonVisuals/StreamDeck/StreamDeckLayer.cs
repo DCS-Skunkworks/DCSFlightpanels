@@ -16,6 +16,15 @@ namespace NonVisuals.StreamDeck
         private Color _fontColor;
         private Color _backgroundColor;
         private bool _isVisible = false;
+        private string _streamDeckInstanceId = "";
+
+
+
+
+        private void NotifyChanges()
+        {
+            EventHandlers.NotifyStreamDeckConfigurationChange(this);
+        }
 
         public Font TextFont
         {
@@ -111,9 +120,32 @@ namespace NonVisuals.StreamDeck
                 _streamDeckButtons.Add(streamDeckButton);
             }
 
-            EventHandlers.NotifyStreamDeckConfigurationChange(this);
+            NotifyChanges();
         }
-        
+
+
+        public void RemoveButton(StreamDeckButton streamDeckButton)
+        {
+            streamDeckButton.Remove();
+            _streamDeckButtons.Remove(streamDeckButton);
+            NotifyChanges();
+        }
+
+        public void RemoveButtons(bool sendNotification)
+        {
+            foreach (var streamDeckButton in _streamDeckButtons)
+            {
+                streamDeckButton.Remove();
+            }
+
+            _streamDeckButtons.RemoveAll(o => o != null);
+
+            if (sendNotification)
+            {
+                NotifyChanges();
+            }
+        }
+
         public string Name
         {
             get => _name;
@@ -126,7 +158,7 @@ namespace NonVisuals.StreamDeck
             {
                 streamDeckButton.Remove();
             }
-            
+
             _streamDeckButtons.RemoveAll(o => !o.HasConfig);
         }
 
@@ -159,7 +191,7 @@ namespace NonVisuals.StreamDeck
                     return streamDeckButton;
                 }
             }
-            return new StreamDeckButton(streamDeckButtonName);
+            return new StreamDeckButton(streamDeckButtonName, _streamDeckInstanceId);
         }
 
         public bool ContainStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
@@ -188,25 +220,6 @@ namespace NonVisuals.StreamDeck
             throw new Exception("StreamDeckLayer " + Name + " does not contain button " + streamDeckButtonName + ".");
         }
 
-        public void RemoveButton(StreamDeckButton streamDeckButton)
-        {
-            streamDeckButton.Remove();
-            _streamDeckButtons.Remove(streamDeckButton);
-            EventHandlers.NotifyStreamDeckConfigurationChange(this);
-        }
-
-        public void RemoveButtons()
-        {
-            foreach (var streamDeckButton in _streamDeckButtons)
-            {
-                streamDeckButton.Remove();
-            }
-
-            _streamDeckButtons.RemoveAll(o => o != null);
-
-            EventHandlers.NotifyStreamDeckConfigurationChange(this);
-        }
-
         public bool IsVisible
         {
             get => _isVisible;
@@ -218,6 +231,12 @@ namespace NonVisuals.StreamDeck
                     streamDeckButton.IsVisible = _isVisible;
                 }
             }
+        }
+
+        public string StreamDeckInstanceId
+        {
+            get => _streamDeckInstanceId;
+            set => _streamDeckInstanceId = value;
         }
     }
 }

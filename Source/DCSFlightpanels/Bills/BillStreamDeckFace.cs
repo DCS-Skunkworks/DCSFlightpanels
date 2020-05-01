@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using HidLibrary;
 using NonVisuals;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;
@@ -146,8 +147,7 @@ namespace DCSFlightpanels.Bills
                 TextBox.Text = _dcsbiosDecoder?.DCSBIOSOutput != null ? _dcsbiosDecoder.DCSBIOSOutput.ControlId : "";
             }
         }
-
-
+        
         public string ImageFileRelativePath
         {
             get => _imageFileRelativePath;

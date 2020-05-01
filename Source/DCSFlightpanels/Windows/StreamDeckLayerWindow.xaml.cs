@@ -16,15 +16,18 @@ namespace DCSFlightpanels.Windows
         private List<StreamDeckLayer> _existingLayers = new List<StreamDeckLayer>();
         private bool _loaded = false;
         private const int MINIMUM_LENGTH = 3;
-        private StreamDeckLayer _newLayer = new StreamDeckLayer();
+        private StreamDeckLayer _newLayer = null;
+        private string _streamDeckInstanceId;
 
-        public StreamDeckLayerWindow(List<StreamDeckLayer> existingLayers)
+        public StreamDeckLayerWindow(List<StreamDeckLayer> existingLayers, string streamDeckInstanceId)
         {
             InitializeComponent();
             if (existingLayers != null)
             {
                 _existingLayers = existingLayers;
             }
+
+            _streamDeckInstanceId = streamDeckInstanceId;
         }
 
         private void StreamDeckLayerWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -105,6 +108,8 @@ namespace DCSFlightpanels.Windows
                 throw new Exception("Layer name " + TextBoxLayerName.Text + " too short. Minimum length is " + MINIMUM_LENGTH + ".");
             }
 
+            _newLayer = new StreamDeckLayer();
+            _newLayer.StreamDeckInstanceId = _streamDeckInstanceId;
             _newLayer.Name = TextBoxLayerName.Text;
             DialogResult = true;
             Close();

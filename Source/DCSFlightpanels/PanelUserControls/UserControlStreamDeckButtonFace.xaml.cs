@@ -89,9 +89,7 @@ namespace DCSFlightpanels.PanelUserControls
                                                     TextBoxButtonTextFace.Bill.TextFont.Size + " " +
                                                     (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
                 TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
-
-                ButtonDeleteDCSBIOSFaceButton.IsEnabled = TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS();
-
+                
                 ButtonTestSelectImageGalleryButton.IsEnabled = TextBoxImageFace.Bill.ContainsImageFace();
             }
             catch (Exception ex)
@@ -372,8 +370,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        var dcsbiosDecoder = (DCSBIOSDecoder)streamDeckButtonFace;
-                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = dcsbiosDecoder;
+                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = (DCSBIOSDecoder)streamDeckButtonFace;
                         SetFormState();
                         return;
                     }
@@ -423,8 +420,14 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case EnumStreamDeckFaceType.DCSBIOS:
                     {
-                        var result = TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.DeepClone();
-                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.Destroy();
+                        DCSBIOSDecoder result = null;
+                        if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
+                        {
+                            result = TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.DeepClone();
+                            DCSBIOSDecoder.ShowOnly(result, StreamDeckInstanceId);
+                            TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.IsVisible = false;
+                            result.AfterClone();
+                        }
                         return result;
                     }
                 case EnumStreamDeckFaceType.Image:
@@ -568,7 +571,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ButtonSelectDCSBIOSFaceButton_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonAddEditDCSBIOSFaceButton_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -576,6 +579,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                 {
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.IsVisible = false;
                     streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, StreamDeckInstanceId);
                 }
                 else
@@ -587,27 +591,13 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder?.Destroy();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.DeepClone();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
                     streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.Destroy();
                     SetIsDirty();
 
                 }
-                ButtonFocus.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ButtonDeleteDCSBIOSFaceButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
-                SetIsDirty();
-
                 ButtonFocus.Focus();
             }
             catch (Exception ex)
@@ -659,7 +649,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
@@ -721,6 +711,11 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.ClearFaceConfiguration)
                 {
+                    if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
+                    {
+                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.Destroy();
+                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
+                    }
                     Clear();
                 }
                 SetFormState();

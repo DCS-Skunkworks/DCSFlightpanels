@@ -30,10 +30,10 @@ namespace DCSFlightpanels.PanelUserControls
         private bool _userControlLoaded;
 
         private CancellationTokenSource _cancellationTokenSource;
-        private Random _random = new Random();
+        private readonly Random _random = new Random();
         private Thread _identificationThread;
 
-        private UserControlStreamDeckUIBase _buttonUI;
+        private readonly UserControlStreamDeckUIBase _uiButtonGrid;
 
 
 
@@ -60,7 +60,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var child = new UserControlStreamDeckUINormal();
                         child.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
-                        _buttonUI = child;
+                        _uiButtonGrid = child;
                         StackPanelButtonUI.Children.Add(child);
 
                         break;
@@ -69,7 +69,7 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         var child = new UserControlStreamDeckUIXL();
                         child.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
-                        _buttonUI = child;
+                        _uiButtonGrid = child;
                         StackPanelButtonUI.Children.Add(child);
                         break;
                     }
@@ -77,8 +77,8 @@ namespace DCSFlightpanels.PanelUserControls
 
             EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonAction);
             EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonFace);
-            EventHandlers.AttachStreamDeckListener(_buttonUI);
-            EventHandlers.AttachStreamDeckConfigListener(_buttonUI);
+            EventHandlers.AttachStreamDeckListener(_uiButtonGrid);
+            EventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckListener(this);
 
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
@@ -322,7 +322,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var layerWindow = new StreamDeckLayerWindow(_streamDeckPanel.LayerList);
+                var layerWindow = new StreamDeckLayerWindow(_streamDeckPanel.LayerList, _streamDeckPanel.InstanceId);
                 layerWindow.ShowDialog();
                 if (layerWindow.DialogResult == true)
                 {
@@ -376,10 +376,11 @@ namespace DCSFlightpanels.PanelUserControls
                 try
                 {
                     var streamDeckButton = _streamDeckPanel.SelectedButton;
-                    streamDeckButton.Face = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
                     streamDeckButton.ActionForPress = UCStreamDeckButtonAction.GetStreamDeckButtonAction(true);
                     streamDeckButton.ActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
 
+                    streamDeckButton.Face = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
+                    
                     if (streamDeckButton.HasConfig)
                     {
                         _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton);
@@ -411,6 +412,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
                 if (streamDeckButton.ActionForPress != null && streamDeckButton.ActionForPress.ActionType == EnumStreamDeckActionType.LayerNavigation)
                 {
+                    streamDeckButton.Face.Destroy();
                     streamDeckButton.Face = null;
                     UCStreamDeckButtonFace.Clear();
                 }
@@ -488,6 +490,7 @@ namespace DCSFlightpanels.PanelUserControls
                 EventHandlers.ClearSettings(this, false, true, false);
                 EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton);
                 EventHandlers.NotifyToSyncConfiguration(this);
+                _streamDeckPanel.SelectedButton.ClearFace();
                 SetFormState();
             }
             catch (Exception ex)

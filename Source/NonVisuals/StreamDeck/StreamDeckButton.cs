@@ -29,9 +29,10 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton)
+        public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, string streamDeckInstanceId)
         {
             _streamDeckButtonName = enumStreamDeckButton;
+            _streamDeckInstanceId = streamDeckInstanceId;
             _streamDeckButtons.Add(this);
         }
 
@@ -83,6 +84,11 @@ namespace NonVisuals.StreamDeck
             {
                 ActionForPress.Execute(CancellationToken.None);
             }
+        }
+
+        public void ClearFace()
+        {
+            StreamDeckPanel.GetInstance(_streamDeckInstanceId).ClearFace(_streamDeckButtonName);
         }
 
         private void ThreadedPress(CancellationToken threadCancellationToken)
@@ -151,6 +157,7 @@ namespace NonVisuals.StreamDeck
             {
                 if (overwrite)
                 {
+                    Face?.Destroy();
                     Face = streamDeckButton.Face;
                     Face.StreamDeckButtonName = _streamDeckButtonName;
                     result = true;
@@ -269,7 +276,7 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
-
+        /*
         public static HashSet<StreamDeckButton> GetAllStreamDeckButtonNames()
         {
             var result = new HashSet<StreamDeckButton>();
@@ -308,16 +315,7 @@ namespace NonVisuals.StreamDeck
             result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON32));
             return result;
         }
-
-        public string StreamDeckInstanceId
-        {
-            get => _streamDeckInstanceId;
-            set => _streamDeckInstanceId = value;
-        }
-
-
-
-
+        */
         public int GetHash()
         {
             unchecked

@@ -86,10 +86,8 @@
                         <ColumnDefinition Width="20*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <StackPanel Name="StackPanelChoosePredefinedButton"/>
-
                         <StackPanel Name="StackPanelChooseButtonFaceType">
-                            <GroupBox Header="Handle Configuration" Margin="0,0,0,0">
+                            <GroupBox Header="" Margin="0,0,0,0">
                                 <StackPanel >
                                     <Button Name="ButtonAcceptButtonChanges" Content="Accept Changes"  Margin="4,10,4,2" Click="ButtonAcceptButtonChanges_OnClick"/>
                                     <Button Name="ButtonDeleteAction" Content="Delete Action"  Margin="4,15,4,2" Click="ButtonDeleteAction_OnClick"/>

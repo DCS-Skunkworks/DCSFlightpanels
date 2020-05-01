@@ -96,6 +96,7 @@ namespace DCSFlightpanels.Windows
                 _popupDataGrid = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "PopupDataGrid"));
                 _formLoaded = true;
                 SetFormState();
+                TextBoxSearch.Focus();
             }
             catch (Exception ex)
             {
@@ -143,6 +144,7 @@ namespace DCSFlightpanels.Windows
         {
             _populatingData = true;
 
+            DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _streamDeckInstanceId);
             if (_dcsbiosDecoder.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 RadioButtonIntegerSource.IsChecked = true;

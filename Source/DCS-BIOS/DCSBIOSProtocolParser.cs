@@ -42,9 +42,11 @@ namespace DCS_BIOS
         private uint _data;
         private byte _syncByteCount;
         private bool _shutdown;
+        private static object _lockListOfAddressesToBroascastObject = new object();
         private readonly List<uint> _listOfAddressesToBroascast = new List<uint>();
         public static DCSBIOSProtocolParser DCSBIOSProtocolParserSO;
         private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+
 
         //private object _lockArrayToProcess = new object();
         //private List<byte[]> _arraysToProcess = new List<byte[]>();
@@ -152,11 +154,13 @@ namespace DCS_BIOS
         public static void RegisterAddressToBroadCast(uint address)
         {
             GetParser();
-            if (DCSBIOSProtocolParserSO._listOfAddressesToBroascast.Any(u => u == address))
+            lock (_lockListOfAddressesToBroascastObject)
             {
-                return;
+                if (!DCSBIOSProtocolParserSO._listOfAddressesToBroascast.Any(u => u == address))
+                {
+                    DCSBIOSProtocolParserSO._listOfAddressesToBroascast.Add(address);
+                }
             }
-            DCSBIOSProtocolParserSO._listOfAddressesToBroascast.Add(address);
         }
 
         public static DCSBIOSProtocolParser GetParser()
@@ -176,10 +180,15 @@ namespace DCS_BIOS
 
         private bool IsBroadcastable(uint address)
         {
-            if (_listOfAddressesToBroascast.Any(u => u == address))
+            var result = false;
+            lock (_lockListOfAddressesToBroascastObject)
             {
-                return true;
+                if (_listOfAddressesToBroascast.Any(u => u == address))
+                {
+                    result = true;
+                }
             }
+
             /*for (var i = 0; i < _listOfAddressesToBroascast.Count; i++)
             {
                 if (_listOfAddressesToBroascast[i] == address)
@@ -187,7 +196,7 @@ namespace DCS_BIOS
                     return true;
                 }
             }*/
-            return false;
+            return result;
         }
 
         internal void ProcessByte(byte b)

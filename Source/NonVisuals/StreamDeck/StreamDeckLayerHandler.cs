@@ -22,7 +22,6 @@ namespace NonVisuals.StreamDeck
 
 
 
-
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
             _streamDeckPanel = streamDeckPanel;
@@ -66,9 +65,9 @@ namespace NonVisuals.StreamDeck
             {
                 TypeNameHandling = TypeNameHandling.All
             };
-
+            
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
-
+            
             CheckHomeLayerExists();
         }
 
@@ -88,6 +87,7 @@ namespace NonVisuals.StreamDeck
             if (!found)
             {
                 var streamDeckLayer = new StreamDeckLayer();
+                streamDeckLayer.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
                 streamDeckLayer.Name = StreamDeckConstants.HOME_LAYER_NAME;
                 _layerList.Insert(0, streamDeckLayer);
             }
@@ -136,7 +136,7 @@ namespace NonVisuals.StreamDeck
             }
 
             GetLayer(layerName).IsVisible = false;
-            GetLayer(layerName).RemoveButtons();
+            GetLayer(layerName).RemoveButtons(true);
             _layerList.RemoveAll(x => x.Name == layerName);
             _layerHistory.RemoveAll(x => x == layerName);
 
@@ -165,7 +165,7 @@ namespace NonVisuals.StreamDeck
             foreach (var streamDeckLayer in _layerList)
             {
                 streamDeckLayer.IsVisible = false;
-                streamDeckLayer.RemoveButtons();
+                streamDeckLayer.RemoveButtons(false);
             }
             _layerList.Clear();
             ClearAllFaces();
@@ -393,7 +393,7 @@ namespace NonVisuals.StreamDeck
                 throw new Exception("Button " + buttonName + " cannot be found in layer " + layerName + ".");
             }
 
-            var button = new StreamDeckButton(buttonName);
+            var button = new StreamDeckButton(buttonName, _streamDeckPanel.InstanceId);
             GetLayer(layerName).AddButton(button);
             return button;
         }
@@ -408,7 +408,6 @@ namespace NonVisuals.StreamDeck
             var streamDeckButtonName = StreamDeckCommon.ButtonName(streamDeckButtonNumber);
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
         }
-
 
     }
 }

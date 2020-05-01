@@ -142,6 +142,31 @@ namespace NonVisuals.StreamDeck.Events
         {
             OnStreamDeckConfigurationChangeEventHandler?.Invoke(sender, new StreamDeckConfigurationChangedArgs());
         }
+
+        /********************************************************************************************
+        *                   Event to notify DCSBIOSDecoders to go invisible (ugly workaround when I can't get handle of the various threads)
+        ********************************************************************************************/
+        public delegate void StreamDeckHideDecodersEventHandler(object sender, StreamDeckHideDecoderEventArgs e);
+        public static event StreamDeckHideDecodersEventHandler OnStreamDeckHideDecodersEventHandler;
+
+        public static void AttachDCSBIOSDecoder(DCSBIOSDecoder dcsbiosDecoder)
+        {
+            OnStreamDeckHideDecodersEventHandler += dcsbiosDecoder.HideAllEvent;
+        }
+
+        public static void DetachDCSBIOSDecoder(DCSBIOSDecoder dcsbiosDecoder)
+        {
+            OnStreamDeckHideDecodersEventHandler -= dcsbiosDecoder.HideAllEvent;
+        }
+
+        public static void HideDCSBIOSDecoders(DCSBIOSDecoder dcsbiosDecoder, string layerName)
+        {
+            var eventArgs = new StreamDeckHideDecoderEventArgs();
+            eventArgs.StreamDeckButtonName = dcsbiosDecoder.StreamDeckButtonName;
+            eventArgs.LayerName = layerName;
+            eventArgs.StreamDeckInstanceId = dcsbiosDecoder.StreamDeckInstanceId;
+            OnStreamDeckHideDecodersEventHandler?.Invoke(dcsbiosDecoder, eventArgs);
+        }
     }
 
 }

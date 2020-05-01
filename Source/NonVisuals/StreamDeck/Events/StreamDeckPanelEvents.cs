@@ -44,6 +44,7 @@ namespace NonVisuals.StreamDeck.Events
          */
         public string LayerName { get; set; }
         public EnumStreamDeckButtonNames ButtonName { get; set; }
+        public bool UndoIsPossible { get; set; } = true;
     }
 
     public class StreamDeckClearSettingsArgs : EventArgs
@@ -56,4 +57,11 @@ namespace NonVisuals.StreamDeck.Events
     public class StreamDeckSyncConfigurationArgs : EventArgs { }
 
     public class StreamDeckConfigurationChangedArgs : EventArgs { }
+
+    public class StreamDeckHideDecoderEventArgs : EventArgs
+    {
+        public string StreamDeckInstanceId;
+        public string LayerName;
+        public EnumStreamDeckButtonNames StreamDeckButtonName;
+    }
 }
