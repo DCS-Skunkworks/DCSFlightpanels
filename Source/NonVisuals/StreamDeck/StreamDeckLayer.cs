@@ -229,6 +229,7 @@ namespace NonVisuals.StreamDeck
                 foreach (var streamDeckButton in StreamDeckButtons)
                 {
                     streamDeckButton.IsVisible = _isVisible;
+                    streamDeckButton.IsVisible = _isVisible;
                 }
             }
         }

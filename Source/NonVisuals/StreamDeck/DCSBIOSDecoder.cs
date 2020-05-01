@@ -33,15 +33,12 @@ namespace NonVisuals.StreamDeck
         [NonSerialized] private Thread _imageUpdateTread = null;
         private bool _shutdown = false;
 
-        private static int _instanceCounter = 0;
-        private static int _instanceId = 0;
 
 
 
 
         public DCSBIOSDecoder()
         {
-            _instanceId = _instanceCounter++;
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
             _jaceId = RandomFactory.Get();
             _imageUpdateTread = new Thread(ImageRefreshingThread);
@@ -83,7 +80,6 @@ namespace NonVisuals.StreamDeck
 
         public void AfterClone()
         {
-            _instanceId = _instanceCounter++;
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
             _autoResetEvent = new AutoResetEvent(false);
             if (_imageUpdateTread != null)
@@ -109,7 +105,7 @@ namespace NonVisuals.StreamDeck
                      */
                     _autoResetEvent.WaitOne();
                 }
-                Debug.WriteLine(_instanceId);
+
                 if (_shutdown)
                 {
                     break;

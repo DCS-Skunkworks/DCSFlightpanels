@@ -262,11 +262,21 @@ namespace DCSFlightpanels.PanelUserControls
             _comboBoxLayerTextComparison = ComboBoxLayers.Text;
         }
         
-        private void ComboBoxLayers_OnDropDownOpened(object sender, EventArgs e)
+        private void LoadComboBoxLayers()
         {
-            
-        }
+            var layerList = _streamDeckPanel.LayerNameList;
 
+            if (layerList == null || layerList.Count == 0)
+            {
+                return;
+            }
+
+            ComboBoxLayers.ItemsSource = layerList;
+            ComboBoxLayers.Items.Refresh();
+
+            ComboBoxLayers.Text = _streamDeckPanel.SelectedLayerName;
+        }
+        
         private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
         {
             try
@@ -353,21 +363,6 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-
-        private void LoadComboBoxLayers()
-        {
-            var layerList = _streamDeckPanel.LayerNameList;
-
-            if (layerList == null || layerList.Count == 0)
-            {
-                return;
-            }
-
-            ComboBoxLayers.ItemsSource = layerList;
-            ComboBoxLayers.Items.Refresh();
-
-            ComboBoxLayers.Text = _streamDeckPanel.SelectedLayerName;
-        }
 
         private void ButtonAcceptButtonChanges_OnClick(object sender, RoutedEventArgs e)
         {
