@@ -155,7 +155,6 @@ namespace NonVisuals.Radios
                     if (tmp != _comm2CockpitFreq)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        Common.DebugP("_uhfCockpitFreq1DialPos Before : " + tmp + "  now: " + _comm2CockpitFreq);
                         Interlocked.Exchange(ref _comm2DialWaitingForFeedback, 0);
                     }
                 }
@@ -379,7 +378,6 @@ namespace NonVisuals.Radios
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for ILS 1");
                         }
 
                         if (Interlocked.Read(ref _ilsDialWaitingForFeedback) == 0)
@@ -390,7 +388,6 @@ namespace NonVisuals.Radios
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
                                     const string str = ILS_CHANNEL_COMMAND + "INC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
@@ -399,7 +396,6 @@ namespace NonVisuals.Radios
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
                                     const string str = ILS_CHANNEL_COMMAND + "DEC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
@@ -1311,7 +1307,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69FA18C.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }

@@ -159,7 +159,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering P-51D Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -262,14 +261,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving P-51D Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering P-51D Radio AdjustFrequency()");
 
                 if (SkipCurrentFrequencyChange())
                 {
@@ -400,7 +397,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving P-51D Radio AdjustFrequency()");
         }
 
 
@@ -408,20 +404,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering P-51D Radio SkipVhf1PresetDialChange()");
                 if (_currentUpperRadioMode == CurrentP51DRadioMode.VHF || _currentLowerRadioMode == CurrentP51DRadioMode.VHF)
                 {
                     if (_vhf1PresetDialSkipper > 2)
                     {
                         _vhf1PresetDialSkipper = 0;
-                        Common.DebugP("Leaving P-51D Radio SkipVhf1PresetDialChange()");
                         return false;
                     }
                     _vhf1PresetDialSkipper++;
-                    Common.DebugP("Leaving P-51D Radio SkipVhf1PresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving P-51D Radio SkipVhf1PresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -448,7 +440,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering P-51D Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
 
@@ -504,7 +495,6 @@ namespace NonVisuals.Radios
                 Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving P-51D Radio ShowFrequenciesOnPanel()");
         }
 
         private void SendIncVHFPresetCommand()
@@ -601,7 +591,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69P51D.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -610,14 +599,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering P-51D Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving P-51D Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -640,23 +627,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering P-51D Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentP51DRadioMode);
                 _currentUpperRadioMode = currentP51DRadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving P-51D Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentP51DRadioMode currentP51DRadioMode)
         {
             try
             {
-                Common.DebugP("Entering P-51D Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentP51DRadioMode);
                 _currentLowerRadioMode = currentP51DRadioMode;
                 //If NOUSE then send next round of e.Data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -665,7 +647,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving P-51D Radio SetLowerRadioMode()");
         }
 
         public override string SettingsVersion()

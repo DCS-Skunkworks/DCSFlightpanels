@@ -229,7 +229,6 @@ namespace NonVisuals.Radios
                     //This would cause unintended sync.
                     return;
                 }
-                Common.DebugP("Entering F-86F Radio SendFrequencyToDCSBIOS()");
                 if (!DataHasBeenReceivedFromDCSBIOS)
                 {
                     //Don't start communication with DCS-BIOS before we have had a first contact from "them"
@@ -299,7 +298,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving F-86F Radio SendFrequencyToDCSBIOS()");
         }
 
 
@@ -307,7 +305,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -458,15 +455,12 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving F-86F Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio AdjustFrequency()");
-
                 if (SkipCurrentFrequencyChange())
                 {
                     return;
@@ -816,7 +810,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving F-86F Radio AdjustFrequency()");
         }
 
         private void ShowFrequenciesOnPanel()
@@ -837,7 +830,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering F-86F Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
 
@@ -1057,7 +1049,6 @@ namespace NonVisuals.Radios
                 Common.ShowErrorMessageBox( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving F-86F Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -1094,7 +1085,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69F86F.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -1103,14 +1093,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving F-86F Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -1133,23 +1121,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentF86FRadioMode);
                 _currentUpperRadioMode = currentF86FRadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving F-86F Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentF86FRadioMode currentF86FRadioMode)
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentF86FRadioMode);
                 _currentLowerRadioMode = currentF86FRadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -1158,7 +1141,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving F-86F Radio SetLowerRadioMode()");
         }
 
 
@@ -1166,20 +1148,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio SkipARC27PresetDialChange()");
                 if (_currentUpperRadioMode == CurrentF86FRadioMode.ARC27_PRESET || _currentLowerRadioMode == CurrentF86FRadioMode.ARC27_PRESET)
                 {
                     if (_arc27PresetDialSkipper > 2)
                     {
                         _arc27PresetDialSkipper = 0;
-                        Common.DebugP("Leaving F-86F Radio SkipARC27PresetDialChange()");
                         return false;
                     }
                     _arc27PresetDialSkipper++;
-                    Common.DebugP("Leaving F-86F Radio SkipARC27PresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving F-86F Radio SkipARC27PresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -1192,20 +1170,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio SkipARC27ModeDialChange()");
                 if (_currentUpperRadioMode == CurrentF86FRadioMode.ARC27_PRESET || _currentLowerRadioMode == CurrentF86FRadioMode.ARC27_PRESET)
                 {
                     if (_arc27ModeDialSkipper > 2)
                     {
                         _arc27ModeDialSkipper = 0;
-                        Common.DebugP("Leaving F-86F Radio SkipARC27ModeDialChange()");
                         return false;
                     }
                     _arc27ModeDialSkipper++;
-                    Common.DebugP("Leaving F-86F Radio SkipARC27ModeDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving F-86F Radio SkipARC27ModeDialChange()");
             }
             catch (Exception ex)
             {
@@ -1218,20 +1192,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio SkipARN6BandDialChange()");
                 if (_currentUpperRadioMode == CurrentF86FRadioMode.ARN6 || _currentLowerRadioMode == CurrentF86FRadioMode.ARN6)
                 {
                     if (_arn6BandDialSkipper > 2)
                     {
                         _arn6BandDialSkipper = 0;
-                        Common.DebugP("Leaving F-86F Radio SkipARN6BandDialChange()");
                         return false;
                     }
                     _arn6BandDialSkipper++;
-                    Common.DebugP("Leaving F-86F Radio SkipARN6BandDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving F-86F Radio SkipARN6BandDialChange()");
             }
             catch (Exception ex)
             {
@@ -1244,20 +1214,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio SkipARN6ModeDialChange()");
                 if (_currentUpperRadioMode == CurrentF86FRadioMode.ARN6_MODES || _currentLowerRadioMode == CurrentF86FRadioMode.ARN6_MODES)
                 {
                     if (_arn6ModeDialSkipper > 2)
                     {
                         _arn6ModeDialSkipper = 0;
-                        Common.DebugP("Leaving F-86F Radio SkipARN6ModeDialChange()");
                         return false;
                     }
                     _arn6ModeDialSkipper++;
-                    Common.DebugP("Leaving F-86F Radio SkipARN6ModeDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving F-86F Radio SkipARN6ModeDialChange()");
             }
             catch (Exception ex)
             {
@@ -1270,20 +1236,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering F-86F Radio SkipAPX6ModeDialChange()");
                 if (_currentUpperRadioMode == CurrentF86FRadioMode.ADF_APX6 || _currentLowerRadioMode == CurrentF86FRadioMode.ADF_APX6)
                 {
                     if (_apx6ModeDialSkipper > 2)
                     {
                         _apx6ModeDialSkipper = 0;
-                        Common.DebugP("Leaving F-86F Radio SkipAPX6ModeDialChange()");
                         return false;
                     }
                     _apx6ModeDialSkipper++;
-                    Common.DebugP("Leaving F-86F Radio SkipAPX6ModeDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving F-86F Radio SkipAPX6ModeDialChange()");
             }
             catch (Exception ex)
             {

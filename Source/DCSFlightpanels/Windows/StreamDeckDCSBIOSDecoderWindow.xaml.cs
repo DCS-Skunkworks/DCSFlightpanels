@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCS_BIOS;
@@ -34,14 +35,12 @@ namespace DCSFlightpanels.Windows
     {
         private string _streamDeckInstanceId;
         private bool _formLoaded;
-        private readonly string _typeToSearch = "Type to search control";
         private Popup _popupSearch;
         private DataGrid _popupDataGrid;
         private IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private DCSBIOSControl _dcsbiosControl;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private Dictionary<string, double> _variables = new Dictionary<string, double>();
-        private string _decoderResult;
         private bool _isDirty = false;
         private bool _populatingData = false;
 
@@ -70,6 +69,7 @@ namespace DCSFlightpanels.Windows
         {
             InitializeComponent();
             _dcsbiosDecoder = new DCSBIOSDecoder();
+            _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
             _dcsbiosDecoder.StreamDeckInstanceId = streamDeckInstanceId;
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
@@ -96,7 +96,7 @@ namespace DCSFlightpanels.Windows
                 _popupDataGrid = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "PopupDataGrid"));
                 _formLoaded = true;
                 SetFormState();
-                TextBoxSearch.Focus();
+                TextBoxSearchWord.Focus();
             }
             catch (Exception ex)
             {
@@ -111,33 +111,43 @@ namespace DCSFlightpanels.Windows
                 return;
             }
 
-            StackPanelRawTextAndStyle.Visibility = RadioButtonOutputRaw.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            StackPanelRawTextAndStyle.Visibility = RadioButtonProcessToRaw.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
-            StackPanelConverters.Visibility = RadioButtonOutputConvert.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
-            StackPanelConverters.IsEnabled = RadioButtonOutputConvert.IsChecked == true;
-            ButtonAddConverter.IsEnabled = RadioButtonOutputConvert.IsChecked == true;
+            StackPanelConverters.Visibility = RadioButtonProcessToConverter.IsChecked == true ? Visibility.Visible : Visibility.Hidden;
+            StackPanelConverters.IsEnabled = RadioButtonProcessToConverter.IsChecked == true;
+            ButtonAddConverter.IsEnabled = RadioButtonProcessToConverter.IsChecked == true;
 
             ButtonEditConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
             ButtonDeleteConverter.IsEnabled = DataGridConverters.SelectedItems.Count == 1;
 
+            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.STRING_TYPE && CheckBoxTreatStringAsNumber.IsChecked == false)
+            {
+                RadioButtonProcessToRaw.IsChecked = true;
+                RadioButtonProcessToConverter.IsEnabled = false;
+            }
+            else
+            {
+                RadioButtonProcessToConverter.IsEnabled = true;
+            }
 
             GroupBoxFormula.IsEnabled = CheckBoxUseFormula.IsChecked == true;
 
-            CheckBoxStringAsNumber.IsEnabled = RadioButtonStringSource.IsChecked == true;
+            CheckBoxTreatStringAsNumber.IsEnabled = RadioButtonStringSource.IsChecked == true;
+
             CheckBoxUseFormula.IsEnabled = (RadioButtonIntegerSource.IsChecked == true) ||
-                                           (RadioButtonStringSource.IsChecked == true && CheckBoxStringAsNumber.IsChecked == true);
+                                           (RadioButtonStringSource.IsChecked == true && CheckBoxTreatStringAsNumber.IsChecked == true);
 
             if (RadioButtonIntegerSource.IsChecked == true)
             {
-                CheckBoxStringAsNumber.IsChecked = false;
+                CheckBoxTreatStringAsNumber.IsChecked = false;
             }
 
-            if (RadioButtonStringSource.IsChecked == true && CheckBoxStringAsNumber.IsChecked == false)
+            if (RadioButtonStringSource.IsChecked == true && CheckBoxTreatStringAsNumber.IsChecked == false)
             {
                 CheckBoxUseFormula.IsChecked = false;
             }
 
-            ButtonSave.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
+            ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
         }
 
         private void ShowDecoder()
@@ -145,11 +155,11 @@ namespace DCSFlightpanels.Windows
             _populatingData = true;
 
             DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _streamDeckInstanceId);
-            if (_dcsbiosDecoder.DCSBiosOutputType == DCSBiosOutputType.INTEGER_TYPE)
+            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 RadioButtonIntegerSource.IsChecked = true;
             }
-            else if (_dcsbiosDecoder.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
+            else if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.STRING_TYPE)
             {
                 RadioButtonStringSource.IsChecked = true;
             }
@@ -159,16 +169,16 @@ namespace DCSFlightpanels.Windows
                 case EnumDCSBIOSDecoderOutputType.Raw:
                     {
                         TextBoxOutputTextRaw.Text = _dcsbiosDecoder.ButtonTextTemplate;
-                        RadioButtonOutputRaw.IsChecked = true;
+                        RadioButtonProcessToRaw.IsChecked = true;
                         break;
                     }
                 case EnumDCSBIOSDecoderOutputType.Converter:
                     {
-                        RadioButtonOutputConvert.IsChecked = true;
+                        RadioButtonProcessToConverter.IsChecked = true;
                         break;
                     }
             }
-            CheckBoxStringAsNumber.IsChecked = _dcsbiosDecoder.TreatStringAsNumber;
+            CheckBoxTreatStringAsNumber.IsChecked = _dcsbiosDecoder.TreatStringAsNumber;
 
             CheckBoxUseFormula.IsChecked = _dcsbiosDecoder.UseFormula;
             if (_dcsbiosDecoder.UseFormula)
@@ -198,7 +208,14 @@ namespace DCSFlightpanels.Windows
                         {
                             SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : "");
                             SetFormulaResult(_dcsbiosDecoder.FormulaResult);
-                            SetRawDCSBIOSValue(_dcsbiosDecoder.UintDcsBiosValue);
+                            if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
+                            {
+                                SetRawDCSBIOSValue(_dcsbiosDecoder.UintDcsBiosValue);
+                            }
+                            else
+                            {
+                                SetRawDCSBIOSValue(_dcsbiosDecoder.StringDcsBiosValue);
+                            }
                         }
                         catch (Exception e)
                         {
@@ -224,7 +241,6 @@ namespace DCSFlightpanels.Windows
                     _dcsbiosDecoder.DCSBIOSOutput = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsbiosControl.identifier);
 
                     TextBoxDCSBIOSId.Text = _dcsbiosControl.identifier;
-                    TextBoxSearch.Text = _typeToSearch;
                     SetIsDirty();
                     SetFormState();
                 }
@@ -374,8 +390,8 @@ namespace DCSFlightpanels.Windows
                 LabelSourceRawValue.Content = "";
                 LabelResult.Content = "";
                 LabelErrors.Content = "";
-                TextBoxSearch.Text = _typeToSearch;
-                TextBoxSearch.Foreground = new SolidColorBrush(Colors.Gainsboro);
+                TextBoxSearchWord.Text = "";
+                TextBoxSearchWord.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosDecoder.RemoveDCSBIOSOutput();
                 _dcsbiosControl = null;
             }
@@ -478,13 +494,40 @@ namespace DCSFlightpanels.Windows
         private void TextBoxSearch_OnLostFocus(object sender, RoutedEventArgs e)
         {
             var textbox = (TextBox)sender;
-            textbox.Text = _typeToSearch;
             textbox.Foreground = new SolidColorBrush(Colors.Gainsboro);
+        }
+
+        private void TextBoxSearch_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (TextBoxSearchWord.Text == "")
+                {
+                    // Create an ImageBrush.
+                    var textImageBrush = new ImageBrush();
+                    textImageBrush.ImageSource =
+                        new BitmapImage(
+                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
+                        );
+                    textImageBrush.AlignmentX = AlignmentX.Left;
+                    textImageBrush.Stretch = Stretch.Uniform;
+                    // Use the brush to paint the button's background.
+                    TextBoxSearchWord.Background = textImageBrush;
+                }
+                else
+                {
+                    TextBoxSearchWord.Background = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
         private void ShowConverters()
         {
-            RadioButtonOutputConvert.IsChecked = DCSBIOSConverters.Count > 0;
+            RadioButtonProcessToConverter.IsChecked = DCSBIOSConverters.Count > 0;
             DataGridConverters.DataContext = DCSBIOSConverters;
             DataGridConverters.ItemsSource = DCSBIOSConverters;
             DataGridConverters.Items.Refresh();
@@ -542,7 +585,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.Remove((DCSBIOSConverter)DataGridConverters.SelectedItems[0]);
-                RadioButtonOutputRaw.IsChecked = DCSBIOSConverters.Count == 0;
+                RadioButtonProcessToRaw.IsChecked = DCSBIOSConverters.Count == 0;
                 SetIsDirty();
                 ShowConverters();
                 SetFormState();
@@ -557,11 +600,11 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (RadioButtonOutputRaw.IsChecked == true)
+                if (RadioButtonProcessToRaw.IsChecked == true)
                 {
                     _dcsbiosDecoder.DecoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
                 }
-                if (RadioButtonOutputConvert.IsChecked == true)
+                if (RadioButtonProcessToConverter.IsChecked == true)
                 {
                     _dcsbiosDecoder.DecoderOutputType = EnumDCSBIOSDecoderOutputType.Converter;
                 }
@@ -633,6 +676,15 @@ namespace DCSFlightpanels.Windows
         }
 
         private void SetRawDCSBIOSValue(uint value)
+        {
+            Dispatcher?.BeginInvoke(
+                (Action)delegate
+                {
+                    LabelSourceRawValue.Content = value;
+                });
+        }
+
+        private void SetRawDCSBIOSValue(string value)
         {
             Dispatcher?.BeginInvoke(
                 (Action)delegate
@@ -726,7 +778,7 @@ namespace DCSFlightpanels.Windows
             Close();
         }
 
-        private void ButtonSave_OnClick(object sender, RoutedEventArgs e)
+        private void ButtonOK_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -762,6 +814,10 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
+                if (_dcsbiosDecoder != null)
+                {
+                    _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
+                }
                 SetFormState();
             }
             catch (Exception ex)
@@ -775,6 +831,10 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosControls = DCSBIOSControlLocator.GetStringOutputControls();
+                if (_dcsbiosDecoder != null)
+                {
+                    _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.STRING_TYPE;
+                }
                 SetFormState();
             }
             catch (Exception ex)
@@ -787,6 +847,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                _dcsbiosDecoder.TreatStringAsNumber = CheckBoxTreatStringAsNumber.IsChecked == true;
                 SetFormState();
             }
             catch (Exception ex)
@@ -870,5 +931,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+
     }
 }

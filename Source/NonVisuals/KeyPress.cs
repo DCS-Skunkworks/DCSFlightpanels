@@ -139,15 +139,7 @@ namespace NonVisuals
                         }
 
                         var array = keyPressInfo.VirtualKeyCodes.ToArray();
-                        Common.DebugP("-----------------------------------");
-                        foreach (var virtualKeyCode in array)
-                        {
-                            Common.DebugP(virtualKeyCode + " " + CommonVK.IsModifierKey(virtualKeyCode));
-                        }
-                        Common.DebugP("-----------------------------------");
-
-
-
+                        
                         if (Common.APIMode == APIModeEnum.keybd_event)
                         {
                             KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
@@ -160,14 +152,12 @@ namespace NonVisuals
                         }
                         if (Abort)
                         {
-                            Common.DebugP("Aborting key pressing routine (Abort)");
                             break;
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
-                    Common.DebugP(ex.Message);
                 }
             }
             finally
@@ -202,7 +192,6 @@ namespace NonVisuals
                     var virtualKeyCode = virtualKeyCodes[i];
                     if (CommonVK.IsModifierKey(virtualKeyCode))
                     {
-                        Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
                         if (CommonVK.IsExtendedKey(virtualKeyCode))
                         {
                             NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)NativeMethods.KEYEVENTF_EXTENDEDKEY | 0, 0);
@@ -272,7 +261,6 @@ namespace NonVisuals
                 var virtualKeyCode = virtualKeyCodes[i];
                 if (CommonVK.IsModifierKey(virtualKeyCode))
                 {
-                    Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
                     if (CommonVK.IsExtendedKey(virtualKeyCode))
                     {
                         NativeMethods.keybd_event((byte)virtualKeyCode, (byte)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0), (int)(NativeMethods.KEYEVENTF_EXTENDEDKEY | NativeMethods.KEYEVENTF_KEYUP), 0);
@@ -594,17 +582,14 @@ namespace NonVisuals
                     var virtualKeyCode = virtualKeyCodes[i];
                     if (CommonVK.IsModifierKey(virtualKeyCode))
                     {
-                        Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
                         inputs[i].type = NativeMethods.INPUT_KEYBOARD;
                         inputs[i].InputUnion.ki.time = 0;
                         inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
-                        Common.DebugP(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " is MODIFIER = " + CommonVK.IsExtendedKey(virtualKeyCode));
                         if (CommonVK.IsExtendedKey(virtualKeyCode))
                         {
                             inputs[i].InputUnion.ki.dwFlags |= NativeMethods.KEYEVENTF_EXTENDEDKEY;
                         }
                         inputs[i].InputUnion.ki.wVk = 0;
-                        Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
                         inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
                         inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
                     }
@@ -618,13 +603,11 @@ namespace NonVisuals
                     var virtualKeyCode = virtualKeyCodes[i];
                     if (!CommonVK.IsModifierKey(virtualKeyCode) && virtualKeyCode != VirtualKeyCode.VK_NULL)
                     {
-                        Common.DebugP("INSERTING [] AT " + i + " total position are " + inputs.Count());
                         inputs[i].type = NativeMethods.INPUT_KEYBOARD;
                         inputs[i].InputUnion.ki.time = 0;
                         inputs[i].InputUnion.ki.dwFlags = NativeMethods.KEYEVENTF_SCANCODE;
 
                         inputs[i].InputUnion.ki.wVk = 0;
-                        Common.DebugP("***********\nMapVirtualKey returned " + Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode) + " : " + NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0) + "\n************");
                         inputs[i].InputUnion.ki.wScan = (ushort)NativeMethods.MapVirtualKey((uint)virtualKeyCode, 0);
                         inputs[i].InputUnion.ki.dwExtraInfo = NativeMethods.GetMessageExtraInfo();
                     }

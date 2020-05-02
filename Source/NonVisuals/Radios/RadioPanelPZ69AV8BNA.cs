@@ -618,18 +618,17 @@ namespace NonVisuals.Radios
 
                 //V/UHF COMM1
                 _comm1DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM1_STRING_FREQ");
-                DCSBIOSStringManager.AddAddress(_comm1DcsbiosOutputFreq.Address, 4, this);
+                DCSBIOSStringManager.AddListener(_comm1DcsbiosOutputFreq, this);
 
                 //V/UHF COMM2
                 _comm2DcsbiosOutputFreq = DCSBIOSControlLocator.GetDCSBIOSOutput("COMM2_STRING_FREQ");
-                DCSBIOSStringManager.AddAddress(_comm2DcsbiosOutputFreq.Address, 4, this);
+                DCSBIOSStringManager.AddListener(_comm2DcsbiosOutputFreq, this);
 
                 StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69AV8BNA.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }

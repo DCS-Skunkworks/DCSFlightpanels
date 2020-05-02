@@ -694,7 +694,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69MiG21bis.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }

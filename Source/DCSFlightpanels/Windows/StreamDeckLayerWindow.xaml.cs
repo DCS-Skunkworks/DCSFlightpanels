@@ -34,9 +34,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                _loaded = true;
+                if (_loaded)
+                {
+                    return;
+                }
                 TextBoxLayerName.Focus();
                 SetFormState();
+
+                _loaded = true;
             }
             catch (Exception ex)
             {

@@ -360,7 +360,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering M2000C Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -486,14 +485,12 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving M2000C Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering M2000C Radio AdjustFrequency()");
 
                 if (SkipCurrentFrequencyChange())
                 {
@@ -847,7 +844,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving M2000C Radio AdjustFrequency()");
         }
 
         private void ShowFrequenciesOnPanel()
@@ -868,7 +864,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering M2000C Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
 
@@ -998,7 +993,6 @@ namespace NonVisuals.Radios
                 Common.ShowErrorMessageBox( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving M2000C Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -1036,7 +1030,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69M2000C.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -1045,14 +1038,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering M2000C Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving M2000C Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -1075,23 +1066,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering M2000C Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentM2000CRadioMode);
                 _currentUpperRadioMode = currentM2000CRadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving M2000C Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentM2000CRadioMode currentM2000CRadioMode)
         {
             try
             {
-                Common.DebugP("Entering M2000C Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentM2000CRadioMode);
                 _currentLowerRadioMode = currentM2000CRadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -1100,7 +1086,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving M2000C Radio SetLowerRadioMode()");
         }
 
 
@@ -1108,20 +1093,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering M2000C Radio SkipVUHFPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentM2000CRadioMode.VUHF || _currentLowerRadioMode == CurrentM2000CRadioMode.VUHF)
                 {
                     if (_vhfPresetDialSkipper > 2)
                     {
                         _vhfPresetDialSkipper = 0;
-                        Common.DebugP("Leaving M2000C Radio SkipVUHFPresetDialChange()");
                         return false;
                     }
                     _vhfPresetDialSkipper++;
-                    Common.DebugP("Leaving M2000C Radio SkipVUHFPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving M2000C Radio SkipVUHFPresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -1134,20 +1115,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering M2000C Radio SkipUHFPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentM2000CRadioMode.UHF || _currentLowerRadioMode == CurrentM2000CRadioMode.UHF)
                 {
                     if (_uhfPresetDialSkipper > 2)
                     {
                         _uhfPresetDialSkipper = 0;
-                        Common.DebugP("Leaving M2000C Radio SkipUHFPresetDialChange()");
                         return false;
                     }
                     _uhfPresetDialSkipper++;
-                    Common.DebugP("Leaving M2000C Radio SkipUHFPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving M2000C Radio SkipUHFPresetDialChange()");
             }
             catch (Exception ex)
             {

@@ -172,8 +172,8 @@
 
         <StackPanel Grid.Row="1" Grid.Column="2" Margin="5,5,5,0" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="ButtonHelp" Content="Help" Click="ButtonHelp_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
-            <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
             <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
+            <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
         </StackPanel>
     </Grid>
 </Window>

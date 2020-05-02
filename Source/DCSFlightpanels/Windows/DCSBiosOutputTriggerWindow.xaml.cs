@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
 using CommonClassLibraryJD;
 using DCS_BIOS;
@@ -265,6 +267,34 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void TextBoxSearchWord_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (TextBoxSearchWord.Text == "")
+                {
+                    // Create an ImageBrush.
+                    var textImageBrush = new ImageBrush();
+                    textImageBrush.ImageSource =
+                        new BitmapImage(
+                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
+                        );
+                    textImageBrush.AlignmentX = AlignmentX.Left;
+                    textImageBrush.Stretch = Stretch.Uniform;
+                    // Use the brush to paint the button's background.
+                    TextBoxSearchWord.Background = textImageBrush;
+                }
+                else
+                {
+                    TextBoxSearchWord.Background = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -350,5 +380,6 @@ namespace DCSFlightpanels.Windows
                 Close();
             }
         }
+
     }
 }

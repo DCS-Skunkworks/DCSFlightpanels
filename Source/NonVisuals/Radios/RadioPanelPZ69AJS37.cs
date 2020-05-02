@@ -177,7 +177,6 @@ namespace NonVisuals.Radios
                     //This would cause unintended sync.
                     return;
                 }
-                Common.DebugP("Entering AJS-37 Radio SendFrequencyToDCSBIOS()");
                 if (!DataHasBeenReceivedFromDCSBIOS)
                 {
                     //Don't start communication with DCS-BIOS before we have had a first contact from "them"
@@ -239,7 +238,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving AJS-37 Radio SendFrequencyToDCSBIOS()");
         }
 
 
@@ -247,7 +245,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering AJS-37 Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -383,14 +380,12 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving AJS-37 Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering AJS-37 Radio AdjustFrequency()");
 
                 if (SkipCurrentFrequencyChange())
                 {
@@ -639,7 +634,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving AJS-37 Radio AdjustFrequency()");
         }
 
 
@@ -662,7 +656,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering AJS-37 Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
 
@@ -776,7 +769,6 @@ namespace NonVisuals.Radios
                 Common.ShowErrorMessageBox( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving AJS-37 Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -815,7 +807,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69AJS37.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -824,14 +815,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering AJS-37 Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving AJS-37 Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -854,23 +843,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering AJS-37 Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentAJS37RadioMode);
                 _currentUpperRadioMode = currentAJS37RadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving AJS-37 Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentAJS37RadioMode currentAJS37RadioMode)
         {
             try
             {
-                Common.DebugP("Entering AJS-37 Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentAJS37RadioMode);
                 _currentLowerRadioMode = currentAJS37RadioMode;
                 //If NOUSE then send next round of e.Data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -879,27 +863,22 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving AJS-37 Radio SetLowerRadioMode()");
         }
 
         private bool SkipTilsChannelDialChange()
         {
             try
             {
-                Common.DebugP("Entering AJS-37 Radio SkipR863PresetDialChange()");
                 if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS || _currentLowerRadioMode == CurrentAJS37RadioMode.TILS)
                 {
                     if (_tilsChannelDialSkipper > 2)
                     {
                         _tilsChannelDialSkipper = 0;
-                        Common.DebugP("Leaving AJS-37 Radio SkipTILSChannelDialChange()");
                         return false;
                     }
                     _tilsChannelDialSkipper++;
-                    Common.DebugP("Leaving AJS-37 Radio SkipTILSChannelDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving AJS-37 Radio SkipTILSChannelDialChange()");
             }
             catch (Exception ex)
             {
@@ -912,20 +891,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering AJS-37 Radio SkipMasterModeSelectorChange()");
                 if (_currentUpperRadioMode == CurrentAJS37RadioMode.TILS || _currentLowerRadioMode == CurrentAJS37RadioMode.TILS)
                 {
                     if (_masterModeSelectorDialSkipper > 2)
                     {
                         _masterModeSelectorDialSkipper = 0;
-                        Common.DebugP("Leaving AJS-37 Radio SkipMasterModeSelectorChange()");
                         return false;
                     }
                     _masterModeSelectorDialSkipper++;
-                    Common.DebugP("Leaving AJS-37 Radio SkipMasterModeSelectorChange()");
                     return true;
                 }
-                Common.DebugP("Leaving AJS-37 Radio SkipMasterModeSelectorChange()");
             }
             catch (Exception ex)
             {

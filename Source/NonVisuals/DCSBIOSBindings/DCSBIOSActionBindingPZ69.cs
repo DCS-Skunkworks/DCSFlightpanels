@@ -94,7 +94,6 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 throw new Exception("Unknown dial position in DCSBIOSBindingPZ69 for knob " + RadioPanelPZ69Knob + ". Cannot export.");
             }
-            Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)

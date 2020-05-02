@@ -31,9 +31,8 @@ namespace NonVisuals.Saitek
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
             }
         }
 

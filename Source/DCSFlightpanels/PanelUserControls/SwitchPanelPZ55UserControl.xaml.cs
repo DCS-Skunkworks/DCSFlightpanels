@@ -516,7 +516,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in Common.FindVisualChildren<PZ55TextBox>(this))
             {
-                if (textBox == TextBoxLogPZ55)
+                if (textBox == TextBoxLogPZ55 || textBox.Bill == null)
                 {
                     continue;
                 }

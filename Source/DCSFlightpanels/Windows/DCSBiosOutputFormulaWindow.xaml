@@ -52,7 +52,11 @@
                 <Label Name="LabelUserDescription" Content="Description"></Label>
                 <TextBox Name="TextBoxUserDescription" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" IsEnabled="true"/>
                 <Label Content="Search Box : Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
-                <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true"/>
+                <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" TextChanged="TextBoxSearchWord_OnTextChanged" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true">
+                    <TextBox.Background>
+                        <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
+                    </TextBox.Background>
+                </TextBox>
                 <GroupBox Name="GroupBoxFormula" Header="Formula">
                     <StackPanel>
                         <CheckBox Name="CheckBoxUseFormula" Content="Use formula for final output" Margin="10,10,10,0" Unchecked="CheckBoxUseFormula_OnUnchecked" Checked="CheckBoxUseFormula_OnChecked"/>

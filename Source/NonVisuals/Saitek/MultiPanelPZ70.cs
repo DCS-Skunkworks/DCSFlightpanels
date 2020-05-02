@@ -64,7 +64,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.DebugP("MultiPanelPZ70.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }
@@ -288,7 +287,6 @@ namespace NonVisuals.Saitek
                 knobBinding.WhenTurnedOn = whenTurnedOn;
                 _knobBindings.Add(knobBinding);
             }
-            Common.DebugP("MultiPanelPZ70 _knobBindings : " + _knobBindings.Count);
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             SetIsDirty();
         }
@@ -1139,7 +1137,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception e)
             {
-                Common.DebugP("SendLEDData() :\n" + e.Message + e.StackTrace);
                 SetLastException(e);
             }
         }

@@ -44,7 +44,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.DebugP("TPMPanel.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -302,7 +301,6 @@ namespace NonVisuals.Saitek
                 _keyBindings.Add(keyBinding);
             }
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            Common.DebugP("TPMPanel _keyBindings : " + _keyBindings.Count);
             SetIsDirty();
         }
 
@@ -348,8 +346,6 @@ namespace NonVisuals.Saitek
                     dcsBiosBinding.DCSBIOSInputs.Clear();
                 }
             }
-            Common.DebugP("TPMPanel _keyBindings : " + _keyBindings.Count);
-            Common.DebugP("TPMPanel _dcsBiosBindings : " + _dcsBiosBindings.Count);
             SetIsDirty();
         }
 

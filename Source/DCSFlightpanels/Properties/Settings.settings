@@ -32,8 +32,8 @@
     <Setting Name="DCSBiosPortTo" Type="System.String" Scope="User">
       <Value Profile="(Default)">7778</Value>
     </Setting>
-    <Setting Name="DCSBiosJSONLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)">USERDIRECTORY$$$###\Saved Games\DCS\Scripts\DCS-BIOS\doc\json</Value>
+    <Setting Name="DCSBiosRootLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">USERDIRECTORY$$$###\Saved Games\DCS\Scripts\DCS-BIOS</Value>
     </Setting>
     <Setting Name="BIPLedStrength" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
@@ -49,12 +49,6 @@
     </Setting>
     <Setting Name="ProcessPriority" Type="System.Diagnostics.ProcessPriorityClass" Scope="User">
       <Value Profile="(Default)">Normal</Value>
-    </Setting>
-    <Setting Name="DebugOn" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="DebugToFile" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="RunMinimized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

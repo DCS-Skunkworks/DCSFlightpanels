@@ -85,7 +85,6 @@ namespace DCS_BIOS
 
         public void Startup()
         {
-            Common.DebugP("ProtocolParser starting up");
             _processingThread = new Thread(ProcessArrays);
             _processingThread.Start();
             _shutdown = false;
@@ -93,7 +92,6 @@ namespace DCS_BIOS
 
         public void Shutdown()
         {
-            Common.DebugP("ProtocolParser shutting down");
             _shutdown = true;
             try
             {
@@ -110,7 +108,6 @@ namespace DCS_BIOS
             try
             {
                 var interval = 0;
-                Common.DebugP("ProtocolParser starting processing loop");
                 while (!_shutdown)
                 {
                     try
@@ -142,7 +139,6 @@ namespace DCS_BIOS
                     }
                     _autoResetEvent.WaitOne();
                 }
-                Common.DebugP("ProtocolParser exiting processing loop");
             }
             catch (ThreadAbortException) { }
             catch (Exception e)

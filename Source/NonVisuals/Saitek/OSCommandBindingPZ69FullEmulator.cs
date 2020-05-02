@@ -58,7 +58,6 @@ namespace NonVisuals.Saitek
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
             return "RadioPanelKeyDialPos{" + _pz69DialPosition + "}" + SaitekConstants.SEPARATOR_SYMBOL + "{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSCommandObject.ExportString();
         }

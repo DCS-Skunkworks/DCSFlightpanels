@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace DCS_BIOS
 {
@@ -32,13 +33,13 @@ namespace DCS_BIOS
         }
 
 
-        public static string GetDCSBIOSJSONDirectory(string jsonDirectory)
+        public static string GetDCSBIOSDirectory(string directory)
         {
             var replaceString = "USERDIRECTORY$$$###";
             //Cannot use %USERPROFILE%, DirectoryInfo gets crazy
-            if (!string.IsNullOrEmpty(jsonDirectory))
+            if (!string.IsNullOrEmpty(directory))
             {
-                var path = jsonDirectory;
+                var path = directory;
                 if (path.Contains(replaceString))
                 {
                     path = path.Replace(replaceString, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
@@ -46,6 +47,23 @@ namespace DCS_BIOS
                 return path;
             }
             return null;
+        }
+
+        public static bool VerifyDCSBIOSRootDirectory(string dcsbiosRootDirectory)
+        {
+            var result = Directory.Exists(dcsbiosRootDirectory);
+
+            if (!Directory.Exists(dcsbiosRootDirectory + "//doc//json"))
+            {
+                result = false;
+            }
+
+            if (!Directory.Exists(dcsbiosRootDirectory + "//lib"))
+            {
+                result = false;
+            }
+
+            return result;
         }
     }
 }

@@ -394,7 +394,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception e)
             {
-                Common.DebugP("SendLCDData() :\n" + e.Message + e.StackTrace);
                 SetLastException(e);
             }
         }
@@ -454,7 +453,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69Base.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }

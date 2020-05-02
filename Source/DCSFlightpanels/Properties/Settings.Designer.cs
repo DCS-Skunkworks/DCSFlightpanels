@@ -145,13 +145,13 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("USERDIRECTORY$$$###\\Saved Games\\DCS\\Scripts\\DCS-BIOS\\doc\\json")]
-        public string DCSBiosJSONLocation {
+        [global::System.Configuration.DefaultSettingValueAttribute("USERDIRECTORY$$$###\\Saved Games\\DCS\\Scripts\\DCS-BIOS")]
+        public string DCSBiosRootLocation {
             get {
-                return ((string)(this["DCSBiosJSONLocation"]));
+                return ((string)(this["DCSBiosRootLocation"]));
             }
             set {
-                this["DCSBiosJSONLocation"] = value;
+                this["DCSBiosRootLocation"] = value;
             }
         }
         
@@ -212,30 +212,6 @@ namespace DCSFlightpanels.Properties {
             }
             set {
                 this["ProcessPriority"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DebugOn {
-            get {
-                return ((bool)(this["DebugOn"]));
-            }
-            set {
-                this["DebugOn"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DebugToFile {
-            get {
-                return ((bool)(this["DebugToFile"]));
-            }
-            set {
-                this["DebugToFile"] = value;
             }
         }
         

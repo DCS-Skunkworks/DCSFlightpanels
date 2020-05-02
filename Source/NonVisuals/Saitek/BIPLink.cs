@@ -71,23 +71,19 @@ namespace NonVisuals.Saitek
                     {
                         if (AbortThread())
                         {
-                            Common.DebugP("Aborting BIPLink thread routine (AbortThread) #1");
                             break;
                         }
                         var bipLight = bipLights[i];
                         Thread.Sleep((int)bipLight.DelayBefore);
                         if (AbortThread())
                         {
-                            Common.DebugP("Aborting BIPLink thread routine (AbortThread) #2");
                             break;
                         }
                         bipEventHandlerManager.ShowLight(bipLight);
                     }
                 }
-                catch (Exception ex)
-                {
-                    Common.DebugP(ex.Message);
-                }
+                catch (Exception )
+                { }
             }
             finally
             {

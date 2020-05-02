@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
-using ClassLibraryCommon;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
-// ReSharper disable All
-/*
- * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
- */
+
+
+
+
 
 namespace DCS_BIOS
 {
@@ -47,33 +47,18 @@ namespace DCS_BIOS
         private string _controlType; //display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
-        //private String _formula;
-        //private Expression _expression;
-        private bool _debug;
+        
         [NonSerialized]private readonly object _lockObject = new object();
 
-        public static DCSBIOSOutput GetUpdateCounter()
-        {
-            var counter = DCSBIOSControlLocator.GetDCSBIOSOutput("_UPDATE_COUNTER");
-            return counter;
-        }
-        /*
-        private int Evaluate(uint data)
-        {
-            try
-            {
-                var value = GetUIntValue(data);
-                _expression.Parameters["x"] = value;
-                var result = _expression.Evaluate();
-                return Convert.ToInt32(Math.Abs((double) result));
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(124874, ex, "Evaluate() function");
-                throw;
-            }
-        }
-        */
+
+
+
+
+
+
+
+
+
 
         public static DCSBIOSOutput CreateCopy(DCSBIOSOutput dcsbiosOutput)
         {
@@ -234,10 +219,6 @@ namespace DCS_BIOS
 
         public uint GetUIntValue(uint data)
         {
-            if (_debug)
-            {
-                Common.DebugP(ToDebugString() + "    >>        Data is : " + data);
-            }
             lock (_lockObject)
             {
                 return (data & Mask) >> Shiftvalue;
@@ -267,6 +248,7 @@ namespace DCS_BIOS
                 _address = dcsbiosControl.outputs[0].address;
                 _mask = dcsbiosControl.outputs[0].mask;
                 _maxValue = dcsbiosControl.outputs[0].max_value;
+                _maxLength = dcsbiosControl.outputs[0].max_length;
                 _shiftvalue = dcsbiosControl.outputs[0].shift_by;
                 if (dcsbiosControl.outputs[0].type.Equals("string"))
                 {
@@ -357,12 +339,6 @@ namespace DCS_BIOS
             }
         }
 
-        public bool Debug
-        {
-            get { return _debug; }
-            set { _debug = value; }
-        }
-
         public int Shiftvalue
         {
             get { return _shiftvalue; }
@@ -441,17 +417,7 @@ namespace DCS_BIOS
             get { return _controlType; }
             set { _controlType = value; }
         }
-        /*
-        public string Formula
-        {
-            get { return _formula; }
-            set
-            {
-                _formula = value;
-                _expression = new Expression(_formula);
-            }
-        }
-        */
+
         [JsonIgnore]
         public uint LastIntValue
         {
@@ -459,5 +425,11 @@ namespace DCS_BIOS
             set { _lastIntValue = value; }
         }
 
+
+        public static DCSBIOSOutput GetUpdateCounter()
+        {
+            var counter = DCSBIOSControlLocator.GetDCSBIOSOutput("_UPDATE_COUNTER");
+            return counter;
+        }
     }
 }

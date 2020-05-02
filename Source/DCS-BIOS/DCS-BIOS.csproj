@@ -119,11 +119,15 @@
   <ItemGroup>
     <Compile Include="DBCommon.cs" />
     <Compile Include="DCSBIOS.cs" />
-    <Compile Include="DCSBIOSControl.cs" />
+    <Compile Include="Json\DCSBIOSControl.cs" />
+    <Compile Include="Json\DCSBIOSControlInput.cs" />
     <Compile Include="DCSBIOSControlLocator.cs" />
+    <Compile Include="Json\DCSBIOSControlOutput.cs" />
     <Compile Include="DCSBIOSInput.cs" />
+    <Compile Include="DCSBIOSJsonFormatterVersion1.cs" />
     <Compile Include="DCSBIOSOutput.cs" />
     <Compile Include="DCSBIOSOutputFormula.cs" />
+    <Compile Include="DCSBIOSProfileLoadStatus.cs" />
     <Compile Include="DCSBIOSString.cs" />
     <Compile Include="DCSBIOSStringListener.cs" />
     <Compile Include="DCSBIOSProtocolParser.cs" />
@@ -147,6 +151,7 @@
       <Name>ClassLibraryCommon</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd "$(SolutionDir)..\BuildScripts"

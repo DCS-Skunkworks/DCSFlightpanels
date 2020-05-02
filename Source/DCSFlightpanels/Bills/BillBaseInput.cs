@@ -44,7 +44,7 @@ namespace DCSFlightpanels.Bills
             get => _keyPress;
             set
             {
-                if (ContainsDCSBIOS())
+                if (value != null && ContainsDCSBIOS())
                 {
                     throw new Exception("Cannot insert KeyPress, Bill already contains DCSBIOSInputs");
                 }

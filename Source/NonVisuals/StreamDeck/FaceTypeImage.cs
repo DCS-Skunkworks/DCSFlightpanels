@@ -10,7 +10,6 @@ namespace NonVisuals.StreamDeck
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Image;
-        private bool _refreshBitmap = true;
         private string _imageFile;
         [NonSerialized]private KeyBitmap _keyBitmap;
         private Font _textFont = SettingsManager.DefaultFont;
@@ -98,7 +97,7 @@ namespace NonVisuals.StreamDeck
             get => _imageFile;
             set
             {
-                _refreshBitmap = true;
+                RefreshBitmap = true;
                 _imageFile = value;
             }
         }

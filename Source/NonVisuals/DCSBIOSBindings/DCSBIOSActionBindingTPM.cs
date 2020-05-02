@@ -77,7 +77,6 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
 
             //\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}

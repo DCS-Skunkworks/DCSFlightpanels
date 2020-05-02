@@ -20,7 +20,7 @@ namespace NonVisuals
         //Both directory and filename
         private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         private string _lastProfileUsed = "";
-        private string _jsonDirectory = "";
+        private string _dcsbiosRootDirectory = "";
         private bool _isDirty;
         private bool _isNewProfile;
         private readonly List<string> _listPanelSettingsData = new List<string>();
@@ -42,16 +42,16 @@ namespace NonVisuals
 
 
 
-        public ProfileHandler(string jsonDirectory)
+        public ProfileHandler(string dcsbiosRootDirectory)
         {
-            _jsonDirectory = jsonDirectory;
-            DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
+            _dcsbiosRootDirectory = dcsbiosRootDirectory;
+            DCSBIOSControlLocator.DCSBIOSRootDirectory = dcsbiosRootDirectory;
         }
 
-        public ProfileHandler(string jsonDirectory, string lastProfileUsed)
+        public ProfileHandler(string dcsbiosRootDirectory, string lastProfileUsed)
         {
-            _jsonDirectory = jsonDirectory;
-            DCSBIOSControlLocator.JSONDirectory = jsonDirectory;
+            _dcsbiosRootDirectory = dcsbiosRootDirectory;
+            DCSBIOSControlLocator.DCSBIOSRootDirectory = dcsbiosRootDirectory;
             _lastProfileUsed = lastProfileUsed;
         }
 
@@ -61,7 +61,7 @@ namespace NonVisuals
             {
                 return;
             }
-            var tempDirectory = string.IsNullOrEmpty(Filename) ? MyDocumentsPath() : Path.GetFullPath(Filename);
+            var tempDirectory = string.IsNullOrEmpty(Filename) ? MyDocumentsPath() : Path.GetDirectoryName(Filename);
             ClearAll();
             var openFileDialog = new OpenFileDialog();
             openFileDialog.RestoreDirectory = true;
@@ -81,7 +81,6 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("Settings changed for " + e.GamingPanelEnum + "   " + e.UniqueId);
                 IsDirty = true;
             }
             catch (Exception ex)
@@ -137,7 +136,6 @@ namespace NonVisuals
                 _isNewProfile = false;
                 ClearAll();
 
-                Common.DebugP("LoadProfile filename : " + filename);
                 if (!string.IsNullOrEmpty(filename))
                 {
                     _filename = filename;
@@ -156,13 +154,9 @@ namespace NonVisuals
                     }
                 }
                 
-                Common.DebugP("LoadProfile _lastProfileUsed : " + _lastProfileUsed);
-                Common.DebugP("LoadProfile _filename : " + _filename);
-
                 if (string.IsNullOrEmpty(_filename) || !File.Exists(_filename))
                 {
                     //Main window will handle this
-                    Common.DebugP("LoadProfile returns false");
                     return false;
                 }
                 /*
@@ -216,7 +210,6 @@ namespace NonVisuals
                             }
                         }
                         DCSBIOSControlLocator.Airframe = _airframe;
-                        DCSBIOSControlLocator.JSONDirectory = _jsonDirectory;
                     }
                     else if (fileLine.StartsWith("OperationLevelFlag="))
                     {
@@ -377,15 +370,6 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("ProfileHandler Sends OnAirframeSelected & OnSettingsReadFromFile event");
-                if (OnSettingsReadFromFile == null)
-                {
-                    Common.DebugP("ProfileHandler : no one is listening to OnSettingsReadFromFile?");
-                }
-                if (OnAirframeSelected == null)
-                {
-                    Common.DebugP("ProfileHandler : no one is listening to OnAirframeSelected?");
-                }
                 if (OnSettingsReadFromFile != null)
                 {
                     //TODO DENNA ORSAKAR HÄNGANDE!!
@@ -603,16 +587,19 @@ namespace NonVisuals
             set => _lastProfileUsed = value;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
-
-        public string JSONDirectory
+        public string DCSBIOSRootDirectory
         {
-            get => _jsonDirectory;
-            set => _jsonDirectory = value;
+            get => _dcsbiosRootDirectory;
+            set
+            {
+                DCSBIOSControlLocator.DCSBIOSRootDirectory = value;
+                _dcsbiosRootDirectory = value;
+            }
         }
 
-        public bool ProfileLoaded => _profileLoaded || _isNewProfile;
+        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
 
+        public bool ProfileLoaded => _profileLoaded || _isNewProfile;
 
         public bool UseNS430
         {
@@ -695,7 +682,7 @@ namespace NonVisuals
 
         }
     }
-
+    
     public class AirframeEventArgs : EventArgs
     {
         public DCSAirframe Airframe { get; set; }

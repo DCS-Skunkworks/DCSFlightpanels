@@ -240,7 +240,6 @@ namespace DCSFlightpanels.PanelUserControls
 
         private BIPLedPositionEnum GetLedPosition(string imageName)
         {
-            Common.DebugP("BIP image name clicked is : " + imageName);
             var result = BIPLedPositionEnum.Position_1_1;
             //ImagePosition3_4
             var str = imageName.Remove(0, 13);

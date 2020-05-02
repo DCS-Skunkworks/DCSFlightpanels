@@ -398,7 +398,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_lastShownLayer != e.SelectedLayerName)
                 {
-                    UIShowLayer(e.SelectedLayerName);
+                    Dispatcher?.BeginInvoke((Action)(() => UIShowLayer(e.SelectedLayerName)));
                 }
             }
             catch (Exception ex)
@@ -455,7 +455,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.ClearUIConfiguration)
                 {
-                    HideAllDotImages();
+                    Dispatcher?.BeginInvoke((Action)HideAllDotImages);
                 }
             }
             catch (Exception ex)
@@ -468,6 +468,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                Dispatcher?.BeginInvoke((Action)UpdateButtonInfoFromSource);
                 UpdateButtonInfoFromSource();
             }
             catch (Exception ex)
@@ -480,7 +481,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                UpdateButtonInfoFromSource();
+                Dispatcher?.BeginInvoke((Action)UpdateButtonInfoFromSource);
             }
             catch (Exception ex)
             {

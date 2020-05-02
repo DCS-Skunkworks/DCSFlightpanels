@@ -49,7 +49,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69Emulator.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }
@@ -401,7 +400,6 @@ namespace NonVisuals.Radios
                 keyBinding.WhenTurnedOn = whenTurnedOn;
                 _keyBindings.Add(keyBinding);
             }
-            Common.DebugP("RadioPanelPZ69Emulator _keyBindings : " + _keyBindings.Count);
             _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
             SetIsDirty();
         }

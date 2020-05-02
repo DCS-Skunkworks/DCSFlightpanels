@@ -49,7 +49,6 @@ namespace NonVisuals.Saitek
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
             return "SwitchPanelKey{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }

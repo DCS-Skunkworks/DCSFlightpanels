@@ -167,7 +167,6 @@
     <Compile Include="CustomControls\PZ69TextBox.cs" />
     <Compile Include="CustomControls\StreamDeckActionTextBox.cs" />
     <Compile Include="CustomControls\PZ55TextBox.cs" />
-    <Compile Include="Event Propagators\SettingsChangedPropagator.cs" />
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
@@ -856,6 +855,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\filenotfound.png" />
+    <Resource Include="Images\cue_banner_search_dcsbios.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

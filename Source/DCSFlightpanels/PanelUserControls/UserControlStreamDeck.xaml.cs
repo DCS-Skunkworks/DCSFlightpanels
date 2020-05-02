@@ -405,7 +405,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
-                if (streamDeckButton.ActionForPress != null && streamDeckButton.ActionForPress.ActionType == EnumStreamDeckActionType.LayerNavigation)
+                if (streamDeckButton.ActionForPress != null && streamDeckButton.ActionForPress.ActionType == EnumStreamDeckActionType.LayerNavigation && streamDeckButton.Face != null)
                 {
                     streamDeckButton.Face.Destroy();
                     streamDeckButton.Face = null;

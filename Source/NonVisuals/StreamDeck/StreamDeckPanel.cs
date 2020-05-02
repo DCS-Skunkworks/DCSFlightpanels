@@ -26,7 +26,6 @@ namespace NonVisuals.StreamDeck
 
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
 
-        private long _doUpdatePanelLCD;
         private int _buttonCount = 0;
 
 
@@ -88,7 +87,6 @@ namespace NonVisuals.StreamDeck
             }
             catch (Exception ex)
             {
-                Common.DebugP("StreamDeck.StartUp() : " + ex.Message);
                 Common.LogError(ex);
             }
         }
@@ -135,16 +133,7 @@ namespace NonVisuals.StreamDeck
         }
 
         protected override void StartListeningForPanelChanges()
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Common.DebugP(ex.Message + "\n" + ex.StackTrace);
-            }
-        }
+        { }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
         {

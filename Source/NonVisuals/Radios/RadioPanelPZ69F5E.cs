@@ -146,7 +146,6 @@ namespace NonVisuals.Radios
                     if (tmp != _uhfCockpitFreq1DialPos)
                     {
                         Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        Common.DebugP("_uhfCockpitFreq1DialPos Before : " + tmp + "  now: " + _uhfCockpitFreq1DialPos);
                         Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
                     }
                 }
@@ -458,11 +457,6 @@ namespace NonVisuals.Radios
                         break;
                     }
             }
-            Common.DebugP("freqDial1 =" + freqDial1);
-            Common.DebugP("freqDial2 =" + freqDial2);
-            Common.DebugP("freqDial3 =" + freqDial3);
-            Common.DebugP("freqDial4 =" + freqDial4);
-            Common.DebugP("freqDial5 =" + freqDial5);
 
             _uhfSyncThread?.Abort();
 
@@ -498,31 +492,26 @@ namespace NonVisuals.Radios
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for UHF 1");
                         }
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "UHF dial2Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for UHF 2");
                         }
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "UHF dial3Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for UHF 3");
                         }
                         if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "UHF dial4Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for UHF 4");
                         }
                         if (IsTimedOut(ref dial5Timeout, ResetSyncTimeout, "UHF dial5Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for UHF 5");
                         }
                         //Frequency selector 1     
                         //       "2"  "3"  "A"/"-1"
@@ -538,7 +527,6 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
                                     const string str = UHF_FREQ_1DIAL_COMMAND + "DEC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
@@ -546,7 +534,6 @@ namespace NonVisuals.Radios
                                 else if (_uhfCockpitFreq1DialPos > desiredPosition1)
                                 {
                                     const string str = UHF_FREQ_1DIAL_COMMAND + "INC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
@@ -570,7 +557,6 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq2DialPos < desiredPosition2)
                                 {
                                     const string str = UHF_FREQ_2DIAL_COMMAND + "DEC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
@@ -578,7 +564,6 @@ namespace NonVisuals.Radios
                                 else if (_uhfCockpitFreq2DialPos > desiredPosition2)
                                 {
                                     const string str = UHF_FREQ_2DIAL_COMMAND + "INC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
@@ -602,7 +587,6 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq3DialPos < desiredPosition3)
                                 {
                                     const string str = UHF_FREQ_3DIAL_COMMAND + "DEC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
@@ -610,7 +594,6 @@ namespace NonVisuals.Radios
                                 else if (_uhfCockpitFreq3DialPos > desiredPosition3)
                                 {
                                     const string str = UHF_FREQ_3DIAL_COMMAND + "INC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
@@ -634,7 +617,6 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq4DialPos < desiredPosition4)
                                 {
                                     const string str = UHF_FREQ_4DIAL_COMMAND + "DEC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
@@ -642,7 +624,6 @@ namespace NonVisuals.Radios
                                 else if (_uhfCockpitFreq4DialPos > desiredPosition4)
                                 {
                                     const string str = UHF_FREQ_4DIAL_COMMAND + "INC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
@@ -666,7 +647,6 @@ namespace NonVisuals.Radios
                                 if (_uhfCockpitFreq5DialPos < desiredPosition5)
                                 {
                                     const string str = UHF_FREQ_5DIAL_COMMAND + "DEC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
@@ -674,7 +654,6 @@ namespace NonVisuals.Radios
                                 else if (_uhfCockpitFreq5DialPos > desiredPosition5)
                                 {
                                     const string str = UHF_FREQ_5DIAL_COMMAND + "INC\n";
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
@@ -771,21 +750,18 @@ namespace NonVisuals.Radios
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 1");
                         }
 
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 2");
                         }
 
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 3");
                         }
 
                         if (Interlocked.Read(ref _tacanDial1WaitingForFeedback) == 0)
@@ -796,9 +772,7 @@ namespace NonVisuals.Radios
                                 if (_tacanCockpitFreq1DialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    Common.DebugP("_tacanCockpitFreq1DialPos is " + _tacanCockpitFreq1DialPos + " and should be " + desiredPositionDial1);
                                     var str = TACAN_FREQ_1DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 1);
@@ -821,7 +795,6 @@ namespace NonVisuals.Radios
                                     dial2OkTime = DateTime.Now.Ticks;
 
                                     var str = TACAN_FREQ_2DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 1);
@@ -844,7 +817,6 @@ namespace NonVisuals.Radios
                                     dial3OkTime = DateTime.Now.Ticks;
 
                                     var str = TACAN_FREQ_3DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 1);
@@ -1861,14 +1833,13 @@ namespace NonVisuals.Radios
 
                 //TACAN
                 _tacanDcsbiosOutputFreqChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("TACAN_CHANNEL");
-                DCSBIOSStringManager.AddAddress(_tacanDcsbiosOutputFreqChannel.Address, 4, this); //_tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
+                DCSBIOSStringManager.AddListener(_tacanDcsbiosOutputFreqChannel, this); //_tacanDcsbiosOutputFreqChannel.MaxLength does not work. Bad JSON format.
 
                 StartListeningForPanelChanges();
                 //IsAttached = true;
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69F5E.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }
@@ -2053,12 +2024,8 @@ namespace NonVisuals.Radios
 
         private void SwapCockpitStandbyFrequencyUhf()
         {
-            Common.DebugP("Old _uhfBigFrequencyStandby = " + _uhfBigFrequencyStandby);
-            Common.DebugP("Old _uhfSmallFrequencyStandby = " + _uhfSmallFrequencyStandby);
             _uhfBigFrequencyStandby = _uhfSavedCockpitBigFrequency;
             _uhfSmallFrequencyStandby = _uhfSavedCockpitSmallFrequency;
-            Common.DebugP("New _uhfBigFrequencyStandby = " + _uhfBigFrequencyStandby);
-            Common.DebugP("New _uhfSmallFrequencyStandby = " + _uhfSmallFrequencyStandby);
         }
 
 

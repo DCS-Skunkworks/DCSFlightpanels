@@ -109,7 +109,6 @@ namespace NonVisuals.Radios
             try
             {
                 IsRunning = true;
-                Common.DebugP("SRSListener entering threaded receive data loop");
                 while (!_shutdown)
                 {
                     var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
@@ -141,7 +140,6 @@ namespace NonVisuals.Radios
                 Common.LogError( e, "SRSListener.ReceiveDataUdp()");
             }
             IsRunning = false;
-            Common.DebugP("SRSListener exiting threaded receive data loop");
         }
 
         public int SendDataFunction(string stringData)
@@ -159,7 +157,6 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception e)
                 {
-                    Common.DebugP("Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
                     Common.LogError( e, "Error sending data to SRS. " + e.Message + Environment.NewLine + e.StackTrace);
                 }
             }
@@ -175,7 +172,6 @@ namespace NonVisuals.Radios
                     return;
                 }
                 _shutdown = false;
-                Common.DebugP("SRSListener STARTING UP");
 
                 var ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, _srsReceivePortUdp);
                 var ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(_srsSendToIPUdp), _srsSendPortUdp);
@@ -497,7 +493,6 @@ namespace NonVisuals.Radios
                     }
             }
             var result = "{ \"Command\": 0,\"RadioId\":" + radioId + ",\"Frequency\": " + value.ToString("0.000", CultureInfo.InvariantCulture) + " }\n";
-            Common.DebugP(result);
             SendDataFunction(result);
         }
 
@@ -555,7 +550,6 @@ namespace NonVisuals.Radios
             }
             var result = "{\"Command\": 2,\"RadioId\":" + radioId + "}\n";
             //{ "Command": 2,"RadioId":2} 
-            Common.DebugP(result);
             SendDataFunction(result);
         }
 
@@ -621,7 +615,6 @@ namespace NonVisuals.Radios
             {
                 result = "{\"Command\": 4,\"RadioId\":" + radioId + "}\n";
             }
-            Common.DebugP(result);
             SendDataFunction(result);
         }
 
@@ -632,7 +625,6 @@ namespace NonVisuals.Radios
                 try
                 {
                     _shutdown = true;
-                    Common.DebugP("SRSListener RP is SHUTTING DOWN");
                     _srsListeningThread?.Abort();
                 }
                 catch (Exception)

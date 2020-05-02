@@ -51,8 +51,12 @@
         <StackPanel Grid.Column="2" Grid.RowSpan="3">
             <Label Name="LabelDescription" Content="Description here" HorizontalAlignment="Stretch" Margin="10,0,0,10" FontWeight="Bold" FontSize="12"/>
             <Label Content="Type aircraft control search words:" HorizontalAlignment="Stretch" Margin="10,0,0,0" IsEnabled="True"/>
-            <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true"/>
-            
+            <TextBox Name="TextBoxSearchWord" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text=""  Margin="10,0,10,10" TextChanged="TextBoxSearchWord_OnTextChanged" KeyUp="TextBoxSearchWord_OnKeyUp"  IsEnabled="true">
+                <TextBox.Background>
+                    <ImageBrush ImageSource="/Images/cue_banner_search_dcsbios.png" AlignmentX="Left" Stretch="Uniform" />
+                </TextBox.Background>
+            </TextBox>
+
             <Label Name="LabelInterfaceType" Content="Choose input type" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
             <ComboBox x:Name="ComboBoxInterfaceType" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" >
                 <!--<ComboBoxItem Content="SET_STATE" />

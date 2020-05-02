@@ -72,7 +72,6 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "      " + WhenOnTurnedOn);
             var onStr = WhenOnTurnedOn ? "1" : "0";
 
             //\o/DCSBIOSInput{AAP_STEER|SET_STATE|2}\o/DCSBIOSInput{BAT_PWR|INC|2}

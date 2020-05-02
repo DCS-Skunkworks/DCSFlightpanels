@@ -199,7 +199,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -336,14 +335,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Fw 190 Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio AdjustFrequency()");
 
                 if (SkipCurrentFrequencyChange())
                 {
@@ -428,13 +425,11 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                Common.DebugP("Sending Fug16ZyFineTuneCommandInc");
                                                 DCSBIOS.Send(FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                Common.DebugP("Sending RadioVolumeKnobCommandInc");
                                                 DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
@@ -456,13 +451,11 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                Common.DebugP("Sending Fug16ZyFineTuneCommandDec");
                                                 DCSBIOS.Send(FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                Common.DebugP("Sending RadioVolumeKnobCommandDec");
                                                 DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
@@ -548,13 +541,11 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                Common.DebugP("Sending Fug16ZyFineTuneCommandInc");
                                                 DCSBIOS.Send(FUG16_ZY_FINE_TUNE_COMMAND_INC);
                                                 break;
                                             }
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                Common.DebugP("Sending RadioVolumeKnobCommandInc");
                                                 DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
@@ -576,13 +567,11 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 //Fine tuning
-                                                Common.DebugP("Sending Fug16ZyFineTuneCommandDec");
                                                 DCSBIOS.Send(FUG16_ZY_FINE_TUNE_COMMAND_DEC);
                                                 break;
                                             }
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                Common.DebugP("Sending RadioVolumeKnobCommandDec");
                                                 DCSBIOS.Send(RADIO_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
@@ -606,7 +595,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Fw 190 Radio AdjustFrequency()");
         }
 
         private void ShowFrequenciesOnPanel()
@@ -627,7 +615,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering Fw 190 Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
 
@@ -751,7 +738,6 @@ namespace NonVisuals.Radios
                 Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving Fw 190 Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -783,7 +769,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69Fw190.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -792,14 +777,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving Fw 190 Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -822,23 +805,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentFw190RadioMode);
                 _currentUpperRadioMode = currentFw190RadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Fw 190 Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentFw190RadioMode currentFw190RadioMode)
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentFw190RadioMode);
                 _currentLowerRadioMode = currentFw190RadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -847,27 +825,22 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Fw 190 Radio SetLowerRadioMode()");
         }
 
         private bool SkipFuG16ZYPresetDialChange()
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio SkipFuG16ZYPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentFw190RadioMode.FUG16ZY || _currentLowerRadioMode == CurrentFw190RadioMode.FUG16ZY)
                 {
                     if (_fug16ZyPresetDialSkipper > 2)
                     {
                         _fug16ZyPresetDialSkipper = 0;
-                        Common.DebugP("Leaving Fw 190 Radio SkipFuG16ZYPresetDialChange()");
                         return false;
                     }
                     _fug16ZyPresetDialSkipper++;
-                    Common.DebugP("Leaving Fw 190 Radio SkipFuG16ZYPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Fw 190 Radio SkipFuG16ZYPresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -880,20 +853,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio SkipIFFDialChange()");
                 if (_currentUpperRadioMode == CurrentFw190RadioMode.IFF || _currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                 {
                     if (_fug25AIFFDialSkipper > 2)
                     {
                         _fug25AIFFDialSkipper = 0;
-                        Common.DebugP("Leaving Fw 190 Radio SkipIFFDialChange()");
                         return false;
                     }
                     _fug25AIFFDialSkipper++;
-                    Common.DebugP("Leaving Fw 190 Radio SkipIFFDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Fw 190 Radio SkipIFFDialChange()");
             }
             catch (Exception ex)
             {
@@ -906,20 +875,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Fw 190 Radio SkipHomingPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING || _currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
                 {
                     if (_homingDialSkipper > 2)
                     {
                         _homingDialSkipper = 0;
-                        Common.DebugP("Leaving Fw 190 Radio SkipHomingPresetDialChange()");
                         return false;
                     }
                     _homingDialSkipper++;
-                    Common.DebugP("Leaving Fw 190 Radio SkipHomingPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Fw 190 Radio SkipHomingPresetDialChange()");
             }
             catch (Exception ex)
             {

@@ -66,7 +66,7 @@ namespace DCSFlightpanels.Windows
             Dispose(true);
         }
 
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -640,6 +640,77 @@ namespace DCSFlightpanels.Windows
             {
                 e.Handled = true;
                 Close();
+            }
+        }
+
+        private void LabelInsert_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Hand;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void LabelInsert_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void LabelInsert_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                TextBox textBox = null;
+                switch (((Label)sender).Name)
+                {
+                    case "LabelInsert1":
+                    {
+                        textBox = TextBoxId1;
+                        break;
+                    }
+                    case "LabelInsert2":
+                    {
+                        textBox = TextBoxId2;
+                        break;
+                    }
+                    case "LabelInsert3":
+                    {
+                        textBox = TextBoxId3;
+                        break;
+                    }
+                    case "LabelInsert4":
+                    {
+                        textBox = TextBoxId4;
+                        break;
+                    }
+                    case "LabelInsert5":
+                    {
+                        textBox = TextBoxId5;
+                        break;
+                    }
+                }
+
+                if (textBox == null)
+                {
+                    return;
+                }
+
+                TextBoxFormula.Text = textBox.Text + " " + TextBoxFormula.Text;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

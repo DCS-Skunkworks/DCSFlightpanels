@@ -59,7 +59,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.DebugP("SwitchPanelPZ55.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -164,7 +163,6 @@ namespace NonVisuals.Saitek
                     result.Add(bipLink.ExportSettings());
                 }
             }
-            Common.DebugP("Exporting " + _listColorOutputBinding.Count + " ColorOutBindings from SwitchPanelPZ55");
             foreach (var colorOutputBinding in _listColorOutputBinding)
             {
                 result.Add(colorOutputBinding.ExportSettings());
@@ -447,7 +445,6 @@ namespace NonVisuals.Saitek
             }
 
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
-            Common.DebugP("SwitchPanelPZ55 _keyBindings : " + _keyBindings.Count);
             SetIsDirty();
         }
 
@@ -721,7 +718,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception e)
             {
-                Common.DebugP("SetLandingGearLED() :\n" + e.Message + e.StackTrace);
                 SetLastException(e);
             }
         }
@@ -745,7 +741,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception e)
             {
-                Common.DebugP("SetLandingGearLED(SwitchPanelPZ55LEDs switchPanelPZ55LEDs) :\n" + e.Message + e.StackTrace);
                 SetLastException(e);
             }
         }

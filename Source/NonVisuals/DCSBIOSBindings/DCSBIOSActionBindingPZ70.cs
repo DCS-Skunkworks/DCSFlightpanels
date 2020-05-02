@@ -93,7 +93,6 @@ namespace NonVisuals.DCSBIOSBindings
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(MultiPanelPZ70Knobs), MultiPanelPZ70Knob) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)

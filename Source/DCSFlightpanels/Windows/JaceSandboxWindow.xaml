@@ -55,6 +55,7 @@
                             <TextBox Name="TextBoxSearch1" Text="Type to search control" Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
                             <TextBox FontSize="10" Height="18" Width="150" IsReadOnly="True" Margin="10,10,10,10" Name="TextBoxId1" IsEnabled="False"/>
                             <Label Name="LabelSourceRawValue1" Content="Value : " Margin="10,10,10,0"/>
+                            <Label x:Name="LabelInsert1" Content="Click to insert to formula.." FontSize="8" Foreground="Blue" VerticalContentAlignment="Center" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Name="LabelSource2" Content="2 : " Margin="10,10,10,0"/>
@@ -62,6 +63,7 @@
                             <TextBox Name="TextBoxSearch2" Text="Type to search control" Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus" />
                             <TextBox FontSize="10" Height="18" Width="150"  IsReadOnly="True" Margin="10,10,10,10" Name="TextBoxId2" IsEnabled="False"/>
                             <Label Name="LabelSourceRawValue2" Content="Value : " Margin="10,10,10,0"/>
+                            <Label x:Name="LabelInsert2" Content="Click to insert to formula.." FontSize="8" Foreground="Blue" VerticalContentAlignment="Center" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Name="LabelSource3" Content="3 : " Margin="10,10,10,0"/>
@@ -69,6 +71,7 @@
                             <TextBox Name="TextBoxSearch3" Text="Type to search control" Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
                             <TextBox FontSize="10" Height="18"  Width="150" IsReadOnly="True" Margin="10,10,10,10" Name="TextBoxId3" IsEnabled="False"/>
                             <Label Name="LabelSourceRawValue3" Content="Value : " Margin="10,10,10,0"/>
+                            <Label x:Name="LabelInsert3" Content="Click to insert to formula.." FontSize="8" Foreground="Blue" VerticalContentAlignment="Center" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Name="LabelSource4" Content="4 : " Margin="10,10,10,0"/>
@@ -76,6 +79,7 @@
                             <TextBox Name="TextBoxSearch4" Text="Type to search control" Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp" GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
                             <TextBox FontSize="10" Height="18"  Width="150" IsReadOnly="True" Margin="10,10,10,10" Name="TextBoxId4" IsEnabled="False"/>
                             <Label Name="LabelSourceRawValue4" Content="Value : " Margin="10,10,10,0"/>
+                            <Label x:Name="LabelInsert4" Content="Click to insert to formula.." FontSize="8" Foreground="Blue" VerticalContentAlignment="Center" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Name="LabelSource5" Content="5 : " Margin="10,10,10,0"/>
@@ -83,6 +87,7 @@
                             <TextBox Name="TextBoxSearch5" Text="Type to search control" Foreground="Gainsboro" FontSize="10" Height="18" Width="120" IsEnabled="True"  KeyUp="TextBoxSearch_OnKeyUp"  GotFocus="TextBoxSearch_OnGotFocus" LostFocus="TextBoxSearch_OnLostFocus"/>
                             <TextBox FontSize="10" Height="18"  Width="150" IsReadOnly="True" Margin="10,10,10,10" Name="TextBoxId5" IsEnabled="False"/>
                             <Label Name="LabelSourceRawValue5" Content="Value : " Margin="10,10,10,0"/>
+                            <Label x:Name="LabelInsert5" Content="Click to insert to formula.." FontSize="8" Foreground="Blue" VerticalContentAlignment="Center" MouseEnter="LabelInsert_OnMouseEnter" MouseLeave="LabelInsert_OnMouseLeave" MouseDown="LabelInsert_OnMouseDown"/>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

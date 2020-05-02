@@ -23,7 +23,7 @@ namespace NonVisuals.StreamDeck
         private string _streamDeckInstanceId;
 
 
-        public new int GetHash()
+        public int GetHash()
         {
             unchecked
             {

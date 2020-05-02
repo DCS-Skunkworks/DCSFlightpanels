@@ -73,7 +73,7 @@ namespace DCSFlightpanels.Windows
             RadioButtonRealtime.Checked += RadioButtonProcessPriority_OnChecked;
             RadioButtonKeyBd.Checked += RadioButtonAPI_OnChecked;
             RadioButtonSendInput.Checked += RadioButtonAPI_OnChecked;
-            TextBoxDcsBiosJSONLocation.TextChanged += TextBoxDcsBios_OnTextChanged;
+            TextBoxDcsBiosRootLocation.TextChanged += TextBoxDcsBios_OnTextChanged;
             TextBoxDCSBIOSFromIP.TextChanged += TextBoxDcsBios_OnTextChanged;
             TextBoxDCSBIOSToIP.TextChanged += TextBoxDcsBios_OnTextChanged;
             TextBoxDCSBIOSFromPort.TextChanged += TextBoxDcsBios_OnTextChanged;
@@ -82,8 +82,6 @@ namespace DCSFlightpanels.Windows
             TextBoxSRSToIP.TextChanged += TextBoxSRS_OnTextChanged;
             TextBoxSRSFromPort.TextChanged += TextBoxSRS_OnTextChanged;
             TextBoxSRSToPort.TextChanged += TextBoxSRS_OnTextChanged;
-            CheckBoxDoDebug.Checked += CheckBoxDebug_OnChecked;
-            CheckBoxDebugToFile.Checked += CheckBoxDebug_OnChecked;
             CheckBoxMinimizeToTray.Checked += CheckBoxMinimizeToTray_OnChecked;
             CheckBoxMinimizeToTray.Unchecked += CheckBoxMinimizeToTray_OnUnchecked;
         }
@@ -127,13 +125,11 @@ namespace DCSFlightpanels.Windows
                 RadioButtonSendInput.IsChecked = true;
             }
             
-            CheckBoxDoDebug.IsChecked = Settings.Default.DebugOn;
-            CheckBoxDebugToFile.IsChecked = Settings.Default.DebugToFile;
             CheckBoxMinimizeToTray.IsChecked = Settings.Default.RunMinimized;
 
             if (Common.PartialDCSBIOSEnabled())
             {
-                TextBoxDcsBiosJSONLocation.Text = Settings.Default.DCSBiosJSONLocation;
+                TextBoxDcsBiosRootLocation.Text = Settings.Default.DCSBiosRootLocation;
                 TextBoxDCSBIOSFromIP.Text = Settings.Default.DCSBiosIPFrom;
                 TextBoxDCSBIOSToIP.Text = Settings.Default.DCSBiosIPTo;
                 TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
@@ -227,8 +223,6 @@ namespace DCSFlightpanels.Windows
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
                     }
 
-                    Settings.Default.DebugOn = CheckBoxDoDebug.IsChecked == true;
-                    Settings.Default.DebugToFile = CheckBoxDebugToFile.IsChecked == true;
                     Settings.Default.Save();
 
                     Settings.Default.RunMinimized = CheckBoxMinimizeToTray.IsChecked == true;
@@ -237,7 +231,7 @@ namespace DCSFlightpanels.Windows
 
                 if (_dcsbiosChanged)
                 {
-                    Settings.Default.DCSBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
+                    Settings.Default.DCSBiosRootLocation = TextBoxDcsBiosRootLocation.Text;
                     Settings.Default.DCSBiosIPFrom = IpAddressFromDCSBIOS;
                     Settings.Default.DCSBiosPortFrom = PortFromDCSBIOS;
                     Settings.Default.DCSBiosIPTo = IpAddressToDCSBIOS;
@@ -268,13 +262,21 @@ namespace DCSFlightpanels.Windows
             {
                 var folderBrowserDialog = new FolderBrowserDialog();
                 folderBrowserDialog.ShowNewFolderButton = false;
-                if (!string.IsNullOrEmpty(DCS_BIOS.DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
+                if (!string.IsNullOrEmpty(DCS_BIOS.DBCommon.GetDCSBIOSDirectory(Settings.Default.DCSBiosRootLocation)))
                 {
-                    folderBrowserDialog.SelectedPath = DCS_BIOS.DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                    folderBrowserDialog.SelectedPath = DCS_BIOS.DBCommon.GetDCSBIOSDirectory(Settings.Default.DCSBiosRootLocation);
                 }
+
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextBoxDcsBiosJSONLocation.Text = folderBrowserDialog.SelectedPath;
+                    if (!DCS_BIOS.DBCommon.VerifyDCSBIOSRootDirectory(folderBrowserDialog.SelectedPath))
+                    {
+                        MessageBox.Show(folderBrowserDialog.SelectedPath + " is not a valid DCS-BIOS root directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        TextBoxDcsBiosRootLocation.Text = folderBrowserDialog.SelectedPath;
+                    }
                 }
             }
             catch (Exception ex)
@@ -304,7 +306,7 @@ namespace DCSFlightpanels.Windows
                 {
                     throw new Exception("DCS-BIOS Port to cannot be empty");
                 }
-                if (string.IsNullOrEmpty(TextBoxDcsBiosJSONLocation.Text))
+                if (string.IsNullOrEmpty(TextBoxDcsBiosRootLocation.Text))
                 {
                     throw new Exception("DCS-BIOS JSON directory cannot be empty");
                 }
@@ -352,8 +354,8 @@ namespace DCSFlightpanels.Windows
                 }
                 try
                 {
-                    var directoryInfo = new DirectoryInfo(TextBoxDcsBiosJSONLocation.Text);
-                    _dcsBiosJSONLocation = TextBoxDcsBiosJSONLocation.Text;
+                    var directoryInfo = new DirectoryInfo(TextBoxDcsBiosRootLocation.Text);
+                    _dcsBiosJSONLocation = TextBoxDcsBiosRootLocation.Text;
                 }
                 catch (Exception e)
                 {

@@ -447,13 +447,11 @@ namespace NonVisuals.Radios
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _vhfAmValue1WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for VHF AM 1");
                         }
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "VHF AM dial2Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _vhfAmValue2WaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for VHF AM 2");
                         }
                         if (Interlocked.Read(ref _vhfAmValue1WaitingForFeedback) == 0 || Interlocked.Read(ref _vhfAmValue2WaitingForFeedback) == 0)
                         {
@@ -464,19 +462,15 @@ namespace NonVisuals.Radios
                                     var frequencyWholeNumbers = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit10SFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit1SFrequencyValue);
                                     if (int.Parse(frequencyWholeNumbers) != desiredPositionDialWholeNumbers)
                                     {
-                                        //Debug.Print("cockpit frequencyWholeNumbers = " + int.Parse(frequencyWholeNumbers));
-                                        //Debug.Print("desiredPositionDialWholeNumbers = " + desiredPositionDialWholeNumbers);
-                                        //Debug.Print("_vhfAmCockpit10sFrequencyValue RAW = " + _vhfAmCockpit10sFrequencyValue);
-                                        //Debug.Print("_vhfAmCockpit1sFrequencyValue RAW = " + _vhfAmCockpit1sFrequencyValue);
                                         var command = "";
                                         if (int.Parse(frequencyWholeNumbers) < desiredPositionDialWholeNumbers)
                                         {
-                                            //Debug.Print("frequencyWholeNumbers sending INC");
+                                     
                                             command = VHF_AM_LEFT_DIAL_DIAL_COMMAND_INC;
                                         }
                                         if (int.Parse(frequencyWholeNumbers) > desiredPositionDialWholeNumbers)
                                         {
-                                            //Debug.Print("frequencyWholeNumbers sending DEC");
+                                     
                                             command = VHF_AM_LEFT_DIAL_DIAL_COMMAND_DEC;
                                         }
                                         DCSBIOS.Send(command);
@@ -1621,7 +1615,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69S342.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -1870,20 +1863,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SA342 Radio SkipVhfAmLeftDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.VHFAM || _currentLowerRadioMode == CurrentSA342RadioMode.VHFAM)
                 {
                     if (_vhfAmLeftDialSkipper > 2)
                     {
                         _vhfAmLeftDialSkipper = 0;
-                        Common.DebugP("Leaving SA342 Radio SkipVhfAmLeftDialChange()");
                         return false;
                     }
                     _vhfAmLeftDialSkipper++;
-                    Common.DebugP("Leaving SA342 Radio SkipVhfAmLeftDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving SA342 Radio SkipVhfAmLeftDialChange()");
             }
             catch (Exception ex)
             {
@@ -1896,20 +1885,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SA342 Radio SkipVhfAmRightDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.VHFAM || _currentLowerRadioMode == CurrentSA342RadioMode.VHFAM)
                 {
                     if (_vhfAmRightDialSkipper > 4)
                     {
                         _vhfAmRightDialSkipper = 0;
-                        Common.DebugP("Leaving SA342 Radio SkipVhfAmRightDialChange()");
                         return false;
                     }
                     _vhfAmRightDialSkipper++;
-                    Common.DebugP("Leaving SA342 Radio SkipVhfAmRightDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving SA342 Radio SkipVhfAmRightDialChange()");
             }
             catch (Exception ex)
             {
@@ -1922,20 +1907,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SA342 Radio SkipUhfBigFrequencyChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.UHF || _currentLowerRadioMode == CurrentSA342RadioMode.UHF)
                 {
                     if (_uhfBigFrequencySkipper > 2)
                     {
                         _uhfBigFrequencySkipper = 0;
-                        Common.DebugP("Leaving SA342 Radio SkipUhfBigFrequencyChange()");
                         return false;
                     }
                     _uhfBigFrequencySkipper++;
-                    Common.DebugP("Leaving SA342 Radio SkipUhfBigFrequencyChange()");
                     return true;
                 }
-                Common.DebugP("Leaving SA342 Radio SkipUhfBigFrequencyChange()");
             }
             catch (Exception ex)
             {
@@ -1948,20 +1929,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SA342 Radio SkipUhfSmallFrequencyChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.UHF || _currentLowerRadioMode == CurrentSA342RadioMode.UHF)
                 {
                     if (_uhfSmallFrequencySkipper > 1)
                     {
                         _uhfSmallFrequencySkipper = 0;
-                        Common.DebugP("Leaving SA342 Radio SkipUhfSmallFrequencyChange()");
                         return false;
                     }
                     _uhfSmallFrequencySkipper++;
-                    Common.DebugP("Leaving SA342 Radio SkipUhfSmallFrequencyChange()");
                     return true;
                 }
-                Common.DebugP("Leaving SA342 Radio SkipUhfSmallFrequencyChange()");
             }
             catch (Exception ex)
             {
@@ -2017,20 +1994,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SA342 Radio SkipAdf100sDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
                 {
                     if (_adf100SDialSkipper > 2)
                     {
                         _adf100SDialSkipper = 0;
-                        Common.DebugP("Leaving SA342 Radio SkipAdf100sDialChange()");
                         return false;
                     }
                     _adf100SDialSkipper++;
-                    Common.DebugP("Leaving SA342 Radio SkipAdf100sDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving SA342 Radio SkipAdf100sDialChange()");
             }
             catch (Exception ex)
             {
@@ -2043,20 +2016,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SA342 Radio SkipAdf10sDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
                 {
                     if (_adf10SDialSkipper > 2)
                     {
                         _adf10SDialSkipper = 0;
-                        Common.DebugP("Leaving SA342 Radio SkipAdf10sDialChange()");
                         return false;
                     }
                     _adf10SDialSkipper++;
-                    Common.DebugP("Leaving SA342 Radio SkipAdf10sDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving SA342 Radio SkipAdf10sDialChange()");
             }
             catch (Exception ex)
             {
@@ -2069,20 +2038,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SA342 Radio SkipAdf1sDialChange()");
                 if (_currentUpperRadioMode == CurrentSA342RadioMode.ADF || _currentLowerRadioMode == CurrentSA342RadioMode.ADF)
                 {
                     if (_adf1SDialSkipper > 2)
                     {
                         _adf1SDialSkipper = 0;
-                        Common.DebugP("Leaving SA342 Radio SkipAdf1sDialChange()");
                         return false;
                     }
                     _adf1SDialSkipper++;
-                    Common.DebugP("Leaving SA342 Radio SkipAdf1sDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving SA342 Radio SkipAdf1sDialChange()");
             }
             catch (Exception ex)
             {

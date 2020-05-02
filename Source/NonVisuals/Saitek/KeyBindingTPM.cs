@@ -49,7 +49,6 @@ namespace NonVisuals.Saitek
             {
                 return null;
             }
-            Common.DebugP(Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "      " + WhenTurnedOn);
             var onStr = WhenTurnedOn ? "1" : "0";
             return "TPMPanelSwitch{" + onStr + Enum.GetName(typeof(TPMPanelSwitches), TPMSwitch) + "}" + SaitekConstants.SEPARATOR_SYMBOL + OSKeyPress.ExportString();
         }

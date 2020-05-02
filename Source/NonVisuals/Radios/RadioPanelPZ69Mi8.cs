@@ -227,7 +227,6 @@ namespace NonVisuals.Radios
 
                 if (string.IsNullOrWhiteSpace(e.StringData))
                 {
-                    Common.DebugP("Received DCSBIOS stringData : " + e.StringData);
                     return;
                 }
 
@@ -253,7 +252,6 @@ namespace NonVisuals.Radios
                         // "02000.0" - "*17*999.9"
                         var tmp = _yadro1ACockpitFreq1DialPos;
                         _yadro1ACockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
-                        Common.DebugP("Just read YaDRO-1A dial 1 position: " + _yadro1ACockpitFreq1DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1ACockpitFreq1DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -265,7 +263,6 @@ namespace NonVisuals.Radios
                         // "02000.0" - "17*9*99.9"  
                         var tmp = _yadro1ACockpitFreq2DialPos;
                         _yadro1ACockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
-                        Common.DebugP("Just read YaDRO-1A dial 2 position: " + _yadro1ACockpitFreq2DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1ACockpitFreq2DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -277,7 +274,6 @@ namespace NonVisuals.Radios
                         // "02000.0" - "179*9*9.9"  
                         var tmp = _yadro1ACockpitFreq3DialPos;
                         _yadro1ACockpitFreq3DialPos = uint.Parse(e.StringData.Substring(3, 1));
-                        Common.DebugP("Just read YaDRO-1A dial 3 position: " + _yadro1ACockpitFreq3DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1ACockpitFreq3DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -289,7 +285,6 @@ namespace NonVisuals.Radios
                         // "02000.0" - "1799*9*.9"  
                         var tmp = _yadro1ACockpitFreq4DialPos;
                         _yadro1ACockpitFreq4DialPos = uint.Parse(e.StringData.Substring(4, 1));
-                        Common.DebugP("Just read YaDRO-1A dial 4 position: " + _yadro1ACockpitFreq4DialPos + "  " + Environment.TickCount);
                         if (tmp != _yadro1ACockpitFreq4DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -319,7 +314,6 @@ namespace NonVisuals.Radios
                         // "100.000" - "*39*9.975"
                         var tmp = _r863ManualCockpitFreq1DialPos;
                         _r863ManualCockpitFreq1DialPos = uint.Parse(e.StringData.Substring(0, 2));
-                        Common.DebugP("Just read R-863 dial 1 position: " + _r863ManualCockpitFreq1DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq1DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -331,7 +325,6 @@ namespace NonVisuals.Radios
                         // "100.000" - "39*9*.975"
                         var tmp = _r863ManualCockpitFreq2DialPos;
                         _r863ManualCockpitFreq2DialPos = uint.Parse(e.StringData.Substring(2, 1));
-                        Common.DebugP("Just read R-863 dial 2 position: " + _r863ManualCockpitFreq2DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq2DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -343,7 +336,6 @@ namespace NonVisuals.Radios
                         // "100.000" - "399.*9*75"
                         var tmp = _r863ManualCockpitFreq3DialPos;
                         _r863ManualCockpitFreq3DialPos = uint.Parse(e.StringData.Substring(4, 1));
-                        Common.DebugP("Just read R-863 dial 3 position: " + _r863ManualCockpitFreq3DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq3DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -356,7 +348,6 @@ namespace NonVisuals.Radios
                         //Read only the first char
                         var tmp = _r863ManualCockpitFreq4DialPos;
                         _r863ManualCockpitFreq4DialPos = uint.Parse(e.StringData.Substring(5, 2));
-                        Common.DebugP("Just read R-863 dial 4 position: " + _r863ManualCockpitFreq4DialPos + "  " + Environment.TickCount);
                         if (tmp != _r863ManualCockpitFreq4DialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -596,7 +587,6 @@ namespace NonVisuals.Radios
                     //This would cause unintended sync.
                     return;
                 }
-                Common.DebugP("Entering Mi-8 Radio SendFrequencyToDCSBIOS()");
                 if (!DataHasBeenReceivedFromDCSBIOS)
                 {
                     //Don't start communication with DCS-BIOS before we have had a first contact from "them"
@@ -686,7 +676,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SendFrequencyToDCSBIOS()");
         }
 
 
@@ -694,7 +683,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SendR863ManualToDCSBIOS()");
                 if (R863ManualNowSyncing())
                 {
                     return;
@@ -711,7 +699,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SendR863ManualToDCSBIOS()");
         }
 
         private void R863ManualSynchThreadMethod()
@@ -724,7 +711,6 @@ namespace NonVisuals.Radios
                     {   /*
                      * Mi-8 R-863 COM1
                      */
-                        Common.DebugP("Entering Mi-8 Radio R863ManualSynchThreadMethod()");
                         Interlocked.Exchange(ref _r863ManualThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -741,7 +727,6 @@ namespace NonVisuals.Radios
 
                         var frequencyAsString = _r863ManualBigFrequencyStandby.ToString() + "." + _r863ManualSmallFrequencyStandby.ToString().PadLeft(3, '0');
                         frequencyAsString = frequencyAsString.PadRight(6, '0');
-                        Common.DebugP("Standby frequencyAsString is " + frequencyAsString);
                         //Frequency selector 1      R863_FREQ1
                         //      "10" "11" "12" "13" "14" "22" "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" "36" "37" "38" "39"
                         //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17   18   19   20   21   22
@@ -779,25 +764,21 @@ namespace NonVisuals.Radios
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-863 1");
                             }
                             if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "R-863 dial2Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-863 2");
                             }
                             if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "R-863 dial3Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-863 3");
                             }
                             if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "R-863 dial4Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-863 4");
                             }
 
                             string str;
@@ -805,7 +786,6 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockR863ManualDialsObject1)
                                 {
-                                    Common.DebugP("_r863ManualCockpitFreq1DialPos is " + _r863ManualCockpitFreq1DialPos + " and should be " + desiredPositionDial1X);
                                     if (_r863ManualCockpitFreq1DialPos != desiredPositionDial1X)
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
@@ -821,7 +801,6 @@ namespace NonVisuals.Radios
                                             So only go down with it
                                          */
 
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial1WaitingForFeedback, 1);
@@ -837,12 +816,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockR863ManualDialsObject2)
                                 {
-                                    Common.DebugP("_r863ManualCockpitFreq2DialPos is " + _r863ManualCockpitFreq2DialPos + " and should be " + desiredPositionDial2X);
                                     if (_r863ManualCockpitFreq2DialPos != desiredPositionDial2X)
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r863ManualCockpitFreq2DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial2WaitingForFeedback, 1);
@@ -858,12 +835,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockR863ManualDialsObject3)
                                 {
-                                    Common.DebugP("_r863ManualCockpitFreq3DialPos is " + _r863ManualCockpitFreq3DialPos + " and should be " + desiredPositionDial3X);
                                     if (_r863ManualCockpitFreq3DialPos != desiredPositionDial3X)
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r863ManualCockpitFreq3DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial3SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial3WaitingForFeedback, 1);
@@ -881,12 +856,10 @@ namespace NonVisuals.Radios
 
                                 lock (_lockR863ManualDialsObject4)
                                 {
-                                    Common.DebugP("_r863ManualCockpitFreq4DialPos is " + _r863ManualCockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
                                     if (_r863ManualCockpitFreq4DialPos < desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_4DIAL_COMMAND + "INC\n";
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
@@ -895,7 +868,6 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R863_MANUAL_FREQ_4DIAL_COMMAND + "DEC\n";
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r863ManualDial4WaitingForFeedback, 1);
@@ -950,18 +922,12 @@ namespace NonVisuals.Radios
             }
             //Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-            Common.DebugP("Leaving Mi-8 Radio R863ManualSynchThreadMethod()");
         }
 
         private void SwapCockpitStandbyFrequencyR863Manual()
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SwapCockpitStandbyFrequencyR863Manual()");
-                Common.DebugP("_r863ManualBigFrequencyStandby  " + _r863ManualBigFrequencyStandby);
-                Common.DebugP("_r863ManualSavedCockpitBigFrequency  " + _r863ManualSavedCockpitBigFrequency);
-                Common.DebugP("x_r863ManualSmallFrequencyStandby  " + _r863ManualSmallFrequencyStandby);
-                Common.DebugP("_r863ManualSavedCockpitSmallFrequency  " + _r863ManualSavedCockpitSmallFrequency);
                 _r863ManualBigFrequencyStandby = _r863ManualSavedCockpitBigFrequency;
                 _r863ManualSmallFrequencyStandby = _r863ManualSavedCockpitSmallFrequency;
             }
@@ -969,14 +935,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SwapCockpitStandbyFrequencyR863Manual()");
         }
 
         private void SendYaDRO1AToDCSBIOS()
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SendYaDRO1AToDCSBIOS()");
                 if (YaDRO1ANowSyncing())
                 {
                     return;
@@ -993,7 +957,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SendYaDRO1AToDCSBIOS()");
         }
 
         private void YaDRO1ASynchThreadMethod()
@@ -1006,7 +969,6 @@ namespace NonVisuals.Radios
                     {   /*
                      * Mi-8 YaDRO-1A
                      */
-                        Common.DebugP("Entering Mi-8 Radio YaDRO1ASynchThreadMethod()");
                         Interlocked.Exchange(ref _yadro1AThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -1061,25 +1023,21 @@ namespace NonVisuals.Radios
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for YaDRO-1A 1");
                             }
                             if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "YaDRO-1A dial2Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for YaDRO-1A 2");
                             }
                             if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "YaDRO-1A dial3Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for YaDRO-1A 3");
                             }
                             if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "YaDRO-1A dial4Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for YaDRO-1A 4");
                             }
 
                             string str;
@@ -1088,7 +1046,6 @@ namespace NonVisuals.Radios
                                 lock (_lockYadro1ADialsObject1)
                                 {
 
-                                    Common.DebugP("_yadro1aCockpitFreq1DialPos is " + _yadro1ACockpitFreq1DialPos + " and should be " + desiredPositionDial1X);
                                     if (_yadro1ACockpitFreq1DialPos != desiredPositionDial1X)
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
@@ -1100,7 +1057,6 @@ namespace NonVisuals.Radios
                                         {
                                             str = YADRO1_A_FREQ_1DIAL_COMMAND + "DEC\n";
                                         }
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial1WaitingForFeedback, 1);
@@ -1116,12 +1072,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockYadro1ADialsObject2)
                                 {
-                                    Common.DebugP("_yadro1aCockpitFreq2DialPos is " + _yadro1ACockpitFreq2DialPos + " and should be " + desiredPositionDial2X);
                                     if (_yadro1ACockpitFreq2DialPos != desiredPositionDial2X)
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _yadro1ACockpitFreq2DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial2WaitingForFeedback, 1);
@@ -1137,12 +1091,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockYadro1ADialsObject3)
                                 {
-                                    Common.DebugP("_yadro1aCockpitFreq3DialPos is " + _yadro1ACockpitFreq3DialPos + " and should be " + desiredPositionDial3X);
                                     if (_yadro1ACockpitFreq3DialPos != desiredPositionDial3X)
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _yadro1ACockpitFreq3DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial3SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial3WaitingForFeedback, 1);
@@ -1158,12 +1110,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockYadro1ADialsObject4)
                                 {
-                                    Common.DebugP("_yadro1aCockpitFreq4DialPos is " + _yadro1ACockpitFreq4DialPos + " and should be " + desiredPositionDial4X);
                                     if (_yadro1ACockpitFreq4DialPos != desiredPositionDial4X)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = YADRO1_A_FREQ_4DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial4X, _yadro1ACockpitFreq4DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _yadro1ADial4WaitingForFeedback, 1);
@@ -1201,14 +1151,12 @@ namespace NonVisuals.Radios
             }
             //Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-            Common.DebugP("Leaving Mi-8 Radio YaDRO1ASynchThreadMethod()");
         }
 
         private void SwapCockpitStandbyFrequencyYaDRO1A()
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SwapCockpitStandbyFrequencyYaDRO1A()");
                 _yadro1ABigFrequencyStandby = _yadro1ASavedCockpitBigFrequency;
                 _yadro1ASmallFrequencyStandby = _yadro1ASavedCockpitSmallFrequency;
             }
@@ -1216,14 +1164,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SwapCockpitStandbyFrequencyYaDRO1A()");
         }
 
         public void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -1412,14 +1358,12 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio AdjustFrequency()");
 
                 if (SkipCurrentFrequencyChange())
                 {
@@ -2106,7 +2050,6 @@ namespace NonVisuals.Radios
             {
                 Common.ShowErrorMessageBox( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio AdjustFrequency()");
         }
 
 
@@ -2114,7 +2057,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio CheckFrequenciesForValidity()");
                 //Crude fix if any freqs are outside the valid boundaries
 
                 //R-800L VHF 2
@@ -2141,7 +2083,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio CheckFrequenciesForValidity()");
         }
 
 
@@ -2163,7 +2104,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering Mi-8 Radio ShowFrequenciesOnPanel()");
                     CheckFrequenciesForValidity();
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
@@ -2527,7 +2467,6 @@ namespace NonVisuals.Radios
                 Common.ShowErrorMessageBox( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving Mi-8 Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -2544,7 +2483,7 @@ namespace NonVisuals.Radios
 
                 //COM1
                 _r863ManualDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_FREQ");
-                DCSBIOSStringManager.AddAddress(_r863ManualDcsbiosOutputCockpitFrequency.Address, 7, this);
+                DCSBIOSStringManager.AddListener(_r863ManualDcsbiosOutputCockpitFrequency, this);
 
                 //COM2
                 _r863Preset1DcsbiosOutputPresetDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R863_CNL_SEL");
@@ -2552,7 +2491,7 @@ namespace NonVisuals.Radios
 
                 //NAV1
                 _yadro1ADcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("YADRO1A_FREQ");
-                DCSBIOSStringManager.AddAddress(_yadro1ADcsbiosOutputCockpitFrequency.Address, 7, this);
+                DCSBIOSStringManager.AddListener(_yadro1ADcsbiosOutputCockpitFrequency, this);
 
                 //NAV2
                 _r828Preset1DcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("R828_PRST_CHAN_SEL");
@@ -2579,7 +2518,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69Mi8.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -2588,14 +2526,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving Mi-8 Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -2618,23 +2554,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentMi8RadioMode);
                 _currentUpperRadioMode = currentMi8RadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentMi8RadioMode currentMi8RadioMode)
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentMi8RadioMode);
                 _currentLowerRadioMode = currentMi8RadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -2643,7 +2574,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SetLowerRadioMode()");
         }
 
         private bool R863ManualNowSyncing()
@@ -2660,7 +2590,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SaveCockpitFrequencyR863Manual()");
                 /*
                  * Dial 1
                  *      10 11 12 13 14 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39
@@ -2697,14 +2626,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SaveCockpitFrequencyR863Manual()");
         }
 
         private void SaveCockpitFrequencyYaDRO1A()
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SaveCockpitFrequencyYaDRO1A()");
                 /*
                  * 02000
                  * 17999
@@ -2743,7 +2670,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Mi-8 Radio SaveCockpitFrequencyYaDRO1A()");
         }
 
         private string GetCommandDirectionForR863ManualDial1(int desiredDialPosition, uint actualDialPosition)
@@ -2756,13 +2682,11 @@ namespace NonVisuals.Radios
                  * Min is 10
                  * Max is 39
                  */
-                Common.DebugP("Entering Mi-8 Radio GetCommandDirectionForR863ManualDial1()");
                 //count up
                 var tmpActualDialPositionUp = actualDialPosition;
                 var upCount = actualDialPosition;
                 do
                 {
-                    Common.DebugP("tmpActualDialPositionUp " + tmpActualDialPositionUp + " desiredDialPosition " + desiredDialPosition);
                     if (tmpActualDialPositionUp == 39)
                     {
                         tmpActualDialPositionUp = 10;
@@ -2783,7 +2707,6 @@ namespace NonVisuals.Radios
                 var downCount = actualDialPosition;
                 do
                 {
-                    Common.DebugP("tmpActualDialPositionDown " + tmpActualDialPositionDown + " desiredDialPosition " + desiredDialPosition);
                     if (tmpActualDialPositionDown == 10)
                     {
                         tmpActualDialPositionDown = 39;
@@ -2802,10 +2725,8 @@ namespace NonVisuals.Radios
 
                 if (upCount < downCount)
                 {
-                    Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionForR863ManualDial1()");
                     return inc;
                 }
-                Common.DebugP("Leaving Mi-8 Radio GetCommandDirectionForR863ManualDial1()");
                 return dec;
             }
             catch (Exception ex)
@@ -2819,7 +2740,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio GetCommandDirectionFor0To9Dials()");
                 const string inc = "INC\n";
                 const string dec = "DEC\n";
 
@@ -2827,7 +2747,6 @@ namespace NonVisuals.Radios
                 var upCount = actualDialPosition;
                 do
                 {
-                    Common.DebugP("tmpActualDialPositionUp " + tmpActualDialPositionUp + " desiredDialPosition " + desiredDialPosition);
 
                     if (tmpActualDialPositionUp == 9)
                     {
@@ -2845,7 +2764,6 @@ namespace NonVisuals.Radios
                 var downCount = actualDialPosition;
                 do
                 {
-                    Common.DebugP("tmpActualDialPositionUp " + tmpActualDialPositionUp + " desiredDialPosition " + desiredDialPosition);
 
                     if (tmpActualDialPositionUp == 0)
                     {
@@ -2860,7 +2778,6 @@ namespace NonVisuals.Radios
                 } while (tmpActualDialPositionUp != desiredDialPosition);
 
 
-                Common.DebugP("GetCommandDirectionFor0To9Dials()");
                 if (upCount < downCount)
                 {
                     return inc;
@@ -2918,20 +2835,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipR863PresetDialChange()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R863_PRESET || _currentLowerRadioMode == CurrentMi8RadioMode.R863_PRESET)
                 {
                     if (_r863PresetDialSkipper > 2)
                     {
                         _r863PresetDialSkipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipR863PresetDialChange()");
                         return false;
                     }
                     _r863PresetDialSkipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipR863PresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipR863PresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -2944,20 +2857,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipR828PresetDialChange()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.R828_PRESETS || _currentLowerRadioMode == CurrentMi8RadioMode.R828_PRESETS)
                 {
                     if (_r828PresetDialSkipper > 2)
                     {
                         _r828PresetDialSkipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipR828PresetDialChange()");
                         return false;
                     }
                     _r828PresetDialSkipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipR828PresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipR828PresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -2970,20 +2879,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipADFPresetDial1Change()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
                     if (_adfPresetDial1Skipper > 2)
                     {
                         _adfPresetDial1Skipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial1Change()");
                         return false;
                     }
                     _adfPresetDial1Skipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial1Change()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial1Change()");
             }
             catch (Exception ex)
             {
@@ -2996,20 +2901,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipADFPresetDial2Change()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ADF_ARK9 || _currentLowerRadioMode == CurrentMi8RadioMode.ADF_ARK9)
                 {
                     if (_adfPresetDial2Skipper > 2)
                     {
                         _adfPresetDial2Skipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial2Change()");
                         return false;
                     }
                     _adfPresetDial2Skipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial2Change()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipADFPresetDial2Change()");
             }
             catch (Exception ex)
             {
@@ -3022,20 +2923,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipSPU7PresetDialChange()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.SPU7 || _currentLowerRadioMode == CurrentMi8RadioMode.SPU7)
                 {
                     if (_spu7DialSkipper > 2)
                     {
                         _spu7DialSkipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipSPU7PresetDialChange()");
                         return false;
                     }
                     _spu7DialSkipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipSPU7PresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipSPU7PresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -3048,20 +2945,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipARKUDPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
                     if (_arkUdPresetDialSkipper > 2)
                     {
                         _arkUdPresetDialSkipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipARKUDPresetDialChange()");
                         return false;
                     }
                     _arkUdPresetDialSkipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipARKUDPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipARKUDPresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -3074,20 +2967,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Mi-8 Radio SkipARKUDModeDialChange()");
                 if (_currentUpperRadioMode == CurrentMi8RadioMode.ARK_UD || _currentLowerRadioMode == CurrentMi8RadioMode.ARK_UD)
                 {
                     if (_arkUdModeDialSkipper > 2)
                     {
                         _arkUdModeDialSkipper = 0;
-                        Common.DebugP("Leaving Mi-8 Radio SkipARKUDModeDialChange()");
                         return false;
                     }
                     _arkUdModeDialSkipper++;
-                    Common.DebugP("Leaving Mi-8 Radio SkipARKUDModeDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Mi-8 Radio SkipARKUDModeDialChange()");
             }
             catch (Exception ex)
             {

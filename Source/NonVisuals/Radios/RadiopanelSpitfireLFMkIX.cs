@@ -248,7 +248,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -357,15 +356,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio AdjustFrequency()");
-
                 if (SkipCurrentFrequencyChange())
                 {
                     return;
@@ -615,7 +611,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio AdjustFrequency()");
         }
 
         private void ShowFrequenciesOnPanel()
@@ -636,7 +631,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering Spitfire LF Mk. IX Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
 
@@ -800,7 +794,6 @@ namespace NonVisuals.Radios
                 Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -833,7 +826,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69SpitfireLFMkIX.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -842,14 +834,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -877,23 +867,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentSpitfireLFMkIXRadioMode);
                 _currentUpperRadioMode = currentSpitfireLFMkIXRadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentSpitfireLFMkIXRadioMode currentSpitfireLFMkIXRadioMode)
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentSpitfireLFMkIXRadioMode);
                 _currentLowerRadioMode = currentSpitfireLFMkIXRadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -902,27 +887,22 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Spitfire LF Mk. IX Radio SetLowerRadioMode()");
         }
 
         private bool SkipHFRadioChannelPresetDialChange()
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio SkipHFRadioChannelPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO)
                 {
                     if (_hfRadioChannelPresetDialSkipper > 2)
                     {
                         _hfRadioChannelPresetDialSkipper = 0;
-                        Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipHFRadioChannelPresetDialChange()");
                         return false;
                     }
                     _hfRadioChannelPresetDialSkipper++;
-                    Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipHFRadioChannelPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipHFRadioChannelPresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -935,20 +915,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio SkipIFFDDialChange()");
                 if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF)
                 {
                     if (_iffDiffDialSkipper > 2)
                     {
                         _iffDiffDialSkipper = 0;
-                        Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipIFFDDialChange()");
                         return false;
                     }
                     _iffDiffDialSkipper++;
-                    Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipIFFDDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipIFFDDialChange()");
             }
             catch (Exception ex)
             {
@@ -961,20 +937,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio SkipIFFBDialChange()");
                 if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.IFF)
                 {
                     if (_iffBiffDialSkipper > 2)
                     {
                         _iffBiffDialSkipper = 0;
-                        Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipIFFBDialChange()");
                         return false;
                     }
                     _iffBiffDialSkipper++;
-                    Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipIFFBDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipIFFBDialChange()");
             }
             catch (Exception ex)
             {
@@ -987,20 +959,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Spitfire LF Mk. IX Radio SkipHFRadioModeDialChange()");
                 if (_currentUpperRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO || _currentLowerRadioMode == CurrentSpitfireLFMkIXRadioMode.HFRADIO)
                 {
                     if (_hfRadioModePresetDialSkipper > 2)
                     {
                         _hfRadioModePresetDialSkipper = 0;
-                        Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipHFRadioModeDialChange()");
                         return false;
                     }
                     _hfRadioModePresetDialSkipper++;
-                    Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipHFRadioModeDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Spitfire LF Mk. IX Radio SkipHFRadioModeDialChange()");
             }
             catch (Exception ex)
             {

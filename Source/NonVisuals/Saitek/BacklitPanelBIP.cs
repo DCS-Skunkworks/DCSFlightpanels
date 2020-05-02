@@ -158,7 +158,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.DebugP("BacklitPanelBIP.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }
@@ -553,13 +552,7 @@ namespace NonVisuals.Saitek
                 finalArray[4] = _upperRowBytes[1];
                 finalArray[5] = _middleRowBytes[1];
                 finalArray[6] = _lowerRowBytes[1];
-                if (Common.DebugOn && 1 == 2)
-                {
-                    Common.DebugP("UPPER: " + Common.PrintBitStrings(_upperRowBytes));
-                    Common.DebugP("MIDDLE: " + Common.PrintBitStrings(_middleRowBytes));
-                    Common.DebugP("LOWER: " + Common.PrintBitStrings(_lowerRowBytes));
-                    Common.DebugP(Common.PrintBitStrings(finalArray));
-                }
+                
                 SendLEDData(finalArray);
             }
             catch (Exception ex)
@@ -605,7 +598,6 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.DebugP("BacklitPanelBIP.SetLedStrength() : " + ex.Message);
                 SetLastException(ex);
             }
         }

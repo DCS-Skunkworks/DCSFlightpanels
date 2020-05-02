@@ -688,21 +688,18 @@ namespace NonVisuals.Radios
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 1");
                         }
 
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 2");
                         }
 
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 3");
                         }
 
                         if (Interlocked.Read(ref _rioLinkHundredsWaitingForFeedback) == 0)
@@ -712,9 +709,7 @@ namespace NonVisuals.Radios
                                 if (_rioLink4HundredsCockpitFrequency != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    Common.DebugP("_rioLink4HundredsCockpitFrequency is " + _rioLink4HundredsCockpitFrequency + " and should be " + desiredPositionDial1);
                                     var str = RIO_LINK4_HUNDREDS_DIAL_COMMAND + (_rioLink4HundredsCockpitFrequency < desiredPositionDial1 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkHundredsWaitingForFeedback, 1);
@@ -734,9 +729,7 @@ namespace NonVisuals.Radios
                                 if (_rioLink4TensCockpitFrequency != desiredPositionDial2)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    Common.DebugP("_rioLink4TensCockpitFrequency is " + _rioLink4TensCockpitFrequency + " and should be " + desiredPositionDial2);
                                     var str = RIO_LINK4_TENS_DIAL_COMMAND + (_rioLink4TensCockpitFrequency < desiredPositionDial2 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkTensWaitingForFeedback, 1);
@@ -756,9 +749,7 @@ namespace NonVisuals.Radios
                                 if (_rioLink4OnesCockpitFrequency != desiredPositionDial3)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    Common.DebugP("_rioLink4OnesCockpitFrequency is " + _rioLink4OnesCockpitFrequency + " and should be " + desiredPositionDial3);
                                     var str = RIO_LINK4_ONES_DIAL_COMMAND + (_rioLink4OnesCockpitFrequency < desiredPositionDial3 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioLinkOnesWaitingForFeedback, 1);
@@ -859,21 +850,18 @@ namespace NonVisuals.Radios
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 1");
                         }
 
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 2");
                         }
 
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 3");
                         }
 
                         if (Interlocked.Read(ref _pilotTacanTensWaitingForFeedback) == 0)
@@ -884,9 +872,7 @@ namespace NonVisuals.Radios
                                 if (_pilotTacanCockpitTensDialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    Common.DebugP("_pilotTacanCockpitFreq1DialPos is " + _pilotTacanCockpitTensDialPos + " and should be " + desiredPositionDial1);
                                     var str = PILOT_TACAN_TENS_DIAL_COMMAND + (_pilotTacanCockpitTensDialPos < desiredPositionDial1 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanTensWaitingForFeedback, 1);
@@ -909,7 +895,6 @@ namespace NonVisuals.Radios
                                     dial2OkTime = DateTime.Now.Ticks;
 
                                     var str = PILOT_TACAN_ONES_DIAL_COMMAND + (_pilotTacanCockpitOnesDialPos < desiredPositionDial2 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanOnesWaitingForFeedback, 1);
@@ -932,7 +917,6 @@ namespace NonVisuals.Radios
                                     dial3OkTime = DateTime.Now.Ticks;
 
                                     var str = PILOT_TACAN_XY_DIAL_COMMAND + (_pilotTacanCockpitXYDialPos < desiredPositionDial3 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _pilotTacanXYWaitingForFeedback, 1);
@@ -1016,21 +1000,18 @@ namespace NonVisuals.Radios
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 1");
                         }
 
                         if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "TACAN dial2Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 2");
                         }
 
                         if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "TACAN dial3Timeout"))
                         {
                             //Lets do an ugly reset
                             Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 0);
-                            Common.DebugP("Resetting SYNC for TACAN 3");
                         }
 
                         if (Interlocked.Read(ref _rioTacanTensWaitingForFeedback) == 0)
@@ -1041,9 +1022,7 @@ namespace NonVisuals.Radios
                                 if (_rioTacanCockpitTensDialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    Common.DebugP("_rioTacanCockpitFreq1DialPos is " + _rioTacanCockpitTensDialPos + " and should be " + desiredPositionDial1);
                                     var str = RIO_TACAN_TENS_DIAL_COMMAND + (_rioTacanCockpitTensDialPos < desiredPositionDial1 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _rioTacanTensWaitingForFeedback, 1);
@@ -1066,7 +1045,6 @@ namespace NonVisuals.Radios
                                     dial2OkTime = DateTime.Now.Ticks;
 
                                     var str = RIO_TACAN_ONES_DIAL_COMMAND + (_rioTacanCockpitOnesDialPos < desiredPositionDial2 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _rioTacanOnesWaitingForFeedback, 1);
@@ -1089,7 +1067,6 @@ namespace NonVisuals.Radios
                                     dial3OkTime = DateTime.Now.Ticks;
 
                                     var str = RIO_TACAN_XY_DIAL_COMMAND + (_rioTacanCockpitXYDialPos < desiredPositionDial3 ? inc : dec);
-                                    Common.DebugP("Sending " + str);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _rioTacanXYWaitingForFeedback, 1);
@@ -2622,12 +2599,12 @@ namespace NonVisuals.Radios
                 _uhfDcsbiosOutputDial4FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_DIAL4_FREQ");
                 _uhfDcsbiosOutputMode = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF1_FUNCTION");
                 _uhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_UHF_REMOTE_DISP");
-                DCSBIOSStringManager.AddAddress(_uhfDcsbiosOutputSelectedChannel.Address, 7, this);
+                DCSBIOSStringManager.AddListener(_uhfDcsbiosOutputSelectedChannel, this);
 
                 //VUHF
                 _vuhfDcsbiosOutputChannelFreqMode = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_FREQ_MODE");
                 _vuhfDcsbiosOutputSelectedChannel = DCSBIOSControlLocator.GetDCSBIOSOutput("PLT_VUHF_REMOTE_DISP");
-                DCSBIOSStringManager.AddAddress(_vuhfDcsbiosOutputSelectedChannel.Address, 7, this);
+                DCSBIOSStringManager.AddListener(_vuhfDcsbiosOutputSelectedChannel, this);
 
                 _vuhfDcsbiosOutputBigFrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_HIGH_FREQ");
                 _vuhfDcsbiosOutputDial3FrequencyNumber = DCSBIOSControlLocator.GetDCSBIOSOutput("RIO_VUHF_DIAL3_FREQ");
@@ -2653,7 +2630,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69F14B.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }

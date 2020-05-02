@@ -75,7 +75,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69SRS.StartUp() : " + ex.Message);
                 SetLastException(ex);
             }
         }
@@ -86,7 +85,6 @@ namespace NonVisuals.Radios
             try
             {
                 SRSListenerFactory.GetSRSListener().Detach(this);
-                Common.DebugP("Entering SRS Radio Shutdown()");
                 ShutdownBase();
                 SRSListenerFactory.Shutdown();
             }
@@ -94,7 +92,6 @@ namespace NonVisuals.Radios
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving SRS Radio Shutdown()");
         }
 
         public double SmallFreqStepping
@@ -124,7 +121,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SRS Radio PZ69KnobChanged()");
                 lock (LockLCDUpdateObject)
                 {
                     foreach (var radioPanelKnobObject in hashSet)
@@ -300,15 +296,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving SRS Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering SRS Radio AdjustFrequency()");
-
                 if (SkipCurrentFrequencyChange())
                 {
                     return;
@@ -529,7 +522,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving SRS Radio AdjustFrequency()");
         }
 
         
@@ -544,7 +536,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering SRS Radio ShowFrequenciesOnPanel()");
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
                     lock (_freqListLockObject)
@@ -604,7 +595,6 @@ namespace NonVisuals.Radios
                 Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving SRS Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -635,23 +625,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SRS Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentBf109RadioMode);
                 _currentUpperRadioMode = currentBf109RadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving SRS Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentSRSRadioMode currentBf109RadioMode)
         {
             try
             {
-                Common.DebugP("Entering SRS Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentBf109RadioMode);
                 _currentLowerRadioMode = currentBf109RadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -660,22 +645,18 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving SRS Radio SetLowerRadioMode()");
         }
 
         private bool SkipSmallDialDialChange()
         {
             try
             {
-                Common.DebugP("Entering SRS Radio SkipSmallDialDialChange()");
                 if (_smallDialSkipper > 2)
                 {
                     _smallDialSkipper = 0;
-                    Common.DebugP("Leaving SRS Radio SkipSmallDialDialChange()");
                     return false;
                 }
                 _smallDialSkipper++;
-                Common.DebugP("Leaving SRS Radio SkipSmallDialDialChange()");
                 return true;
             }
             catch (Exception ex)
@@ -689,15 +670,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering SRS Radio SkipLargeDialDialChange()");
                 if (_largeDialSkipper > 2)
                 {
                     _largeDialSkipper = 0;
-                    Common.DebugP("Leaving SRS Radio SkipLargeDialDialChange()");
                     return false;
                 }
                 _largeDialSkipper++;
-                Common.DebugP("Leaving SRS Radio SkipLargeDialDialChange()");
                 return true;
             }
             catch (Exception ex)

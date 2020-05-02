@@ -26,14 +26,15 @@
             <Button Content="Ok" Height="23" VerticalAlignment="Bottom" Margin="10,0,0,10"  x:Name="ButtonOk" Width="75"  Click="ButtonOk_OnClick"/>
             <Button Content="Cancel" Height="23" VerticalAlignment="Bottom" Margin="10,0,10,10" x:Name="ButtonCancel" Width="75" Click="ButtonCancel_OnClick" />
         </StackPanel>
+
+
+
         <StackPanel Name="StackPanelGeneralSettings"  Margin="0,5,0,0" Grid.Column="1" Grid.Row="0" Visibility="Visible">
             <StackPanel Margin="0,0,0,10">
                 <Label FontWeight="Bold">API Mode</Label>
                 <RadioButton Name="RadioButtonKeyBd" >keybd_event()</RadioButton>
                 <RadioButton Name="RadioButtonSendInput">SendInput()</RadioButton>
             </StackPanel>
-            <CheckBox Content="Debug to file" Name="CheckBoxDebugToFile" Unchecked="CheckBoxDebug_OnUnchecked"/>
-            <CheckBox Content="Debug turned on" Name="CheckBoxDoDebug" Unchecked="CheckBoxDebug_OnUnchecked"/>
             <StackPanel>
                 <Label FontWeight="Bold">Process priority</Label>
                 <RadioButton Name="RadioButtonBelowNormal">Below Normal</RadioButton>
@@ -59,9 +60,12 @@
         </StackPanel>
         <StackPanel Name="StackPanelDCSBIOSSettings"  Margin="0,0,0,0" Grid.Column="1" Grid.Row="0" Visibility="Collapsed" >
             <Label FontWeight="Bold">DCS-BIOS Settings</Label>
-            <Label Content="DCS-BIOS json folder location" Margin="0,0,0,0" VerticalAlignment="Top"/>
             <StackPanel Orientation="Horizontal">
-                <TextBox Name="TextBoxDcsBiosJSONLocation" Height="23" Width="400" Margin="0,0,0,0" TextWrapping="Wrap" Text="%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS\doc\json"/>
+                <Label Content="DCS-BIOS root folder location" Foreground="White" Background="#f54747" Margin="0,0,0,0" VerticalAlignment="Top"/>
+                <Label/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Name="TextBoxDcsBiosRootLocation" Height="23" Width="400" Margin="0,0,0,0" TextWrapping="Wrap" Text="%USERPROFILE%\Saved Games\DCS\Scripts\DCS-BIOS"/>
                 <Button Content="..." Height="23" VerticalAlignment="Bottom" Margin="0,0,0,0" x:Name="ButtonBrowse" Width="75" Click="ButtonBrowse_OnClick" />
             </StackPanel>
             <Label Content="IP address to read from" Margin="0,0,0,0" VerticalAlignment="Top"/>

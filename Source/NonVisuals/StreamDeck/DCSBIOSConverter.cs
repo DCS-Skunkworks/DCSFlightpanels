@@ -833,12 +833,10 @@ namespace NonVisuals.StreamDeck
                     case EnumConverterOutputType.Raw:
                         {
                             throw new Exception("DCSBIOSConverter OutputType is [Raw]. Can not add DCSBIOSValue.");
-                            break;
                         }
                     case EnumConverterOutputType.Image:
                         {
                             throw new Exception("DCSBIOSConverter OutputType is [Image]. Can not add DCSBIOSValue.");
-                            break;
                         }
                     case EnumConverterOutputType.ImageOverlay:
                         {

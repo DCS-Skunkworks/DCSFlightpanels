@@ -184,28 +184,11 @@ namespace ClassLibraryCommon
             return string.Empty;
         }
 
-        public static bool DebugOn { get; set; } = false;
-        public static bool DebugToFile = false;
         public static APIModeEnum APIMode = 0;
         private static readonly object ErrorLogLockObject = new object();
         private static readonly object DebugLogLockObject = new object();
         private static string _errorLog = "";
         private static string _debugLog = "";
-
-        public static void DebugP(string str)
-        {
-            if (DebugOn)
-            {
-                if (DebugToFile)
-                {
-                    LogToDebugFile(str);
-                }
-                else
-                {
-                    Debug.WriteLine(str);
-                }
-            }
-        }
 
         public static void SetErrorLog(string filename)
         {

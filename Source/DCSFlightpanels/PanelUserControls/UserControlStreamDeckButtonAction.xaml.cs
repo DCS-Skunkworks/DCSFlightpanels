@@ -73,7 +73,8 @@ namespace DCSFlightpanels.PanelUserControls
             ComboBoxLayerNavigationButton.SelectedIndex = 0;
 
             _isDirty = false;
-            
+
+            SetFormState();
         }
 
         public void SetFormState()

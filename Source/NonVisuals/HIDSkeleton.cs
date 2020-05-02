@@ -26,12 +26,10 @@ namespace NonVisuals
                 if (_hidReadDevice.IsOpen)
                 {
                     _hidReadDevice.CloseDevice();
-                    Common.DebugP(_gamingPanelSkeleton.GamingPanelType + " : HidReadDevice has left the building...");
                 }
                 if (_hidWriteDevice.IsOpen)
                 {
                     _hidWriteDevice.CloseDevice();
-                    Common.DebugP(_gamingPanelSkeleton.GamingPanelType + " : HidWriteDevice has left the building...");
                 }
                 _hidReadDevice.Dispose();
                 _hidWriteDevice.Dispose();

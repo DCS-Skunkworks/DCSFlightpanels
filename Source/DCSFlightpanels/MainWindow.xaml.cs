@@ -135,7 +135,7 @@ namespace DCSFlightpanels
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
-                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
+                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosRootLocation, Settings.Default.LastProfileFileUsed);
                 _profileHandler.Attach(this);
                 _profileHandler.AttachUserMessageHandler(this);
                 if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
@@ -197,7 +197,7 @@ namespace DCSFlightpanels
                 var loggerText = File.ReadAllText(_errorLogFile);
                 if (loggerText.Contains(DCSBIOSControlLocator.DCSBIOSNotFoundErrorMessage))
                 {
-                    var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosJSONLocation);
+                    var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosRootLocation);
                     window.ShowDialog();
                     MessageBox.Show(
                         "This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log once you have fixed the problem.",
@@ -230,9 +230,7 @@ namespace DCSFlightpanels
             {
                 return;
             }
-
-            Common.DebugP("SetApplicationMode() Airframe has changed. Current airframe is " + dcsAirframe);
-
+            
             if (dcsAirframe == DCSAirframe.NOFRAMELOADEDYET)
             {
                 LabelAirframe.Content = "";
@@ -243,13 +241,11 @@ namespace DCSFlightpanels
             }
 
             var itemCount = TabControlPanels.Items.Count;
-            Common.DebugP("There are " + TabControlPanels.Items.Count + " TabControlPanels.Items");
 
             var closedItemCount = CloseTabItems();
 
             if (Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
             {
-                Common.DebugP("Shutting down DCSBIOS");
                 _dcsBios?.Shutdown();
                 _dcsStopGearTimer.Stop();
                 _dcsCheckDcsBiosStatusTimer.Stop();
@@ -258,7 +254,6 @@ namespace DCSFlightpanels
             }
             else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
-                Common.DebugP("Starting up DCSBIOS");
                 if (_dcsBios == null)
                 {
                     _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
@@ -276,10 +271,6 @@ namespace DCSFlightpanels
                 //Something isn't right
                 Common.LogError("SetApplicationMode(). Error closing tab items. Items to close was " + itemCount + ", items actually closed was " + closedItemCount);
             }
-            else if (itemCount > 0)
-            {
-                Common.DebugP("Closed " + itemCount + " out of " + closedItemCount + " tab items");
-            }
         }
 
         public int CloseTabItems()
@@ -287,9 +278,6 @@ namespace DCSFlightpanels
             var closedItemCount = 0;
             try
             {
-                Common.DebugP("Entering CloseTabItems()");
-                Common.DebugP("_saitekUserControls count is " + _panelUserControls.Count);
-                Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
                 if (TabControlPanels.Items.Count > 0)
                 {
                     do
@@ -305,17 +293,13 @@ namespace DCSFlightpanels
                             gamingPanel.Detach((IProfileHandlerListener)this);
                             _dcsBios?.DetachDataReceivedListener(gamingPanel);
 
-                            Common.DebugP("Shutting down " + gamingPanel.GetType().Name);
                             gamingPanel.Shutdown();
                             _panelUserControls.Remove((UserControl)item.Content);
-                            Common.DebugP("_saitekUserControls count is " + _panelUserControls.Count);
-                            Common.DebugP("TabControlPanels.Items.Count is " + TabControlPanels.Items.Count);
                             closedItemCount++;
                         }
                     } while (TabControlPanels.Items.Count > 0);
                 }
 
-                Common.DebugP("Leaving CloseTabItems()");
             }
             catch (Exception ex)
             {
@@ -748,11 +732,7 @@ namespace DCSFlightpanels
             {
                 Left = Settings.Default.MainWindowLeft;
             }
-
-            Common.DebugOn = Settings.Default.DebugOn;
-            Common.DebugToFile = Settings.Default.DebugToFile;
-
-
+            
             if (Settings.Default.APIMode == 0)
             {
                 Common.APIMode = APIModeEnum.keybd_event;
@@ -1072,12 +1052,10 @@ namespace DCSFlightpanels
         {
             try
             {
-                Common.DebugP("Entering Mainwindow Shutdown()");
                 _exceptionTimer.Stop();
                 _dcsStopGearTimer.Stop();
                 _statusMessagesTimer.Stop();
                 _dcsCheckDcsBiosStatusTimer.Stop();
-                Common.DebugP("Mainwindow Shutdown() Timers stopped");
             }
             catch (Exception ex)
             {
@@ -1096,7 +1074,6 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox( ex);
             }
 
-            Common.DebugP("Mainwindow Shutdown() saitekUserControls shutdown");
             try
             {
                 //TODO THIS CAUSES HANGING WHEN CLOSING THE APPLICATION!?!?
@@ -1107,7 +1084,6 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox( ex);
             }
 
-            Common.DebugP("Mainwindow Shutdown() _hidHandler shutdown");
             try
             {
                 _dcsBios?.Shutdown();
@@ -1117,20 +1093,6 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox( ex);
             }
 
-            Common.DebugP("Mainwindow Shutdown() _dcsBios shutdown");
-            /*try
-            {
-                if (_fipHandler != null)
-                {
-                    _fipHandler.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(2018, ex);
-            }
-            Common.DebugP("Mainwindow Shutdown() _fipHandler shutdown");*/
-            Common.DebugP("Leaving Mainwindow Shutdown()");
         }
 
         private void MenuItemExitClick(object sender, RoutedEventArgs e)
@@ -1233,7 +1195,7 @@ namespace DCSFlightpanels
         private void CloseProfile()
         {
             CloseTabItems();
-            _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
+            _profileHandler = new ProfileHandler(Settings.Default.DCSBiosRootLocation);
             _profileHandler.Attach(this);
             _profileHandler.AttachUserMessageHandler(this);
             _dcsAirframe = _profileHandler.Airframe;
@@ -1415,12 +1377,7 @@ namespace DCSFlightpanels
 
         public void DeviceDetached(GamingPanelEnum gamingPanelsEnum) { }
 
-        private void ButtonDev_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Common.DebugOn = false;
-        }
-
-
+        
         private void ShowStatusBarMessage(string str)
         {
             try
@@ -1549,21 +1506,19 @@ namespace DCSFlightpanels
                 if (settingsWindow.GeneralChanged)
                 {
                     LoadProcessPriority();
-                    Common.DebugOn = Settings.Default.DebugOn;
-                    Common.DebugToFile = Settings.Default.DebugToFile;
                 }
 
                 if (settingsWindow.DCSBIOSChanged && Common.PartialDCSBIOSEnabled())
                 {
                     //Refresh, make sure they are using the latest settings
-                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    DCSBIOSControlLocator.DCSBIOSRootDirectory = Settings.Default.DCSBiosRootLocation;
                     _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
                     _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
                     _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
                     _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
                     _dcsBios.Shutdown();
                     _dcsBios.Startup();
-                    _profileHandler.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
+                    _profileHandler.DCSBIOSRootDirectory = Settings.Default.DCSBiosRootLocation;
                 }
 
                 if (settingsWindow.SRSChanged)
@@ -1759,21 +1714,26 @@ namespace DCSFlightpanels
         }
 
         #region IDisposable Support
-        private bool _disposedValue = false; // To detect redundant calls
+        private bool _hasBeenCalledAlready = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposedValue)
+            if (!_hasBeenCalledAlready)
             {
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
                 }
-
+                _dcsCheckDcsBiosStatusTimer.Dispose();
+                _dcsStopGearTimer.Dispose();
+                _exceptionTimer.Dispose();
+                _statusMessagesTimer.Dispose();
+                ;_exceptionTimer.Dispose();
+                _dcsBios?.Dispose();
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 
-                _disposedValue = true;
+                _hasBeenCalledAlready = true;
             }
         }
 

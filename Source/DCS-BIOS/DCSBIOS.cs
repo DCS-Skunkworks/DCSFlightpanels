@@ -124,7 +124,6 @@ namespace DCS_BIOS
         {
             try
             {
-                Common.DebugP("DCSBIOS entering threaded receive data loop");
                 while (!_shutdown)
                 {
                     var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
@@ -133,7 +132,6 @@ namespace DCS_BIOS
                         _dcsProtocolParser.AddArray(byteData);
                     }
                 }
-                Common.DebugP("DCSBIOS exiting threaded receive data loop");
             }
             catch (ThreadAbortException) { }
             catch (Exception e)
@@ -164,7 +162,6 @@ namespace DCS_BIOS
                     return;
                 }
                 _shutdown = false;
-                Common.DebugP("DCSBIOS is STARTING UP");
                 _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
                 _dcsProtocolParser?.Shutdown();
                 _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
@@ -250,7 +247,6 @@ namespace DCS_BIOS
                 try
                 {
                     _shutdown = true;
-                    Common.DebugP("DCSBIOS is SHUTTING DOWN");
                     _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
                     _dcsProtocolParser?.Shutdown();
                     _dcsbiosListeningThread?.Abort();
@@ -356,7 +352,6 @@ namespace DCS_BIOS
                 }
                 catch (Exception e)
                 {
-                    Common.DebugP("Error sending data to DCS-BIOS. " + e.Message + Environment.NewLine + e.StackTrace);
                     SetLastException(e);
                     Common.LogError(e, "DCSBIOS.SendDataFunction()");
                 }
@@ -388,7 +383,6 @@ namespace DCS_BIOS
                 }
                 Common.LogError(ex, "Via DCSBIOS.SetLastException()");
                 var message = ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace;
-                Common.DebugP(message);
                 lock (_lockExceptionObject)
                 {
                     _lastException = new Exception(message);

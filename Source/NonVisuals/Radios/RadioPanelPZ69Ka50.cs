@@ -340,7 +340,6 @@ namespace NonVisuals.Radios
                     //This would cause unintended sync.
                     return;
                 }
-                Common.DebugP("Entering Ka-50 Radio SendFrequencyToDCSBIOS()");
                 if (!DataHasBeenReceivedFromDCSBIOS)
                 {
                     //Don't start communication with DCS-BIOS before we have had a first contact from "them"
@@ -410,7 +409,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio SendFrequencyToDCSBIOS()");
         }
 
 
@@ -418,7 +416,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SendR800L1ToDCSBIOS()");
                 if (R800L1NowSyncing())
                 {
                     return;
@@ -435,7 +432,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio SendR800L1ToDCSBIOS()");
         }
 
         private void R800L1SynchThreadMethod()
@@ -448,7 +444,6 @@ namespace NonVisuals.Radios
                     {   /*
                      * Ka-50 R-800L1 VHF 2
                      */
-                        Common.DebugP("Entering Ka-50 Radio R800L1SynchThreadMethod()");
                         Interlocked.Exchange(ref _r800L1ThreadNowSynching, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
@@ -503,25 +498,21 @@ namespace NonVisuals.Radios
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-800L1 1");
                             }
                             if (IsTimedOut(ref dial2Timeout, ResetSyncTimeout, "R-800L1 dial2Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-800L1 2");
                             }
                             if (IsTimedOut(ref dial3Timeout, ResetSyncTimeout, "R-800L1 dial3Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-800L1 3");
                             }
                             if (IsTimedOut(ref dial4Timeout, ResetSyncTimeout, "R-800L1 dial4Timeout"))
                             {
                                 //Lets do an ugly reset
                                 Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 0);
-                                Common.DebugP("Resetting SYNC for R-800L1 4");
                             }
 
                             string str;
@@ -530,12 +521,10 @@ namespace NonVisuals.Radios
                                 lock (_lockR800L1DialsObject1)
                                 {
 
-                                    Common.DebugP("_r800l1CockpitFreq1DialPos is " + _r800L1CockpitFreq1DialPos + " and should be " + desiredPositionDial1X);
                                     if (_r800L1CockpitFreq1DialPos != desiredPositionDial1X)
                                     {
                                         dial1OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_1DIAL_COMMAND + GetCommandDirectionForR800L1Dial1(desiredPositionDial1X, _r800L1CockpitFreq1DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial1SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial1WaitingForFeedback, 1);
@@ -551,12 +540,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockR800L1DialsObject2)
                                 {
-                                    Common.DebugP("_r800l1CockpitFreq2DialPos is " + _r800L1CockpitFreq2DialPos + " and should be " + desiredPositionDial2X);
                                     if (_r800L1CockpitFreq2DialPos != desiredPositionDial2X)
                                     {
                                         dial2OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_2DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial2X, _r800L1CockpitFreq2DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial2SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial2WaitingForFeedback, 1);
@@ -572,12 +559,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockR800L1DialsObject3)
                                 {
-                                    Common.DebugP("_r800l1CockpitFreq3DialPos is " + _r800L1CockpitFreq3DialPos + " and should be " + desiredPositionDial3X);
                                     if (_r800L1CockpitFreq3DialPos != desiredPositionDial3X)
                                     {
                                         dial3OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_3DIAL_COMMAND + GetCommandDirectionFor0To9Dials(desiredPositionDial3X, _r800L1CockpitFreq3DialPos);
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial3SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial3WaitingForFeedback, 1);
@@ -613,12 +598,10 @@ namespace NonVisuals.Radios
 
                                 lock (_lockR800L1DialsObject4)
                                 {
-                                    Common.DebugP("_r800l1CockpitFreq4DialPos is " + _r800L1CockpitFreq4DialPos + " and should be " + desiredPositionDial4);
                                     if (_r800L1CockpitFreq4DialPos < desiredPositionDial4)
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_4DIAL_COMMAND + "INC\n";
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
@@ -627,7 +610,6 @@ namespace NonVisuals.Radios
                                     {
                                         dial4OkTime = DateTime.Now.Ticks;
                                         str = R800_L1_FREQ_4DIAL_COMMAND + "DEC\n";
-                                        Common.DebugP("Sending " + str);
                                         DCSBIOS.Send(str);
                                         dial4SendCount++;
                                         Interlocked.Exchange(ref _r800L1Dial4WaitingForFeedback, 1);
@@ -674,14 +656,12 @@ namespace NonVisuals.Radios
             }
             //Refresh panel once this debacle is finished
             Interlocked.Add(ref _doUpdatePanelLCD, 1);
-            Common.DebugP("Leaving Ka-50 Radio R800L1SynchThreadMethod()");
         }
 
         private void SwapCockpitStandbyFrequencyR800L1()
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SwapCockpitStandbyFrequencyR800L1()");
                 _r800L1BigFrequencyStandby = _r800L1SavedCockpitBigFrequency;
                 _r800L1SmallFrequencyStandby = _r800L1SavedCockpitSmallFrequency;
             }
@@ -689,14 +669,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio SwapCockpitStandbyFrequencyR800L1()");
         }
 
         public void PZ69KnobChanged(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio PZ69KnobChanged()");
                 Interlocked.Add(ref _doUpdatePanelLCD, 1);
                 lock (LockLCDUpdateObject)
                 {
@@ -915,14 +893,12 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio PZ69KnobChanged()");
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio AdjustFrequency()");
 
                 if (SkipCurrentFrequencyChange())
                 {
@@ -1188,7 +1164,6 @@ namespace NonVisuals.Radios
                                                 {
                                                     _r800L1BigFrequencyStandby = _r800L1BigFrequencyStandby - 149 + 220;
                                                 }
-                                                Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800L1BigFrequencyStandby);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
@@ -1260,7 +1235,6 @@ namespace NonVisuals.Radios
                                                 {
                                                     _r800L1BigFrequencyStandby = 149 - (220 - _r800L1BigFrequencyStandby);
                                                 }
-                                                Common.DebugP("_r800l1BigFrequencyStandby is now " + _r800L1BigFrequencyStandby);
                                                 break;
                                             }
                                         case CurrentKa50RadioMode.ABRIS:
@@ -1393,7 +1367,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio AdjustFrequency()");
         }
 
 
@@ -1401,7 +1374,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio CheckFrequenciesForValidity()");
                 //Crude fix if any freqs are outside the valid boundaries
 
                 //R-800L VHF 2
@@ -1428,27 +1400,22 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio CheckFrequenciesForValidity()");
         }
 
         private bool SkipVhf1PresetDialChange()
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SkipVhf1PresetDialChange()");
                 if (_currentUpperRadioMode == CurrentKa50RadioMode.VHF1_R828 || _currentLowerRadioMode == CurrentKa50RadioMode.VHF1_R828)
                 {
                     if (_vhf1PresetDialSkipper > 2)
                     {
                         _vhf1PresetDialSkipper = 0;
-                        Common.DebugP("Leaving Ka-50 Radio SkipVhf1PresetDialChange()");
                         return false;
                     }
                     _vhf1PresetDialSkipper++;
-                    Common.DebugP("Leaving Ka-50 Radio SkipVhf1PresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Ka-50 Radio SkipVhf1PresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -1461,20 +1428,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SkipADFPresetDialChange()");
                 if (_currentUpperRadioMode == CurrentKa50RadioMode.ADF_ARK22 || _currentLowerRadioMode == CurrentKa50RadioMode.ADF_ARK22)
                 {
                     if (_adfPresetDialSkipper > 2)
                     {
                         _adfPresetDialSkipper = 0;
-                        Common.DebugP("Leaving Ka-50 Radio SkipADFPresetDialChange()");
                         return false;
                     }
                     _adfPresetDialSkipper++;
-                    Common.DebugP("Leaving Ka-50 Radio SkipADFPresetDialChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Ka-50 Radio SkipADFPresetDialChange()");
             }
             catch (Exception ex)
             {
@@ -1487,20 +1450,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SkipDataLinkMasterModeChange()");
                 if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK || _currentLowerRadioMode == CurrentKa50RadioMode.DATALINK)
                 {
                     if (_datalinkMasterModeDialSkipper > 2)
                     {
                         _datalinkMasterModeDialSkipper = 0;
-                        Common.DebugP("Leaving Ka-50 Radio SkipDataLinkMasterModeChange()");
                         return false;
                     }
                     _datalinkMasterModeDialSkipper++;
-                    Common.DebugP("Leaving Ka-50 Radio SkipDataLinkMasterModeChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Ka-50 Radio SkipDataLinkMasterModeChange()");
             }
             catch (Exception ex)
             {
@@ -1513,20 +1472,16 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SkipDataLinkSelfIdChange()");
                 if (_currentUpperRadioMode == CurrentKa50RadioMode.DATALINK || _currentLowerRadioMode == CurrentKa50RadioMode.DATALINK)
                 {
                     if (_datalinkSelfIdDialSkipper > 2)
                     {
                         _datalinkSelfIdDialSkipper = 0;
-                        Common.DebugP("Leaving Ka-50 Radio SkipDataLinkSelfIdChange()");
                         return false;
                     }
                     _datalinkSelfIdDialSkipper++;
-                    Common.DebugP("Leaving Ka-50 Radio SkipDataLinkSelfIdChange()");
                     return true;
                 }
-                Common.DebugP("Leaving Ka-50 Radio SkipDataLinkSelfIdChange()");
             }
             catch (Exception ex)
             {
@@ -1550,7 +1505,6 @@ namespace NonVisuals.Radios
                         return;
                     }
 
-                    Common.DebugP("Entering Ka-50 Radio ShowFrequenciesOnPanel()");
                     CheckFrequenciesForValidity();
                     var bytes = new byte[21];
                     bytes[0] = 0x0;
@@ -1799,7 +1753,6 @@ namespace NonVisuals.Radios
                 Common.LogError( ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
-            Common.DebugP("Leaving Ka-50 Radio ShowFrequenciesOnPanel()");
         }
 
 
@@ -1839,7 +1792,6 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.DebugP("RadioPanelPZ69Ka50.StartUp() : " + ex.Message);
                 Common.LogError( ex);
             }
         }
@@ -1848,14 +1800,12 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio Shutdown()");
                 ShutdownBase();
             }
             catch (Exception e)
             {
                 SetLastException(e);
             }
-            Common.DebugP("Leaving Ka-50 Radio Shutdown()");
         }
 
         public override void ClearSettings() { }
@@ -1878,23 +1828,18 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SetUpperRadioMode()");
-                Common.DebugP("Setting upper radio mode to " + currentKa50RadioMode);
                 _currentUpperRadioMode = currentKa50RadioMode;
             }
             catch (Exception ex)
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio SetUpperRadioMode()");
         }
 
         private void SetLowerRadioMode(CurrentKa50RadioMode currentKa50RadioMode)
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SetLowerRadioMode()");
-                Common.DebugP("Setting lower radio mode to " + currentKa50RadioMode);
                 _currentLowerRadioMode = currentKa50RadioMode;
                 //If NOUSE then send next round of data to the panel in order to clear the LCD.
                 //_sendNextRoundToPanel = true;catch (Exception ex)
@@ -1903,7 +1848,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio SetLowerRadioMode()");
         }
 
         private bool R800L1NowSyncing()
@@ -1915,7 +1859,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio SaveCockpitFrequencyR800L1()");
                 /*
                  * Dial 1
                  *      10 11 12 13 14 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39
@@ -1970,7 +1913,6 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            Common.DebugP("Leaving Ka-50 Radio SaveCockpitFrequencyR800L1()");
         }
 
 
@@ -1980,7 +1922,6 @@ namespace NonVisuals.Radios
             const string dec = "DEC\n";
             try
             {
-                Common.DebugP("Entering Ka-50 Radio GetCommandDirectionForR800L1Dial1()");
 
                 var tmpPos = actualDialPosition;
                 var countUp = 0;
@@ -1989,7 +1930,6 @@ namespace NonVisuals.Radios
                 {
                     //0 1 2
                     //len 3
-                    Common.DebugP("GetCommandDirectionForR800L1Dial1 #1 : tmpPos = " + tmpPos + " desiredDialPosition = " + desiredDialPosition);
                     if (tmpPos == desiredDialPosition)
                     {
                         break;
@@ -2010,7 +1950,6 @@ namespace NonVisuals.Radios
                 {
                     //0 1 2
                     //len 3
-                    Common.DebugP("GetCommandDirectionForR800L1Dial1 #2 : tmpPos = " + tmpPos + " desiredDialPosition = " + desiredDialPosition);
                     if (tmpPos == desiredDialPosition)
                     {
                         break;
@@ -2027,13 +1966,10 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                Common.DebugP("GetCommandDirectionForR800L1Dial1 : countDown = " + countDown + " countUp = " + countUp);
                 if (countDown < countUp)
                 {
-                    Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionForR800L1Dial1()");
                     return dec;
                 }
-                Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionForR800L1Dial1()");
             }
             catch (Exception ex)
             {
@@ -2046,7 +1982,6 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                 const string inc = "INC\n";
                 const string dec = "DEC\n";
                 switch (desiredDialPosition)
@@ -2057,7 +1992,6 @@ namespace NonVisuals.Radios
                             {
                                 case 0:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2066,7 +2000,6 @@ namespace NonVisuals.Radios
                                 case 3:
                                 case 4:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //-4 DEC
                                         return dec;
                                     }
@@ -2076,7 +2009,6 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //5 INC
                                         return inc;
                                     }
@@ -2089,12 +2021,10 @@ namespace NonVisuals.Radios
                             {
                                 case 0:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 1:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2103,7 +2033,6 @@ namespace NonVisuals.Radios
                                 case 4:
                                 case 5:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 6:
@@ -2111,7 +2040,6 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                             }
@@ -2124,12 +2052,10 @@ namespace NonVisuals.Radios
                                 case 0:
                                 case 1:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 2:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2138,14 +2064,12 @@ namespace NonVisuals.Radios
                                 case 5:
                                 case 6:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 7:
                                 case 8:
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                             }
@@ -2159,12 +2083,10 @@ namespace NonVisuals.Radios
                                 case 1:
                                 case 2:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 3:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2173,13 +2095,11 @@ namespace NonVisuals.Radios
                                 case 6:
                                 case 7:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 8:
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                             }
@@ -2194,12 +2114,10 @@ namespace NonVisuals.Radios
                                 case 2:
                                 case 3:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 4:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2208,12 +2126,10 @@ namespace NonVisuals.Radios
                                 case 7:
                                 case 8:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                             }
@@ -2229,12 +2145,10 @@ namespace NonVisuals.Radios
                                 case 3:
                                 case 4:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 5:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2243,7 +2157,6 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                             }
@@ -2255,7 +2168,6 @@ namespace NonVisuals.Radios
                             {
                                 case 0:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 1:
@@ -2264,12 +2176,10 @@ namespace NonVisuals.Radios
                                 case 4:
                                 case 5:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 6:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2277,7 +2187,6 @@ namespace NonVisuals.Radios
                                 case 8:
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                             }
@@ -2290,7 +2199,6 @@ namespace NonVisuals.Radios
                                 case 0:
                                 case 1:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 2:
@@ -2299,19 +2207,16 @@ namespace NonVisuals.Radios
                                 case 5:
                                 case 6:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 7:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
                                 case 8:
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                             }
@@ -2325,7 +2230,6 @@ namespace NonVisuals.Radios
                                 case 1:
                                 case 2:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 3:
@@ -2334,18 +2238,15 @@ namespace NonVisuals.Radios
                                 case 6:
                                 case 7:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 8:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                             }
@@ -2360,7 +2261,6 @@ namespace NonVisuals.Radios
                                 case 2:
                                 case 3:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return dec;
                                     }
                                 case 4:
@@ -2369,12 +2269,10 @@ namespace NonVisuals.Radios
                                 case 7:
                                 case 8:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         return inc;
                                     }
                                 case 9:
                                     {
-                                        Common.DebugP("Leaving Ka-50 Radio GetCommandDirectionFor0To9Dials()");
                                         //Do nothing
                                         return null;
                                     }
@@ -2394,33 +2292,27 @@ namespace NonVisuals.Radios
         {
             try
             {
-                Common.DebugP("Entering Ka-50 Radio GetR800L1DialFrequencyForPosition()");
                 //        "00"  "25" "50" "75"
                 //          0    1    2    3  
                 switch (position)
                 {
                     case 0:
                         {
-                            Common.DebugP("Leaving Ka-50 Radio GetR800L1DialFrequencyForPosition()");
                             return "0";
                         }
                     case 1:
                         {
-                            Common.DebugP("Leaving Ka-50 Radio GetR800L1DialFrequencyForPosition()");
                             return "5";
                         }
                     case 2:
                         {
-                            Common.DebugP("Leaving Ka-50 Radio GetR800L1DialFrequencyForPosition()");
                             return "5";
                         }
                     case 3:
                         {
-                            Common.DebugP("Leaving Ka-50 Radio GetR800L1DialFrequencyForPosition()");
                             return "0";
                         }
                 }
-                Common.DebugP("ERROR!!! Leaving Ka-50 Radio GetR800L1DialFrequencyForPosition()");
             }
             catch (Exception ex)
             {

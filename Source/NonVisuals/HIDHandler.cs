@@ -19,7 +19,6 @@ namespace NonVisuals
         {
             try
             {
-                Common.DebugP("Entering HIDHandler.Startup()");
                 foreach (var gamingPanelSkeleton in Common.GamingPanelSkeletons)
                 {
                     foreach (var hidDevice in HidDevices.Enumerate(gamingPanelSkeleton.VendorId, gamingPanelSkeleton.ProductId))
@@ -85,19 +84,13 @@ namespace NonVisuals
             {
                 throw new Exception("Looking for empty/null InstanceId HIDDeviceAlreadyExists().");
             }
-            Common.DebugP("---------------");
-            Common.DebugP("Looking for : " + instanceId + "   " + instanceId);
             foreach (var hidskeleton in HIDSkeletons)
             {
                 if (hidskeleton.InstanceId.Equals(instanceId))
                 {
-                    Common.DebugP("HIDSkeleton already found : " + hidskeleton.InstanceId);
-                    Common.DebugP("---------------");
                     return true;
                 }
             }
-            Common.DebugP("HIDSkeleton not found : " + instanceId);
-            Common.DebugP("---------------");
             return false;
         }
     }
