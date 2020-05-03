@@ -159,7 +159,18 @@ namespace NonVisuals.StreamDeck
                     }
                     else
                     {
-                        StringDcsBiosValue = e.StringData.Substring(0, _dcsbiosOutput.MaxLength);
+                        if (string.IsNullOrWhiteSpace(e.StringData))
+                        {
+                            StringDcsBiosValue = "";
+                        }
+                        else if (e.StringData.Length < _dcsbiosOutput.MaxLength)
+                        {
+                            StringDcsBiosValue = e.StringData.Substring(0, e.StringData.Length);
+                        }
+                        else
+                        {
+                            StringDcsBiosValue = e.StringData.Substring(0, _dcsbiosOutput.MaxLength);
+                        }
                     }
 
                     /*
