@@ -850,8 +850,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Clear();
-                SetFormState();
+                Dispatcher?.BeginInvoke((Action)(() =>
+                {
+                    Clear();
+                    SetFormState();
+                }));
             }
             catch (Exception ex)
             {

@@ -791,7 +791,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                SetWindowState();
+                Dispatcher?.BeginInvoke((Action)SetWindowState);
             }
             catch (Exception ex)
             {

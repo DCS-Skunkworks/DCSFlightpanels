@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
@@ -148,16 +146,28 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
-                if (_decoderSourceType == DCSBiosOutputType.INTEGER_TYPE || string.IsNullOrWhiteSpace(e.StringData))
+                if (_decoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
                 {
                     return;
                 }
 
                 if (_dcsbiosOutput?.Address == e.Address)
                 {
-                    StringDcsBiosValue = e.StringData;
+                    if (TreatStringAsNumber && string.IsNullOrWhiteSpace(e.StringData))
+                    {
+                        StringDcsBiosValue = "0";
+                    }
+                    else
+                    {
+                        StringDcsBiosValue = e.StringData.Substring(0, _dcsbiosOutput.MaxLength);
+                    }
 
-                    if (_treatStringAsNumber && uint.TryParse(e.StringData.Substring(0, _dcsbiosOutput.MaxLength), out var tmpUint))
+                    /*
+                     * If DCS-BIOS sends null string data and the decoder should 
+                     * treat it as number then it will be represented by zero.
+                     */
+
+                    if (_treatStringAsNumber && uint.TryParse(string.IsNullOrWhiteSpace(e.StringData) ? "0" : e.StringData.Substring(0, _dcsbiosOutput.MaxLength), out var tmpUint))
                     {
                         UintDcsBiosValue = tmpUint;
                     }
@@ -201,7 +211,7 @@ namespace NonVisuals.StreamDeck
                     }
                     else if (DecoderSourceType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
                     {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, StringDcsBiosValue);
+                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, (string.IsNullOrWhiteSpace(StringDcsBiosValue) ? "" : StringDcsBiosValue));
                         showImage = true;
                     }
                     else if (!string.IsNullOrEmpty(ButtonTextTemplate))

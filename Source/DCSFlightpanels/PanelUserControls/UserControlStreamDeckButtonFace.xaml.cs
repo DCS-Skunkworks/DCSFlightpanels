@@ -650,12 +650,16 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
             {
-                Clear();
-                SetFormState();
+                Dispatcher?.BeginInvoke((Action)(() =>
+                {
+                    Clear();
+                    SetFormState();
+                }));
             }
             catch (Exception ex)
             {

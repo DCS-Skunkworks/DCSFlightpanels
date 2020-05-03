@@ -559,11 +559,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (ComboBoxLayers.Text != e.SelectedLayerName)
+                Dispatcher?.BeginInvoke((Action) (() =>
                 {
-                    Dispatcher?.BeginInvoke((Action)LoadComboBoxLayers);
-                    Dispatcher?.BeginInvoke((Action)SetFormState);
-                }
+                    if (ComboBoxLayers.Text != e.SelectedLayerName)
+                    {
+                        Dispatcher?.BeginInvoke((Action)LoadComboBoxLayers);
+                        Dispatcher?.BeginInvoke((Action)SetFormState);
+                    }
+                }));
             }
             catch (Exception ex)
             {
