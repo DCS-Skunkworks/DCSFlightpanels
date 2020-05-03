@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace NonVisuals.StreamDeck.Events
 {
@@ -64,4 +65,11 @@ namespace NonVisuals.StreamDeck.Events
         public string LayerName;
         public EnumStreamDeckButtonNames StreamDeckButtonName;
     }
+
+    /*public class StreamDeckOledImageChangeEventArgs : EventArgs
+    {
+        public string StreamDeckInstanceId;
+        public EnumStreamDeckButtonNames StreamDeckButtonName;
+        public Bitmap Bitmap;
+    }*/
 }

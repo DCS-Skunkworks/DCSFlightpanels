@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -10,6 +11,13 @@ namespace NonVisuals
     public static class Extensions
     {
 
+        public static void SetInstanceId(this List<StreamDeckLayer> list, string instanceId)
+        {
+            foreach (var streamDeckLayer in list)
+            {
+                streamDeckLayer.StreamDeckInstanceId = instanceId;
+            }
+        }
 
         public static T DeepClone<T>(this T obj)
         {

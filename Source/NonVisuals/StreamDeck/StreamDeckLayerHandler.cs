@@ -19,6 +19,7 @@ namespace NonVisuals.StreamDeck
         private readonly IStreamDeckBoard _streamDeckBoard;
         private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
+        private bool _jsonImported = false;
 
 
 
@@ -67,7 +68,9 @@ namespace NonVisuals.StreamDeck
             };
             
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
-            
+
+            _layerList.SetInstanceId(_streamDeckPanel.InstanceId);
+            _jsonImported = true;
             CheckHomeLayerExists();
         }
 
@@ -279,10 +282,13 @@ namespace NonVisuals.StreamDeck
 
         private void SetSelectedLayer(string layerName)
         {
-            if (layerName == _selectedLayerName)
+            if (layerName == _selectedLayerName && _jsonImported == false)
             {
                 return;
             }
+
+            //We want one update after having read the json
+            _jsonImported = false;
 
             MarkAllButtonsHiddenAndClearFaces();
 

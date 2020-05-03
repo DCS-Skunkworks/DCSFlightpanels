@@ -2,8 +2,10 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ClassLibraryCommon;
 using Color = System.Drawing.Color;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
@@ -11,7 +13,46 @@ namespace NonVisuals.StreamDeck
 {
     public static class BitMapCreator
     {
-        public static BitmapImage GetButtonNumberImage(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
+
+        public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        {
+            using (var outStream = new MemoryStream())
+            {
+                BitmapEncoder bmpBitmapEncoder = new BmpBitmapEncoder();
+                bmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                bmpBitmapEncoder.Save(outStream);
+                var bitmap = new System.Drawing.Bitmap(outStream);
+
+                return new Bitmap(bitmap);
+            }
+        }
+
+        public static BitmapImage Bitmap2BitmapImage(Bitmap bitmap)
+        {
+            try
+            {
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                    memory.Position = 0;
+                    BitmapImage bitmapimage = new BitmapImage();
+                    bitmapimage.BeginInit();
+                    bitmapimage.StreamSource = memory;
+                    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapimage.EndInit();
+
+                    return bitmapimage;
+                }
+            }
+            catch (Exception e)
+            {
+                Common.LogError(e, "Failed to convert bitmap to bitmapimage.");
+            }
+            return null;
+        }
+
+
+        public static BitmapImage GetButtonImageFromResources(EnumStreamDeckButtonNames streamDeckButtonName, Color color)
         {
             return new BitmapImage(new Uri(StreamDeckConstants.NUMBER_BUTTON_LOCATION + StreamDeckCommon.ButtonNumber(streamDeckButtonName) + "_" + color.Name.ToLower() + ".png", UriKind.Absolute));
         }

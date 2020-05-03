@@ -237,7 +237,14 @@ namespace NonVisuals.StreamDeck
         public string StreamDeckInstanceId
         {
             get => _streamDeckInstanceId;
-            set => _streamDeckInstanceId = value;
+            set
+            {
+                _streamDeckInstanceId = value;
+                foreach (var streamDeckButton in StreamDeckButtons)
+                {
+                    streamDeckButton.SetStreamDeckInstanceId(_streamDeckInstanceId);
+                }
+            }
         }
     }
 }

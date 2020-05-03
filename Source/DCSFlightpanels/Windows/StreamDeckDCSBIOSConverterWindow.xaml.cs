@@ -99,8 +99,6 @@ namespace DCSFlightpanels.Windows
                 var criteriaOK = (Use2Criteria ? criteria2DataOK : true) && criteria1DataOK && referenceValuesOK;
 
                 ButtonOk.IsEnabled = criteriaOK && _dcsbiosConverter.FaceConfigurationIsOK && IsDirty;
-
-                UpdateFontInfo();
             }
             catch (Exception ex)
             {
@@ -271,6 +269,15 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void SetInfoTextBoxes()
+        {
+            TextBoxFontInfo.TargetFont = _dcsbiosConverter.TextFont;
+            TextBoxFontInfo.TargetFontColor = _dcsbiosConverter.FontColor;
+            TextBoxFontInfo.TargetBackgroundColor = _dcsbiosConverter.BackgroundColor;
+
+            TextBoxOffsetInfo.OffSetX = _dcsbiosConverter.OffsetX;
+            TextBoxOffsetInfo.OffSetY = _dcsbiosConverter.OffsetY;
+        }
 
         private void ShowConverter()
         {
@@ -282,6 +289,8 @@ namespace DCSFlightpanels.Windows
 
             TextBoxReferenceValue1.Text = _dcsbiosConverter.ReferenceValue1.ToString(CultureInfo.InvariantCulture);
             TextBoxReferenceValue2.Text = _dcsbiosConverter.ReferenceValue2.ToString(CultureInfo.InvariantCulture);
+
+            SetInfoTextBoxes();
 
             switch (_dcsbiosConverter.ConverterOutputType)
             {
@@ -324,8 +333,6 @@ namespace DCSFlightpanels.Windows
 
             StreamDeckCommon.SetComparatorValue(ComboBoxComparisonType1, _dcsbiosConverter.Comparator1);
             StreamDeckCommon.SetComparatorValue(ComboBoxComparisonType2, _dcsbiosConverter.Comparator2);
-            
-            UpdateFontInfo();
             _isPopulatingData = false;
         }
 
@@ -532,6 +539,18 @@ namespace DCSFlightpanels.Windows
             }
         }
 
+        private void TextBoxOutputButtonText_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                SetInfoTextBoxes();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void RepeatButtonPressUp_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -610,9 +629,9 @@ namespace DCSFlightpanels.Windows
                 if (StreamDeckUICommon.SetFontStyle(ref font) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.TextFont = font;
+                    TextBoxFontInfo.TargetFont = font;
                     SettingsManager.DefaultFont = font;
                     TestImage();
-                    UpdateFontInfo();
                     SetFormState();
                 }
             }
@@ -631,9 +650,9 @@ namespace DCSFlightpanels.Windows
                 if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.FontColor = color;
+                    TextBoxFontInfo.TargetFontColor = color;
                     SettingsManager.DefaultFontColor = color;
                     SetIsDirty();
-                    UpdateFontInfo();
                     SetFormState();
                 }
             }
@@ -652,31 +671,15 @@ namespace DCSFlightpanels.Windows
                 if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosConverter.BackgroundColor = color;
+                    TextBoxFontInfo.TargetBackgroundColor = color;
                     SettingsManager.DefaultBackgroundColor = color;
                     SetIsDirty();
-                    UpdateFontInfo();
                     SetFormState();
                 }
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UpdateFontInfo()
-        {
-            if (_dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.NotSet)
-            {
-                return;
-            }
-
-
-            TextBoxFontInfo.Text = "Font : " + _dcsbiosConverter.TextFont.Name + " " + _dcsbiosConverter.TextFont.Size + " " + (_dcsbiosConverter.TextFont.Bold ? "Bold" : "Regular") + "    OffsetX = " + _dcsbiosConverter.OffsetX + "\n";
-            TextBoxFontInfo.Text = TextBoxFontInfo.Text + "Font Color : " + _dcsbiosConverter.FontColor.ToString() + "    OffsetY = " + _dcsbiosConverter.OffsetY + "\n";
-            if (_dcsbiosConverter.ConverterOutputType != EnumConverterOutputType.ImageOverlay && _dcsbiosConverter.ConverterOutputType != EnumConverterOutputType.NotSet)
-            {
-                TextBoxFontInfo.Text = TextBoxFontInfo.Text + "Background Color : " + _dcsbiosConverter.BackgroundColor.ToString();
             }
         }
 
@@ -698,5 +701,6 @@ namespace DCSFlightpanels.Windows
                 CancelWindow();
             }
         }
+
     }
 }

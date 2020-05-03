@@ -276,46 +276,13 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
-        /*
-        public static HashSet<StreamDeckButton> GetAllStreamDeckButtonNames()
+       
+        //fugly
+        public void SetStreamDeckInstanceId(string instanceId)
         {
-            var result = new HashSet<StreamDeckButton>();
-
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON1));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON2));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON3));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON4));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON5));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON6));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON7));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON8));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON9));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON10));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON11));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON12));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON13));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON14));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON15));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON16));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON17));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON18));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON19));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON20));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON21));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON22));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON23));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON24));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON25));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON26));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON27));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON28));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON29));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON30));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON31));
-            result.Add(new StreamDeckButton(EnumStreamDeckButtonNames.BUTTON32));
-            return result;
+            _streamDeckInstanceId = instanceId;
         }
-        */
+
         public int GetHash()
         {
             unchecked

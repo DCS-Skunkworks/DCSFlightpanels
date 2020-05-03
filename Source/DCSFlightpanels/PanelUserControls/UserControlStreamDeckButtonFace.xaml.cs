@@ -73,7 +73,7 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
 
-                StackPanelButtonTextAndStyle.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+                StackPanelButtonTextImage.Visibility = RadioButtonTextFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonDCSBIOSImage.Visibility = RadioButtonDCSBIOSFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonImage.Visibility = RadioButtonImageFace.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
@@ -83,12 +83,6 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceBackgroundColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
-
-
-                TextBoxFontInfo.Text = "Font : " + TextBoxButtonTextFace.Bill.TextFont.Name + " " +
-                                                    TextBoxButtonTextFace.Bill.TextFont.Size + " " +
-                                                    (TextBoxButtonTextFace.Bill.TextFont.Bold ? "Bold" : "Regular");
-                TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Color : " + TextBoxButtonTextFace.Bill.BackgroundHex;
                 
                 ButtonTestSelectImageGalleryButton.IsEnabled = TextBoxImageFace.Bill.ContainsImageFace();
             }
@@ -97,8 +91,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
+        
         public void Update()
         {
             try
@@ -217,8 +210,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (StreamDeckUICommon.SetFontStyle(TextBoxButtonTextFace) == DialogResult.OK)
                 {
+                    TextBoxFontInfo.TargetFont = TextBoxButtonTextFace.Bill.TextFont;
                     SetIsDirty();
-
                 }
                 TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetFormState();
@@ -235,6 +228,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (StreamDeckUICommon.SetFontColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
+                    TextBoxFontInfo.TargetFontColor = TextBoxButtonTextFace.Bill.FontColor;
                     SetIsDirty();
 
                 }
@@ -253,6 +247,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (StreamDeckUICommon.SetBackgroundColor(TextBoxButtonTextFace) == DialogResult.OK)
                 {
+                    TextBoxFontInfo.TargetBackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
                     SetIsDirty();
 
                 }
@@ -349,6 +344,17 @@ namespace DCSFlightpanels.PanelUserControls
 
         }
 
+        private void SetInfoTextBoxes()
+        {
+            TextBoxFontInfo.TargetFont = TextBoxButtonTextFace.Bill.TextFont;
+            TextBoxFontInfo.TargetFontColor = TextBoxButtonTextFace.Bill.FontColor;
+            TextBoxFontInfo.TargetBackgroundColor = TextBoxButtonTextFace.Bill.BackgroundColor;
+
+            TextBoxOffsetInfo.OffSetX = TextBoxOffsetInfo.OffSetX;
+            TextBoxOffsetInfo.OffSetY = TextBoxOffsetInfo.OffSetY;
+        }
+
+
         private void ShowFaceConfiguration(IStreamDeckButtonFace streamDeckButtonFace)
         {
             if (streamDeckButtonFace == null)
@@ -365,6 +371,11 @@ namespace DCSFlightpanels.PanelUserControls
                         TextBoxButtonTextFace.Text = faceTypeText.ButtonTextTemplate;
                         TextBoxButtonTextFace.Bill.FontColor = faceTypeText.FontColor;
                         TextBoxButtonTextFace.Bill.BackgroundColor = faceTypeText.BackgroundColor;
+                        TextBoxButtonTextFace.Bill.OffsetX = faceTypeText.OffsetX;
+                        TextBoxButtonTextFace.Bill.OffsetY = faceTypeText.OffsetY;
+
+                        SetInfoTextBoxes();
+
                         SetFormState();
                         return;
                     }
@@ -472,11 +483,24 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
+        private void TextBoxButtonTextFace_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                SetInfoTextBoxes();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void RepeatButtonActionPressUp_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.Bill.OffsetY;
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
                 TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
@@ -493,6 +517,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.Bill.OffsetY;
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
                 TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
@@ -509,6 +534,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.Bill.OffsetX;
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
                 TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
@@ -525,6 +551,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 TextBoxButtonTextFace.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.Bill.OffsetX;
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
                 TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(StreamDeckInstanceId));
                 SetIsDirty();
@@ -729,5 +756,6 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.LogError(ex);
             }
         }
+
     }
 }

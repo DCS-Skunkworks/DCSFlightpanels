@@ -154,6 +154,8 @@
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillBaseOutput.cs" />
+    <Compile Include="CustomControls\FontInfoTextBox.cs" />
+    <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Shared\CommonUI.cs" />
     <Compile Include="Shared\StreamDeckUICommon.cs" />

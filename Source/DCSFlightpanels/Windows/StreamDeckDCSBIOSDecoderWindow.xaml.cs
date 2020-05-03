@@ -150,9 +150,21 @@ namespace DCSFlightpanels.Windows
             ButtonOK.IsEnabled = _dcsbiosDecoder.DecoderConfigurationOK() && !string.IsNullOrEmpty(TextBoxDCSBIOSId.Text);
         }
 
+        private void SetInfoTextBoxes()
+        {
+            TextBoxFontInfo.TargetFont = _dcsbiosDecoder.RawTextFont;
+            TextBoxFontInfo.TargetFontColor = _dcsbiosDecoder.RawFontColor;
+            TextBoxFontInfo.TargetBackgroundColor = _dcsbiosDecoder.RawBackgroundColor;
+
+            TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
+            TextBoxOffsetInfo.OffSetY = _dcsbiosDecoder.OffsetY;
+        }
+
         private void ShowDecoder()
         {
             _populatingData = true;
+
+            SetInfoTextBoxes();
 
             DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _streamDeckInstanceId);
             if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
@@ -192,7 +204,7 @@ namespace DCSFlightpanels.Windows
                 TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
             }
             ShowConverters();
-            UpdateFontInfo();
+            TextBoxFontInfo.UpdateFontInfo();
             _populatingData = false;
         }
 
@@ -296,6 +308,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetY = _dcsbiosDecoder.OffsetY;
                 SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
                 SetIsDirty();
             }
@@ -310,6 +323,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetY = _dcsbiosDecoder.OffsetY;
                 SettingsManager.OffsetY = _dcsbiosDecoder.OffsetY;
                 SetIsDirty();
             }
@@ -340,6 +354,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
                 SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
                 SetIsDirty();
             }
@@ -354,6 +369,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _dcsbiosDecoder.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
+                TextBoxOffsetInfo.OffSetX = _dcsbiosDecoder.OffsetX;
                 SettingsManager.OffsetX = _dcsbiosDecoder.OffsetX;
                 SetIsDirty();
             }
@@ -411,8 +427,8 @@ namespace DCSFlightpanels.Windows
                 {
                     _dcsbiosDecoder.TextFont = font;
                     SettingsManager.DefaultFont = font;
+                    TextBoxFontInfo.TargetFont = font;
                     SetIsDirty();
-                    UpdateFontInfo();
                     SetFormState();
                 }
             }
@@ -431,8 +447,8 @@ namespace DCSFlightpanels.Windows
                 if (StreamDeckUICommon.SetFontColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosDecoder.FontColor = color;
+                    TextBoxFontInfo.TargetFontColor = color;
                     SetIsDirty();
-                    UpdateFontInfo();
                     SetFormState();
                 }
             }
@@ -451,8 +467,8 @@ namespace DCSFlightpanels.Windows
                 if (StreamDeckUICommon.SetBackgroundColor(ref color) == System.Windows.Forms.DialogResult.OK)
                 {
                     _dcsbiosDecoder.BackgroundColor = color;
+                    TextBoxFontInfo.TargetBackgroundColor = color;
                     SetIsDirty();
-                    UpdateFontInfo();
                     SetFormState();
                 }
             }
@@ -460,15 +476,6 @@ namespace DCSFlightpanels.Windows
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
-
-        private void UpdateFontInfo()
-        {
-            TextBoxFontInfo.Text = "Font : " + _dcsbiosDecoder.TextFont.Name + " " +
-                                   _dcsbiosDecoder.TextFont.Size + " " +
-                                   (_dcsbiosDecoder.TextFont.Bold ? "Bold" : "Regular");
-            TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Font Color : " + _dcsbiosDecoder.FontColor.ToString();
-            TextBoxFontInfo.Text = TextBoxFontInfo.Text + "\n" + "Background Color : " + _dcsbiosDecoder.BackgroundColor.ToString();
         }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -931,7 +938,17 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
+        
+        private void TextBoxOutputTextRaw_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                SetInfoTextBoxes();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

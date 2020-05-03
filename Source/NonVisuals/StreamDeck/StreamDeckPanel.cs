@@ -28,7 +28,7 @@ namespace NonVisuals.StreamDeck
 
         private int _buttonCount = 0;
 
-
+        private object _updateStreamDeckOledLockObject = new object();
 
 
 
@@ -156,7 +156,12 @@ namespace NonVisuals.StreamDeck
                 return;
             }
             var keyBitmap = KeyBitmap.Create.FromBitmap(bitmap);
-            _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
+            
+            lock (_updateStreamDeckOledLockObject)
+            {
+                //EventHandlers.NotifyOledImageChange(this, InstanceId, streamDeckButtonName, bitmap);
+                _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
+            }
         }
 
         public void SetImage(EnumStreamDeckButtonNames streamDeckButtonName, BitmapImage bitmapImage)
@@ -165,8 +170,12 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            var keyBitmap = KeyBitmap.Create.FromBitmap(StreamDeckCommon.BitmapImage2Bitmap(bitmapImage));
-            _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
+            var keyBitmap = KeyBitmap.Create.FromBitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage));
+            lock (_updateStreamDeckOledLockObject)
+            {
+                //EventHandlers.NotifyOledImageChange(this, InstanceId, streamDeckButtonName, BitMapCreator.BitmapImage2Bitmap(bitmapImage));
+                _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
+            }
         }
 
         public void ClearAllFaces()
@@ -421,7 +430,7 @@ namespace NonVisuals.StreamDeck
                 tmpBitMapImage.EndInit();
             }
 
-            _fileNotFoundBitMap = StreamDeckCommon.BitmapImage2Bitmap(tmpBitMapImage);
+            _fileNotFoundBitMap = BitMapCreator.BitmapImage2Bitmap(tmpBitMapImage);
             return _fileNotFoundBitMap;
         }
         

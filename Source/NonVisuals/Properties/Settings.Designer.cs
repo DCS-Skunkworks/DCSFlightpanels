@@ -97,7 +97,7 @@ namespace NonVisuals.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int OffsetX {
             get {
                 return ((int)(this["OffsetX"]));
@@ -109,7 +109,7 @@ namespace NonVisuals.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("22")]
         public int OffsetY {
             get {
                 return ((int)(this["OffsetY"]));

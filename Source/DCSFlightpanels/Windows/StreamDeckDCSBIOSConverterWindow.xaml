@@ -95,7 +95,7 @@
                 <GroupBox Header="Settings" HorizontalAlignment="Stretch">
                     <StackPanel HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal">
-                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputButtonTextRaw"  FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                            <customControls:StreamDeckFaceTextBox x:Name="TextBoxOutputButtonTextRaw"  FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" TextChanged="TextBoxOutputButtonText_OnTextChanged" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonPressUpRaw" Content="{StaticResource UpArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
                                 <RepeatButton Name="RepeatButtonPressDownRaw" Content="{StaticResource DownArrow}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
@@ -135,7 +135,7 @@
                 <GroupBox Header="Settings">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Name="TextBoxOutputButtonTextOverlayImage"  FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" KeyUp="TextBoxOutputText_OnKeyUp"/>
+                            <TextBox Name="TextBoxOutputButtonTextOverlayImage"  FontSize="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="72" Width="72"  TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" TextChanged="TextBoxOutputButtonText_OnTextChanged" KeyUp="TextBoxOutputText_OnKeyUp"/>
                             <StackPanel>
                                 <RepeatButton Name="RepeatButtonActionPressUpOverlay" Content="{StaticResource UpArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressUp_OnClick"/>
                                 <RepeatButton Name="RepeatButtonActionPressDownOverlay" Content="{StaticResource DownArrow2}" Height="{StaticResource ArrowHeight}" Click="RepeatButtonPressDown_OnClick"/>
@@ -164,8 +164,9 @@
                 </GroupBox>
             </StackPanel>
 
-            <StackPanel Margin="0,5,0,0" >
-                <TextBox Name="TextBoxFontInfo" Height="60" IsReadOnly="True" Background="Transparent"></TextBox>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <customControls:FontInfoTextBox x:Name="TextBoxFontInfo"></customControls:FontInfoTextBox>
+                <customControls:OffsetInfoTextBox x:Name="TextBoxOffsetInfo"></customControls:OffsetInfoTextBox>
             </StackPanel>
         </StackPanel>
 

@@ -167,6 +167,31 @@ namespace NonVisuals.StreamDeck.Events
             eventArgs.StreamDeckInstanceId = dcsbiosDecoder.StreamDeckInstanceId;
             OnStreamDeckHideDecodersEventHandler?.Invoke(dcsbiosDecoder, eventArgs);
         }
+
+        /********************************************************************************************
+        *                Event to when physical panel image changes so UI can replicate
+        ********************************************************************************************/
+        /*public delegate void StreamDeckOledImageChangeEventHandler(object sender, StreamDeckOledImageChangeEventArgs e);
+        public static event StreamDeckOledImageChangeEventHandler OnStreamDeckOledImageChangeEventHandler;
+
+        public static void AttachOledImageListener(IOledImageListener oledImageListener)
+        {
+            OnStreamDeckOledImageChangeEventHandler += oledImageListener.OledImageChanged;
+        }
+
+        public static void DetachOledImageListener(IOledImageListener oledImageListener)
+        {
+            OnStreamDeckOledImageChangeEventHandler -= oledImageListener.OledImageChanged;
+        }
+
+        public static void NotifyOledImageChange(object sender, string streamDeckInstanceId, EnumStreamDeckButtonNames streamDeckButtonName, System.Drawing.Bitmap bitMap)
+        {
+            var eventArgs = new StreamDeckOledImageChangeEventArgs();
+            eventArgs.StreamDeckButtonName = streamDeckButtonName;
+            eventArgs.StreamDeckInstanceId = streamDeckInstanceId;
+            eventArgs.Bitmap = bitMap;
+            OnStreamDeckOledImageChangeEventHandler?.Invoke(sender, eventArgs);
+        }*/
     }
 
 }

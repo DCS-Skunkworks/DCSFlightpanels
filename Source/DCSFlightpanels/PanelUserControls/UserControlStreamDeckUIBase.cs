@@ -16,7 +16,7 @@ using NonVisuals.StreamDeck.Events;
 
 namespace DCSFlightpanels.PanelUserControls
 {
-    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, IStreamDeckListener, IStreamDeckConfigListener
+    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, IStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
     {
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
         protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
@@ -31,6 +31,12 @@ namespace DCSFlightpanels.PanelUserControls
         protected virtual int ButtonAmount()
         {
             return 0;
+        }
+
+
+        protected UserControlStreamDeckUIBase()
+        {
+            //EventHandlers.AttachOledImageListener(this);
         }
 
 
@@ -70,7 +76,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 var newlySelectedImage = (StreamDeckImage)sender;
-                
+
                 /*
                  * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
                  */
@@ -346,8 +352,8 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 buttonImage.Bill = new BillStreamDeckFace();
                 buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
-                buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
-                buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonNumberImage(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
+                buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
+                buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
                 buttonImage.Bill.StreamDeckInstanceId = StreamDeckInstanceId;
                 buttonImage.Source = buttonImage.Bill.DeselectedImage;
             }
@@ -391,7 +397,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             return result;
         }
-        
+
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
@@ -399,6 +405,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_lastShownLayer != e.SelectedLayerName)
                 {
                     Dispatcher?.BeginInvoke((Action)(() => UIShowLayer(e.SelectedLayerName)));
+                    _lastShownLayer = e.SelectedLayerName;
                 }
             }
             catch (Exception ex)
@@ -488,5 +495,31 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.LogError(ex);
             }
         }
+
+        /*public void OledImageChanged(object sender, StreamDeckOledImageChangeEventArgs e)
+        {
+            try
+            {
+                if (e.StreamDeckInstanceId != StreamDeckInstanceId || e.Bitmap == null)
+                {
+                    return;
+                }
+                Dispatcher?.BeginInvoke((Action)(() =>
+               {
+                   foreach (var streamDeckImage in ButtonImages)
+                   {
+                       if (streamDeckImage.Bill.StreamDeckButtonName == e.StreamDeckButtonName)
+                       {
+                           streamDeckImage.Bill.DeselectedImage = BitMapCreator.Bitmap2BitmapImage(e.Bitmap);
+                           break;
+                       }
+                   }
+               }));
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }*/
     }
 }

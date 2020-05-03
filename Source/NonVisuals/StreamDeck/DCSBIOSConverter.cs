@@ -686,7 +686,7 @@ namespace NonVisuals.StreamDeck
                 {
                     case EnumConverterOutputType.NotSet:
                         {
-                            throw new Exception("DCSBIOSConverter.TextFont:  OutputType is [NotSet]. Can not retrieve TextFont.");
+                            return SettingsManager.DefaultFont;
                         }
                     case EnumConverterOutputType.Raw:
                         {

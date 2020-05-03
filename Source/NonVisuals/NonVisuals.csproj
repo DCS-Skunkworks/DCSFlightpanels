@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
+    <Compile Include="Interfaces\IOledImageListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
     <Compile Include="Interfaces\IIsDirty.cs" />
     <Compile Include="Interfaces\ISRSHandler.cs" />

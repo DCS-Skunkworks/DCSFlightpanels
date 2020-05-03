@@ -40,47 +40,7 @@ namespace NonVisuals.StreamDeck
 
             return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
         }
-
-
-
-        public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
-        {
-            using (var outStream = new MemoryStream())
-            {
-                BitmapEncoder bmpBitmapEncoder = new BmpBitmapEncoder();
-                bmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmapImage));
-                bmpBitmapEncoder.Save(outStream);
-                var bitmap = new System.Drawing.Bitmap(outStream);
-
-                return new Bitmap(bitmap);
-            }
-        }
-
-        public static BitmapImage ConvertBitMap(Bitmap bitmap)
-        {
-            try
-            {
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                    memory.Position = 0;
-                    BitmapImage bitmapimage = new BitmapImage();
-                    bitmapimage.BeginInit();
-                    bitmapimage.StreamSource = memory;
-                    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapimage.EndInit();
-
-                    return bitmapimage;
-                }
-            }
-            catch (Exception e)
-            {
-                Common.LogError(e, "Failed to convert bitmap to bitmapimage.");
-            }
-            return null;
-        }
-
-
+        
         public static EnumComparator ComparatorValue(string text)
         {
             if (text == "NotSet")
