@@ -40,7 +40,7 @@ namespace NonVisuals.StreamDeck
         protected override void Show()
         {
             DrawBitmap();
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).StreamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
+            StreamDeckPanel.GetInstance(PanelHash).StreamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
         }
 
 

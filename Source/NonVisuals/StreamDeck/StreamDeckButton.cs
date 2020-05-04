@@ -17,7 +17,7 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonAction _buttonActionForRelease = null;
         [NonSerialized] private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         [NonSerialized] private Thread _keyPressedThread;
-        private string _streamDeckInstanceId;
+        private string _panelHash;
         private bool _isVisible = false;
         
         [NonSerialized] private static List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
@@ -29,10 +29,10 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, string streamDeckInstanceId)
+        public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, string panelHash)
         {
             _streamDeckButtonName = enumStreamDeckButton;
-            _streamDeckInstanceId = streamDeckInstanceId;
+            _panelHash = _panelHash;
             _streamDeckButtons.Add(this);
         }
 
@@ -88,7 +88,7 @@ namespace NonVisuals.StreamDeck
 
         public void ClearFace()
         {
-            StreamDeckPanel.GetInstance(_streamDeckInstanceId).ClearFace(_streamDeckButtonName);
+            StreamDeckPanel.GetInstance(_panelHash).ClearFace(_streamDeckButtonName);
         }
 
         private void ThreadedPress(CancellationToken threadCancellationToken)
@@ -278,9 +278,21 @@ namespace NonVisuals.StreamDeck
         }
        
         //fugly
-        public void SetStreamDeckInstanceId(string instanceId)
+        public void SetStreamDeckPanelHash(string panelHash)
         {
-            _streamDeckInstanceId = instanceId;
+            _panelHash = panelHash;
+            if (_buttonFace != null)
+            {
+                _buttonFace.PanelHash = _panelHash;
+            }
+            if (_buttonActionForPress != null)
+            {
+                _buttonActionForPress.PanelHash = _panelHash;
+            }
+            if (_buttonActionForRelease != null)
+            {
+                _buttonActionForRelease.PanelHash = _panelHash;
+            }
         }
 
         public int GetHash()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -11,7 +12,7 @@ namespace NonVisuals.StreamDeck
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
         public bool IsRepeatable() => true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private string _streamDeckInstanceId;
+        private string _panelHash;
 
 
 
@@ -49,11 +50,12 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckButtonName;
             set => _streamDeckButtonName = value;
         }
-        
-        public string StreamDeckInstanceId
+
+        [JsonIgnore]
+        public string PanelHash
         {
-            get => _streamDeckInstanceId;
-            set => _streamDeckInstanceId = value;
+            get => _panelHash;
+            set => _panelHash = value;
         }
     }
 }

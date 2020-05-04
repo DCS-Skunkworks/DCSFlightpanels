@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Security.Cryptography;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
@@ -47,7 +49,7 @@ namespace NonVisuals
 
         protected abstract void StartListeningForPanelChanges();
 
-
+        private string _hashedInstanceId = "";
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
@@ -134,6 +136,25 @@ namespace NonVisuals
         {
             get => HIDSkeletonBase.InstanceId;
             set => HIDSkeletonBase.InstanceId = value;
+        }
+
+        public string PanelHash
+        {
+            get
+            {
+                
+                if (string.IsNullOrWhiteSpace(_hashedInstanceId))
+                {
+                    var array = InstanceId.ToCharArray();
+                    uint hash = 0xFFFF;
+                    foreach (var c in array)
+                    {
+                        hash = (hash * 397) ^ c;
+                    }
+                    _hashedInstanceId = hash.ToString("X");
+                }
+                return _hashedInstanceId;
+            }
         }
 
         public string Hash => _hash;

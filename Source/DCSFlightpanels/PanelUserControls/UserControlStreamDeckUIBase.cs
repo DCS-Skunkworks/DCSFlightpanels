@@ -22,7 +22,7 @@ namespace DCSFlightpanels.PanelUserControls
         protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
         protected bool UserControlLoaded;
         protected StreamDeckButton StreamDeckButtonInstance;
-        public string StreamDeckInstanceId;
+        public string PanelHash;
 
         private string _lastShownLayer = "";
 
@@ -80,7 +80,7 @@ namespace DCSFlightpanels.PanelUserControls
                 /*
                  * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
                  */
-                if (newlySelectedImage.Bill.Button != StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedButton && EventHandlers.AreThereDirtyListeners(this))
+                if (newlySelectedImage.Bill.Button != StreamDeckPanel.GetInstance(PanelHash).SelectedButton && EventHandlers.AreThereDirtyListeners(this))
                 {
                     if (CommonUI.DoDiscardAfterMessage(true, "Discard Changes to " + SelectedButtonName + " ?"))
                     {
@@ -241,7 +241,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                var selectedStreamDeckButton = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+                var selectedStreamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
                 menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
 
                 var iDataObject = Clipboard.GetDataObject();
@@ -278,7 +278,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        protected StreamDeckPanel StreamDeckPanelInstance => StreamDeckPanel.GetInstance(StreamDeckInstanceId);
+        protected StreamDeckPanel StreamDeckPanelInstance => StreamDeckPanel.GetInstance(PanelHash);
 
         protected void ShowGraphicConfiguration()
         {
@@ -354,14 +354,14 @@ namespace DCSFlightpanels.PanelUserControls
                 buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
                 buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
                 buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
-                buttonImage.Bill.StreamDeckInstanceId = StreamDeckInstanceId;
+                buttonImage.Bill.PanelHash = PanelHash;
                 buttonImage.Source = buttonImage.Bill.DeselectedImage;
             }
         }
 
         protected void Copy()
         {
-            var streamDeckButton = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+            var streamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (streamDeckButton != null)
             {
                 Clipboard.SetDataObject(streamDeckButton);
@@ -378,7 +378,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             var result = false;
             var newStreamDeckButton = (StreamDeckButton)iDataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
-            var oldStreamDeckButton = StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+            var oldStreamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
                 MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
@@ -391,7 +391,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             if (result)
             {
-                StreamDeckPanel.GetInstance(StreamDeckInstanceId).SelectedLayer.AddButton(oldStreamDeckButton);
+                StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.AddButton(oldStreamDeckButton);
                 UpdateButtonInfoFromSource();
                 SetIsDirty();
             }
@@ -500,7 +500,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.StreamDeckInstanceId != StreamDeckInstanceId || e.Bitmap == null)
+                if (e.PanelHash != PanelHash || e.Bitmap == null)
                 {
                     return;
                 }

@@ -164,7 +164,7 @@ namespace NonVisuals.StreamDeck.Events
             var eventArgs = new StreamDeckHideDecoderEventArgs();
             eventArgs.StreamDeckButtonName = dcsbiosDecoder.StreamDeckButtonName;
             eventArgs.LayerName = layerName;
-            eventArgs.StreamDeckInstanceId = dcsbiosDecoder.StreamDeckInstanceId;
+            eventArgs.PanelHash = dcsbiosDecoder.PanelHash;
             OnStreamDeckHideDecodersEventHandler?.Invoke(dcsbiosDecoder, eventArgs);
         }
 
@@ -184,11 +184,11 @@ namespace NonVisuals.StreamDeck.Events
             OnStreamDeckOledImageChangeEventHandler -= oledImageListener.OledImageChanged;
         }
 
-        public static void NotifyOledImageChange(object sender, string streamDeckInstanceId, EnumStreamDeckButtonNames streamDeckButtonName, System.Drawing.Bitmap bitMap)
+        public static void NotifyOledImageChange(object sender, string panelHash, EnumStreamDeckButtonNames streamDeckButtonName, System.Drawing.Bitmap bitMap)
         {
             var eventArgs = new StreamDeckOledImageChangeEventArgs();
             eventArgs.StreamDeckButtonName = streamDeckButtonName;
-            eventArgs.StreamDeckInstanceId = streamDeckInstanceId;
+            eventArgs.PanelHash = panelHash;
             eventArgs.Bitmap = bitMap;
             OnStreamDeckOledImageChangeEventHandler?.Invoke(sender, eventArgs);
         }*/

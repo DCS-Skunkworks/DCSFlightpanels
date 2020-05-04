@@ -33,7 +33,7 @@ namespace DCSFlightpanels.Windows
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty
     {
-        private string _streamDeckInstanceId;
+        private string _panelHash;
         private bool _formLoaded;
         private Popup _popupSearch;
         private DataGrid _popupDataGrid;
@@ -54,28 +54,28 @@ namespace DCSFlightpanels.Windows
 
 
 
-        public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, string streamDeckInstanceId)
+        public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, string panelHash)
         {
             InitializeComponent();
             _dcsbiosDecoder = dcsbiosDecoder;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _streamDeckInstanceId = streamDeckInstanceId;
+            _panelHash = panelHash;
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }
 
-        public StreamDeckDCSBIOSDecoderWindow(string streamDeckInstanceId)
+        public StreamDeckDCSBIOSDecoderWindow(string panelHash)
         {
             InitializeComponent();
             _dcsbiosDecoder = new DCSBIOSDecoder();
             _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
-            _dcsbiosDecoder.StreamDeckInstanceId = streamDeckInstanceId;
+            _dcsbiosDecoder.PanelHash = panelHash;
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _dcsbiosDecoder.StreamDeckButtonName = StreamDeckPanel.GetInstance(streamDeckInstanceId).SelectedButtonName;
-            _streamDeckInstanceId = streamDeckInstanceId;
+            _dcsbiosDecoder.StreamDeckButtonName = StreamDeckPanel.GetInstance(panelHash).SelectedButtonName;
+            _panelHash = panelHash;
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }
@@ -166,7 +166,7 @@ namespace DCSFlightpanels.Windows
 
             SetInfoTextBoxes();
 
-            DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _streamDeckInstanceId);
+            DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _panelHash);
             if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 RadioButtonIntegerSource.IsChecked = true;
@@ -544,7 +544,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _streamDeckInstanceId);
+                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _panelHash);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
@@ -570,7 +570,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
                 var converter = (DCSBIOSConverter)DataGridConverters.SelectedItems[0];
-                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _streamDeckInstanceId, converter);
+                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _panelHash, converter);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {

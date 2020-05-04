@@ -59,7 +59,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case GamingPanelEnum.StreamDeck:
                     {
                         var child = new UserControlStreamDeckUINormal();
-                        child.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
+                        child.PanelHash = _streamDeckPanel.PanelHash;
                         _uiButtonGrid = child;
                         StackPanelButtonUI.Children.Add(child);
 
@@ -68,7 +68,7 @@ namespace DCSFlightpanels.PanelUserControls
                 case GamingPanelEnum.StreamDeckXL:
                     {
                         var child = new UserControlStreamDeckUIXL();
-                        child.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
+                        child.PanelHash = _streamDeckPanel.PanelHash;
                         _uiButtonGrid = child;
                         StackPanelButtonUI.Children.Add(child);
                         break;
@@ -84,8 +84,8 @@ namespace DCSFlightpanels.PanelUserControls
             UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
             UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
 
-            UCStreamDeckButtonFace.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
-            UCStreamDeckButtonAction.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
+            UCStreamDeckButtonFace.PanelHash = _streamDeckPanel.PanelHash;
+            UCStreamDeckButtonAction.PanelHash = _streamDeckPanel.PanelHash;
 
         }
 
@@ -154,7 +154,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.StreamDeck && e.UniqueId.Equals(_streamDeckPanel.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.StreamDeck && e.UniqueId.Equals(_streamDeckPanel.PanelHash))
                 {
                     NotifyButtonChanges(e.Switches);
                 }
@@ -222,7 +222,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                /*if (e.UniqueId.Equals(_streamDeck.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.StreamDeckMultiPanel)
+                /*if (e.UniqueId.Equals(_streamDeck.PanelHash) && e.GamingPanelEnum == GamingPanelEnum.StreamDeckMultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck.Text = ""));
@@ -245,8 +245,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_streamDeckPanel != null)
                 {
                     TextBoxLogStreamDeck.Text = "";
-                    TextBoxLogStreamDeck.Text = _streamDeckPanel.InstanceId;
-                    Clipboard.SetText(_streamDeckPanel.InstanceId);
+                    TextBoxLogStreamDeck.Text = _streamDeckPanel.PanelHash;
+                    Clipboard.SetText(_streamDeckPanel.PanelHash);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }
@@ -332,7 +332,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var layerWindow = new StreamDeckLayerWindow(_streamDeckPanel.LayerList, _streamDeckPanel.InstanceId);
+                var layerWindow = new StreamDeckLayerWindow(_streamDeckPanel.LayerList, _streamDeckPanel.PanelHash);
                 layerWindow.ShowDialog();
                 if (layerWindow.DialogResult == true)
                 {

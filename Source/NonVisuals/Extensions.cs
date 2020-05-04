@@ -11,11 +11,11 @@ namespace NonVisuals
     public static class Extensions
     {
 
-        public static void SetInstanceId(this List<StreamDeckLayer> list, string instanceId)
+        public static void SetPanelHash(this List<StreamDeckLayer> list, string panelHash)
         {
             foreach (var streamDeckLayer in list)
             {
-                streamDeckLayer.StreamDeckInstanceId = instanceId;
+                streamDeckLayer.PanelHash = panelHash;
             }
         }
 

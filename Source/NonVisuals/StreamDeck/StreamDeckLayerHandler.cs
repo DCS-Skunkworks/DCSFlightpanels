@@ -69,7 +69,7 @@ namespace NonVisuals.StreamDeck
             
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
 
-            _layerList.SetInstanceId(_streamDeckPanel.InstanceId);
+            _layerList.SetPanelHash(_streamDeckPanel.PanelHash);
             _jsonImported = true;
             CheckHomeLayerExists();
         }
@@ -90,7 +90,7 @@ namespace NonVisuals.StreamDeck
             if (!found)
             {
                 var streamDeckLayer = new StreamDeckLayer();
-                streamDeckLayer.StreamDeckInstanceId = _streamDeckPanel.InstanceId;
+                streamDeckLayer.PanelHash = _streamDeckPanel.PanelHash;
                 streamDeckLayer.Name = StreamDeckConstants.HOME_LAYER_NAME;
                 _layerList.Insert(0, streamDeckLayer);
             }
@@ -399,7 +399,7 @@ namespace NonVisuals.StreamDeck
                 throw new Exception("Button " + buttonName + " cannot be found in layer " + layerName + ".");
             }
 
-            var button = new StreamDeckButton(buttonName, _streamDeckPanel.InstanceId);
+            var button = new StreamDeckButton(buttonName, _streamDeckPanel.PanelHash);
             GetLayer(layerName).AddButton(button);
             return button;
         }

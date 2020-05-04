@@ -17,9 +17,9 @@ namespace DCSFlightpanels.Windows
         private bool _loaded = false;
         private const int MINIMUM_LENGTH = 3;
         private StreamDeckLayer _newLayer = null;
-        private string _streamDeckInstanceId;
+        private string _panelHash;
 
-        public StreamDeckLayerWindow(List<StreamDeckLayer> existingLayers, string streamDeckInstanceId)
+        public StreamDeckLayerWindow(List<StreamDeckLayer> existingLayers, string panelHash)
         {
             InitializeComponent();
             if (existingLayers != null)
@@ -27,7 +27,7 @@ namespace DCSFlightpanels.Windows
                 _existingLayers = existingLayers;
             }
 
-            _streamDeckInstanceId = streamDeckInstanceId;
+            _panelHash = panelHash;
         }
 
         private void StreamDeckLayerWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -114,7 +114,7 @@ namespace DCSFlightpanels.Windows
             }
 
             _newLayer = new StreamDeckLayer();
-            _newLayer.StreamDeckInstanceId = _streamDeckInstanceId;
+            _newLayer.PanelHash = _panelHash;
             _newLayer.Name = TextBoxLayerName.Text;
             DialogResult = true;
             Close();

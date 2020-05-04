@@ -61,14 +61,14 @@ namespace NonVisuals.StreamDeck.Events
 
     public class StreamDeckHideDecoderEventArgs : EventArgs
     {
-        public string StreamDeckInstanceId;
+        public string PanelHash;
         public string LayerName;
         public EnumStreamDeckButtonNames StreamDeckButtonName;
     }
 
     /*public class StreamDeckOledImageChangeEventArgs : EventArgs
     {
-        public string StreamDeckInstanceId;
+        public string PanelHash;
         public EnumStreamDeckButtonNames StreamDeckButtonName;
         public Bitmap Bitmap;
     }*/

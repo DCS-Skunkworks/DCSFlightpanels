@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
@@ -20,7 +21,7 @@ namespace NonVisuals.StreamDeck
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         public LayerNavType NavigationType;
         public string TargetLayer;
-        private string _streamDeckInstanceId;
+        private string _panelHash;
 
 
         public int GetHash()
@@ -59,27 +60,27 @@ namespace NonVisuals.StreamDeck
             {
                 case LayerNavType.Home:
                 {
-                    StreamDeckPanel.GetInstance(_streamDeckInstanceId).ShowHomeLayer();
+                    StreamDeckPanel.GetInstance(_panelHash).ShowHomeLayer();
                     break;
                 }
                 case LayerNavType.Back:
                 {
-                    StreamDeckPanel.GetInstance(_streamDeckInstanceId).ShowPreviousLayer();
+                    StreamDeckPanel.GetInstance(_panelHash).ShowPreviousLayer();
                     break;
                 }
                 case LayerNavType.SwitchToSpecificLayer:
                 {
-                    StreamDeckPanel.GetInstance(_streamDeckInstanceId).SelectedLayerName = TargetLayer;
+                    StreamDeckPanel.GetInstance(_panelHash).SelectedLayerName = TargetLayer;
                     break;
                 }
             }
         }
 
-        
-        public string StreamDeckInstanceId
+        [JsonIgnore]
+        public string PanelHash
         {
-            get => _streamDeckInstanceId;
-            set => _streamDeckInstanceId = value;
+            get => _panelHash;
+            set => _panelHash = value;
         }
     }
 }

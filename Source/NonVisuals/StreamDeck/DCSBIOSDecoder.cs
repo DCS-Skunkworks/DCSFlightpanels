@@ -62,15 +62,15 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, string streamDeckInstanceId)
+        public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, string panelHash)
         {
-            EventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, StreamDeckPanel.GetInstance(streamDeckInstanceId).SelectedLayerName);
+            EventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, StreamDeckPanel.GetInstance(panelHash).SelectedLayerName);
             dcsbiosDecoder.IsVisible = true;
         }
 
         public void HideAllEvent(object sender, StreamDeckHideDecoderEventArgs e)
         {
-            if (StreamDeckInstanceId == e.StreamDeckInstanceId && StreamDeckButtonName == e.StreamDeckButtonName)
+            if (PanelHash == e.PanelHash && StreamDeckButtonName == e.StreamDeckButtonName)
             {
                 IsVisible = false;
             }
@@ -130,7 +130,7 @@ namespace NonVisuals.StreamDeck
                 {
                     if (!Equals(UintDcsBiosValue, e.Data))
                     {
-                        UintDcsBiosValue = e.Data;
+                        UintDcsBiosValue = _dcsbiosOutput.GetUIntValue(e.Data);
                         _valueUpdated = true;
                     }
                 }
@@ -294,17 +294,17 @@ namespace NonVisuals.StreamDeck
 
         private void BlackoutKey()
         {
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).ClearFace(StreamDeckButtonName);
+            StreamDeckPanel.GetInstance(PanelHash).ClearFace(StreamDeckButtonName);
         }
 
         private void ShowBitmap(Bitmap bitmap)
         {
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, bitmap);
+            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, bitmap);
         }
 
         private void ShowBitmapImage(BitmapImage bitmapImage)
         {
-            StreamDeckPanel.GetInstance(StreamDeckInstanceId).SetImage(StreamDeckButtonName, bitmapImage);
+            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, bitmapImage);
         }
 
         public void RemoveDCSBIOSOutput()

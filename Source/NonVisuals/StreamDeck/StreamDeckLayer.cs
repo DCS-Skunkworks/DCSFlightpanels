@@ -16,7 +16,7 @@ namespace NonVisuals.StreamDeck
         private Color _fontColor;
         private Color _backgroundColor;
         private bool _isVisible = false;
-        private string _streamDeckInstanceId = "";
+        private string _panelHash = "";
 
 
 
@@ -191,7 +191,7 @@ namespace NonVisuals.StreamDeck
                     return streamDeckButton;
                 }
             }
-            return new StreamDeckButton(streamDeckButtonName, _streamDeckInstanceId);
+            return new StreamDeckButton(streamDeckButtonName, _panelHash);
         }
 
         public bool ContainStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
@@ -234,15 +234,16 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public string StreamDeckInstanceId
+        [JsonIgnore]
+        public string PanelHash
         {
-            get => _streamDeckInstanceId;
+            get => _panelHash;
             set
             {
-                _streamDeckInstanceId = value;
+                _panelHash = value;
                 foreach (var streamDeckButton in StreamDeckButtons)
                 {
-                    streamDeckButton.SetStreamDeckInstanceId(_streamDeckInstanceId);
+                    streamDeckButton.SetStreamDeckPanelHash(_panelHash);
                 }
             }
         }

@@ -66,11 +66,11 @@ namespace NonVisuals.StreamDeck
             StreamDeckPanels.Remove(this);
         }
 
-        public static StreamDeckPanel GetInstance(string instanceId)
+        public static StreamDeckPanel GetInstance(string panelHash)
         {
             foreach (var streamDeckPanel in StreamDeckPanels)
             {
-                if (streamDeckPanel.InstanceId == instanceId)
+                if (streamDeckPanel.PanelHash == panelHash)
                 {
                     return streamDeckPanel;
                 }
@@ -159,7 +159,7 @@ namespace NonVisuals.StreamDeck
             
             lock (_updateStreamDeckOledLockObject)
             {
-                //EventHandlers.NotifyOledImageChange(this, InstanceId, streamDeckButtonName, bitmap);
+                //EventHandlers.NotifyOledImageChange(this, PanelHash, streamDeckButtonName, bitmap);
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }
@@ -173,7 +173,7 @@ namespace NonVisuals.StreamDeck
             var keyBitmap = KeyBitmap.Create.FromBitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage));
             lock (_updateStreamDeckOledLockObject)
             {
-                //EventHandlers.NotifyOledImageChange(this, InstanceId, streamDeckButtonName, BitMapCreator.BitmapImage2Bitmap(bitmapImage));
+                //EventHandlers.NotifyOledImageChange(this, PanelHash, streamDeckButtonName, BitMapCreator.BitmapImage2Bitmap(bitmapImage));
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }
