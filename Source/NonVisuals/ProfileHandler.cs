@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -8,6 +9,7 @@ using DCS_BIOS;
 using HidLibrary;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using Theraot.Core;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
@@ -172,6 +174,7 @@ namespace NonVisuals
                  * 
                  */
                 _profileLoaded = true;
+                Debug.WriteLine("ProfileHandler reading file ".Append(_filename));
                 var fileLines = File.ReadAllLines(_filename);
                 var currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;

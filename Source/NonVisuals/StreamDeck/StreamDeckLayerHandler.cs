@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
@@ -21,10 +22,12 @@ namespace NonVisuals.StreamDeck
 
         private bool _jsonImported = false;
 
-
+        private static int _instanceIdCounter = 0;
+        private int _instanceId = 0;
 
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
+            _instanceId = _instanceIdCounter++;
             _streamDeckPanel = streamDeckPanel;
             _streamDeckBoard = streamDeckPanel.StreamDeckBoard;
         }
@@ -256,6 +259,22 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public string GetConfigurationInformation()
+        {
+            var stringBuilder = new StringBuilder(500);
+            stringBuilder.Append("\n");
+
+            stringBuilder.Append("Layer count : " + _layerList.Count + ", button count = " + StreamDeckButton.GetButtons().Count + "\n");
+            stringBuilder.Append("Existing layers:\n");
+            foreach (var streamDeckLayer in _layerList)
+            {
+                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.StreamDeckButtons.Count + ")\n");
+            }
+            stringBuilder.Append("\n");
+
+            return stringBuilder.ToString();
+        }
+
         public void ShowPreviousLayer()
         {
             if (_layerHistory.Count > 0)
@@ -400,7 +419,20 @@ namespace NonVisuals.StreamDeck
             }
 
             var button = new StreamDeckButton(buttonName, _streamDeckPanel.PanelHash);
-            GetLayer(layerName).AddButton(button);
+
+            /*
+             * Silently means there won't be any event of type "New Button added". This is an empty button
+             * and unless it receives settings later it will just be here to serve the machinery instead of
+             * having to do with streamdeck buttons being null.
+             *
+             * The reason, Layer A has layer navigation on button 15 => Layer B.
+             * Layer B has nothing configured for button 15.
+             * When user presses button (button still pressed) a switch to Layer B occurs.
+             * When user releases the button Stream Deck Sharp reports an release event,
+             * DCSFP then retrieves the streamdeck button for 15 but none exists, it is then
+             * we end up here on the next line.
+             */
+            GetLayer(layerName).AddButton(button, true);
             return button;
         }
 
@@ -415,5 +447,8 @@ namespace NonVisuals.StreamDeck
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
         }
 
+        public static int InstanceIdCounter => _instanceIdCounter;
+
+        public int InstanceId => _instanceId;
     }
 }

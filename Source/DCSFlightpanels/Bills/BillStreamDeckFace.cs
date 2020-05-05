@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using HidLibrary;
 using NonVisuals;
 using NonVisuals.StreamDeck;
 using Brushes = System.Windows.Media.Brushes;

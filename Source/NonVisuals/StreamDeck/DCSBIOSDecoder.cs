@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Threading;
@@ -13,7 +14,7 @@ using ThreadState = System.Threading.ThreadState;
 namespace NonVisuals.StreamDeck
 {
     [Serializable]
-    public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener
+    public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable
     {
         private DCSBIOSOutput _dcsbiosOutput = null;
         private string _formula = "";
@@ -34,32 +35,42 @@ namespace NonVisuals.StreamDeck
 
 
 
-        
+
         public DCSBIOSDecoder()
         {
-            DCSBIOS.GetInstance().AttachDataReceivedListener(this);
             _jaceId = RandomFactory.Get();
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();
+            DCSBIOS.GetInstance().AttachDataReceivedListener(this);
             EventHandlers.AttachDCSBIOSDecoder(this);
         }
 
-        ~DCSBIOSDecoder()
+
+        public override void Dispose()
         {
             EventHandlers.DetachDCSBIOSDecoder(this);
-            Destroy();
             DCSBIOSStringManager.DetachListener(this);
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
-        }
-
-        public override void Destroy()
-        {
-            IsVisible = false;
             _shutdown = true;
-            if (_imageUpdateTread != null && _imageUpdateTread.ThreadState == (ThreadState.Suspended | ThreadState.WaitSleepJoin))
+            try
             {
-                _autoResetEvent?.Set();
+                _autoResetEvent.Set();
             }
+            catch (Exception e)
+            {
+                Debugger.Break();
+            }
+            try
+            {
+                if (_imageUpdateTread != null && (_imageUpdateTread.ThreadState & (ThreadState.Aborted | ThreadState.AbortRequested)) == 0)
+                {
+                    _imageUpdateTread.Abort();
+                }
+            }
+            catch (Exception)
+            {}
+
+            base.Dispose();
         }
 
         public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, string panelHash)
@@ -86,7 +97,7 @@ namespace NonVisuals.StreamDeck
                 {
                     _imageUpdateTread.Abort();
                 }
-                catch (Exception ) { }
+                catch (Exception) { }
             }
             _imageUpdateTread = new Thread(ImageRefreshingThread);
             _imageUpdateTread.Start();

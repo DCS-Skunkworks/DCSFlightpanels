@@ -6,7 +6,6 @@ using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -618,10 +617,10 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (streamDeckDCSBIOSDecoderWindow.DialogResult == true)
                 {
-                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder?.Destroy();
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder?.Dispose();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.DeepClone();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
-                    streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.Destroy();
+                    streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.Dispose();
                     SetIsDirty();
 
                 }
@@ -744,7 +743,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                     {
-                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.Destroy();
+                        TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.Dispose();
                         TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = null;
                     }
                     Clear();

@@ -21,7 +21,6 @@ namespace DCSFlightpanels.PanelUserControls
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
         protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
         protected bool UserControlLoaded;
-        protected StreamDeckButton StreamDeckButtonInstance;
         public string PanelHash;
 
         private string _lastShownLayer = "";
@@ -46,7 +45,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 var image = (StreamDeckImage)sender;
 
-                SetSelectedButtonLocally(image.Bill.StreamDeckButtonName);
+                SetSelectedButtonUIOnly(image.Bill.StreamDeckButtonName);
 
                 if (image.IsSelected)
                 {
@@ -58,6 +57,7 @@ namespace DCSFlightpanels.PanelUserControls
                     StreamDeckPanelInstance.SelectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
                 }
 
+                //MessageBox.Show(StreamDeckPanelInstance.GetLayerHandlerInformation() + "\n" + StreamDeckPanelInstance.GetConfigurationInformation());
                 SetFormState();
             }
             catch (Exception ex)
@@ -106,7 +106,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 UpdateButtonInfoFromSource();
 
-                SetSelectedButtonLocally(selectedButton);
+                SetSelectedButtonUIOnly(selectedButton);
                 SetFormState();
             }
             catch (Exception ex)
@@ -138,7 +138,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetSelectedButtonLocally(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
+                SetSelectedButtonUIOnly(EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON);
             }
             catch (Exception ex)
             {
@@ -292,7 +292,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        protected void SetSelectedButtonLocally(EnumStreamDeckButtonNames selectedButtonName)
+        protected void SetSelectedButtonUIOnly(EnumStreamDeckButtonNames selectedButtonName)
         {
             foreach (var buttonImage in ButtonImages)
             {
@@ -418,9 +418,12 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                /*
+                 * Only do it when it is a different button selected. Should make more comments...
+                 */
                 if (SelectedImageBill == null || SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash())
                 {
-                    SetSelectedButtonLocally(e.SelectedButton.StreamDeckButtonName);
+                    SetSelectedButtonUIOnly(e.SelectedButton.StreamDeckButtonName);
                 }
             }
             catch (Exception ex)

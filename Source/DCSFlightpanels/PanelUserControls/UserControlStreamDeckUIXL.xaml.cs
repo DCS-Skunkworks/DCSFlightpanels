@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-using ClassLibraryCommon;
-using NonVisuals.StreamDeck;
+﻿using System.Windows;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -10,7 +7,6 @@ namespace DCSFlightpanels.PanelUserControls
     /// </summary>
     public partial class UserControlStreamDeckUIXL : UserControlStreamDeckUIBase
     {
-
         public UserControlStreamDeckUIXL():base()
         {
             InitializeComponent();
@@ -32,17 +28,6 @@ namespace DCSFlightpanels.PanelUserControls
         protected override int ButtonAmount()
         {
             return 32;
-        }
-
-        protected override void SetFormState()
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
         }
 
         private void FillControlLists()

@@ -282,19 +282,19 @@ namespace DCSFlightpanels
                 {
                     do
                     {
-                        var item = (TabItem)TabControlPanels.Items.GetItemAt(0);
-                        TabControlPanels.Items.Remove(item);
-                        var gamingPanelUserControl = ((IGamingPanelUserControl)item.Content);
+                        var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(0);
+                        var userControl = (UserControlBase) tabItem.Content;
+                        TabControlPanels.Items.Remove(tabItem);
+                        var gamingPanelUserControl = ((IGamingPanelUserControl)tabItem.Content);
                         var gamingPanel = gamingPanelUserControl.GetGamingPanel();
+
                         if (gamingPanel != null)
                         {
-                            _profileHandler.Detach(gamingPanel);
-                            gamingPanel.Detach(_profileHandler);
-                            gamingPanel.Detach((IProfileHandlerListener)this);
-                            _dcsBios?.DetachDataReceivedListener(gamingPanel);
+                            Detach(gamingPanel);
 
                             gamingPanel.Shutdown();
-                            _panelUserControls.Remove((UserControl)item.Content);
+                            userControl.Dispose();
+                            _panelUserControls.Remove(userControl);
                             closedItemCount++;
                         }
                     } while (TabControlPanels.Items.Count > 0);
@@ -338,6 +338,7 @@ namespace DCSFlightpanels
             _profileHandler.Detach(gamingPanel);
             gamingPanel.Detach(_profileHandler);
             gamingPanel.Detach((IProfileHandlerListener)this);
+            _dcsBios?.DetachDataReceivedListener(gamingPanel);
         }
 
         public DCSAirframe GetAirframe()
@@ -1179,6 +1180,7 @@ namespace DCSFlightpanels
                 try
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
+                    CloseProfile();
                     _profileHandler.OpenProfile();
                 }
                 finally
@@ -1253,6 +1255,7 @@ namespace DCSFlightpanels
         {
             try
             {
+                CloseProfile();
                 _profileHandler.OpenProfile();
             }
             catch (Exception ex)

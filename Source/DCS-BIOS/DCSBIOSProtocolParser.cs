@@ -45,7 +45,7 @@ namespace DCS_BIOS
         private static object _lockListOfAddressesToBroascastObject = new object();
         private readonly List<uint> _listOfAddressesToBroascast = new List<uint>();
         public static DCSBIOSProtocolParser DCSBIOSProtocolParserSO;
-        private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
 
         //private object _lockArrayToProcess = new object();
@@ -60,19 +60,15 @@ namespace DCS_BIOS
             DCSBIOSProtocolParserSO = this;
             _shutdown = false;
         }
-
-        ~DCSBIOSProtocolParser()
-        {
-            // Finalizer calls Dispose(false)  
-            Dispose(false);
-        }
-
+        
         protected virtual void Dispose(bool disposing)
         {
+            _shutdown = true;
             if (disposing)
             {
                 // dispose managed resources
                 _autoResetEvent?.Dispose();
+                _autoResetEvent = null;
             }
             // free native resources
         }
@@ -82,10 +78,10 @@ namespace DCS_BIOS
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
+        
         public void Startup()
         {
-            _processingThread = new Thread(ProcessArrays);
+            _processingThread = new Thread(ThreadedProcessArrays);
             _processingThread.Start();
             _shutdown = false;
         }
@@ -93,17 +89,10 @@ namespace DCS_BIOS
         public void Shutdown()
         {
             _shutdown = true;
-            try
-            {
-                _processingThread.Abort();
-            }
-            catch (Exception)
-            {
-            }
             _autoResetEvent.Set();
         }
 
-        private void ProcessArrays()
+        private void ThreadedProcessArrays()
         {
             try
             {
@@ -117,8 +106,7 @@ namespace DCS_BIOS
                             //Debug.Print("_arraysToProcess.Count = " + _arraysToProcess.Count);
                             interval = 0;
                         }
-                        //lock (_lockArrayToProcess)
-                        //{
+                        
                         byte[] array = null;
                         while (_arraysToProcess.TryDequeue(out array))
                         {
@@ -130,14 +118,14 @@ namespace DCS_BIOS
                                 }
                             }
                         }
-                        //}
+                        
                         interval++;
                     }
                     catch (Exception e)
                     {
                         Common.LogError( e, "DCSBIOSProtocolParser.ProcessArrays(), arrays to process : " + _arraysToProcess.Count);
                     }
-                    _autoResetEvent.WaitOne();
+                    _autoResetEvent?.WaitOne();
                 }
             }
             catch (ThreadAbortException) { }

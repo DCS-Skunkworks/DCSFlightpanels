@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Security.Cryptography;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
@@ -142,16 +141,9 @@ namespace NonVisuals
         {
             get
             {
-                
                 if (string.IsNullOrWhiteSpace(_hashedInstanceId))
                 {
-                    var array = InstanceId.ToCharArray();
-                    uint hash = 0xFFFF;
-                    foreach (var c in array)
-                    {
-                        hash = (hash * 397) ^ c;
-                    }
-                    _hashedInstanceId = hash.ToString("X");
+                    _hashedInstanceId = ((uint)InstanceId.GetHashCode()).ToString(CultureInfo.InvariantCulture);
                 }
                 return _hashedInstanceId;
             }

@@ -40,7 +40,7 @@ namespace NonVisuals.StreamDeck
 
             return (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + streamDeckButtonNumber);
         }
-        
+
         public static EnumComparator ComparatorValue(string text)
         {
             if (text == "NotSet")

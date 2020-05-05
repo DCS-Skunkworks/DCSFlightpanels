@@ -13,6 +13,7 @@ using NonVisuals.Saitek;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
+using Theraot.Core;
 
 namespace NonVisuals.StreamDeck
 {
@@ -66,6 +67,8 @@ namespace NonVisuals.StreamDeck
             StreamDeckPanels.Remove(this);
         }
 
+
+
         public static StreamDeckPanel GetInstance(string panelHash)
         {
             foreach (var streamDeckPanel in StreamDeckPanels)
@@ -95,6 +98,7 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                StreamDeckButton.DisposeAll();
                 Closed = true;
             }
             catch (Exception e)
@@ -253,11 +257,6 @@ namespace NonVisuals.StreamDeck
 
         public override void ClearSettings()
         {
-            /*_keyBindings.Clear();
-            _osCommandBindings.Clear();
-            _dcsBiosBindings.Clear();
-            _dcsBiosLcdBindings.Clear();
-            _bipLinks.Clear();*/
             _streamDeckLayerHandler.ClearSettings();
         }
 
@@ -342,6 +341,16 @@ namespace NonVisuals.StreamDeck
         public List<string> GetStreamDeckLayerNames()
         {
             return _streamDeckLayerHandler.GetStreamDeckLayerNames();
+        }
+
+        public string GetConfigurationInformation()
+        {
+            return _streamDeckLayerHandler.GetConfigurationInformation();
+        }
+
+        public string GetLayerHandlerInformation()
+        {
+            return "StreamDeckLayerHandler Instance ID = ".Append(_streamDeckLayerHandler.InstanceId.ToString()).Append(" Counter = ").Append(StreamDeckLayerHandler.InstanceIdCounter.ToString());
         }
 
         public StreamDeckButton GetStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName, string layerName)

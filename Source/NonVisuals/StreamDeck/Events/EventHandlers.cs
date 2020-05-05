@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using NonVisuals.Interfaces;
+﻿using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck.Events
 {

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
+using DCSFlightpanels.PanelUserControls;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -15,7 +16,7 @@ namespace DCSFlightpanels.Radios
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlNotImplemented.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlNotImplemented : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class RadioPanelPZ69UserControlNotImplemented : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         public RadioPanelPZ69UserControlNotImplemented(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {

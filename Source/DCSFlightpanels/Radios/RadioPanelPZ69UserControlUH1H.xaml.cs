@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using DCSFlightpanels.PanelUserControls;
 using NonVisuals;
 using DCSFlightpanels.Properties;
 using NonVisuals.Interfaces;
@@ -16,7 +17,7 @@ namespace DCSFlightpanels.Radios
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlUH1H.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlUH1H : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class RadioPanelPZ69UserControlUH1H : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69UH1H _radioPanelPZ69;
         private readonly TabItem _parentTabItem;

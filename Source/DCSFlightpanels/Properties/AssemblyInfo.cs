@@ -52,5 +52,5 @@ using System.Windows;
 
 
 
-[assembly: AssemblyVersion("4.0.39.5325")]
-[assembly: AssemblyFileVersion("4.0.39.5325")]
+[assembly: AssemblyVersion("4.0.40.8067")]
+[assembly: AssemblyFileVersion("4.0.40.8067")]

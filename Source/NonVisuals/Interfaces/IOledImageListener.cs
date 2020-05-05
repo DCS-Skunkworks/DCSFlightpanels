@@ -1,6 +1,4 @@
-﻿using NonVisuals.StreamDeck.Events;
-
-namespace NonVisuals.Interfaces
+﻿namespace NonVisuals.Interfaces
 {
     public interface IOledImageListener
     {

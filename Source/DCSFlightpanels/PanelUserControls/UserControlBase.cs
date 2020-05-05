@@ -6,8 +6,10 @@ using DCSFlightpanels.Windows;
 
 namespace DCSFlightpanels.PanelUserControls
 {
-    public class UserControlBase : UserControl
+    public class UserControlBase : UserControl, IDisposable
     {
+
+        public virtual void Dispose(){}
 
         internal void CheckContextMenuItems(KeyPressLength keyPressLength, ContextMenu contextMenu)
         {

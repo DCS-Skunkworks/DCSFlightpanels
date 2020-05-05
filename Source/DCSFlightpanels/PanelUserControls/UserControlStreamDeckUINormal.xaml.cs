@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using ClassLibraryCommon;
+﻿using System.Windows;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -31,18 +29,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             return 15;
         }
-
-        protected override void SetFormState()
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
 
         private void FillControlLists()
         {

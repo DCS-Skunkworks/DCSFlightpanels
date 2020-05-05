@@ -20,7 +20,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class UserControlStreamDeck : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckListener
+    public partial class UserControlStreamDeck : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckListener, IDisposable
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly DCSBIOS _dcsbios;
@@ -75,6 +75,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
             }
 
+
             EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonAction);
             EventHandlers.AttachStreamDeckListener(UCStreamDeckButtonFace);
             EventHandlers.AttachStreamDeckListener(_uiButtonGrid);
@@ -86,7 +87,11 @@ namespace DCSFlightpanels.PanelUserControls
 
             UCStreamDeckButtonFace.PanelHash = _streamDeckPanel.PanelHash;
             UCStreamDeckButtonAction.PanelHash = _streamDeckPanel.PanelHash;
+        }
 
+        public override void Dispose()
+        {
+            StackPanelButtonUI.Children.Clear();
         }
 
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
@@ -99,7 +104,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             SetFormState();
         }
-        
+
         public void SetFormState()
         {
             try
@@ -149,7 +154,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
@@ -255,13 +260,13 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private string _comboBoxLayerTextComparison;
         private void ComboBoxLayers_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             _comboBoxLayerTextComparison = ComboBoxLayers.Text;
         }
-        
+
         private void LoadComboBoxLayers()
         {
             var layerList = _streamDeckPanel.LayerNameList;
@@ -276,7 +281,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             ComboBoxLayers.Text = _streamDeckPanel.SelectedLayerName;
         }
-        
+
         private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
         {
             try
@@ -324,7 +329,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Dispatcher?.BeginInvoke((Action) (() => Common.ShowErrorMessageBox(ex)));
+                Dispatcher?.BeginInvoke((Action)(() => Common.ShowErrorMessageBox(ex)));
             }
         }
 
@@ -375,7 +380,7 @@ namespace DCSFlightpanels.PanelUserControls
                     streamDeckButton.ActionForRelease = UCStreamDeckButtonAction.GetStreamDeckButtonAction(false);
 
                     streamDeckButton.Face = UCStreamDeckButtonFace.GetStreamDeckButtonFace(streamDeckButton.StreamDeckButtonName);
-                    
+
                     if (streamDeckButton.HasConfig)
                     {
                         _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton);
@@ -407,7 +412,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
                 if (streamDeckButton.ActionForPress != null && streamDeckButton.ActionForPress.ActionType == EnumStreamDeckActionType.LayerNavigation && streamDeckButton.Face != null)
                 {
-                    streamDeckButton.Face.Destroy();
+                    streamDeckButton.Face.Dispose();
                     streamDeckButton.Face = null;
                     UCStreamDeckButtonFace.Clear();
                 }
@@ -416,7 +421,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (streamDeckButton.HasConfig)
                 {
-                    _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton); 
+                    _streamDeckPanel.SelectedLayer.AddButton(streamDeckButton);
                 }
                 else
                 {
@@ -438,7 +443,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                EventHandlers.ClearSettings(this,true,false,false);
+                EventHandlers.ClearSettings(this, true, false, false);
                 EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton);
                 EventHandlers.NotifyToSyncConfiguration(this);
                 SetFormState();
@@ -456,7 +461,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var streamDeckButton = _streamDeckPanel.SelectedButton;
                 var streamDeckButtonName = streamDeckButton.StreamDeckButtonName;
 
-                streamDeckButton.Face.Destroy(); //todo this must be properly made 
+                streamDeckButton.Face.Dispose(); //todo this must be properly made 
                 streamDeckButton.Face = null; //todo this must be properly made 
 
                 if (streamDeckButton.HasConfig)
@@ -541,7 +546,7 @@ namespace DCSFlightpanels.PanelUserControls
                 while (true)
                 {
                     var bitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(_colors[_random.Next(0, 20)]);
-                    _streamDeckPanel.SetImage(_random.Next(1, _streamDeckPanel.ButtonCount), bitmap);
+                    _streamDeckPanel.SetImage(_random.Next(0, _streamDeckPanel.ButtonCount - 1), bitmap);
                     Thread.Sleep(50);
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -559,14 +564,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action) (() =>
-                {
-                    if (ComboBoxLayers.Text != e.SelectedLayerName)
-                    {
-                        Dispatcher?.BeginInvoke((Action)LoadComboBoxLayers);
-                        Dispatcher?.BeginInvoke((Action)SetFormState);
-                    }
-                }));
+                Dispatcher?.BeginInvoke((Action)(() =>
+               {
+                   if (ComboBoxLayers.Text != e.SelectedLayerName)
+                   {
+                       Dispatcher?.BeginInvoke((Action)LoadComboBoxLayers);
+                       Dispatcher?.BeginInvoke((Action)SetFormState);
+                   }
+               }));
             }
             catch (Exception ex)
             {
@@ -623,6 +628,13 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 Common.LogError(ex);
             }
+        }
+
+        private void ButtonInfoLayer_OnClick(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine(_streamDeckPanel.GetConfigurationInformation());
+            Debug.WriteLine(HIDHandler.GetInformation());
+            Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
         }
     }
 }

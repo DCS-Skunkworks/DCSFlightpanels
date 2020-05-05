@@ -19,7 +19,7 @@ namespace NonVisuals.Interfaces
         string PanelHash { get; set; }
         EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         bool IsVisible { get; set; }
-        void Destroy();
+        void Dispose();
         bool ConfigurationOK { get; }
         int GetHash();
     }

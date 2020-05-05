@@ -9,7 +9,7 @@ namespace NonVisuals.StreamDeck
 
 
     [Serializable]
-    public class StreamDeckButton
+    public class StreamDeckButton : IDisposable
     {
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private IStreamDeckButtonFace _buttonFace = null;
@@ -32,28 +32,53 @@ namespace NonVisuals.StreamDeck
         public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, string panelHash)
         {
             _streamDeckButtonName = enumStreamDeckButton;
-            _panelHash = _panelHash;
+            _panelHash = panelHash;
             _streamDeckButtons.Add(this);
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            // TODO release unmanaged resources here
+        }
+
+        private void Dispose(bool disposing)
+        {
+            ReleaseUnmanagedResources();
+            if (disposing)
+            {
+                _cancellationTokenSource?.Dispose();
+                _streamDeckButtons.Remove(this);
+                IsVisible = false;
+                _buttonFace?.Dispose();
+                _buttonActionForPress = null;
+                _buttonActionForRelease = null;
+                _streamDeckButtons.Remove(this);
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         ~StreamDeckButton()
         {
-            _streamDeckButtons.Remove(this);
+            Dispose(false);
         }
-
-        public void Remove()
-        {
-            _streamDeckButtons.Remove(this);
-            IsVisible = false;
-            _buttonFace?.Destroy();
-            _buttonActionForPress = null;
-            _buttonActionForRelease = null;
-            _streamDeckButtons.Remove(this);
-        }
-
+        
         public static StreamDeckButton Get(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return _streamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
+        }
+
+        public static void DisposeAll()
+        {
+            for (var i = 0; i < _streamDeckButtons.Count; i++)
+            {
+                var streamDeckButton= _streamDeckButtons[i];
+                streamDeckButton.Dispose();
+            }
         }
 
         public static List<StreamDeckButton> GetButtons()
@@ -157,7 +182,7 @@ namespace NonVisuals.StreamDeck
             {
                 if (overwrite)
                 {
-                    Face?.Destroy();
+                    Face?.Dispose();
                     Face = streamDeckButton.Face;
                     Face.StreamDeckButtonName = _streamDeckButtonName;
                     result = true;

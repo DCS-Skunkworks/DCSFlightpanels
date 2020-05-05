@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using Newtonsoft.Json;
 
 
@@ -47,8 +46,8 @@ namespace DCS_BIOS
         private string _controlType; //display button toggle etc
         private DCSBiosOutputType _dcsBiosOutputType = DCSBiosOutputType.INTEGER_TYPE;
         private DCSBiosOutputComparison _dcsBiosOutputComparison = DCSBiosOutputComparison.Equals;
-        
-        [NonSerialized]private readonly object _lockObject = new object();
+
+        [NonSerialized] private object _lockObject = new object();
 
 
 
@@ -219,6 +218,13 @@ namespace DCS_BIOS
 
         public uint GetUIntValue(uint data)
         {
+            /*
+             * Fugly workaround, side effect of using deep clone DCSBIOSDecoder is that this is null
+             */
+            if (_lockObject == null)
+            {
+                _lockObject = new object();
+            }
             lock (_lockObject)
             {
                 return (data & Mask) >> Shiftvalue;

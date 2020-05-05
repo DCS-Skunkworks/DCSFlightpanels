@@ -21,7 +21,7 @@ namespace NonVisuals.StreamDeck
         public bool ConfigurationOK => !string.IsNullOrEmpty(_imageFile);
 
 
-        public virtual void Destroy() {}
+        public virtual void Dispose() {}
 
         protected override void DrawBitmap()
         {

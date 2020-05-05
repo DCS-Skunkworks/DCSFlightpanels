@@ -11,6 +11,7 @@ using DCSFlightpanels.Properties;
 using DCS_BIOS;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Windows;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
@@ -22,7 +23,7 @@ namespace DCSFlightpanels.Radios
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlEmulator.xaml
     /// </summary>
-    public partial class RadioPanelPZ69UserControlEmulatorFull : IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class RadioPanelPZ69UserControlEmulatorFull : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69EmulatorFull _radioPanelPZ69;
         private readonly TabItem _parentTabItem;

@@ -100,7 +100,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void AddButton(StreamDeckButton streamDeckButton)
+        public void AddButton(StreamDeckButton streamDeckButton, bool silently = false)
         {
             streamDeckButton.IsVisible = _isVisible;
 
@@ -120,13 +120,16 @@ namespace NonVisuals.StreamDeck
                 _streamDeckButtons.Add(streamDeckButton);
             }
 
-            NotifyChanges();
+            if (!silently)
+            {
+                NotifyChanges();
+            }
         }
 
 
         public void RemoveButton(StreamDeckButton streamDeckButton)
         {
-            streamDeckButton.Remove();
+            streamDeckButton.Dispose();
             _streamDeckButtons.Remove(streamDeckButton);
             NotifyChanges();
         }
@@ -135,7 +138,7 @@ namespace NonVisuals.StreamDeck
         {
             foreach (var streamDeckButton in _streamDeckButtons)
             {
-                streamDeckButton.Remove();
+                streamDeckButton.Dispose();
             }
 
             _streamDeckButtons.RemoveAll(o => o != null);
@@ -156,7 +159,7 @@ namespace NonVisuals.StreamDeck
         {
             foreach (var streamDeckButton in _streamDeckButtons.Where(o => o.HasConfig == false))
             {
-                streamDeckButton.Remove();
+                streamDeckButton.Dispose();
             }
 
             _streamDeckButtons.RemoveAll(o => !o.HasConfig);
@@ -191,7 +194,9 @@ namespace NonVisuals.StreamDeck
                     return streamDeckButton;
                 }
             }
-            return new StreamDeckButton(streamDeckButtonName, _panelHash);
+            var newButton = new StreamDeckButton(streamDeckButtonName, _panelHash);
+            _streamDeckButtons.Add(newButton);
+            return newButton;
         }
 
         public bool ContainStreamDeckButton(EnumStreamDeckButtonNames streamDeckButtonName)
@@ -220,6 +225,7 @@ namespace NonVisuals.StreamDeck
             throw new Exception("StreamDeckLayer " + Name + " does not contain button " + streamDeckButtonName + ".");
         }
 
+        [JsonIgnore]
         public bool IsVisible
         {
             get => _isVisible;

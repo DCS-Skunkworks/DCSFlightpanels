@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using EnumEx = CommonClassLibraryJD.EnumEx;
@@ -129,6 +130,23 @@ namespace DCSFlightpanels.Windows
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
+            }
+        }
+
+        private void ChooseProfileModuleWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Escape)
+                {
+                    e.Handled = true;
+                    DialogResult = false;
+                    Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
     }

@@ -87,6 +87,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="CommonEnums.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="GamingPanelSkeleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

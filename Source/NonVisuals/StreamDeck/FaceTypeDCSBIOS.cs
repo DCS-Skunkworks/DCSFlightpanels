@@ -21,9 +21,8 @@ namespace NonVisuals.StreamDeck
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
 
-        public virtual void Destroy()
+        public virtual void Dispose()
         {
-            Debugger.Break();
         }
 
         protected override void DrawBitmap()
