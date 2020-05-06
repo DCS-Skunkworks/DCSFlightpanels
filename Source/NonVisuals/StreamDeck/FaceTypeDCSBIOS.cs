@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
@@ -23,6 +24,17 @@ namespace NonVisuals.StreamDeck
 
         public virtual void Dispose()
         {
+        }
+
+        public virtual string FaceDescription
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder(100);
+                stringBuilder.Append("Face DCS-BIOS");
+                
+                return stringBuilder.ToString();
+            }
         }
 
         protected override void DrawBitmap()

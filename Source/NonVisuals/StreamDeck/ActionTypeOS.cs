@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
@@ -25,8 +26,21 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
+        
+        public string ActionDescription
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder(100);
+                stringBuilder.Append("OS Command");
+                if (OSCommandObject != null)
+                {
+                    stringBuilder.Append(" ").Append(OSCommandObject.Name);
+                }
 
-        public string Description { get => "OS Command"; }
+                return stringBuilder.ToString();
+            }
+        }
 
         public bool IsRunning()
         {

@@ -15,7 +15,7 @@ namespace NonVisuals.Interfaces
     public interface IStreamDeckButtonAction
     {
         EnumStreamDeckActionType ActionType { get; }
-        string Description { get; }
+        string ActionDescription { get; }
         void Execute(CancellationToken threadCancellationToken);
         bool IsRunning();
         bool IsRepeatable();

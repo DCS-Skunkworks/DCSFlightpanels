@@ -210,10 +210,13 @@
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\StreamDeckDCSBIOSConverterWindow.xaml.cs">
+    <Compile Include="Windows\StreamDeck\ExportWindow.xaml.cs">
+      <DependentUpon>ExportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\StreamDeck\StreamDeckDCSBIOSConverterWindow.xaml.cs">
       <DependentUpon>StreamDeckDCSBIOSConverterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml.cs">
+    <Compile Include="Windows\StreamDeck\StreamDeckDCSBIOSDecoderWindow.xaml.cs">
       <DependentUpon>StreamDeckDCSBIOSDecoderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\JaceSandboxWindow.xaml.cs">
@@ -304,7 +307,7 @@
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\StreamDeckLayerWindow.xaml.cs">
+    <Compile Include="Windows\StreamDeck\StreamDeckLayerWindow.xaml.cs">
       <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\StreamDeckUserControl.xaml.cs">
@@ -402,11 +405,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\StreamDeckDCSBIOSConverterWindow.xaml">
+    <Page Include="Windows\StreamDeck\ExportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StreamDeck\StreamDeckDCSBIOSConverterWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\StreamDeckDCSBIOSDecoderWindow.xaml">
+    <Page Include="Windows\StreamDeck\StreamDeckDCSBIOSDecoderWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -534,7 +541,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\StreamDeckLayerWindow.xaml">
+    <Page Include="Windows\StreamDeck\StreamDeckLayerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

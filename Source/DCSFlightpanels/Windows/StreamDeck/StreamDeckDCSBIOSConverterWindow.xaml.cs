@@ -15,7 +15,7 @@ using Cursors = System.Windows.Input.Cursors;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
-namespace DCSFlightpanels.Windows
+namespace DCSFlightpanels.Windows.StreamDeck
 {
     public partial class StreamDeckDCSBIOSConverterWindow : Window, IIsDirty
     {

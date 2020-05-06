@@ -26,7 +26,7 @@ using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 
-namespace DCSFlightpanels.Windows
+namespace DCSFlightpanels.Windows.StreamDeck
 {
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
@@ -71,6 +72,21 @@ namespace NonVisuals.StreamDeck
             {}
 
             base.Dispose();
+        }
+
+        public override string FaceDescription
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder(100);
+                stringBuilder.Append("Face DCS-BIOS Decoder");
+                if (_dcsbiosOutput != null)
+                {
+                    stringBuilder.Append(" ").Append(_dcsbiosOutput.ControlId);
+                }
+
+                return stringBuilder.ToString();
+            }
         }
 
         public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, string panelHash)

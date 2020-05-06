@@ -5,7 +5,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using NonVisuals.StreamDeck;
 
-namespace DCSFlightpanels.Windows
+namespace DCSFlightpanels.Windows.StreamDeck
 {
     /// <summary>
     /// Interaction logic for StreamDeckLayerWindow.xaml

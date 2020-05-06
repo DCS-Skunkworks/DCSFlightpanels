@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DCSFlightpanels.Shared;
+using DCSFlightpanels.Windows.StreamDeck;
 using NonVisuals;
 using NonVisuals.StreamDeck.Events;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;

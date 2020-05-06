@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
@@ -33,8 +34,21 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
+        
+        public string ActionDescription
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder(100);
+                stringBuilder.Append("Layer Nav.");
+                if (!string.IsNullOrEmpty(TargetLayer))
+                {
+                    stringBuilder.Append(" ").Append(TargetLayer);
+                }
 
-        public string Description { get => "Layer Navigation"; }
+                return stringBuilder.ToString();
+            }
+        }
 
         public bool IsRunning()
         {

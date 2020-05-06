@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 using OpenMacroBoard.SDK;
@@ -22,6 +23,21 @@ namespace NonVisuals.StreamDeck
 
 
         public virtual void Dispose() {}
+
+        public string FaceDescription
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder(100);
+                stringBuilder.Append("Face Image");
+                if (!string.IsNullOrEmpty(_imageFile))
+                {
+                    stringBuilder.Append(" ").Append(_imageFile);
+                }
+
+                return stringBuilder.ToString();
+            }
+        }
 
         protected override void DrawBitmap()
         {

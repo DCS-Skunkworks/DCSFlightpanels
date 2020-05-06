@@ -21,6 +21,7 @@ namespace NonVisuals.Interfaces
         bool IsVisible { get; set; }
         void Dispose();
         bool ConfigurationOK { get; }
+        string FaceDescription { get; }
         int GetHash();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
@@ -238,6 +239,28 @@ namespace NonVisuals.StreamDeck
                 {
                     _buttonFace.IsVisible = value;
                 }
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder();
+                if (ActionForPress != null)
+                {
+                    stringBuilder.Append("ActionPress : ").Append(_buttonActionForPress.ActionDescription).Append(" ");
+                }
+                if (ActionForRelease != null)
+                {
+                    stringBuilder.Append("ActionRelease : ").Append(_buttonActionForRelease.ActionDescription).Append(" ");
+                }
+                if (Face != null)
+                {
+                    stringBuilder.Append(Face.FaceDescription).Append(" ");
+                }
+
+                return stringBuilder.ToString();
             }
         }
 

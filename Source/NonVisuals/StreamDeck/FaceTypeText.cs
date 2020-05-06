@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 
@@ -20,6 +21,21 @@ namespace NonVisuals.StreamDeck
 
 
         public virtual void Dispose() { }
+
+        public string FaceDescription
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder(100);
+                stringBuilder.Append("Face Text");
+                if (!string.IsNullOrEmpty(_buttonTextTemplate))
+                {
+                    stringBuilder.Append(" ").Append(_buttonTextTemplate);
+                }
+
+                return stringBuilder.ToString();
+            }
+        }
 
         protected override void DrawBitmap()
         {

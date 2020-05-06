@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck.Events;
@@ -75,6 +77,27 @@ namespace NonVisuals.StreamDeck
             _layerList.SetPanelHash(_streamDeckPanel.PanelHash);
             _jsonImported = true;
             CheckHomeLayerExists();
+        }
+
+
+        public void Export(string fileName, List<StreamDeckButton> streamDeckButtons)
+        {
+            var encoder = new UnicodeEncoding();
+            const Formatting indented = Formatting.Indented;
+            var settings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+            var json = JsonConvert.SerializeObject(streamDeckButtons, indented, settings);
+
+            var chars = encoder.GetChars(encoder.GetBytes(json));
+            using (var streamWriter = File.CreateText(fileName))
+            {
+                streamWriter.Write(chars);
+            }
+
+            SystemSounds.Asterisk.Play();
         }
 
         private void CheckHomeLayerExists()

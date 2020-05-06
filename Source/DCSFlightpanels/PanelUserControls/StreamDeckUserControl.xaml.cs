@@ -9,6 +9,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.PanelUserControls.StreamDeck;
 using DCSFlightpanels.Windows;
+using DCSFlightpanels.Windows.StreamDeck;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -647,6 +648,20 @@ namespace DCSFlightpanels.PanelUserControls
             Debug.WriteLine(HIDHandler.GetInformation());
             Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
             Debug.WriteLine(EventHandlers.GetInformation());
+        }
+
+        private void ButtonExport_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var exportWindow = new ExportWindow(_streamDeckPanel.PanelHash);
+                exportWindow.Show();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
         }
     }
 }

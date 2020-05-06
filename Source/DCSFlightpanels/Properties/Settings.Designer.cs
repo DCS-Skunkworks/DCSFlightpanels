@@ -334,5 +334,29 @@ namespace DCSFlightpanels.Properties {
                 this["LastDCSBIOSRelease"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastStreamDeckExportFolder {
+            get {
+                return ((string)(this["LastStreamDeckExportFolder"]));
+            }
+            set {
+                this["LastStreamDeckExportFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastStreamDeckImportFolder {
+            get {
+                return ((string)(this["LastStreamDeckImportFolder"]));
+            }
+            set {
+                this["LastStreamDeckImportFolder"] = value;
+            }
+        }
     }
 }

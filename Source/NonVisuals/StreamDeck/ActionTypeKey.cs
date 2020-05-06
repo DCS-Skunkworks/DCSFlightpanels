@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
@@ -29,7 +30,20 @@ namespace NonVisuals.StreamDeck
         }
 
 
-        public string Description { get => "Key press"; }
+        public string ActionDescription
+        {
+            get
+            {
+                var stringBuilder = new StringBuilder(100);
+                stringBuilder.Append("Key press");
+                if (OSKeyPress != null)
+                {
+                    stringBuilder.Append(" ").Append(OSKeyPress.GetKeyPressInformation());
+                }
+
+                return stringBuilder.ToString();
+            }
+        }
 
 
         public bool IsRunning()

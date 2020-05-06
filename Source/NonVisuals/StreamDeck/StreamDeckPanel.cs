@@ -118,6 +118,12 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+
+        public void Export(string fileName, List<StreamDeckButton> streamDeckButtons)
+        {
+            _streamDeckLayerHandler.Export(fileName, streamDeckButtons);
+        }
+
         public override void SelectedAirframe(object sender, AirframeEventArgs e)
         {
             _streamDeckLayerHandler.ClearSettings();

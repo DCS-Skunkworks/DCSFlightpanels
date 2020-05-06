@@ -15,7 +15,7 @@ namespace NonVisuals.StreamDeck
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         private string _panelHash;
 
-
+        public string ActionDescription => Description;
 
         public int GetHash()
         {
