@@ -1,9 +1,26 @@
-﻿using NonVisuals.Interfaces;
+﻿using System.Text;
+using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck.Events
 {
     public static class EventHandlers
     {
+
+        public static string GetInformation()
+        {
+            var stringBuilder = new StringBuilder(200);
+
+            stringBuilder.Append("\nOnDirtyConfigurationsEventHandler :").Append(OnDirtyConfigurationsEventHandler != null ? OnDirtyConfigurationsEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+            stringBuilder.Append("OnDirtyNotificationEventHandler :").Append(OnDirtyNotificationEventHandler != null ? OnDirtyNotificationEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+            stringBuilder.Append("OnStreamDeckShowNewLayerEventHandler :").Append(OnStreamDeckShowNewLayerEventHandler != null ? OnStreamDeckShowNewLayerEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+            stringBuilder.Append("OnStreamDeckSelectedButtonChangedEventHandler :").Append(OnStreamDeckSelectedButtonChangedEventHandler != null ? OnStreamDeckSelectedButtonChangedEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+            stringBuilder.Append("OnStreamDeckClearSettingsEventHandler :").Append(OnStreamDeckClearSettingsEventHandler != null ? OnStreamDeckClearSettingsEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+            stringBuilder.Append("OnStreamDeckSyncConfigurationEventHandler :").Append(OnStreamDeckSyncConfigurationEventHandler != null ? OnStreamDeckSyncConfigurationEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+            stringBuilder.Append("OnStreamDeckConfigurationChangeEventHandler :").Append(OnStreamDeckConfigurationChangeEventHandler != null ? OnStreamDeckConfigurationChangeEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+            stringBuilder.Append("OnStreamDeckHideDecodersEventHandler :").Append(OnStreamDeckHideDecodersEventHandler != null ? OnStreamDeckHideDecodersEventHandler.GetInvocationList().Length.ToString() : "0").Append("\n");
+
+            return stringBuilder.ToString();
+        }
 
         public static void AttachStreamDeckListener(IStreamDeckListener streamDeckListener)
         {
@@ -41,7 +58,7 @@ namespace NonVisuals.StreamDeck.Events
             foreach (var @delegate in OnDirtyConfigurationsEventHandler.GetInvocationList())
             {
                 @delegate.DynamicInvoke(sender, eventArguments);
-                
+
                 if (eventArguments.Cancel)
                 {
                     return true; //There are dirty listeners out there
@@ -86,7 +103,7 @@ namespace NonVisuals.StreamDeck.Events
 
         public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton)
         {
-            var eventArgs = new StreamDeckSelectedButtonChangedArgs() {SelectedButton = streamDeckButton};
+            var eventArgs = new StreamDeckSelectedButtonChangedArgs() { SelectedButton = streamDeckButton };
             OnStreamDeckSelectedButtonChangedEventHandler?.Invoke(sender, eventArgs);
         }
 

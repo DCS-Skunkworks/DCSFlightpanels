@@ -17,7 +17,7 @@ using Theraot.Core;
 
 namespace NonVisuals.StreamDeck
 {
-    public class StreamDeckPanel : GamingPanel, IStreamDeckListener, IStreamDeckConfigListener
+    public class StreamDeckPanel : GamingPanel, IStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
@@ -62,13 +62,35 @@ namespace NonVisuals.StreamDeck
             StreamDeckPanels.Add(this);
         }
 
-        ~StreamDeckPanel()
+        private void ReleaseUnmanagedResources()
         {
-            StreamDeckPanels.Remove(this);
+            // TODO release unmanaged resources here
         }
 
+        private void Dispose(bool disposing)
+        {
+            ReleaseUnmanagedResources();
+            if (disposing)
+            {
+                _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
+                _streamDeckBoard?.Dispose();
+                StreamDeckPanels.Remove(this);
+                EventHandlers.DetachStreamDeckListener(this);
+                EventHandlers.DetachStreamDeckConfigListener(this);
+            }
+        }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
+        ~StreamDeckPanel()
+        {
+            Dispose(false);
+        }
+        
         public static StreamDeckPanel GetInstance(string panelHash)
         {
             foreach (var streamDeckPanel in StreamDeckPanels)
@@ -99,6 +121,7 @@ namespace NonVisuals.StreamDeck
             try
             {
                 StreamDeckButton.DisposeAll();
+                Dispose();
                 Closed = true;
             }
             catch (Exception e)

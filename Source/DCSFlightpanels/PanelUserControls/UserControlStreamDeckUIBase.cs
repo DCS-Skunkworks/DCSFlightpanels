@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows;
@@ -57,7 +58,9 @@ namespace DCSFlightpanels.PanelUserControls
                     StreamDeckPanelInstance.SelectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
                 }
 
-                //MessageBox.Show(StreamDeckPanelInstance.GetLayerHandlerInformation() + "\n" + StreamDeckPanelInstance.GetConfigurationInformation());
+                /*Debug.WriteLine(StreamDeckPanelInstance.GetLayerHandlerInformation());
+                Debug.WriteLine(StreamDeckPanelInstance.GetConfigurationInformation());
+                Debug.WriteLine(EventHandlers.GetInformation());*/
                 SetFormState();
             }
             catch (Exception ex)

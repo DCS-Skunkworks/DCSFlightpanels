@@ -92,6 +92,11 @@ namespace DCSFlightpanels.PanelUserControls
         public override void Dispose()
         {
             StackPanelButtonUI.Children.Clear();
+            EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
+            EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
+            EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
+            EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
+            EventHandlers.DetachStreamDeckListener(this);
         }
 
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
@@ -635,6 +640,7 @@ namespace DCSFlightpanels.PanelUserControls
             Debug.WriteLine(_streamDeckPanel.GetConfigurationInformation());
             Debug.WriteLine(HIDHandler.GetInformation());
             Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
+            Debug.WriteLine(EventHandlers.GetInformation());
         }
     }
 }
