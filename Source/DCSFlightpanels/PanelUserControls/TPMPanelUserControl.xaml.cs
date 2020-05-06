@@ -41,6 +41,15 @@ namespace DCSFlightpanels.PanelUserControls
             _globalHandler = globalHandler;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _tpmPanel.Dispose();
+                _tpmPanel.Dispose();
+            }
+        }
+        
         private void TPMPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!_once)

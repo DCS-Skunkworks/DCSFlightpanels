@@ -66,7 +66,7 @@ namespace DCSFlightpanels.Windows
             Dispose(true);
         }
 
-        public virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {

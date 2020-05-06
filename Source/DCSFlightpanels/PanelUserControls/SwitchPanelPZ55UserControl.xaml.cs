@@ -63,6 +63,14 @@ namespace DCSFlightpanels.PanelUserControls
             _imageArrayRight[3] = ImagePZ55LEDRedRight;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _switchPanelPZ55.Dispose();
+            }
+        }
+        
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();

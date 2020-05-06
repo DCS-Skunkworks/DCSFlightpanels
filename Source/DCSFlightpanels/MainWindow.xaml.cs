@@ -292,7 +292,6 @@ namespace DCSFlightpanels
                         {
                             Detach(gamingPanel);
 
-                            gamingPanel.Shutdown();
                             userControl.Dispose();
                             _panelUserControls.Remove(userControl);
                             closedItemCount++;
@@ -581,7 +580,7 @@ namespace DCSFlightpanels
                                     {
                                         var tabItemStreamDeck = new TabItem();
                                         tabItemStreamDeck.Header = "StreamDeck";
-                                        var streamDeckUserControl = new UserControlStreamDeck(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this, _dcsBios);
+                                        var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this, _dcsBios);
                                         _panelUserControls.Add(streamDeckUserControl);
                                         _profileHandler.Attach(streamDeckUserControl);
                                         tabItemStreamDeck.Content = streamDeckUserControl;
@@ -1067,7 +1066,7 @@ namespace DCSFlightpanels
             {
                 foreach (var saitekUserControl in _panelUserControls)
                 {
-                    ((IGamingPanelUserControl)saitekUserControl).GetGamingPanel()?.Shutdown();
+                    ((IGamingPanelUserControl)saitekUserControl).GetGamingPanel()?.Dispose();
                 }
             }
             catch (Exception ex)
@@ -1726,13 +1725,13 @@ namespace DCSFlightpanels
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
+                    _dcsCheckDcsBiosStatusTimer.Dispose();
+                    _dcsStopGearTimer.Dispose();
+                    _exceptionTimer.Dispose();
+                    _statusMessagesTimer.Dispose();
+                    ; _exceptionTimer.Dispose();
+                    _dcsBios?.Dispose();
                 }
-                _dcsCheckDcsBiosStatusTimer.Dispose();
-                _dcsStopGearTimer.Dispose();
-                _exceptionTimer.Dispose();
-                _statusMessagesTimer.Dispose();
-                ;_exceptionTimer.Dispose();
-                _dcsBios?.Dispose();
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 

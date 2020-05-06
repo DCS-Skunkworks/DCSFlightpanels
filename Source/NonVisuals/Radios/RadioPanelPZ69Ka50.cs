@@ -1796,7 +1796,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void Shutdown()
+        public override void Dispose()
         {
             try
             {

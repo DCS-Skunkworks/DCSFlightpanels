@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using DCSFlightpanels.PanelUserControls.StreamDeck;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -20,7 +21,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for StreamDeckUserControl.xaml
     /// </summary>
-    public partial class UserControlStreamDeck : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckListener, IDisposable
+    public partial class StreamDeckUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IStreamDeckListener
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly DCSBIOS _dcsbios;
@@ -40,7 +41,7 @@ namespace DCSFlightpanels.PanelUserControls
 
 
 
-        public UserControlStreamDeck(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
+        public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
         {
             InitializeComponent();
             _parentTabItem = parentTabItem;
@@ -89,16 +90,21 @@ namespace DCSFlightpanels.PanelUserControls
             UCStreamDeckButtonAction.PanelHash = _streamDeckPanel.PanelHash;
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool dispose)
         {
-            StackPanelButtonUI.Children.Clear();
-            EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
-            EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
-            EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
-            EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
-            EventHandlers.DetachStreamDeckListener(this);
+            if (dispose)
+            {
+                _cancellationTokenSource?.Dispose();
+                StackPanelButtonUI.Children.Clear();
+                EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonAction);
+                EventHandlers.DetachStreamDeckListener(UCStreamDeckButtonFace);
+                EventHandlers.DetachStreamDeckListener(_uiButtonGrid);
+                EventHandlers.DetachStreamDeckConfigListener(_uiButtonGrid);
+                EventHandlers.DetachStreamDeckListener(this);
+                _streamDeckPanel.Dispose();
+            }
         }
-
+        
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!_userControlLoaded)
@@ -256,7 +262,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     TextBoxLogStreamDeck.Text = "";
                     TextBoxLogStreamDeck.Text = _streamDeckPanel.PanelHash;
-                    Clipboard.SetText(_streamDeckPanel.PanelHash);
+                    Clipboard.SetText(_streamDeckPanel.InstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }

@@ -72,15 +72,17 @@ namespace NonVisuals.StreamDeck
             ReleaseUnmanagedResources();
             if (disposing)
             {
+                StreamDeckButton.DisposeAll();
                 _streamDeckBoard.KeyStateChanged -= StreamDeckKeyListener;
                 _streamDeckBoard?.Dispose();
                 StreamDeckPanels.Remove(this);
                 EventHandlers.DetachStreamDeckListener(this);
                 EventHandlers.DetachStreamDeckConfigListener(this);
+                Closed = true;
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -113,20 +115,6 @@ namespace NonVisuals.StreamDeck
             catch (Exception ex)
             {
                 Common.LogError(ex);
-            }
-        }
-
-        public override void Shutdown()
-        {
-            try
-            {
-                StreamDeckButton.DisposeAll();
-                Dispose();
-                Closed = true;
-            }
-            catch (Exception e)
-            {
-                SetLastException(e);
             }
         }
 
@@ -307,7 +295,7 @@ namespace NonVisuals.StreamDeck
 
         private void DeviceRemovedHandler()
         {
-            Shutdown();
+            Dispose();
             //IsAttached = false;
         }
 

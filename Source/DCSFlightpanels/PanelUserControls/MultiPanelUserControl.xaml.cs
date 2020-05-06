@@ -44,6 +44,14 @@ namespace DCSFlightpanels.PanelUserControls
             HideAllImages();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _multiPanelPZ70.Dispose();
+            }
+        }
+        
         private void MultiPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;

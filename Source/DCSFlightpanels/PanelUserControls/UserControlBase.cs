@@ -9,7 +9,13 @@ namespace DCSFlightpanels.PanelUserControls
     public class UserControlBase : UserControl, IDisposable
     {
 
-        public virtual void Dispose(){}
+        protected virtual void Dispose(bool disposing)
+        { }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         internal void CheckContextMenuItems(KeyPressLength keyPressLength, ContextMenu contextMenu)
         {

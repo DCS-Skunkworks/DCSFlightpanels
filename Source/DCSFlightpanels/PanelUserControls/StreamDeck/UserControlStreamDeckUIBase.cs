@@ -15,7 +15,7 @@ using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;
 
 
-namespace DCSFlightpanels.PanelUserControls
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, IStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
     {

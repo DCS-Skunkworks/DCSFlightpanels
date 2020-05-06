@@ -172,11 +172,11 @@
     <Compile Include="PanelUserControls\BackLitPanelUserControl.xaml.cs">
       <DependentUpon>BackLitPanelUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelUserControls\UserControlStreamDeckUIBase.cs" />
-    <Compile Include="PanelUserControls\UserControlStreamDeckUIXL.xaml.cs">
+    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIBase.cs" />
+    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIXL.xaml.cs">
       <DependentUpon>UserControlStreamDeckUIXL.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelUserControls\UserControlStreamDeckUINormal.xaml.cs">
+    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml.cs">
       <DependentUpon>UserControlStreamDeckUINormal.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
@@ -307,8 +307,8 @@
     <Compile Include="Windows\StreamDeckLayerWindow.xaml.cs">
       <DependentUpon>StreamDeckLayerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelUserControls\UserControlStreamDeck.xaml.cs">
-      <DependentUpon>UserControlStreamDeck.xaml</DependentUpon>
+    <Compile Include="PanelUserControls\StreamDeckUserControl.xaml.cs">
+      <DependentUpon>StreamDeckUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="PanelUserControls\SwitchPanelPZ55UserControl.xaml.cs">
       <DependentUpon>SwitchPanelPZ55UserControl.xaml</DependentUpon>
@@ -332,10 +332,10 @@
     <Compile Include="Windows\OSCommandWindow.xaml.cs">
       <DependentUpon>OSCommandWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml.cs">
+    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonAction.xaml.cs">
       <DependentUpon>UserControlStreamDeckButtonAction.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PanelUserControls\UserControlStreamDeckButtonFace.xaml.cs">
+    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonFace.xaml.cs">
       <DependentUpon>UserControlStreamDeckButtonFace.xaml</DependentUpon>
     </Compile>
     <Page Include="AboutFPWindow.xaml">
@@ -350,11 +350,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelUserControls\UserControlStreamDeckUIXL.xaml">
+    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIXL.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="PanelUserControls\UserControlStreamDeckUINormal.xaml">
+    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -538,7 +538,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelUserControls\UserControlStreamDeck.xaml">
+    <Page Include="PanelUserControls\StreamDeckUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -558,11 +558,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelUserControls\UserControlStreamDeckButtonAction.xaml">
+    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonAction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PanelUserControls\UserControlStreamDeckButtonFace.xaml">
+    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckButtonFace.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

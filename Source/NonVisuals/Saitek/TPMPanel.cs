@@ -48,7 +48,7 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void Shutdown()
+        public override void Dispose()
         {
             try
             {
@@ -522,7 +522,7 @@ namespace NonVisuals.Saitek
 
         private void DeviceRemovedHandler()
         {
-            Shutdown();
+            Dispose();
             DeviceDetached();
         }
 

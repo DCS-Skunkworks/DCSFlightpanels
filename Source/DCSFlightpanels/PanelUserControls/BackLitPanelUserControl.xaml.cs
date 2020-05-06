@@ -53,6 +53,14 @@ namespace DCSFlightpanels.PanelUserControls
             ShowGraphicConfiguration();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _backlitPanelBIP.Dispose();
+            }
+        }
+
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
         }

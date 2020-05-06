@@ -12,7 +12,7 @@ using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;
 
 
-namespace DCSFlightpanels.PanelUserControls
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml

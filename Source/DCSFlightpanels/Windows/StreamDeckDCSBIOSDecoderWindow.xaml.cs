@@ -31,7 +31,7 @@ namespace DCSFlightpanels.Windows
     /// <summary>
     /// This StreamDeck implementation is a big clusterf*ck.
     /// </summary>
-    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty
+    public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable
     {
         private string _panelHash;
         private bool _formLoaded;
@@ -78,6 +78,20 @@ namespace DCSFlightpanels.Windows
             _panelHash = panelHash;
             var thread = new Thread(ThreadLoop);
             thread.Start();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _dcsbiosDecoder?.Dispose();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         private void StreamDeckDCSBIOSDecoderWindow_OnLoaded(object sender, RoutedEventArgs e)

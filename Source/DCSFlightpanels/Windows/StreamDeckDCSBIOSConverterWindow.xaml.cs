@@ -22,7 +22,6 @@ namespace DCSFlightpanels.Windows
         private bool _isLoaded = false;
         private DCSBIOSConverter _dcsbiosConverter = null;
         private bool _isDirty;
-        private bool _isPopulatingData = false;
         private StreamDeckPanel _streamDeckPanel;
         private string _streamDeckPanelInstanceId;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
@@ -281,7 +280,6 @@ namespace DCSFlightpanels.Windows
 
         private void ShowConverter()
         {
-            _isPopulatingData = true;
             if (_dcsbiosConverter.Comparator2 == EnumComparator.NotSet)
             {
                 HideSecondCriteria();
@@ -333,7 +331,6 @@ namespace DCSFlightpanels.Windows
 
             StreamDeckCommon.SetComparatorValue(ComboBoxComparisonType1, _dcsbiosConverter.Comparator1);
             StreamDeckCommon.SetComparatorValue(ComboBoxComparisonType2, _dcsbiosConverter.Comparator2);
-            _isPopulatingData = false;
         }
 
         private void ButtonHelp_OnClick(object sender, RoutedEventArgs e)

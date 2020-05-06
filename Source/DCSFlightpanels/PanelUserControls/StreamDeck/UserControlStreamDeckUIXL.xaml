@@ -1,11 +1,11 @@
-﻿<local:UserControlStreamDeckUIBase x:Class="DCSFlightpanels.PanelUserControls.UserControlStreamDeckUIXL"
+﻿<streamDeck:UserControlStreamDeckUIBase x:Class="DCSFlightpanels.PanelUserControls.StreamDeck.UserControlStreamDeckUIXL"
                                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                                        xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
                                        Loaded="UserControlStreamDeckNormal_OnLoaded"
-                                       xmlns:local="clr-namespace:DCSFlightpanels.PanelUserControls"
+                                       xmlns:streamDeck="clr-namespace:DCSFlightpanels.PanelUserControls.StreamDeck"
                                        mc:Ignorable="d" 
                                        d:DesignHeight="235" d:DesignWidth="400">
     <UserControl.Resources>
@@ -263,4 +263,4 @@
             </Canvas>
         </Border>
     </Grid>
-</local:UserControlStreamDeckUIBase>
+</streamDeck:UserControlStreamDeckUIBase>

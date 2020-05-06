@@ -1,13 +1,14 @@
 ﻿using System.Windows;
+using DCSFlightpanels.PanelUserControls.StreamDeck;
 
-namespace DCSFlightpanels.PanelUserControls
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     /// <summary>
     /// Interaction logic for UserControlStreamDeckNormal.xaml
     /// </summary>
-    public partial class UserControlStreamDeckUIXL : UserControlStreamDeckUIBase
+    public partial class UserControlStreamDeckUINormal : UserControlStreamDeckUIBase
     {
-        public UserControlStreamDeckUIXL():base()
+        public UserControlStreamDeckUINormal()
         {
             InitializeComponent();
         }
@@ -27,7 +28,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         protected override int ButtonAmount()
         {
-            return 32;
+            return 15;
         }
 
         private void FillControlLists()
@@ -47,23 +48,6 @@ namespace DCSFlightpanels.PanelUserControls
             ButtonImages.Add(ButtonImage13);
             ButtonImages.Add(ButtonImage14);
             ButtonImages.Add(ButtonImage15);
-            ButtonImages.Add(ButtonImage16);
-            ButtonImages.Add(ButtonImage17);
-            ButtonImages.Add(ButtonImage18);
-            ButtonImages.Add(ButtonImage19);
-            ButtonImages.Add(ButtonImage20);
-            ButtonImages.Add(ButtonImage21);
-            ButtonImages.Add(ButtonImage22);
-            ButtonImages.Add(ButtonImage23);
-            ButtonImages.Add(ButtonImage24);
-            ButtonImages.Add(ButtonImage25);
-            ButtonImages.Add(ButtonImage26);
-            ButtonImages.Add(ButtonImage27);
-            ButtonImages.Add(ButtonImage28);
-            ButtonImages.Add(ButtonImage29);
-            ButtonImages.Add(ButtonImage30);
-            ButtonImages.Add(ButtonImage31);
-            ButtonImages.Add(ButtonImage32);
 
             DotImages.Add(DotImage1);
             DotImages.Add(DotImage2);
@@ -80,23 +64,7 @@ namespace DCSFlightpanels.PanelUserControls
             DotImages.Add(DotImage13);
             DotImages.Add(DotImage14);
             DotImages.Add(DotImage15);
-            DotImages.Add(DotImage16);
-            DotImages.Add(DotImage17);
-            DotImages.Add(DotImage18);
-            DotImages.Add(DotImage19);
-            DotImages.Add(DotImage20);
-            DotImages.Add(DotImage21);
-            DotImages.Add(DotImage22);
-            DotImages.Add(DotImage23);
-            DotImages.Add(DotImage24);
-            DotImages.Add(DotImage25);
-            DotImages.Add(DotImage26);
-            DotImages.Add(DotImage27);
-            DotImages.Add(DotImage28);
-            DotImages.Add(DotImage29);
-            DotImages.Add(DotImage30);
-            DotImages.Add(DotImage31);
-            DotImages.Add(DotImage32);
         }
+
     }
 }

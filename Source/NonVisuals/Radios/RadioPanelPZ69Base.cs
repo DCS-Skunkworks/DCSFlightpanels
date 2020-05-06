@@ -498,7 +498,7 @@ namespace NonVisuals.Radios
 
         protected void DeviceRemovedHandler()
         {
-            Shutdown();
+            Dispose();
             //IsAttached = false;
         }
 

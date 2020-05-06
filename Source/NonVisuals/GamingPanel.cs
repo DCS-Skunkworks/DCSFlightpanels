@@ -32,7 +32,7 @@ namespace NonVisuals
         private readonly string _hash;
         public abstract string SettingsVersion();
         public abstract void Startup();
-        public abstract void Shutdown();
+        public abstract void Dispose();
         public abstract void ClearSettings();
         public abstract void ImportSettings(List<string> settings);
         public abstract List<string> ExportSettings();

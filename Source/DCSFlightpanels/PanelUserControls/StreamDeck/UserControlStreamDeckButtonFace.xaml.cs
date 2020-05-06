@@ -17,7 +17,7 @@ using NonVisuals.StreamDeck.Events;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 
-namespace DCSFlightpanels.PanelUserControls
+namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
@@ -620,7 +620,7 @@ namespace DCSFlightpanels.PanelUserControls
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder?.Dispose();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.DeepClone();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
-                    streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.Dispose();
+                    streamDeckDCSBIOSDecoderWindow.Dispose();
                     SetIsDirty();
 
                 }
