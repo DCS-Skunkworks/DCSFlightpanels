@@ -5,6 +5,7 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals
 {
+    [Serializable]
     public class OSCommand
     {
         private string _file;

@@ -210,6 +210,9 @@
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\StreamDeck\ImportWindow.xaml.cs">
+      <DependentUpon>ImportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\StreamDeck\ExportWindow.xaml.cs">
       <DependentUpon>ExportWindow.xaml</DependentUpon>
     </Compile>
@@ -404,6 +407,10 @@
     <Page Include="Windows\JaceHelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StreamDeck\ImportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\StreamDeck\ExportWindow.xaml">
       <SubType>Designer</SubType>

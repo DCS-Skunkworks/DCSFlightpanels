@@ -1,5 +1,8 @@
-﻿namespace NonVisuals
+﻿using System;
+
+namespace NonVisuals
 {
+    [Serializable]
     public abstract class OSCommandBinding
     {
         /*

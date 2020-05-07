@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using DCSFlightpanels.PanelUserControls.StreamDeck;
-using DCSFlightpanels.Windows;
 using DCSFlightpanels.Windows.StreamDeck;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -649,6 +648,20 @@ namespace DCSFlightpanels.PanelUserControls
             Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
             Debug.WriteLine(EventHandlers.GetInformation());
         }
+        
+        private void ButtonImport_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var importWindow = new ImportWindow(_streamDeckPanel.PanelHash);
+                importWindow.Show();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
 
         private void ButtonExport_OnClick(object sender, RoutedEventArgs e)
         {
@@ -663,5 +676,6 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.LogError(ex);
             }
         }
+
     }
 }

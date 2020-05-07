@@ -20,6 +20,91 @@ namespace NonVisuals.StreamDeck
 
 
 
+        public ImportResult ImportButtons(bool replace, bool overwrite, List<StreamDeckButton> newStreamDeckButtons)
+        {
+            var result = new ImportResult();
+
+            foreach (var newStreamDeckButton in newStreamDeckButtons)
+            {
+                var found = false;
+                var changesMade = false;
+
+                foreach (var oldStreamDeckButton in _streamDeckButtons)
+                {
+                    if (oldStreamDeckButton.StreamDeckButtonName == newStreamDeckButton.StreamDeckButtonName)
+                    {
+                        found = true;
+                        
+                        if (overwrite)
+                        {
+                            if (newStreamDeckButton.Face != null)
+                            {
+                                var face = newStreamDeckButton.Face.DeepClone();
+                                face.AfterClone();
+                                oldStreamDeckButton.Face = face;
+                                result.FacesImported++;
+                                changesMade = true;
+                            }
+
+                            if (newStreamDeckButton.ActionForPress != null)
+                            {
+                                oldStreamDeckButton.ActionForPress = newStreamDeckButton.ActionForPress.DeepClone();
+                                result.KeyPressActions++;
+                                changesMade = true;
+                            }
+
+                            if (newStreamDeckButton.ActionForRelease != null)
+                            {
+                                oldStreamDeckButton.ActionForRelease = newStreamDeckButton.ActionForRelease.DeepClone();
+                                result.KeyReleaseActions++;
+                                changesMade = true;
+                            }
+                        }
+                        else
+                        {
+                            if (oldStreamDeckButton.Face == null && newStreamDeckButton.Face != null)
+                            {
+                                var face = newStreamDeckButton.Face.DeepClone();
+                                face.AfterClone();
+                                oldStreamDeckButton.Face = face;
+                                result.FacesImported++;
+                                changesMade = true;
+                            }
+                            if (oldStreamDeckButton.ActionForPress == null && newStreamDeckButton.ActionForPress != null)
+                            {
+                                oldStreamDeckButton.ActionForPress = newStreamDeckButton.ActionForPress.DeepClone();
+                                result.KeyPressActions++;
+                                changesMade = true;
+                            }
+                            if (oldStreamDeckButton.ActionForRelease == null && newStreamDeckButton.ActionForRelease != null)
+                            {
+                                oldStreamDeckButton.ActionForRelease = newStreamDeckButton.ActionForRelease.DeepClone();
+                                result.KeyReleaseActions++;
+                                changesMade = true;
+                            }
+                        }
+
+                        if (changesMade)
+                        {
+                            result.StreamDeckButtons++;
+                        }
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    result.StreamDeckButtons++;
+                    _streamDeckButtons.Add(newStreamDeckButton);
+                }
+            }
+
+            if (result.StreamDeckButtons > 0)
+            {
+                NotifyChanges();
+            }
+            return result;
+        }
 
         private void NotifyChanges()
         {
@@ -176,7 +261,7 @@ namespace NonVisuals.StreamDeck
 
         public List<StreamDeckButton> GetButtonsWithConfig()
         {
-            return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig);
+            return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
         public List<StreamDeckButton> StreamDeckButtons

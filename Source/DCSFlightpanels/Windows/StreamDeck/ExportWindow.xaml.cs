@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
@@ -20,6 +19,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
     {
         private bool _formLoaded = false;
         private string _panelHash;
+        private string _exportFileName = "";
+
+
 
         public ExportWindow(string panelHash)
         {
@@ -54,12 +56,14 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private void SetFormState()
         {
             ButtonExport.IsEnabled = DataGridStreamDeckButtons.SelectedItems.Count > 0;
+            ButtonOpenFile.IsEnabled = !string.IsNullOrEmpty(_exportFileName);
         }
 
         private void LoadButtons()
         {
-            DataGridStreamDeckButtons.DataContext = StreamDeckButton.GetButtons();
-            DataGridStreamDeckButtons.ItemsSource = StreamDeckButton.GetButtons();
+            var buttonList = StreamDeckPanel.GetInstance(_panelHash).GetButtonExports();
+            DataGridStreamDeckButtons.DataContext = buttonList;
+            DataGridStreamDeckButtons.ItemsSource = buttonList;
             DataGridStreamDeckButtons.Items.Refresh();
         }
 
@@ -67,6 +71,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
+                DataGridStreamDeckButtons.SelectAll();
                 SetFormState();
             }
             catch (Exception ex)
@@ -92,21 +97,21 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                string fileName = "";
                 var saveFileDialog = new SaveFileDialog();
 
                 saveFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckExportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckExportFolder;
-                saveFileDialog.Filter = @"Stream Deck Export|*.streamdeckexport";
+                saveFileDialog.Filter = @"Stream Deck Export|*.txt";
+                saveFileDialog.FileName = "streamdeck_export";
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    fileName = saveFileDialog.FileName;
+                    _exportFileName = saveFileDialog.FileName;
                     Settings.Default.LastStreamDeckExportFolder = Path.GetDirectoryName(saveFileDialog.FileName);
                     Settings.Default.Save();
 
-                    var streamDeckButtons = DataGridStreamDeckButtons.SelectedItems.Cast<StreamDeckButton>().ToList();
+                    var buttonExports = DataGridStreamDeckButtons.SelectedItems.Cast<ButtonExport>().ToList();
 
-                    StreamDeckPanel.GetInstance(_panelHash).Export(fileName, streamDeckButtons);
+                    StreamDeckPanel.GetInstance(_panelHash).Export(_exportFileName, buttonExports);
                 }
                 SetFormState();
             }
@@ -127,12 +132,43 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void DataGridStreamDeckButtons_OnMouseDown(object sender, MouseButtonEventArgs e)
+        
+        private void DataGridStreamDeckButtons_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
                 SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonOpenFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(_exportFileName) && File.Exists(_exportFileName))
+                {
+                    Process.Start(_exportFileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ExportWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Escape)
+                {
+                    e.Handled = true;
+                    Close();
+                }
             }
             catch (Exception ex)
             {

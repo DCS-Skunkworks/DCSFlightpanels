@@ -72,7 +72,8 @@
                     <Button Name="ButtonIdentifyPanel" Content="Identify Panel" Width="100" HorizontalAlignment="Left" Margin="10,10,0,4" Click="ButtonIdentifyPanel_OnClick" Visibility="Visible"/>
                     <Button Name="ButtonGetId" Content="Copy Panel USB ID"   Width="100" HorizontalAlignment="Left" Margin="10,0,10,4" Click="ButtonGetId_OnClick" Visibility="Visible"/>
                     <Button Name="ButtonClearImages" Content="Clear Panel Images" Width="100" HorizontalAlignment="Left" Margin="10,0,10,4" Click="ButtonClearImages_OnClick" Visibility="Visible"/>
-                    <Button Name="ButtonExport" Content="Export Buttons" Width="100" HorizontalAlignment="Left" Margin="10,10,10,4" Click="ButtonExport_OnClick" Visibility="Visible"/>
+                    <Button Name="ButtonImport" Content="Import Buttons" Width="100" HorizontalAlignment="Left" Margin="10,10,10,4" Click="ButtonImport_OnClick" Visibility="Visible"/>
+                    <Button Name="ButtonExport" Content="Export Buttons" Width="100" HorizontalAlignment="Left" Margin="10,0,10,4" Click="ButtonExport_OnClick" Visibility="Visible"/>
                     <TextBlock TextWrapping="Wrap" FontSize="10" FontWeight="Bold">
                     </TextBlock>
                 </StackPanel>

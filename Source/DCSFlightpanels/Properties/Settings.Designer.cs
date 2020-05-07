@@ -358,5 +358,17 @@ namespace DCSFlightpanels.Properties {
                 this["LastStreamDeckImportFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowImportWarning {
+            get {
+                return ((bool)(this["ShowImportWarning"]));
+            }
+            set {
+                this["ShowImportWarning"] = value;
+            }
+        }
     }
 }

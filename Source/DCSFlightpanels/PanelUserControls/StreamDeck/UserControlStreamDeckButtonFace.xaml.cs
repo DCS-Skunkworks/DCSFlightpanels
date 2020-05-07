@@ -1,7 +1,6 @@
 ﻿using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Windows;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using System;

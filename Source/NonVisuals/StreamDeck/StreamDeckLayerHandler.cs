@@ -79,8 +79,33 @@ namespace NonVisuals.StreamDeck
             CheckHomeLayerExists();
         }
 
+        public ImportResult ImportButtons(string layerName, List<StreamDeckButton> streamDeckButtons, bool overwrite, bool replace)
+        {
+            var layer = GetLayer(layerName);
+            return layer.ImportButtons(replace, overwrite, streamDeckButtons);
+        }
 
-        public void Export(string fileName, List<StreamDeckButton> streamDeckButtons)
+        public List<ButtonExport> GetButtonExports()
+        {
+            var result = new List<ButtonExport>();
+
+            foreach (var streamDeckLayer in _layerList)
+            {
+                if (streamDeckLayer.HasConfig)
+                {
+                    var list = streamDeckLayer.GetButtonsWithConfig();
+                    foreach (var streamDeckButton in list)
+                    {
+                        var exportButton = new ButtonExport(streamDeckLayer, streamDeckButton);
+                        result.Add(exportButton);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public void Export(string fileName, List<ButtonExport> buttonExports)
         {
             var encoder = new UnicodeEncoding();
             const Formatting indented = Formatting.Indented;
@@ -89,7 +114,10 @@ namespace NonVisuals.StreamDeck
                 TypeNameHandling = TypeNameHandling.All,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-            var json = JsonConvert.SerializeObject(streamDeckButtons, indented, settings);
+
+            var exportList = buttonExports.Select(buttonExport => buttonExport.Button).ToList();
+
+            var json = JsonConvert.SerializeObject(exportList, indented, settings);
 
             var chars = encoder.GetChars(encoder.GetBytes(json));
             using (var streamWriter = File.CreateText(fileName))

@@ -124,6 +124,8 @@ namespace NonVisuals.StreamDeck
                 _backgroundColor = value;
             }
         }
-
+        
+        public void AfterClone()
+        { }
     }
 }

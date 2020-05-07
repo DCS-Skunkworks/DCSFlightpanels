@@ -23,5 +23,6 @@ namespace NonVisuals.Interfaces
         bool ConfigurationOK { get; }
         string FaceDescription { get; }
         int GetHash();
+        void AfterClone();
     }
 }

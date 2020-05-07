@@ -92,7 +92,7 @@ namespace NonVisuals.StreamDeck
         {
             Dispose(false);
         }
-        
+
         public static StreamDeckPanel GetInstance(string panelHash)
         {
             foreach (var streamDeckPanel in StreamDeckPanels)
@@ -118,10 +118,19 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-
-        public void Export(string fileName, List<StreamDeckButton> streamDeckButtons)
+        public ImportResult ImportButtons(string layerName, List<StreamDeckButton> streamDeckButtons, bool overwrite, bool replace)
         {
-            _streamDeckLayerHandler.Export(fileName, streamDeckButtons);
+            return _streamDeckLayerHandler.ImportButtons(layerName, streamDeckButtons, overwrite, replace);
+        }
+
+        public List<ButtonExport> GetButtonExports()
+        {
+            return _streamDeckLayerHandler.GetButtonExports();
+        }
+
+        public void Export(string fileName, List<ButtonExport> buttonExports)
+        {
+            _streamDeckLayerHandler.Export(fileName, buttonExports);
         }
 
         public override void SelectedAirframe(object sender, AirframeEventArgs e)
@@ -177,7 +186,7 @@ namespace NonVisuals.StreamDeck
                 return;
             }
             var keyBitmap = KeyBitmap.Create.FromBitmap(bitmap);
-            
+
             lock (_updateStreamDeckOledLockObject)
             {
                 //EventHandlers.NotifyOledImageChange(this, PanelHash, streamDeckButtonName, bitmap);
@@ -459,7 +468,7 @@ namespace NonVisuals.StreamDeck
             _fileNotFoundBitMap = BitMapCreator.BitmapImage2Bitmap(tmpBitMapImage);
             return _fileNotFoundBitMap;
         }
-        
+
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try

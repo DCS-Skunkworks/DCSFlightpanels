@@ -1,0 +1,78 @@
+﻿<Window x:Class="DCSFlightpanels.Windows.StreamDeck.ImportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCSFlightpanels.Windows.StreamDeck"
+        xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
+        Loaded="ImportWindow_OnLoaded"
+        KeyDown="ImportWindow_OnKeyDown"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="Import Stream Deck buttons" Height="450" Width="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70*" />
+            <RowDefinition Height="15*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="2,2,2,0">
+            <DataGrid AutoGenerateColumns="false" 
+                      Background="White"
+                      ItemsSource="{Binding}" 
+                      SelectionMode="Extended" 
+                      SelectionUnit="FullRow" 
+                      HorizontalAlignment="Stretch" 
+                      Name="DataGridStreamDeckButtons" 
+                      VerticalAlignment="Stretch" 
+                      VerticalScrollBarVisibility="Visible" 
+                      CanUserReorderColumns="False" 
+                      CanUserResizeRows="False" 
+                      CanUserSortColumns="False"
+                      ColumnWidth="Auto"
+                      SelectionChanged="DataGridStreamDeckButtons_OnSelectionChanged"
+                      MouseDown="DataGridStreamDeckButtons_OnMouseDown">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Button" IsReadOnly="True" Binding="{Binding Path=(streamDeck:StreamDeckButton.StreamDeckButtonName)}" Width="1*" />
+                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=(streamDeck:StreamDeckButton.Description)}" Width="4*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="2,2,2,0">
+            <Button Name="ButtonOpenFile" Content="Open Export File" Margin="20,10,20,15" Click="ButtonOpenFile_OnClick"/>
+            <Button Name="ButtonSelectAll" Content="Select All" Margin="20,5,20,3" Click="ButtonSelectAll_OnClick"/>
+            <Button Name="ButtonSelectNone" Content="Clear Selection" Margin="20,2,20,5" Click="ButtonSelectNone_OnClick"/>
+
+            <GroupBox Header="Target layer" Margin="13,15,13,15">
+                <StackPanel>
+                    <ComboBox Name="ComboBoxLayers" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxLayers_OnDropDownClosed" />
+
+                    <CheckBox Name="CheckBoxReplace" Margin="2,10,2,2" IsEnabled="False" Checked="CheckBoxOverwrite_CheckedChanged" Unchecked="CheckBoxOverwrite_CheckedChanged">
+                    <TextBlock TextWrapping="Wrap" Text="Replace existing buttons - Not implemented"/>
+                    </CheckBox>
+
+                    <CheckBox Name="CheckBoxOverwrite" Margin="2,2,2,10" Checked="CheckBoxOverwrite_CheckedChanged" Unchecked="CheckBoxOverwrite_CheckedChanged">
+                        <TextBlock TextWrapping="Wrap" Text="Overwrite existing settings"/>
+                    </CheckBox>
+
+                    <Button Name="ButtonImport" Content="Import" Margin="2,3,2,2" Click="ButtonImport_OnClick"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Button location" Margin="13,15,13,15">
+                <StackPanel>
+                    <ComboBox Name="ComboBoxButtonName" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxButtonName_OnDropDownClosed"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="2,30,2,0">
+            <Button Name="ButtonClose" Content="Close" Margin="20,5,20,3" Click="ButtonClose_OnClick"/>
+        </StackPanel>
+    </Grid>
+</Window>

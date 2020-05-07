@@ -133,5 +133,8 @@ namespace NonVisuals.StreamDeck
                 RefreshBitmap = true;
             }
         }
+
+        public void AfterClone()
+        { }
     }
 }

@@ -117,6 +117,8 @@ namespace NonVisuals.StreamDeck
                 _imageFile = value;
             }
         }
-
+        
+        public void AfterClone()
+        { }
     }
 }

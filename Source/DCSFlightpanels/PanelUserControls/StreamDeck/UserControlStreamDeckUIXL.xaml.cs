@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using DCSFlightpanels.PanelUserControls.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {

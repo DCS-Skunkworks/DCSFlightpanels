@@ -7,6 +7,7 @@
         xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
         Loaded="ExportWindow_OnLoaded"
         WindowStartupLocation="CenterScreen"
+        KeyDown="ExportWindow_OnKeyDown"
         mc:Ignorable="d"
         Title="Export Stream Deck buttons" Height="450" Width="1000">
     <Grid>
@@ -33,18 +34,20 @@
                       CanUserResizeRows="False" 
                       CanUserSortColumns="False"
                       ColumnWidth="Auto"
-                      MouseDown="DataGridStreamDeckButtons_OnMouseDown">
+                      SelectionChanged="DataGridStreamDeckButtons_OnSelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Button" IsReadOnly="True" Binding="{Binding Path=(streamDeck:StreamDeckButton.StreamDeckButtonName)}" Width="*" />
-                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=(streamDeck:StreamDeckButton.Description)}" Width="*" />
+                    <DataGridTextColumn Header="Layer" IsReadOnly="True" Binding="{Binding Path=(streamDeck:ButtonExport.LayerName)}" Width="1*" />
+                    <DataGridTextColumn Header="Button" IsReadOnly="True" Binding="{Binding Path=(streamDeck:ButtonExport.ButtonName)}" Width="1*" />
+                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=(streamDeck:ButtonExport.ButtonDescription)}" Width="4*" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="2,2,2,0">
-            <Button Name="ButtonSelectAll" Content="Select All" Margin="20,5,20,3" Click="ButtonSelectAll_OnClick"/>
-            <Button Name="ButtonSelectNone" Content="Clear Selection" Margin="20,2,20,5" Click="ButtonSelectNone_OnClick"/>
-            <Button Name="ButtonExport" Content="Export" Margin="20,10,20,5" Click="ButtonExport_OnClick"/>
+            <Button Name="ButtonSelectAll" Content="Select All" Margin="20,5,20,2" Click="ButtonSelectAll_OnClick"/>
+            <Button Name="ButtonSelectNone" Content="Clear Selection" Margin="20,2,20,4" Click="ButtonSelectNone_OnClick"/>
+            <Button Name="ButtonExport" Content="Export" Margin="20,20,20,2" Click="ButtonExport_OnClick"/>
+            <Button Name="ButtonOpenFile" Content="Open Export File" Margin="20,2,20,5" Click="ButtonOpenFile_OnClick"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="2,30,2,0">
