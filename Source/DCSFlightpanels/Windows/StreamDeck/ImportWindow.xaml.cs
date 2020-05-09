@@ -122,21 +122,19 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     return;
                 }
 
-                var result = StreamDeckPanel.GetInstance(_panelHash).ImportButtons(ComboBoxLayers.Text, selectedStreamDeckButtons, CheckBoxOverwrite.IsChecked == true, CheckBoxOverwrite.IsChecked == true);
-
-                stringBuilder.Clear();
-                stringBuilder.Append(result.StreamDeckButtons.ToString()).Append(" buttons imported.\n\n");
-                stringBuilder.Append("Numbers below indicate import to existing buttons").Append("\n");
-                stringBuilder.Append("Key press Actions : ").Append(result.KeyPressActions.ToString()).Append("\n");
-                stringBuilder.Append("Key release Actions : ").Append(result.KeyReleaseActions.ToString()).Append("\n");
-                stringBuilder.Append("Key Faces : ").Append(result.FacesImported.ToString()).Append("\n\n");
-
-                if (result.ChangesWereMade)
+                var importMode = EnumButtonImportMode.None;
+                if (CheckBoxReplace.IsChecked == true)
                 {
-                    stringBuilder.Append("Save configuration before changing layer!").Append("\n\n");
+                    importMode = EnumButtonImportMode.Replace;
+                }
+                else if (CheckBoxOverwrite.IsChecked == true)
+                {
+                    importMode = EnumButtonImportMode.Overwrite;
                 }
 
-                MessageBox.Show(stringBuilder.ToString(), "Import successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                StreamDeckPanel.GetInstance(_panelHash).ImportButtons(importMode, ComboBoxLayers.Text, selectedStreamDeckButtons);
+                
+                MessageBox.Show("Import was completed", "Import successful", MessageBoxButton.OK, MessageBoxImage.Information);
                 SetFormState();
             }
             catch (Exception ex)
@@ -351,5 +349,60 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
+        private void CheckBoxReplace_OnChecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CheckBoxOverwrite.IsChecked == true)
+                {
+                    CheckBoxOverwrite.IsChecked = false;
+                }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void CheckBoxReplace_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void CheckBoxOverwrite_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void CheckBoxOverwrite_OnChecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CheckBoxReplace.IsChecked == true)
+                {
+                    CheckBoxReplace.IsChecked = false;
+                }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

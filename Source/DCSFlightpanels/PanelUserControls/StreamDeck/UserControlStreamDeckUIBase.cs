@@ -183,6 +183,14 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             menuItem.Click += ButtonContextMenuPaste_OnClick;
             contextMenu.Items.Add(menuItem);
 
+            contextMenu.Items.Add(new Separator());
+
+            menuItem = new MenuItem();
+            menuItem.Name = "MenuItemDelete";
+            menuItem.Header = "Delete";
+            menuItem.Click += ButtonContextMenuDelete_OnClick;
+            contextMenu.Items.Add(menuItem);
+
             foreach (var streamDeckImage in ButtonImages)
             {
                 streamDeckImage.ContextMenu = contextMenu;
@@ -214,6 +222,22 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
+        private void ButtonContextMenuDelete_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var streamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+                if (MessageBox.Show("Delete button" + streamDeckButton.StreamDeckButtonName.ToString() + "?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.RemoveButton(streamDeckButton);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void ButtonContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             try
@@ -224,27 +248,37 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 var contextMenu = (ContextMenu)sender;
                 MenuItem menuItemCopy = null;
                 MenuItem menuItemPaste = null;
-                foreach (MenuItem contextMenuItem in contextMenu.Items)
+                MenuItem menuItemDelete = null;
+
+                foreach (var contextMenuItem in contextMenu.Items)
                 {
-                    if (contextMenuItem.Name == "MenuItemCopy")
+                    if (contextMenuItem.GetType() == typeof(MenuItem) && ((MenuItem) contextMenuItem).Name == "MenuItemCopy")
                     {
-                        menuItemCopy = contextMenuItem;
+                        menuItemCopy = ((MenuItem)contextMenuItem);
                     }
                 }
-                foreach (MenuItem contextMenuItem in contextMenu.Items)
+                foreach (var contextMenuItem in contextMenu.Items)
                 {
-                    if (contextMenuItem.Name == "MenuItemPaste")
+                    if (contextMenuItem.GetType() == typeof(MenuItem) && ((MenuItem)contextMenuItem).Name == "MenuItemPaste")
                     {
-                        menuItemPaste = contextMenuItem;
+                        menuItemPaste = ((MenuItem)contextMenuItem);
+                    }
+                }
+                foreach (var contextMenuItem in contextMenu.Items)
+                {
+                    if (contextMenuItem.GetType() == typeof(MenuItem) && ((MenuItem)contextMenuItem).Name == "MenuItemPaste")
+                    {
+                        menuItemDelete = ((MenuItem)contextMenuItem);
                     }
                 }
 
-                if (menuItemCopy == null || menuItemPaste == null)
+                if (menuItemCopy == null || menuItemPaste == null || menuItemDelete == null)
                 {
                     return;
                 }
                 var selectedStreamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
                 menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
+                menuItemDelete.IsEnabled = selectedStreamDeckButton.HasConfig;
 
                 var iDataObject = Clipboard.GetDataObject();
                 menuItemPaste.IsEnabled = iDataObject != null && iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton");

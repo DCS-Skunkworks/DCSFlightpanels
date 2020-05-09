@@ -79,10 +79,10 @@ namespace NonVisuals.StreamDeck
             CheckHomeLayerExists();
         }
 
-        public ImportResult ImportButtons(string layerName, List<StreamDeckButton> streamDeckButtons, bool overwrite, bool replace)
+        public void ImportButtons(EnumButtonImportMode importMode, string layerName, List<StreamDeckButton> streamDeckButtons)
         {
             var layer = GetLayer(layerName);
-            return layer.ImportButtons(replace, overwrite, streamDeckButtons);
+            layer.ImportButtons(importMode, streamDeckButtons);
         }
 
         public List<ButtonExport> GetButtonExports()

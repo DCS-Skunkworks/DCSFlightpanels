@@ -16,8 +16,8 @@ namespace NonVisuals.StreamDeck
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
-        private uint _uintDcsBiosValue = 0;
-        private string _stringDcsBiosValue = "";
+        private uint _uintDcsBiosValue = UInt32.MaxValue;
+        private string _stringDcsBiosValue = "PÖLKASD2!";
 
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
@@ -134,7 +134,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void AfterClone()
+        public virtual void AfterClone()
         { }
     }
 }

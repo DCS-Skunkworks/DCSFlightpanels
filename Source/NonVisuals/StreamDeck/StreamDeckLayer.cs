@@ -20,90 +20,69 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public ImportResult ImportButtons(bool replace, bool overwrite, List<StreamDeckButton> newStreamDeckButtons)
+        public void ImportButtons(EnumButtonImportMode importMode, List<StreamDeckButton> newStreamDeckButtons)
         {
-            var result = new ImportResult();
-
+            var changesMade = false;
             foreach (var newStreamDeckButton in newStreamDeckButtons)
             {
                 var found = false;
-                var changesMade = false;
 
                 foreach (var oldStreamDeckButton in _streamDeckButtons)
                 {
                     if (oldStreamDeckButton.StreamDeckButtonName == newStreamDeckButton.StreamDeckButtonName)
                     {
                         found = true;
-                        
-                        if (overwrite)
+
+                        if (importMode == EnumButtonImportMode.Replace)
                         {
-                            if (newStreamDeckButton.Face != null)
-                            {
-                                var face = newStreamDeckButton.Face.DeepClone();
-                                face.AfterClone();
-                                oldStreamDeckButton.Face = face;
-                                result.FacesImported++;
-                                changesMade = true;
-                            }
-
-                            if (newStreamDeckButton.ActionForPress != null)
-                            {
-                                oldStreamDeckButton.ActionForPress = newStreamDeckButton.ActionForPress.DeepClone();
-                                result.KeyPressActions++;
-                                changesMade = true;
-                            }
-
-                            if (newStreamDeckButton.ActionForRelease != null)
-                            {
-                                oldStreamDeckButton.ActionForRelease = newStreamDeckButton.ActionForRelease.DeepClone();
-                                result.KeyReleaseActions++;
-                                changesMade = true;
-                            }
+                            oldStreamDeckButton.ClearConfiguration();
+                            oldStreamDeckButton.Consume(true, newStreamDeckButton);
+                            changesMade = true;
                         }
-                        else
+                        else if (importMode == EnumButtonImportMode.Overwrite)
+                        {
+                            oldStreamDeckButton.Consume(true, newStreamDeckButton);
+                            changesMade = true;
+                        }
+                        else if (importMode == EnumButtonImportMode.None)
                         {
                             if (oldStreamDeckButton.Face == null && newStreamDeckButton.Face != null)
                             {
                                 var face = newStreamDeckButton.Face.DeepClone();
                                 face.AfterClone();
                                 oldStreamDeckButton.Face = face;
-                                result.FacesImported++;
+
                                 changesMade = true;
                             }
                             if (oldStreamDeckButton.ActionForPress == null && newStreamDeckButton.ActionForPress != null)
                             {
                                 oldStreamDeckButton.ActionForPress = newStreamDeckButton.ActionForPress.DeepClone();
-                                result.KeyPressActions++;
+
                                 changesMade = true;
                             }
                             if (oldStreamDeckButton.ActionForRelease == null && newStreamDeckButton.ActionForRelease != null)
                             {
                                 oldStreamDeckButton.ActionForRelease = newStreamDeckButton.ActionForRelease.DeepClone();
-                                result.KeyReleaseActions++;
+
                                 changesMade = true;
                             }
                         }
 
-                        if (changesMade)
-                        {
-                            result.StreamDeckButtons++;
-                        }
                         break;
                     }
                 }
 
                 if (!found)
                 {
-                    result.StreamDeckButtons++;
                     _streamDeckButtons.Add(newStreamDeckButton);
+                    changesMade = true;
                 }
             }
 
-            if (result.StreamDeckButtons > 0)
+            if (changesMade)
             {
                 NotifyChanges();
             }
-            return result;
         }
 
         private void NotifyChanges()
@@ -338,5 +317,12 @@ namespace NonVisuals.StreamDeck
                 }
             }
         }
+    }
+
+    public enum EnumButtonImportMode
+    {
+        None,
+        Overwrite,
+        Replace
     }
 }

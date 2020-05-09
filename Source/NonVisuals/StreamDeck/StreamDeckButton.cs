@@ -112,6 +112,14 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public void ClearConfiguration()
+        {
+            _buttonActionForPress = null;
+            _buttonActionForRelease = null;
+            _buttonFace?.Dispose();
+            _buttonFace = null;
+        }
+
         public void ClearFace()
         {
             StreamDeckPanel.GetInstance(_panelHash).ClearFace(_streamDeckButtonName);
@@ -170,9 +178,11 @@ namespace NonVisuals.StreamDeck
         
         public void Consume(StreamDeckButton newStreamDeckButton)
         {
+            ClearConfiguration();
             ActionForPress = newStreamDeckButton.ActionForPress;
             ActionForRelease = newStreamDeckButton.ActionForRelease;
             Face = newStreamDeckButton.Face;
+            Face.StreamDeckButtonName = _streamDeckButtonName;
         }
 
         public bool Consume(bool overwrite, StreamDeckButton streamDeckButton)

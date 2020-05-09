@@ -52,11 +52,11 @@
                 <StackPanel>
                     <ComboBox Name="ComboBoxLayers" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxLayers_OnDropDownClosed" />
 
-                    <CheckBox Name="CheckBoxReplace" Margin="2,10,2,2" IsEnabled="False" Checked="CheckBoxOverwrite_CheckedChanged" Unchecked="CheckBoxOverwrite_CheckedChanged">
-                    <TextBlock TextWrapping="Wrap" Text="Replace existing buttons - Not implemented"/>
+                    <CheckBox Name="CheckBoxReplace" Margin="2,10,2,2" Checked="CheckBoxReplace_OnChecked" Unchecked="CheckBoxReplace_OnUnchecked">
+                    <TextBlock TextWrapping="Wrap" Text="Replace existing buttons"/>
                     </CheckBox>
 
-                    <CheckBox Name="CheckBoxOverwrite" Margin="2,2,2,10" Checked="CheckBoxOverwrite_CheckedChanged" Unchecked="CheckBoxOverwrite_CheckedChanged">
+                    <CheckBox Name="CheckBoxOverwrite" Margin="2,2,2,10" Checked="CheckBoxOverwrite_OnChecked" Unchecked="CheckBoxOverwrite_OnUnchecked">
                         <TextBlock TextWrapping="Wrap" Text="Overwrite existing settings"/>
                     </CheckBox>
 

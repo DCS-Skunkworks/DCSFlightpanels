@@ -20,7 +20,7 @@ namespace NonVisuals.StreamDeck
         private DCSBIOSOutput _dcsbiosOutput = null;
         private string _formula = "";
         private bool _useFormula = false;
-        private double _formulaResult = 0;
+        private double _formulaResult = Double.MaxValue;
         private string _lastFormulaError = "";
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated;
@@ -103,7 +103,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void AfterClone()
+        public override void AfterClone()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
             _autoResetEvent = new AutoResetEvent(false);
