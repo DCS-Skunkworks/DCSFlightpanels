@@ -29,7 +29,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-
+        [JsonIgnore]
         public string ActionDescription
         {
             get

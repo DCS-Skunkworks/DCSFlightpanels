@@ -574,13 +574,13 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
-                    TextBoxImageFace.Bill.ImageFileRelativePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryHomeWhite;
+                    TextBoxImageFace.Bill.ImageFileRelativePath = @"StreamDeckGallery\\Symbols\\home_white.png";
                 }
                 else if (e.TargetLayerName == StreamDeckConstants.BACK)
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;
-                    TextBoxImageFace.Bill.ImageFileRelativePath = StreamDeckConstants.StreamDeckGalleryPathSymbols + StreamDeckConstants.StreamDeckGalleryBackWhite;
+                    TextBoxImageFace.Bill.ImageFileRelativePath = @"StreamDeckGallery\\Symbols\\back_white.png";
                 }
                 else
                 {

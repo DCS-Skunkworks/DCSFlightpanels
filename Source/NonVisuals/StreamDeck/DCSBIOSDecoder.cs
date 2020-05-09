@@ -74,6 +74,7 @@ namespace NonVisuals.StreamDeck
             base.Dispose();
         }
 
+        [JsonIgnore]
         public override string FaceDescription
         {
             get

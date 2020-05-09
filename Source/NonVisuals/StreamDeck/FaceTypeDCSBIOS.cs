@@ -19,6 +19,7 @@ namespace NonVisuals.StreamDeck
         private uint _uintDcsBiosValue = UInt32.MaxValue;
         private string _stringDcsBiosValue = "PÖLKASD2!";
 
+        [JsonIgnore]
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
 
@@ -26,6 +27,7 @@ namespace NonVisuals.StreamDeck
         {
         }
 
+        [JsonIgnore]
         public virtual string FaceDescription
         {
             get

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
@@ -178,11 +179,17 @@ namespace NonVisuals.StreamDeck
         
         public void Consume(StreamDeckButton newStreamDeckButton)
         {
-            ClearConfiguration();
+            if (!this.Equals(newStreamDeckButton))
+            {
+                ClearConfiguration();
+            }
             ActionForPress = newStreamDeckButton.ActionForPress;
             ActionForRelease = newStreamDeckButton.ActionForRelease;
             Face = newStreamDeckButton.Face;
-            Face.StreamDeckButtonName = _streamDeckButtonName;
+            if (Face != null)
+            {
+                Face.StreamDeckButtonName = _streamDeckButtonName;
+            }
         }
 
         public bool Consume(bool overwrite, StreamDeckButton streamDeckButton)

@@ -17,11 +17,13 @@ namespace NonVisuals.StreamDeck
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
 
 
+        [JsonIgnore]
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
 
         public virtual void Dispose() { }
 
+        [JsonIgnore]
         public string FaceDescription
         {
             get
