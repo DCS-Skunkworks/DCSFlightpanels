@@ -13,7 +13,6 @@ namespace DCS_BIOS
         private static readonly object LockObject = new object();
         private static DCSAirframe _airframe;
         private static string _jsonDirectory;
-        private static string _luaDirectory;
         private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
         //private static bool _listOnce = true;
         public static readonly string DCSBIOSNotFoundErrorMessage = "Error loading DCS-BIOS. Check that the DCS-BIOS location setting points to the JSON directory.";
@@ -329,26 +328,12 @@ namespace DCS_BIOS
             }
         }
 
-        public static string DCSBIOSRootDirectory
+        public static string JSONDirectory
         {
-            get { return _jsonDirectory; }
-            set
-            {
-                if (!DBCommon.VerifyDCSBIOSRootDirectory(DBCommon.GetDCSBIOSDirectory(value)))
-                {
-                    throw new Exception(value + " is not a valid DCS-BIOS root directory.");
-                }
-                _jsonDirectory = DBCommon.GetDCSBIOSDirectory(DBCommon.GetDCSBIOSDirectory(value)) + "//doc//json";
-                _luaDirectory = DBCommon.GetDCSBIOSDirectory(DBCommon.GetDCSBIOSDirectory(value)) + "//lib";
-            }
+            get => _jsonDirectory;
+            set => _jsonDirectory = DBCommon.GetDCSBIOSJSONDirectory(value);
         }
-
-
-
-        public static string JSONDirectory => _jsonDirectory;
-
-        public static string LuaDirectory => _luaDirectory;
-
+        
         public static IEnumerable<DCSBIOSControl> GetControls()
         {
             LoadControls();

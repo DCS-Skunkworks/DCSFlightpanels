@@ -145,13 +145,13 @@ namespace DCSFlightpanels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("USERDIRECTORY$$$###\\Saved Games\\DCS\\Scripts\\DCS-BIOS")]
-        public string DCSBiosRootLocation {
+        [global::System.Configuration.DefaultSettingValueAttribute("$USERDIRECTORY$\\Saved Games\\DCS\\Scripts\\DCS-BIOS\\doc\\json")]
+        public string DCSBiosJSONLocation {
             get {
-                return ((string)(this["DCSBiosRootLocation"]));
+                return ((string)(this["DCSBiosJSONLocation"]));
             }
             set {
-                this["DCSBiosRootLocation"] = value;
+                this["DCSBiosJSONLocation"] = value;
             }
         }
         

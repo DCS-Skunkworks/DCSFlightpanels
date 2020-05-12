@@ -135,7 +135,7 @@ namespace DCSFlightpanels
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
-                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosRootLocation, Settings.Default.LastProfileFileUsed);
+                _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
                 _profileHandler.Attach(this);
                 _profileHandler.AttachUserMessageHandler(this);
                 if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
@@ -197,7 +197,7 @@ namespace DCSFlightpanels
                 var loggerText = File.ReadAllText(_errorLogFile);
                 if (loggerText.Contains(DCSBIOSControlLocator.DCSBIOSNotFoundErrorMessage))
                 {
-                    var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosRootLocation);
+                    var window = new DCSBIOSNotFoundWindow(Settings.Default.DCSBiosJSONLocation);
                     window.ShowDialog();
                     MessageBox.Show(
                         "This warning will be shown as long as there are error messages in error log stating that DCS-BIOS can not be found. Delete or clear the error log once you have fixed the problem.",
@@ -1017,7 +1017,7 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (CommonUI.DoDiscardAfterMessage(_profileHandler.IsDirty))
+                if (_profileHandler != null && CommonUI.DoDiscardAfterMessage(_profileHandler.IsDirty))
                 {
                     Settings.Default.LastProfileFileUsed = _profileHandler.LastProfileUsed;
                     Settings.Default.Save();
@@ -1196,7 +1196,7 @@ namespace DCSFlightpanels
         private void CloseProfile()
         {
             CloseTabItems();
-            _profileHandler = new ProfileHandler(Settings.Default.DCSBiosRootLocation);
+            _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
             _profileHandler.Attach(this);
             _profileHandler.AttachUserMessageHandler(this);
             _dcsAirframe = _profileHandler.Airframe;
@@ -1513,14 +1513,14 @@ namespace DCSFlightpanels
                 if (settingsWindow.DCSBIOSChanged && Common.PartialDCSBIOSEnabled())
                 {
                     //Refresh, make sure they are using the latest settings
-                    DCSBIOSControlLocator.DCSBIOSRootDirectory = Settings.Default.DCSBiosRootLocation;
+                    DCSBIOSControlLocator.JSONDirectory = Settings.Default.DCSBiosJSONLocation;
                     _dcsBios.ReceiveFromIp = Settings.Default.DCSBiosIPFrom;
                     _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
                     _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
                     _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
                     _dcsBios.Shutdown();
                     _dcsBios.Startup();
-                    _profileHandler.DCSBIOSRootDirectory = Settings.Default.DCSBiosRootLocation;
+                    _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;
                 }
 
                 if (settingsWindow.SRSChanged)

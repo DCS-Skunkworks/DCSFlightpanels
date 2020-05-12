@@ -22,7 +22,6 @@ namespace NonVisuals
         //Both directory and filename
         private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         private string _lastProfileUsed = "";
-        private string _dcsbiosRootDirectory = "";
         private bool _isDirty;
         private bool _isNewProfile;
         private readonly List<string> _listPanelSettingsData = new List<string>();
@@ -44,16 +43,14 @@ namespace NonVisuals
 
 
 
-        public ProfileHandler(string dcsbiosRootDirectory)
+        public ProfileHandler(string dcsbiosJSONDirectory)
         {
-            _dcsbiosRootDirectory = dcsbiosRootDirectory;
-            DCSBIOSControlLocator.DCSBIOSRootDirectory = dcsbiosRootDirectory;
+            DCSBIOSControlLocator.JSONDirectory = dcsbiosJSONDirectory;
         }
 
-        public ProfileHandler(string dcsbiosRootDirectory, string lastProfileUsed)
+        public ProfileHandler(string dcsbiosJSONDirectory, string lastProfileUsed)
         {
-            _dcsbiosRootDirectory = dcsbiosRootDirectory;
-            DCSBIOSControlLocator.DCSBIOSRootDirectory = dcsbiosRootDirectory;
+            DCSBIOSControlLocator.JSONDirectory = dcsbiosJSONDirectory;
             _lastProfileUsed = lastProfileUsed;
         }
 
@@ -590,14 +587,10 @@ namespace NonVisuals
             set => _lastProfileUsed = value;
         }
 
-        public string DCSBIOSRootDirectory
+        public string DCSBIOSJSONDirectory
         {
-            get => _dcsbiosRootDirectory;
-            set
-            {
-                DCSBIOSControlLocator.DCSBIOSRootDirectory = value;
-                _dcsbiosRootDirectory = value;
-            }
+            get => DCSBIOSControlLocator.JSONDirectory;
+            set => DCSBIOSControlLocator.JSONDirectory = value;
         }
 
         public void SelectedAirframe(object sender, AirframeEventArgs e) { }

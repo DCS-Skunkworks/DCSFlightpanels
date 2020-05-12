@@ -32,14 +32,13 @@ namespace DCS_BIOS
             return value & ~(1 << position);
         }
 
-
-        public static string GetDCSBIOSDirectory(string directory)
+        public static string GetDCSBIOSJSONDirectory(string jsonDirectory)
         {
-            var replaceString = "USERDIRECTORY$$$###";
+            var replaceString = "$USERDIRECTORY$";
             //Cannot use %USERPROFILE%, DirectoryInfo gets crazy
-            if (!string.IsNullOrEmpty(directory))
+            if (!string.IsNullOrEmpty(jsonDirectory))
             {
-                var path = directory;
+                var path = jsonDirectory;
                 if (path.Contains(replaceString))
                 {
                     path = path.Replace(replaceString, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
@@ -49,21 +48,5 @@ namespace DCS_BIOS
             return null;
         }
 
-        public static bool VerifyDCSBIOSRootDirectory(string dcsbiosRootDirectory)
-        {
-            var result = Directory.Exists(dcsbiosRootDirectory);
-
-            if (!Directory.Exists(dcsbiosRootDirectory + "//doc//json"))
-            {
-                result = false;
-            }
-
-            if (!Directory.Exists(dcsbiosRootDirectory + "//lib"))
-            {
-                result = false;
-            }
-
-            return result;
-        }
     }
 }

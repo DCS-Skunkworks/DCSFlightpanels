@@ -49,6 +49,8 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 * XL
 
 
+[How to install](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki)
+
 [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
 
 [Tutorial #2 (DCS-BIOS)](https://youtu.be/1CnmIdzqOJs): 

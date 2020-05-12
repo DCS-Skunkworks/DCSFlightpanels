@@ -19,7 +19,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     {
         private bool _formLoaded = false;
         private string _panelHash;
-        private string _exportFileName = "";
+        private string _zipFileName = "";
 
 
 
@@ -56,7 +56,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private void SetFormState()
         {
             ButtonExport.IsEnabled = DataGridStreamDeckButtons.SelectedItems.Count > 0;
-            ButtonOpenFile.IsEnabled = !string.IsNullOrEmpty(_exportFileName);
+            ButtonOpenFile.IsEnabled = !string.IsNullOrEmpty(_zipFileName);
         }
 
         private void LoadButtons()
@@ -100,18 +100,18 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 var saveFileDialog = new SaveFileDialog();
 
                 saveFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckExportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckExportFolder;
-                saveFileDialog.Filter = @"Stream Deck Export|*.txt";
+                saveFileDialog.Filter = @"Compressed File|*.zip";
                 saveFileDialog.FileName = "streamdeck_export";
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    _exportFileName = saveFileDialog.FileName;
+                    _zipFileName = saveFileDialog.FileName;
                     Settings.Default.LastStreamDeckExportFolder = Path.GetDirectoryName(saveFileDialog.FileName);
                     Settings.Default.Save();
 
                     var buttonExports = DataGridStreamDeckButtons.SelectedItems.Cast<ButtonExport>().ToList();
 
-                    StreamDeckPanel.GetInstance(_panelHash).Export(_exportFileName, buttonExports);
+                    StreamDeckPanel.GetInstance(_panelHash).Export(_zipFileName, buttonExports);
                 }
                 SetFormState();
             }
@@ -149,9 +149,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                if (!string.IsNullOrEmpty(_exportFileName) && File.Exists(_exportFileName))
+                if (!string.IsNullOrEmpty(_zipFileName) && File.Exists(_zipFileName))
                 {
-                    Process.Start(_exportFileName);
+                    Process.Start(_zipFileName);
                 }
             }
             catch (Exception ex)

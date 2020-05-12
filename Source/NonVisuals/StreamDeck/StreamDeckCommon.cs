@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace NonVisuals.StreamDeck
 {
     public static class StreamDeckCommon
     {
-
-
         public static int ButtonNumber(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             if (streamDeckButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON)

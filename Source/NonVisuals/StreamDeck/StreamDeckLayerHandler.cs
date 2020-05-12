@@ -6,6 +6,7 @@ using System.IO.Packaging;
 using System.Linq;
 using System.Media;
 using System.Text;
+using System.Windows.Documents;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
@@ -73,7 +74,7 @@ namespace NonVisuals.StreamDeck
             {
                 TypeNameHandling = TypeNameHandling.All
             };
-            
+
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
 
             _layerList.SetPanelHash(_streamDeckPanel.PanelHash);
@@ -90,7 +91,7 @@ namespace NonVisuals.StreamDeck
         public List<ButtonExport> GetButtonExports()
         {
             var result = new List<ButtonExport>();
-            
+
             foreach (var streamDeckLayer in _layerList)
             {
                 if (streamDeckLayer.HasConfig)
@@ -107,7 +108,7 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
-        public void Export(string fileName, string imagePath, List<ButtonExport> buttonExports)
+        public void Export(string compressedFileAndPath, List<ButtonExport> buttonExports)
         {
             var encoder = new UnicodeEncoding();
             const Formatting indented = Formatting.Indented;
@@ -119,35 +120,55 @@ namespace NonVisuals.StreamDeck
 
             var exportList = buttonExports.Select(buttonExport => buttonExport.Button).ToList();
 
-            var zipFileName = Path.GetFileName(fileName).Replace(Path.GetExtension(fileName), "") + "_streamdeck_images.zip";
-
-            //var zipFile = new ZipPackage(Path.GetFullPath(fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.Inheritable, false);
+            var filesToCompressList = new List<string>(); //includes the json file and eventual image files
 
             foreach (var buttonExport in buttonExports)
             {
-                if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))
+                if (buttonExport.Button.Face != null)
                 {
-                    var decoder = ((DCSBIOSDecoder) buttonExport.Button.Face);
 
-                    foreach (var imageFile in decoder.ImageFiles)
+                    if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))
                     {
-                        
+                        var decoder = ((DCSBIOSDecoder)buttonExport.Button.Face);
+
+                        foreach (var imageFile in decoder.ImageFiles)
+                        {
+                            filesToCompressList.Add(imageFile);
+                        }
+                        /*
+                         * We must remove any path imageFilePath.
+                         * When importing a path will be added back following whatever folder
+                         * the user wants the image files to reside in.
+                         */
+                        decoder.ResetImageFilePaths();
                     }
-                }
-                else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeImage))
-                {
-                    var decoder = ((DCSBIOSDecoder)buttonExport.Button.Face);
-//                    imageFileList.AddRange(decoder.ImageFiles);
+                    else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeImage))
+                    {
+                        var faceTypeImage = ((FaceTypeImage)buttonExport.Button.Face);
+                        filesToCompressList.Add(faceTypeImage.ImageFile);
+                        faceTypeImage.ImageFile = Path.GetFileName(faceTypeImage.ImageFile);
+                    }
+                    else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeDCSBIOSOverlay))
+                    {
+                        var faceTypeDCSBIOSOverlay = ((FaceTypeDCSBIOSOverlay)buttonExport.Button.Face);
+                        filesToCompressList.Add(faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
+                        faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.GetFileName(faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
+                    }
                 }
             }
 
             var json = JsonConvert.SerializeObject(exportList, indented, settings);
-
             var chars = encoder.GetChars(encoder.GetBytes(json));
-            using (var streamWriter = File.CreateText(fileName))
+
+            var filename = Path.GetTempPath() + "dcsfp_export_buttons" + ".txt";
+            filesToCompressList.Add(filename);
+
+            using (var streamWriter = File.CreateText(filename))
             {
                 streamWriter.Write(chars);
             }
+
+            ZipArchiver.CreateZipFile(compressedFileAndPath, filesToCompressList);
 
             SystemSounds.Asterisk.Play();
         }
@@ -442,7 +463,7 @@ namespace NonVisuals.StreamDeck
         {
             get => SelectedLayer.GetStreamDeckButton(SelectedButtonName);
         }
-        
+
         public List<string> GetStreamDeckLayerNames()
         {
             var result = new List<string>();

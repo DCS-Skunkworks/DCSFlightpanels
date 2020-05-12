@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Media.Imaging;
@@ -404,6 +405,35 @@ namespace NonVisuals.StreamDeck
                 }
 
                 return result;
+            }
+        }
+
+        /*
+         * When exporting buttons the image file's path will be removed.
+         * When user import the buttons and specifies to where the images should
+         * be stored then the path is updated again.
+         *
+         * So there will only be the filename in ImageFileRelativePath.
+         */
+        public void ResetImageFilePaths()
+        {
+            foreach (var dcsbiosConverter in _dcsbiosConverters)
+            {
+                if (!string.IsNullOrEmpty(dcsbiosConverter.ImageFileRelativePath))
+                {
+                    dcsbiosConverter.ImageFileRelativePath = Path.GetFileName(dcsbiosConverter.ImageFileRelativePath);
+                }
+            }
+        }
+
+        public void SetImageFilePaths(string path)
+        {
+            foreach (var dcsbiosConverter in _dcsbiosConverters)
+            {
+                if(dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.Image || dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.ImageOverlay)
+                {
+                    dcsbiosConverter.ImageFileRelativePath = path + dcsbiosConverter.ImageFileRelativePath;
+                }
             }
         }
 

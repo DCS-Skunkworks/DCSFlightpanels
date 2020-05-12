@@ -128,9 +128,9 @@ namespace NonVisuals.StreamDeck
             return _streamDeckLayerHandler.GetButtonExports();
         }
 
-        public void Export(string fileName, List<ButtonExport> buttonExports)
+        public void Export(string compressedFileAndPath, List<ButtonExport> buttonExports)
         {
-            //_streamDeckLayerHandler.Export(fileName, buttonExports);
+            _streamDeckLayerHandler.Export(compressedFileAndPath, buttonExports);
         }
 
         public override void SelectedAirframe(object sender, AirframeEventArgs e)
@@ -464,7 +464,7 @@ namespace NonVisuals.StreamDeck
                 tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
                 tmpBitMapImage.EndInit();
             }
-
+            
             _fileNotFoundBitMap = BitMapCreator.BitmapImage2Bitmap(tmpBitMapImage);
             return _fileNotFoundBitMap;
         }
