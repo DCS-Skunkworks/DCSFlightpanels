@@ -389,6 +389,24 @@ namespace NonVisuals.StreamDeck
             _dcsbiosConverters.Add(dcsbiosConverter);
         }
 
+        public List<string> ImageFiles
+        {
+            get
+            {
+                var result = new List<string>();
+
+                foreach (var dcsbiosConverter in _dcsbiosConverters)
+                {
+                    if (!string.IsNullOrEmpty(dcsbiosConverter.ImageFileRelativePath))
+                    {
+                        result.Add(dcsbiosConverter.ImageFileRelativePath);
+                    }
+                }
+
+                return result;
+            }
+        }
+
         public void Replace(DCSBIOSConverter oldDcsBiosValueToFaceConverter, DCSBIOSConverter newDcsBiosValueToFaceConverter)
         {
             Remove(oldDcsBiosValueToFaceConverter);

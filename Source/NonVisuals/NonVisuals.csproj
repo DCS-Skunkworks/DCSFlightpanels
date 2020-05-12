@@ -89,6 +89,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -257,6 +259,7 @@
     <Compile Include="Saitek\SwitchPanelKey.cs" />
     <Compile Include="Saitek\TPMPanel.cs" />
     <Compile Include="Saitek\SwitchPanelPZ55.cs" />
+    <Compile Include="StreamDeck\ZipArchiver.cs" />
     <Compile Include="VirtualKeyCode.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="OSCommand.cs" />

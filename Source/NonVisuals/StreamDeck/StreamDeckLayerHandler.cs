@@ -1,6 +1,8 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -88,7 +90,7 @@ namespace NonVisuals.StreamDeck
         public List<ButtonExport> GetButtonExports()
         {
             var result = new List<ButtonExport>();
-
+            
             foreach (var streamDeckLayer in _layerList)
             {
                 if (streamDeckLayer.HasConfig)
@@ -105,7 +107,7 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
-        public void Export(string fileName, List<ButtonExport> buttonExports)
+        public void Export(string fileName, string imagePath, List<ButtonExport> buttonExports)
         {
             var encoder = new UnicodeEncoding();
             const Formatting indented = Formatting.Indented;
@@ -116,6 +118,28 @@ namespace NonVisuals.StreamDeck
             };
 
             var exportList = buttonExports.Select(buttonExport => buttonExport.Button).ToList();
+
+            var zipFileName = Path.GetFileName(fileName).Replace(Path.GetExtension(fileName), "") + "_streamdeck_images.zip";
+
+            //var zipFile = new ZipPackage(Path.GetFullPath(fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.Inheritable, false);
+
+            foreach (var buttonExport in buttonExports)
+            {
+                if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))
+                {
+                    var decoder = ((DCSBIOSDecoder) buttonExport.Button.Face);
+
+                    foreach (var imageFile in decoder.ImageFiles)
+                    {
+                        
+                    }
+                }
+                else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeImage))
+                {
+                    var decoder = ((DCSBIOSDecoder)buttonExport.Button.Face);
+//                    imageFileList.AddRange(decoder.ImageFiles);
+                }
+            }
 
             var json = JsonConvert.SerializeObject(exportList, indented, settings);
 

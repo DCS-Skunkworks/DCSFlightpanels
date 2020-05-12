@@ -297,7 +297,6 @@ namespace NonVisuals.Radios
                     // "100.000" - "399.975"
                     // Last digit not used in panel
 
-
                     var tmpFreq = double.Parse(e.StringData, NumberFormatInfoFullDisplay);
                     if (!tmpFreq.Equals(_r863ManualCockpitFrequency))
                     {
@@ -2475,7 +2474,7 @@ namespace NonVisuals.Radios
             PZ69KnobChanged(hashSet);
         }
 
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {

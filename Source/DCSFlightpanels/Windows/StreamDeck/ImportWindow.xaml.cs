@@ -31,7 +31,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             InitializeComponent();
             _panelHash = panelHash;
-            ReadFile(@"C:\Users\Jerker\Documents\streamdeck_export.txt");
         }
 
         public void Dispose()
