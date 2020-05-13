@@ -128,9 +128,9 @@ namespace NonVisuals.StreamDeck
             return _streamDeckLayerHandler.GetButtonExports();
         }
 
-        public void Export(string compressedFileAndPath, List<ButtonExport> buttonExports)
+        public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
-            _streamDeckLayerHandler.Export(compressedFileAndPath, buttonExports);
+            _streamDeckLayerHandler.Export(compressedFilenameAndPath, buttonExports);
         }
 
         public override void SelectedAirframe(object sender, AirframeEventArgs e)

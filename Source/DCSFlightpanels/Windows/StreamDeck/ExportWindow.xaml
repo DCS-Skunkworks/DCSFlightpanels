@@ -20,7 +20,7 @@
             <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Margin="2,2,2,0">
+        <WrapPanel Grid.Row="0" Grid.Column="0" Margin="2,2,2,0">
             <DataGrid AutoGenerateColumns="false" 
                       Background="White"
                       ItemsSource="{Binding}" 
@@ -41,7 +41,7 @@
                     <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=(streamDeck:ButtonExport.ButtonDescription)}" Width="4*" />
                 </DataGrid.Columns>
             </DataGrid>
-        </StackPanel>
+        </WrapPanel>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="2,2,2,0">
             <Button Name="ButtonSelectAll" Content="Select All" Margin="20,5,20,2" Click="ButtonSelectAll_OnClick"/>

@@ -370,5 +370,17 @@ namespace DCSFlightpanels.Properties {
                 this["ShowImportWarning"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ImageImportFolder {
+            get {
+                return ((string)(this["ImageImportFolder"]));
+            }
+            set {
+                this["ImageImportFolder"] = value;
+            }
+        }
     }
 }

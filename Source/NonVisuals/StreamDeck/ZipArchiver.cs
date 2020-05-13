@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 
@@ -8,16 +7,34 @@ namespace NonVisuals.StreamDeck
 {
     public static class ZipArchiver
     {
-        public static void CreateZipFile(string zipFileName, List<string> filesToInclude)
-        {
-            var tempFolder = Path.GetTempPath() + Guid.NewGuid();
-            var directoryInfo = Directory.CreateDirectory(tempFolder);
 
-            if (!directoryInfo.Exists)
+        public static bool ZipFileContainsFile(string zipFileName, string filenameInsideArchive)
+        {
+            var result = false;
+
+            using (var zipArchive = ZipFile.OpenRead(zipFileName))
             {
-                throw new Exception("Failed to create temporary directory for Zip operations.");
+                foreach (var zipArchiveEntry in zipArchive.Entries)
+                {
+                    if (zipArchiveEntry.Name == filenameInsideArchive)
+                    {
+                        result = true;
+                        break;
+                    }
+                }
             }
 
+            return result;
+        }
+
+        public static void ExtractZipFile(string zipFileName, string extractFolder)
+        {
+            ZipFile.ExtractToDirectory(zipFileName, extractFolder);
+        }
+
+        public static void CreateZipFile(string zipFileName, List<string> filesToInclude)
+        {
+            
             using (var memoryStream = new MemoryStream())
             {
                 /*
@@ -47,8 +64,6 @@ namespace NonVisuals.StreamDeck
                 }
             }
 
-
-            Directory.Delete(tempFolder);
         }
     }
 }

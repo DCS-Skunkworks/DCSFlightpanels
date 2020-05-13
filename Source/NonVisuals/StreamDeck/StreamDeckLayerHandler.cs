@@ -99,7 +99,8 @@ namespace NonVisuals.StreamDeck
                     var list = streamDeckLayer.GetButtonsWithConfig();
                     foreach (var streamDeckButton in list)
                     {
-                        var exportButton = new ButtonExport(streamDeckLayer, streamDeckButton);
+                        var clonedButton = streamDeckButton.DeepClone();
+                        var exportButton = new ButtonExport(streamDeckLayer, clonedButton);
                         result.Add(exportButton);
                     }
                 }
@@ -108,7 +109,7 @@ namespace NonVisuals.StreamDeck
             return result;
         }
 
-        public void Export(string compressedFileAndPath, List<ButtonExport> buttonExports)
+        public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
             var encoder = new UnicodeEncoding();
             const Formatting indented = Formatting.Indented;
@@ -126,7 +127,6 @@ namespace NonVisuals.StreamDeck
             {
                 if (buttonExport.Button.Face != null)
                 {
-
                     if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))
                     {
                         var decoder = ((DCSBIOSDecoder)buttonExport.Button.Face);
@@ -159,8 +159,8 @@ namespace NonVisuals.StreamDeck
 
             var json = JsonConvert.SerializeObject(exportList, indented, settings);
             var chars = encoder.GetChars(encoder.GetBytes(json));
-
-            var filename = Path.GetTempPath() + "dcsfp_export_buttons" + ".txt";
+            
+            var filename = StreamDeckCommon.GetDCSFPTemporaryFolder() + "\\" + StreamDeckConstants.BUTTON_EXPORT_FILENAME;
             filesToCompressList.Add(filename);
 
             using (var streamWriter = File.CreateText(filename))
@@ -168,7 +168,7 @@ namespace NonVisuals.StreamDeck
                 streamWriter.Write(chars);
             }
 
-            ZipArchiver.CreateZipFile(compressedFileAndPath, filesToCompressList);
+            ZipArchiver.CreateZipFile(compressedFilenameAndPath, filesToCompressList.Distinct().ToList());
 
             SystemSounds.Asterisk.Play();
         }

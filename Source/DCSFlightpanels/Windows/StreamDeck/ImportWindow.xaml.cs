@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace DCSFlightpanels.Windows.StreamDeck
 {
@@ -23,6 +27,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private readonly string _panelHash;
         private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
 
+        private string _extractedFilesFolder = "";
 
 
 
@@ -60,7 +65,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void SetFormState()
         {
-            ButtonImport.IsEnabled = DataGridStreamDeckButtons.SelectedItems.Count > 0 && PreCheckBeforeImport() && !string.IsNullOrEmpty(ComboBoxLayers.Text);
+            ButtonImport.IsEnabled = !string.IsNullOrEmpty(TextBoxImageImportFolder.Text) && DataGridStreamDeckButtons.SelectedItems.Count > 0 && PreCheckBeforeImport() && !string.IsNullOrEmpty(ComboBoxLayers.Text);
             ComboBoxButtonName.IsEnabled = DataGridStreamDeckButtons.SelectedItems.Count == 1;
         }
 
@@ -110,6 +115,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     stringBuilder.Append("Before you import, make a copy of your bindings file");
                     MessageBox.Show(stringBuilder.ToString(), "Make backup", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+
+                CopyImagesToNewLocation();
 
                 var selectedStreamDeckButtons = DataGridStreamDeckButtons.SelectedItems.Cast<StreamDeckButton>().ToList(); ;
                 var duplicateList = selectedStreamDeckButtons.GroupBy(a => a.StreamDeckButtonName).Where(a => a.Count() > 1).Select(x => new { StreamDeckButtonName = x.Key }).ToList();
@@ -197,18 +204,18 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var fileName = "";
+                var zipFileName = "";
                 var openFileDialog = new OpenFileDialog();
 
                 openFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastStreamDeckImportFolder) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : Settings.Default.LastStreamDeckImportFolder;
-                openFileDialog.Filter = @"Stream Deck Export|*.txt";
+                openFileDialog.Filter = @"Compressed File|*.zip";
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    fileName = openFileDialog.FileName;
+                    zipFileName = openFileDialog.FileName;
                     Settings.Default.LastStreamDeckImportFolder = Path.GetDirectoryName(openFileDialog.FileName);
                     Settings.Default.Save();
-                    ReadFile(fileName);
+                    ReadFile(zipFileName);
                 }
                 SetFormState();
             }
@@ -218,15 +225,41 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private void ReadFile(string fileName)
+        private void ReadFile(string filename)
         {
+            if (!VerifyImportArchive(filename))
+            {
+                MessageBox.Show("Archive does not contain button data file " + StreamDeckConstants.BUTTON_EXPORT_FILENAME + ". Choose an other file.", "Invalid export file", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            /*
+             * Copy zip to temp folder and work on it there
+             */
+            StreamDeckCommon.CleanDCSFPTemporaryFolder();
+            var tempFolder = StreamDeckCommon.GetDCSFPTemporaryFolder();
+            _extractedFilesFolder = tempFolder + "\\extracted_files";
+            
+            
+            File.Copy(filename, tempFolder + "\\" + Path.GetFileName(filename));
+            filename = tempFolder + "\\" + Path.GetFileName(filename);
+
+            /*
+             * Extract files to folder extracted_files
+             */
+            ZipArchiver.ExtractZipFile(filename, _extractedFilesFolder);
+            
             Clear();
 
-            var fileContents = File.ReadAllText(fileName);
+            var fileContents = File.ReadAllText(_extractedFilesFolder + "\\" + StreamDeckConstants.BUTTON_EXPORT_FILENAME);
 
             TranslateJSON(fileContents);
 
             ShowButtons();
+        }
+
+        private bool VerifyImportArchive(string filename)
+        {
+            return ZipArchiver.ZipFileContainsFile(filename, StreamDeckConstants.BUTTON_EXPORT_FILENAME);
         }
 
         private void TranslateJSON(string jsonText)
@@ -401,6 +434,85 @@ namespace DCSFlightpanels.Windows.StreamDeck
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonBrowse_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var folderBrowserDialog = new FolderBrowserDialog();
+
+                
+                folderBrowserDialog.SelectedPath = string.IsNullOrEmpty(Settings.Default.ImageImportFolder)
+                    ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    : Settings.Default.ImageImportFolder;
+                folderBrowserDialog.ShowNewFolderButton = true;
+
+                if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Settings.Default.ImageImportFolder = folderBrowserDialog.SelectedPath;
+                    Settings.Default.Save();
+                    TextBoxImageImportFolder.Text = Common.GetRelativePath(Common.GetApplicationPath(), folderBrowserDialog.SelectedPath);
+                    SetNewImageFilePaths(TextBoxImageImportFolder.Text);
+                    DataGridStreamDeckButtons.Items.Refresh();
+                }
+
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SetNewImageFilePaths(string filePath)
+        {
+            foreach (var streamDeckButton in _streamDeckButtons)
+            {
+                if (streamDeckButton.Face != null)
+                {
+                    if (streamDeckButton.Face.GetType() == typeof(DCSBIOSDecoder))
+                    {
+                        var decoder = ((DCSBIOSDecoder)streamDeckButton.Face);
+                        decoder.SetImageFilePaths(filePath);
+                    }
+                    else if (streamDeckButton.Face.GetType() == typeof(FaceTypeImage))
+                    {
+                        var faceTypeImage = ((FaceTypeImage)streamDeckButton.Face);
+                        faceTypeImage.ImageFile = Path.Combine(filePath, faceTypeImage.ImageFile);
+                    }
+                    else if (streamDeckButton.Face.GetType() == typeof(FaceTypeDCSBIOSOverlay))
+                    {
+                        var faceTypeDCSBIOSOverlay = ((FaceTypeDCSBIOSOverlay)streamDeckButton.Face);
+                        faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.Combine(filePath, faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
+                    }
+                }
+            }
+        }
+
+        private void CopyImagesToNewLocation()
+        {
+            var extractedFolderDirectoryInfo = new DirectoryInfo(_extractedFilesFolder);
+            var filesToCopy = extractedFolderDirectoryInfo.GetFiles();
+
+            foreach (var file in filesToCopy)
+            {
+                if (!file.Name.EndsWith(".txt"))
+                {
+                    if (File.Exists(Path.Combine(TextBoxImageImportFolder.Text, file.Name)))
+                    {
+                        if (MessageBox.Show("Overwrite file " + Path.Combine(TextBoxImageImportFolder.Text, file.Name) + "?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) ==
+                            MessageBoxResult.Yes)
+                        {
+                            File.Copy(file.FullName, Path.Combine(TextBoxImageImportFolder.Text, file.Name), true);
+                        }
+                    }
+                    else
+                    {
+                        File.Copy(file.FullName, Path.Combine(TextBoxImageImportFolder.Text, file.Name));
+                    }
+                }
             }
         }
     }

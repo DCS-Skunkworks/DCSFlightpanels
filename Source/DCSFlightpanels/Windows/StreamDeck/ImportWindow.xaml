@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels.Windows.StreamDeck"
         xmlns:streamDeck="clr-namespace:NonVisuals.StreamDeck;assembly=NonVisuals"
+        xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
         Loaded="ImportWindow_OnLoaded"
         KeyDown="ImportWindow_OnKeyDown"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="Import Stream Deck buttons" Height="450" Width="1000">
+        Title="Import Stream Deck buttons" Height="600" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70*" />
@@ -20,7 +21,7 @@
             <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Margin="2,2,2,0">
+        <WrapPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="2,2,2,0" >
             <DataGrid AutoGenerateColumns="false" 
                       Background="White"
                       ItemsSource="{Binding}" 
@@ -34,6 +35,7 @@
                       CanUserResizeRows="False" 
                       CanUserSortColumns="False"
                       ColumnWidth="Auto"
+                      Height="460"
                       SelectionChanged="DataGridStreamDeckButtons_OnSelectionChanged"
                       MouseDown="DataGridStreamDeckButtons_OnMouseDown">
                 <DataGrid.Columns>
@@ -41,19 +43,32 @@
                     <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=(streamDeck:StreamDeckButton.Description)}" Width="4*" />
                 </DataGrid.Columns>
             </DataGrid>
-        </StackPanel>
+        </WrapPanel>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="2,2,2,0">
-            <Button Name="ButtonOpenFile" Content="Open Export File" Margin="20,10,20,15" Click="ButtonOpenFile_OnClick"/>
+            <Button Name="ButtonOpenFile" Content="Open Export File" Margin="20,10,20,10" Click="ButtonOpenFile_OnClick"/>
             <Button Name="ButtonSelectAll" Content="Select All" Margin="20,5,20,3" Click="ButtonSelectAll_OnClick"/>
             <Button Name="ButtonSelectNone" Content="Clear Selection" Margin="20,2,20,5" Click="ButtonSelectNone_OnClick"/>
 
-            <GroupBox Header="Target layer" Margin="13,15,13,15">
+            <GroupBox Header="Image folder" Margin="13,5,13,15">
+                <StackPanel Margin="0,2,0,2">
+                    <Label>
+                        <TextBlock TextWrapping="Wrap" Text="Select to which folder images will be imported"/>
+                    </Label>
+                    <TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxImageImportFolder"  IsEnabled="False" Background="LightSteelBlue"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Right">
+                        <Button Name="ButtonBrowse" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowse_OnClick"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+
+            <GroupBox Header="Target layer" Margin="13,5,13,15">
                 <StackPanel>
                     <ComboBox Name="ComboBoxLayers" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxLayers_OnDropDownClosed" />
 
                     <CheckBox Name="CheckBoxReplace" Margin="2,10,2,2" Checked="CheckBoxReplace_OnChecked" Unchecked="CheckBoxReplace_OnUnchecked">
-                    <TextBlock TextWrapping="Wrap" Text="Replace existing buttons"/>
+                        <TextBlock TextWrapping="Wrap" Text="Replace existing buttons"/>
                     </CheckBox>
 
                     <CheckBox Name="CheckBoxOverwrite" Margin="2,2,2,10" Checked="CheckBoxOverwrite_OnChecked" Unchecked="CheckBoxOverwrite_OnUnchecked">
@@ -64,7 +79,7 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Button location" Margin="13,15,13,15">
+            <GroupBox Header="Button location" Margin="13,5,13,15">
                 <StackPanel>
                     <ComboBox Name="ComboBoxButtonName" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxButtonName_OnDropDownClosed"/>
                 </StackPanel>
