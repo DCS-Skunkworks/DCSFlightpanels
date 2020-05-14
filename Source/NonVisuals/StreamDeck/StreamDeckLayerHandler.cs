@@ -17,7 +17,7 @@ namespace NonVisuals.StreamDeck
 {
     public class StreamDeckLayerHandler
     {
-        private StreamDeckPanel _streamDeckPanel = null;
+        private readonly StreamDeckPanel _streamDeckPanel = null;
         private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
@@ -28,7 +28,17 @@ namespace NonVisuals.StreamDeck
         private bool _jsonImported = false;
 
         private static int _instanceIdCounter = 0;
-        private int _instanceId = 0;
+        private readonly int _instanceId = 0;
+
+
+        private readonly UnicodeEncoding _uniCodeEncoding = new UnicodeEncoding();
+        private const Formatting INDENTED_FORMATTING = Formatting.Indented;
+        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings()
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+
 
         public StreamDeckLayerHandler(StreamDeckPanel streamDeckPanel)
         {
@@ -50,18 +60,11 @@ namespace NonVisuals.StreamDeck
 
         public string ExportJSONSettings()
         {
-            const Formatting indented = Formatting.Indented;
-            var settings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-
             CleanLayers();
 
             CheckHomeLayerExists();
 
-            return JsonConvert.SerializeObject(_layerList, indented, settings);
+            return JsonConvert.SerializeObject(_layerList, INDENTED_FORMATTING, _jsonSettings);
         }
 
         public void ImportJSONSettings(string jsonText)
@@ -82,10 +85,22 @@ namespace NonVisuals.StreamDeck
             CheckHomeLayerExists();
         }
 
-        public void ImportButtons(EnumButtonImportMode importMode, string layerName, List<StreamDeckButton> streamDeckButtons)
+        public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
         {
-            var layer = GetLayer(layerName);
-            layer.ImportButtons(importMode, streamDeckButtons);
+            var importLayerNames = buttonExports.Select(o => o.LayerName).Distinct().ToList();
+
+            foreach (var importLayerName in importLayerNames)
+            {
+
+                if (!LayerExists(importLayerName))
+                {
+                    var newLayer = new StreamDeckLayer {Name = importLayerName};
+                    AddLayer(newLayer);
+                }
+
+                var layer = GetLayer(importLayerName);
+                layer.ImportButtons(importMode, buttonExports);
+            }
         }
 
         public List<ButtonExport> GetButtonExports()
@@ -100,7 +115,7 @@ namespace NonVisuals.StreamDeck
                     foreach (var streamDeckButton in list)
                     {
                         var clonedButton = streamDeckButton.DeepClone();
-                        var exportButton = new ButtonExport(streamDeckLayer, clonedButton);
+                        var exportButton = new ButtonExport(streamDeckLayer.Name, clonedButton);
                         result.Add(exportButton);
                     }
                 }
@@ -111,19 +126,16 @@ namespace NonVisuals.StreamDeck
 
         public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
-            var encoder = new UnicodeEncoding();
-            const Formatting indented = Formatting.Indented;
-            var settings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-
-            var exportList = buttonExports.Select(buttonExport => buttonExport.Button).ToList();
-
             var filesToCompressList = new List<string>(); //includes the json file and eventual image files
 
-            foreach (var buttonExport in buttonExports)
+            StreamDeckCommon.CleanDCSFPTemporaryFolder();
+            /*
+             * Close because the list changes below. If not then subsequent operations by the user
+             * will cause null exceptions since image path is reset.
+             */
+            var clonedButtonExports = buttonExports.DeepClone();
+
+            foreach (var buttonExport in clonedButtonExports)
             {
                 if (buttonExport.Button.Face != null)
                 {
@@ -157,9 +169,9 @@ namespace NonVisuals.StreamDeck
                 }
             }
 
-            var json = JsonConvert.SerializeObject(exportList, indented, settings);
-            var chars = encoder.GetChars(encoder.GetBytes(json));
-            
+            var json = JsonConvert.SerializeObject(clonedButtonExports, INDENTED_FORMATTING, _jsonSettings);
+            var chars = _uniCodeEncoding.GetChars(_uniCodeEncoding.GetBytes(json));
+
             var filename = StreamDeckCommon.GetDCSFPTemporaryFolder() + "\\" + StreamDeckConstants.BUTTON_EXPORT_FILENAME;
             filesToCompressList.Add(filename);
 
@@ -364,7 +376,7 @@ namespace NonVisuals.StreamDeck
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
-                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.StreamDeckButtons.Count + ")\n");
+                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.LayerStreamDeckButtons.Count + ")\n");
             }
             stringBuilder.Append("\n");
 
@@ -541,6 +553,22 @@ namespace NonVisuals.StreamDeck
         {
             var streamDeckButtonName = StreamDeckCommon.ButtonName(streamDeckButtonNumber);
             return GetButton(streamDeckButtonName, SelectedLayerName, false);
+        }
+
+        public bool LayerExists(string layerName)
+        {
+            var result = false;
+
+            foreach (var streamDeckLayer in _layerList)
+            {
+                if (streamDeckLayer.Name == layerName)
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
         }
 
         public static int InstanceIdCounter => _instanceIdCounter;

@@ -29,7 +29,20 @@ namespace NonVisuals.StreamDeck
 
         public static void ExtractZipFile(string zipFileName, string extractFolder)
         {
-            ZipFile.ExtractToDirectory(zipFileName, extractFolder);
+            //ZipFile.ExtractToDirectory(zipFileName, extractFolder);
+
+            var zipArchive = ZipFile.OpenRead(zipFileName);
+
+            foreach (var zipArchiveEntry in zipArchive.Entries)
+            {
+                using (var zipEntryStream = zipArchiveEntry.Open())
+                {
+                    using (var fileStream = File.Create(extractFolder + "\\" + zipArchiveEntry.Name ))
+                    {
+                        zipEntryStream.CopyTo(fileStream);
+                    }
+                }
+            }
         }
 
         public static void CreateZipFile(string zipFileName, List<string> filesToInclude)

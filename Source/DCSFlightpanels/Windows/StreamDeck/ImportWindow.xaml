@@ -39,17 +39,23 @@
                       SelectionChanged="DataGridStreamDeckButtons_OnSelectionChanged"
                       MouseDown="DataGridStreamDeckButtons_OnMouseDown">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Button" IsReadOnly="True" Binding="{Binding Path=(streamDeck:StreamDeckButton.StreamDeckButtonName)}" Width="1*" />
-                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=(streamDeck:StreamDeckButton.Description)}" Width="4*" />
+                    <DataGridTextColumn Header="Button" IsReadOnly="True" Binding="{Binding Path=(streamDeck:ButtonExport.LayerName)}" Width="1*" />
+                    <DataGridTextColumn Header="Button" IsReadOnly="True" Binding="{Binding Path=(streamDeck:ButtonExport.ButtonName)}" Width="1*" />
+                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=(streamDeck:ButtonExport.ButtonDescription)}" Width="4*" />
                 </DataGrid.Columns>
             </DataGrid>
         </WrapPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="1" Margin="2,2,2,0">
-            <Button Name="ButtonOpenFile" Content="Open Export File" Margin="20,10,20,10" Click="ButtonOpenFile_OnClick"/>
-            <Button Name="ButtonSelectAll" Content="Select All" Margin="20,5,20,3" Click="ButtonSelectAll_OnClick"/>
-            <Button Name="ButtonSelectNone" Content="Clear Selection" Margin="20,2,20,5" Click="ButtonSelectNone_OnClick"/>
+        <StackPanel Grid.Row="1" Grid.Column="0"  Margin="2,2,2,0" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal">
+                <Button Name="ButtonSelectAll" Content="Select All" Margin="5,0,5,0" Click="ButtonSelectAll_OnClick"/>
+                <Button Name="ButtonSelectNone" Content="Clear Selection" Margin="5,0,5,0" Click="ButtonSelectNone_OnClick"/>
+            </StackPanel>
+        </StackPanel>
 
+        <StackPanel Grid.Row="0" Grid.Column="1"  Margin="2,2,2,0">
+
+            <Button Name="ButtonOpenFile" Content="Open Export File" Margin="13,10,13,5" Click="ButtonOpenFile_OnClick"/>
             <GroupBox Header="Image folder" Margin="13,5,13,15">
                 <StackPanel Margin="0,2,0,2">
                     <Label>
@@ -63,10 +69,8 @@
             </GroupBox>
 
 
-            <GroupBox Header="Target layer" Margin="13,5,13,15">
+            <GroupBox Header="Import Options" Margin="13,5,13,15">
                 <StackPanel>
-                    <ComboBox Name="ComboBoxLayers" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxLayers_OnDropDownClosed" />
-
                     <CheckBox Name="CheckBoxReplace" Margin="2,10,2,2" Checked="CheckBoxReplace_OnChecked" Unchecked="CheckBoxReplace_OnUnchecked">
                         <TextBlock TextWrapping="Wrap" Text="Replace existing buttons"/>
                     </CheckBox>
@@ -75,13 +79,19 @@
                         <TextBlock TextWrapping="Wrap" Text="Overwrite existing settings"/>
                     </CheckBox>
 
+                    <Label FontSize="9">
+                        <TextBox TextWrapping="Wrap">Missing layers are created automatically</TextBox>
+                    </Label>
                     <Button Name="ButtonImport" Content="Import" Margin="2,3,2,2" Click="ButtonImport_OnClick"/>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Button location" Margin="13,5,13,15">
+            <GroupBox Header="Modify Import Targets" Margin="13,5,13,15">
                 <StackPanel>
+                    <Label Content="Button Name"></Label>
                     <ComboBox Name="ComboBoxButtonName" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxButtonName_OnDropDownClosed"/>
+                    <Label Content="Layer"></Label>
+                    <ComboBox Name="ComboBoxLayers" IsEditable="False" Margin="2,5,2,2" DropDownClosed="ComboBoxLayers_OnDropDownClosed" />
                 </StackPanel>
             </GroupBox>
         </StackPanel>

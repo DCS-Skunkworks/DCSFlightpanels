@@ -137,6 +137,22 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
+                if (DataGridStreamDeckButtons.SelectedItems.Count == 1)
+                {
+                    var buttonExport = (ButtonExport)DataGridStreamDeckButtons.SelectedItems[0];
+                    if (buttonExport != null)
+                    {
+                        TextBoxLayerName.Text = buttonExport.LayerName;
+                        TextBoxButtonName.Text = buttonExport.ButtonName.ToString();
+                        TextBoxDescription.Text = buttonExport.ButtonDescription;
+                    }
+                }
+                else
+                {
+                    TextBoxLayerName.Text = "";
+                    TextBoxButtonName.Text = "";
+                    TextBoxDescription.Text = "";
+                }
                 SetFormState();
             }
             catch (Exception ex)

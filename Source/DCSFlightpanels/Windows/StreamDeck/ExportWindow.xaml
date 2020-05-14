@@ -50,6 +50,16 @@
             <Button Name="ButtonOpenFile" Content="Open Export File" Margin="20,2,20,5" Click="ButtonOpenFile_OnClick"/>
         </StackPanel>
 
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="2,0,2,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <TextBox Name="TextBoxLayerName" BorderThickness="0" IsReadOnly="False" ></TextBox>
+                <TextBox Name="TextBoxButtonName" BorderThickness="0" IsReadOnly="False" ></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <TextBox Name="TextBoxDescription" BorderThickness="0" IsReadOnly="False" ></TextBox>
+            </StackPanel>
+        </StackPanel>
+
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="2,30,2,0">
             <Button Name="ButtonClose" Content="Close" Margin="20,5,20,3" Click="ButtonClose_OnClick"/>
         </StackPanel>

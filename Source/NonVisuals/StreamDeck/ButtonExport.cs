@@ -1,26 +1,28 @@
-﻿namespace NonVisuals.StreamDeck
+﻿using System;
+using Newtonsoft.Json;
+
+namespace NonVisuals.StreamDeck
 {
+
+    [Serializable]
     public class ButtonExport
     {
-        public StreamDeckLayer Layer { get; set; }
+        public string LayerName { get; set; }
         public StreamDeckButton Button { get; set; }
 
-        public ButtonExport(StreamDeckLayer layer, StreamDeckButton button)
+        public ButtonExport(string layerName, StreamDeckButton button)
         {
-            Layer = layer;
+            LayerName = layerName;
             Button = button;
         }
-
-        public string LayerName
-        {
-            get => Layer.Name;
-        }
-
+        
+        [JsonIgnore]
         public EnumStreamDeckButtonNames ButtonName
         {
             get => Button.StreamDeckButtonName;
         }
 
+        [JsonIgnore]
         public string ButtonDescription
         {
             get => Button.Description;

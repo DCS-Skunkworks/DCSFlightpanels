@@ -118,9 +118,9 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public void ImportButtons(EnumButtonImportMode importMode, string layerName, List<StreamDeckButton> streamDeckButtons)
+        public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
         {
-            _streamDeckLayerHandler.ImportButtons(importMode, layerName, streamDeckButtons);
+            _streamDeckLayerHandler.ImportButtons(importMode, buttonExports);
         }
 
         public List<ButtonExport> GetButtonExports()

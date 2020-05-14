@@ -19,7 +19,15 @@ namespace NonVisuals.StreamDeck
         private string _panelHash = "";
 
 
-
+        public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
+        {
+            var streamDeckButtons = buttonExports.Where(o => o.LayerName == _name).Select(m => m.Button).ToList();
+            if (streamDeckButtons.Count > 0)
+            {
+                ImportButtons(importMode, streamDeckButtons);
+            }
+        }
+        
         public void ImportButtons(EnumButtonImportMode importMode, List<StreamDeckButton> newStreamDeckButtons)
         {
             var changesMade = false;
@@ -37,11 +45,13 @@ namespace NonVisuals.StreamDeck
                         {
                             oldStreamDeckButton.ClearConfiguration();
                             oldStreamDeckButton.Consume(true, newStreamDeckButton);
+
                             changesMade = true;
                         }
                         else if (importMode == EnumButtonImportMode.Overwrite)
                         {
                             oldStreamDeckButton.Consume(true, newStreamDeckButton);
+
                             changesMade = true;
                         }
                         else if (importMode == EnumButtonImportMode.None)
@@ -50,7 +60,6 @@ namespace NonVisuals.StreamDeck
                             {
                                 var face = newStreamDeckButton.Face.DeepClone();
                                 face.AfterClone();
-                                oldStreamDeckButton.Face = face;
 
                                 changesMade = true;
                             }
@@ -68,12 +77,14 @@ namespace NonVisuals.StreamDeck
                             }
                         }
 
+                        oldStreamDeckButton.SetStreamDeckPanelHash(_panelHash);
                         break;
                     }
                 }
 
                 if (!found)
                 {
+                    newStreamDeckButton.SetStreamDeckPanelHash(_panelHash);
                     _streamDeckButtons.Add(newStreamDeckButton);
                     changesMade = true;
                 }
@@ -94,7 +105,7 @@ namespace NonVisuals.StreamDeck
         {
             set
             {
-                foreach (var streamDeckButton in StreamDeckButtons)
+                foreach (var streamDeckButton in LayerStreamDeckButtons)
                 {
                     if (streamDeckButton.Face != null)
                     {
@@ -119,7 +130,7 @@ namespace NonVisuals.StreamDeck
         {
             set
             {
-                foreach (var streamDeckButton in StreamDeckButtons)
+                foreach (var streamDeckButton in LayerStreamDeckButtons)
                 {
                     if (streamDeckButton.Face != null)
                     {
@@ -144,7 +155,7 @@ namespace NonVisuals.StreamDeck
         {
             set
             {
-                foreach (var streamDeckButton in StreamDeckButtons)
+                foreach (var streamDeckButton in LayerStreamDeckButtons)
                 {
                     if (streamDeckButton.Face != null)
                     {
@@ -169,7 +180,7 @@ namespace NonVisuals.StreamDeck
             streamDeckButton.IsVisible = _isVisible;
 
             var found = false;
-            foreach (var button in StreamDeckButtons)
+            foreach (var button in LayerStreamDeckButtons)
             {
                 if (button.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName)
                 {
@@ -243,7 +254,7 @@ namespace NonVisuals.StreamDeck
             return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
-        public List<StreamDeckButton> StreamDeckButtons
+        public List<StreamDeckButton> LayerStreamDeckButtons
         {
             get => _streamDeckButtons;
             set => _streamDeckButtons = value;
@@ -296,7 +307,7 @@ namespace NonVisuals.StreamDeck
             set
             {
                 _isVisible = value;
-                foreach (var streamDeckButton in StreamDeckButtons)
+                foreach (var streamDeckButton in LayerStreamDeckButtons)
                 {
                     streamDeckButton.IsVisible = _isVisible;
                     streamDeckButton.IsVisible = _isVisible;
@@ -311,7 +322,7 @@ namespace NonVisuals.StreamDeck
             set
             {
                 _panelHash = value;
-                foreach (var streamDeckButton in StreamDeckButtons)
+                foreach (var streamDeckButton in LayerStreamDeckButtons)
                 {
                     streamDeckButton.SetStreamDeckPanelHash(_panelHash);
                 }

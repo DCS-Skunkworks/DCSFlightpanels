@@ -432,7 +432,7 @@ namespace NonVisuals.StreamDeck
             {
                 if(dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.Image || dcsbiosConverter.ConverterOutputType == EnumConverterOutputType.ImageOverlay)
                 {
-                    dcsbiosConverter.ImageFileRelativePath = path + dcsbiosConverter.ImageFileRelativePath;
+                    dcsbiosConverter.ImageFileRelativePath = path + "\\" + Path.GetFileName(dcsbiosConverter.ImageFileRelativePath);
                 }
             }
         }

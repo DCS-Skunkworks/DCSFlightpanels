@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck;
+using Cursors = System.Windows.Input.Cursors;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -25,7 +25,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     {
         private bool _formLoaded = false;
         private readonly string _panelHash;
-        private List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
+        private List<ButtonExport> _buttonExports = new List<ButtonExport>();
 
         private string _extractedFilesFolder = "";
 
@@ -60,19 +60,20 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 Common.ShowErrorMessageBox(ex);
             }
-
         }
 
         private void SetFormState()
         {
-            ButtonImport.IsEnabled = !string.IsNullOrEmpty(TextBoxImageImportFolder.Text) && DataGridStreamDeckButtons.SelectedItems.Count > 0 && PreCheckBeforeImport() && !string.IsNullOrEmpty(ComboBoxLayers.Text);
+            ButtonImport.IsEnabled = !string.IsNullOrEmpty(TextBoxImageImportFolder.Text) && DataGridStreamDeckButtons.SelectedItems.Count > 0 && PreCheckBeforeImport();
             ComboBoxButtonName.IsEnabled = DataGridStreamDeckButtons.SelectedItems.Count == 1;
+
+            ButtonImport.Content = "Import" + (DataGridStreamDeckButtons.SelectedItems.Count == 0 ? "" : "(" + DataGridStreamDeckButtons.SelectedItems.Count + ")");
         }
 
         private void ShowButtons()
         {
-            DataGridStreamDeckButtons.DataContext = _streamDeckButtons;
-            DataGridStreamDeckButtons.ItemsSource = _streamDeckButtons;
+            DataGridStreamDeckButtons.DataContext = _buttonExports;
+            DataGridStreamDeckButtons.ItemsSource = _buttonExports;
             DataGridStreamDeckButtons.Items.Refresh();
         }
 
@@ -118,8 +119,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 CopyImagesToNewLocation();
 
-                var selectedStreamDeckButtons = DataGridStreamDeckButtons.SelectedItems.Cast<StreamDeckButton>().ToList(); ;
-                var duplicateList = selectedStreamDeckButtons.GroupBy(a => a.StreamDeckButtonName).Where(a => a.Count() > 1).Select(x => new { StreamDeckButtonName = x.Key }).ToList();
+                var selectedButtonExports = DataGridStreamDeckButtons.SelectedItems.Cast<ButtonExport>().ToList(); ;
+
+                /*var duplicateList = selectedStreamDeckButtons.GroupBy(a => a.StreamDeckButtonName).Where(a => a.Count() > 1).Select(x => new { StreamDeckButtonName = x.Key }).ToList();
 
                 if (duplicateList.Count > 0)
                 {
@@ -127,6 +129,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     MessageBox.Show(infoText, "Duplicate buttons", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     return;
                 }
+                */
 
                 var importMode = EnumButtonImportMode.None;
                 if (CheckBoxReplace.IsChecked == true)
@@ -138,8 +141,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     importMode = EnumButtonImportMode.Overwrite;
                 }
 
-                StreamDeckPanel.GetInstance(_panelHash).ImportButtons(importMode, ComboBoxLayers.Text, selectedStreamDeckButtons);
-                
+                StreamDeckPanel.GetInstance(_panelHash).ImportButtons(importMode, selectedButtonExports);
+
                 MessageBox.Show("Import was completed", "Import successful", MessageBoxButton.OK, MessageBoxImage.Information);
                 SetFormState();
             }
@@ -177,14 +180,29 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                if (DataGridStreamDeckButtons.SelectedItems.Count == 0 || DataGridStreamDeckButtons.SelectedItems.Count > 1)
+                if (DataGridStreamDeckButtons.SelectedItems.Count != 1)
                 {
                     SetComboBoxButtonNameValueNone();
-                    return;
+                }
+                else
+                {
+                    var buttonExport = (ButtonExport)DataGridStreamDeckButtons.SelectedItems[0];
+                    SetComboBoxButtonNameValue(StreamDeckCommon.ButtonNumber(buttonExport.Button.StreamDeckButtonName));
                 }
 
-                var button = (StreamDeckButton)DataGridStreamDeckButtons.SelectedItems[0];
-                SetComboBoxButtonNameValue(StreamDeckCommon.ButtonNumber(button.StreamDeckButtonName));
+                if (DataGridStreamDeckButtons.SelectedItems.Cast<ButtonExport>().ToList().Select(m => m.LayerName).Distinct().ToList().Count > 1)
+                {
+                    ComboBoxLayers.Text = "";
+                }
+                else if (DataGridStreamDeckButtons.SelectedItems.Count == 1)
+                {
+                    ComboBoxLayers.Text = ((ButtonExport)DataGridStreamDeckButtons.SelectedItems[0]).LayerName;
+                }
+                else if (DataGridStreamDeckButtons.SelectedItems.Count == 0)
+                {
+                    ComboBoxLayers.Text = "";
+                }
+
                 SetFormState();
             }
             catch (Exception ex)
@@ -195,8 +213,8 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void Clear()
         {
-            _streamDeckButtons.Clear();
-            DataGridStreamDeckButtons.Items.Clear();
+            _buttonExports.Clear();
+            ShowButtons();
             SetFormState();
         }
 
@@ -212,6 +230,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                 if (openFileDialog.ShowDialog() == true)
                 {
+                    Mouse.OverrideCursor = Cursors.Wait;
                     zipFileName = openFileDialog.FileName;
                     Settings.Default.LastStreamDeckImportFolder = Path.GetDirectoryName(openFileDialog.FileName);
                     Settings.Default.Save();
@@ -227,34 +246,47 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void ReadFile(string filename)
         {
-            if (!VerifyImportArchive(filename))
+            try
             {
-                MessageBox.Show("Archive does not contain button data file " + StreamDeckConstants.BUTTON_EXPORT_FILENAME + ". Choose an other file.", "Invalid export file", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+
+                if (!VerifyImportArchive(filename))
+                {
+                    MessageBox.Show("Archive does not contain button data file " + StreamDeckConstants.BUTTON_EXPORT_FILENAME + ". Choose an other file.", "Invalid export file", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                /*
+                 * Copy zip to temp folder and work on it there
+                 */
+                StreamDeckCommon.CleanDCSFPTemporaryFolder();
+                var tempFolder = StreamDeckCommon.GetDCSFPTemporaryFolder();
+                _extractedFilesFolder = tempFolder + "\\extracted_files";
+
+                if (!Directory.Exists(_extractedFilesFolder))
+                {
+                    Directory.CreateDirectory(_extractedFilesFolder);
+                }
+
+                File.Copy(filename, tempFolder + "\\" + Path.GetFileName(filename));
+                filename = tempFolder + "\\" + Path.GetFileName(filename);
+
+                /*
+                 * Extract files to folder extracted_files
+                 */
+                ZipArchiver.ExtractZipFile(filename, _extractedFilesFolder);
+
+                Clear();
+
+                var fileContents = File.ReadAllText(_extractedFilesFolder + "\\" + StreamDeckConstants.BUTTON_EXPORT_FILENAME);
+
+                TranslateJSON(fileContents);
+
+                ShowButtons();
+
             }
-            /*
-             * Copy zip to temp folder and work on it there
-             */
-            StreamDeckCommon.CleanDCSFPTemporaryFolder();
-            var tempFolder = StreamDeckCommon.GetDCSFPTemporaryFolder();
-            _extractedFilesFolder = tempFolder + "\\extracted_files";
-            
-            
-            File.Copy(filename, tempFolder + "\\" + Path.GetFileName(filename));
-            filename = tempFolder + "\\" + Path.GetFileName(filename);
-
-            /*
-             * Extract files to folder extracted_files
-             */
-            ZipArchiver.ExtractZipFile(filename, _extractedFilesFolder);
-            
-            Clear();
-
-            var fileContents = File.ReadAllText(_extractedFilesFolder + "\\" + StreamDeckConstants.BUTTON_EXPORT_FILENAME);
-
-            TranslateJSON(fileContents);
-
-            ShowButtons();
+            finally
+            {
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
         }
 
         private bool VerifyImportArchive(string filename)
@@ -273,7 +305,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 TypeNameHandling = TypeNameHandling.All
             };
 
-            _streamDeckButtons = JsonConvert.DeserializeObject<List<StreamDeckButton>>(jsonText, settings);
+            _buttonExports = JsonConvert.DeserializeObject<List<ButtonExport>>(jsonText, settings);
 
 
         }
@@ -310,8 +342,37 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                ((StreamDeckButton)DataGridStreamDeckButtons.SelectedItems[0]).StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), ComboBoxButtonName.Text);
+                if (string.IsNullOrEmpty(ComboBoxButtonName.Text) || DataGridStreamDeckButtons.SelectedItems.Count != 1)
+                {
+                    return;
+                }
+
+                var streamDeckButton = ((ButtonExport)DataGridStreamDeckButtons.SelectedItems[0]).Button;
+                streamDeckButton.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), ComboBoxButtonName.Text);
                 DataGridStreamDeckButtons.Items.Refresh();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(ComboBoxLayers.Text) || DataGridStreamDeckButtons.SelectedItems.Count == 0)
+                {
+                    return;
+                }
+
+                foreach (var selectedItem in DataGridStreamDeckButtons.SelectedItems)
+                {
+                    var buttonExport = (ButtonExport)selectedItem;
+                    buttonExport.LayerName = ComboBoxLayers.Text;
+                }
+
                 DataGridStreamDeckButtons.Items.Refresh();
                 SetFormState();
             }
@@ -334,18 +395,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
 
             ComboBoxLayers.DropDownClosed += ComboBoxLayers_OnDropDownClosed;
-        }
-
-        private void ComboBoxLayers_OnDropDownClosed(object sender, EventArgs e)
-        {
-            try
-            {
-                SetFormState();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
         }
 
         private void ImportWindow_OnKeyDown(object sender, KeyEventArgs e)
@@ -443,7 +492,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 var folderBrowserDialog = new FolderBrowserDialog();
 
-                
+
                 folderBrowserDialog.SelectedPath = string.IsNullOrEmpty(Settings.Default.ImageImportFolder)
                     ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
                     : Settings.Default.ImageImportFolder;
@@ -468,8 +517,10 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void SetNewImageFilePaths(string filePath)
         {
-            foreach (var streamDeckButton in _streamDeckButtons)
+            foreach (var buttonExport in _buttonExports)
             {
+                var streamDeckButton = buttonExport.Button;
+
                 if (streamDeckButton.Face != null)
                 {
                     if (streamDeckButton.Face.GetType() == typeof(DCSBIOSDecoder))
@@ -480,12 +531,12 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     else if (streamDeckButton.Face.GetType() == typeof(FaceTypeImage))
                     {
                         var faceTypeImage = ((FaceTypeImage)streamDeckButton.Face);
-                        faceTypeImage.ImageFile = Path.Combine(filePath, faceTypeImage.ImageFile);
+                        faceTypeImage.ImageFile = Path.Combine(filePath, Path.GetFileName(faceTypeImage.ImageFile));
                     }
                     else if (streamDeckButton.Face.GetType() == typeof(FaceTypeDCSBIOSOverlay))
                     {
                         var faceTypeDCSBIOSOverlay = ((FaceTypeDCSBIOSOverlay)streamDeckButton.Face);
-                        faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.Combine(filePath, faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
+                        faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.Combine(filePath, Path.GetFileName(faceTypeDCSBIOSOverlay.BackgroundBitmapPath));
                     }
                 }
             }
@@ -495,6 +546,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             var extractedFolderDirectoryInfo = new DirectoryInfo(_extractedFilesFolder);
             var filesToCopy = extractedFolderDirectoryInfo.GetFiles();
+            var show = false;
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("Following files exists in target folder and were not copied :\n");
 
             foreach (var file in filesToCopy)
             {
@@ -502,17 +556,19 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 {
                     if (File.Exists(Path.Combine(TextBoxImageImportFolder.Text, file.Name)))
                     {
-                        if (MessageBox.Show("Overwrite file " + Path.Combine(TextBoxImageImportFolder.Text, file.Name) + "?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) ==
-                            MessageBoxResult.Yes)
-                        {
-                            File.Copy(file.FullName, Path.Combine(TextBoxImageImportFolder.Text, file.Name), true);
-                        }
+                        stringBuilder.Append(file.Name).Append("\n");
+                        show = true;
                     }
                     else
                     {
                         File.Copy(file.FullName, Path.Combine(TextBoxImageImportFolder.Text, file.Name));
                     }
                 }
+            }
+
+            if (show)
+            {
+                MessageBox.Show(stringBuilder.ToString(), "File already exists", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }
