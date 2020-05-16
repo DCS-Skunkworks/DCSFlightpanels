@@ -1,13 +1,16 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Windows.Documents;
+using ClassLibraryCommon;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -36,7 +39,11 @@ namespace NonVisuals.StreamDeck
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings()
         {
             TypeNameHandling = TypeNameHandling.All,
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            Error = (sender, args) =>
+            {
+                Common.LogError("JSON Error.\n" + args.ErrorContext.Error.Message);
+            }
         };
 
 
@@ -73,13 +80,11 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            var settings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.All
-            };
 
-            _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, settings);
+            _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
 
+            _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
+            
             _layerList.SetPanelHash(_streamDeckPanel.PanelHash);
             _jsonImported = true;
             CheckHomeLayerExists();
@@ -376,7 +381,7 @@ namespace NonVisuals.StreamDeck
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
-                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.LayerStreamDeckButtons.Count + ")\n");
+                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.StreamDeckButtons.Count + ")\n");
             }
             stringBuilder.Append("\n");
 

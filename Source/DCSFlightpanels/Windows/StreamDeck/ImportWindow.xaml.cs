@@ -496,7 +496,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 folderBrowserDialog.SelectedPath = string.IsNullOrEmpty(Settings.Default.ImageImportFolder)
                     ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
                     : Settings.Default.ImageImportFolder;
-                folderBrowserDialog.ShowNewFolderButton = true;
+                folderBrowserDialog.ShowNewFolderButton = false;
 
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {

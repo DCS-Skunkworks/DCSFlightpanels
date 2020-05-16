@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -987,6 +988,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 var textBox = (PZ55TextBox)sender;
 
+                
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
                 if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
                 {
@@ -994,7 +996,8 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
 
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.Key);
+                var keyCode = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
+
                 e.Handled = true;
 
                 if (keyCode > 0)
@@ -1051,7 +1054,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
         {
-            try
+            /*try
             {
                 var textBox = (PZ55TextBox)sender;
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
@@ -1059,7 +1062,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                var keyPressed = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(e.Key);
+                var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
                 e.Handled = true;
 
                 var hashSetOfKeysPressed = new HashSet<string>();
@@ -1089,7 +1092,7 @@ namespace DCSFlightpanels.PanelUserControls
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
-            }
+            }*/
         }
 
         private void NotifySwitchChanges(HashSet<object> switches)

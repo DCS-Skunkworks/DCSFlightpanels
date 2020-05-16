@@ -801,8 +801,8 @@ namespace DCSFlightpanels.Radios
                     return;
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
-
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.Key);
+                
+                var keyCode = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
                 e.Handled = true;
 
                 if (keyCode > 0)
@@ -1001,18 +1001,6 @@ namespace DCSFlightpanels.Radios
             }
         }
 
-
-        private void TextBoxShortcutKeyDownNumbers(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                return;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1045,7 +1033,7 @@ namespace DCSFlightpanels.Radios
 
         private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
         {
-            try
+            /*try
             {
                 var textBox = ((PZ69TextBox)sender);
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
@@ -1053,7 +1041,8 @@ namespace DCSFlightpanels.Radios
                 {
                     return;
                 }
-                var keyPressed = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(e.Key);
+
+                var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
                 e.Handled = true;
 
                 var hashSetOfKeysPressed = new HashSet<string>();
@@ -1082,7 +1071,7 @@ namespace DCSFlightpanels.Radios
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
-            }
+            }*/
         }
 
 

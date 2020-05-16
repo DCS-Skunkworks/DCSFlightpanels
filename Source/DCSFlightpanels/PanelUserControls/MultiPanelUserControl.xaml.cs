@@ -703,7 +703,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
         {
-            try
+            /*try
             {
                 var textBox = ((PZ70TextBox)sender);
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
@@ -741,7 +741,7 @@ namespace DCSFlightpanels.PanelUserControls
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
-            }
+            }*/
         }
 
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -826,8 +826,8 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
-                
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.Key);
+
+                var keyCode = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
                 e.Handled = true;
 
                 if (keyCode > 0)

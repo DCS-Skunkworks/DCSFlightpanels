@@ -72,7 +72,8 @@ namespace DCSFlightpanels.Windows
                 {
                     textBox.Tag = KeyPressLength.ThirtyTwoMilliSec;
                 }
-                var keyPressed = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(e.Key);
+
+                var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
                 e.Handled = true;
 
                 var hashSetOfKeysPressed = new HashSet<string>();

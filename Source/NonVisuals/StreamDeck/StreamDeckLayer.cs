@@ -105,7 +105,7 @@ namespace NonVisuals.StreamDeck
         {
             set
             {
-                foreach (var streamDeckButton in LayerStreamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons)
                 {
                     if (streamDeckButton.Face != null)
                     {
@@ -130,7 +130,7 @@ namespace NonVisuals.StreamDeck
         {
             set
             {
-                foreach (var streamDeckButton in LayerStreamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons)
                 {
                     if (streamDeckButton.Face != null)
                     {
@@ -155,7 +155,7 @@ namespace NonVisuals.StreamDeck
         {
             set
             {
-                foreach (var streamDeckButton in LayerStreamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons)
                 {
                     if (streamDeckButton.Face != null)
                     {
@@ -180,7 +180,7 @@ namespace NonVisuals.StreamDeck
             streamDeckButton.IsVisible = _isVisible;
 
             var found = false;
-            foreach (var button in LayerStreamDeckButtons)
+            foreach (var button in _streamDeckButtons)
             {
                 if (button.StreamDeckButtonName == streamDeckButton.StreamDeckButtonName)
                 {
@@ -254,7 +254,7 @@ namespace NonVisuals.StreamDeck
             return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
-        public List<StreamDeckButton> LayerStreamDeckButtons
+        public List<StreamDeckButton> StreamDeckButtons
         {
             get => _streamDeckButtons;
             set => _streamDeckButtons = value;
@@ -307,7 +307,7 @@ namespace NonVisuals.StreamDeck
             set
             {
                 _isVisible = value;
-                foreach (var streamDeckButton in LayerStreamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons)
                 {
                     streamDeckButton.IsVisible = _isVisible;
                     streamDeckButton.IsVisible = _isVisible;
@@ -322,7 +322,7 @@ namespace NonVisuals.StreamDeck
             set
             {
                 _panelHash = value;
-                foreach (var streamDeckButton in LayerStreamDeckButtons)
+                foreach (var streamDeckButton in _streamDeckButtons)
                 {
                     streamDeckButton.SetStreamDeckPanelHash(_panelHash);
                 }

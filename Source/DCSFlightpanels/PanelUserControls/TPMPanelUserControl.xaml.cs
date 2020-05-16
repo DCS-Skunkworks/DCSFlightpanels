@@ -735,7 +735,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
 
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.Key);
+                var keyCode = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
                 e.Handled = true;
 
                 if (keyCode > 0)
@@ -793,6 +793,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
         {
+            /*
             try
             {
                 var textBox = ((TPMTextBox)sender);
@@ -801,7 +802,8 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     return;
                 }
-                var keyPressed = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(e.Key);
+                var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
+                
                 e.Handled = true;
 
                 var hashSetOfKeysPressed = new HashSet<string>();
@@ -830,7 +832,7 @@ namespace DCSFlightpanels.PanelUserControls
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
-            }
+            }*/
         }
 
         private void NotifySwitchChanges(HashSet<object> switches)
