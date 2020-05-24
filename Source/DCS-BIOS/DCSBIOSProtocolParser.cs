@@ -26,6 +26,8 @@ namespace DCS_BIOS
         public delegate void DcsDataAddressValueEventHandler(object sender, DCSBIOSDataEventArgs e);
         public event DcsDataAddressValueEventHandler OnDcsDataAddressValue;
 
+        private List<string> _errorsLogged = new List<string>(10);
+
         public void Attach(IDcsBiosDataListener iDcsBiosDataListener)
         {
             OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
@@ -223,7 +225,18 @@ namespace DCS_BIOS
                             {
                                 Debug.Print("SENDING FROM DCS-BIOS address & value --> " + _address + "  " + _data);
                             }*/
-                            OnDcsDataAddressValue?.Invoke(this, new DCSBIOSDataEventArgs() { Address = _address, Data = _data });
+                            try
+                            {
+                                OnDcsDataAddressValue?.Invoke(this, new DCSBIOSDataEventArgs() { Address = _address, Data = _data });
+                            }
+                            catch (Exception e)
+                            {
+                                if (!_errorsLogged.Contains(e.Message))
+                                {
+                                    Common.LogError(e, "Error in DCS-BIOS stream. This error will be logged *just once*.");
+                                    _errorsLogged.Add(e.Message);
+                                }
+                            }
                         }
                         _address += 2;
                         if (_count == 0)

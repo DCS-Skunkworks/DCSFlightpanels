@@ -1512,6 +1512,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ButtonSwitchPanelInfo_OnClick(object sender, RoutedEventArgs e)
         {
+            Common.LogError("asd");
             var bytes = Encoding.UTF8.GetBytes(Properties.Resources.PZ55Notes);
             var informationWindow = new InformationRichTextWindow(bytes);
             informationWindow.ShowDialog();

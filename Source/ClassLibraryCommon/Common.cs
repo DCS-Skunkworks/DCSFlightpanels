@@ -186,9 +186,9 @@ namespace ClassLibraryCommon
 
         public static APIModeEnum APIMode = 0;
         private static readonly object ErrorLogLockObject = new object();
-        private static readonly object DebugLogLockObject = new object();
+        //private static readonly object DebugLogLockObject = new object();
         private static string _errorLog = "";
-        private static string _debugLog = "";
+        //private static string _debugLog = "";
 
         public static void SetErrorLog(string filename)
         {
@@ -197,7 +197,7 @@ namespace ClassLibraryCommon
                 _errorLog = filename;
             }
         }
-
+        /*
         public static void SetDebugLog(string filename)
         {
             lock (DebugLogLockObject)
@@ -205,7 +205,7 @@ namespace ClassLibraryCommon
                 _debugLog = filename;
             }
         }
-
+        */
         public static void Log(string message)
         {
             try
@@ -362,7 +362,7 @@ namespace ClassLibraryCommon
                 }
             }
         }
-
+        /*
         public static void LogToDebugFile(string message = null)
         {
             lock (DebugLogLockObject)
@@ -383,7 +383,7 @@ namespace ClassLibraryCommon
                     debugStreamWriter.Close();
                 }
             }
-        }
+        }*/
     }
 
 

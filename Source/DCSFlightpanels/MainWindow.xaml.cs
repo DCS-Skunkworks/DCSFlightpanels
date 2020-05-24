@@ -62,8 +62,8 @@ namespace DCSFlightpanels
         private readonly object _lockObjectStatusMessages = new object();
         private readonly List<UserControl> _panelUserControls = new List<UserControl>();
         private DCSAirframe _dcsAirframe;
-        private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_debug_log.txt";
-        private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "\\DCSFlightpanels_error_log.txt";
+        private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_debug_log.txt";
+        private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_error_log.txt";
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded = false;
 
@@ -104,7 +104,7 @@ namespace DCSFlightpanels
                 }
 
                 Common.SetErrorLog(_errorLogFile);
-                Common.SetDebugLog(_debugLogFile);
+                //Common.SetDebugLog(_debugLogFile);
 
                 CheckErrorLogAndDCSBIOSLocation();
                 /*******************************************************************************************/
