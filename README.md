@@ -2,15 +2,12 @@
 
 
 
-<p align="center">
-<a href="https://www.paypal.me/jerkerdahlblom"><img src="./Documentation/support_dcsflightpanels2.png" width="200"></a>
-</p>
-<br/>
-DCSFlightpanels Supports :
-* Saitek/Logitech Pro Flight Panels
-* Stream Deck
 
+Please visit our [Wiki](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki) for answers to common questions.
+<br/>
+<br/>
 DCSFlightpanels primary use is for using Saitek/Logitech panels and Stream Deck in DCS World.
+<br/>
 Together with DCS-BIOS you can manage every control for the aircraft and use
 the Radio Panel to operate cockpit radio equipment and also show data from the
 aircraft in the Multipanel & Backlit Panel.
