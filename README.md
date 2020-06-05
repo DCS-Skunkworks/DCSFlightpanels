@@ -3,7 +3,7 @@
 
 
 <p align="center">
-<a href="https://www.paypal.me/jerkerdahlblom"><img src="./Documentation/support_dcsflightpanels2.png" width="200"></a>
+Please visit our [Wiki](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki) for answers to common questions.
 </p>
 <br/>
 DCSFlightpanels Supports :
