@@ -2,9 +2,9 @@
 
 
 
-<p align="center">
+
 Please visit our [Wiki](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki) for answers to common questions.
-</p>
+
 <br/>
 DCSFlightpanels Supports :
 * Saitek/Logitech Pro Flight Panels
