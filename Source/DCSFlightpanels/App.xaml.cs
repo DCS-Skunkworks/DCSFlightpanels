@@ -17,7 +17,7 @@ namespace DCSFlightpanels
         private static Mutex _mutex;
         private bool _hasHandle;
         private System.Windows.Forms.NotifyIcon _notifyIcon;
-        
+
         private void InitNotificationIcon()
         {
             System.Windows.Forms.MenuItem notifyIconContextMenuShow = new System.Windows.Forms.MenuItem
@@ -46,7 +46,7 @@ namespace DCSFlightpanels
             _notifyIcon.DoubleClick += new EventHandler(NotifyIcon_Show);
 
         }
-        
+
         private void NotifyIcon_Show(object sender, EventArgs args)
         {
             MainWindow?.Show();
@@ -66,6 +66,10 @@ namespace DCSFlightpanels
             try
             {
                 InitNotificationIcon();
+
+                Settings.Default.LoadStreamDeck = true; //Default is loading Stream Deck.
+                Settings.Default.Save();
+
                 //DCSFlightpanels.exe OpenProfile="C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings"
                 //DCSFlightpanels.exe OpenProfile='C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings'
 
@@ -73,26 +77,33 @@ namespace DCSFlightpanels
                 //2 If argument and profile exists close running instance, start this with profile chosen
                 var closeCurrentInstance = false;
 
-                try
+                if (e != null)
                 {
-                    if (e.Args.Length > 0 && e.Args[0].Contains("OpenProfile") && e.Args[0].Contains("="))
+                    try
                     {
-                        var array = e.Args[0].Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (array[0].Equals("OpenProfile") && File.Exists(array[1].Replace("\"", "").Replace("'", "")))
+
+                        for (int i = 0; i < e.Args.Length; i++)
                         {
-                            Settings.Default.LastProfileFileUsed = array[1].Replace("\"", "").Replace("'","");
-                            Settings.Default.RunMinimized = true;
-                            closeCurrentInstance = true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Invalid startup arguments." + Environment.NewLine + array[0] + Environment.NewLine + array[1]);
+                            var arg = e.Args[i];
+                            if (arg.Contains("OpenProfile") && e.Args[0].Contains("="))
+                            {
+                                Settings.Default.LastProfileFileUsed = e.Args[i + 1].Replace("\"", "").Replace("'", "");
+                                Settings.Default.RunMinimized = true;
+                                Settings.Default.Save();
+                                closeCurrentInstance = true;
+                            }
+                            else if (arg.ToLower().Contains("-nostreamdeck"))
+                            {
+                                Settings.Default.LoadStreamDeck = false;
+                                Settings.Default.Save();
+                            }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error processing startup arguments." + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Invalid startup arguments." + Environment.NewLine + ex.Message);
+                        throw;
+                    }
                 }
 
                 // get application GUID as defined in AssemblyInfo.cs
@@ -106,7 +117,7 @@ namespace DCSFlightpanels
                 var securitySettings = new MutexSecurity();
                 securitySettings.AddAccessRule(allowEveryoneRule);
 
-                _mutex = new Mutex(false, mutexId,  out var createdNew, securitySettings);
+                _mutex = new Mutex(false, mutexId, out var createdNew, securitySettings);
 
                 _hasHandle = false;
                 try
@@ -119,7 +130,7 @@ namespace DCSFlightpanels
                     // it will still get acquired
                     //_hasHandle = true;
                 }
-                
+
                 if (!closeCurrentInstance && !_hasHandle)
                 {
                     MessageBox.Show("DCSFlightpanels is already running..");

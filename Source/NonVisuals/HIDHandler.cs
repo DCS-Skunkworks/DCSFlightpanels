@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using ClassLibraryCommon;
 using HidLibrary;
@@ -42,7 +43,7 @@ namespace NonVisuals
             return stringBuilder.ToString();
         }
 
-        public void Startup()
+        public void Startup(bool loadStreamDeck)
         {
             try
             {
@@ -52,6 +53,11 @@ namespace NonVisuals
                     {
                         if (hidDevice != null)
                         {
+                            if (!loadStreamDeck && gamingPanelSkeleton.VendorId == (int)GamingPanelVendorEnum.Elgato)
+                            {
+                                continue;
+                            }
+
                             var instanceId = hidDevice.DevicePath;
                             if (!HIDDeviceAlreadyExists(instanceId))
                             {

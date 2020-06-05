@@ -382,5 +382,17 @@ namespace DCSFlightpanels.Properties {
                 this["ImageImportFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LoadStreamDeck {
+            get {
+                return ((bool)(this["LoadStreamDeck"]));
+            }
+            set {
+                this["LoadStreamDeck"] = value;
+            }
+        }
     }
 }

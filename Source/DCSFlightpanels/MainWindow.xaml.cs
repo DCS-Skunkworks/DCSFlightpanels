@@ -114,7 +114,7 @@ namespace DCSFlightpanels
                 _hidHandler = new HIDHandler();
                 if (_doSearchForPanels)
                 {
-                    _hidHandler.Startup();
+                    _hidHandler.Startup(Settings.Default.LoadStreamDeck);
                 }
 
                 _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
@@ -161,7 +161,7 @@ namespace DCSFlightpanels
 
                 CheckForNewDCSFPRelease();
 
-                if (Process.GetProcessesByName("StreamDeck").Length >= 1)
+                if (Settings.Default.LoadStreamDeck && Process.GetProcessesByName("StreamDeck").Length >= 1)
                 {
                     MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
