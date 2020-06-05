@@ -123,8 +123,8 @@ namespace ClassLibraryCommon
         NS430,
         [Description("P-51D")]
         P51D,
-        /*[Description("P-47D")]
-        P47D,*/
+        [Description("P-47D")]
+        P47D,
         [Description("SA342M")]
         SA342M,
         [Description("SpitfireLFMkIX")]
