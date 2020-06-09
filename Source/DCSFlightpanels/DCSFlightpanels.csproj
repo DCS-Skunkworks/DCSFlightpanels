@@ -157,6 +157,12 @@
     <Compile Include="CustomControls\FontInfoTextBox.cs" />
     <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml.cs">
+      <DependentUpon>UserControlStreamDeckUIMini.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Radios\RadioPanelPZ69UserControlP47D.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlP47D.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shared\CommonUI.cs" />
     <Compile Include="Shared\StreamDeckUICommon.cs" />
     <Compile Include="CustomControls\PZ69FullTextBox.cs" />
@@ -348,6 +354,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PanelUserControls\UCDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -363,6 +373,10 @@
     <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Radios\RadioPanelPZ69UserControlP47D.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\ChooseProfileModuleWindow.xaml">
       <SubType>Designer</SubType>

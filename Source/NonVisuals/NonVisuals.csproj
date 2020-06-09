@@ -138,6 +138,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Radios\RadiopanelKnobP47D.cs" />
+    <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />

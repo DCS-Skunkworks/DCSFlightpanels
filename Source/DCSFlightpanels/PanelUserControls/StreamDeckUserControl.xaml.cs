@@ -57,6 +57,14 @@ namespace DCSFlightpanels.PanelUserControls
             switch (panelType)
             {
                 case GamingPanelEnum.StreamDeckMini:
+                    {
+                        var child = new UserControlStreamDeckUIMini();
+                        child.PanelHash = _streamDeckPanel.PanelHash;
+                        _uiButtonGrid = child;
+                        StackPanelButtonUI.Children.Add(child);
+
+                        break;
+                    }
                 case GamingPanelEnum.StreamDeck:
                     {
                         var child = new UserControlStreamDeckUINormal();
@@ -104,7 +112,7 @@ namespace DCSFlightpanels.PanelUserControls
                 _streamDeckPanel.Dispose();
             }
         }
-        
+
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (!_userControlLoaded)
@@ -648,7 +656,7 @@ namespace DCSFlightpanels.PanelUserControls
             Debug.WriteLine(_streamDeckPanel.GetLayerHandlerInformation());
             Debug.WriteLine(EventHandlers.GetInformation());
         }
-        
+
         private void ButtonImport_OnClick(object sender, RoutedEventArgs e)
         {
             try
