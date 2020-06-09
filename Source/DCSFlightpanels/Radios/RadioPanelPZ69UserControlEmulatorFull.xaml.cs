@@ -867,8 +867,8 @@ namespace DCSFlightpanels.Radios
                     return;
                 }
                 var hashSetOfKeysPressed = new HashSet<string>();
-                
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
+
+                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
                 e.Handled = true;
 
                 if (keyCode > 0)

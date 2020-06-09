@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ClassLibraryCommon
@@ -26,6 +27,24 @@ namespace ClassLibraryCommon
 
     public static class Common
     {
+        public static Key RealKey(this KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.System:
+                    return e.SystemKey;
+
+                case Key.ImeProcessed:
+                    return e.ImeProcessedKey;
+
+                case Key.DeadCharProcessed:
+                    return e.DeadCharProcessedKey;
+
+                default:
+                    return e.Key;
+            }
+        }
+
         public static string RemoveRControl(string keySequence)
         {
             if (keySequence.Contains(@"RMENU + LCONTROL"))
