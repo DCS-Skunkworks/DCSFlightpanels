@@ -806,7 +806,7 @@ namespace NonVisuals.Radios
         {
             try
             {
-                StartupBase("Spitfire LF Mk. IX");
+                StartupBase("P-47D");
 
                 //COM1
                 _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_OFF");

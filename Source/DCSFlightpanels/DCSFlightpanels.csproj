@@ -847,9 +847,6 @@
     <Resource Include="Images\F-14 RIO Datalink.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\mi8_r863_freq_panel.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\icons8-bug-26.png" />
     <Resource Include="Images\icons8-bug-52.png" />
   </ItemGroup>
@@ -888,6 +885,8 @@
     <Resource Include="Images\cue_banner_search_dcsbios.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\mi8_r863_freq_panel.png" />
+    <Resource Include="Images\P47_radio.png" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
