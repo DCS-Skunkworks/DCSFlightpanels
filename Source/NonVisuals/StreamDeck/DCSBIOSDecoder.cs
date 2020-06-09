@@ -11,6 +11,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck.Events;
+using OpenMacroBoard.SDK;
 using ThreadState = System.Threading.ThreadState;
 
 namespace NonVisuals.StreamDeck
@@ -29,12 +30,13 @@ namespace NonVisuals.StreamDeck
         private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
         private bool _treatStringAsNumber = false;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
-
+        
         [NonSerialized] private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         [NonSerialized] private Thread _imageUpdateTread = null;
         private bool _shutdown = false;
 
-
+        private string _defaultImageFilePath;
+        private Bitmap _defaultImage;
 
 
 
@@ -571,6 +573,21 @@ namespace NonVisuals.StreamDeck
                     }
             }
         }
+        
+        protected void ShowDefaultImage()
+        {
+            if (string.IsNullOrEmpty(_defaultImageFilePath) || !File.Exists(_defaultImageFilePath))
+            {
+                return;
+            }
+            if (_defaultImage == null)
+            {
+                _defaultImage = StreamDeckPanel.Validate(_defaultImageFilePath);
+            }
+            
+            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, _defaultImage);
+            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, _defaultImage);
+        }
 
         [JsonIgnore]
         public override bool IsVisible
@@ -582,9 +599,16 @@ namespace NonVisuals.StreamDeck
                 if (base.IsVisible)
                 {
                     _autoResetEvent?.Set();
+                    ShowDefaultImage();
                     Show();
                 }
             }
+        }
+
+        public string DefaultImageFilePath
+        {
+            get => _defaultImageFilePath;
+            set => _defaultImageFilePath = value;
         }
     }
 
@@ -593,4 +617,5 @@ namespace NonVisuals.StreamDeck
         Raw,
         Converter
     }
+
 }

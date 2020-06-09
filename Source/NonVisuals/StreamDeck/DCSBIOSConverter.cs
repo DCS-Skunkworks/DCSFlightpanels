@@ -343,7 +343,7 @@ namespace NonVisuals.StreamDeck
                 {
                     case EnumConverterOutputType.Raw:
                         {
-                            throw new Exception("DCSBIOSConverter.ImageFileRelativePath: FaceTypeText have no property ImageFileRelativePath. DCSBIOSConverter.ImageFileRelativePath.");
+                            return "";
                         }
                     case EnumConverterOutputType.Image:
                         {

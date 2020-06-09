@@ -217,6 +217,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
             {
                 TextBoxDCSBIOSId.Text = _dcsbiosDecoder.DCSBIOSOutput.ControlId;
             }
+
+            TextBoxDefaultImagePath.Text = _dcsbiosDecoder.DefaultImageFilePath;
+
             ShowConverters();
             TextBoxFontInfo.UpdateFontInfo();
             _populatingData = false;
@@ -967,7 +970,26 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void ButtonBrowseDefaultImage_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var imageRelativePath = "";
+                var directory = SettingsManager.LastImageFileDirectory;
+
+                var dialogResult = StreamDeckUICommon.BrowseForImage(ref directory, ref imageRelativePath);
+
+                if (dialogResult == System.Windows.Forms.DialogResult.OK)
+                {
+                    TextBoxDefaultImagePath.Text = imageRelativePath;
+                    _dcsbiosDecoder.DefaultImageFilePath = imageRelativePath;
+                    SettingsManager.LastImageFileDirectory = directory;
+                    SetIsDirty();
+                    SetFormState();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

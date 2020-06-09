@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
+using OpenMacroBoard.SDK;
 
 namespace NonVisuals.StreamDeck
 {
@@ -41,6 +42,10 @@ namespace NonVisuals.StreamDeck
 
         protected override void DrawBitmap()
         {
+            if (string.IsNullOrEmpty(_buttonFinalText))
+            {
+                return;
+            }
             if (_bitmap == null || RefreshBitmap)
             {
                 _bitmap = BitMapCreator.CreateStreamDeckBitmap(_buttonFinalText, _textFont, _fontColor, _backgroundColor, OffsetX, OffsetY);
@@ -51,9 +56,13 @@ namespace NonVisuals.StreamDeck
         protected override void Show()
         {
             DrawBitmap();
+            if (Bitmap == null)
+            {
+                return;
+            }
             StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, Bitmap);
         }
-        
+
         public override int GetHash()
         {
             unchecked
