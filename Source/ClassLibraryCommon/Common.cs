@@ -28,11 +28,11 @@ namespace ClassLibraryCommon
     {
         public static string RemoveRControl(string keySequence)
         {
-            if (keySequence.Contains(@"+ LCONTROL"))
+            if (keySequence.Contains(@"RMENU + LCONTROL"))
             {
                 keySequence = keySequence.Replace(@"+ LCONTROL", "");
             }
-            if (keySequence.Contains(@"LCONTROL +"))
+            if (keySequence.Contains(@"LCONTROL + RMENU"))
             {
                 keySequence = keySequence.Replace(@"LCONTROL +", "");
             }
