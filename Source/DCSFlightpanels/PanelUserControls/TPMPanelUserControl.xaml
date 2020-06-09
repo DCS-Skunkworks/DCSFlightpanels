@@ -87,47 +87,47 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G1 On" FontSize="10" Height="23"   />
-                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG1On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG1On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G2 On" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG2On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG2On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G3 On" Height="23"  FontSize="10"  />
-                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG3On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox Height="18" IsReadOnly="True" x:Name="TextBoxG3On" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G4 On" Height="23" FontSize="10"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG4On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG4On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G5 On" Height="23"  FontSize="10"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG5On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG5On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G1 Off" FontSize="10" Height="23"   />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG1Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG1Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G2 Off" FontSize="10" Height="23" />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG2Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG2Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G3 Off" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG3Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG3Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G4 Off" FontSize="10" Height="23"   />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG4Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG4Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G5 Off" FontSize="10" Height="23"   />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG5Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG5Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G6 On" FontSize="10" Height="23"   />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG6On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG6On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G7 On" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG7On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG7On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G8 On" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG8On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG8On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G9 On" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG9On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG9On" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="3" MouseDown="MouseDownFocusLogTextBox" Margin="2,2,2,2">
                     <Label Content="G6 Off" FontSize="10" Height="23"   />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG6Off" MouseDoubleClick="TextBoxMouseDoubleClick" KeyDown="TextBoxShortcutKeyDown" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG6Off" MouseDoubleClick="TextBoxMouseDoubleClick" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G7 Off" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG7Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG7Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G8 Off" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG8Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG8Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                     <Label Content="G9 Off" FontSize="10" Height="23"  />
-                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG9Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" KeyDown="TextBoxShortcutKeyDown" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControl:TPMTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxG9Off" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
             </Grid>
         </GroupBox>

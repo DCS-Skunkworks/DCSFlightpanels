@@ -759,6 +759,9 @@ namespace DCSFlightpanels.PanelUserControls
                         result = str + " " + result;
                     }
                 }
+
+                result = Common.RemoveRControl(result);
+
                 textBox.Text = result;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -788,51 +791,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 Common.ShowErrorMessageBox( ex);
             }
-        }
-
-
-        private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
-        {
-            /*
-            try
-            {
-                var textBox = ((TPMTextBox)sender);
-                //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
-                {
-                    return;
-                }
-                var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
-                
-                e.Handled = true;
-
-                var hashSetOfKeysPressed = new HashSet<string>();
-                hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyPressed));
-
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                }
-                var result = "";
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-                textBox.Text = result;
-                UpdateKeyBindingProfileSequencedKeyStrokesTPM(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }*/
         }
 
         private void NotifySwitchChanges(HashSet<object> switches)

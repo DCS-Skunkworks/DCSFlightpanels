@@ -964,5 +964,10 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void ButtonBrowseDefaultImage_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -892,6 +892,7 @@ namespace DCSFlightpanels.Radios
                         result = str + " " + result;
                     }
                 }
+                result = Common.RemoveRControl(result);
                 textBox.Text = result;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -1105,52 +1106,7 @@ namespace DCSFlightpanels.Radios
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-
-        private void TextBoxShortcutKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                var textBox = ((PZ69FullTextBox)sender);
-                //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    return;
-                }
-
-                var keyPressed = KeyInterop.VirtualKeyFromKey(e.SystemKey == Key.F10 ? Key.F10 : e.Key);
-                e.Handled = true;
-
-                var hashSetOfKeysPressed = new HashSet<string>();
-                hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyPressed));
-
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                }
-                var result = "";
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-                textBox.Text = result;
-                UpdateKeyBindingProfileSequencedKeyStrokesPZ69(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-
+        
         private void NotifySwitchChanges(HashSet<object> switches)
         {
             try

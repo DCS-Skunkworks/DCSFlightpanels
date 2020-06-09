@@ -96,6 +96,7 @@ namespace DCSFlightpanels.Windows
                         result = str + " " + result;
                     }
                 }
+                result = Common.RemoveRControl(result);
                 textBox.Text = result;
                 SetIsDirty();
                 SetFormState();

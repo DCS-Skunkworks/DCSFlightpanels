@@ -26,6 +26,20 @@ namespace ClassLibraryCommon
 
     public static class Common
     {
+        public static string RemoveRControl(string keySequence)
+        {
+            if (keySequence.Contains(@"+ LCONTROL"))
+            {
+                keySequence = keySequence.Replace(@"+ LCONTROL", "");
+            }
+            if (keySequence.Contains(@"LCONTROL +"))
+            {
+                keySequence = keySequence.Replace(@"LCONTROL +", "");
+            }
+
+            return keySequence;
+        }
+
         public static readonly List<GamingPanelSkeleton> GamingPanelSkeletons = new List<GamingPanelSkeleton>
         {
             new GamingPanelSkeleton(GamingPanelVendorEnum.Saitek, GamingPanelEnum.PZ55SwitchPanel),
