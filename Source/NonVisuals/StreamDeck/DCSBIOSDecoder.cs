@@ -31,14 +31,14 @@ namespace NonVisuals.StreamDeck
         private bool _treatStringAsNumber = false;
         private EnumDCSBIOSDecoderOutputType _decoderOutputType = EnumDCSBIOSDecoderOutputType.Raw;
         
-        [NonSerialized] private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        //[NonSerialized] private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         [NonSerialized] private Thread _imageUpdateTread = null;
         private bool _shutdown = false;
 
-        private string _defaultImageFilePath;
-        private Bitmap _defaultImage;
+        private string _defaultImageFilePath;//DO NOT USE THESE
+        private Bitmap _defaultImage;//DO NOT USE THESE
 
-
+        Bitmap _converterBitmap = null;
 
         public DCSBIOSDecoder()
         {
@@ -58,7 +58,7 @@ namespace NonVisuals.StreamDeck
             _shutdown = true;
             try
             {
-                _autoResetEvent.Set();
+                //_autoResetEvent.Set();
             }
             catch (Exception e)
             {
@@ -110,7 +110,7 @@ namespace NonVisuals.StreamDeck
         public override void AfterClone()
         {
             DCSBIOS.GetInstance().AttachDataReceivedListener(this);
-            _autoResetEvent = new AutoResetEvent(false);
+            //_autoResetEvent = new AutoResetEvent(false);
             if (_imageUpdateTread != null)
             {
                 try
@@ -132,7 +132,7 @@ namespace NonVisuals.StreamDeck
                     /*
                      * If decoder isn't visible we end up here until it is visible again
                      */
-                    _autoResetEvent.WaitOne();
+                    //_autoResetEvent.WaitOne();
                 }
 
                 if (_shutdown)
@@ -277,22 +277,21 @@ namespace NonVisuals.StreamDeck
                 /* 2) Use converter    (formula / no formula) */
                 else if (_dcsbiosConverters.Count > 0 && (_decoderSourceType == DCSBiosOutputType.STRING_TYPE && _treatStringAsNumber) || _decoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
                 {
-                    Bitmap converterBitmap = null;
 
                     foreach (var dcsbiosConverter in _dcsbiosConverters)
                     {
                         if (dcsbiosConverter.CriteriaFulfilled(UseFormula ? FormulaResult : UintDcsBiosValue))
                         {
-                            converterBitmap = dcsbiosConverter.Get();
+                            _converterBitmap = dcsbiosConverter.Get();
                             break;
                         }
                     }
 
                     if (IsVisible)
                     {
-                        if (converterBitmap != null)
+                        if (_converterBitmap != null)
                         {
-                            ShowBitmap(converterBitmap);
+                            ShowBitmap(_converterBitmap);
                         }
                         else
                         {
@@ -574,6 +573,7 @@ namespace NonVisuals.StreamDeck
             }
         }
         
+        /*
         protected void ShowDefaultImage()
         {
             if (string.IsNullOrEmpty(_defaultImageFilePath) || !File.Exists(_defaultImageFilePath))
@@ -587,7 +587,7 @@ namespace NonVisuals.StreamDeck
             
             StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, _defaultImage);
             StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, _defaultImage);
-        }
+        }*/
 
         [JsonIgnore]
         public override bool IsVisible
@@ -596,11 +596,16 @@ namespace NonVisuals.StreamDeck
             set
             {
                 base.IsVisible = value;
-                if (base.IsVisible)
+                if (IsVisible)
                 {
-                    _autoResetEvent?.Set();
-                    ShowDefaultImage();
-                    Show();
+                    if (_converterBitmap != null)
+                    {
+                        ShowBitmap(_converterBitmap);
+                    }
+                    else
+                    {
+                        BlackoutKey();
+                    }
                 }
             }
         }

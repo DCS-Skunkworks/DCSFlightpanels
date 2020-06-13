@@ -170,11 +170,6 @@
                             <Button Name="ButtonEditConverter" Width="60"  Margin="0,0,5,0" Content="Edit" Click="ButtonEditConverter_OnClick"></Button>
                             <Button Name="ButtonDeleteConverter" Width="60"  Margin="0,0,5,0" Content="Delete" Click="ButtonDeleteConverter_OnClick"></Button>
                         </StackPanel>
-                        <Label Content="Default Image" FontSize="10" Height="23" Margin="0,5,2,0" />
-                        <StackPanel Orientation="Horizontal">
-                            <customControl:StreamDeckFaceTextBox FontSize="10" Height="18"  Margin="0,0,10,0" Width="250" IsReadOnly="True" x:Name="TextBoxDefaultImagePath"  IsEnabled="False" Background="LightSteelBlue"/>
-                            <Button Name="ButtonBrowseDefaultImage" Width="65" Content="Browse..." Margin="0,2,2,0" Click="ButtonBrowseDefaultImage_OnClick"/>
-                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
