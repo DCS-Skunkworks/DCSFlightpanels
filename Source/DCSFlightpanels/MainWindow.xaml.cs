@@ -67,6 +67,7 @@ namespace DCSFlightpanels
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded = false;
 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -749,12 +750,18 @@ namespace DCSFlightpanels
             {
                 Common.APIMode = APIModeEnum.SendInput;
             }
+
         }
 
         private void MainWindowLocationChanged(object sender, EventArgs e)
         {
             try
             {
+                if (!_isLoaded)
+                {
+                    return;
+                }
+
                 if (Top > 0 && Left > 0)
                 {
                     Settings.Default.MainWindowTop = Top;
@@ -874,6 +881,11 @@ namespace DCSFlightpanels
         {
             try
             {
+                if (!_isLoaded)
+                {
+                    return;
+                }
+
                 if (WindowState != WindowState.Minimized && WindowState != WindowState.Maximized)
                 {
                     Settings.Default.MainWindowHeight = Height;

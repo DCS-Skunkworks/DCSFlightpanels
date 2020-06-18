@@ -418,9 +418,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
                         textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                         if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
                         {
+                            textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
                             textBox.Text = keySequenceWindow.GetInformation;
                         }
                     }
@@ -511,6 +511,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     textBox.Bill.Consume(dcsBiosInputs);
                     textBox.Bill.DCSBIOSBinding.WhenTurnedOn = !textBox.Name.Contains("Off");
                     textBox.Bill.DCSBIOSBinding.IsSequenced = dcsbiosControlsConfigsWindow.IsSequenced;
+                    textBox.Bill.DCSBIOSBinding.Description = dcsbiosControlsConfigsWindow.Description;
                     SetIsDirty();
                     
                 }

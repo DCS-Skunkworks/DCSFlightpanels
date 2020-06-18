@@ -572,23 +572,7 @@ namespace NonVisuals.StreamDeck
                     }
             }
         }
-        
-        /*
-        protected void ShowDefaultImage()
-        {
-            if (string.IsNullOrEmpty(_defaultImageFilePath) || !File.Exists(_defaultImageFilePath))
-            {
-                return;
-            }
-            if (_defaultImage == null)
-            {
-                _defaultImage = StreamDeckPanel.Validate(_defaultImageFilePath);
-            }
-            
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, _defaultImage);
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, _defaultImage);
-        }*/
-
+     
         [JsonIgnore]
         public override bool IsVisible
         {
@@ -610,6 +594,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonIgnore]
         public string DefaultImageFilePath
         {
             get => _defaultImageFilePath;
