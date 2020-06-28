@@ -73,6 +73,8 @@ namespace ClassLibraryCommon
         A4E,
         [Description("A-10C")]
         A10C,
+        [Description("AH-6J")]
+        AH6J,
         [Description("AJS37")]
         AJS37,
         [Description("AV8BNA")]
@@ -83,6 +85,8 @@ namespace ClassLibraryCommon
         C101CC,
         [Description("Christen Eagle II")]
         ChristenEagle,
+        [Description("Edge540")]
+        Edge540,
         [Description("F-5E-3")]
         F5E,
         [Description("F-14B")]
