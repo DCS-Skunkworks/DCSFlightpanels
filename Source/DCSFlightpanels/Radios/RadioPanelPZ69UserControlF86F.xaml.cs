@@ -19,31 +19,27 @@ namespace DCSFlightpanels.Radios
     public partial class RadioPanelPZ69UserControlF86F : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69F86F _radioPanelPZ69;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private IGlobalHandler _globalHandler;
-        private bool _userControlLoaded;
 
         public RadioPanelPZ69UserControlF86F(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69F86F(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
-            _globalHandler = globalHandler;
-
-            //LoadConfiguration();
+            GlobalHandler = globalHandler;
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
         }
@@ -359,7 +355,7 @@ namespace DCSFlightpanels.Radios
                 ComboBoxSynchResetTimeout.SelectedValue = Settings.Default.BAKDialResetSyncTimeout;
                 _radioPanelPZ69.ResetSyncTimeout = Settings.Default.BAKDialResetSyncTimeout;
                 _radioPanelPZ69.SynchSleepTime = Settings.Default.BAKDialSynchSleepTime;*/
-                _userControlLoaded = true;
+                UserControlLoaded = true;
             }
             catch (Exception ex)
             {
@@ -389,7 +385,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
                     _radioPanelPZ69.SyncOKDelayTimeout = int.Parse(ComboBoxSyncOKDelayTimeout.SelectedValue.ToString());
@@ -406,7 +402,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     _radioPanelPZ69.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
@@ -423,7 +419,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     /*Settings.Default.BAKDialSynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
                     _radioPanelPZ69.SynchSleepTime = int.Parse(ComboBoxSynchSleepTime.SelectedValue.ToString());
@@ -440,7 +436,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     /*Settings.Default.BAKDialResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());
                     _radioPanelPZ69.ResetSyncTimeout = int.Parse(ComboBoxSynchResetTimeout.SelectedValue.ToString());

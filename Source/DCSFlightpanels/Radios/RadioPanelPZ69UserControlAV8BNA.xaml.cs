@@ -19,31 +19,28 @@ namespace DCSFlightpanels.Radios
     public partial class RadioPanelPZ69UserControlAV8BNA : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69AV8BNA _radioPanelPZ69;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
 
         public RadioPanelPZ69UserControlAV8BNA(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69AV8BNA(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = -1;//doesn't work with 0 value Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
-            _globalHandler = globalHandler;
-
-            //LoadConfiguration();
+            GlobalHandler = globalHandler;
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
         }

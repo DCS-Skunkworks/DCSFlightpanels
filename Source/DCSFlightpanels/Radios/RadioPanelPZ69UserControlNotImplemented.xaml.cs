@@ -27,7 +27,7 @@ namespace DCSFlightpanels.Radios
         {
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return null;
         }

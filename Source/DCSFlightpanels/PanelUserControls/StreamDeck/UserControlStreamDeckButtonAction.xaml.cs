@@ -22,7 +22,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private List<StreamDeckActionTextBox> _textBoxes = new List<StreamDeckActionTextBox>();
 
         private StreamDeckButton _streamDeckButton;
-        private IGlobalHandler _globalHandler;
         private bool _isLoaded = false;
         private bool _isDirty = false;
         public string PanelHash;
@@ -378,12 +377,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             throw new ArgumentException("GetStreamDeckButtonAction, failed to determine Action Type for button");
         }
 
-        public IGlobalHandler GlobalHandler
-        {
-            get => _globalHandler;
-            set => _globalHandler = value;
-        }
-        
         private void ButtonAddEditKeySequenceButtonOn_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditKeyPress(TextBoxKeyPressButtonOn);
@@ -485,7 +478,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(),
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(),
                         textBox.Name.Replace("TextBox", ""),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
@@ -495,7 +488,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null, true);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();

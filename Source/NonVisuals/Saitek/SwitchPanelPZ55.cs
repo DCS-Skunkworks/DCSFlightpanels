@@ -47,7 +47,6 @@ namespace NonVisuals.Saitek
             VendorId = 0x6A3;
             ProductId = 0xD67;
             CreateSwitchKeys();
-            //SwitchPanelPZ55SO = this;
             Startup();
         }
 

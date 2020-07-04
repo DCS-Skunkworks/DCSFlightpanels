@@ -274,6 +274,37 @@ namespace DCSFlightpanels
             }
         }
 
+        public void CloseTabItem(string instanceId)
+        {
+            try
+            {
+                var counter = 0;
+                while(TabControlPanels.Items.Count > counter)
+                {
+                    var tabItem = (TabItem)TabControlPanels.Items[counter];
+                    var userControl = (UserControlBase)tabItem.Content;
+                    var gamingPanelUserControl = ((IGamingPanelUserControl)tabItem.Content);
+                    var gamingPanel = gamingPanelUserControl.GetGamingPanel();
+
+                    if (gamingPanel != null && gamingPanel.InstanceId == instanceId)
+                    {
+                        TabControlPanels.Items.Remove(tabItem);
+                        Detach(gamingPanel);
+                        userControl.Dispose();
+                        _panelUserControls.Remove(userControl);
+                        break;
+                    }
+
+                    counter++;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         public int CloseTabItems()
         {
             var closedItemCount = 0;
@@ -323,6 +354,7 @@ namespace DCSFlightpanels
             }
         }
 
+        
         public void Attach(GamingPanel gamingPanel)
         {
             OnForwardKeyPressesChanged += gamingPanel.SetForwardKeyPresses;
@@ -331,7 +363,7 @@ namespace DCSFlightpanels
             gamingPanel.Attach((IProfileHandlerListener)this);
             _dcsBios?.AttachDataReceivedListener(gamingPanel);
         }
-
+        
         public void Detach(GamingPanel gamingPanel)
         {
             OnForwardKeyPressesChanged -= gamingPanel.SetForwardKeyPresses;
@@ -339,6 +371,9 @@ namespace DCSFlightpanels
             gamingPanel.Detach(_profileHandler);
             gamingPanel.Detach((IProfileHandlerListener)this);
             _dcsBios?.DetachDataReceivedListener(gamingPanel);
+
+            Dispatcher?.BeginInvoke((Action)(() => CloseTabItem(gamingPanel.InstanceId)));
+
         }
 
         public DCSAirframe GetAirframe()

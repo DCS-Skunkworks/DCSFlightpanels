@@ -29,25 +29,24 @@ namespace DCSFlightpanels.PanelUserControls
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
+
         private readonly Image[] _imageArrayUpper = new Image[4];
         private readonly Image[] _imageArrayLeft = new Image[4];
         private readonly Image[] _imageArrayRight = new Image[4];
-        private readonly IGlobalHandler _globalHandler;
         private bool _textBoxBillsSet;
-        private bool _controlLoaded;
 
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
+            ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             _switchPanelPZ55.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_switchPanelPZ55);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -71,12 +70,13 @@ namespace DCSFlightpanels.PanelUserControls
                 _switchPanelPZ55.Dispose();
             }
         }
-        
+
+
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
             SetContextMenuClickHandlers();
-            _controlLoaded = true;
+            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
 
@@ -87,7 +87,7 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _switchPanelPZ55;
         }
@@ -418,11 +418,11 @@ namespace DCSFlightpanels.PanelUserControls
                 DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
                 dcsBIOSInputControlsWindow.ShowDialog();
                 if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -612,7 +612,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
                 }
-                var ledConfigsWindow = new LEDConfigsWindow(_globalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
+                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position
@@ -1366,7 +1366,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_controlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }

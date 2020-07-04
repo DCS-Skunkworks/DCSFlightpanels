@@ -20,8 +20,7 @@ namespace DCSFlightpanels.PanelUserControls
     {
 
         private readonly BacklitPanelBIP _backlitPanelBIP;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
+
         private readonly List<Image> _colorImages = new List<Image>();
         private readonly List<Image> _configurationIndicatorImages = new List<Image>();
         private readonly BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
@@ -29,25 +28,24 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
-        private bool _loaded;
-        private readonly IGlobalHandler _globalHandler;
 
         public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _backlitPanelBIP.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
         }
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             Init();
-            _loaded = true;
+            UserControlLoaded = true;
             SetContextMenuClickHandlers();
             SetAllBlack();
             ShowGraphicConfiguration();
@@ -65,7 +63,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _backlitPanelBIP;
         }
@@ -100,7 +98,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -118,7 +116,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -134,7 +132,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -196,7 +194,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -232,7 +230,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var imageName = contextMenu.Tag.ToString();
                 var position = GetLedPosition(imageName);
 
-                var ledConfigsWindow = new LEDConfigsWindow(_globalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
+                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position

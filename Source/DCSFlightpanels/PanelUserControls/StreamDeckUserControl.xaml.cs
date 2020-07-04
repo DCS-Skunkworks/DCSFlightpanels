@@ -25,10 +25,6 @@ namespace DCSFlightpanels.PanelUserControls
     {
         private readonly StreamDeckPanel _streamDeckPanel;
         private readonly DCSBIOS _dcsbios;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private readonly IGlobalHandler _globalHandler;
-        private bool _userControlLoaded;
 
         private CancellationTokenSource _cancellationTokenSource;
         private readonly Random _random = new Random();
@@ -44,12 +40,14 @@ namespace DCSFlightpanels.PanelUserControls
         public StreamDeckUserControl(GamingPanelEnum panelType, HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler, DCSBIOS dcsbios)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            //no worky worky for this library hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             _streamDeckPanel = new StreamDeckPanel(panelType, hidSkeleton);
             _streamDeckPanel.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_streamDeckPanel);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
             _dcsbios = dcsbios;
 
 
@@ -91,8 +89,8 @@ namespace DCSFlightpanels.PanelUserControls
             EventHandlers.AttachStreamDeckConfigListener(_uiButtonGrid);
             EventHandlers.AttachStreamDeckListener(this);
 
-            UCStreamDeckButtonAction.GlobalHandler = _globalHandler;
-            UCStreamDeckButtonFace.GlobalHandler = _globalHandler;
+            UCStreamDeckButtonAction.GlobalHandler = GlobalHandler;
+            UCStreamDeckButtonFace.GlobalHandler = GlobalHandler;
 
             UCStreamDeckButtonFace.PanelHash = _streamDeckPanel.PanelHash;
             UCStreamDeckButtonAction.PanelHash = _streamDeckPanel.PanelHash;
@@ -115,11 +113,11 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void UserControlStreamDeck_OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!_userControlLoaded)
+            if (!UserControlLoaded)
             {
                 UCStreamDeckButtonAction.Update();
                 UCStreamDeckButtonAction.AttachListener(UCStreamDeckButtonFace);
-                _userControlLoaded = true;
+                UserControlLoaded = true;
             }
             SetFormState();
         }
@@ -151,7 +149,7 @@ namespace DCSFlightpanels.PanelUserControls
             //SetContextMenuClickHandlers();
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _streamDeckPanel;
         }
@@ -205,7 +203,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_userControlLoaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }

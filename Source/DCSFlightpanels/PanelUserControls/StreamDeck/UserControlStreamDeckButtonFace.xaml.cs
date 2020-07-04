@@ -22,9 +22,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
-    public partial class UserControlStreamDeckButtonFace : UserControlBase, UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty, IStreamDeckListener
+    public partial class UserControlStreamDeckButtonFace : UserControlStreamDeckButtonAction.IStreamDeckButtonActionListener, IIsDirty, IStreamDeckListener
     {
-        private IGlobalHandler _globalHandler;
         private bool _isDirty = false;
         private bool _isLoaded = false;
         private List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
@@ -159,12 +158,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private void RadioButtonFaceType_OnClick(object sender, RoutedEventArgs e)
         {
             SetFormState();
-        }
-
-        public IGlobalHandler GlobalHandler
-        {
-            get => _globalHandler;
-            set => _globalHandler = value;
         }
 
         public void StateSaved()

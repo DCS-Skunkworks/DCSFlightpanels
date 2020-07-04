@@ -22,23 +22,21 @@ namespace DCSFlightpanels.PanelUserControls
     {
 
         private readonly TPMPanel _tpmPanel;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private readonly IGlobalHandler _globalHandler;
         private bool _once;
         private bool _textBoxBillsSet;
-        private bool _controlLoaded;
 
         public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             _tpmPanel = new TPMPanel(hidSkeleton);
 
             _tpmPanel.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_tpmPanel);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
         }
 
         protected override void Dispose(bool disposing)
@@ -59,7 +57,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             SetTextBoxBills();
             SetContextMenuClickHandlers();
-            _controlLoaded = true;
+            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
 
@@ -88,7 +86,7 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _tpmPanel;
         }
@@ -262,11 +260,11 @@ namespace DCSFlightpanels.PanelUserControls
                 DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
                 dcsBIOSInputControlsWindow.ShowDialog();
                 if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -1026,7 +1024,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_controlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }
