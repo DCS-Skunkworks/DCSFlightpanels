@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using ClassLibraryCommon;
 using HidLibrary;
@@ -67,14 +66,10 @@ namespace NonVisuals
                                 {
                                     hidSkeleton.HIDReadDevice = hidDevice;
                                     hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
-                                    //hidSkeleton.HIDReadDevice.Inserted += DeviceAttachedHandler;
-                                    //hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
                                     hidSkeleton.HIDReadDevice.MonitorDeviceEvents = true;
 
                                     hidSkeleton.HIDWriteDevice = hidDevice;
                                     hidSkeleton.HIDWriteDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
-                                    //hidSkeleton.HIDWriteDevice.Inserted += DeviceAttachedHandler;
-                                    //hidSkeleton.HIDWriteDevice.Removed += DeviceRemovedHandler;
                                     hidSkeleton.HIDWriteDevice.MonitorDeviceEvents = true;
                                 }
                             }

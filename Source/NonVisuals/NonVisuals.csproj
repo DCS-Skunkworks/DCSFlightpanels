@@ -124,6 +124,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingMappingManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
