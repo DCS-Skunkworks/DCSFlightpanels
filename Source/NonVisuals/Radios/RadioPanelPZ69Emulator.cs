@@ -185,7 +185,7 @@ namespace NonVisuals.Radios
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
 
-        private void PZ69KnobChanged(IEnumerable<object> hashSet)
+        private void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (ForwardPanelEvent)
             {
@@ -572,9 +572,9 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            PZ69KnobChanged(hashSet);
+            PZ69KnobChanged(isFirstReport, hashSet);
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)

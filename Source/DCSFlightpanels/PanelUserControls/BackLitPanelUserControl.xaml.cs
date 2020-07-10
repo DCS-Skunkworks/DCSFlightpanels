@@ -82,7 +82,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
 
-        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
+        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
 
         public void SettingsCleared(object sender, PanelEventArgs e)
         {

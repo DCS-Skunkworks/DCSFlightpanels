@@ -74,7 +74,7 @@ namespace NonVisuals.Radios
         public string unit = "";
         public uint unitId;
 
-        public readonly static uint UnitIdOffset = 100000001; // this is where non aircraft "Unit" Ids start from for satcom intercom
+        public static readonly uint UnitIdOffset = 100000001; // this is where non aircraft "Unit" Ids start from for satcom intercom
 
         public SRSPlayerRadioInfo()
         {

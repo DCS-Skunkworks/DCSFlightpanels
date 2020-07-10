@@ -155,7 +155,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        public void PZ69KnobChanged(IEnumerable<object> hashSet)
+        public void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             try
             {
@@ -567,12 +567,12 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            PZ69KnobChanged(hashSet);
+            PZ69KnobChanged(isFirstReport, hashSet);
         }
 
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {

@@ -268,7 +268,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void PZ69KnobChanged(IEnumerable<object> hashSet)
+        private void PZ69KnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (ForwardPanelEvent)
             {
@@ -981,9 +981,9 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            PZ69KnobChanged(hashSet);
+            PZ69KnobChanged(isFirstReport, hashSet);
         }
 
 

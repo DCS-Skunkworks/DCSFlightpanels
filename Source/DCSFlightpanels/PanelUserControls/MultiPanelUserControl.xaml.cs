@@ -106,7 +106,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void SwitchesChanged(object sender, SwitchesChangedEventArgs e)
+        public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
             try
             {

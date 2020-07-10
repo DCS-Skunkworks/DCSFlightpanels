@@ -43,8 +43,12 @@ namespace NonVisuals.Saitek
                 Array.Copy(NewSaitekPanelValueTPM, OldSaitekPanelValueTPM, 5);
                 Array.Copy(report.Data, NewSaitekPanelValueTPM, 5);
                 var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValueTPM, NewSaitekPanelValueTPM);
-                GamingPanelKnobChanged(hashSet);
-                SwitchesChanged(hashSet);
+                if (hashSet.Count > 0)
+                {
+                    GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
+                    UISwitchesChanged(hashSet);
+                }
+
                 FirstReportHasBeenRead = true;
             }
             else if (report.Data.Length == 3)
@@ -52,8 +56,12 @@ namespace NonVisuals.Saitek
                 Array.Copy(NewSaitekPanelValue, OldSaitekPanelValue, 3);
                 Array.Copy(report.Data, NewSaitekPanelValue, 3);
                 var hashSet = GetHashSetOfChangedKnobs(OldSaitekPanelValue, NewSaitekPanelValue);
-                GamingPanelKnobChanged(hashSet);
-                SwitchesChanged(hashSet);
+                if (hashSet.Count > 0)
+                {
+                    GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
+                    UISwitchesChanged(hashSet);
+                }
+
                 FirstReportHasBeenRead = true;
             }
             
