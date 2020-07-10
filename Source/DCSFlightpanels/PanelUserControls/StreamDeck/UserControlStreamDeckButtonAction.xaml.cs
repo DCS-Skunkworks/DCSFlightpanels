@@ -24,7 +24,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private StreamDeckButton _streamDeckButton;
         private bool _isLoaded = false;
         private bool _isDirty = false;
-        public string PanelHash;
+        private string _panelHash;
 
 
 
@@ -70,6 +70,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             RadioButtonLayerNav.IsChecked = false;
 
             ComboBoxLayerNavigationButton.SelectedIndex = 0;
+            ComboBoxRemoteLayerNavigationButton.SelectedIndex = 0;
 
             _isDirty = false;
 
@@ -695,6 +696,30 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
+        
+        private void ComboBoxRemoteLayerNavigationButton_OnDropDownClosed(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoadComboBoxRemoteStreamDeck()
+        {
+            var streamDeckList = StreamDeckPanel.GetStreamDeckPanels();
+
+            var customStreamDeckList = new List<StreamDeckPanel>();
+
+            foreach (var streamDeckPanel in streamDeckList)
+            {
+                if (streamDeckPanel.PanelHash != PanelHash)
+                {
+                    customStreamDeckList.Add(streamDeckPanel);
+                }
+            }
+            
+            ComboBoxRemoteStreamDecks.ItemsSource = customStreamDeckList;
+            ComboBoxRemoteStreamDecks.Items.Refresh();
+
+        }
 
         private void LoadComboBoxLayers()
         {
@@ -912,6 +937,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 Common.LogError(ex);
             }
+        }
+
+        public string PanelHash
+        {
+            get => _panelHash;
+            set => _panelHash = value;
         }
     }
 }

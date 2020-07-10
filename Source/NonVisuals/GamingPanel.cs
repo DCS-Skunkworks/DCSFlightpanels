@@ -29,7 +29,7 @@ namespace NonVisuals
         private uint _count;
         private bool _synchedOnce;
         private readonly Guid _guid = Guid.NewGuid();
-        private readonly string _hash;
+        //private readonly string _hash;
         public abstract string SettingsVersion();
         public abstract void Startup();
         public abstract void Dispose();
@@ -48,7 +48,7 @@ namespace NonVisuals
 
         protected abstract void StartListeningForPanelChanges();
 
-        private string _hashedInstanceId = "";
+        private string _randomPanelHash = "";
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
@@ -58,7 +58,7 @@ namespace NonVisuals
             {
                 _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
             }
-            _hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
+            //_hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
         }
 
 
@@ -137,19 +137,34 @@ namespace NonVisuals
             set => HIDSkeletonBase.InstanceId = value;
         }
 
+        //todo fix that a hash is created for the configuration ONCE, that is only if there are none.
+
         public string PanelHash
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_hashedInstanceId))
+                if (string.IsNullOrWhiteSpace(_randomPanelHash))
                 {
-                    _hashedInstanceId = ((uint)InstanceId.GetHashCode()).ToString(CultureInfo.InvariantCulture);
+                    _randomPanelHash = Common.GetRandomMd5Hash();
+                    SetIsDirty();
                 }
-                return _hashedInstanceId;
+                return _randomPanelHash;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    _randomPanelHash = Common.GetRandomMd5Hash();
+                    SetIsDirty();
+                }
+                else
+                {
+                    _randomPanelHash = value;
+                }
             }
         }
 
-        public string Hash => _hash;
+        //public string Hash => _hash;
 
         public string GuidString => _guid.ToString();
 

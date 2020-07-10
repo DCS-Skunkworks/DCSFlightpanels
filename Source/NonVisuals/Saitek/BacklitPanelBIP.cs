@@ -371,6 +371,7 @@ namespace NonVisuals.Saitek
 
         public override List<string> ExportSettings()
         {
+            denna ska exportera sin panelhash (alltid även om ingen config finns
             if (Closed)
             {
                 return null;

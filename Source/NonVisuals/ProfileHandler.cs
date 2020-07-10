@@ -175,6 +175,7 @@ namespace NonVisuals
                 var fileLines = File.ReadAllLines(_filename);
                 var currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;
+                string currentPanelHash = null;
                 string currentPanelSettingsVersion = null;
                 var insidePanel = false;
                 var insideJSONPanel = false;
@@ -231,6 +232,10 @@ namespace NonVisuals
                             currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
                             _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstanceID, currentPanelType));
                         }
+                        else if (fileLine.StartsWith("PanelHash="))
+                        {
+                            currentPanelHash = fileLine.Replace("PanelHash=", "").Trim();
+                        }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
                         {
                             currentPanelSettingsVersion = fileLine.Trim();
@@ -262,27 +267,28 @@ namespace NonVisuals
                                 }
                                 if (currentPanelSettingsVersion != null)
                                 {
+                                    //todo refactor this away
                                     //0X marks that setting version isn't used (yet). Any number above 0 indicated the panel are using new versions of the settings
                                     //and that old settings won't be loaded.
                                     if (currentPanelSettingsVersion.EndsWith("0X"))
                                     {
-                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
+                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
                                     }
                                     else
                                     {
-                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.SEPARATOR_SYMBOL + currentPanelSettingsVersion);
+                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.SEPARATOR_SYMBOL + currentPanelSettingsVersion + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
                                     }
                                 }
                                 else
                                 {
-                                    _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
+                                    _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
                                 }
                             }
 
 
                             if (insideJSONPanel)
                             {
-                                _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
+                                _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
                             }
                         }
                     }
@@ -445,6 +451,7 @@ namespace NonVisuals
                     _listPanelSettingsData.Add(Environment.NewLine);
                     _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
+                    _listPanelSettingsData.Add("PanelHash=" + gamingPanel.PanelHash);
                     _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanel");
 
@@ -479,6 +486,7 @@ namespace NonVisuals
                     _listPanelSettingsData.Add(Environment.NewLine);
                     _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
+                    _listPanelSettingsData.Add("PanelHash=" + gamingPanel.PanelHash);
                     _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanelJSON");
                     _listPanelSettingsData.Add(jsonData);

@@ -27,6 +27,8 @@ namespace ClassLibraryCommon
 
     public static class Common
     {
+
+
         public static Key RealKey(this KeyEventArgs e)
         {
             switch (e.Key)
@@ -180,6 +182,17 @@ namespace ClassLibraryCommon
 
             // Return the hexadecimal string.
             return sBuilder.ToString().ToUpperInvariant();
+        }
+
+        public static string GetRandomMd5Hash()
+        {
+            var bytes = new byte[16];
+            using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            {
+                rngCryptoServiceProvider.GetBytes(bytes);
+            }
+
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
 
         public static NumberFormatInfo GetPZ69EmptyDisplayNumberFormat()

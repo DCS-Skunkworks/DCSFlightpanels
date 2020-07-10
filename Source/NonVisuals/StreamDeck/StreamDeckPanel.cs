@@ -106,6 +106,11 @@ namespace NonVisuals.StreamDeck
             return null;
         }
 
+        public static List<StreamDeckPanel> GetStreamDeckPanels()
+        {
+            return StreamDeckPanels;
+        }
+
         public sealed override void Startup()
         {
             try
@@ -238,14 +243,27 @@ namespace NonVisuals.StreamDeck
             }
 
             var stringBuilder = new StringBuilder();
+            var setOnce = true;
 
             foreach (var setting in settings)
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
-                    stringBuilder.Append(setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "") + Environment.NewLine);
+                    var strippedSettingsLine = setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "");
+                    //stringBuilder.Append(strippedSettingsLine + Environment.NewLine);
+                    if (setOnce)
+                    {
+                        var panelHash = strippedSettingsLine.Substring(strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture));
+                        PanelHash = panelHash.Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
+                        setOnce = false;
+                    }
+                    
+                    var line = strippedSettingsLine.Substring(0, strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture)).Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
+                    stringBuilder.Append(line + Environment.NewLine);
                 }
             }
+
+            var str = stringBuilder.ToString();
             _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
             SettingsLoading = false;
             SettingsApplied();
