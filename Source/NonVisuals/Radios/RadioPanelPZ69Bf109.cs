@@ -773,8 +773,7 @@ namespace NonVisuals.Radios
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
-
-
+        
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(isFirstReport, hashSet);
