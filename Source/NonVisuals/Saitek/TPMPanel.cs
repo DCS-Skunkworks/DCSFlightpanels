@@ -23,6 +23,7 @@ namespace NonVisuals.Saitek
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
+            
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
             if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.TPM)
@@ -36,7 +37,7 @@ namespace NonVisuals.Saitek
             Startup();
         }
 
-        public override sealed void Startup()
+        public sealed override void Startup()
         {
             try
             {
@@ -205,7 +206,7 @@ namespace NonVisuals.Saitek
             }
         }
 
-        private void TPMSwitchChanged(IEnumerable<object> hashSet)
+        private void TPMSwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (!ForwardPanelEvent)
             {
@@ -217,7 +218,7 @@ namespace NonVisuals.Saitek
                 var found = false;
                 foreach (var keyBinding in _keyBindings)
                 {
-                    if (keyBinding.OSKeyPress != null && keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
+                    if (!isFirstReport && keyBinding.OSKeyPress != null && keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
                         keyBinding.OSKeyPress.Execute(new CancellationToken());
                         found = true;
@@ -226,7 +227,7 @@ namespace NonVisuals.Saitek
                 }
                 foreach (var osCommand in _osCommandBindings)
                 {
-                    if (osCommand.OSCommandObject != null && osCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && osCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
+                    if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && osCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
                         osCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
@@ -235,13 +236,13 @@ namespace NonVisuals.Saitek
                 }
                 foreach (var bipLinkTPM in _bipLinks)
                 {
-                    if (bipLinkTPM.BIPLights.Count > 0 && bipLinkTPM.TPMSwitch == tpmPanelSwitch.TPMSwitch && bipLinkTPM.WhenTurnedOn == tpmPanelSwitch.IsOn)
+                    if (!isFirstReport && bipLinkTPM.BIPLights.Count > 0 && bipLinkTPM.TPMSwitch == tpmPanelSwitch.TPMSwitch && bipLinkTPM.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
                         bipLinkTPM.Execute();
                         break;
                     }
                 }
-                if (!found)
+                if (!isFirstReport && !found)
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
                     {
@@ -509,9 +510,9 @@ namespace NonVisuals.Saitek
             SetIsDirty();
         }
 
-        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            TPMSwitchChanged(hashSet);
+            TPMSwitchChanged(isFirstReport, hashSet);
         }
 
         private void DeviceAttachedHandler()

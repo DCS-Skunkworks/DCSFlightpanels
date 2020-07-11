@@ -304,7 +304,7 @@ namespace NonVisuals.StreamDeck
             _streamDeckLayerHandler.ClearSettings();
         }
 
-        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             //Set _selectedMode and LCD button statuses
             //and performs the actual actions for key presses

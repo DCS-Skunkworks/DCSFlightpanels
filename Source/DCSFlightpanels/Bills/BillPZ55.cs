@@ -18,7 +18,7 @@ namespace DCSFlightpanels.Bills
             TextBox = textBox;
             Key = key;
         }
-
+        
         public override bool ContainsDCSBIOS()
         {
             return _dcsbiosBindingPZ55 != null;// && _dcsbiosInputs.Count > 0;

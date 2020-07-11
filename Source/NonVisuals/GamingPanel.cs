@@ -44,7 +44,7 @@ namespace NonVisuals
         public long ReportCounter = 0;
         
         protected bool FirstReportHasBeenRead = false;
-        protected abstract void GamingPanelKnobChanged(IEnumerable<object> hashSet);
+        protected abstract void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet);
 
         protected abstract void StartListeningForPanelChanges();
 
@@ -269,7 +269,7 @@ namespace NonVisuals
         public virtual void Attach(IGamingPanelListener iGamingPanelListener)
         {
             OnDeviceAttachedA += iGamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA += iGamingPanelListener.SwitchesChanged;
+            OnSwitchesChangedA += iGamingPanelListener.UISwitchesChanged;
             OnPanelDataAvailableA += iGamingPanelListener.PanelDataAvailable;
             OnSettingsAppliedA += iGamingPanelListener.SettingsApplied;
             OnSettingsClearedA += iGamingPanelListener.SettingsCleared;
@@ -281,7 +281,7 @@ namespace NonVisuals
         public virtual void Detach(IGamingPanelListener iGamingPanelListener)
         {
             OnDeviceAttachedA -= iGamingPanelListener.DeviceAttached;
-            OnSwitchesChangedA -= iGamingPanelListener.SwitchesChanged;
+            OnSwitchesChangedA -= iGamingPanelListener.UISwitchesChanged;
             OnPanelDataAvailableA -= iGamingPanelListener.PanelDataAvailable;
             OnSettingsAppliedA -= iGamingPanelListener.SettingsApplied;
             OnSettingsClearedA -= iGamingPanelListener.SettingsCleared;
@@ -302,7 +302,7 @@ namespace NonVisuals
         }
 
         //Used by any but descendants that wants to see buttons that have changed, UI for example
-        protected virtual void SwitchesChanged(HashSet<object> hashSet)
+        protected virtual void UISwitchesChanged(HashSet<object> hashSet)
         {
             OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel, Switches = hashSet });
         }

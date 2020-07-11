@@ -236,7 +236,7 @@ namespace NonVisuals.Saitek
             }
         }
 
-        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             //Nothing needs to be done here
         }

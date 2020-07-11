@@ -274,12 +274,13 @@ namespace NonVisuals.Saitek
             }
         }
 
-        private void PZ55SwitchChanged(IEnumerable<object> hashSet)
+        private void PZ55SwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             if (!ForwardPanelEvent)
             {
                 return;
             }
+
             foreach (var switchPanelKeyObject in hashSet)
             {
                 //Looks which switches has been switched and sees whether any key emulation has been tied to them.
@@ -287,7 +288,7 @@ namespace NonVisuals.Saitek
                 var found = false;
 
                 //Look if leds are manually operated
-                if (_manualLandingGearLeds)
+                if (!isFirstReport && _manualLandingGearLeds)
                 {
                     if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && switchPanelKey.IsOn)
                     {
@@ -305,7 +306,7 @@ namespace NonVisuals.Saitek
                 }
                 foreach (var keyBinding in _keyBindings)
                 {
-                    if (keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
+                    if (!isFirstReport && keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
                     {
                         keyBinding.OSKeyPress.Execute(new CancellationToken());
                         found = true;
@@ -314,7 +315,7 @@ namespace NonVisuals.Saitek
                 }
                 foreach (var osCommand in _osCommandBindings)
                 {
-                    if (osCommand.OSCommandObject != null && osCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && osCommand.WhenTurnedOn == switchPanelKey.IsOn)
+                    if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && osCommand.WhenTurnedOn == switchPanelKey.IsOn)
                     {
                         osCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
@@ -323,13 +324,13 @@ namespace NonVisuals.Saitek
                 }
                 foreach (var bipLinkPZ55 in _bipLinks)
                 {
-                    if (bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && bipLinkPZ55.WhenTurnedOn == switchPanelKey.IsOn)
+                    if (!isFirstReport && bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && bipLinkPZ55.WhenTurnedOn == switchPanelKey.IsOn)
                     {
                         bipLinkPZ55.Execute();
                         break;
                     }
                 }
-                if (!found)
+                if (!isFirstReport && !found)
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
                     {
@@ -658,9 +659,9 @@ namespace NonVisuals.Saitek
         }
 
 
-        protected override void GamingPanelKnobChanged(IEnumerable<object> hashSet)
+        protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            PZ55SwitchChanged(hashSet);
+            PZ55SwitchChanged(isFirstReport, hashSet);
         }
 
         private void DeviceAttachedHandler()

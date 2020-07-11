@@ -4,7 +4,7 @@ namespace NonVisuals.Interfaces
 {
     public interface IGamingPanelListener
     {
-        void SwitchesChanged(object sender, SwitchesChangedEventArgs e);
+        void UISwitchesChanged(object sender, SwitchesChangedEventArgs e);
         void SettingsApplied(object sender, PanelEventArgs e);
         void SettingsCleared(object sender, PanelEventArgs e);
         void PanelSettingsChanged(object sender, PanelEventArgs e);
