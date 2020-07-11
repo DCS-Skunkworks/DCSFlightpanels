@@ -106,6 +106,19 @@ namespace NonVisuals.StreamDeck
             return null;
         }
 
+        public static StreamDeckPanel GetInstance(GamingPanel gamingPanel)
+        {
+            foreach (var streamDeckPanel in StreamDeckPanels)
+            {
+                if (streamDeckPanel.PanelHash == gamingPanel.PanelHash)
+                {
+                    return streamDeckPanel;
+                }
+            }
+
+            return null;
+        }
+
         public static List<StreamDeckPanel> GetStreamDeckPanels()
         {
             return StreamDeckPanels;
@@ -249,6 +262,8 @@ namespace NonVisuals.StreamDeck
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
+                    ReadPanelHash(setting);
+
                     var strippedSettingsLine = setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "");
                     //stringBuilder.Append(strippedSettingsLine + Environment.NewLine);
                     if (setOnce)
@@ -349,12 +364,7 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckLayerHandler.SelectedLayerName;
             set => _streamDeckLayerHandler.SelectedLayerName = value;
         }
-
-        public override string SettingsVersion()
-        {
-            return "2X";
-        }
-
+        
         public List<string> LayerNameList
         {
             get => _streamDeckLayerHandler.GetLayerNameList();

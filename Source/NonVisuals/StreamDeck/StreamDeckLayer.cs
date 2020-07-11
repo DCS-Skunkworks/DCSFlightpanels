@@ -16,8 +16,13 @@ namespace NonVisuals.StreamDeck
         private Color _fontColor;
         private Color _backgroundColor;
         private bool _isVisible = false;
-        private string _panelHash = "";
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
 
+        public StreamDeckLayer(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+        }
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
         {
@@ -77,14 +82,14 @@ namespace NonVisuals.StreamDeck
                             }
                         }
 
-                        oldStreamDeckButton.SetStreamDeckPanelHash(_panelHash);
+                        oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
                         break;
                     }
                 }
 
                 if (!found)
                 {
-                    newStreamDeckButton.SetStreamDeckPanelHash(_panelHash);
+                    newStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
                     _streamDeckButtons.Add(newStreamDeckButton);
                     changesMade = true;
                 }
@@ -269,7 +274,7 @@ namespace NonVisuals.StreamDeck
                     return streamDeckButton;
                 }
             }
-            var newButton = new StreamDeckButton(streamDeckButtonName, _panelHash);
+            var newButton = new StreamDeckButton(streamDeckButtonName, _streamDeckPanel);
             _streamDeckButtons.Add(newButton);
             return newButton;
         }
@@ -316,18 +321,19 @@ namespace NonVisuals.StreamDeck
         }
 
         [JsonIgnore]
-        public string PanelHash
+        public StreamDeckPanel StreamDeckPanelInstance
         {
-            get => _panelHash;
+            get => _streamDeckPanel;
             set
             {
-                _panelHash = value;
+                _streamDeckPanel = value;
                 foreach (var streamDeckButton in _streamDeckButtons)
                 {
-                    streamDeckButton.SetStreamDeckPanelHash(_panelHash);
+                    streamDeckButton.StreamDeckPanelInstance = value;
                 }
             }
         }
+
     }
 
     public enum EnumButtonImportMode

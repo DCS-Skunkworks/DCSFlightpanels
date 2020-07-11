@@ -24,14 +24,18 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private StreamDeckButton _streamDeckButton;
         private bool _isLoaded = false;
         private bool _isDirty = false;
-        private string _panelHash;
-
+        private StreamDeckPanel _streamDeckPanel;
 
 
 
         public UserControlStreamDeckButtonAction()
         {
             InitializeComponent();
+        }
+
+        internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
         }
 
         private void UserControlStreamDeckButtonAction_OnLoaded(object sender, RoutedEventArgs e)
@@ -90,7 +94,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 StackPanelButtonOSCommandSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.OSCommand ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonLayerNavigationSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                //StackPanelChooseButtonActionType.IsEnabled = StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                //StackPanelChooseButtonActionType.IsEnabled = _streamDeckPanel.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
                 ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
                                                             TextBoxKeyPressButtonOn.Bill.ContainsKeyPress();
@@ -190,7 +194,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             foreach (var textBox in _textBoxes)
             {
-                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, !textBox.Name.Contains("Off")));
+                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
             }
         }
 
@@ -318,9 +322,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         if (textBoxKeyPress.Bill.ContainsKeyPress())
                         {
                             ActionTypeKey result;
-                            result = new ActionTypeKey();
+                            result = new ActionTypeKey(_streamDeckPanel);
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            result.PanelHash = PanelHash;
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSKeyPress = textBoxKeyPress.Bill.KeyPress;
 
@@ -335,7 +338,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            textBoxDCSBIOS.Bill.DCSBIOSBinding.PanelHash = PanelHash;
                             return textBoxDCSBIOS.Bill.DCSBIOSBinding;
                         }
                         return null;
@@ -344,11 +346,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         if (textBoxOSCommand.Bill.ContainsOSCommand())
                         {
-                            var result = new ActionTypeOS();
+                            var result = new ActionTypeOS(_streamDeckPanel);
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSCommandObject = textBoxOSCommand.Bill.OSCommandObject;
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            result.PanelHash = PanelHash;
                             return result;
                         }
                         return null;
@@ -363,7 +364,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             var result = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            result.PanelHash = PanelHash;
                             return result;
                         }
 
@@ -665,7 +665,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                var target = new ActionTypeLayer();
+                var target = new ActionTypeLayer(_streamDeckPanel);
                 target.TargetLayer = ComboBoxLayerNavigationButton.Text;
                 switch (ComboBoxLayerNavigationButton.Text)
                 {
@@ -710,7 +710,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
             foreach (var streamDeckPanel in streamDeckList)
             {
-                if (streamDeckPanel.PanelHash != PanelHash)
+                if (streamDeckPanel.PanelHash != _streamDeckPanel.PanelHash)
                 {
                     customStreamDeckList.Add(streamDeckPanel);
                 }
@@ -724,16 +724,16 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private void LoadComboBoxLayers()
         {
 
-            if (StreamDeckPanel.GetInstance(PanelHash).SelectedLayer == null)
+            if (_streamDeckPanel.SelectedLayer == null)
             {
                 return;
             }
 
-            var selectedLayerName = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.Name;
+            var selectedLayerName = _streamDeckPanel.SelectedLayer.Name;
 
             var selectedIndex = ComboBoxLayerNavigationButton.SelectedIndex;
 
-            var layerList = StreamDeckPanel.GetInstance(PanelHash).GetStreamDeckLayerNames();
+            var layerList = _streamDeckPanel.GetStreamDeckLayerNames();
 
             if (layerList == null)
             {
@@ -808,11 +808,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             if (textBox.Equals(TextBoxKeyPressButtonOn))
                             {
-                                return new StreamDeckButtonOnOff( StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, true);
+                                return new StreamDeckButtonOnOff( _streamDeckPanel.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxKeyPressButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, false);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
                             }
 
                             break;
@@ -821,11 +821,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             if (textBox.Equals(TextBoxDCSBIOSActionButtonOn))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, true);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxDCSBIOSActionButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, false);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
                             }
 
                             break;
@@ -834,11 +834,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             if (textBox.Equals(TextBoxOSCommandButtonOn))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, true);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxOSCommandButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, false);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
                             }
 
                             break;
@@ -885,7 +885,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                ShowStreamDeckButton(StreamDeckPanel.GetInstance(PanelHash).SelectedButton);
+                ShowStreamDeckButton(_streamDeckPanel.SelectedButton);
                 SetFormState();
             }
             catch (Exception ex)
@@ -937,12 +937,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 Common.LogError(ex);
             }
-        }
-
-        public string PanelHash
-        {
-            get => _panelHash;
-            set => _panelHash = value;
         }
     }
 }

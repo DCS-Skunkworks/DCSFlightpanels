@@ -22,9 +22,14 @@ namespace NonVisuals.StreamDeck
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         public LayerNavType NavigationType;
         public string TargetLayer;
-        private string _panelHash;
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
 
-
+        public ActionTypeLayer(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+        }
+        
         public int GetHash()
         {
             unchecked
@@ -75,27 +80,27 @@ namespace NonVisuals.StreamDeck
             {
                 case LayerNavType.Home:
                 {
-                    StreamDeckPanel.GetInstance(_panelHash).ShowHomeLayer();
+                    _streamDeckPanel.ShowHomeLayer();
                     break;
                 }
                 case LayerNavType.Back:
                 {
-                    StreamDeckPanel.GetInstance(_panelHash).ShowPreviousLayer();
+                    _streamDeckPanel.ShowPreviousLayer();
                     break;
                 }
                 case LayerNavType.SwitchToSpecificLayer:
                 {
-                    StreamDeckPanel.GetInstance(_panelHash).SelectedLayerName = TargetLayer;
+                    _streamDeckPanel.SelectedLayerName = TargetLayer;
                     break;
                 }
             }
         }
 
         [JsonIgnore]
-        public string PanelHash
+        public StreamDeckPanel StreamDeckPanelInstance
         {
-            get => _panelHash;
-            set => _panelHash = value;
+            get => _streamDeckPanel;
+            set => _streamDeckPanel = value;
         }
     }
 }

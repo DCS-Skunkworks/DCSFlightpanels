@@ -54,11 +54,11 @@ namespace NonVisuals
             _lastProfileUsed = lastProfileUsed;
         }
 
-        public void OpenProfile()
+        public string OpenProfile()
         {
             if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
-                return;
+                return null;
             }
             var tempDirectory = string.IsNullOrEmpty(Filename) ? MyDocumentsPath() : Path.GetDirectoryName(Filename);
             ClearAll();
@@ -70,8 +70,10 @@ namespace NonVisuals
             openFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
             if (openFileDialog.ShowDialog() == true)
             {
-                LoadProfile(openFileDialog.FileName);
+                return openFileDialog.FileName;
             }
+
+            return null;
         }
 
         public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
@@ -108,10 +110,10 @@ namespace NonVisuals
             _profileFileInstanceIDs.Clear();
         }
 
-        public string DefaultFile()
+        /*public string DefaultFile()
         {
             return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
-        }
+        }*/
 
         public string MyDocumentsPath()
         {
@@ -146,10 +148,9 @@ namespace NonVisuals
                     {
                         _filename = _lastProfileUsed;
                     }
-                    else if (File.Exists(DefaultFile()))
+                    else
                     {
-                        _filename = DefaultFile();
-                        _lastProfileUsed = filename;
+                        return false;
                     }
                 }
                 
@@ -176,7 +177,6 @@ namespace NonVisuals
                 var currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;
                 string currentPanelHash = null;
-                string currentPanelSettingsVersion = null;
                 var insidePanel = false;
                 var insideJSONPanel = false;
 
@@ -238,7 +238,7 @@ namespace NonVisuals
                         }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
                         {
-                            currentPanelSettingsVersion = fileLine.Trim();
+                            //do nothing, this will be phased out
                         }
                         else if (fileLine.Equals("BeginPanel"))
                         {
@@ -265,27 +265,10 @@ namespace NonVisuals
                                 {
                                     line = line.Replace("\t", "");
                                 }
-                                if (currentPanelSettingsVersion != null)
-                                {
-                                    //todo refactor this away
-                                    //0X marks that setting version isn't used (yet). Any number above 0 indicated the panel are using new versions of the settings
-                                    //and that old settings won't be loaded.
-                                    if (currentPanelSettingsVersion.EndsWith("0X"))
-                                    {
-                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
-                                    }
-                                    else
-                                    {
-                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.SEPARATOR_SYMBOL + currentPanelSettingsVersion + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
-                                    }
-                                }
-                                else
-                                {
-                                    _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
-                                }
+                                
+                                _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
                             }
-
-
+                            
                             if (insideJSONPanel)
                             {
                                 _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
@@ -452,7 +435,6 @@ namespace NonVisuals
                     _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
                     _listPanelSettingsData.Add("PanelHash=" + gamingPanel.PanelHash);
-                    _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanel");
 
                     foreach (var s in strings)
@@ -487,7 +469,6 @@ namespace NonVisuals
                     _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
                     _listPanelSettingsData.Add("PanelHash=" + gamingPanel.PanelHash);
-                    _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
                     _listPanelSettingsData.Add("BeginPanelJSON");
                     _listPanelSettingsData.Add(jsonData);
                     _listPanelSettingsData.Add("EndPanelJSON");

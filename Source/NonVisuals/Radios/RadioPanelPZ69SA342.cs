@@ -1819,11 +1819,6 @@ namespace NonVisuals.Radios
             return Interlocked.Read(ref _vhfAmThreadNowSynching) > 0;
         }
 
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
-
         private bool SwitchVhfAmDecimalDirectionUp(int cockpitValue, int desiredValue)
         {
             var upCount = 0;

@@ -82,10 +82,13 @@ namespace NonVisuals.Saitek
             {
                 return;
             }
+            
             foreach (var setting in settings)
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
+                    ReadPanelHash(setting);
+
                     if (setting.StartsWith("SwitchPanelKey{"))
                     {
                         var keyBinding = new KeyBindingPZ55();
@@ -857,13 +860,6 @@ namespace NonVisuals.Saitek
                 SetIsDirty();
             }
         }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
-
-
     }
 
     public enum ControlListPZ55 : byte

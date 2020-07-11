@@ -88,6 +88,8 @@ namespace NonVisuals.Radios
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
+                    ReadPanelHash(setting);
+
                     if (setting.StartsWith("RadioPanelKeyDialPos{"))
                     {
                         var keyBinding = new KeyBindingPZ69DialPosition();
@@ -1000,11 +1002,6 @@ namespace NonVisuals.Radios
         private void CreateSwitchKeys()
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
-        }
-        
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
 
         public HashSet<DCSBIOSOutputBindingPZ69> LCDBindings

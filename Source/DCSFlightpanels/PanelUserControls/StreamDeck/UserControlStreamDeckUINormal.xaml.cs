@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using NonVisuals;
+using NonVisuals.StreamDeck;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
@@ -7,7 +9,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
     /// </summary>
     public partial class UserControlStreamDeckUINormal : UserControlStreamDeckUIBase
     {
-        public UserControlStreamDeckUINormal()
+        public UserControlStreamDeckUINormal(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
             InitializeComponent();
         }

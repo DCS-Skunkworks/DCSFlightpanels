@@ -85,7 +85,7 @@ namespace NonVisuals.StreamDeck
 
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
             
-            _layerList.SetPanelHash(_streamDeckPanel.PanelHash);
+            _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
             CheckHomeLayerExists();
         }
@@ -99,7 +99,7 @@ namespace NonVisuals.StreamDeck
 
                 if (!LayerExists(importLayerName))
                 {
-                    var newLayer = new StreamDeckLayer {Name = importLayerName};
+                    var newLayer = new StreamDeckLayer(_streamDeckPanel) { Name = importLayerName};
                     AddLayer(newLayer);
                 }
 
@@ -128,7 +128,7 @@ namespace NonVisuals.StreamDeck
 
             return result;
         }
-
+        härifrån till buttons och till alla undre objekt (stream deck panel)
         public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
             var filesToCompressList = new List<string>(); //includes the json file and eventual image files
@@ -205,8 +205,7 @@ namespace NonVisuals.StreamDeck
 
             if (!found)
             {
-                var streamDeckLayer = new StreamDeckLayer();
-                streamDeckLayer.PanelHash = _streamDeckPanel.PanelHash;
+                var streamDeckLayer = new StreamDeckLayer(_streamDeckPanel);
                 streamDeckLayer.Name = StreamDeckConstants.HOME_LAYER_NAME;
                 _layerList.Insert(0, streamDeckLayer);
             }
@@ -531,7 +530,7 @@ namespace NonVisuals.StreamDeck
                 throw new Exception("Button " + buttonName + " cannot be found in layer " + layerName + ".");
             }
 
-            var button = new StreamDeckButton(buttonName, _streamDeckPanel.PanelHash);
+            var button = new StreamDeckButton(buttonName, _streamDeckPanel);
 
             /*
              * Silently means there won't be any event of type "New Button added". This is an empty button

@@ -2838,11 +2838,6 @@ namespace NonVisuals.Radios
         {
             return Interlocked.Read(ref _rioTacanThreadNowSynching) > 0;
         }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
     }
 
 }

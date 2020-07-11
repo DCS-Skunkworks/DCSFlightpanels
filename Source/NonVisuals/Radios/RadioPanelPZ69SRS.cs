@@ -686,12 +686,6 @@ namespace NonVisuals.Radios
         }
 
 
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
-
-
         public void DCSBIOSStringReceived(object sender, DCSBIOSStringDataEventArgs e)
         {
             try

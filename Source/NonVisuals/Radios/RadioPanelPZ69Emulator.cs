@@ -77,6 +77,8 @@ namespace NonVisuals.Radios
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
+                    ReadPanelHash(setting);
+
                     if (setting.StartsWith("RadioPanelKey{"))
                     {
                         var keyBinding = new KeyBindingPZ69();
@@ -590,19 +592,7 @@ namespace NonVisuals.Radios
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
         }
-
-        /*public HashSet<DCSBIOSBindingPZ69> DCSBiosBindings
-        {
-            get { return _dcsBiosBindings; }
-            set { _dcsBiosBindings = value; }
-        }*/
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
-
-
+        
     }
 
     public enum ControlListPZ69 : byte

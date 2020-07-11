@@ -9,6 +9,7 @@ using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Shared;
+using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;
@@ -21,7 +22,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
         protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();
         protected bool UserControlLoaded;
-        public string PanelHash;
+        protected StreamDeckPanel _streamDeckPanel;
 
         private string _lastShownLayer = "";
 
@@ -33,9 +34,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         }
 
 
-        protected UserControlStreamDeckUIBase()
+        protected UserControlStreamDeckUIBase(StreamDeckPanel streamDeckPanel)
         {
-            //EventHandlers.AttachOledImageListener(this);
+            _streamDeckPanel = streamDeckPanel;
         }
 
 
@@ -82,7 +83,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 /*
                  * Here we must check if event if we can change the button that is selected. If there are unsaved configurations we can't
                  */
-                if (newlySelectedImage.Bill.Button != StreamDeckPanel.GetInstance(PanelHash).SelectedButton && EventHandlers.AreThereDirtyListeners(this))
+                if (newlySelectedImage.Bill.Button != _streamDeckPanel.SelectedButton && EventHandlers.AreThereDirtyListeners(this))
                 {
                     if (CommonUI.DoDiscardAfterMessage(true, "Discard Changes to " + SelectedButtonName + " ?"))
                     {
@@ -226,10 +227,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                var streamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+                var streamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
                 if (MessageBox.Show("Delete button" + streamDeckButton.StreamDeckButtonName.ToString() + "?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.RemoveButton(streamDeckButton);
+                    _streamDeckPanel.SelectedLayer.RemoveButton(streamDeckButton);
                 }
             }
             catch (Exception ex)
@@ -276,7 +277,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     return;
                 }
-                var selectedStreamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+                var selectedStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
                 menuItemCopy.IsEnabled = selectedStreamDeckButton.HasConfig;
                 menuItemDelete.IsEnabled = selectedStreamDeckButton.HasConfig;
 
@@ -314,7 +315,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        protected StreamDeckPanel StreamDeckPanelInstance => StreamDeckPanel.GetInstance(PanelHash);
+
+        public StreamDeckPanel StreamDeckPanelInstance
+        {
+            get => _streamDeckPanel;
+            set => _streamDeckPanel = value;
+        }
 
         protected void ShowGraphicConfiguration()
         {
@@ -390,14 +396,14 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
                 buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
                 buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
-                buttonImage.Bill.PanelHash = PanelHash;
+                buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;
                 buttonImage.Source = buttonImage.Bill.DeselectedImage;
             }
         }
 
         protected void Copy()
         {
-            var streamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+            var streamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (streamDeckButton != null)
             {
                 Clipboard.SetDataObject(streamDeckButton);
@@ -414,7 +420,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
             var result = false;
             var newStreamDeckButton = (StreamDeckButton)iDataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
-            var oldStreamDeckButton = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+            var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
             if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
                 MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
@@ -427,7 +433,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
             if (result)
             {
-                StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.AddButton(oldStreamDeckButton);
+                _streamDeckPanel.SelectedLayer.AddButton(oldStreamDeckButton);
                 UpdateButtonInfoFromSource();
                 SetIsDirty();
             }

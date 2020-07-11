@@ -796,11 +796,6 @@ namespace NonVisuals.Radios
 
             return result;
         }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
     }
 
 }

@@ -12,12 +12,22 @@ namespace NonVisuals.StreamDeck
     {
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.DCSBIOS;
         public bool IsRepeatable() => true;
+
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private string _panelHash;
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
+
+
+        public ActionTypeDCSBIOS(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+        }
+
 
         [JsonIgnore]
         public string ActionDescription => Description;
 
+        
         public int GetHash()
         {
             unchecked
@@ -30,7 +40,7 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
-        
+
         public void Execute(CancellationToken threadCancellationToken)
         {
             SendDCSBIOSCommands(threadCancellationToken);
@@ -49,11 +59,12 @@ namespace NonVisuals.StreamDeck
         }
 
         [JsonIgnore]
-        public string PanelHash
+        public StreamDeckPanel StreamDeckPanelInstance
         {
-            get => _panelHash;
-            set => _panelHash = value;
+            get => _streamDeckPanel;
+            set => _streamDeckPanel = value;
         }
+
 
     }
 }

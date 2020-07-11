@@ -23,26 +23,23 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private DCSBIOSConverter _dcsbiosConverter = null;
         private bool _isDirty;
         private StreamDeckPanel _streamDeckPanel;
-        private string _streamDeckPanelInstanceId;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
 
 
 
-        public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, string streamDeckPanelInstanceId)
+        public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, StreamDeckPanel streamDeckPanel)
         {
             InitializeComponent();
             _streamDeckButtonName = streamDeckButtonName;
-            _streamDeckPanelInstanceId = streamDeckPanelInstanceId;
-            _streamDeckPanel = StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId);
-            _dcsbiosConverter = new DCSBIOSConverter();
+            _streamDeckPanel = streamDeckPanel;
+            _dcsbiosConverter = new DCSBIOSConverter(_streamDeckPanel);
         }
 
-        public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, string streamDeckPanelInstanceId, DCSBIOSConverter dcsbiosConverter)
+        public StreamDeckDCSBIOSConverterWindow(EnumStreamDeckButtonNames streamDeckButtonName, DCSBIOSConverter dcsbiosConverter, StreamDeckPanel streamDeckPanel)
         {
             InitializeComponent();
             _streamDeckButtonName = streamDeckButtonName;
-            _streamDeckPanelInstanceId = streamDeckPanelInstanceId;
-            _streamDeckPanel = StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId);
+            _streamDeckPanel = streamDeckPanel;
             _dcsbiosConverter = dcsbiosConverter;
         }
 
@@ -514,7 +511,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                StreamDeckPanel.GetInstance(_streamDeckPanelInstanceId).SetImage(_streamDeckButtonName, _dcsbiosConverter.Bitmap);
+                _streamDeckPanel.SetImage(_streamDeckButtonName, _dcsbiosConverter.Bitmap);
             }
             catch (Exception ex)
             {

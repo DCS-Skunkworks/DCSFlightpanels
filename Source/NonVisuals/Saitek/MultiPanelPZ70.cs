@@ -132,8 +132,10 @@ namespace NonVisuals.Saitek
 
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.Contains(SettingsVersion()))
+                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
+                    ReadPanelHash(setting);
+
                     if (setting.StartsWith("MultiPanelKnob{"))
                     {
                         var knobBinding = new KeyBindingPZ70();
@@ -1209,11 +1211,6 @@ namespace NonVisuals.Saitek
         {
             get => _pz70DialPosition;
             set => _pz70DialPosition = value;
-        }
-
-        public override string SettingsVersion()
-        {
-            return "2X";
         }
 
         public PZ70LCDButtonByteList LCDButtonByteListHandler => _lcdButtonByteListHandler;

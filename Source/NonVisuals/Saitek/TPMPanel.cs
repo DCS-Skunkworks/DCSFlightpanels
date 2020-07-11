@@ -73,6 +73,8 @@ namespace NonVisuals.Saitek
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
+                    ReadPanelHash(setting);
+
                     if (setting.StartsWith("TPMPanelSwitch{"))
                     {
                         var keyBinding = new KeyBindingTPM();
@@ -536,11 +538,6 @@ namespace NonVisuals.Saitek
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
     }
 

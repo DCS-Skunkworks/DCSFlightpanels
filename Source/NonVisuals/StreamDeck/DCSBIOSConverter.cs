@@ -22,8 +22,15 @@ namespace NonVisuals.StreamDeck
 
         private FaceTypeText _faceTypeText = new FaceTypeText();
         private FaceTypeImage _faceTypeImage = new FaceTypeImage();
-        private FaceTypeDCSBIOSOverlay _faceTypeDCSBIOSOverlay = new FaceTypeDCSBIOSOverlay();
+        private FaceTypeDCSBIOSOverlay _faceTypeDCSBIOSOverlay;
 
+        private StreamDeckPanel _streamDeckPanel;
+
+        public DCSBIOSConverter(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+            _faceTypeDCSBIOSOverlay = new FaceTypeDCSBIOSOverlay(streamDeckPanel);
+        }
 
         public FaceTypeText FaceTypeText
         {
@@ -877,6 +884,13 @@ namespace NonVisuals.StreamDeck
                 }
                 throw new Exception("FaceConfigurationIsOK: Exception. FaceTypeText OutputType not known " + _converterOutputType + ".");
             }
+        }
+
+        [JsonIgnore]
+        public StreamDeckPanel StreamDeckPanelInstance
+        {
+            get => _streamDeckPanel;
+            set => _streamDeckPanel = value;
         }
     }
 

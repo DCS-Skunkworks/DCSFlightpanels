@@ -29,12 +29,16 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private List<StreamDeckFaceTextBox> _textBoxList = new List<StreamDeckFaceTextBox>();
         private List<RadioButton> _radioButtonList = new List<RadioButton>();
         private EnumStreamDeckButtonNames _streamDeckButton;
-        public string PanelHash;
-
+        private StreamDeckPanel _streamDeckPanel;
 
         public UserControlStreamDeckButtonFace()
         {
             InitializeComponent();
+        }
+
+        internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
         }
 
         private void UserControlStreamDeckButtonFace_OnLoaded(object sender, RoutedEventArgs e)
@@ -205,7 +209,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     TextBoxFontInfo.TargetFont = TextBoxButtonTextFace.Bill.TextFont;
                     SetIsDirty();
                 }
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetFormState();
             }
             catch (Exception ex)
@@ -224,7 +228,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     SetIsDirty();
 
                 }
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetFormState();
             }
             catch (Exception ex)
@@ -243,7 +247,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     SetIsDirty();
 
                 }
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetFormState();
             }
             catch (Exception ex)
@@ -256,7 +260,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetFormState();
             }
             catch (Exception ex)
@@ -408,7 +412,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                             var result = new FaceTypeText();
 
                             result.StreamDeckButtonName = streamDeckButtonName;
-                            result.PanelHash = PanelHash;
+                            result.StreamDeckPanelInstance = _streamDeckPanel;
                             result.ButtonTextTemplate = TextBoxButtonTextFace.Text;
                             result.TextFont = TextBoxButtonTextFace.Bill.TextFont;
                             result.FontColor = TextBoxButtonTextFace.Bill.FontColor;
@@ -427,7 +431,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                         {
                             result = TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.DeepClone();
-                            DCSBIOSDecoder.ShowOnly(result, PanelHash);
+                            result.StreamDeckPanelInstance = _streamDeckPanel;
+                            DCSBIOSDecoder.ShowOnly(result, _streamDeckPanel);
                             TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.IsVisible = false;
                             result.AfterClone();
                         }
@@ -440,7 +445,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                             var result = new FaceTypeImage();
 
                             result.StreamDeckButtonName = streamDeckButtonName;
-                            result.PanelHash = PanelHash;
+                            result.StreamDeckPanelInstance = _streamDeckPanel;
                             result.ImageFile = TextBoxImageFace.Bill.ImageFileRelativePath;
 
                             return result;
@@ -463,7 +468,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 var textBox = (StreamDeckFaceTextBox)sender;
-                textBox.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                textBox.TestImage(_streamDeckPanel);
                 SetIsDirty();
 
                 SetFormState();
@@ -494,7 +499,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 TextBoxButtonTextFace.Bill.OffsetY -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.Bill.OffsetY;
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
 
             }
@@ -511,7 +516,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 TextBoxButtonTextFace.Bill.OffsetY += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TextBoxOffsetInfo.OffSetY = TextBoxButtonTextFace.Bill.OffsetY;
                 SettingsManager.OffsetY = TextBoxButtonTextFace.Bill.OffsetY;
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
 
             }
@@ -528,7 +533,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 TextBoxButtonTextFace.Bill.OffsetX -= StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.Bill.OffsetX;
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
 
             }
@@ -545,7 +550,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 TextBoxButtonTextFace.Bill.OffsetX += StreamDeckConstants.ADJUST_OFFSET_CHANGE_VALUE;
                 TextBoxOffsetInfo.OffSetX = TextBoxButtonTextFace.Bill.OffsetX;
                 SettingsManager.OffsetX = TextBoxButtonTextFace.Bill.OffsetX;
-                TextBoxButtonTextFace.TestImage(StreamDeckPanel.GetInstance(PanelHash));
+                TextBoxButtonTextFace.TestImage(_streamDeckPanel);
                 SetIsDirty();
 
             }
@@ -599,11 +604,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                 {
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.IsVisible = false;
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, PanelHash);
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder, _streamDeckPanel);
                 }
                 else
                 {
-                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(PanelHash);
+                    streamDeckDCSBIOSDecoderWindow = new StreamDeckDCSBIOSDecoderWindow(_streamDeckPanel);
                 }
 
                 streamDeckDCSBIOSDecoderWindow.ShowDialog();
@@ -613,6 +618,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder?.Dispose();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder = streamDeckDCSBIOSDecoderWindow.DCSBIOSDecoder.DeepClone();
                     TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.AfterClone();
+                    TextBoxDCSBIOSDecoder.Bill.DCSBIOSDecoder.StreamDeckPanelInstance = _streamDeckPanel;
                     streamDeckDCSBIOSDecoderWindow.Dispose();
                     SetIsDirty();
 
@@ -639,7 +645,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     TextBoxImageFace.Bill.ImageFileRelativePath = imageRelativePath;
                     SettingsManager.LastImageFileDirectory = directory;
                     var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
-                    StreamDeckPanel.GetInstance(PanelHash).SetImage(_streamDeckButton, bitmap);
+                    _streamDeckPanel.SetImage(_streamDeckButton, bitmap);
                     SetIsDirty();
 
                     SetFormState();
@@ -661,7 +667,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     return;
                 }
                 var bitmap = new Bitmap(TextBoxImageFace.Bill.ImageFileRelativePath);
-                StreamDeckPanel.GetInstance(PanelHash).SetImage(_streamDeckButton, bitmap);
+                _streamDeckPanel.SetImage(_streamDeckButton, bitmap);
             }
             catch (Exception ex)
             {
@@ -690,7 +696,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                ShowStreamDeckButton(StreamDeckPanel.GetInstance(PanelHash).SelectedButton);
+                ShowStreamDeckButton(_streamDeckPanel.SelectedButton);
                 SetFormState();
             }
             catch (Exception ex)

@@ -19,7 +19,14 @@ namespace NonVisuals.StreamDeck
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
         private uint _uintDcsBiosValue = UInt32.MaxValue;
         private string _stringDcsBiosValue = "PÖLKASD2!";
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
 
+        public FaceTypeDCSBIOS(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+        }
+        
         [JsonIgnore]
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
@@ -60,7 +67,7 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, Bitmap);
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 
         public override int GetHash()
@@ -144,7 +151,7 @@ namespace NonVisuals.StreamDeck
                 RefreshBitmap = true;
             }
         }
-
+        
         public virtual void AfterClone()
         { }
     }

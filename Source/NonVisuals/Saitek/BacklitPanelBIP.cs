@@ -186,6 +186,8 @@ namespace NonVisuals.Saitek
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
                 {
+                    ReadPanelHash(setting);
+
                     var colorOutput = new DcsOutputAndColorBindingBIP();
                     colorOutput.ImportSettings(setting);
                     _listColorOutputBinding.Add(colorOutput);
@@ -371,7 +373,6 @@ namespace NonVisuals.Saitek
 
         public override List<string> ExportSettings()
         {
-            denna ska exportera sin panelhash (alltid även om ingen config finns
             if (Closed)
             {
                 return null;
@@ -631,11 +632,6 @@ namespace NonVisuals.Saitek
             }
             _ledBrightness += 10;
             SetLedStrength();
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
     }
 

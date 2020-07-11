@@ -14,6 +14,9 @@ namespace NonVisuals.StreamDeck
         private bool _loadBackground = false;
         private double _dcsbiosValue = 0;
 
+        public FaceTypeDCSBIOSOverlay(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
+        {
+        }
 
         protected override void DrawBitmap()
         {
@@ -33,7 +36,7 @@ namespace NonVisuals.StreamDeck
         protected override void Show()
         {
             DrawBitmap();
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, Bitmap);
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 
         public string BackgroundBitmapPath

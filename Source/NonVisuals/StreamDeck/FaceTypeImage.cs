@@ -22,6 +22,8 @@ namespace NonVisuals.StreamDeck
         public bool ConfigurationOK => !string.IsNullOrEmpty(_imageFile);
 
 
+
+
         public virtual void Dispose() {}
 
         [JsonIgnore]
@@ -57,7 +59,7 @@ namespace NonVisuals.StreamDeck
         protected override void Show()
         {
             DrawBitmap();
-            StreamDeckPanel.GetInstance(PanelHash).StreamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
+            StreamDeckPanelInstance.StreamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
         }
 
 

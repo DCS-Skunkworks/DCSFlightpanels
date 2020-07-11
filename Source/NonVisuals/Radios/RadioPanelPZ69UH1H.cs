@@ -3117,11 +3117,6 @@ namespace NonVisuals.Radios
             return Interlocked.Read(ref _vhfNavThreadNowSynching) > 0;
         }
 
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
-
     }
 }
 

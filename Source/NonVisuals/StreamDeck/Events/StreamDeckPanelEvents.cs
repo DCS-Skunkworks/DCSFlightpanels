@@ -60,7 +60,7 @@ namespace NonVisuals.StreamDeck.Events
 
     public class StreamDeckHideDecoderEventArgs : EventArgs
     {
-        public string PanelHash;
+        public StreamDeckPanel StreamDeckPanelInstance;
         public string LayerName;
         public EnumStreamDeckButtonNames StreamDeckButtonName;
     }

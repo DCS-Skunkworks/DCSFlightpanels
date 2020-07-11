@@ -666,11 +666,6 @@ namespace NonVisuals.Radios
             SaitekPanelKnobs = RadioPanelKnobAV8BNA.GetRadioPanelKnobs();
         }
 
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
     }
 
 }

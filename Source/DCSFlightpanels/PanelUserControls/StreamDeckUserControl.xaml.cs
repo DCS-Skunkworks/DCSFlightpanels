@@ -50,14 +50,15 @@ namespace DCSFlightpanels.PanelUserControls
             GlobalHandler = globalHandler;
             _dcsbios = dcsbios;
 
+            UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
+            UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
 
             StackPanelButtonUI.Children.Clear();
             switch (panelType)
             {
                 case GamingPanelEnum.StreamDeckMini:
                     {
-                        var child = new UserControlStreamDeckUIMini();
-                        child.PanelHash = _streamDeckPanel.PanelHash;
+                        var child = new UserControlStreamDeckUIMini(_streamDeckPanel);
                         _uiButtonGrid = child;
                         StackPanelButtonUI.Children.Add(child);
 
@@ -65,8 +66,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case GamingPanelEnum.StreamDeck:
                     {
-                        var child = new UserControlStreamDeckUINormal();
-                        child.PanelHash = _streamDeckPanel.PanelHash;
+                        var child = new UserControlStreamDeckUINormal(_streamDeckPanel);
                         _uiButtonGrid = child;
                         StackPanelButtonUI.Children.Add(child);
 
@@ -74,8 +74,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case GamingPanelEnum.StreamDeckXL:
                     {
-                        var child = new UserControlStreamDeckUIXL();
-                        child.PanelHash = _streamDeckPanel.PanelHash;
+                        var child = new UserControlStreamDeckUIXL(_streamDeckPanel);
                         _uiButtonGrid = child;
                         StackPanelButtonUI.Children.Add(child);
                         break;
@@ -92,8 +91,8 @@ namespace DCSFlightpanels.PanelUserControls
             UCStreamDeckButtonAction.GlobalHandler = GlobalHandler;
             UCStreamDeckButtonFace.GlobalHandler = GlobalHandler;
 
-            UCStreamDeckButtonFace.PanelHash = _streamDeckPanel.PanelHash;
-            UCStreamDeckButtonAction.PanelHash = _streamDeckPanel.PanelHash;
+            UCStreamDeckButtonFace.SetStreamDeckPanel(_streamDeckPanel);
+            UCStreamDeckButtonAction.SetStreamDeckPanel(_streamDeckPanel);
         }
 
         protected override void Dispose(bool dispose)
@@ -354,7 +353,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var layerWindow = new StreamDeckLayerWindow(_streamDeckPanel.LayerList, _streamDeckPanel.PanelHash);
+                var layerWindow = new StreamDeckLayerWindow(_streamDeckPanel.LayerList, _streamDeckPanel);
                 layerWindow.ShowDialog();
                 if (layerWindow.DialogResult == true)
                 {
@@ -673,7 +672,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var exportWindow = new ExportWindow(_streamDeckPanel.PanelHash);
+                var exportWindow = new ExportWindow(_streamDeckPanel);
                 exportWindow.Show();
                 SetFormState();
             }

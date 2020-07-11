@@ -18,15 +18,15 @@ namespace DCSFlightpanels.Windows.StreamDeck
     public partial class ExportWindow : Window, IDisposable
     {
         private bool _formLoaded = false;
-        private string _panelHash;
+        private StreamDeckPanel _streamDeckPanel;
         private string _zipFileName = "";
 
 
 
-        public ExportWindow(string panelHash)
+        public ExportWindow(StreamDeckPanel streamDeckPanel)
         {
             InitializeComponent();
-            _panelHash = panelHash;
+            _streamDeckPanel = streamDeckPanel;
         }
 
         public void Dispose()
@@ -61,7 +61,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
         private void LoadButtons()
         {
-            var buttonList = StreamDeckPanel.GetInstance(_panelHash).GetButtonExports();
+            var buttonList = _streamDeckPanel.GetButtonExports();
             DataGridStreamDeckButtons.DataContext = buttonList;
             DataGridStreamDeckButtons.ItemsSource = buttonList;
             DataGridStreamDeckButtons.Items.Refresh();
@@ -111,7 +111,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
                     var buttonExports = DataGridStreamDeckButtons.SelectedItems.Cast<ButtonExport>().ToList();
 
-                    StreamDeckPanel.GetInstance(_panelHash).Export(_zipFileName, buttonExports);
+                    _streamDeckPanel.Export(_zipFileName, buttonExports);
                 }
                 SetFormState();
             }

@@ -180,7 +180,7 @@ namespace NonVisuals.StreamDeck.Events
             var eventArgs = new StreamDeckHideDecoderEventArgs();
             eventArgs.StreamDeckButtonName = dcsbiosDecoder.StreamDeckButtonName;
             eventArgs.LayerName = layerName;
-            eventArgs.PanelHash = dcsbiosDecoder.PanelHash;
+            eventArgs.StreamDeckPanelInstance = dcsbiosDecoder.StreamDeckPanelInstance;
             OnStreamDeckHideDecodersEventHandler?.Invoke(dcsbiosDecoder, eventArgs);
         }
 

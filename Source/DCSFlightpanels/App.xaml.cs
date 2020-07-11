@@ -67,6 +67,7 @@ namespace DCSFlightpanels
             {
                 InitNotificationIcon();
 
+                Settings.Default.RunMinimized = false; //Default
                 Settings.Default.LoadStreamDeck = true; //Default is loading Stream Deck.
                 Settings.Default.Save();
 
@@ -85,14 +86,25 @@ namespace DCSFlightpanels
                         for (int i = 0; i < e.Args.Length; i++)
                         {
                             var arg = e.Args[i];
-                            if (arg.Contains("OpenProfile") && e.Args[0].Contains("="))
+                            if (arg.Contains("-StartMinimized"))
                             {
-                                Settings.Default.LastProfileFileUsed = e.Args[i + 1].Replace("\"", "").Replace("'", "");
                                 Settings.Default.RunMinimized = true;
+                                Settings.Default.Save();
+                            }
+                            if (arg.Contains("OpenProfile="))
+                            {
+                                if (arg.Contains("NEWPROFILE"))
+                                {
+                                    Settings.Default.LastProfileFileUsed = "";
+                                }
+                                else
+                                {
+                                    Settings.Default.LastProfileFileUsed = e.Args[i].Replace("\"", "").Replace("'", "").Replace("OpenProfile=", "");
+                                }
                                 Settings.Default.Save();
                                 closeCurrentInstance = true;
                             }
-                            else if (arg.ToLower().Contains("-nostreamdeck"))
+                            else if (arg.Contains("-NoStreamDeck"))
                             {
                                 Settings.Default.LoadStreamDeck = false;
                                 Settings.Default.Save();

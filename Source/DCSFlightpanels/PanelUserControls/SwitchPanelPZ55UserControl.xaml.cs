@@ -16,6 +16,7 @@ using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 using NonVisuals.StreamDeck;
+using Octokit;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
@@ -1853,13 +1854,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var background = new Bitmap("E:\\temp\\png\\0.png");
-                var bitmap = BitMapCreator.CreateStreamDeckBitmap("Test", SettingsManager.DefaultFont, SettingsManager.DefaultFontColor, SettingsManager.OffsetX, SettingsManager.OffsetY, background);
-                
-
-                var instanceId = @"\\?\hid#vid_0fd9&pid_0060#6&25d3ea36&1&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}";
-                
-                StreamDeckPanel.GetInstance(instanceId).SetImage(EnumStreamDeckButtonNames.BUTTON1, bitmap);
+                var binding = @"C:\Users\Jerker\Documents\Ka50 2.bindings";
+                Process.Start("dcsfp.exe", "OpenProfile=\"" + binding + "\"");
             }
             catch (Exception ex)
             {

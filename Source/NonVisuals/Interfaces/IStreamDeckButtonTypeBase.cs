@@ -5,6 +5,6 @@ namespace NonVisuals.Interfaces
     public interface IStreamDeckButtonTypeBase
     {
         EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
-        string PanelHash { get; set; }
+        StreamDeckPanel StreamDeckPanelInstance { get; set; }
     }
 }

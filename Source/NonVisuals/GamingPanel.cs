@@ -4,6 +4,7 @@ using System.Globalization;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Saitek;
 
 namespace NonVisuals
 {
@@ -29,8 +30,6 @@ namespace NonVisuals
         private uint _count;
         private bool _synchedOnce;
         private readonly Guid _guid = Guid.NewGuid();
-        //private readonly string _hash;
-        public abstract string SettingsVersion();
         public abstract void Startup();
         public abstract void Dispose();
         public abstract void ClearSettings();
@@ -137,7 +136,14 @@ namespace NonVisuals
             set => HIDSkeletonBase.InstanceId = value;
         }
 
-        //todo fix that a hash is created for the configuration ONCE, that is only if there are none.
+        public void ReadPanelHash(string settingsLine)
+        {
+            if (string.IsNullOrEmpty(_randomPanelHash) && settingsLine.Contains(InstanceId))
+            {
+                settingsLine = settingsLine.Replace(InstanceId, "").Replace(SaitekConstants.SEPARATOR_SYMBOL, "");
+                _randomPanelHash = settingsLine.Substring(settingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture)).Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
+            }
+        }
 
         public string PanelHash
         {
@@ -157,8 +163,9 @@ namespace NonVisuals
                     _randomPanelHash = Common.GetRandomMd5Hash();
                     SetIsDirty();
                 }
-                else
+                else if(string.IsNullOrEmpty(_randomPanelHash))
                 {
+                    //Do not overwrite existing value
                     _randomPanelHash = value;
                 }
             }

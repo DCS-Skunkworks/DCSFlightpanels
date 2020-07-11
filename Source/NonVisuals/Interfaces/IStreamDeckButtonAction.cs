@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using NonVisuals.StreamDeck;
 
 namespace NonVisuals.Interfaces
 {
@@ -19,7 +20,8 @@ namespace NonVisuals.Interfaces
         void Execute(CancellationToken threadCancellationToken);
         bool IsRunning();
         bool IsRepeatable();
-        string PanelHash { get; set; }
+        StreamDeckPanel StreamDeckPanelInstance { get; set; }
+
         int GetHash();
     }
 }

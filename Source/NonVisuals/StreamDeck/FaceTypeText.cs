@@ -58,7 +58,7 @@ namespace NonVisuals.StreamDeck
         protected override void Show()
         {
             DrawBitmap();
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, Bitmap);
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 
         public override int GetHash()

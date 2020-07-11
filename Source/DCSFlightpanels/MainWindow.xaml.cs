@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
+using CommonClassLibraryJD;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
 using DCSFlightpanels.Shared;
@@ -171,7 +172,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -187,7 +188,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -208,7 +209,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -232,7 +233,7 @@ namespace DCSFlightpanels
             {
                 return;
             }
-            
+
             if (dcsAirframe == DCSAirframe.NOFRAMELOADEDYET)
             {
                 LabelAirframe.Content = "";
@@ -282,7 +283,7 @@ namespace DCSFlightpanels
             try
             {
                 var counter = 0;
-                while(TabControlPanels.Items.Count > counter)
+                while (TabControlPanels.Items.Count > counter)
                 {
                     var tabItem = (TabItem)TabControlPanels.Items[counter];
                     var userControl = (UserControlBase)tabItem.Content;
@@ -327,7 +328,7 @@ namespace DCSFlightpanels
                     do
                     {
                         var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(0);
-                        var userControl = (UserControlBase) tabItem.Content;
+                        var userControl = (UserControlBase)tabItem.Content;
                         TabControlPanels.Items.Remove(tabItem);
                         var gamingPanelUserControl = ((IGamingPanelUserControl)tabItem.Content);
                         var gamingPanel = gamingPanelUserControl.GetGamingPanel();
@@ -348,7 +349,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             return closedItemCount;
@@ -360,15 +361,15 @@ namespace DCSFlightpanels
             {
                 var str = "DCS-BIOS UPDATES MISSED = " + e.GamingPanelEnum + "  " + e.Count;
                 ShowStatusBarMessage(str);
-                Common.LogError( str);
+                Common.LogError(str);
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        
+
         public void Attach(GamingPanel gamingPanel)
         {
             OnForwardKeyPressesChanged += gamingPanel.SetForwardKeyPresses;
@@ -377,7 +378,7 @@ namespace DCSFlightpanels
             gamingPanel.Attach((IProfileHandlerListener)this);
             _dcsBios?.AttachDataReceivedListener(gamingPanel);
         }
-        
+
         public void Detach(GamingPanel gamingPanel)
         {
             OnForwardKeyPressesChanged -= gamingPanel.SetForwardKeyPresses;
@@ -662,7 +663,7 @@ namespace DCSFlightpanels
                                     if (_profileHandler.Airframe != DCSAirframe.KEYEMULATOR)
                                     {
                                         var tabItemStreamDeck = new TabItem();
-                                        tabItemStreamDeck.Header = "StreamDeck";
+                                        tabItemStreamDeck.Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription();
                                         var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this, _dcsBios);
                                         _panelUserControls.Add(streamDeckUserControl);
                                         _profileHandler.Attach(streamDeckUserControl);
@@ -684,7 +685,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -816,7 +817,7 @@ namespace DCSFlightpanels
             {
                 Left = Settings.Default.MainWindowLeft;
             }
-            
+
             if (Settings.Default.APIMode == 0)
             {
                 Common.APIMode = APIModeEnum.keybd_event;
@@ -846,7 +847,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -858,7 +859,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -871,7 +872,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -885,7 +886,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -911,7 +912,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -930,7 +931,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -942,7 +943,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -970,7 +971,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1053,7 +1054,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.LogError( "Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
+                Common.LogError("Error checking for newer releases. " + ex.Message + "\n" + ex.StackTrace);
                 LabelVersionInformation.Text = "DCSFP version : " + fileVersionInfo.FileVersion;
                 LabelDCSBIOSReleaseDate.Text = "DCS-BIOS Release Date : " + Settings.Default.LastDCSBIOSRelease;
             }
@@ -1104,7 +1105,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1124,7 +1125,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1139,7 +1140,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1154,7 +1155,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             try
@@ -1166,7 +1167,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             try
@@ -1176,7 +1177,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
             try
@@ -1185,7 +1186,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
 
         }
@@ -1199,7 +1200,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1211,7 +1212,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1233,7 +1234,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1241,16 +1242,17 @@ namespace DCSFlightpanels
         {
             try
             {
-                _profileHandler.NewProfile();
+                /*_profileHandler.NewProfile();
                 var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
                 chooseProfileModuleWindow.ShowDialog();
                 Common.UseGenericRadio = chooseProfileModuleWindow.UseGenericRadio;
                 _profileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
-                SetWindowState();
+                SetWindowState();*/
+                NewProfile();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1263,7 +1265,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1271,25 +1273,20 @@ namespace DCSFlightpanels
         {
             try
             {
-                try
-                {
-                    Mouse.OverrideCursor = Cursors.Wait;
-                    CloseProfile();
-                    _profileHandler.OpenProfile();
-                }
-                finally
-                {
-                    Mouse.OverrideCursor = null;
-                }
+                OpenAnOtherProfile();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
-        private void CloseProfile()
+        private bool CloseProfile()
         {
+            if (_profileHandler.IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            {
+                return false;
+            }
             CloseTabItems();
             _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
             _profileHandler.Attach(this);
@@ -1299,6 +1296,8 @@ namespace DCSFlightpanels
             SetWindowTitle();
             SetWindowState();
             SendEventRegardingForwardingOfKeys();
+
+            return true;
         }
 
         private void MenuItemCloseProfile_OnClick(object sender, RoutedEventArgs e)
@@ -1317,7 +1316,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
@@ -1329,7 +1328,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1337,11 +1336,11 @@ namespace DCSFlightpanels
         {
             try
             {
-                CreateNewProfile();
+                NewProfile();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1349,12 +1348,57 @@ namespace DCSFlightpanels
         {
             try
             {
-                CloseProfile();
-                _profileHandler.OpenProfile();
+                OpenAnOtherProfile();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void NewProfile()
+        {
+            try
+            {
+                if (!CloseProfile())
+                {
+                    return;
+                }
+                RestartWithProfile("NEWPROFILE");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void OpenAnOtherProfile()
+        {
+            if (!CloseProfile())
+            {
+                return;
+            }
+            var bindingsFile = _profileHandler.OpenProfile();
+            RestartWithProfile(bindingsFile);
+        }
+
+        private void RestartWithProfile(string bindingsFile)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(bindingsFile))
+                {
+                    if (bindingsFile != "NEWPROFILE" && !File.Exists(bindingsFile))
+                    {
+                        MessageBox.Show("File " + bindingsFile + " does not exist.", "Error finding file", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    Process.Start("dcsfp.exe", "OpenProfile=\"" + bindingsFile + "\"");
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1366,7 +1410,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1384,7 +1428,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1407,7 +1451,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1466,7 +1510,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1474,7 +1518,7 @@ namespace DCSFlightpanels
 
         public void DeviceDetached(GamingPanelEnum gamingPanelsEnum) { }
 
-        
+
         private void ShowStatusBarMessage(string str)
         {
             try
@@ -1486,7 +1530,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1536,7 +1580,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1553,7 +1597,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1565,7 +1609,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1578,7 +1622,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1591,7 +1635,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1705,7 +1749,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "Error disabling Enhanced USB Power Management.");
+                Common.ShowErrorMessageBox(ex, "Error disabling Enhanced USB Power Management.");
                 return;
             }
 
@@ -1771,7 +1815,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1796,7 +1840,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -1871,7 +1915,7 @@ namespace DCSFlightpanels
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
     }

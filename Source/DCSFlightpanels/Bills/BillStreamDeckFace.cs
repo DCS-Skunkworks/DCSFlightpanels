@@ -22,7 +22,8 @@ namespace DCSFlightpanels.Bills
         public BitmapImage DeselectedImage { get; set; }
         private DCSBIOSDecoder _dcsbiosDecoder;
         private string _imageFileRelativePath;
-        private string _panelHash;
+        private StreamDeckPanel _streamDeckPanel;
+
 
         public override void Clear()
         {
@@ -157,10 +158,10 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public string PanelHash
+        public StreamDeckPanel StreamDeckPanelInstance
         {
-            get => _panelHash;
-            set => _panelHash = value;
+            get => _streamDeckPanel;
+            set => _streamDeckPanel = value;
         }
     }
 
