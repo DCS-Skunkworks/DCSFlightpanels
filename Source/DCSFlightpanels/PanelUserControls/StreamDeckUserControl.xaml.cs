@@ -175,7 +175,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.StreamDeck && e.UniqueId.Equals(_streamDeckPanel.PanelHash))
+                if (e.GamingPanelEnum == GamingPanelEnum.StreamDeck && e.UniqueId.Equals(_streamDeckPanel.BindingHash))
                 {
                     NotifyButtonChanges(e.Switches);
                 }
@@ -243,7 +243,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                /*if (e.UniqueId.Equals(_streamDeck.PanelHash) && e.GamingPanelEnum == GamingPanelEnum.StreamDeckMultiPanel)
+                /*if (e.UniqueId.Equals(_streamDeck.BindingHash) && e.GamingPanelEnum == GamingPanelEnum.StreamDeckMultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck.Text = ""));
@@ -266,7 +266,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_streamDeckPanel != null)
                 {
                     TextBoxLogStreamDeck.Text = "";
-                    TextBoxLogStreamDeck.Text = _streamDeckPanel.PanelHash;
+                    TextBoxLogStreamDeck.Text = _streamDeckPanel.BindingHash;
                     Clipboard.SetText(_streamDeckPanel.InstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
@@ -658,7 +658,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var importWindow = new ImportWindow(_streamDeckPanel.PanelHash);
+                var importWindow = new ImportWindow(_streamDeckPanel.BindingHash);
                 importWindow.Show();
                 SetFormState();
             }

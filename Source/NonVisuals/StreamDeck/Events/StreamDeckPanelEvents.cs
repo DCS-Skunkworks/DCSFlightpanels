@@ -65,10 +65,4 @@ namespace NonVisuals.StreamDeck.Events
         public EnumStreamDeckButtonNames StreamDeckButtonName;
     }
 
-    /*public class StreamDeckOledImageChangeEventArgs : EventArgs
-    {
-        public string PanelHash;
-        public EnumStreamDeckButtonNames StreamDeckButtonName;
-        public Bitmap Bitmap;
-    }*/
 }

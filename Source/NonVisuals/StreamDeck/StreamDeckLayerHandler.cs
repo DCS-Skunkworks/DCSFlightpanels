@@ -87,6 +87,7 @@ namespace NonVisuals.StreamDeck
             
             _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
+            SetStreamDeckPanelInstance(_streamDeckPanel);
             CheckHomeLayerExists();
         }
 
@@ -106,6 +107,8 @@ namespace NonVisuals.StreamDeck
                 var layer = GetLayer(importLayerName);
                 layer.ImportButtons(importMode, buttonExports);
             }
+
+            SetStreamDeckPanelInstance(_streamDeckPanel);
         }
 
         public List<ButtonExport> GetButtonExports()
@@ -128,7 +131,7 @@ namespace NonVisuals.StreamDeck
 
             return result;
         }
-        härifrån till buttons och till alla undre objekt (stream deck panel)
+        
         public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
             var filesToCompressList = new List<string>(); //includes the json file and eventual image files
@@ -188,6 +191,14 @@ namespace NonVisuals.StreamDeck
             ZipArchiver.CreateZipFile(compressedFilenameAndPath, filesToCompressList.Distinct().ToList());
 
             SystemSounds.Asterisk.Play();
+        }
+
+        public void SetStreamDeckPanelInstance(StreamDeckPanel streamDeckPanel)
+        {
+            foreach (var streamDeckLayer in LayerList)
+            {
+                streamDeckLayer.StreamDeckPanelInstance = streamDeckPanel;
+            }
         }
 
         private void CheckHomeLayerExists()
@@ -376,11 +387,11 @@ namespace NonVisuals.StreamDeck
             var stringBuilder = new StringBuilder(500);
             stringBuilder.Append("\n");
 
-            stringBuilder.Append("Layer count : " + _layerList.Count + ", button count = " + StreamDeckButton.GetButtons().Count + "\n");
+            stringBuilder.Append("Layer count : " + _layerList.Count + ", button count = " + StreamDeckButton.GetStaticButtons(null).Count + "\n");
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
-                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.StreamDeckButtons.Count + ")\n");
+                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.LayerStreamDeckButtons.Count + ")\n");
             }
             stringBuilder.Append("\n");
 
@@ -404,7 +415,7 @@ namespace NonVisuals.StreamDeck
 
         private void MarkAllButtonsHiddenAndClearFaces()
         {
-            foreach (var streamDeckButton in StreamDeckButton.GetButtons())
+            foreach (var streamDeckButton in StreamDeckButton.GetStaticButtons(_streamDeckPanel))
             {
                 streamDeckButton.IsVisible = false;
             }

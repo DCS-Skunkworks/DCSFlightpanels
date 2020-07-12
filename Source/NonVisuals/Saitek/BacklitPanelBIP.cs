@@ -186,7 +186,7 @@ namespace NonVisuals.Saitek
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
                 {
-                    ReadPanelHash(setting);
+                    ReadBindingHash(setting);
 
                     var colorOutput = new DcsOutputAndColorBindingBIP();
                     colorOutput.ImportSettings(setting);

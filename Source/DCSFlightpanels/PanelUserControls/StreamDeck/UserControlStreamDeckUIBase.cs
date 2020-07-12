@@ -545,7 +545,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                if (e.PanelHash != PanelHash || e.Bitmap == null)
+                if (e.BindingHash != BindingHash || e.Bitmap == null)
                 {
                     return;
                 }

@@ -93,11 +93,11 @@ namespace NonVisuals.StreamDeck
             Dispose(false);
         }
 
-        public static StreamDeckPanel GetInstance(string panelHash)
+        public static StreamDeckPanel GetInstance(string bindingHash)
         {
             foreach (var streamDeckPanel in StreamDeckPanels)
             {
-                if (streamDeckPanel.PanelHash == panelHash)
+                if (streamDeckPanel.BindingHash == bindingHash)
                 {
                     return streamDeckPanel;
                 }
@@ -110,7 +110,7 @@ namespace NonVisuals.StreamDeck
         {
             foreach (var streamDeckPanel in StreamDeckPanels)
             {
-                if (streamDeckPanel.PanelHash == gamingPanel.PanelHash)
+                if (streamDeckPanel.BindingHash == gamingPanel.BindingHash)
                 {
                     return streamDeckPanel;
                 }
@@ -207,7 +207,6 @@ namespace NonVisuals.StreamDeck
 
             lock (_updateStreamDeckOledLockObject)
             {
-                //EventHandlers.NotifyOledImageChange(this, PanelHash, streamDeckButtonName, bitmap);
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }
@@ -221,7 +220,6 @@ namespace NonVisuals.StreamDeck
             var keyBitmap = KeyBitmap.Create.FromBitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage));
             lock (_updateStreamDeckOledLockObject)
             {
-                //EventHandlers.NotifyOledImageChange(this, PanelHash, streamDeckButtonName, BitMapCreator.BitmapImage2Bitmap(bitmapImage));
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }
@@ -262,14 +260,14 @@ namespace NonVisuals.StreamDeck
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
-                    ReadPanelHash(setting);
+                    ReadBindingHash(setting);
 
                     var strippedSettingsLine = setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "");
                     //stringBuilder.Append(strippedSettingsLine + Environment.NewLine);
                     if (setOnce)
                     {
-                        var panelHash = strippedSettingsLine.Substring(strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture));
-                        PanelHash = panelHash.Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
+                        var bindingHash = strippedSettingsLine.Substring(strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture));
+                        BindingHash = bindingHash.Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
                         setOnce = false;
                     }
                     

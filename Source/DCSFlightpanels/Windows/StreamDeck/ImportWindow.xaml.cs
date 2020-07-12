@@ -24,7 +24,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     public partial class ImportWindow : Window, IDisposable
     {
         private bool _formLoaded = false;
-        private readonly string _panelHash;
+        private readonly string _bindingHash;
         private List<ButtonExport> _buttonExports = new List<ButtonExport>();
 
         private string _extractedFilesFolder = "";
@@ -32,10 +32,10 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
 
 
-        public ImportWindow(string panelHash)
+        public ImportWindow(string bindingHash)
         {
             InitializeComponent();
-            _panelHash = panelHash;
+            _bindingHash = bindingHash;
         }
 
         public void Dispose()
@@ -141,7 +141,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     importMode = EnumButtonImportMode.Overwrite;
                 }
 
-                StreamDeckPanel.GetInstance(_panelHash).ImportButtons(importMode, selectedButtonExports);
+                StreamDeckPanel.GetInstance(_bindingHash).ImportButtons(importMode, selectedButtonExports);
 
                 MessageBox.Show("Import was completed", "Import successful", MessageBoxButton.OK, MessageBoxImage.Information);
                 SetFormState();
@@ -330,7 +330,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             ComboBoxButtonName.DropDownClosed -= ComboBoxButtonName_OnDropDownClosed;
 
             var buttonName = "BUTTON";
-            for (var i = 0; i < StreamDeckPanel.GetInstance(_panelHash).ButtonCount; i++)
+            for (var i = 0; i < StreamDeckPanel.GetInstance(_bindingHash).ButtonCount; i++)
             {
                 ComboBoxButtonName.Items.Add(buttonName + (i + 1).ToString());
             }
@@ -387,7 +387,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
             ComboBoxLayers.DropDownClosed -= ComboBoxLayers_OnDropDownClosed;
 
-            var layerList = StreamDeckPanel.GetInstance(_panelHash).GetStreamDeckLayerNames();
+            var layerList = StreamDeckPanel.GetInstance(_bindingHash).GetStreamDeckLayerNames();
 
             foreach (var layerName in layerList)
             {

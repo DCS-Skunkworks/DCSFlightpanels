@@ -15,7 +15,7 @@ namespace NonVisuals.StreamDeck
         private Font _textFont;
         private Color _fontColor;
         private Color _backgroundColor;
-        private bool _isVisible = false;
+        private volatile bool _isVisible = false;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
@@ -259,7 +259,7 @@ namespace NonVisuals.StreamDeck
             return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
-        public List<StreamDeckButton> StreamDeckButtons
+        public List<StreamDeckButton> LayerStreamDeckButtons
         {
             get => _streamDeckButtons;
             set => _streamDeckButtons = value;

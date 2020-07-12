@@ -140,6 +140,7 @@
   <ItemGroup>
     <Compile Include="BindingMappingManager.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="GenericBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />

@@ -176,7 +176,7 @@ namespace NonVisuals
                 var fileLines = File.ReadAllLines(_filename);
                 var currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;
-                string currentPanelHash = null;
+                string currentBindingHash = null;
                 var insidePanel = false;
                 var insideJSONPanel = false;
 
@@ -232,9 +232,9 @@ namespace NonVisuals
                             currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
                             _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstanceID, currentPanelType));
                         }
-                        else if (fileLine.StartsWith("PanelHash="))
+                        else if (fileLine.StartsWith("BindingHash="))
                         {
-                            currentPanelHash = fileLine.Replace("PanelHash=", "").Trim();
+                            currentBindingHash = fileLine.Replace("BindingHash=", "").Trim();
                         }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
                         {
@@ -266,12 +266,12 @@ namespace NonVisuals
                                     line = line.Replace("\t", "");
                                 }
                                 
-                                _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
+                                _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
                             }
                             
                             if (insideJSONPanel)
                             {
-                                _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentPanelHash);
+                                _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
                             }
                         }
                     }
@@ -434,7 +434,7 @@ namespace NonVisuals
                     _listPanelSettingsData.Add(Environment.NewLine);
                     _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
-                    _listPanelSettingsData.Add("PanelHash=" + gamingPanel.PanelHash);
+                    _listPanelSettingsData.Add("BindingHash=" + gamingPanel.BindingHash);
                     _listPanelSettingsData.Add("BeginPanel");
 
                     foreach (var s in strings)
@@ -468,7 +468,7 @@ namespace NonVisuals
                     _listPanelSettingsData.Add(Environment.NewLine);
                     _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
                     _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
-                    _listPanelSettingsData.Add("PanelHash=" + gamingPanel.PanelHash);
+                    _listPanelSettingsData.Add("BindingHash=" + gamingPanel.BindingHash);
                     _listPanelSettingsData.Add("BeginPanelJSON");
                     _listPanelSettingsData.Add(jsonData);
                     _listPanelSettingsData.Add("EndPanelJSON");

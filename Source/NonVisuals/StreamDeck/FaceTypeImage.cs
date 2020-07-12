@@ -59,6 +59,10 @@ namespace NonVisuals.StreamDeck
         protected override void Show()
         {
             DrawBitmap();
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeImage]");
+            }
             StreamDeckPanelInstance.StreamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(StreamDeckButtonName) - 1, _keyBitmap);
         }
 

@@ -87,7 +87,7 @@ namespace NonVisuals.Saitek
             {
                 if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                 {
-                    ReadPanelHash(setting);
+                    ReadBindingHash(setting);
 
                     if (setting.StartsWith("SwitchPanelKey{"))
                     {

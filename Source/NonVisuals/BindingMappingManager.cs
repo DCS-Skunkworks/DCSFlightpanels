@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace NonVisuals
 {
-    public class BindingMappingManager
+    public static class BindingMappingManager
     {
+        private static List<GenericBinding> _genericBindings = new List<GenericBinding>();
 
+        public static void AddBinding(GenericBinding genericBinding)
+        {
+
+        }
     }
 }

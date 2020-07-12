@@ -47,7 +47,7 @@ namespace NonVisuals
 
         protected abstract void StartListeningForPanelChanges();
 
-        private string _randomPanelHash = "";
+        private string _randomBindingHash = "";
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {
@@ -136,37 +136,37 @@ namespace NonVisuals
             set => HIDSkeletonBase.InstanceId = value;
         }
 
-        public void ReadPanelHash(string settingsLine)
+        public void ReadBindingHash(string settingsLine)
         {
-            if (string.IsNullOrEmpty(_randomPanelHash) && settingsLine.Contains(InstanceId))
+            if (string.IsNullOrEmpty(_randomBindingHash) && settingsLine.Contains(InstanceId))
             {
                 settingsLine = settingsLine.Replace(InstanceId, "").Replace(SaitekConstants.SEPARATOR_SYMBOL, "");
-                _randomPanelHash = settingsLine.Substring(settingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture)).Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
+                _randomBindingHash = settingsLine.Substring(settingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture)).Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
             }
         }
 
-        public string PanelHash
+        public string BindingHash
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_randomPanelHash))
+                if (string.IsNullOrWhiteSpace(_randomBindingHash))
                 {
-                    _randomPanelHash = Common.GetRandomMd5Hash();
+                    _randomBindingHash = Common.GetRandomMd5Hash();
                     SetIsDirty();
                 }
-                return _randomPanelHash;
+                return _randomBindingHash;
             }
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    _randomPanelHash = Common.GetRandomMd5Hash();
+                    _randomBindingHash = Common.GetRandomMd5Hash();
                     SetIsDirty();
                 }
-                else if(string.IsNullOrEmpty(_randomPanelHash))
+                else if(string.IsNullOrEmpty(_randomBindingHash))
                 {
                     //Do not overwrite existing value
-                    _randomPanelHash = value;
+                    _randomBindingHash = value;
                 }
             }
         }

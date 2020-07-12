@@ -102,7 +102,7 @@ namespace NonVisuals.Saitek
         {
             foreach (var backlitPanelBIP in _backlitPanels)
             {
-                if (bipLight.Hash == backlitPanelBIP.PanelHash)
+                if (bipLight.Hash == backlitPanelBIP.BindingHash)
                 {
                     backlitPanelBIP.SetLED(bipLight.BIPLedPosition, bipLight.LEDColor);
                 }
@@ -113,7 +113,7 @@ namespace NonVisuals.Saitek
         {
             foreach (var backlitPanelBIP in _backlitPanels)
             {
-                if (hash == backlitPanelBIP.PanelHash)
+                if (hash == backlitPanelBIP.BindingHash)
                 {
                     foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
                     {
@@ -127,7 +127,7 @@ namespace NonVisuals.Saitek
         {
             foreach (var backlitPanelBIP in _backlitPanels)
             {
-                if (hash == backlitPanelBIP.PanelHash)
+                if (hash == backlitPanelBIP.BindingHash)
                 {
                     foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
                     {

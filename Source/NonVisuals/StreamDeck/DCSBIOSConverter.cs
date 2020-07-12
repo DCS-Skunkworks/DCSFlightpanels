@@ -24,6 +24,7 @@ namespace NonVisuals.StreamDeck
         private FaceTypeImage _faceTypeImage = new FaceTypeImage();
         private FaceTypeDCSBIOSOverlay _faceTypeDCSBIOSOverlay;
 
+        [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
         public DCSBIOSConverter(StreamDeckPanel streamDeckPanel)
@@ -890,7 +891,23 @@ namespace NonVisuals.StreamDeck
         public StreamDeckPanel StreamDeckPanelInstance
         {
             get => _streamDeckPanel;
-            set => _streamDeckPanel = value;
+            set
+            {
+                _streamDeckPanel = value;
+
+                if (_faceTypeText != null)
+                {
+                    _faceTypeText.StreamDeckPanelInstance = value;
+                }
+                if (_faceTypeImage != null)
+                {
+                    _faceTypeImage.StreamDeckPanelInstance = value;
+                }
+                if (_faceTypeDCSBIOSOverlay != null)
+                {
+                    _faceTypeDCSBIOSOverlay.StreamDeckPanelInstance = value;
+                }
+            }
         }
     }
 

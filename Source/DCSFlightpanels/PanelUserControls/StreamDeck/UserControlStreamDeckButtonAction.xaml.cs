@@ -710,7 +710,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
             foreach (var streamDeckPanel in streamDeckList)
             {
-                if (streamDeckPanel.PanelHash != _streamDeckPanel.PanelHash)
+                if (streamDeckPanel.BindingHash != _streamDeckPanel.BindingHash)
                 {
                     customStreamDeckList.Add(streamDeckPanel);
                 }

@@ -67,6 +67,11 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
+
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeDCSBIOS]");
+            }
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 

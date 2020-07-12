@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
@@ -21,9 +22,9 @@ namespace NonVisuals.StreamDeck
         [NonSerialized] private Thread _keyPressedThread;
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
-        private bool _isVisible = false;
+        private volatile bool _isVisible = false;
         
-        [NonSerialized] private static List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
+        [NonSerialized] private static List<StreamDeckButton> _staticStreamDeckButtons = new List<StreamDeckButton>();
 
 
 
@@ -36,7 +37,7 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckButtonName = enumStreamDeckButton;
             _streamDeckPanel = streamDeckPanel;
-            _streamDeckButtons.Add(this);
+            _staticStreamDeckButtons.Add(this);
         }
 
         private void ReleaseUnmanagedResources()
@@ -50,12 +51,12 @@ namespace NonVisuals.StreamDeck
             if (disposing)
             {
                 _cancellationTokenSource?.Dispose();
-                _streamDeckButtons.Remove(this);
+                _staticStreamDeckButtons.Remove(this);
                 IsVisible = false;
                 _buttonFace?.Dispose();
                 _buttonActionForPress = null;
                 _buttonActionForRelease = null;
-                _streamDeckButtons.Remove(this);
+                _staticStreamDeckButtons.Remove(this);
             }
         }
 
@@ -70,23 +71,28 @@ namespace NonVisuals.StreamDeck
             Dispose(false);
         }
         
-        public static StreamDeckButton Get(EnumStreamDeckButtonNames streamDeckButtonName)
+        public static StreamDeckButton GetStatic(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return _streamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
+            return _staticStreamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
         }
 
         public static void DisposeAll()
         {
-            for (var i = 0; i < _streamDeckButtons.Count; i++)
+            for (var i = 0; i < _staticStreamDeckButtons.Count; i++)
             {
-                var streamDeckButton= _streamDeckButtons[i];
+                var streamDeckButton= _staticStreamDeckButtons[i];
                 streamDeckButton.Dispose();
             }
         }
 
-        public static List<StreamDeckButton> GetButtons()
+        public static List<StreamDeckButton> GetStaticButtons(StreamDeckPanel streamDeckPanelInstance)
         {
-            return _streamDeckButtons;
+            if (streamDeckPanelInstance == null)
+            {
+                return _staticStreamDeckButtons;
+            }
+            
+            return _staticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanelInstance.BindingHash).ToList();
         }
 
         public void DoPress()

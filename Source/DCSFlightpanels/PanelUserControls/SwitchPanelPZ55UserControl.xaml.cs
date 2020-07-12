@@ -11,6 +11,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -1952,14 +1953,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (contextMenuItem.Name == "contextMenuItemKeepPressed")
                 {
-                    var message = "Remember to set a command for the opposing action!\n\n" +
-                                  "For example if you set Keep Pressed for the \"On\" position for a button you need to set a command for \"Off\" position.\n" +
-                                  "This way the continuous Keep Pressed will be canceled.\n" +
-                                  "If you do not want a key press to cancel the continuous key press you can add a \"VK_NULL\" key.\n" +
-                                  "\"VK_NULL\'s\" sole purpose is to cancel a continuous key press.";
-                    var infoDialog = new InformationTextBlockWindow(message);
-                    infoDialog.Height = 250;
-                    infoDialog.ShowDialog();
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")

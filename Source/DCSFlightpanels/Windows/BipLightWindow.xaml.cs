@@ -153,7 +153,7 @@ namespace DCSFlightpanels.Windows
                 foreach (BacklitPanelBIP bip in BipFactory.GetBips())
                 {
                     var comboBoxItem = new ComboBoxItem();
-                    comboBoxItem.Content = bip.PanelHash;
+                    comboBoxItem.Content = bip.BindingHash;
                     ComboBoxBIPPanel.Items.Add(comboBoxItem);
                 }
 

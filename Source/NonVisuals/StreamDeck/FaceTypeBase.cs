@@ -15,7 +15,7 @@ namespace NonVisuals.StreamDeck
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
         private StreamDeckButton _streamDeckButton;
-        private bool _isVisible;
+        private volatile bool _isVisible;
         private int _offsetX = 0;
         private int _offsetY = 0;
 
@@ -58,7 +58,10 @@ namespace NonVisuals.StreamDeck
         public StreamDeckPanel StreamDeckPanelInstance
         {
             get => _streamDeckPanel;
-            set => _streamDeckPanel = value;
+            set
+            {
+                _streamDeckPanel = value;
+            }
         }
 
         [JsonIgnore]

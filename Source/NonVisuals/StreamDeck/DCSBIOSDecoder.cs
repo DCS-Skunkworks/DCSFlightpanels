@@ -100,7 +100,7 @@ namespace NonVisuals.StreamDeck
 
         public void HideAllEvent(object sender, StreamDeckHideDecoderEventArgs e)
         {
-            if (StreamDeckPanelInstance.PanelHash == e.StreamDeckPanelInstance.PanelHash && StreamDeckButtonName == e.StreamDeckButtonName)
+            if (StreamDeckPanelInstance.BindingHash == e.StreamDeckPanelInstance.BindingHash && StreamDeckButtonName == e.StreamDeckButtonName)
             {
                 IsVisible = false;
             }
@@ -328,12 +328,34 @@ namespace NonVisuals.StreamDeck
 
         private void ShowBitmap(Bitmap bitmap)
         {
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
+            }
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmap);
         }
 
         private void ShowBitmapImage(BitmapImage bitmapImage)
         {
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
+            }
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmapImage);
+        }
+
+        [JsonIgnore]
+        public new StreamDeckPanel StreamDeckPanelInstance
+        {
+            get => base.StreamDeckPanelInstance;
+            set
+            {
+                base.StreamDeckPanelInstance = value;
+                foreach (var dcsbiosConverter in _dcsbiosConverters)
+                {
+                    dcsbiosConverter.StreamDeckPanelInstance = base.StreamDeckPanelInstance;
+                }
+            }
         }
 
         public void RemoveDCSBIOSOutput()
