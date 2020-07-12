@@ -223,6 +223,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox( ex);
             }
         }
+
         public bool IsDirty => _isDirty;
 
         public void SetIsDirty()
@@ -242,7 +243,6 @@ namespace DCSFlightpanels.Windows
                 e.Handled = true;
                 Close();
             }
-
         }
     }
 }

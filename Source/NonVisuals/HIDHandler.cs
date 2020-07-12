@@ -17,6 +17,11 @@ namespace NonVisuals
         public List<HIDSkeleton> HIDSkeletons { get; } = new List<HIDSkeleton>();
         private static HIDHandler _instance = null;
 
+        public static HIDHandler GetInstance()
+        {
+            return _instance ?? (_instance = new HIDHandler());
+        }
+
         public HIDHandler()
         {
             if (_instance != null)

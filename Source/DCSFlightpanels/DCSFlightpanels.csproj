@@ -199,6 +199,9 @@
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml.cs">
       <DependentUpon>UserControlStreamDeckUINormal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\BindingsMappingWindow.xaml.cs">
+      <DependentUpon>BindingsMappingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ChooseProfileModuleWindow.xaml.cs">
       <DependentUpon>ChooseProfileModuleWindow.xaml</DependentUpon>
     </Compile>
@@ -391,6 +394,10 @@
     <Page Include="Radios\RadioPanelPZ69UserControlP47D.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\BindingsMappingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ChooseProfileModuleWindow.xaml">
       <SubType>Designer</SubType>
