@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using NonVisuals;
 
 namespace DCSFlightpanels.Windows
 {
@@ -12,6 +14,12 @@ namespace DCSFlightpanels.Windows
     {
         private bool _formLoaded;
         private bool _isDirty;
+        private List<GenericBinding> _genericBindings;
+
+        public BindingsMappingWindow(List<GenericBinding> genericBindings)
+        {
+            _genericBindings = genericBindings;
+        }
 
         public BindingsMappingWindow()
         {
@@ -23,7 +31,7 @@ namespace DCSFlightpanels.Windows
             try
             {
 
-                //PopulateComboBoxes();
+                PopulateComboBoxes();
                 //CopyValues();
                 _formLoaded = true;
                 SetFormState();
@@ -35,6 +43,22 @@ namespace DCSFlightpanels.Windows
         }
 
         private void SetFormState()
+        {
+
+        }
+
+        private void PopulateComboBoxes()
+        {
+            PopulateMissingHardware();
+            PopulateReplacementHardware();
+        }
+
+        private void PopulateMissingHardware()
+        {
+
+        }
+
+        private void PopulateReplacementHardware()
         {
 
         }

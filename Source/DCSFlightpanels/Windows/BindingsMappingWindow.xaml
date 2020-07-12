@@ -21,7 +21,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.RowSpan="3" Grid.Row="0">
-            <GroupBox Header="Missing hardware" Margin="10,10,10,0">
+            <GroupBox Header="Bindings with missing hardware" Margin="10,10,10,0">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                         <ComboBox x:Name="ComboBoxMissingHardware" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" ></ComboBox>
@@ -34,8 +34,7 @@
             </GroupBox>
             <GroupBox Header="Replacement hardware" Margin="10,10,10,0">
                 <StackPanel>
-                    <Label Name="LabelReplacement" Content="Select new panel for this binding :" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
-                    <ComboBox x:Name="ComboBoxReplacementHardware" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0"></ComboBox>
+                    <ComboBox x:Name="ComboBoxReplacementHardware" SelectedIndex="0" SelectedValuePath="Content" Margin="10,10,10,0"></ComboBox>
 
                     <Label Content="Panel information " HorizontalAlignment="Stretch" Margin="10,0,0,0" />
                     <TextBox Name="TextBoxReplacementPanelInformation" Margin="10,0,10,0"></TextBox>
@@ -45,7 +44,7 @@
             </GroupBox>
         </StackPanel>
 
-        <DockPanel Name="StackPanelBindingText" Grid.Column="1" Grid.Row="0" Grid.RowSpan="4">
+        <DockPanel Name="StackPanelBindingText" Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" Visibility="Visible">
             <ScrollViewer HorizontalScrollBarVisibility="Visible">
                 <TextBlock Name="TextBlockBindingText" Height="400" ></TextBlock>
             </ScrollViewer>

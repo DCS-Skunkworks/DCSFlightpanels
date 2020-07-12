@@ -63,8 +63,17 @@ namespace NonVisuals
              *    If only 1, then we can map it without asking questions.
              * 2) Hardware missing, then it will be left as is and saved next time user saves bindings.
              */
-            var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).GroupBy(o => o.PanelType);
-            if (count == 1)
+            foreach (var bindingsGrouped in _genericBindings.GroupBy(o => o.PanelType)
+                .Select(group => new {
+                    PanelType = group.Key,
+                    Count = group.Count()
+                })
+                .OrderBy(x => x.PanelType))
+            {
+                //if(bindingsGrouped.Count
+            }
+            //var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).GroupBy(o => o.PanelType);
+            /*if (count == 1)
             {
                 //This we can map ourselves!
                 var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
@@ -73,7 +82,7 @@ namespace NonVisuals
             else
             {
                 //Askuser
-            }
+            }*/
         }
     }
 }
