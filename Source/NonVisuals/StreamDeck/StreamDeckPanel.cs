@@ -119,6 +119,48 @@ namespace NonVisuals.StreamDeck
             return null;
         }
 
+
+        public override void Identify()
+        {
+            try
+            {
+                var thread = new Thread(ShowIdentifyingValue);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private readonly Color[] _colors = new Color[]
+        {
+            Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
+            Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
+        };
+
+        private void ShowIdentifyingValue()
+        {
+            try
+            {
+                var spins = 40;
+                var random = new Random();
+                var ledPositionArray = Enum.GetValues(typeof(SwitchPanelPZ55LEDPosition));
+                var panelColorArray = Enum.GetValues(typeof(PanelLEDColor));
+
+                while (spins > 0)
+                {
+                    var bitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(_colors[random.Next(0, 20)]);
+                    SetImage(random.Next(0, ButtonCount - 1), bitmap);
+                    
+                    Thread.Sleep(50);
+                    spins--;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
         public static List<StreamDeckPanel> GetStreamDeckPanels()
         {
             return StreamDeckPanels;

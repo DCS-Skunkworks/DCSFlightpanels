@@ -74,7 +74,7 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
         public void SelectedAirframe(object sender, AirframeEventArgs e) { }
-        
+
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
@@ -90,7 +90,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -106,7 +106,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -124,7 +124,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -140,7 +140,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -155,7 +155,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -170,7 +170,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -208,7 +208,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -240,7 +240,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -401,7 +401,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
             return result;
         }
@@ -567,9 +567,10 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
+
 
         private void LEDIncrease_OnClick(object sender, RoutedEventArgs e)
         {
@@ -579,7 +580,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -591,7 +592,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -610,7 +611,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -626,7 +627,19 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _backlitPanelBIP.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
     }

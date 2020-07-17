@@ -165,6 +165,7 @@
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="Saitek\PZ70LCDButtonByteList.cs" />
     <Compile Include="Saitek\SaitekConstants.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />

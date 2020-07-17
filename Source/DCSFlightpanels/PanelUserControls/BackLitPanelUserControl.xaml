@@ -83,6 +83,8 @@
             <Image Height="5" Width="5" x:Name="ImageConfigFound3_6" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="431" Canvas.Top="151" Cursor="Hand"   MouseDown="ImagePosition_OnMouseDown" Visibility="Hidden"/>
             <Image Height="5" Width="5" x:Name="ImageConfigFound3_7" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="509" Canvas.Top="151" Cursor="Hand"   MouseDown="ImagePosition_OnMouseDown" Visibility="Hidden"/>
             <Image Height="5" Width="5" x:Name="ImageConfigFound3_8" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="587" Canvas.Top="151" Cursor="Hand"   MouseDown="ImagePosition_OnMouseDown" Visibility="Hidden"/>
+
+            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="390" Canvas.Top="5" Click="ButtonGetIdentify_OnClick"/>
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="480" Canvas.Top="5" Click="ButtonGetId_OnClick"/>
             <Button Name="ButtonGetHash" Content="MD5" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="570" Canvas.Top="5" Click="ButtonGetHash_OnClick"/>
         </Canvas>

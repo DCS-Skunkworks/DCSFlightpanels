@@ -535,5 +535,17 @@ namespace DCSFlightpanels.Radios
                 Common.ShowErrorMessageBox( ex);
             }
         }
+
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _radioPanelPZ69.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

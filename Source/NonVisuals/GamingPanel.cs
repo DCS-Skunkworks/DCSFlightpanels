@@ -31,6 +31,7 @@ namespace NonVisuals
         private bool _synchedOnce;
         private readonly Guid _guid = Guid.NewGuid();
         public abstract void Startup();
+        public abstract void Identify();
         public abstract void Dispose();
         public abstract void ClearSettings();
         public abstract void ImportSettings(List<string> settings);

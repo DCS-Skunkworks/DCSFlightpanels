@@ -453,6 +453,16 @@ namespace DCSFlightpanels.Radios
         }
 
 
-
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _radioPanelPZ69SRS.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

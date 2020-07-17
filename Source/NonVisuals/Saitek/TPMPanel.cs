@@ -161,6 +161,17 @@ namespace NonVisuals.Saitek
             }
 
         }
+        
+        public override void Identify()
+        {
+            try
+            {
+                //This panel can not identify itself, no LEDs, nothing
+            }
+            catch (Exception e)
+            {
+            }
+        }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {

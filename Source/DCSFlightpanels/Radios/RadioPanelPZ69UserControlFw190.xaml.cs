@@ -478,5 +478,17 @@ namespace DCSFlightpanels.Radios
             LowerSmallerLCDKnobDec.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
         }
+
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _radioPanelPZ69.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

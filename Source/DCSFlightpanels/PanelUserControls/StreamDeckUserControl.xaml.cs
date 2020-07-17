@@ -531,48 +531,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (_identificationThread == null)
-                {
-                    _cancellationTokenSource = new CancellationTokenSource();
-                    _identificationThread = new Thread(() => ThreadedPanelIdentification(_cancellationTokenSource.Token));
-                    _identificationThread.Start();
-                }
-                else
-                {
-                    _cancellationTokenSource.Cancel();
-                    _identificationThread = null;
-                }
+                _streamDeckPanel.Identify();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private readonly Color[] _colors = new Color[]
-        {
-            Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
-            Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
-        };
-
-        private void ThreadedPanelIdentification(CancellationToken cancellationToken)
-        {
-            try
-            {
-                while (true)
-                {
-                    var bitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(_colors[_random.Next(0, 20)]);
-                    _streamDeckPanel.SetImage(_random.Next(0, _streamDeckPanel.ButtonCount - 1), bitmap);
-                    Thread.Sleep(50);
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.LogError(ex);
             }
         }
 

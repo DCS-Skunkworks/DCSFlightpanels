@@ -62,6 +62,7 @@
             <Image Height="76" Name="UpperRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="58" />
             <Image Height="76" Name="LowerRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="562" Canvas.Top="131" />
 
+            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
             <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
         <GroupBox Header="Selector Knobs" Name="GroupUpperSelectorKnob" FontSize="14" FontWeight="Bold" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="3" >

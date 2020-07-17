@@ -1968,5 +1968,17 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void ButtonIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _multiPanelPZ70.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

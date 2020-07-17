@@ -89,7 +89,7 @@ namespace NonVisuals.Radios
                 //1     -> DDDD1
 
                 byte b;
-                b = digitsAsString[i].ToString().Equals(" ") ? (byte) 0xFF : byte.Parse(digitsAsString[i].ToString());
+                b = digitsAsString[i].ToString().Equals(" ") ? (byte)0xFF : byte.Parse(digitsAsString[i].ToString());
                 bytes[arrayPosition] = b;
 
                 arrayPosition++;
@@ -110,7 +110,7 @@ namespace NonVisuals.Radios
             } while (i < 5);
         }
 
-        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e){}
+        public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
 
         protected void SetPZ69DisplayBytesUnsignedInteger(ref byte[] bytes, uint digits, PZ69LCDPosition pz69LCDPosition)
         {
@@ -136,7 +136,7 @@ namespace NonVisuals.Radios
                 //1     -> DDDD1
 
                 byte b;
-                b = digitsAsString[i].ToString().Equals(" ") ? (byte) 0xFF : byte.Parse(digitsAsString[i].ToString());
+                b = digitsAsString[i].ToString().Equals(" ") ? (byte)0xFF : byte.Parse(digitsAsString[i].ToString());
                 bytes[arrayPosition] = b;
 
                 arrayPosition++;
@@ -161,7 +161,7 @@ namespace NonVisuals.Radios
                     i++;
                 }
                 byte b;
-                b = digitsAsString[i].ToString().Equals(" ") ? (byte) 0xFF : byte.Parse(digitsAsString[i].ToString());
+                b = digitsAsString[i].ToString().Equals(" ") ? (byte)0xFF : byte.Parse(digitsAsString[i].ToString());
                 bytes[arrayPosition] = b;
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
                 {
@@ -189,6 +189,48 @@ namespace NonVisuals.Radios
                 arrayPosition++;
                 i++;
             } while (i < bytesToBeInjected.Length && i < 5);
+        }
+
+        public override void Identify()
+        {
+            try
+            {
+                var thread = new Thread(ShowIdentifyingValue);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private void ShowIdentifyingValue()
+        {
+            try
+            {
+                var bytes = new byte[21];
+                bytes[0] = 0x0;
+                PZ69LCDPosition pz69LCDPosition = PZ69LCDPosition.UPPER_ACTIVE_LEFT;
+                var random = new Random();
+                var lcdPositionArray = Enum.GetValues(typeof(PZ69LCDPosition));
+                var lcdValueArray = new string[] { "00000", "11111", "22222", "33333", "44444", "55555", "66666", "77777", "88888", "99999" };
+                var spins = 8;
+
+                while (spins > 0)
+                {
+                    var position = (PZ69LCDPosition)lcdPositionArray.GetValue(random.Next(lcdPositionArray.Length));
+                    var value = (string)lcdValueArray.GetValue(random.Next(lcdValueArray.Length));
+
+                    SetPZ69DisplayBytesString(ref bytes, value, position);
+                    SendLCDData(bytes);
+
+                    Thread.Sleep(500);
+                    spins--;
+                }
+
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         protected void SetPZ69DisplayBytesString(ref byte[] bytes, string digitString, PZ69LCDPosition pz69LCDPosition)
@@ -254,7 +296,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception e)
                 {
-                    Common.LogError( e, "SetPZ69DisplayBytesDefault()");
+                    Common.LogError(e, "SetPZ69DisplayBytesDefault()");
                 }
                 if (digits.Length > i + 1 && digits[i + 1] == '.')
                 {
@@ -295,7 +337,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception e)
                 {
-                    Common.LogError( e, "SetPZ69DisplayBytesDefault()");
+                    Common.LogError(e, "SetPZ69DisplayBytesDefault()");
                 }
                 if (digits.Length > i + 1 && digits[i + 1] == '.')
                 {
@@ -343,7 +385,7 @@ namespace NonVisuals.Radios
                 }
                 catch (Exception e)
                 {
-                    Common.LogError( e, "SetPZ69DisplayBytesDefault() digitsAsString.Length = " + digitsAsString.Length);
+                    Common.LogError(e, "SetPZ69DisplayBytesDefault() digitsAsString.Length = " + digitsAsString.Length);
                 }
 
                 if (digitsAsString.Length > i + 1 && digitsAsString[i + 1] == '.')
@@ -495,6 +537,7 @@ namespace NonVisuals.Radios
             Startup();
             //IsAttached = true;
         }
+
 
         protected void DeviceRemovedHandler()
         {

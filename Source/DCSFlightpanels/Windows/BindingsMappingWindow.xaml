@@ -32,7 +32,7 @@
                     <TextBox Name="TextBoxMissingPanelInformation" Margin="10,0,10,0"></TextBox>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Replacement hardware" Margin="10,10,10,0">
+            <GroupBox Header="Use this hardware" Margin="10,10,10,0">
                 <StackPanel>
                     <ComboBox x:Name="ComboBoxReplacementHardware" SelectedIndex="0" SelectedValuePath="Content" Margin="10,10,10,0"></ComboBox>
 

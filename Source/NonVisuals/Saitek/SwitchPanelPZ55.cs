@@ -191,6 +191,44 @@ namespace NonVisuals.Saitek
 
         }
 
+
+        public override void Identify()
+        {
+            try
+            {
+                var thread = new Thread(ShowIdentifyingValue);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private void ShowIdentifyingValue()
+        {
+            try
+            {
+                var spins = 40;
+                var random = new Random();
+                var ledPositionArray = Enum.GetValues(typeof(SwitchPanelPZ55LEDPosition));
+                var panelColorArray = Enum.GetValues(typeof(PanelLEDColor));
+                
+                while (spins > 0)
+                {
+                    var position = (SwitchPanelPZ55LEDPosition)ledPositionArray.GetValue(random.Next(ledPositionArray.Length));
+                    var color = (PanelLEDColor)panelColorArray.GetValue(random.Next(panelColorArray.Length));
+
+                    SetLandingGearLED(position, color);
+
+                    Thread.Sleep(50);
+                    spins--;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        
         public override void ClearSettings()
         {
             _keyBindings.Clear();
