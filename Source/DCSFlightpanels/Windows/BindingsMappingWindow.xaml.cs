@@ -14,9 +14,9 @@ namespace DCSFlightpanels.Windows
     {
         private bool _formLoaded;
         private bool _isDirty;
-        private List<GenericBinding> _genericBindings;
+        private List<GenericPanelBinding> _genericBindings;
 
-        public BindingsMappingWindow(List<GenericBinding> genericBindings)
+        public BindingsMappingWindow(List<GenericPanelBinding> genericBindings)
         {
             _genericBindings = genericBindings;
         }

@@ -78,7 +78,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
         public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
 

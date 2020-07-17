@@ -24,7 +24,7 @@ namespace NonVisuals
         private string _lastProfileUsed = "";
         private bool _isDirty;
         private bool _isNewProfile;
-        private readonly List<string> _listPanelSettingsData = new List<string>();
+        //private readonly List<string> _listPanelSettingsData = new List<string>();
         private readonly object _lockObject = new object();
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
@@ -76,7 +76,7 @@ namespace NonVisuals
             return null;
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
@@ -106,7 +106,6 @@ namespace NonVisuals
 
         public void ClearAll()
         {
-            _listPanelSettingsData.Clear();
             _profileFileInstanceIDs.Clear();
         }
 
@@ -180,6 +179,8 @@ namespace NonVisuals
                 var insidePanel = false;
                 var insideJSONPanel = false;
 
+                GenericPanelBinding genericPanelBinding = null;
+
                 foreach (var fileLine in fileLines)
                 {
                     if (fileLine.StartsWith("Airframe="))
@@ -226,15 +227,19 @@ namespace NonVisuals
                         if (fileLine.StartsWith("PanelType="))
                         {
                             currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", "").Trim());
+                            genericPanelBinding = new GenericPanelBinding();
+                            genericPanelBinding.PanelType = currentPanelType;
                         }
                         else if (fileLine.StartsWith("PanelInstanceID="))
                         {
                             currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
+                            genericPanelBinding.HIDInstance = currentPanelInstanceID;
                             _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstanceID, currentPanelType));
                         }
                         else if (fileLine.StartsWith("BindingHash="))
                         {
                             currentBindingHash = fileLine.Replace("BindingHash=", "").Trim();
+                            genericPanelBinding.BindingHash = currentBindingHash;
                         }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
                         {
@@ -246,6 +251,10 @@ namespace NonVisuals
                         }
                         else if (fileLine.Equals("EndPanel"))
                         {
+                            if (genericPanelBinding != null)
+                            {
+                                BindingMappingManager.AddBinding(genericPanelBinding);
+                            }
                             insidePanel = false;
                         }
                         else if (fileLine.Equals("BeginPanelJSON"))
@@ -254,6 +263,10 @@ namespace NonVisuals
                         }
                         else if (fileLine.Equals("EndPanelJSON"))
                         {
+                            if (genericPanelBinding != null)
+                            {
+                                BindingMappingManager.AddBinding(genericPanelBinding);
+                            }
                             insideJSONPanel = false;
                         }
                         else
@@ -265,13 +278,15 @@ namespace NonVisuals
                                 {
                                     line = line.Replace("\t", "");
                                 }
-                                
-                                _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
+
+                                genericPanelBinding.Settings.AppendLine(line);
+                                //_listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
                             }
                             
                             if (insideJSONPanel)
                             {
-                                _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
+                                genericPanelBinding.Settings.AppendLine(fileLine);
+                                //_listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
                             }
                         }
                     }
@@ -282,8 +297,8 @@ namespace NonVisuals
                     SetOperationLevelFlag();
                 }
 
-                SendSettingsReadEvent();
-                CheckAllProfileInstanceIDsAgainstAttachedHardware();
+                BindingMappingManager.VerifyBindings();
+                SendBindingsReadEvent();
                 return true;
             }
             catch (Exception ex)
@@ -314,57 +329,19 @@ namespace NonVisuals
                 Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled | OperationFlag.DCSBIOSInputEnabled);
             }
         }
-
-        private void CheckAllProfileInstanceIDsAgainstAttachedHardware()
-        {
-            foreach (var saitekPanelSkeleton in Common.GamingPanelSkeletons)
-            {
-                foreach (var hidDevice in HidDevices.Enumerate(saitekPanelSkeleton.VendorId, saitekPanelSkeleton.ProductId))
-                {
-                    if (hidDevice != null)
-                    {
-                        try
-                        {
-                            _profileFileInstanceIDs.RemoveAll(item => item.Key.Equals(hidDevice.DevicePath));
-                        }
-                        catch (Exception ex)
-                        {
-                            Common.ShowErrorMessageBox( ex);
-                        }
-                    }
-                }
-            }
-            if (_profileFileInstanceIDs.Count > 0)
-            {
-                if (OnUserMessageEventHandler != null)
-                {
-                    foreach (var profileFileInstanceID in _profileFileInstanceIDs)
-                    {
-                        if (profileFileInstanceID.Key != HIDSkeletonIgnore.HidSkeletonIgnore)
-                        {
-                            OnUserMessageEventHandler(this,
-                                new UserMessageEventArgs()
-                                {
-                                    UserMessage = "The " + profileFileInstanceID.Value + " panel with USB Instance ID :" + Environment.NewLine + profileFileInstanceID.Key + Environment.NewLine +
-                                                  "cannot be found. Have you rearranged your panels (USB ports) or have you copied someone else's profile?" + Environment.NewLine +
-                                                  "Use the ID button to copy current Instance ID and replace the faulty one in the profile file."
-                                });
-                        }
-                    }
-                }
-            }
-        }
-
-        public void SendSettingsReadEvent()
+        
+        public void SendBindingsReadEvent()
         {
             try
             {
                 if (OnSettingsReadFromFile != null)
                 {
-                    //TODO DENNA ORSAKAR HÄNGANDE!!
                     OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Airframe = _airframe });
-                    //TODO DENNA ORSAKAR HÄNGANDE!!
-                    OnSettingsReadFromFile(this, new SettingsReadFromFileEventArgs() { Settings = _listPanelSettingsData });
+
+                    foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                    {
+                        OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                    }
                 }
             }
             catch (Exception e)
@@ -407,17 +384,12 @@ namespace NonVisuals
             set => _filename = value;
         }
 
-        public void RegisterProfileData(GamingPanel gamingPanel, List<string> strings)
+        public void RegisterPanelBinding(GamingPanel gamingPanel, List<string> strings)
         {
             try
             {
                 lock (_lockObject)
                 {
-                    if (strings == null || strings.Count == 0)
-                    {
-                        return;
-                    }
-
                     /*
                      * Example:
                      *         
@@ -431,21 +403,21 @@ namespace NonVisuals
                      * EndPanel
                      * 
                      */
-                    _listPanelSettingsData.Add(Environment.NewLine);
-                    _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
-                    _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
-                    _listPanelSettingsData.Add("BindingHash=" + gamingPanel.BindingHash);
-                    _listPanelSettingsData.Add("BeginPanel");
+                    var genericPanelBinding = BindingMappingManager.GetBinding(gamingPanel);
 
-                    foreach (var s in strings)
+                    if (genericPanelBinding == null)
                     {
-                        if (s != null)
-                        {
-                            _listPanelSettingsData.Add("\t" + s);
-                        }
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.InstanceId, gamingPanel.BindingHash);
+                        genericPanelBinding.PanelType = gamingPanel.TypeOfPanel;
+                        genericPanelBinding.HIDInstance = gamingPanel.InstanceId;
+                        genericPanelBinding.BindingHash = gamingPanel.BindingHash;
+                        BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
-                    _listPanelSettingsData.Add("EndPanel");
+                    foreach (var str in strings)
+                    {
+                        genericPanelBinding.Settings.AppendLine(str);
+                    }
                 }
             }
             catch (Exception ex)
@@ -460,18 +432,18 @@ namespace NonVisuals
             {
                 lock (_lockObject)
                 {
-                    if (string.IsNullOrEmpty(jsonData))
+                    var genericPanelBinding = BindingMappingManager.GetBinding(gamingPanel);
+
+                    if (genericPanelBinding == null)
                     {
-                        return;
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.InstanceId, gamingPanel.BindingHash);
+                        genericPanelBinding.PanelType = gamingPanel.TypeOfPanel;
+                        genericPanelBinding.HIDInstance = gamingPanel.InstanceId;
+                        genericPanelBinding.BindingHash = gamingPanel.BindingHash;
+                        BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
-                    _listPanelSettingsData.Add(Environment.NewLine);
-                    _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
-                    _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
-                    _listPanelSettingsData.Add("BindingHash=" + gamingPanel.BindingHash);
-                    _listPanelSettingsData.Add("BeginPanelJSON");
-                    _listPanelSettingsData.Add(jsonData);
-                    _listPanelSettingsData.Add("EndPanelJSON");
+                    genericPanelBinding.Settings.Append(jsonData);
                 }
             }
             catch (Exception ex)
@@ -510,6 +482,10 @@ namespace NonVisuals
                 stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
                 stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio);
 
+                foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                {
+                    
+                }
                 foreach (var s in _listPanelSettingsData)
                 {
                     stringBuilder.AppendLine(s);
@@ -604,7 +580,7 @@ namespace NonVisuals
         }
 
 
-        public delegate void ProfileReadFromFileEventHandler(object sender, SettingsReadFromFileEventArgs e);
+        public delegate void ProfileReadFromFileEventHandler(object sender, PanelBindingReadFromFileEventArgs e);
         public event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
 
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
@@ -624,7 +600,7 @@ namespace NonVisuals
 
         public void Attach(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile += gamingPanel.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile += gamingPanel.PanelBindingReadFromFile;
             OnSavePanelSettings += gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings += gamingPanel.ClearPanelSettings;
@@ -633,7 +609,7 @@ namespace NonVisuals
 
         public void Detach(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile -= gamingPanel.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile -= gamingPanel.PanelBindingReadFromFile;
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
@@ -642,13 +618,13 @@ namespace NonVisuals
 
         public void Attach(IProfileHandlerListener gamingPanelSettingsListener)
         {
-            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelBindingReadFromFile;
             OnAirframeSelected += gamingPanelSettingsListener.SelectedAirframe;
         }
 
         public void Detach(IProfileHandlerListener gamingPanelSettingsListener)
         {
-            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelBindingReadFromFile;
             OnAirframeSelected -= gamingPanelSettingsListener.SelectedAirframe;
         }
 

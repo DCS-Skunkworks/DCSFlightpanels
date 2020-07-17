@@ -34,7 +34,7 @@ namespace NonVisuals
         public abstract void Identify();
         public abstract void Dispose();
         public abstract void ClearSettings();
-        public abstract void ImportSettings(List<string> settings);
+        public abstract void ImportSettings(GenericPanelBinding genericPanelBinding);
         public abstract List<string> ExportSettings();
         public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);
         public abstract void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e);
@@ -355,10 +355,10 @@ namespace NonVisuals
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
             ClearPanelSettings(this);
-            ImportSettings(e.Settings);
+            ImportSettings(e.PanelBinding);
         }
 
         public void ClearPanelSettings(object sender)

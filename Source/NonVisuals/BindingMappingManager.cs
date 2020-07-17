@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Navigation;
+using ClassLibraryCommon;
+using HidLibrary;
 
 namespace NonVisuals
 {
     public static class BindingMappingManager
     {
-        private static List<GenericBinding> _genericBindings = new List<GenericBinding>();
+        private static List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
 
-        public static void AddBinding(GenericBinding genericBinding)
+        public static void AddBinding(GenericPanelBinding genericBinding)
         {
             if (genericBinding != null)
             {
@@ -37,7 +41,7 @@ namespace NonVisuals
             }
         }
 
-        public static bool FindSolution(GenericBinding genericBinding)
+        public static bool FindSolution(GenericPanelBinding genericBinding)
         {
             /*
              * 1) Check, are there multiple such panels where hardware does not match? If so user must map them
@@ -55,6 +59,21 @@ namespace NonVisuals
 
             return false;
         }
+
+        public static GenericPanelBinding GetBinding(GamingPanel gamingPanel)
+        {
+            foreach (var genericPanelBinding in _genericBindings)
+            {
+                if (genericPanelBinding.BindingHash == gamingPanel.BindingHash)
+                {
+                    return genericPanelBinding;
+                }
+            }
+
+            return null;
+        }
+
+        public static List<GenericPanelBinding> PanelBindings => _genericBindings;
 
         public static void AskUser()
         {
@@ -82,6 +101,46 @@ namespace NonVisuals
             else
             {
                 //Askuser
+            }*/
+        }
+
+        private static void CheckAllProfileInstanceIDsAgainstAttachedHardware()
+        {
+            foreach (var saitekPanelSkeleton in Common.GamingPanelSkeletons)
+            {
+                foreach (var hidDevice in HidDevices.Enumerate(saitekPanelSkeleton.VendorId, saitekPanelSkeleton.ProductId))
+                {
+                    if (hidDevice != null)
+                    {
+                        try
+                        {
+                            //_profileFileInstanceIDs.RemoveAll(item => item.Key.Equals(hidDevice.DevicePath));
+                        }
+                        catch (Exception ex)
+                        {
+                            Common.ShowErrorMessageBox(ex);
+                        }
+                    }
+                }
+            }
+            /*if (_profileFileInstanceIDs.Count > 0)
+            {
+                if (OnUserMessageEventHandler != null)
+                {
+                    foreach (var profileFileInstanceID in _profileFileInstanceIDs)
+                    {
+                        if (profileFileInstanceID.Key != HIDSkeletonIgnore.HidSkeletonIgnore)
+                        {
+                            OnUserMessageEventHandler(this,
+                                new UserMessageEventArgs()
+                                {
+                                    UserMessage = "The " + profileFileInstanceID.Value + " panel with USB Instance ID :" + Environment.NewLine + profileFileInstanceID.Key + Environment.NewLine +
+                                                  "cannot be found. Have you rearranged your panels (USB ports) or have you copied someone else's profile?" + Environment.NewLine +
+                                                  "Use the ID button to copy current Instance ID and replace the faulty one in the profile file."
+                                });
+                        }
+                    }
+                }
             }*/
         }
     }

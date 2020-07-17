@@ -6,12 +6,12 @@ namespace NonVisuals.Interfaces
     public interface IProfileHandlerListener
     {
         void PanelSettingsChanged(object sender, PanelEventArgs e);
-        void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e);
+        void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e);
         void SelectedAirframe(object sender, AirframeEventArgs e);
     }
 
-    public class SettingsReadFromFileEventArgs : EventArgs
+    public class PanelBindingReadFromFileEventArgs : EventArgs
     {
-        public List<string> Settings { get; set; }
+        public GenericPanelBinding PanelBinding { get; set; }
     }
 }
