@@ -279,13 +279,13 @@ namespace NonVisuals.Saitek
                 while (spins > 0)
                 {
                     var randomButton = (MultiPanelPZ70Knobs)buttonList.ToArray().GetValue(random.Next(buttonList.ToArray().Length));
-
-                    _lcdButtonByteListHandler.(PZ70DialPosition randomButton);
-
-                    butt
+                    var onOrOff = random.Next(0, 1);
+                    _lcdButtonByteListHandler.FlipButton(PZ70DialPosition, randomButton);
+                    
+                    Interlocked.Add(ref _doUpdatePanelLCD, 1);
                     UpdateLCD();
 
-                    Thread.Sleep(200);
+                    Thread.Sleep(50);
                     spins--;
                 }
             }

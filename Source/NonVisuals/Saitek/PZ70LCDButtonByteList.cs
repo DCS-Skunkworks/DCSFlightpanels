@@ -195,6 +195,11 @@ namespace NonVisuals.Saitek
             }
         }
 
+        public void SetButtonOnOrOff(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knob, bool on)
+        {
+            SetButtonOnOrOff(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob), on);
+        }
+
         public bool SetButtonOnOrOff(int buttonDialMask, byte buttonMask, bool on)
         {
             if (on)
@@ -203,6 +208,11 @@ namespace NonVisuals.Saitek
             }
 
             return SetButtonOff(buttonDialMask, buttonMask);
+        }
+
+        public void SetButtonOff(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knob)
+        {
+            SetButtonOff(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob));
         }
 
         public bool SetButtonOff(int buttonDialMask, byte buttonMask)
@@ -224,6 +234,11 @@ namespace NonVisuals.Saitek
                 Common.LogError(e);
                 throw;
             }
+        }
+
+        public void SetButtonOn(PZ70DialPosition pz70DialPosition, MultiPanelPZ70Knobs multiPanelPZ70Knob)
+        {
+            SetButtonOn(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob));
         }
 
         public bool SetButtonOn(int buttonDialMask, byte buttonMask)
@@ -289,10 +304,7 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public bool SetButtonByte(PZ70DialPosition pz70DialPosition, MultiPanelKnob multiPanelPZ70Knob)
-        {
-            return SetButtonOnOrOff(GetMaskForDialPosition(pz70DialPosition), GetMaskForButton(multiPanelPZ70Knob.MultiPanelPZ70Knob), multiPanelPZ70Knob.IsOn);
-        }
+        
 
 
     }
