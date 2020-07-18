@@ -338,7 +338,14 @@ namespace NonVisuals
 
                     foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                     {
-                        OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                        try
+                        {
+                            OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                        }
+                        catch (Exception e)
+                        {
+                            Common.ShowErrorMessageBox(e,"Error reading settings. Panel : " + genericPanelBinding.PanelType);
+                        }
                     }
                 }
             }
@@ -428,7 +435,7 @@ namespace NonVisuals
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
-                    genericPanelBinding.Settings.Add(jsonData);
+                    genericPanelBinding.JSONString = jsonData;
                 }
             }
             catch (Exception ex)

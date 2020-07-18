@@ -136,16 +136,7 @@ namespace NonVisuals
             get => HIDSkeletonBase.InstanceId;
             set => HIDSkeletonBase.InstanceId = value;
         }
-
-        public void ReadBindingHash(string settingsLine)
-        {
-            if (string.IsNullOrEmpty(_randomBindingHash) && settingsLine.Contains(InstanceId))
-            {
-                settingsLine = settingsLine.Replace(InstanceId, "").Replace(SaitekConstants.SEPARATOR_SYMBOL, "");
-                _randomBindingHash = settingsLine.Substring(settingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture)).Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
-            }
-        }
-
+        
         public string BindingHash
         {
             get

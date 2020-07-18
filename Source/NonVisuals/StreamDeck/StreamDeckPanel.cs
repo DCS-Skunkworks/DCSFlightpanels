@@ -297,31 +297,17 @@ namespace NonVisuals.StreamDeck
                 SettingsLoading = true;
 
                 var stringBuilder = new StringBuilder();
-                var setOnce = true;
 
                 foreach (var setting in settings)
                 {
-                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                    if (!setting.StartsWith("#") && setting.Length > 2)
                     {
-                        ReadBindingHash(setting);
-
-                        var strippedSettingsLine = setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "");
-                        //stringBuilder.Append(strippedSettingsLine + Environment.NewLine);
-                        if (setOnce)
-                        {
-                            var bindingHash = strippedSettingsLine.Substring(strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture));
-                            BindingHash = bindingHash.Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
-                            setOnce = false;
-                        }
-
-                        var line = strippedSettingsLine.Substring(0, strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture))
-                            .Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
-                        stringBuilder.Append(line + Environment.NewLine);
+                        stringBuilder.Append(setting + Environment.NewLine);
                     }
                 }
 
                 var str = stringBuilder.ToString();
-                _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
+                _streamDeckLayerHandler.ImportJSONSettings(str);
                 SettingsLoading = false;
                 SettingsApplied();
             }

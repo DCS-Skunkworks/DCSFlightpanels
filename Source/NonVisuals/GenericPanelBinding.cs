@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClassLibraryCommon;
+using NonVisuals.Saitek;
 
 namespace NonVisuals
 {
@@ -13,11 +14,12 @@ namespace NonVisuals
         private string _hidInstance;
         private string _bindingHash;
         private List<string> _settings = new List<string>(50);
+        private string _jsonString = "";
         private bool _hardwareWasFound = false;
         private bool _hasBeenProcess = false;
 
         public GenericPanelBinding()
-        {}
+        { }
 
         public GenericPanelBinding(string hidInstance, string bindingHash)
         {
@@ -74,6 +76,12 @@ namespace NonVisuals
             }
         }
 
+        public string JSONString
+        {
+            get => _jsonString;
+            set => _jsonString = value;
+        }
+
         public void ClearSettings()
         {
             _settings.Clear();
@@ -95,24 +103,31 @@ namespace NonVisuals
                 stringBuilder.AppendLine("BeginPanel");
             }
 
-            foreach (var str in _settings)
+            if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
             {
-                if (!string.IsNullOrEmpty(str))
+                stringBuilder.Append(_jsonString);
+            }
+            else
+            {
+                foreach (var str in _settings)
                 {
-                    stringBuilder.AppendLine("\t" + str);
+                    if (!string.IsNullOrEmpty(str))
+                    {
+                        stringBuilder.AppendLine("\t" + str);
+                    }
                 }
             }
 
             if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
-            {
-                stringBuilder.AppendLine("EndPanelJSON");
-            }
-            else
-            {
-                stringBuilder.AppendLine("EndPanel");
-            }
+                {
+                    stringBuilder.AppendLine("EndPanelJSON");
+                }
+                else
+                {
+                    stringBuilder.AppendLine("EndPanel");
+                }
 
-            return stringBuilder.ToString();
+                return stringBuilder.ToString();
+            }
         }
     }
-}
