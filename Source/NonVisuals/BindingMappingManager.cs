@@ -39,7 +39,7 @@ namespace NonVisuals
         {
             foreach (var binding in _genericBindings)
             {
-                if (binding.BindingHash == genericPanelBinding.BindingHash)
+                if (binding.HIDInstance == genericPanelBinding.HIDInstance)
                 {
                     return true;
                 }

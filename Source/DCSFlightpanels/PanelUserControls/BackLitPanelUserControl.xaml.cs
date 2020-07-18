@@ -86,7 +86,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _backlitPanelBIP.InstanceId == e.UniqueId)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -148,7 +151,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -163,7 +166,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }

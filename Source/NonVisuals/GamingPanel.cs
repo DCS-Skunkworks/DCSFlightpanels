@@ -144,7 +144,6 @@ namespace NonVisuals
                 if (string.IsNullOrWhiteSpace(_randomBindingHash))
                 {
                     _randomBindingHash = Common.GetRandomMd5Hash();
-                    SetIsDirty();
                 }
                 return _randomBindingHash;
             }
@@ -316,40 +315,46 @@ namespace NonVisuals
         protected virtual void DeviceAttached()
         {
             //IsAttached = true;
-            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
+            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void DeviceDetached()
         {
             //IsAttached = false;
-            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
+            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void SettingsChanged()
         {
-            OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
+            OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void SettingsApplied()
         {
-            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
+            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void SettingsCleared()
         {
-            OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel });
+            OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
         }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
-            ClearPanelSettings(this);
-            ImportSettings(e.PanelBinding);
+            if (e.PanelBinding.PanelType == GamingPanelEnum.StreamDeckMini)
+            {
+                var asdf = 1;
+            }
+            if (e.PanelBinding.HIDInstance == InstanceId)
+            {
+                ImportSettings(e.PanelBinding);
+            }
         }
 
         public void ClearPanelSettings(object sender)
@@ -370,7 +375,7 @@ namespace NonVisuals
     public class PanelEventArgs : EventArgs
     {
         public string UniqueId { get; set; }
-        public GamingPanelEnum GamingPanelEnum { get; set; }
+        public GamingPanelEnum PanelType { get; set; }
     }
 
     public class PanelDataToDCSBIOSEventEventArgs : EventArgs

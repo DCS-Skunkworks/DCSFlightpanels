@@ -78,54 +78,51 @@ namespace NonVisuals.Radios
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            if (genericPanelBinding.HIDInstance == InstanceId)
+            ClearSettings();
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+            foreach (var setting in settings)
             {
-                ClearSettings();
-
-                BindingHash = genericPanelBinding.BindingHash;
-
-                var settings = genericPanelBinding.Settings;
-                foreach (var setting in settings)
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
-                    if (!setting.StartsWith("#") && setting.Length > 2)
-                    {
 
-                        if (setting.StartsWith("RadioPanelKeyDialPos{"))
-                        {
-                            var keyBinding = new KeyBindingPZ69DialPosition();
-                            keyBinding.ImportSettings(setting);
-                            _keyBindings.Add(keyBinding);
-                        }
-                        else if (setting.StartsWith("RadioPanelOSPZ69Full"))
-                        {
-                            var osCommand = new OSCommandBindingPZ69FullEmulator();
-                            osCommand.ImportSettings(setting);
-                            _osCommandBindings.Add(osCommand);
-                        }
-                        else if (setting.StartsWith("PZ69DisplayValue{"))
-                        {
-                            var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
-                            radioPanelPZ69DisplayValue.ImportSettings(setting);
-                            _displayValues.Add(radioPanelPZ69DisplayValue);
-                        }
-                        else if (setting.StartsWith("RadioPanelBIPLink{"))
-                        {
-                            var bipLinkPZ69 = new BIPLinkPZ69();
-                            bipLinkPZ69.ImportSettings(setting);
-                            _bipLinks.Add(bipLinkPZ69);
-                        }
-                        else if (setting.StartsWith("RadioPanelDCSBIOSLCD{"))
-                        {
-                            var dcsbiosBindingLCDPZ69 = new DCSBIOSOutputBindingPZ69();
-                            dcsbiosBindingLCDPZ69.ImportSettings(setting);
-                            _dcsBiosLcdBindings.Add(dcsbiosBindingLCDPZ69);
-                        }
-                        else if (setting.StartsWith("RadioPanelDCSBIOSControl{"))
-                        {
-                            var dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
-                            dcsbiosBindingPZ69.ImportSettings(setting);
-                            _dcsBiosBindings.Add(dcsbiosBindingPZ69);
-                        }
+                    if (setting.StartsWith("RadioPanelKeyDialPos{"))
+                    {
+                        var keyBinding = new KeyBindingPZ69DialPosition();
+                        keyBinding.ImportSettings(setting);
+                        _keyBindings.Add(keyBinding);
+                    }
+                    else if (setting.StartsWith("RadioPanelOSPZ69Full"))
+                    {
+                        var osCommand = new OSCommandBindingPZ69FullEmulator();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
+                    else if (setting.StartsWith("PZ69DisplayValue{"))
+                    {
+                        var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
+                        radioPanelPZ69DisplayValue.ImportSettings(setting);
+                        _displayValues.Add(radioPanelPZ69DisplayValue);
+                    }
+                    else if (setting.StartsWith("RadioPanelBIPLink{"))
+                    {
+                        var bipLinkPZ69 = new BIPLinkPZ69();
+                        bipLinkPZ69.ImportSettings(setting);
+                        _bipLinks.Add(bipLinkPZ69);
+                    }
+                    else if (setting.StartsWith("RadioPanelDCSBIOSLCD{"))
+                    {
+                        var dcsbiosBindingLCDPZ69 = new DCSBIOSOutputBindingPZ69();
+                        dcsbiosBindingLCDPZ69.ImportSettings(setting);
+                        _dcsBiosLcdBindings.Add(dcsbiosBindingLCDPZ69);
+                    }
+                    else if (setting.StartsWith("RadioPanelDCSBIOSControl{"))
+                    {
+                        var dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
+                        dcsbiosBindingPZ69.ImportSettings(setting);
+                        _dcsBiosBindings.Add(dcsbiosBindingPZ69);
                     }
                 }
 
@@ -999,7 +996,7 @@ namespace NonVisuals.Radios
             dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
             return dcsOutputAndColorBinding;
         }
-        
+
         private void CreateSwitchKeys()
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();

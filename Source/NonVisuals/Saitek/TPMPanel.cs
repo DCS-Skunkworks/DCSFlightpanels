@@ -23,7 +23,7 @@ namespace NonVisuals.Saitek
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
-            
+
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
             if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.TPM)
@@ -45,7 +45,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -63,48 +63,45 @@ namespace NonVisuals.Saitek
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            if (genericPanelBinding.HIDInstance == InstanceId)
+            ClearSettings();
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+            foreach (var setting in settings)
             {
-                ClearSettings();
-
-                BindingHash = genericPanelBinding.BindingHash;
-
-                var settings = genericPanelBinding.Settings;
-                foreach (var setting in settings)
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
-                    if (!setting.StartsWith("#") && setting.Length > 2)
-                    {
 
-                        if (setting.StartsWith("TPMPanelSwitch{"))
-                        {
-                            var keyBinding = new KeyBindingTPM();
-                            keyBinding.ImportSettings(setting);
-                            _keyBindings.Add(keyBinding);
-                        }
-                        else if (setting.StartsWith("TPMPanelOSCommand"))
-                        {
-                            var osCommand = new OSCommandBindingTPM();
-                            osCommand.ImportSettings(setting);
-                            _osCommandBindings.Add(osCommand);
-                        }
-                        else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
-                        {
-                            var dcsBIOSBindingTPM = new DCSBIOSActionBindingTPM();
-                            dcsBIOSBindingTPM.ImportSettings(setting);
-                            _dcsBiosBindings.Add(dcsBIOSBindingTPM);
-                        }
-                        else if (setting.StartsWith("TPMPanelBipLink{"))
-                        {
-                            var tmpBipLink = new BIPLinkTPM();
-                            tmpBipLink.ImportSettings(setting);
-                            _bipLinks.Add(tmpBipLink);
-                        }
+                    if (setting.StartsWith("TPMPanelSwitch{"))
+                    {
+                        var keyBinding = new KeyBindingTPM();
+                        keyBinding.ImportSettings(setting);
+                        _keyBindings.Add(keyBinding);
+                    }
+                    else if (setting.StartsWith("TPMPanelOSCommand"))
+                    {
+                        var osCommand = new OSCommandBindingTPM();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
+                    else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
+                    {
+                        var dcsBIOSBindingTPM = new DCSBIOSActionBindingTPM();
+                        dcsBIOSBindingTPM.ImportSettings(setting);
+                        _dcsBiosBindings.Add(dcsBIOSBindingTPM);
+                    }
+                    else if (setting.StartsWith("TPMPanelBipLink{"))
+                    {
+                        var tmpBipLink = new BIPLinkTPM();
+                        tmpBipLink.ImportSettings(setting);
+                        _bipLinks.Add(tmpBipLink);
                     }
                 }
-
-                _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-                SettingsApplied();
             }
+
+            _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
+            SettingsApplied();
         }
 
         public override List<string> ExportSettings()
@@ -162,7 +159,7 @@ namespace NonVisuals.Saitek
             }
 
         }
-        
+
         public override void Identify()
         {
             try

@@ -124,7 +124,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _multiPanelPZ70.InstanceId == e.PanelBinding.HIDInstance)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -136,8 +139,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ClearAll(false);
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _multiPanelPZ70.InstanceId == e.UniqueId)
+                {
+                    ClearAll(false);
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -187,7 +193,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_multiPanelPZ70.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel)
+                if (e.UniqueId.Equals(_multiPanelPZ70.InstanceId) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = ""));

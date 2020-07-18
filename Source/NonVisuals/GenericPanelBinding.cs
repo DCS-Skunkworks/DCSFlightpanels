@@ -119,15 +119,15 @@ namespace NonVisuals
             }
 
             if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
-                {
-                    stringBuilder.AppendLine("EndPanelJSON");
-                }
-                else
-                {
-                    stringBuilder.AppendLine("EndPanel");
-                }
-
-                return stringBuilder.ToString();
+            {
+                stringBuilder.AppendLine(Environment.NewLine + "EndPanelJSON");
             }
+            else
+            {
+                stringBuilder.AppendLine("EndPanel");
+            }
+
+            return stringBuilder.ToString();
         }
     }
+}

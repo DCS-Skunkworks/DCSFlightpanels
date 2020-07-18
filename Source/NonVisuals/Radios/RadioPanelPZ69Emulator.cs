@@ -67,49 +67,46 @@ namespace NonVisuals.Radios
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            if (genericPanelBinding.HIDInstance == InstanceId)
+            ClearSettings();
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+
+            foreach (var setting in settings)
             {
-                ClearSettings();
-
-                BindingHash = genericPanelBinding.BindingHash;
-
-                var settings = genericPanelBinding.Settings;
-
-                foreach (var setting in settings)
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
-                    if (!setting.StartsWith("#") && setting.Length > 2)
-                    {
 
-                        if (setting.StartsWith("RadioPanelKey{"))
-                        {
-                            var keyBinding = new KeyBindingPZ69();
-                            keyBinding.ImportSettings(setting);
-                            _keyBindings.Add(keyBinding);
-                        }
-                        else if (setting.StartsWith("RadioPanelOSPZ69"))
-                        {
-                            var osCommand = new OSCommandBindingPZ69Emulator();
-                            osCommand.ImportSettings(setting);
-                            _osCommandBindings.Add(osCommand);
-                        }
-                        else if (setting.StartsWith("PZ69DisplayValue{"))
-                        {
-                            var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
-                            radioPanelPZ69DisplayValue.ImportSettings(setting);
-                            _displayValues.Add(radioPanelPZ69DisplayValue);
-                        }
-                        else if (setting.StartsWith("RadioPanelBIPLink{"))
-                        {
-                            var bipLinkPZ69 = new BIPLinkPZ69();
-                            bipLinkPZ69.ImportSettings(setting);
-                            _bipLinks.Add(bipLinkPZ69);
-                        }
+                    if (setting.StartsWith("RadioPanelKey{"))
+                    {
+                        var keyBinding = new KeyBindingPZ69();
+                        keyBinding.ImportSettings(setting);
+                        _keyBindings.Add(keyBinding);
+                    }
+                    else if (setting.StartsWith("RadioPanelOSPZ69"))
+                    {
+                        var osCommand = new OSCommandBindingPZ69Emulator();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
+                    else if (setting.StartsWith("PZ69DisplayValue{"))
+                    {
+                        var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
+                        radioPanelPZ69DisplayValue.ImportSettings(setting);
+                        _displayValues.Add(radioPanelPZ69DisplayValue);
+                    }
+                    else if (setting.StartsWith("RadioPanelBIPLink{"))
+                    {
+                        var bipLinkPZ69 = new BIPLinkPZ69();
+                        bipLinkPZ69.ImportSettings(setting);
+                        _bipLinks.Add(bipLinkPZ69);
                     }
                 }
-
-                _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-                SettingsApplied();
             }
+
+            _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
+            SettingsApplied();
         }
 
         public override List<string> ExportSettings()
@@ -594,7 +591,7 @@ namespace NonVisuals.Radios
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
         }
-        
+
     }
 
     public enum ControlListPZ69 : byte

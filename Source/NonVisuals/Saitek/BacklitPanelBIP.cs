@@ -179,26 +179,23 @@ namespace NonVisuals.Saitek
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            if (genericPanelBinding.HIDInstance == InstanceId)
+            ClearSettings();
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+            foreach (var setting in settings)
             {
-                ClearSettings();
-
-                BindingHash = genericPanelBinding.BindingHash;
-
-                var settings = genericPanelBinding.Settings;
-                foreach (var setting in settings)
+                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
                 {
-                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
-                    {
 
-                        var colorOutput = new DcsOutputAndColorBindingBIP();
-                        colorOutput.ImportSettings(setting);
-                        _listColorOutputBinding.Add(colorOutput);
-                    }
+                    var colorOutput = new DcsOutputAndColorBindingBIP();
+                    colorOutput.ImportSettings(setting);
+                    _listColorOutputBinding.Add(colorOutput);
                 }
-
-                SettingsApplied();
             }
+
+            SettingsApplied();
         }
 
         public List<DcsOutputAndColorBinding> GetLedDcsBiosOutputs(BIPLedPositionEnum bipLedPositionEnum)

@@ -157,7 +157,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.InstanceId == e.PanelBinding.HIDInstance)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -169,8 +172,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ClearAll(false);
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.InstanceId == e.UniqueId)
+                {
+                    ClearAll(false);
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -283,7 +289,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -298,7 +304,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -313,7 +319,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel)
+                if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.PanelType == GamingPanelEnum.PZ55SwitchPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action) (() => TextBoxLogPZ55.Text = ""));

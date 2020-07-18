@@ -124,7 +124,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.InstanceId == e.PanelBinding.HIDInstance)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -136,8 +139,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ClearAll(false);
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _tpmPanel.InstanceId == e.UniqueId)
+                {
+                    ClearAll(false);
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -165,7 +171,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.TPM)
+                if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.PanelType == GamingPanelEnum.TPM)
                 {
                     Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action) (() => TextBoxLogTPM.Text = ""));

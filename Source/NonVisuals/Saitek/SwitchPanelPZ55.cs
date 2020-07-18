@@ -58,7 +58,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -76,59 +76,57 @@ namespace NonVisuals.Saitek
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            if (genericPanelBinding.HIDInstance == InstanceId)
+            ClearSettings();
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+
+            foreach (var setting in settings)
             {
-                ClearSettings();
-
-                BindingHash = genericPanelBinding.BindingHash;
-
-                var settings = genericPanelBinding.Settings;
-
-                foreach (var setting in settings)
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
-                    if (!setting.StartsWith("#") && setting.Length > 2)
-                    {
 
-                        if (setting.StartsWith("SwitchPanelKey{"))
-                        {
-                            var keyBinding = new KeyBindingPZ55();
-                            keyBinding.ImportSettings(setting);
-                            _keyBindings.Add(keyBinding);
-                        }
-                        else if (setting.StartsWith("SwitchPanelOSPZ55"))
-                        {
-                            var osCommand = new OSCommandBindingPZ55();
-                            osCommand.ImportSettings(setting);
-                            _osCommandBindings.Add(osCommand);
-                        }
-                        else if (setting.StartsWith("SwitchPanelLed"))
-                        {
-                            var colorOutput = new DcsOutputAndColorBindingPZ55();
-                            colorOutput.ImportSettings(setting);
-                            _listColorOutputBinding.Add(colorOutput);
-                        }
-                        else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
-                        {
-                            var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
-                            dcsBIOSBindingPZ55.ImportSettings(setting);
-                            _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
-                        }
-                        else if (setting.StartsWith("SwitchPanelBIPLink{"))
-                        {
-                            var bipLinkPZ55 = new BIPLinkPZ55();
-                            bipLinkPZ55.ImportSettings(setting);
-                            _bipLinks.Add(bipLinkPZ55);
-                        }
-                        else if (setting.StartsWith("ManualLandingGearLEDs{"))
-                        {
-                            _manualLandingGearLeds = setting.Contains("True");
-                        }
+                    if (setting.StartsWith("SwitchPanelKey{"))
+                    {
+                        var keyBinding = new KeyBindingPZ55();
+                        keyBinding.ImportSettings(setting);
+                        _keyBindings.Add(keyBinding);
+                    }
+                    else if (setting.StartsWith("SwitchPanelOSPZ55"))
+                    {
+                        var osCommand = new OSCommandBindingPZ55();
+                        osCommand.ImportSettings(setting);
+                        _osCommandBindings.Add(osCommand);
+                    }
+                    else if (setting.StartsWith("SwitchPanelLed"))
+                    {
+                        var colorOutput = new DcsOutputAndColorBindingPZ55();
+                        colorOutput.ImportSettings(setting);
+                        _listColorOutputBinding.Add(colorOutput);
+                    }
+                    else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
+                    {
+                        var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
+                        dcsBIOSBindingPZ55.ImportSettings(setting);
+                        _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
+                    }
+                    else if (setting.StartsWith("SwitchPanelBIPLink{"))
+                    {
+                        var bipLinkPZ55 = new BIPLinkPZ55();
+                        bipLinkPZ55.ImportSettings(setting);
+                        _bipLinks.Add(bipLinkPZ55);
+                    }
+                    else if (setting.StartsWith("ManualLandingGearLEDs{"))
+                    {
+                        _manualLandingGearLeds = setting.Contains("True");
                     }
                 }
-
-                SettingsApplied();
-                _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
             }
+
+            SettingsApplied();
+            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
+
         }
 
         public override List<string> ExportSettings()
@@ -214,7 +212,7 @@ namespace NonVisuals.Saitek
                 var random = new Random();
                 var ledPositionArray = Enum.GetValues(typeof(SwitchPanelPZ55LEDPosition));
                 var panelColorArray = Enum.GetValues(typeof(PanelLEDColor));
-                
+
                 while (spins > 0)
                 {
                     var position = (SwitchPanelPZ55LEDPosition)ledPositionArray.GetValue(random.Next(ledPositionArray.Length));
@@ -230,7 +228,7 @@ namespace NonVisuals.Saitek
             {
             }
         }
-        
+
         public override void ClearSettings()
         {
             _keyBindings.Clear();
@@ -312,7 +310,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "SetLandingGearLedsManually");
+                Common.LogError(ex, "SetLandingGearLedsManually");
                 throw;
             }
         }
@@ -436,7 +434,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
+                Common.LogError(ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
                 throw;
             }
         }

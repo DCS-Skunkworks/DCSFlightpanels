@@ -118,7 +118,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (e.UniqueId.Equals(_radioPanelPZ69.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel)
+                if (e.UniqueId.Equals(_radioPanelPZ69.InstanceId) && e.PanelType == GamingPanelEnum.PZ69RadioPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = ""));

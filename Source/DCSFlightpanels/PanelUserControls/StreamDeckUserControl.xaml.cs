@@ -190,7 +190,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                LoadComboBoxLayers();
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _streamDeckPanel.InstanceId == e.PanelBinding.HIDInstance)
+                {
+                    LoadComboBoxLayers();
+                }
             }
             catch (Exception ex)
             {
@@ -202,10 +205,6 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!UserControlLoaded)
-                {
-                    return;
-                }
             }
             catch (Exception ex)
             {

@@ -151,7 +151,7 @@ namespace NonVisuals.StreamDeck
                 {
                     var bitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(_colors[random.Next(0, 20)]);
                     SetImage(random.Next(0, ButtonCount - 1), bitmap);
-                    
+
                     Thread.Sleep(50);
                     spins--;
                 }
@@ -287,30 +287,27 @@ namespace NonVisuals.StreamDeck
 
         public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            if (genericPanelBinding.HIDInstance == InstanceId)
+            ClearSettings();
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+            SettingsLoading = true;
+
+            var stringBuilder = new StringBuilder();
+
+            foreach (var setting in settings)
             {
-                ClearSettings();
-
-                BindingHash = genericPanelBinding.BindingHash;
-
-                var settings = genericPanelBinding.Settings;
-                SettingsLoading = true;
-
-                var stringBuilder = new StringBuilder();
-
-                foreach (var setting in settings)
+                if (!setting.StartsWith("#"))
                 {
-                    if (!setting.StartsWith("#") && setting.Length > 2)
-                    {
-                        stringBuilder.Append(setting + Environment.NewLine);
-                    }
+                    stringBuilder.Append(setting + Environment.NewLine);
                 }
-
-                var str = stringBuilder.ToString();
-                _streamDeckLayerHandler.ImportJSONSettings(str);
-                SettingsLoading = false;
-                SettingsApplied();
             }
+
+            var str = stringBuilder.ToString();
+            _streamDeckLayerHandler.ImportJSONSettings(str);
+            SettingsLoading = false;
+            SettingsApplied();
         }
 
         private string ExportJSONSettings()
@@ -320,7 +317,8 @@ namespace NonVisuals.StreamDeck
                 return null;
             }
 
-            return _streamDeckLayerHandler.ExportJSONSettings();
+            var str = _streamDeckLayerHandler.ExportJSONSettings();
+            return str;
         }
 
         public string GetKeyPressForLoggingPurposes(StreamDeckButton streamDeckButton)
@@ -393,7 +391,7 @@ namespace NonVisuals.StreamDeck
             get => _streamDeckLayerHandler.SelectedLayerName;
             set => _streamDeckLayerHandler.SelectedLayerName = value;
         }
-        
+
         public List<string> LayerNameList
         {
             get => _streamDeckLayerHandler.GetLayerNameList();
@@ -521,7 +519,7 @@ namespace NonVisuals.StreamDeck
                 tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
                 tmpBitMapImage.EndInit();
             }
-            
+
             _fileNotFoundBitMap = BitMapCreator.BitmapImage2Bitmap(tmpBitMapImage);
             return _fileNotFoundBitMap;
         }

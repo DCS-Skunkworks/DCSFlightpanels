@@ -9,6 +9,7 @@ using DCSFlightpanels.Properties;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Text;
 using System.Windows.Navigation;
@@ -1102,6 +1103,7 @@ namespace DCSFlightpanels
             {
                 SaveNewOrExistingProfile();
                 SetWindowState();
+                SystemSounds.Asterisk.Play();
             }
             catch (Exception ex)
             {
@@ -1407,6 +1409,7 @@ namespace DCSFlightpanels
             try
             {
                 RefreshProfile();
+                SystemSounds.Beep.Play();
             }
             catch (Exception ex)
             {
