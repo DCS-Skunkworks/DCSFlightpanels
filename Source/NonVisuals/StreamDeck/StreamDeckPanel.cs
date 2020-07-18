@@ -293,7 +293,7 @@ namespace NonVisuals.StreamDeck
 
                 BindingHash = genericPanelBinding.BindingHash;
 
-                var settings = genericPanelBinding.SettingsList;
+                var settings = genericPanelBinding.Settings;
                 SettingsLoading = true;
 
                 var stringBuilder = new StringBuilder();

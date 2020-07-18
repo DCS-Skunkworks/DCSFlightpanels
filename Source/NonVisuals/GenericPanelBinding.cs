@@ -12,7 +12,7 @@ namespace NonVisuals
         private GamingPanelEnum _panelType = GamingPanelEnum.Unknown;
         private string _hidInstance;
         private string _bindingHash;
-        private StringBuilder _settings = new StringBuilder();
+        private List<string> _settings = new List<string>(50);
         private bool _hardwareWasFound = false;
         private bool _hasBeenProcess = false;
 
@@ -37,7 +37,7 @@ namespace NonVisuals
             set => _bindingHash = value;
         }
 
-        public StringBuilder Settings
+        public List<string> Settings
         {
             get => _settings;
             set => _settings = value;
@@ -61,12 +61,22 @@ namespace NonVisuals
             set => _hasBeenProcess = value;
         }
 
-        public List<string> SettingsList
+        public string SettingsString
         {
             get
             {
-                return _settings.ToString().Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var stringBuilder = new StringBuilder(500);
+                foreach (var setting in _settings)
+                {
+                    stringBuilder.AppendLine(setting);
+                }
+                return stringBuilder.ToString();
             }
+        }
+
+        public void ClearSettings()
+        {
+            _settings.Clear();
         }
 
         public string ExportBinding()
@@ -85,11 +95,11 @@ namespace NonVisuals
                 stringBuilder.AppendLine("BeginPanel");
             }
 
-            foreach (var str in SettingsList)
+            foreach (var str in _settings)
             {
                 if (!string.IsNullOrEmpty(str))
                 {
-                    stringBuilder.Append("\t" + str);
+                    stringBuilder.AppendLine("\t" + str);
                 }
             }
 

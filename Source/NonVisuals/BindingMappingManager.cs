@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
@@ -9,14 +10,42 @@ namespace NonVisuals
 {
     public static class BindingMappingManager
     {
-        private static List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
+        private static volatile List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
 
         public static void AddBinding(GenericPanelBinding genericBinding)
         {
             if (genericBinding != null)
             {
-                _genericBindings.Add(genericBinding);
+                if (Exists(genericBinding))
+                {
+                    foreach (var binding in _genericBindings)
+                    {
+                        if (binding.BindingHash == genericBinding.BindingHash)
+                        {
+                            binding.Settings = genericBinding.Settings;
+                        }
+                    }
+                }
+                else
+                {
+                    _genericBindings.Add(genericBinding);
+                }
             }
+
+            Debug.WriteLine("Count is " + _genericBindings.Count);
+        }
+
+        public static bool Exists(GenericPanelBinding genericPanelBinding)
+        {
+            foreach (var binding in _genericBindings)
+            {
+                if (binding.BindingHash == genericPanelBinding.BindingHash)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static void VerifyBindings()

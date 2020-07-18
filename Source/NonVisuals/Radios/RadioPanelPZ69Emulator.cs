@@ -73,7 +73,7 @@ namespace NonVisuals.Radios
 
                 BindingHash = genericPanelBinding.BindingHash;
 
-                var settings = genericPanelBinding.SettingsList;
+                var settings = genericPanelBinding.Settings;
 
                 foreach (var setting in settings)
                 {

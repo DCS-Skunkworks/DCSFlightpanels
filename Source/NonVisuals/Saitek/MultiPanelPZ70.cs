@@ -128,7 +128,7 @@ namespace NonVisuals.Saitek
 
                 BindingHash = genericPanelBinding.BindingHash;
 
-                var settings = genericPanelBinding.SettingsList;
+                var settings = genericPanelBinding.Settings;
                 SettingsLoading = true;
 
 

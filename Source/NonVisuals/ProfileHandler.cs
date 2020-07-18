@@ -279,14 +279,12 @@ namespace NonVisuals
                                     line = line.Replace("\t", "");
                                 }
 
-                                genericPanelBinding.Settings.AppendLine(line);
-                                //_listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
+                                genericPanelBinding.Settings.Add(line);
                             }
                             
                             if (insideJSONPanel)
                             {
-                                genericPanelBinding.Settings.AppendLine(fileLine);
-                                //_listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL + currentBindingHash);
+                                genericPanelBinding.Settings.Add(fileLine);
                             }
                         }
                     }
@@ -399,9 +397,11 @@ namespace NonVisuals
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
+                    genericPanelBinding.ClearSettings();
+
                     foreach (var str in strings)
                     {
-                        genericPanelBinding.Settings.AppendLine(str);
+                        genericPanelBinding.Settings.Add(str);
                     }
                 }
             }
@@ -428,7 +428,7 @@ namespace NonVisuals
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
-                    genericPanelBinding.Settings.Append(jsonData);
+                    genericPanelBinding.Settings.Add(jsonData);
                 }
             }
             catch (Exception ex)

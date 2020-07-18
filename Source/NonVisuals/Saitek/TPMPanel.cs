@@ -69,7 +69,7 @@ namespace NonVisuals.Saitek
 
                 BindingHash = genericPanelBinding.BindingHash;
 
-                var settings = genericPanelBinding.SettingsList;
+                var settings = genericPanelBinding.Settings;
                 foreach (var setting in settings)
                 {
                     if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
