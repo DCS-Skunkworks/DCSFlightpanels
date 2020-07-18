@@ -177,25 +177,29 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            ClearSettings();
-            if (settings == null || settings.Count == 0)
+            if (genericPanelBinding.HIDInstance == InstanceId)
             {
-                return;
-            }
-            foreach (var setting in settings)
-            {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
-                {
-                    ReadBindingHash(setting);
+                ClearSettings();
 
-                    var colorOutput = new DcsOutputAndColorBindingBIP();
-                    colorOutput.ImportSettings(setting);
-                    _listColorOutputBinding.Add(colorOutput);
+                BindingHash = genericPanelBinding.BindingHash;
+
+                var settings = genericPanelBinding.SettingsList;
+                foreach (var setting in settings)
+                {
+                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
+                    {
+                        ReadBindingHash(setting);
+
+                        var colorOutput = new DcsOutputAndColorBindingBIP();
+                        colorOutput.ImportSettings(setting);
+                        _listColorOutputBinding.Add(colorOutput);
+                    }
                 }
+
+                SettingsApplied();
             }
-            SettingsApplied();
         }
 
         public List<DcsOutputAndColorBinding> GetLedDcsBiosOutputs(BIPLedPositionEnum bipLedPositionEnum)
@@ -393,7 +397,7 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }

@@ -120,57 +120,61 @@ namespace NonVisuals.Saitek
             UpdateLCD();
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            SettingsLoading = true;
-            //Clear current bindings
-            ClearSettings();
-            if (settings == null || settings.Count == 0)
+            if (genericPanelBinding.HIDInstance == InstanceId)
             {
-                return;
-            }
+                ClearSettings();
 
-            foreach (var setting in settings)
-            {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                BindingHash = genericPanelBinding.BindingHash;
+
+                var settings = genericPanelBinding.SettingsList;
+                SettingsLoading = true;
+
+
+                foreach (var setting in settings)
                 {
-                    ReadBindingHash(setting);
+                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                    {
+                        ReadBindingHash(setting);
 
-                    if (setting.StartsWith("MultiPanelKnob{"))
-                    {
-                        var knobBinding = new KeyBindingPZ70();
-                        knobBinding.ImportSettings(setting);
-                        _knobBindings.Add(knobBinding);
-                    }
-                    else if (setting.StartsWith("MultiPanelOSPZ70"))
-                    {
-                        var osCommand = new OSCommandBindingPZ70();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
-                    }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
-                    {
-                        var dcsBIOSBindingPZ70 = new DCSBIOSActionBindingPZ70();
-                        dcsBIOSBindingPZ70.ImportSettings(setting);
-                        _dcsBiosBindings.Add(dcsBIOSBindingPZ70);
-                    }
-                    else if (setting.StartsWith("MultipanelBIPLink{"))
-                    {
-                        var bipLinkPZ70 = new BIPLinkPZ70();
-                        bipLinkPZ70.ImportSettings(setting);
-                        _bipLinks.Add(bipLinkPZ70);
-                    }
-                    else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
-                    {
-                        var dcsBIOSBindingLCDPZ70 = new DCSBIOSOutputBindingPZ70();
-                        dcsBIOSBindingLCDPZ70.ImportSettings(setting);
-                        _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
+                        if (setting.StartsWith("MultiPanelKnob{"))
+                        {
+                            var knobBinding = new KeyBindingPZ70();
+                            knobBinding.ImportSettings(setting);
+                            _knobBindings.Add(knobBinding);
+                        }
+                        else if (setting.StartsWith("MultiPanelOSPZ70"))
+                        {
+                            var osCommand = new OSCommandBindingPZ70();
+                            osCommand.ImportSettings(setting);
+                            _osCommandBindings.Add(osCommand);
+                        }
+                        else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
+                        {
+                            var dcsBIOSBindingPZ70 = new DCSBIOSActionBindingPZ70();
+                            dcsBIOSBindingPZ70.ImportSettings(setting);
+                            _dcsBiosBindings.Add(dcsBIOSBindingPZ70);
+                        }
+                        else if (setting.StartsWith("MultipanelBIPLink{"))
+                        {
+                            var bipLinkPZ70 = new BIPLinkPZ70();
+                            bipLinkPZ70.ImportSettings(setting);
+                            _bipLinks.Add(bipLinkPZ70);
+                        }
+                        else if (setting.StartsWith("MultiPanelDCSBIOSControlLCD{"))
+                        {
+                            var dcsBIOSBindingLCDPZ70 = new DCSBIOSOutputBindingPZ70();
+                            dcsBIOSBindingLCDPZ70.ImportSettings(setting);
+                            _dcsBiosLcdBindings.Add(dcsBIOSBindingLCDPZ70);
+                        }
                     }
                 }
+
+                SettingsLoading = false;
+                _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
+                SettingsApplied();
             }
-            SettingsLoading = false;
-            _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
-            SettingsApplied();
         }
 
         public override List<string> ExportSettings()
@@ -234,7 +238,7 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }

@@ -65,49 +65,52 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            //Clear current bindings
-            ClearSettings();
-            if (settings == null || settings.Count == 0)
+            if (genericPanelBinding.HIDInstance == InstanceId)
             {
-                return;
-            }
-            foreach (var setting in settings)
-            {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
-                {
-                    ReadBindingHash(setting);
+                ClearSettings();
 
-                    if (setting.StartsWith("RadioPanelKey{"))
+                BindingHash = genericPanelBinding.BindingHash;
+
+                var settings = genericPanelBinding.SettingsList;
+
+                foreach (var setting in settings)
+                {
+                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                     {
-                        var keyBinding = new KeyBindingPZ69();
-                        keyBinding.ImportSettings(setting);
-                        _keyBindings.Add(keyBinding);
-                    }
-                    else if (setting.StartsWith("RadioPanelOSPZ69"))
-                    {
-                        var osCommand = new OSCommandBindingPZ69Emulator();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
-                    }
-                    else if (setting.StartsWith("PZ69DisplayValue{"))
-                    {
-                        var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
-                        radioPanelPZ69DisplayValue.ImportSettings(setting);
-                        _displayValues.Add(radioPanelPZ69DisplayValue);
-                    }
-                    else if (setting.StartsWith("RadioPanelBIPLink{"))
-                    {
-                        var bipLinkPZ69 = new BIPLinkPZ69();
-                        bipLinkPZ69.ImportSettings(setting);
-                        _bipLinks.Add(bipLinkPZ69);
+                        ReadBindingHash(setting);
+
+                        if (setting.StartsWith("RadioPanelKey{"))
+                        {
+                            var keyBinding = new KeyBindingPZ69();
+                            keyBinding.ImportSettings(setting);
+                            _keyBindings.Add(keyBinding);
+                        }
+                        else if (setting.StartsWith("RadioPanelOSPZ69"))
+                        {
+                            var osCommand = new OSCommandBindingPZ69Emulator();
+                            osCommand.ImportSettings(setting);
+                            _osCommandBindings.Add(osCommand);
+                        }
+                        else if (setting.StartsWith("PZ69DisplayValue{"))
+                        {
+                            var radioPanelPZ69DisplayValue = new RadioPanelPZ69DisplayValue();
+                            radioPanelPZ69DisplayValue.ImportSettings(setting);
+                            _displayValues.Add(radioPanelPZ69DisplayValue);
+                        }
+                        else if (setting.StartsWith("RadioPanelBIPLink{"))
+                        {
+                            var bipLinkPZ69 = new BIPLinkPZ69();
+                            bipLinkPZ69.ImportSettings(setting);
+                            _bipLinks.Add(bipLinkPZ69);
+                        }
                     }
                 }
-            }
 
-            _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
-            SettingsApplied();
+                _keyBindings = KeyBindingPZ69.SetNegators(_keyBindings);
+                SettingsApplied();
+            }
         }
 
         public override List<string> ExportSettings()
@@ -153,7 +156,7 @@ namespace NonVisuals.Radios
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)

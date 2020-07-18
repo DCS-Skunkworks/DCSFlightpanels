@@ -440,9 +440,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void ImportSettings(List<string> settings)
-        {
-        }
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding) {}
 
         public override List<string> ExportSettings()
         {
@@ -529,7 +527,7 @@ namespace NonVisuals.Radios
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         protected void DeviceAttachedHandler()

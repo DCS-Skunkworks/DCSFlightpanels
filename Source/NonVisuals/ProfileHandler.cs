@@ -390,27 +390,12 @@ namespace NonVisuals
             {
                 lock (_lockObject)
                 {
-                    /*
-                     * Example:
-                     *         
-                     * PanelType=PZ55SwitchPanel
-                     * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                     * PanelSettingsVersion=2X
-                     * BeginPanel
-                     *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
-                     *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
-                     *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
-                     * EndPanel
-                     * 
-                     */
                     var genericPanelBinding = BindingMappingManager.GetBinding(gamingPanel);
 
                     if (genericPanelBinding == null)
                     {
                         genericPanelBinding = new GenericPanelBinding(gamingPanel.InstanceId, gamingPanel.BindingHash);
                         genericPanelBinding.PanelType = gamingPanel.TypeOfPanel;
-                        genericPanelBinding.HIDInstance = gamingPanel.InstanceId;
-                        genericPanelBinding.BindingHash = gamingPanel.BindingHash;
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
@@ -480,20 +465,15 @@ namespace NonVisuals
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
                 stringBuilder.AppendLine("Airframe=" + _airframe);
                 stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
-                stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio);
+                stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio + Environment.NewLine);
 
                 foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {
-                    
+                    stringBuilder.AppendLine(genericPanelBinding.ExportBinding());
                 }
-                foreach (var s in _listPanelSettingsData)
-                {
-                    stringBuilder.AppendLine(s);
-                }
-                //if (!Common.Debug)
-                //{
+                
                 stringBuilder.AppendLine(GetFooter());
-                //}
+                
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
                 _isDirty = false;
                 _isNewProfile = false;

@@ -74,59 +74,62 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            //Clear current bindings
-            ClearSettings();
-            if (settings == null || settings.Count == 0)
+            if (genericPanelBinding.HIDInstance == InstanceId)
             {
-                return;
-            }
-            
-            foreach (var setting in settings)
-            {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
-                {
-                    ReadBindingHash(setting);
+                ClearSettings();
 
-                    if (setting.StartsWith("SwitchPanelKey{"))
+                BindingHash = genericPanelBinding.BindingHash;
+
+                var settings = genericPanelBinding.SettingsList;
+
+                foreach (var setting in settings)
+                {
+                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                     {
-                        var keyBinding = new KeyBindingPZ55();
-                        keyBinding.ImportSettings(setting);
-                        _keyBindings.Add(keyBinding);
-                    }
-                    else if (setting.StartsWith("SwitchPanelOSPZ55"))
-                    {
-                        var osCommand = new OSCommandBindingPZ55();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
-                    }
-                    else if (setting.StartsWith("SwitchPanelLed"))
-                    {
-                        var colorOutput = new DcsOutputAndColorBindingPZ55();
-                        colorOutput.ImportSettings(setting);
-                        _listColorOutputBinding.Add(colorOutput);
-                    }
-                    else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
-                    {
-                        var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
-                        dcsBIOSBindingPZ55.ImportSettings(setting);
-                        _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
-                    }
-                    else if (setting.StartsWith("SwitchPanelBIPLink{"))
-                    {
-                        var bipLinkPZ55 = new BIPLinkPZ55();
-                        bipLinkPZ55.ImportSettings(setting);
-                        _bipLinks.Add(bipLinkPZ55);
-                    }
-                    else if (setting.StartsWith("ManualLandingGearLEDs{"))
-                    {
-                        _manualLandingGearLeds = setting.Contains("True");
+                        ReadBindingHash(setting);
+
+                        if (setting.StartsWith("SwitchPanelKey{"))
+                        {
+                            var keyBinding = new KeyBindingPZ55();
+                            keyBinding.ImportSettings(setting);
+                            _keyBindings.Add(keyBinding);
+                        }
+                        else if (setting.StartsWith("SwitchPanelOSPZ55"))
+                        {
+                            var osCommand = new OSCommandBindingPZ55();
+                            osCommand.ImportSettings(setting);
+                            _osCommandBindings.Add(osCommand);
+                        }
+                        else if (setting.StartsWith("SwitchPanelLed"))
+                        {
+                            var colorOutput = new DcsOutputAndColorBindingPZ55();
+                            colorOutput.ImportSettings(setting);
+                            _listColorOutputBinding.Add(colorOutput);
+                        }
+                        else if (setting.StartsWith("SwitchPanelDCSBIOSControl{"))
+                        {
+                            var dcsBIOSBindingPZ55 = new DCSBIOSActionBindingPZ55();
+                            dcsBIOSBindingPZ55.ImportSettings(setting);
+                            _dcsBiosBindings.Add(dcsBIOSBindingPZ55);
+                        }
+                        else if (setting.StartsWith("SwitchPanelBIPLink{"))
+                        {
+                            var bipLinkPZ55 = new BIPLinkPZ55();
+                            bipLinkPZ55.ImportSettings(setting);
+                            _bipLinks.Add(bipLinkPZ55);
+                        }
+                        else if (setting.StartsWith("ManualLandingGearLEDs{"))
+                        {
+                            _manualLandingGearLeds = setting.Contains("True");
+                        }
                     }
                 }
+
+                SettingsApplied();
+                _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
             }
-            SettingsApplied();
-            _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
         }
 
         public override List<string> ExportSettings()
@@ -175,7 +178,7 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }

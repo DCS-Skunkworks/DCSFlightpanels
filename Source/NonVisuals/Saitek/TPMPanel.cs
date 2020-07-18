@@ -61,49 +61,51 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            //Clear current bindings
-            ClearSettings();
-            if (settings == null || settings.Count == 0)
+            if (genericPanelBinding.HIDInstance == InstanceId)
             {
-                return;
-            }
-            foreach (var setting in settings)
-            {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
-                {
-                    ReadBindingHash(setting);
+                ClearSettings();
 
-                    if (setting.StartsWith("TPMPanelSwitch{"))
+                BindingHash = genericPanelBinding.BindingHash;
+
+                var settings = genericPanelBinding.SettingsList;
+                foreach (var setting in settings)
+                {
+                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                     {
-                        var keyBinding = new KeyBindingTPM();
-                        keyBinding.ImportSettings(setting);
-                        _keyBindings.Add(keyBinding);
-                    }
-                    else if (setting.StartsWith("TPMPanelOSCommand"))
-                    {
-                        var osCommand = new OSCommandBindingTPM();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
-                    }
-                    else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
-                    {
-                        var dcsBIOSBindingTPM = new DCSBIOSActionBindingTPM();
-                        dcsBIOSBindingTPM.ImportSettings(setting);
-                        _dcsBiosBindings.Add(dcsBIOSBindingTPM);
-                    }
-                    else if (setting.StartsWith("TPMPanelBipLink{"))
-                    {
-                        var tmpBipLink = new BIPLinkTPM();
-                        tmpBipLink.ImportSettings(setting);
-                        _bipLinks.Add(tmpBipLink);
+                        ReadBindingHash(setting);
+
+                        if (setting.StartsWith("TPMPanelSwitch{"))
+                        {
+                            var keyBinding = new KeyBindingTPM();
+                            keyBinding.ImportSettings(setting);
+                            _keyBindings.Add(keyBinding);
+                        }
+                        else if (setting.StartsWith("TPMPanelOSCommand"))
+                        {
+                            var osCommand = new OSCommandBindingTPM();
+                            osCommand.ImportSettings(setting);
+                            _osCommandBindings.Add(osCommand);
+                        }
+                        else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
+                        {
+                            var dcsBIOSBindingTPM = new DCSBIOSActionBindingTPM();
+                            dcsBIOSBindingTPM.ImportSettings(setting);
+                            _dcsBiosBindings.Add(dcsBIOSBindingTPM);
+                        }
+                        else if (setting.StartsWith("TPMPanelBipLink{"))
+                        {
+                            var tmpBipLink = new BIPLinkTPM();
+                            tmpBipLink.ImportSettings(setting);
+                            _bipLinks.Add(tmpBipLink);
+                        }
                     }
                 }
-            }
 
-            _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
-            SettingsApplied();
+                _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
+                SettingsApplied();
+            }
         }
 
         public override List<string> ExportSettings()
@@ -147,7 +149,7 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }

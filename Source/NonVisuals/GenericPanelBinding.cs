@@ -61,14 +61,48 @@ namespace NonVisuals
             set => _hasBeenProcess = value;
         }
 
+        public List<string> SettingsList
+        {
+            get
+            {
+                return _settings.ToString().Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
+        }
+
         public string ExportBinding()
         {
             var stringBuilder = new StringBuilder();
-            PanelType = PZ55SwitchPanel
-            PanelInstanceID =\\?\hid#vid_06a3&pid_0d67#8&b2dc743&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                PanelSettingsVersion = 0X
-            BeginPanel
-                BeginPanelJSON
+            stringBuilder.AppendLine("PanelType=" + PanelType);
+            stringBuilder.AppendLine("PanelInstanceID=" + HIDInstance);
+            stringBuilder.AppendLine("BindingHash=" + BindingHash);
+
+            if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
+            {
+                stringBuilder.AppendLine("BeginPanelJSON");
+            }
+            else
+            {
+                stringBuilder.AppendLine("BeginPanel");
+            }
+
+            foreach (var str in SettingsList)
+            {
+                if (!string.IsNullOrEmpty(str))
+                {
+                    stringBuilder.Append("\t" + str);
+                }
+            }
+
+            if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
+            {
+                stringBuilder.AppendLine("EndPanelJSON");
+            }
+            else
+            {
+                stringBuilder.AppendLine("EndPanel");
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

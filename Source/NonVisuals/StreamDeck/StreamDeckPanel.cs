@@ -285,43 +285,46 @@ namespace NonVisuals.StreamDeck
             return new List<string>();
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            SettingsLoading = true;
-            //Clear current bindings
-            ClearSettings();
-            if (settings == null || settings.Count == 0)
+            if (genericPanelBinding.HIDInstance == InstanceId)
             {
-                return;
-            }
+                ClearSettings();
 
-            var stringBuilder = new StringBuilder();
-            var setOnce = true;
+                BindingHash = genericPanelBinding.BindingHash;
 
-            foreach (var setting in settings)
-            {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                var settings = genericPanelBinding.SettingsList;
+                SettingsLoading = true;
+
+                var stringBuilder = new StringBuilder();
+                var setOnce = true;
+
+                foreach (var setting in settings)
                 {
-                    ReadBindingHash(setting);
-
-                    var strippedSettingsLine = setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "");
-                    //stringBuilder.Append(strippedSettingsLine + Environment.NewLine);
-                    if (setOnce)
+                    if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
                     {
-                        var bindingHash = strippedSettingsLine.Substring(strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture));
-                        BindingHash = bindingHash.Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
-                        setOnce = false;
-                    }
-                    
-                    var line = strippedSettingsLine.Substring(0, strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture)).Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
-                    stringBuilder.Append(line + Environment.NewLine);
-                }
-            }
+                        ReadBindingHash(setting);
 
-            var str = stringBuilder.ToString();
-            _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
-            SettingsLoading = false;
-            SettingsApplied();
+                        var strippedSettingsLine = setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "");
+                        //stringBuilder.Append(strippedSettingsLine + Environment.NewLine);
+                        if (setOnce)
+                        {
+                            var bindingHash = strippedSettingsLine.Substring(strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture));
+                            BindingHash = bindingHash.Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
+                            setOnce = false;
+                        }
+
+                        var line = strippedSettingsLine.Substring(0, strippedSettingsLine.IndexOf(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, StringComparison.InvariantCulture))
+                            .Replace(SaitekConstants.PANEL_HASH_SEPARATOR_SYMBOL, "");
+                        stringBuilder.Append(line + Environment.NewLine);
+                    }
+                }
+
+                var str = stringBuilder.ToString();
+                _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
+                SettingsLoading = false;
+                SettingsApplied();
+            }
         }
 
         private string ExportJSONSettings()
