@@ -142,7 +142,7 @@ namespace DCSFlightpanels
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
                 _profileHandler.Attach(this);
                 _profileHandler.AttachUserMessageHandler(this);
-                if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed))
+                if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed, this))
                 {
                     CreateNewProfile();
                 }
@@ -1923,12 +1923,12 @@ namespace DCSFlightpanels
         }
 
 
-        public bool ResolveConflicts(List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)
+        public List<ModifiedGenericBinding> ResolveConflicts()
         {
             var bindingsMappingWindow = new BindingsMappingWindow(BindingMappingManager.PanelBindings, GamingPanel.GamingPanels);
             bindingsMappingWindow.ShowDialog();
             
-            return bindingsMappingWindow.ProblemsSolved;
+            return bindingsMappingWindow.ModifiedGenericBindings;
         }
     }
 }

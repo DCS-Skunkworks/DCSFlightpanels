@@ -127,4 +127,28 @@ namespace NonVisuals
             return stringBuilder.ToString();
         }
     }
+
+    public enum GenericBindingStateEnum
+    {
+        Unknown,
+        New,
+        Modified,
+        Deleted
+    }
+
+    public class ModifiedGenericBinding
+    {
+        private GenericBindingStateEnum _state = GenericBindingStateEnum.Unknown;
+        private GenericPanelBinding _genericPanelBinding;
+
+        public ModifiedGenericBinding(GenericBindingStateEnum state, GenericPanelBinding genericPanelBinding)
+        {
+            _state = state;
+            _genericPanelBinding = genericPanelBinding;
+        }
+
+        public GenericBindingStateEnum State => _state;
+
+        public GenericPanelBinding GenericPanelBinding => _genericPanelBinding;
+    }
 }

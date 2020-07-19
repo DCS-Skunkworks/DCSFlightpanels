@@ -16,6 +16,7 @@ namespace DCSFlightpanels.Windows
         private bool _formLoaded;
         private bool _isDirty;
         private List<GenericPanelBinding> _genericBindings;
+        private List<ModifiedGenericBinding> _modifiedGenericBindings;
         private List<GamingPanel> _gamingPanels;
         private bool _problemsSolved = false;
 
@@ -66,7 +67,7 @@ namespace DCSFlightpanels.Windows
 
             return gamingPanel.TypeOfPanel == genericBinding.PanelType;
         }
-        testa detta
+        
         private void PopulateComboBoxes()
         {
             PopulateMissingHardware();
@@ -166,9 +167,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        public bool ProblemsSolved => _problemsSolved;
-
+        
         private void ComboBoxMissingHardware_OnDropDownClosed(object sender, EventArgs e)
         {
             try
@@ -182,5 +181,9 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        public List<GenericPanelBinding> GenericBindings => _genericBindings;
+
+        public List<ModifiedGenericBinding> ModifiedGenericBindings => _modifiedGenericBindings;
     }
 }

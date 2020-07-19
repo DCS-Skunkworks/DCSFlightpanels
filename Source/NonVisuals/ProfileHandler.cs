@@ -32,7 +32,7 @@ namespace NonVisuals
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private bool _profileLoaded;
 
-
+        private IHardwareConflictResolver _hardwareConflictResolver;
 
 
 
@@ -119,18 +119,21 @@ namespace NonVisuals
 
         public bool ReloadProfile()
         {
-            return LoadProfile(null);
+            return LoadProfile(null, _hardwareConflictResolver);
         }
 
-        public bool LoadProfile(string filename)
+        public bool LoadProfile(string filename, IHardwareConflictResolver hardwareConflictResolver)
         {
             try
-            {/*
+            {
+                /*
                  * 0 Open specified filename (parameter) if not null
                  * 1 If exists open last profile used (settings)
                  * 2 Try and open default profile located in My Documents
                  * 3 If none found create default file
                  */
+                _hardwareConflictResolver = hardwareConflictResolver;
+
                 _isNewProfile = false;
                 ClearAll();
 
@@ -293,12 +296,8 @@ namespace NonVisuals
                     SetOperationLevelFlag();
                 }
 
-                var settingsWereModified = false;
-                BindingMappingManager.VerifyBindings(ref settingsWereModified);
-                if (settingsWereModified)
-                {
-                    SetIsDirty();
-                }
+                CheckHardwareConflicts();
+
                 SendBindingsReadEvent();
                 return true;
             }
@@ -308,7 +307,20 @@ namespace NonVisuals
                 return false;
             }
         }
-        
+
+        private void CheckHardwareConflicts()
+        {
+            var settingsWereModified = false;
+            if (!BindingMappingManager.VerifyBindings(ref settingsWereModified))
+            {
+                var modifiedBindings = _hardwareConflictResolver.ResolveConflicts();
+            }
+            if (settingsWereModified)
+            {
+                SetIsDirty();
+            }
+        }
+
         private void SetOperationLevelFlag()
         {
             if (_airframe == DCSAirframe.KEYEMULATOR)
@@ -487,7 +499,7 @@ namespace NonVisuals
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
                 _isDirty = false;
                 _isNewProfile = false;
-                LoadProfile(_filename);
+                LoadProfile(_filename, _hardwareConflictResolver);
             }
             catch (Exception ex)
             {

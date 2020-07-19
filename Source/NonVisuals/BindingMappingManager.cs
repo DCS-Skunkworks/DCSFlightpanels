@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using ClassLibraryCommon;
 using HidLibrary;
 
@@ -89,6 +90,11 @@ namespace NonVisuals
             return true;
         }
 
+        public static void MergeModifiedBindings(List<ModifiedGenericBinding> modifiedGenericBindings)
+        {
+            asd
+        }
+
         public static bool FindSolution(GenericPanelBinding genericBinding, ref bool settingsWereModified)
         {
             settingsWereModified = false;
@@ -104,10 +110,10 @@ namespace NonVisuals
                 var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
                 genericBinding.HIDInstance = hidSkeleton.InstanceId;
                 settingsWereModified = true;
+                MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
                 return true;
             }
-
-
+            
             return false;
         }
 

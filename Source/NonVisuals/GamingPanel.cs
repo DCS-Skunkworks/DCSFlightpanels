@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
@@ -40,7 +41,7 @@ namespace NonVisuals
         protected readonly HIDSkeleton HIDSkeletonBase;
         private bool _closed;
         public long ReportCounter = 0;
-        
+
         protected bool FirstReportHasBeenRead = false;
         protected abstract void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet);
 
@@ -57,8 +58,20 @@ namespace NonVisuals
                 _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
             }
             GamingPanels.Add(this);
+
+            if (hidSkeleton.HIDReadDevice != null)
+            {
+                hidSkeleton.HIDReadDevice.Inserted += DeviceInsertedHandler;
+            }
         }
 
+        public void DeviceInsertedHandler()
+        {
+            /*
+             * Not working, hidSkeleton deleted when panel is removed => no instance where this can be executed on. Regardless, restarting isn't a big of a deal.
+             */
+            MessageBox.Show("New device has been detected. Restart DCSFP to take it into use", "New hardware detected", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
         protected void UpdateCounter(uint address, uint data)
         {
@@ -103,7 +116,7 @@ namespace NonVisuals
             IsDirty = true;
         }
 
-        public virtual void SelectedAirframe(object sender, AirframeEventArgs e) {}
+        public virtual void SelectedAirframe(object sender, AirframeEventArgs e) { }
 
         //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
         public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)
@@ -134,7 +147,7 @@ namespace NonVisuals
             get => HIDSkeletonBase.InstanceId;
             set => HIDSkeletonBase.InstanceId = value;
         }
-        
+
         public string BindingHash
         {
             get
@@ -152,7 +165,7 @@ namespace NonVisuals
                     _randomBindingHash = Common.GetRandomMd5Hash();
                     SetIsDirty();
                 }
-                else if(string.IsNullOrEmpty(_randomBindingHash))
+                else if (string.IsNullOrEmpty(_randomBindingHash))
                 {
                     //Do not overwrite existing value
                     _randomBindingHash = value;
@@ -172,7 +185,7 @@ namespace NonVisuals
                 {
                     return;
                 }
-                Common.LogError( ex, "Via GamingPanel.SetLastException()");
+                Common.LogError(ex, "Via GamingPanel.SetLastException()");
                 lock (_exceptionLockObject)
                 {
                     _lastException = new Exception(ex.GetType() + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
