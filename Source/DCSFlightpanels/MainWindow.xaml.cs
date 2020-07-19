@@ -87,7 +87,7 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
-
+                
                 if (Settings.Default.RunMinimized)
                 {
                     this.WindowState = WindowState.Minimized;
@@ -108,7 +108,6 @@ namespace DCSFlightpanels
                 }
 
                 Common.SetErrorLog(_errorLogFile);
-                //Common.SetDebugLog(_debugLogFile);
 
                 CheckErrorLogAndDCSBIOSLocation();
                 /*******************************************************************************************/
@@ -120,26 +119,16 @@ namespace DCSFlightpanels
                 {
                     _hidHandler.Startup(Settings.Default.LoadStreamDeck);
                 }
-
-                _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
-                if (!_dcsBios.HasLastException())
-                {
-                    RotateGear(2000);
-                }
-
-                _exceptionTimer.Elapsed += TimerCheckExceptions;
-                _exceptionTimer.Start();
-                _dcsStopGearTimer.Elapsed += TimerStopRotation;
-                _dcsCheckDcsBiosStatusTimer.Elapsed += TimerCheckDcsBiosStatus;
-                _statusMessagesTimer.Elapsed += TimerStatusMessagesTimer;
-                _statusMessagesTimer.Start();
-                _dcsCheckDcsBiosStatusTimer.Start();
-
+                
+                StartDCSBIOS();
+                StartTimers();
+                
                 /*******************************************************************************************/
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
                 /*******************************************************************************************/
                 _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation, Settings.Default.LastProfileFileUsed);
+                SearchForPanels();
                 _profileHandler.Attach(this);
                 _profileHandler.AttachUserMessageHandler(this);
                 if (!_profileHandler.LoadProfile(Settings.Default.LastProfileFileUsed, this))
@@ -148,6 +137,9 @@ namespace DCSFlightpanels
                 }
 
                 _dcsAirframe = _profileHandler.Airframe;
+
+                SetWindowTitle();
+                SetWindowState();
 
                 if (!Common.PartialDCSBIOSEnabled())
                 {
@@ -159,8 +151,6 @@ namespace DCSFlightpanels
                     _dcsBios?.Startup();
                 }
 
-                SetWindowTitle();
-                SetWindowState();
                 SendEventRegardingForwardingOfKeys();
 
                 CheckForNewDCSFPRelease();
@@ -175,6 +165,28 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void StartDCSBIOS()
+        {
+
+            _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+            if (!_dcsBios.HasLastException())
+            {
+                RotateGear(2000);
+            }
+
+            _dcsCheckDcsBiosStatusTimer.Start();
+        }
+
+        private void StartTimers()
+        {
+            _exceptionTimer.Elapsed += TimerCheckExceptions;
+            _exceptionTimer.Start();
+            _dcsStopGearTimer.Elapsed += TimerStopRotation;
+            _dcsCheckDcsBiosStatusTimer.Elapsed += TimerCheckDcsBiosStatus;
+            _statusMessagesTimer.Elapsed += TimerStatusMessagesTimer;
+            _statusMessagesTimer.Start();
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
@@ -244,17 +256,12 @@ namespace DCSFlightpanels
                 LabelAirframe.Content = dcsAirframe;
             }
 
-            var itemCount = TabControlPanels.Items.Count;
-
-            var closedItemCount = CloseTabItems();
-
             if (Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
             {
                 _dcsBios?.Shutdown();
                 _dcsStopGearTimer.Stop();
                 _dcsCheckDcsBiosStatusTimer.Stop();
                 ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
-                SearchForPanels();
             }
             else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
@@ -267,15 +274,6 @@ namespace DCSFlightpanels
                 _dcsStopGearTimer.Start();
                 _dcsCheckDcsBiosStatusTimer.Start();
                 ImageDcsBiosConnected.Visibility = Visibility.Visible;
-                SearchForPanels();
-            }
-
-            //todo map here!
-
-            if (closedItemCount != itemCount)
-            {
-                //Something isn't right
-                Common.LogError("SetApplicationMode(). Error closing tab items. Items to close was " + itemCount + ", items actually closed was " + closedItemCount);
             }
         }
 

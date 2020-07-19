@@ -13,7 +13,7 @@ namespace NonVisuals
         private List<string> _settings = new List<string>(50);
         private string _jsonString = "";
         private bool _hardwareWasFound = false;
-        private bool _hasBeenProcess = false;
+        private bool _hasBeenDeleted = false;
 
         public GenericPanelBinding()
         { }
@@ -54,16 +54,21 @@ namespace NonVisuals
             set => _panelType = value;
         }
 
-        public bool HasBeenProcess
+        public bool HasBeenDeleted
         {
-            get => _hasBeenProcess;
-            set => _hasBeenProcess = value;
+            get => _hasBeenDeleted;
+            set => _hasBeenDeleted = value;
         }
 
         public string SettingsString
         {
             get
             {
+                if (IsJSON())
+                {
+                    return _jsonString;
+                }
+
                 var stringBuilder = new StringBuilder(500);
                 foreach (var setting in _settings)
                 {
@@ -71,6 +76,11 @@ namespace NonVisuals
                 }
                 return stringBuilder.ToString();
             }
+        }
+
+        public bool IsJSON()
+        {
+            return (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL);
         }
 
         public string JSONString
@@ -91,7 +101,7 @@ namespace NonVisuals
             stringBuilder.AppendLine("PanelInstanceID=" + HIDInstance);
             stringBuilder.AppendLine("BindingHash=" + BindingHash);
 
-            if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
+            if (IsJSON())
             {
                 stringBuilder.AppendLine("BeginPanelJSON");
             }
@@ -100,7 +110,7 @@ namespace NonVisuals
                 stringBuilder.AppendLine("BeginPanel");
             }
 
-            if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
+            if (IsJSON())
             {
                 stringBuilder.Append(_jsonString);
             }
@@ -115,7 +125,7 @@ namespace NonVisuals
                 }
             }
 
-            if (PanelType == GamingPanelEnum.StreamDeckMini || PanelType == GamingPanelEnum.StreamDeck || PanelType == GamingPanelEnum.StreamDeckXL)
+            if (IsJSON())
             {
                 stringBuilder.AppendLine(Environment.NewLine + "EndPanelJSON");
             }

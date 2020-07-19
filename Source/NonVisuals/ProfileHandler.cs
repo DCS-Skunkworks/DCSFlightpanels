@@ -314,7 +314,8 @@ namespace NonVisuals
             if (!BindingMappingManager.VerifyBindings(ref settingsWereModified))
             {
                 var modifiedBindings = _hardwareConflictResolver.ResolveConflicts();
-
+                BindingMappingManager.MergeModifiedBindings(modifiedBindings);
+                settingsWereModified = modifiedBindings != null && modifiedBindings.Count > 0;
             }
             if (settingsWereModified)
             {
@@ -492,7 +493,10 @@ namespace NonVisuals
 
                 foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {
-                    stringBuilder.AppendLine(genericPanelBinding.ExportBinding());
+                    if (!genericPanelBinding.HasBeenDeleted)
+                    {
+                        stringBuilder.AppendLine(genericPanelBinding.ExportBinding());
+                    }
                 }
                 
                 stringBuilder.AppendLine(GetFooter());

@@ -75,7 +75,7 @@ namespace NonVisuals
             {
                 if (genericBinding.HardwareWasFound == false)
                 {
-                    if(!FindSolution(genericBinding, ref settingsWereModified))
+                    if (!FindSolution(genericBinding, ref settingsWereModified))
                     {
                         problemsPersists = true;
                     }
@@ -92,7 +92,55 @@ namespace NonVisuals
 
         public static void MergeModifiedBindings(List<ModifiedGenericBinding> modifiedGenericBindings)
         {
-            asd
+            bool modificationsMade = false;
+
+            if (modifiedGenericBindings == null || modifiedGenericBindings.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var modifiedGenericBinding in modifiedGenericBindings)
+            {
+                for (int i = 0; i < _genericBindings.Count; i++)
+                {
+                    var genericBinding = _genericBindings[i];
+                    if (modifiedGenericBinding.GenericPanelBinding.BindingHash == genericBinding.BindingHash)
+                    {
+                        switch (modifiedGenericBinding.State)
+                        {
+                            case GenericBindingStateEnum.New:
+                                {
+                                    AddBinding(modifiedGenericBinding.GenericPanelBinding);
+                                    modificationsMade = true;
+                                    break;
+                                }
+                            case GenericBindingStateEnum.Modified:
+                                {
+                                    genericBinding.HIDInstance = modifiedGenericBinding.GenericPanelBinding.HIDInstance;
+                                    genericBinding.Settings = modifiedGenericBinding.GenericPanelBinding.Settings;
+                                    modificationsMade = true;
+                                    break;
+                                }
+                            case GenericBindingStateEnum.Deleted:
+                                {
+                                    genericBinding.HasBeenDeleted = true;
+                                    modificationsMade = true;
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+                    }
+                }
+            }
+
+            if (modificationsMade)
+            {
+                MessageBox.Show("USB settings has changed in the bindings file. Please save the profile and verify functionality.", "Save & Restart", MessageBoxButton.OK, MessageBoxImage.Information);
+                
+            }
         }
 
         public static bool FindSolution(GenericPanelBinding genericBinding, ref bool settingsWereModified)
@@ -113,7 +161,7 @@ namespace NonVisuals
                 MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
                 return true;
             }
-            
+
             return false;
         }
 
@@ -140,7 +188,8 @@ namespace NonVisuals
              * 2) Hardware missing, then it will be left as is and saved next time user saves bindings.
              */
             foreach (var bindingsGrouped in _genericBindings.GroupBy(o => o.PanelType)
-                .Select(group => new {
+                .Select(group => new
+                {
                     PanelType = group.Key,
                     Count = group.Count()
                 })

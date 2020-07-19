@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Windows;
 using System.Windows.Input;
 using ClassLibraryCommon;
@@ -16,12 +17,19 @@ namespace DCSFlightpanels.Windows
         private bool _formLoaded;
         private bool _isDirty;
         private List<GenericPanelBinding> _genericBindings;
-        private List<ModifiedGenericBinding> _modifiedGenericBindings;
+        private List<ModifiedGenericBinding> _modifiedGenericBindings = new List<ModifiedGenericBinding>();
         private List<GamingPanel> _gamingPanels;
         private bool _problemsSolved = false;
 
+
+
+
+
+
+
         public BindingsMappingWindow(List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)
         {
+            InitializeComponent();
             _genericBindings = genericBindings;
             _gamingPanels = gamingPanels;
         }
@@ -39,8 +47,8 @@ namespace DCSFlightpanels.Windows
                 {
                     return;
                 }
-
-                PopulateComboBoxes();
+                
+                PopulateMissingHardware();
                 _formLoaded = true;
                 SetFormState();
             }
@@ -52,7 +60,7 @@ namespace DCSFlightpanels.Windows
 
         private void SetFormState()
         {
-            ButtonSaveNewHardwareMapping.IsEnabled = _isDirty && ComboBoxPanelTypesMatch(); 
+            ButtonSaveNewHardwareMapping.IsEnabled = ComboBoxPanelTypesMatch(); 
         }
 
         private bool ComboBoxPanelTypesMatch()
@@ -68,25 +76,68 @@ namespace DCSFlightpanels.Windows
             return gamingPanel.TypeOfPanel == genericBinding.PanelType;
         }
         
-        private void PopulateComboBoxes()
-        {
-            PopulateMissingHardware();
-        }
-
         private void PopulateMissingHardware()
         {
-            ComboBoxMissingHardware.Items.Clear();
-            var missingDevices = _genericBindings.FindAll(o => o.HardwareWasFound == false).ToList();
+            ClearReplacementHardware();
+
+            ComboBoxMissingHardware.ItemsSource = null;
+            var missingDevices = _genericBindings.FindAll(o => o.HardwareWasFound == false && o.HasBeenDeleted == false).ToList();
             ComboBoxMissingHardware.ItemsSource = missingDevices;
             ComboBoxMissingHardware.Items.Refresh();
+            ShowMissingHardwareInformation();
+
+            var genericBinding = (GenericPanelBinding)ComboBoxMissingHardware.SelectedItem;
+            if (genericBinding == null)
+            {
+                return;
+            }
+            PopulateReplacementHardware(genericBinding.PanelType);
+        }
+
+        private void ShowMissingHardwareInformation()
+        {
+            LabelMissingPanelInformation.Content = "";
+            var genericBinding = (GenericPanelBinding)ComboBoxMissingHardware.SelectedItem;
+            if (genericBinding == null)
+            {
+                return;
+            }
+
+            LabelMissingPanelInformation.Content = genericBinding.HIDInstance;
+        }
+
+        private void ShowReplacementHardwareInformation()
+        {
+            LabelReplacementInformation.Content = "";
+            var gamingPanel = (GamingPanel)ComboBoxReplacementHardware.SelectedItem;
+            if (gamingPanel == null)
+            {
+                return;
+            }
+            LabelReplacementInformation.Content = gamingPanel.InstanceId;
+        }
+
+        private void ClearReplacementHardware()
+        {
+            ComboBoxReplacementHardware.ItemsSource = null;
+            LabelReplacementInformation.Content = "";
         }
 
         private void PopulateReplacementHardware(GamingPanelEnum panelType)
         {
-            ComboBoxReplacementHardware.Items.Clear();
-            var sameTypeOfPanels = _genericBindings.FindAll(o => o.PanelType == panelType).ToList();
+            ComboBoxReplacementHardware.ItemsSource = null;
+            var sameTypeOfPanels = _gamingPanels.FindAll(o => o.TypeOfPanel == panelType).ToList();
+            foreach (var genericPanelBinding in _genericBindings)
+            {
+                if (genericPanelBinding.HardwareWasFound)
+                {
+                    //Remove those that has been mapped already so they can't be re-mapped
+                    sameTypeOfPanels.RemoveAll(o => o.InstanceId == genericPanelBinding.HIDInstance);
+                }
+            }
             ComboBoxReplacementHardware.ItemsSource = sameTypeOfPanels;
             ComboBoxReplacementHardware.Items.Refresh();
+            ShowReplacementHardwareInformation();
         }
 
         private void BindingsMappingWindow_OnKeyDown(object sender, KeyEventArgs e)
@@ -134,6 +185,16 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                var genericBinding = (GenericPanelBinding) ComboBoxMissingHardware.SelectedItem;
+                if (genericBinding == null)
+                {
+                    return;
+                }
+
+                var informationTextBlockWindow = new InformationTextBlockWindow(string.IsNullOrEmpty(genericBinding.SettingsString) ? "" : genericBinding.SettingsString);
+
+                informationTextBlockWindow.ShowDialog();
+
                 SetFormState();
             }
             catch (Exception ex)
@@ -146,12 +207,39 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                var genericBinding = (GenericPanelBinding)ComboBoxMissingHardware.SelectedItem;
+                var gamingPanel = (GamingPanel)ComboBoxReplacementHardware.SelectedItem;
+                if (genericBinding == null || gamingPanel == null)
+                {
+                    return;
+                }
+
+                genericBinding.HIDInstance = gamingPanel.InstanceId;
+                genericBinding.HardwareWasFound = true;
+                var modifiedGenericBinding = new ModifiedGenericBinding(GenericBindingStateEnum.Modified, genericBinding);
+                _modifiedGenericBindings.Add(modifiedGenericBinding);
+                _isDirty = true;
+
+                SystemSounds.Asterisk.Play();
+
+                if (!MissingHardwareFound())
+                {
+                    Close();
+                }
+
+                PopulateMissingHardware();
+                
                 SetFormState();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private bool MissingHardwareFound()
+        {
+            return _genericBindings.FindAll(o => o.HardwareWasFound == false && o.HasBeenDeleted == false).ToList().Count > 0;
         }
 
         private void ButtonIdentifyPanel_OnClick(object sender, RoutedEventArgs e)
@@ -172,8 +260,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                if (ComboBoxMissingHardware.SelectedItem == null)
+                {
+                    return;
+                }
                 var genericBinding = (GenericPanelBinding) ComboBoxMissingHardware.SelectedItem;
                 PopulateReplacementHardware(genericBinding.PanelType);
+                LabelMissingPanelInformation.Content = genericBinding.HIDInstance;
+                
                 SetFormState();
             }
             catch (Exception ex)
@@ -185,5 +279,41 @@ namespace DCSFlightpanels.Windows
         public List<GenericPanelBinding> GenericBindings => _genericBindings;
 
         public List<ModifiedGenericBinding> ModifiedGenericBindings => _modifiedGenericBindings;
+
+        private void ComboBoxReplacementHardware_OnDropDownClosed(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ComboBoxReplacementHardware.SelectedItem == null)
+                {
+                    return;
+                }
+                var gamingPanel = (GamingPanel)ComboBoxReplacementHardware.SelectedItem;
+                
+                LabelReplacementInformation.Content = gamingPanel.InstanceId;
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonDeleteBinding_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var genericBinding = (GenericPanelBinding)ComboBoxMissingHardware.SelectedItem;
+                genericBinding.HasBeenDeleted = true;
+                var modifiedGenericBinding = new ModifiedGenericBinding(GenericBindingStateEnum.Deleted, genericBinding);
+                _modifiedGenericBindings.Add(modifiedGenericBinding);
+                PopulateMissingHardware();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

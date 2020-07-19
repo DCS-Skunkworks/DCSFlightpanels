@@ -185,7 +185,7 @@ namespace NonVisuals.Saitek
             var settings = genericPanelBinding.Settings;
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
 
                     var colorOutput = new DcsOutputAndColorBindingBIP();
@@ -452,7 +452,7 @@ namespace NonVisuals.Saitek
                 while (spins > 0)
                 {
                     var randomBIPLedPositionEnum = (BIPLedPositionEnum)arrayBIPLedPositionEnum.GetValue(random.Next(arrayBIPLedPositionEnum.Length));
-                    var randomPanelLEDColor = (PanelLEDColor)arrayBIPLedPositionEnum.GetValue(random.Next(arrayBIPLedPositionEnum.Length));
+                    var randomPanelLEDColor = (PanelLEDColor)arrayPanelLEDColor.GetValue(random.Next(arrayPanelLEDColor.Length));
                     SetLED(randomBIPLedPositionEnum, randomPanelLEDColor);
 
                     Thread.Sleep(50);
