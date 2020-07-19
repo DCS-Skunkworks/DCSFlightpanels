@@ -314,6 +314,7 @@ namespace NonVisuals
             if (!BindingMappingManager.VerifyBindings(ref settingsWereModified))
             {
                 var modifiedBindings = _hardwareConflictResolver.ResolveConflicts();
+
             }
             if (settingsWereModified)
             {

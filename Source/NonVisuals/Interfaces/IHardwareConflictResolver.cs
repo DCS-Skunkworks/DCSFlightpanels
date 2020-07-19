@@ -4,6 +4,6 @@ namespace NonVisuals.Interfaces
 {
     public interface IHardwareConflictResolver
     {
-        List<GenericPanelBinding> ResolveConflicts();
+        List<ModifiedGenericBinding> ResolveConflicts();
     }
 }
