@@ -1,16 +1,11 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
 using System.Media;
 using System.Text;
-using System.Windows.Documents;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;

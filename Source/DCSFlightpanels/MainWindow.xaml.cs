@@ -45,7 +45,7 @@ namespace DCSFlightpanels
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : IGamingPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable
+    public partial class MainWindow : IGamingPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
     {
         public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardPanelEventArgs e);
 
@@ -1920,6 +1920,15 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+
+        public bool ResolveConflicts(List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)
+        {
+            var bindingsMappingWindow = new BindingsMappingWindow(BindingMappingManager.PanelBindings, GamingPanel.GamingPanels);
+            bindingsMappingWindow.ShowDialog();
+            
+            return bindingsMappingWindow.ProblemsSolved;
         }
     }
 }

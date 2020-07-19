@@ -1,8 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -11,13 +9,10 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
-using Octokit;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
@@ -1855,14 +1850,13 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
         
         private void ButtonTEXT_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var binding = @"C:\Users\Jerker\Documents\Ka50 2.bindings";
-                Process.Start("dcsfp.exe", "OpenProfile=\"" + binding + "\"");
+                var window = new BindingsMappingWindow(BindingMappingManager.PanelBindings, GamingPanel.GamingPanels);
+                window.ShowDialog();
             }
             catch (Exception ex)
             {

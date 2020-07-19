@@ -11,7 +11,6 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck.Events;
-using OpenMacroBoard.SDK;
 using ThreadState = System.Threading.ThreadState;
 
 namespace NonVisuals.StreamDeck

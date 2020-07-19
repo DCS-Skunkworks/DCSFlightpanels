@@ -9,7 +9,6 @@ using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Shared;
-using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;

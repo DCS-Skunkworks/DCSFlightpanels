@@ -6,9 +6,7 @@ using System.Text;
 using System.Windows;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
 using Theraot.Core;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -295,7 +293,12 @@ namespace NonVisuals
                     SetOperationLevelFlag();
                 }
 
-                BindingMappingManager.VerifyBindings();
+                var settingsWereModified = false;
+                BindingMappingManager.VerifyBindings(ref settingsWereModified);
+                if (settingsWereModified)
+                {
+                    SetIsDirty();
+                }
                 SendBindingsReadEvent();
                 return true;
             }

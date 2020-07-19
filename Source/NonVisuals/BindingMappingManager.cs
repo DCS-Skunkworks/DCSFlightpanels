@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Navigation;
 using ClassLibraryCommon;
 using HidLibrary;
 
@@ -48,7 +47,7 @@ namespace NonVisuals
             return false;
         }
 
-        public static void VerifyBindings()
+        public static bool VerifyBindings(ref bool settingsWereModified)
         {
             foreach (var genericBinding in _genericBindings)
             {
@@ -58,6 +57,7 @@ namespace NonVisuals
                 {
                     if (genericBinding.HIDInstance == hidSkeleton.InstanceId)
                     {
+                        genericBinding.HardwareWasFound = true;
                         found = true;
                         break;
                     }
@@ -68,14 +68,34 @@ namespace NonVisuals
                     genericBinding.HardwareWasFound = false;
                 }
             }
+
+            var problemsPersists = false;
+            foreach (var genericBinding in _genericBindings)
+            {
+                if (genericBinding.HardwareWasFound == false)
+                {
+                    if(!FindSolution(genericBinding, ref settingsWereModified))
+                    {
+                        problemsPersists = true;
+                    }
+                }
+            }
+
+            if (problemsPersists)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        public static bool FindSolution(GenericPanelBinding genericBinding)
+        public static bool FindSolution(GenericPanelBinding genericBinding, ref bool settingsWereModified)
         {
+            settingsWereModified = false;
+
             /*
              * 1) Check, are there multiple such panels where hardware does not match? If so user must map them
              *    If only 1, then we can map it without asking questions.
-             * 2) Hardware missing, then it will be left as is and saved next time user saves bindings.
              */
             var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).Count;
             if (count == 1)
@@ -83,8 +103,10 @@ namespace NonVisuals
                 //This we can map ourselves!
                 var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
                 genericBinding.HIDInstance = hidSkeleton.InstanceId;
+                settingsWereModified = true;
                 return true;
             }
+
 
             return false;
         }
@@ -135,6 +157,7 @@ namespace NonVisuals
 
         private static void CheckAllProfileInstanceIDsAgainstAttachedHardware()
         {
+            /*
             foreach (var saitekPanelSkeleton in Common.GamingPanelSkeletons)
             {
                 foreach (var hidDevice in HidDevices.Enumerate(saitekPanelSkeleton.VendorId, saitekPanelSkeleton.ProductId))
@@ -152,7 +175,7 @@ namespace NonVisuals
                     }
                 }
             }
-            /*if (_profileFileInstanceIDs.Count > 0)
+            if (_profileFileInstanceIDs.Count > 0)
             {
                 if (OnUserMessageEventHandler != null)
                 {

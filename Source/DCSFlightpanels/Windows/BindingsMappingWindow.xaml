@@ -5,12 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels.Windows"
         mc:Ignorable="d"
-        Title="Map bindings with hardware" Height="450" Width="800"
+        Title="Map bindings with hardware" Height="450" Width="400"
         Loaded="BindingsMappingWindow_OnLoaded"
         Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" WindowStartupLocation="CenterScreen"  KeyDown="BindingsMappingWindow_OnKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -21,34 +20,28 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.RowSpan="3" Grid.Row="0">
-            <GroupBox Header="Bindings with missing hardware" Margin="10,10,10,0">
+            <GroupBox Header="Bindings with missing hardware / panel" Margin="10,10,10,0">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                        <ComboBox x:Name="ComboBoxMissingHardware" SelectedIndex="0" SelectedValuePath="Content" Margin="10,0,10,0" ></ComboBox>
-                        <Button Content="Open binding" Name="ButtonSeeBindingText" Click="ButtonSeeBindingText_OnClick" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="ComboBoxMissingHardware" SelectedIndex="0" SelectedValuePath="PanelType" Margin="10,0,10,0" DropDownClosed="ComboBoxMissingHardware_OnDropDownClosed"></ComboBox>
+                        <Button Content="View binding" Name="ButtonSeeBindingText" Click="ButtonSeeBindingText_OnClick" Margin="10,0,0,0"/>
                     </StackPanel>
 
-                    <Label Content="Panel information " HorizontalAlignment="Stretch" Margin="10,0,0,0" />
-                    <TextBox Name="TextBoxMissingPanelInformation" Margin="10,0,10,0"></TextBox>
+                    <Label Content="Information" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
+                    <Label Name="LabelPanelType" Content="" HorizontalAlignment="Stretch" Margin="10,0,0,0" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Use this hardware" Margin="10,10,10,0">
+            <GroupBox Header="Replace with hardware / panel" Margin="10,10,10,0">
                 <StackPanel>
-                    <ComboBox x:Name="ComboBoxReplacementHardware" SelectedIndex="0" SelectedValuePath="Content" Margin="10,10,10,0"></ComboBox>
-
-                    <Label Content="Panel information " HorizontalAlignment="Stretch" Margin="10,0,0,0" />
-                    <TextBox Name="TextBoxReplacementPanelInformation" Margin="10,0,10,0"></TextBox>
-
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="ComboBoxReplacementHardware" SelectedIndex="0" SelectedValuePath="Content" Margin="10,10,10,0"></ComboBox>
+                        <Button Name="ButtonIdentifyPanel" Content="Identify" VerticalAlignment="Bottom" Click="ButtonIdentifyPanel_OnClick"></Button>
+                    </StackPanel>
                     <Button Name="ButtonSaveNewHardwareMapping" Content="Save" Width="50" HorizontalAlignment="Right" Margin="10,10,10,0" Click="ButtonSaveNewHardwareMapping_OnClick"></Button>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
 
-        <DockPanel Name="StackPanelBindingText" Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" Visibility="Visible">
-            <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                <TextBlock Name="TextBlockBindingText" Height="400" ></TextBlock>
-            </ScrollViewer>
-        </DockPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="0" Grid.Row="3" Margin="0,0,10,0">
             <Button Content="Close" VerticalAlignment="Bottom" Margin="10,0,0,10"  x:Name="ButtonOk" Width="75" Click="ButtonClose_OnClick" />

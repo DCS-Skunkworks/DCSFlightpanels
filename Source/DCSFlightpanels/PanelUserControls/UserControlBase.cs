@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Windows.Controls;
-using ClassLibraryCommon;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 

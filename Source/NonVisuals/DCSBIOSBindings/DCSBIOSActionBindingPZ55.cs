@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
 
 namespace NonVisuals.DCSBIOSBindings
 {

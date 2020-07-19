@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
 
 namespace NonVisuals
 {
@@ -20,7 +18,7 @@ namespace NonVisuals
         //private bool _isAttached;
         private bool _forwardPanelEvent;
         private static readonly object LockObject = new object();
-        private static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>();
+        public static readonly List<GamingPanel> GamingPanels = new List<GamingPanel>(); //TODO REMOVE PUBLIC
         private bool _settingsLoading = false;
         /*
          * IMPORTANT STUFF
@@ -58,7 +56,7 @@ namespace NonVisuals
             {
                 _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
             }
-            //_hash = Common.GetMd5Hash(hidSkeleton.InstanceId);
+            GamingPanels.Add(this);
         }
 
 
@@ -347,10 +345,6 @@ namespace NonVisuals
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
-            if (e.PanelBinding.PanelType == GamingPanelEnum.StreamDeckMini)
-            {
-                var asdf = 1;
-            }
             if (e.PanelBinding.HIDInstance == InstanceId)
             {
                 ImportSettings(e.PanelBinding);

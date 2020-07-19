@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
-using OpenMacroBoard.SDK;
 
 namespace NonVisuals.StreamDeck
 {
