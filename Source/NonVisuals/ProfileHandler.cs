@@ -7,6 +7,7 @@ using System.Windows;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Properties;
 using Theraot.Core;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -58,7 +59,8 @@ namespace NonVisuals
             {
                 return null;
             }
-            var tempDirectory = string.IsNullOrEmpty(Filename) ? MyDocumentsPath() : Path.GetDirectoryName(Filename);
+
+            var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? MyDocumentsPath() : Settings.Default.LastImageFileDialogLocation;
             ClearAll();
             var openFileDialog = new OpenFileDialog();
             openFileDialog.RestoreDirectory = true;
@@ -68,6 +70,8 @@ namespace NonVisuals
             openFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
             if (openFileDialog.ShowDialog() == true)
             {
+                Settings.Default.LastImageFileDialogLocation = Path.GetDirectoryName(openFileDialog.FileName);
+                Settings.Default.Save();
                 return openFileDialog.FileName;
             }
 

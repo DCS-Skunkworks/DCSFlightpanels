@@ -142,7 +142,7 @@ namespace NonVisuals
                 
             }
         }
-        PROCESSING OF BIPLINKS AND STREAM LINKS STILL MISSING
+        //PROCESSING OF BIPLINKS AND STREAM LINKS STILL MISSING
         public static bool FindSolution(GenericPanelBinding genericBinding, ref bool settingsWereModified)
         {
             settingsWereModified = false;
