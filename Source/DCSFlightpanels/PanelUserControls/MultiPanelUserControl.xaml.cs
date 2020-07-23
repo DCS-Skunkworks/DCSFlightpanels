@@ -109,7 +109,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel && e.UniqueId.Equals(_multiPanelPZ70.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId))
                 {
                     NotifyKnobChanges(e.Switches);
                 }
@@ -124,7 +124,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _multiPanelPZ70.InstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.PanelBinding.HIDInstance)
                 {
                     ShowGraphicConfiguration();
                 }
@@ -139,7 +139,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _multiPanelPZ70.InstanceId == e.UniqueId)
+                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.HidInstance)
                 {
                     ClearAll(false);
                     ShowGraphicConfiguration();
@@ -193,7 +193,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_multiPanelPZ70.InstanceId) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
+                if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = ""));
@@ -216,8 +216,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_multiPanelPZ70 != null)
                 {
                     TextBoxLogPZ70.Text = "";
-                    TextBoxLogPZ70.Text = _multiPanelPZ70.InstanceId;
-                    Clipboard.SetText(_multiPanelPZ70.InstanceId);
+                    TextBoxLogPZ70.Text = _multiPanelPZ70.HIDInstanceId;
+                    Clipboard.SetText(_multiPanelPZ70.HIDInstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }

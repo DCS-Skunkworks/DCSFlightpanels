@@ -94,7 +94,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 StackPanelButtonOSCommandSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.OSCommand ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonLayerNavigationSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                //StackPanelChooseButtonActionType.IsEnabled = _streamDeckPanel.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                StackPanelChooseButtonActionType.IsEnabled = _streamDeckPanel.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
                 ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
                                                             TextBoxKeyPressButtonOn.Bill.ContainsKeyPress();

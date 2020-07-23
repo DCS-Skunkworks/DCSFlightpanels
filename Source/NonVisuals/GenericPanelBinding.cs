@@ -18,10 +18,11 @@ namespace NonVisuals
         public GenericPanelBinding()
         { }
 
-        public GenericPanelBinding(string hidInstance, string bindingHash)
+        public GenericPanelBinding(string hidInstance, string bindingHash, GamingPanelEnum panelType)
         {
             _hidInstance = hidInstance;
             _bindingHash = bindingHash;
+            _panelType = panelType;
         }
 
         public string HIDInstance
@@ -40,6 +41,18 @@ namespace NonVisuals
         {
             get => _settings;
             set => _settings = value;
+        }
+
+        public void JSONAddLine(string jsonLine)
+        {
+            if (string.IsNullOrEmpty(_jsonString))
+            {
+                _jsonString = jsonLine;
+            }
+            else
+            {
+                _jsonString = _jsonString + Environment.NewLine + jsonLine;
+            }
         }
 
         public bool HardwareWasFound
@@ -97,9 +110,9 @@ namespace NonVisuals
         public string ExportBinding()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("PanelType=" + PanelType);
-            stringBuilder.AppendLine("PanelInstanceID=" + HIDInstance);
-            stringBuilder.AppendLine("BindingHash=" + BindingHash);
+            stringBuilder.AppendLine("PanelType=" + _panelType);
+            stringBuilder.AppendLine("PanelInstanceID=" + _hidInstance);
+            stringBuilder.AppendLine("BindingHash=" + _bindingHash);
 
             if (IsJSON())
             {

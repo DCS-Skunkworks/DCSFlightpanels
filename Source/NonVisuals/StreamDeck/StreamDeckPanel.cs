@@ -33,7 +33,7 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.StreamDeck, hidSkeleton)
+        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
             switch (panelType)
             {
@@ -291,21 +291,12 @@ namespace NonVisuals.StreamDeck
 
             BindingHash = genericPanelBinding.BindingHash;
 
-            var settings = genericPanelBinding.Settings;
             SettingsLoading = true;
-
-            var stringBuilder = new StringBuilder();
-
-            foreach (var setting in settings)
+            
+            if(!string.IsNullOrEmpty(genericPanelBinding.JSONString))
             {
-                if (!setting.StartsWith("#"))
-                {
-                    stringBuilder.Append(setting + Environment.NewLine);
-                }
+                _streamDeckLayerHandler.ImportJSONSettings(genericPanelBinding.JSONString);
             }
-
-            var str = stringBuilder.ToString();
-            _streamDeckLayerHandler.ImportJSONSettings(str);
             SettingsLoading = false;
             SettingsApplied();
         }

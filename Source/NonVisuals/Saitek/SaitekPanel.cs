@@ -183,7 +183,7 @@ namespace NonVisuals.Saitek
 
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
-            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
+            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = HIDInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
 
         //For those that wants to listen to this panel

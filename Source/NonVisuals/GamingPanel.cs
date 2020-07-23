@@ -97,7 +97,7 @@ namespace NonVisuals
                         //Not good
                         if (OnUpdatesHasBeenMissed != null)
                         {
-                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { UniqueId = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
+                            OnUpdatesHasBeenMissed(this, new DCSBIOSUpdatesMissedEventArgs() { HidInstance = HIDSkeletonBase.InstanceId, GamingPanelEnum = _typeOfGamingPanel, Count = (int)(newCount - _count) });
                             _count = newCount;
                         }
                     }
@@ -142,7 +142,7 @@ namespace NonVisuals
             set => _productId = value;
         }
 
-        public string InstanceId
+        public string HIDInstanceId
         {
             get => HIDSkeletonBase.InstanceId;
             set => HIDSkeletonBase.InstanceId = value;
@@ -313,7 +313,7 @@ namespace NonVisuals
         //Used by any but descendants that wants to see buttons that have changed, UI for example
         protected virtual void UISwitchesChanged(HashSet<object> hashSet)
         {
-            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { UniqueId = InstanceId, GamingPanelEnum = _typeOfGamingPanel, Switches = hashSet });
+            OnSwitchesChangedA?.Invoke(this, new SwitchesChangedEventArgs() { HidInstance = HIDInstanceId, GamingPanelEnum = _typeOfGamingPanel, Switches = hashSet });
         }
 
         //Used by any but descendants that wants to see buttons that have changed, UI for example
@@ -326,39 +326,39 @@ namespace NonVisuals
         protected virtual void DeviceAttached()
         {
             //IsAttached = true;
-            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
+            OnDeviceAttachedA?.Invoke(this, new PanelEventArgs() { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void DeviceDetached()
         {
             //IsAttached = false;
-            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
+            OnDeviceDetachedA?.Invoke(this, new PanelEventArgs() { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void SettingsChanged()
         {
-            OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
+            OnSettingsChangedA?.Invoke(this, new PanelEventArgs() { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void SettingsApplied()
         {
-            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
+            OnSettingsAppliedA?.Invoke(this, new PanelEventArgs() { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
         }
 
 
         protected virtual void SettingsCleared()
         {
-            OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { UniqueId = InstanceId, PanelType = _typeOfGamingPanel });
+            OnSettingsClearedA?.Invoke(this, new PanelEventArgs() { HidInstance = HIDInstanceId, PanelType = _typeOfGamingPanel });
         }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e) { }
 
         public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
-            if (e.PanelBinding.HIDInstance == InstanceId)
+            if (e.PanelBinding.HIDInstance == HIDInstanceId)
             {
                 ImportSettings(e.PanelBinding);
             }
@@ -374,14 +374,14 @@ namespace NonVisuals
 
     public class DCSBIOSUpdatesMissedEventArgs : EventArgs
     {
-        public string UniqueId { get; set; }
+        public string HidInstance { get; set; }
         public GamingPanelEnum GamingPanelEnum { get; set; }
         public int Count { get; set; }
     }
 
     public class PanelEventArgs : EventArgs
     {
-        public string UniqueId { get; set; }
+        public string HidInstance { get; set; }
         public GamingPanelEnum PanelType { get; set; }
     }
 
@@ -392,7 +392,7 @@ namespace NonVisuals
 
     public class SwitchesChangedEventArgs : EventArgs
     {
-        public string UniqueId { get; set; }
+        public string HidInstance { get; set; }
         public GamingPanelEnum GamingPanelEnum { get; set; }
         public HashSet<object> Switches { get; set; }
     }

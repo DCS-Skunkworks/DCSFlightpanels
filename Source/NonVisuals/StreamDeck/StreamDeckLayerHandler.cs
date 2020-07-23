@@ -386,7 +386,7 @@ namespace NonVisuals.StreamDeck
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
-                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.LayerStreamDeckButtons.Count + ")\n");
+                stringBuilder.Append("\t" + streamDeckLayer.Name + " (" + streamDeckLayer.StreamDeckButtons.Count + ")\n");
             }
             stringBuilder.Append("\n");
 

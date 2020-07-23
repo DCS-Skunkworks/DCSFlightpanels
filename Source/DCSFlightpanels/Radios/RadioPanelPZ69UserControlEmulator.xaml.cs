@@ -85,7 +85,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel && e.UniqueId.Equals(_radioPanelPZ69.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -112,7 +112,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (e.UniqueId.Equals(_radioPanelPZ69.InstanceId) && e.PanelType == GamingPanelEnum.PZ69RadioPanel)
+                if (e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ69RadioPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = ""));
@@ -1561,8 +1561,8 @@ namespace DCSFlightpanels.Radios
                 if (_radioPanelPZ69 != null)
                 {
                     TextBoxLogPZ69.Text = "";
-                    TextBoxLogPZ69.Text = _radioPanelPZ69.InstanceId;
-                    Clipboard.SetText(_radioPanelPZ69.InstanceId);
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
+                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

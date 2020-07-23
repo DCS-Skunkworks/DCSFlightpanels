@@ -137,7 +137,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -152,7 +152,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.InstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.PanelBinding.HIDInstance)
                 {
                     ShowGraphicConfiguration();
                 }
@@ -167,7 +167,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.InstanceId == e.UniqueId)
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.HidInstance)
                 {
                     ClearAll(false);
                     ShowGraphicConfiguration();
@@ -183,7 +183,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (_switchPanelPZ55.InstanceId.Equals(e.UniqueId))
+                if (_switchPanelPZ55.HIDInstanceId.Equals(e.UniqueId))
                 {
                     var position = (SwitchPanelPZ55LEDPosition)e.LEDPosition.Position;
                     var imageArray = _imageArrayUpper;
@@ -284,7 +284,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -299,7 +299,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -314,7 +314,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.PanelType == GamingPanelEnum.PZ55SwitchPanel)
+                if (e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ55SwitchPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action) (() => TextBoxLogPZ55.Text = ""));
@@ -1460,8 +1460,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_switchPanelPZ55 != null)
                 {
                     TextBoxLogPZ55.Text = "";
-                    TextBoxLogPZ55.Text = _switchPanelPZ55.InstanceId;
-                    Clipboard.SetText(_switchPanelPZ55.InstanceId);
+                    TextBoxLogPZ55.Text = _switchPanelPZ55.HIDInstanceId;
+                    Clipboard.SetText(_switchPanelPZ55.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

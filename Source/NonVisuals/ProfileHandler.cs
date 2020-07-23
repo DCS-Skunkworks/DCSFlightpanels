@@ -88,7 +88,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -157,7 +157,7 @@ namespace NonVisuals
                         return false;
                     }
                 }
-                
+
                 if (string.IsNullOrEmpty(_filename) || !File.Exists(_filename))
                 {
                     //Main window will handle this
@@ -258,7 +258,7 @@ namespace NonVisuals
                         {
                             if (genericPanelBinding != null)
                             {
-                                BindingMappingManager.AddBinding(genericPanelBinding);
+                                BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
                             }
                             insidePanel = false;
                         }
@@ -270,7 +270,7 @@ namespace NonVisuals
                         {
                             if (genericPanelBinding != null)
                             {
-                                BindingMappingManager.AddBinding(genericPanelBinding);
+                                BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
                             }
                             insideJSONPanel = false;
                         }
@@ -283,13 +283,13 @@ namespace NonVisuals
                                 {
                                     line = line.Replace("\t", "");
                                 }
-
+                                a lot of switch panel settings missing!!! read but disappears ??
                                 genericPanelBinding.Settings.Add(line);
                             }
-                            
+
                             if (insideJSONPanel)
                             {
-                                genericPanelBinding.Settings.Add(fileLine);
+                                genericPanelBinding.JSONAddLine(fileLine);
                             }
                         }
                     }
@@ -307,7 +307,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
                 return false;
             }
         }
@@ -348,7 +348,7 @@ namespace NonVisuals
                 Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled | OperationFlag.DCSBIOSInputEnabled);
             }
         }
-        
+
         public void SendBindingsReadEvent()
         {
             try
@@ -365,14 +365,14 @@ namespace NonVisuals
                         }
                         catch (Exception e)
                         {
-                            Common.ShowErrorMessageBox(e,"Error reading settings. Panel : " + genericPanelBinding.PanelType);
+                            Common.ShowErrorMessageBox(e, "Error reading settings. Panel : " + genericPanelBinding.PanelType);
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                Common.ShowErrorMessageBox( e);
+                Common.ShowErrorMessageBox(e);
             }
         }
 
@@ -420,8 +420,7 @@ namespace NonVisuals
 
                     if (genericPanelBinding == null)
                     {
-                        genericPanelBinding = new GenericPanelBinding(gamingPanel.InstanceId, gamingPanel.BindingHash);
-                        genericPanelBinding.PanelType = gamingPanel.TypeOfPanel;
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstanceId, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
@@ -435,7 +434,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -449,10 +448,7 @@ namespace NonVisuals
 
                     if (genericPanelBinding == null)
                     {
-                        genericPanelBinding = new GenericPanelBinding(gamingPanel.InstanceId, gamingPanel.BindingHash);
-                        genericPanelBinding.PanelType = gamingPanel.TypeOfPanel;
-                        genericPanelBinding.HIDInstance = gamingPanel.InstanceId;
-                        genericPanelBinding.BindingHash = gamingPanel.BindingHash;
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstanceId, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
                         BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
@@ -461,7 +457,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -488,6 +484,15 @@ namespace NonVisuals
                 headerStringBuilder.AppendLine("#by deleting the + LCONTROL part.");
                 headerStringBuilder.AppendLine("#So for example AltGr + HOME pressed on the keyboard becomes RMENU + LCONTROL + HOME");
                 headerStringBuilder.AppendLine("#Open text editor and delete the LCONTROL ==> RMENU + HOME");
+                headerStringBuilder.AppendLine("#Supported panels :");
+                headerStringBuilder.AppendLine("#   PZ55SwitchPanel");
+                headerStringBuilder.AppendLine("#   PZ69RadioPanel");
+                headerStringBuilder.AppendLine("#   PZ70MultiPanel");
+                headerStringBuilder.AppendLine("#   BackLitPanel");
+                headerStringBuilder.AppendLine("#   StreamDeckMini");
+                headerStringBuilder.AppendLine("#   StreamDeck");
+                headerStringBuilder.AppendLine("#   StreamDeckXL");
+
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
@@ -502,9 +507,9 @@ namespace NonVisuals
                         stringBuilder.AppendLine(genericPanelBinding.ExportBinding());
                     }
                 }
-                
+
                 stringBuilder.AppendLine(GetFooter());
-                
+
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
                 _isDirty = false;
                 _isNewProfile = false;
@@ -512,7 +517,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -654,7 +659,7 @@ namespace NonVisuals
 
         }
     }
-    
+
     public class AirframeEventArgs : EventArgs
     {
         public DCSAirframe Airframe { get; set; }

@@ -174,7 +174,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.StreamDeck && e.UniqueId.Equals(_streamDeckPanel.BindingHash))
+                if (e.GamingPanelEnum == _streamDeckPanel.TypeOfPanel && e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId))
                 {
                     NotifyButtonChanges(e.Switches);
                 }
@@ -189,7 +189,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _streamDeckPanel.InstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == _streamDeckPanel.TypeOfPanel && _streamDeckPanel.HIDInstanceId == e.PanelBinding.HIDInstance)
                 {
                     LoadComboBoxLayers();
                 }
@@ -241,11 +241,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                /*if (e.UniqueId.Equals(_streamDeck.BindingHash) && e.GamingPanelEnum == GamingPanelEnum.StreamDeckMultiPanel)
+                if (e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId) && e.PanelType == _streamDeckPanel.TypeOfPanel)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogStreamDeck.Text = ""));
-                }*/
+                    EventHandlers.NotifyToSyncConfiguration(this);
+                }
             }
             catch (Exception ex)
             {
@@ -265,7 +264,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     TextBoxLogStreamDeck.Text = "";
                     TextBoxLogStreamDeck.Text = _streamDeckPanel.BindingHash;
-                    Clipboard.SetText(_streamDeckPanel.InstanceId);
+                    Clipboard.SetText(_streamDeckPanel.HIDInstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }

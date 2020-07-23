@@ -33,7 +33,7 @@ namespace NonVisuals.Saitek
                 MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), tmpArray[1].Substring(1));
                 DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), tmpArray[0]);
 
-                for (int i = 1; i < parameters.Length - 1; i++)
+                for (var i = 0; i < parameters.Length; i++)
                 {
                     if (parameters[i].StartsWith("BIPLight"))
                     {

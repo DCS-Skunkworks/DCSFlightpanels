@@ -10,9 +10,9 @@ using NonVisuals;
 namespace DCSFlightpanels.Windows
 {
     /// <summary>
-    /// Interaction logic for BindingsMappingWindow.xaml
+    /// Interaction logic for LinkMappingWindow.xaml
     /// </summary>
-    public partial class BindingsMappingWindow : Window
+    public partial class LinkMappingWindow : Window
     {
         private bool _formLoaded;
         private bool _isDirty;
@@ -25,21 +25,21 @@ namespace DCSFlightpanels.Windows
 
 
 
+        
 
-
-        public BindingsMappingWindow(List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)
+        public LinkMappingWindow(string bindingHash, GamingPanelEnum panelType, List<GenericPanelBinding> genericBindings, List<GamingPanel> gamingPanels)
         {
             InitializeComponent();
             _genericBindings = genericBindings;
             _gamingPanels = gamingPanels;
         }
 
-        public BindingsMappingWindow()
+        public LinkMappingWindow()
         {
             InitializeComponent();
         }
 
-        private void BindingsMappingWindow_OnLoaded(object sender, RoutedEventArgs e)
+        private void LinkMappingWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace DCSFlightpanels.Windows
             return gamingPanel.TypeOfPanel == genericBinding.PanelType;
         }
         
-        private void PopulateMissingHardware()
+        private void PopulateMissingLinkHardware()
         {
             ClearReplacementHardware();
 
@@ -114,7 +114,7 @@ namespace DCSFlightpanels.Windows
             {
                 return;
             }
-            LabelReplacementInformation.Content = gamingPanel.HIDInstanceId;
+            LabelReplacementInformation.Content = gamingPanel.InstanceId;
         }
 
         private void ClearReplacementHardware()
@@ -132,7 +132,7 @@ namespace DCSFlightpanels.Windows
                 if (genericPanelBinding.HardwareWasFound)
                 {
                     //Remove those that has been mapped already so they can't be re-mapped
-                    sameTypeOfPanels.RemoveAll(o => o.HIDInstanceId == genericPanelBinding.HIDInstance);
+                    sameTypeOfPanels.RemoveAll(o => o.InstanceId == genericPanelBinding.HIDInstance);
                 }
             }
             ComboBoxReplacementHardware.ItemsSource = sameTypeOfPanels;
@@ -140,7 +140,7 @@ namespace DCSFlightpanels.Windows
             ShowReplacementHardwareInformation();
         }
 
-        private void BindingsMappingWindow_OnKeyDown(object sender, KeyEventArgs e)
+        private void LinkMappingWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
             try
             {
@@ -214,7 +214,7 @@ namespace DCSFlightpanels.Windows
                     return;
                 }
 
-                genericBinding.HIDInstance = gamingPanel.HIDInstanceId;
+                genericBinding.HIDInstance = gamingPanel.InstanceId;
                 genericBinding.HardwareWasFound = true;
                 var modifiedGenericBinding = new ModifiedGenericBinding(GenericBindingStateEnum.Modified, genericBinding);
                 _modifiedGenericBindings.Add(modifiedGenericBinding);
@@ -290,7 +290,7 @@ namespace DCSFlightpanels.Windows
                 }
                 var gamingPanel = (GamingPanel)ComboBoxReplacementHardware.SelectedItem;
                 
-                LabelReplacementInformation.Content = gamingPanel.HIDInstanceId;
+                LabelReplacementInformation.Content = gamingPanel.InstanceId;
                 SetFormState();
             }
             catch (Exception ex)

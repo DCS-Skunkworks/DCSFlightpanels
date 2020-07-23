@@ -109,7 +109,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -124,7 +124,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.InstanceId == e.PanelBinding.HIDInstance)
+                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstanceId == e.PanelBinding.HIDInstance)
                 {
                     ShowGraphicConfiguration();
                 }
@@ -139,7 +139,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _tpmPanel.InstanceId == e.UniqueId)
+                if (e.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstanceId == e.HidInstance)
                 {
                     ClearAll(false);
                     ShowGraphicConfiguration();
@@ -171,7 +171,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.PanelType == GamingPanelEnum.TPM)
+                if (e.HidInstance.Equals(_tpmPanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.TPM)
                 {
                     Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action) (() => TextBoxLogTPM.Text = ""));
@@ -1138,8 +1138,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_tpmPanel != null)
                 {
                     TextBoxLogTPM.Text = "";
-                    TextBoxLogTPM.Text = _tpmPanel.InstanceId;
-                    Clipboard.SetText(_tpmPanel.InstanceId);
+                    TextBoxLogTPM.Text = _tpmPanel.HIDInstanceId;
+                    Clipboard.SetText(_tpmPanel.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }

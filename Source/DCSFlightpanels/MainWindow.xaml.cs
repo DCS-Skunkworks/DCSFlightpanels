@@ -289,7 +289,7 @@ namespace DCSFlightpanels
                     var gamingPanelUserControl = ((IGamingPanelUserControl)tabItem.Content);
                     var gamingPanel = gamingPanelUserControl.GetGamingPanel();
 
-                    if (gamingPanel != null && gamingPanel.InstanceId == instanceId)
+                    if (gamingPanel != null && gamingPanel.HIDInstanceId == instanceId)
                     {
                         TabControlPanels.Items.Remove(tabItem);
                         Detach(gamingPanel);
@@ -298,7 +298,7 @@ namespace DCSFlightpanels
 
                         for (int i = 0; i < _profileFileInstanceIDs.Count; i++)
                         {
-                            if (_profileFileInstanceIDs[i].Key == gamingPanel.InstanceId)
+                            if (_profileFileInstanceIDs[i].Key == gamingPanel.HIDInstanceId)
                             {
                                 _profileFileInstanceIDs.RemoveAt(i);
                                 break;
@@ -386,7 +386,7 @@ namespace DCSFlightpanels
             gamingPanel.Detach((IProfileHandlerListener)this);
             _dcsBios?.DetachDataReceivedListener(gamingPanel);
 
-            Dispatcher?.BeginInvoke((Action)(() => CloseTabItem(gamingPanel.InstanceId)));
+            Dispatcher?.BeginInvoke((Action)(() => CloseTabItem(gamingPanel.HIDInstanceId)));
 
         }
 

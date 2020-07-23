@@ -12,6 +12,27 @@ namespace NonVisuals
     {
         private static volatile List<GenericPanelBinding> _genericBindings = new List<GenericPanelBinding>();
 
+        /*
+         * This to be used when loading from file.
+         * Checks that bindinghash exists, if not creates it.
+         */
+        public static void RegisterBindingFromFile(GenericPanelBinding genericBinding)
+        {
+            if (genericBinding != null)
+            {
+                if (!Exists(genericBinding))
+                {
+                    if (string.IsNullOrEmpty(genericBinding.BindingHash))
+                    {
+                        genericBinding.BindingHash = Common.GetRandomMd5Hash();
+                    }
+                    _genericBindings.Add(genericBinding);
+                }
+            }
+
+            Debug.WriteLine("Count is " + _genericBindings.Count);
+        }
+
         public static void AddBinding(GenericPanelBinding genericBinding)
         {
             if (genericBinding != null)
@@ -20,7 +41,16 @@ namespace NonVisuals
                 {
                     foreach (var binding in _genericBindings)
                     {
-                        if (binding.BindingHash == genericBinding.BindingHash)
+                        /*
+                         * Tricky considering old profiles that haven't got this property
+                         * In the future it should be phased out.
+                         */
+                        if (string.IsNullOrEmpty(binding.BindingHash))
+                        {
+                            binding.BindingHash = genericBinding.BindingHash;
+                            binding.Settings = genericBinding.Settings;
+                        }
+                        else if (binding.BindingHash == genericBinding.BindingHash)
                         {
                             binding.Settings = genericBinding.Settings;
                         }
@@ -154,11 +184,18 @@ namespace NonVisuals
             var count = _genericBindings.FindAll(o => (o.HardwareWasFound == false) && (o.PanelType == genericBinding.PanelType)).Count;
             if (count == 1)
             {
-                //This we can map ourselves!
                 var hidSkeleton = HIDHandler.GetInstance().HIDSkeletons.Find(o => o.PanelInfo.GamingPanelType == genericBinding.PanelType);
-                genericBinding.HIDInstance = hidSkeleton.InstanceId;
-                settingsWereModified = true;
-                MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (hidSkeleton != null)
+                {
+                    //This we can map ourselves!
+                    genericBinding.HIDInstance = hidSkeleton.InstanceId;
+                    settingsWereModified = true;
+                    MessageBox.Show("USB settings has changed. Please save the profile.", "USB changes found", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Reference found in bindings file to a " + genericBinding.PanelType.GetDescriptionField() + ", no such hardware found.", "Hardware missing", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
                 return true;
             }
 

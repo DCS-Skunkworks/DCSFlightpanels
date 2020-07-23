@@ -259,7 +259,7 @@ namespace NonVisuals.StreamDeck
             return (List<StreamDeckButton>)_streamDeckButtons.Where(o => o.HasConfig).ToList();
         }
 
-        public List<StreamDeckButton> LayerStreamDeckButtons
+        public List<StreamDeckButton> StreamDeckButtons
         {
             get => _streamDeckButtons;
             set => _streamDeckButtons = value;

@@ -520,7 +520,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 Dispatcher?.BeginInvoke((Action)UpdateButtonInfoFromSource);
-                UpdateButtonInfoFromSource();
             }
             catch (Exception ex)
             {
