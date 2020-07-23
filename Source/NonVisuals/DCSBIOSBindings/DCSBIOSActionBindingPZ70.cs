@@ -61,7 +61,7 @@ namespace NonVisuals.DCSBIOSBindings
                 //The rest of the array besides last entry are DCSBIOSInput
                 //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
                 DCSBIOSInputs = new List<DCSBIOSInput>();
-                for (int i = 2; i < parameters.Length - 1; i++)
+                for (var i = 0; i < parameters.Length; i++)
                 {
                     if (parameters[i].StartsWith("DCSBIOSInput{"))
                     {

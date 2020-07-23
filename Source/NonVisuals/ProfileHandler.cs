@@ -283,7 +283,7 @@ namespace NonVisuals
                                 {
                                     line = line.Replace("\t", "");
                                 }
-                                a lot of switch panel settings missing!!! read but disappears ??
+                                
                                 genericPanelBinding.Settings.Add(line);
                             }
 
