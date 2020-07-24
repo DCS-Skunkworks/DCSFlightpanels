@@ -93,13 +93,13 @@ namespace NonVisuals.StreamDeck
 
         public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {
-            EventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, streamDeckPanel.SelectedLayerName);
+            EventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, streamDeckPanel.SelectedLayerName, streamDeckPanel.BindingHash);
             dcsbiosDecoder.IsVisible = true;
         }
 
         public void HideAllEvent(object sender, StreamDeckHideDecoderEventArgs e)
         {
-            if (StreamDeckPanelInstance.BindingHash == e.StreamDeckPanelInstance.BindingHash && StreamDeckButtonName == e.StreamDeckButtonName)
+            if (StreamDeckPanelInstance.BindingHash == e.BindingHash && StreamDeckButtonName == e.StreamDeckButtonName)
             {
                 IsVisible = false;
             }

@@ -18,6 +18,7 @@ namespace NonVisuals.StreamDeck.Events
         /*
          * Show selected Button's configuration
          */
+        public string BindingHash { get; set; }
         public StreamDeckButton SelectedButton { get; set; }
     }
 
@@ -26,6 +27,16 @@ namespace NonVisuals.StreamDeck.Events
         /*
          * Show new Layer's configuration
          */
+        public string BindingHash { get; set; }
+        public string SelectedLayerName { get; set; }
+    }
+
+    public class RemoteStreamDeckShowNewLayerArgs : EventArgs
+    {
+        /*
+         * Show new Layer's configuration
+         */
+        public string RemoteBindingHash { get; set; }
         public string SelectedLayerName { get; set; }
     }
 
@@ -35,6 +46,7 @@ namespace NonVisuals.StreamDeck.Events
          * Before change, unsaved configurations?
          * Cancel = true means there are...
          */
+        public string BindingHash { get; set; }
     }
 
     public class StreamDeckDirtyNotificationArgs : CancelEventArgs
@@ -45,22 +57,30 @@ namespace NonVisuals.StreamDeck.Events
         public string LayerName { get; set; }
         public EnumStreamDeckButtonNames ButtonName { get; set; }
         public bool UndoIsPossible { get; set; } = true;
+        public string BindingHash { get; set; }
     }
 
     public class StreamDeckClearSettingsArgs : EventArgs
     {
+        public string BindingHash;
         public bool ClearActionConfiguration = false;
         public bool ClearFaceConfiguration = false;
         public bool ClearUIConfiguration = false;
     }
 
-    public class StreamDeckSyncConfigurationArgs : EventArgs { }
+    public class StreamDeckSyncConfigurationArgs : EventArgs
+    {
+        public string BindingHash { get; set; }
+    }
 
-    public class StreamDeckConfigurationChangedArgs : EventArgs { }
+    public class StreamDeckConfigurationChangedArgs : EventArgs
+    {
+        public string BindingHash { get; set; }
+    }
 
     public class StreamDeckHideDecoderEventArgs : EventArgs
     {
-        public StreamDeckPanel StreamDeckPanelInstance;
+        public string BindingHash { get; set; }
         public string LayerName;
         public EnumStreamDeckButtonNames StreamDeckButtonName;
     }

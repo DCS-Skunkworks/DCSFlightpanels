@@ -243,7 +243,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.HidInstance.Equals(_streamDeckPanel.HIDInstanceId) && e.PanelType == _streamDeckPanel.TypeOfPanel)
                 {
-                    EventHandlers.NotifyToSyncConfiguration(this);
+                    EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 }
             }
             catch (Exception ex)
@@ -404,7 +404,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                     UCStreamDeckButtonAction.StateSaved();
                     UCStreamDeckButtonFace.StateSaved();
-                    EventHandlers.NotifyToSyncConfiguration(this);
+                    EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                     SetFormState();
                 }
                 catch (Exception ex)
@@ -443,7 +443,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 UCStreamDeckButtonAction.Clear();
 
-                EventHandlers.NotifyToSyncConfiguration(this);
+                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 SetFormState();
             }
             catch (Exception ex)
@@ -456,9 +456,9 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                EventHandlers.ClearSettings(this, true, false, false);
-                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton);
-                EventHandlers.NotifyToSyncConfiguration(this);
+                EventHandlers.ClearSettings(this, true, false, false, _streamDeckPanel.BindingHash);
+                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
+                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 SetFormState();
             }
             catch (Exception ex)
@@ -487,7 +487,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 UCStreamDeckButtonFace.Clear();
                 _streamDeckPanel.ClearFace(streamDeckButtonName);
-                EventHandlers.NotifyToSyncConfiguration(this);
+                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 SetFormState();
             }
             catch (Exception ex)
@@ -500,9 +500,9 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                EventHandlers.ClearSettings(this, false, true, false);
-                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton);
-                EventHandlers.NotifyToSyncConfiguration(this);
+                EventHandlers.ClearSettings(this, false, true, false, _streamDeckPanel.BindingHash);
+                EventHandlers.SelectedButtonChanged(this, _streamDeckPanel.SelectedButton, _streamDeckPanel.BindingHash);
+                EventHandlers.NotifyToSyncConfiguration(this, _streamDeckPanel.BindingHash);
                 _streamDeckPanel.SelectedButton.ClearFace();
                 SetFormState();
             }
@@ -540,14 +540,17 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() =>
-               {
-                   if (ComboBoxLayers.Text != e.SelectedLayerName)
-                   {
-                       Dispatcher?.BeginInvoke((Action)LoadComboBoxLayers);
-                       Dispatcher?.BeginInvoke((Action)SetFormState);
-                   }
-               }));
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    Dispatcher?.BeginInvoke((Action)(() =>
+                    {
+                        if (ComboBoxLayers.Text != e.SelectedLayerName)
+                        {
+                            Dispatcher?.BeginInvoke((Action)LoadComboBoxLayers);
+                            Dispatcher?.BeginInvoke((Action)SetFormState);
+                        }
+                    }));
+                }
             }
             catch (Exception ex)
             {
@@ -559,7 +562,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetFormState();
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -586,7 +592,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetFormState();
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -598,7 +607,10 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                SetFormState();
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -641,6 +653,20 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.LogError(ex);
             }
         }
-
+        
+        public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                if (e.RemoteBindingHash == _streamDeckPanel.BindingHash)
+                {
+                    Dispatcher?.BeginInvoke((Action)(SetFormState));
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
     }
 }

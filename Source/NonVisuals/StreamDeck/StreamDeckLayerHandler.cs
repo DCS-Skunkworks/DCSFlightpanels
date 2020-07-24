@@ -79,7 +79,7 @@ namespace NonVisuals.StreamDeck
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
 
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
-            
+
             _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
             SetStreamDeckPanelInstance(_streamDeckPanel);
@@ -95,7 +95,7 @@ namespace NonVisuals.StreamDeck
 
                 if (!LayerExists(importLayerName))
                 {
-                    var newLayer = new StreamDeckLayer(_streamDeckPanel) { Name = importLayerName};
+                    var newLayer = new StreamDeckLayer(_streamDeckPanel) { Name = importLayerName };
                     AddLayer(newLayer);
                 }
 
@@ -126,7 +126,7 @@ namespace NonVisuals.StreamDeck
 
             return result;
         }
-        
+
         public void Export(string compressedFilenameAndPath, List<ButtonExport> buttonExports)
         {
             var filesToCompressList = new List<string>(); //includes the json file and eventual image files
@@ -450,7 +450,7 @@ namespace NonVisuals.StreamDeck
 
             selectedLayer.IsVisible = true;
 
-            EventHandlers.LayerSwitched(this, new StreamDeckShowNewLayerArgs() { SelectedLayerName = _selectedLayerName });
+            EventHandlers.LayerSwitched(this, _streamDeckPanel.BindingHash, _selectedLayerName);
         }
 
         public int SelectedButtonNumber
@@ -474,7 +474,7 @@ namespace NonVisuals.StreamDeck
                 if (_selectedButtonName != value)
                 {
                     _selectedButtonName = value;
-                    EventHandlers.SelectedButtonChanged(this, SelectedButton);
+                    EventHandlers.SelectedButtonChanged(this, SelectedButton, _streamDeckPanel.BindingHash);
                     return;
                 }
                 _selectedButtonName = value;

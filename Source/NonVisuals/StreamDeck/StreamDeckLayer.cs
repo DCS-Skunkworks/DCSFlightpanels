@@ -103,7 +103,7 @@ namespace NonVisuals.StreamDeck
 
         private void NotifyChanges()
         {
-            EventHandlers.NotifyStreamDeckConfigurationChange(this);
+            EventHandlers.NotifyStreamDeckConfigurationChange(this, _streamDeckPanel.BindingHash);
         }
 
         public Font TextFont

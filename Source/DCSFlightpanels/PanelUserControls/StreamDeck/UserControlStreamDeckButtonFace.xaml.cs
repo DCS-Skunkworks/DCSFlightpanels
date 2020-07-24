@@ -85,7 +85,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 ButtonTextFaceFontColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTextFaceBackgroundColor.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
                 ButtonTestTextFace.IsEnabled = !string.IsNullOrEmpty(TextBoxButtonTextFace.Text);
-                
+
                 ButtonTestSelectImageGalleryButton.IsEnabled = TextBoxImageFace.Bill.ContainsImageFace();
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         public void Update()
         {
             try
@@ -172,7 +172,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         public void SetIsDirty()
         {
             _isDirty = true;
-            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton, "");
+            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton, "", _streamDeckPanel.BindingHash);
         }
 
         public bool IsDirty
@@ -337,7 +337,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     }
             }
             ShowFaceConfiguration(streamDeckButton.Face);
-
         }
 
         private void SetInfoTextBoxes()
@@ -566,7 +565,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
              * Add the incoming button face if there isn't any already specified.
              * Layer navigation always updates.
              */
-            if (e.ActionType == EnumStreamDeckActionType.LayerNavigation && !string.IsNullOrEmpty(e.TargetLayerName))
+            if (e.BindingHash == _streamDeckPanel.BindingHash && e.ActionType == EnumStreamDeckActionType.LayerNavigation && !string.IsNullOrEmpty(e.TargetLayerName))
             {
                 if (e.TargetLayerName == StreamDeckConstants.NO_ACTION)
                 {
@@ -679,16 +678,35 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
         }
 
-        
+
         public void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() =>
+
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
                 {
-                    Clear();
-                    SetFormState();
-                }));
+                    Dispatcher?.BeginInvoke((Action) (() =>
+                    {
+                        Clear();
+                        SetFormState();
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                if (_streamDeckPanel.BindingHash == e.RemoteBindingHash)
+                {
+                    Dispatcher?.BeginInvoke((Action) (SetFormState));
+                }
             }
             catch (Exception ex)
             {
@@ -700,8 +718,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                ShowStreamDeckButton(_streamDeckPanel.SelectedButton);
-                SetFormState();
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    ShowStreamDeckButton(_streamDeckPanel.SelectedButton);
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -730,7 +751,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                SetFormState();
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -742,7 +766,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                if (e.ClearFaceConfiguration)
+                if (_streamDeckPanel.BindingHash == e.BindingHash && e.ClearFaceConfiguration)
                 {
                     if (TextBoxDCSBIOSDecoder.Bill.ContainsDCSBIOS())
                     {

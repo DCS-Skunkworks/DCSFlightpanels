@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
+using NonVisuals.StreamDeck.Events;
 
 namespace NonVisuals.StreamDeck
 {
@@ -23,6 +24,9 @@ namespace NonVisuals.StreamDeck
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         public LayerNavType NavigationType;
         public string TargetLayer;
+        public string RemoteStreamdeckBindingHash = "";
+        public string RemoteStreamdeckTargetLayer = "";
+
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
 
@@ -30,7 +34,7 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckPanel = streamDeckPanel;
         }
-        
+
         public int GetHash()
         {
             unchecked
@@ -79,22 +83,37 @@ namespace NonVisuals.StreamDeck
         {
             switch (NavigationType)
             {
+                case LayerNavType.None:
+                    {
+                        break;
+                    }
                 case LayerNavType.Home:
-                {
-                    _streamDeckPanel.ShowHomeLayer();
-                    break;
-                }
+                    {
+                        _streamDeckPanel.ShowHomeLayer();
+                        break;
+                    }
                 case LayerNavType.Back:
-                {
-                    _streamDeckPanel.ShowPreviousLayer();
-                    break;
-                }
+                    {
+                        _streamDeckPanel.ShowPreviousLayer();
+                        break;
+                    }
                 case LayerNavType.SwitchToSpecificLayer:
-                {
-                    _streamDeckPanel.SelectedLayerName = TargetLayer;
-                    break;
-                }
+                    {
+                        _streamDeckPanel.SelectedLayerName = TargetLayer;
+                        break;
+                    }
             }
+
+            if (!string.IsNullOrEmpty(RemoteStreamdeckBindingHash) && !string.IsNullOrEmpty(RemoteStreamdeckTargetLayer))
+            {
+                EventHandlers.RemoteLayerSwitch(this, RemoteStreamdeckBindingHash, RemoteStreamdeckTargetLayer);
+            }
+        }
+
+        [JsonIgnore]
+        public bool ControlsRemoteStreamDeck
+        {
+            get => !string.IsNullOrEmpty(RemoteStreamdeckBindingHash) && !string.IsNullOrEmpty(RemoteStreamdeckTargetLayer);
         }
 
         [JsonIgnore]

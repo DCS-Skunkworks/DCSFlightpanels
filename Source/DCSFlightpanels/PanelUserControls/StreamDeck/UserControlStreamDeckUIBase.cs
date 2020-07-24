@@ -252,7 +252,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 foreach (var contextMenuItem in contextMenu.Items)
                 {
-                    if (contextMenuItem.GetType() == typeof(MenuItem) && ((MenuItem) contextMenuItem).Name == "MenuItemCopy")
+                    if (contextMenuItem.GetType() == typeof(MenuItem) && ((MenuItem)contextMenuItem).Name == "MenuItemCopy")
                     {
                         menuItemCopy = ((MenuItem)contextMenuItem);
                     }
@@ -443,7 +443,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                if (_lastShownLayer != e.SelectedLayerName)
+                if (_streamDeckPanel.BindingHash == e.BindingHash && _lastShownLayer != e.SelectedLayerName)
                 {
                     Dispatcher?.BeginInvoke((Action)(() => UIShowLayer(e.SelectedLayerName)));
                     _lastShownLayer = e.SelectedLayerName;
@@ -462,7 +462,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 /*
                  * Only do it when it is a different button selected. Should make more comments...
                  */
-                if (SelectedImageBill == null || SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash())
+                if (_streamDeckPanel.BindingHash == e.BindingHash && SelectedImageBill == null || SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash())
                 {
                     SetSelectedButtonUIOnly(e.SelectedButton.StreamDeckButtonName);
                 }
@@ -481,6 +481,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 {
                     return;
                 }
+
                 e.Cancel = IsDirty;
             }
             catch (Exception ex)
@@ -493,6 +494,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+
+                }
             }
             catch (Exception ex)
             {
@@ -504,7 +509,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                if (e.ClearUIConfiguration)
+                if (_streamDeckPanel.BindingHash == e.BindingHash && e.ClearUIConfiguration)
                 {
                     Dispatcher?.BeginInvoke((Action)HideAllDotImages);
                 }
@@ -519,7 +524,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)UpdateButtonInfoFromSource);
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    Dispatcher?.BeginInvoke((Action)UpdateButtonInfoFromSource);
+                }
             }
             catch (Exception ex)
             {
@@ -531,7 +539,25 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)UpdateButtonInfoFromSource);
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    Dispatcher?.BeginInvoke((Action)UpdateButtonInfoFromSource);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                if (e.RemoteBindingHash == _streamDeckPanel.BindingHash)
+                {
+                    Dispatcher?.BeginInvoke((Action)(SetFormState));
+                }
             }
             catch (Exception ex)
             {

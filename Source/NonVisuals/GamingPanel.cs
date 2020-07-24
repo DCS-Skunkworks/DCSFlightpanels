@@ -165,9 +165,8 @@ namespace NonVisuals
                     _randomBindingHash = Common.GetRandomMd5Hash();
                     SetIsDirty();
                 }
-                else if (string.IsNullOrEmpty(_randomBindingHash))
+                else
                 {
-                    //Do not overwrite existing value
                     _randomBindingHash = value;
                 }
             }

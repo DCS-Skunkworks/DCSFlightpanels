@@ -292,8 +292,8 @@ namespace NonVisuals.StreamDeck
             BindingHash = genericPanelBinding.BindingHash;
 
             SettingsLoading = true;
-            
-            if(!string.IsNullOrEmpty(genericPanelBinding.JSONString))
+
+            if (!string.IsNullOrEmpty(genericPanelBinding.JSONString))
             {
                 _streamDeckLayerHandler.ImportJSONSettings(genericPanelBinding.JSONString);
             }
@@ -519,6 +519,23 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                if (e.RemoteBindingHash == BindingHash && _streamDeckLayerHandler.LayerExists(e.SelectedLayerName))
+                {
+                    _streamDeckLayerHandler.SelectedLayerName = e.SelectedLayerName;
+                }
             }
             catch (Exception ex)
             {
@@ -530,6 +547,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -541,6 +560,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -552,6 +573,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -563,6 +586,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -571,13 +596,27 @@ namespace NonVisuals.StreamDeck
         }
 
 
-        public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e) { }
+        public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e)
+        {
+            try
+            {
+                if (BindingHash == e.BindingHash)
+                { }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
 
         public void ConfigurationChanged(object sender, StreamDeckConfigurationChangedArgs e)
         {
             try
             {
-                SetIsDirty();
+                if (e.BindingHash == BindingHash)
+                {
+                    SetIsDirty();
+                }
             }
             catch (Exception ex)
             {
