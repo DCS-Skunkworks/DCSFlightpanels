@@ -568,7 +568,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
              */
             if (e.ActionType == EnumStreamDeckActionType.LayerNavigation && !string.IsNullOrEmpty(e.TargetLayerName))
             {
-                if (e.TargetLayerName == StreamDeckConstants.HOME)
+                if (e.TargetLayerName == StreamDeckConstants.NO_ACTION)
+                {
+                    Clear();
+                }
+                else if (e.TargetLayerName == StreamDeckConstants.HOME)
                 {
                     Clear();
                     RadioButtonImageFace.IsChecked = true;

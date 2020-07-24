@@ -8,6 +8,7 @@ namespace NonVisuals.StreamDeck
 {
     public enum LayerNavType
     {
+        None = 3, //Do not change value because of JSON.
         SwitchToSpecificLayer = 0,
         Back = 1,
         Home = 2

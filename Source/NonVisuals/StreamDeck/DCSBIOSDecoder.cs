@@ -548,7 +548,7 @@ namespace NonVisuals.StreamDeck
          */
         public bool DecoderConfigurationOK()
         {
-            var formulaIsOK = _useFormula ? !string.IsNullOrEmpty(_formula) : true;
+            var formulaIsOK = !_useFormula || !string.IsNullOrEmpty(_formula);
             var sourceIsOK = _dcsbiosOutput != null;
             var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
 
@@ -613,7 +613,6 @@ namespace NonVisuals.StreamDeck
                 }
             }
         }
-
         
         public string DefaultImageFilePath
         {
