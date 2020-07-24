@@ -614,10 +614,10 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        [JsonIgnore]
+        
         public string DefaultImageFilePath
         {
-            get => _defaultImageFilePath;
+            //No getter, this is to be phased out, setter here so that any existing setting in user's file still can be parsed by JSON.
             set => _defaultImageFilePath = value;
         }
     }

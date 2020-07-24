@@ -1393,7 +1393,7 @@ namespace DCSFlightpanels
                         MessageBox.Show("File " + bindingsFile + " does not exist.", "Error finding file", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    Process.Start("dcsfp.exe", "OpenProfile=\"" + bindingsFile + "\"");
+                    Process.Start("dcsfp.exe", Constants.CommandLineArgumentOpenProfile + "\"" + bindingsFile + "\"");
                 }
             }
             catch (Exception ex)

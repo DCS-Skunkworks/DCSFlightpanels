@@ -168,6 +168,7 @@
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bills\BillBaseOutput.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="CustomControls\FontInfoTextBox.cs" />
     <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
     <Compile Include="Extensions.cs" />
