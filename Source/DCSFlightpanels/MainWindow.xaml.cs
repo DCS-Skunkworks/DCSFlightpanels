@@ -15,6 +15,7 @@ using System.Text;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using CommonClassLibraryJD;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
 using DCSFlightpanels.Shared;
@@ -87,7 +88,7 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
-                
+
                 if (Settings.Default.RunMinimized)
                 {
                     this.WindowState = WindowState.Minimized;
@@ -119,10 +120,10 @@ namespace DCSFlightpanels
                 {
                     _hidHandler.Startup(Settings.Default.LoadStreamDeck);
                 }
-                
+
                 StartDCSBIOS();
                 StartTimers();
-                
+
                 /*******************************************************************************************/
                 /*DO NOT CHANGE INIT SEQUENCE BETWEEN HIDHANDLER DCSBIOS AND PROFILEHANDLER !!!!!  2.5.2018*/
                 /*Changing these will cause difficult to trace problems with DCS-BIOS data being corrupted */
@@ -247,21 +248,15 @@ namespace DCSFlightpanels
                 return;
             }
 
-            if (dcsAirframe == DCSAirframe.NOFRAMELOADEDYET)
-            {
-                LabelAirframe.Content = "";
-            }
-            else
-            {
-                LabelAirframe.Content = dcsAirframe;
-            }
+            LabelAirframe.Content = dcsAirframe == DCSAirframe.NOFRAMELOADEDYET ? "" : dcsAirframe.ToString();
 
-            if (Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
+            if (Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
                 _dcsBios?.Shutdown();
                 _dcsStopGearTimer.Stop();
                 _dcsCheckDcsBiosStatusTimer.Stop();
                 ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
+                CloseStreamDecks();
             }
             else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
@@ -274,6 +269,51 @@ namespace DCSFlightpanels
                 _dcsStopGearTimer.Start();
                 _dcsCheckDcsBiosStatusTimer.Start();
                 ImageDcsBiosConnected.Visibility = Visibility.Visible;
+            }
+
+            CloseTemporaryRadioPanels();
+            SearchForRadioPanels();
+            _profileHandler.SendRadioSettings();
+
+            SortTabs();
+        }
+
+        public void CloseTemporaryRadioPanels()
+        {
+            try
+            {
+                var counter = 0;
+                while (TabControlPanels.Items.Count > counter)
+                {
+                    var tabItem = (TabItem)TabControlPanels.Items[counter];
+                    var userControl = (UserControlBase)tabItem.Content;
+
+                    if (tabItem.Header.Equals(Constants.TemporaryRadioTabHeader))
+                    {
+                        TabControlPanels.Items.Remove(tabItem);
+                        userControl.Dispose();
+                        counter = 0;
+                        continue;
+                    }
+
+                    counter++;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        public void CloseStreamDecks()
+        {
+            foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
+            {
+                if (Common.IsStreamDeck(hidSkeleton.PanelInfo.GamingPanelType))
+                {
+                    CloseTabItem(hidSkeleton.InstanceId);
+                }
             }
         }
 
@@ -422,6 +462,99 @@ namespace DCSFlightpanels
                                     _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     break;
                                 }
+                            case GamingPanelEnum.PZ70MultiPanel:
+                                {
+                                    var tabItem = new TabItem();
+                                    tabItem.Header = "PZ70";
+                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this);
+                                    _panelUserControls.Add(multiPanelUserControl);
+                                    _profileHandler.Attach(multiPanelUserControl);
+                                    tabItem.Content = multiPanelUserControl;
+                                    TabControlPanels.Items.Add(tabItem);
+                                    _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                    break;
+                                }
+                            case GamingPanelEnum.BackLitPanel:
+                                {
+                                    var tabItem = new TabItem();
+                                    tabItem.Header = "B.I.P.";
+                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
+                                    _panelUserControls.Add(backLitPanelUserControl);
+                                    _profileHandler.Attach(backLitPanelUserControl);
+                                    tabItem.Content = backLitPanelUserControl;
+                                    TabControlPanels.Items.Add(tabItem);
+                                    _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                    break;
+                                }
+                            case GamingPanelEnum.TPM:
+                                {
+                                    var tabItem = new TabItem();
+                                    tabItem.Header = "TPM";
+                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this);
+                                    _panelUserControls.Add(tpmPanelUserControl);
+                                    _profileHandler.Attach(tpmPanelUserControl);
+                                    tabItem.Content = tpmPanelUserControl;
+                                    TabControlPanels.Items.Add(tabItem);
+                                    _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                    break;
+                                }
+                            case GamingPanelEnum.StreamDeckMini:
+                            case GamingPanelEnum.StreamDeckXL:
+                            case GamingPanelEnum.StreamDeck:
+                                {
+                                    if (_profileHandler.Airframe != DCSAirframe.KEYEMULATOR)
+                                    {
+                                        var tabItemStreamDeck = new TabItem();
+                                        tabItemStreamDeck.Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription();
+                                        var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this, _dcsBios);
+                                        _panelUserControls.Add(streamDeckUserControl);
+                                        _profileHandler.Attach(streamDeckUserControl);
+                                        tabItemStreamDeck.Content = streamDeckUserControl;
+                                        TabControlPanels.Items.Add(tabItemStreamDeck);
+                                        _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.InstanceId, hidSkeleton.PanelInfo.GamingPanelType));
+                                    }
+                                    break;
+                                }
+                            case GamingPanelEnum.PZ69RadioPanel:
+                                {
+                                    var tabItem = new TabItem();
+                                    tabItem.Header = Constants.TemporaryRadioTabHeader;
+                                    var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlNotImplemented(hidSkeleton, tabItem, this);
+                                    tabItem.Content = radioPanelPZ69UserControl;
+                                    TabControlPanels.Items.Add(tabItem);
+                                    break;
+                                }
+                        }
+                    } //for each
+                }
+
+                SortTabs();
+                if (TabControlPanels.Items.Count > 0)
+                {
+                    TabControlPanels.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void SearchForRadioPanels()
+        {
+            try
+            {
+                if (_doSearchForPanels)
+                {
+                    foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
+                    {
+
+                        switch (hidSkeleton.PanelInfo.GamingPanelType)
+                        {
+                            case GamingPanelEnum.Unknown:
+                                {
+                                    continue;
+                                }
                             case GamingPanelEnum.PZ69RadioPanel:
                                 {
                                     var tabItem = new TabItem();
@@ -435,7 +568,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (Common.IsOperationModeFlagSet(OperationFlag.SRSEnabled) || _profileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
+                                    else if (Common.IsOperationModeFlagSet(EmulationMode.SRSEnabled) || _profileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -619,59 +752,6 @@ namespace DCSFlightpanels
 
                                     break;
                                 }
-                            case GamingPanelEnum.PZ70MultiPanel:
-                                {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "PZ70";
-                                    var multiPanelUserControl = new MultiPanelUserControl(hidSkeleton, tabItem, this);
-                                    _panelUserControls.Add(multiPanelUserControl);
-                                    _profileHandler.Attach(multiPanelUserControl);
-                                    tabItem.Content = multiPanelUserControl;
-                                    TabControlPanels.Items.Add(tabItem);
-                                    _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
-                                    break;
-                                }
-                            case GamingPanelEnum.BackLitPanel:
-                                {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "B.I.P.";
-                                    var backLitPanelUserControl = new BackLitPanelUserControl(tabItem, this, hidSkeleton);
-                                    _panelUserControls.Add(backLitPanelUserControl);
-                                    _profileHandler.Attach(backLitPanelUserControl);
-                                    tabItem.Content = backLitPanelUserControl;
-                                    TabControlPanels.Items.Add(tabItem);
-                                    _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
-                                    break;
-                                }
-                            case GamingPanelEnum.TPM:
-                                {
-                                    var tabItem = new TabItem();
-                                    tabItem.Header = "TPM";
-                                    var tpmPanelUserControl = new TPMPanelUserControl(hidSkeleton, tabItem, this);
-                                    _panelUserControls.Add(tpmPanelUserControl);
-                                    _profileHandler.Attach(tpmPanelUserControl);
-                                    tabItem.Content = tpmPanelUserControl;
-                                    TabControlPanels.Items.Add(tabItem);
-                                    _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
-                                    break;
-                                }
-                            case GamingPanelEnum.StreamDeckMini:
-                            case GamingPanelEnum.StreamDeckXL:
-                            case GamingPanelEnum.StreamDeck:
-                                {
-                                    if (_profileHandler.Airframe != DCSAirframe.KEYEMULATOR)
-                                    {
-                                        var tabItemStreamDeck = new TabItem();
-                                        tabItemStreamDeck.Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription();
-                                        var streamDeckUserControl = new StreamDeckUserControl(hidSkeleton.PanelInfo.GamingPanelType, hidSkeleton, tabItemStreamDeck, this, _dcsBios);
-                                        _panelUserControls.Add(streamDeckUserControl);
-                                        _profileHandler.Attach(streamDeckUserControl);
-                                        tabItemStreamDeck.Content = streamDeckUserControl;
-                                        TabControlPanels.Items.Add(tabItemStreamDeck);
-                                        _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.InstanceId, hidSkeleton.PanelInfo.GamingPanelType));
-                                    }
-                                    break;
-                                }
                         }
                     } //for each
                 }
@@ -690,106 +770,33 @@ namespace DCSFlightpanels
 
         private void SortTabs()
         {
-            //Crude sorting    
-            var tabOrderChanged = false;
-            do
-            {
-                tabOrderChanged = false;
-                var firstPZ55 = -1;
-                var firstPZ70 = -1;
-                var firstPZ69 = -1;
-                var firstTPM = -1;
-                var firstBIP = -1;
+            var panelOrderList = new List<GamingPanelEnum>();
+            panelOrderList.Add(GamingPanelEnum.StreamDeckXL);
+            panelOrderList.Add(GamingPanelEnum.StreamDeck);
+            panelOrderList.Add(GamingPanelEnum.StreamDeckMini);
+            panelOrderList.Add(GamingPanelEnum.BackLitPanel);
+            panelOrderList.Add(GamingPanelEnum.PZ69RadioPanel);
+            panelOrderList.Add(GamingPanelEnum.TPM);
+            panelOrderList.Add(GamingPanelEnum.PZ70MultiPanel);
+            panelOrderList.Add(GamingPanelEnum.PZ55SwitchPanel);
 
+            foreach (var gamingPanelEnum in panelOrderList)
+            {
                 for (var i = 0; i < TabControlPanels.Items.Count; i++)
                 {
-                    var userControl = (IGamingPanelUserControl)((TabItem)TabControlPanels.Items.GetItemAt(i)).Content;
-                    if (userControl is SwitchPanelPZ55UserControl && firstPZ55 < 0)
-                    {
-                        firstPZ55 = i;
-                    }
-                    else if (userControl.GetName().Contains("RadioPanel") && firstPZ69 < 0)
-                    {
-                        firstPZ69 = i;
-                    }
-                    else if (userControl is MultiPanelUserControl && firstPZ70 < 0)
-                    {
-                        firstPZ70 = i;
-                    }
-                    else if (userControl is TPMPanelUserControl && firstTPM < 0)
-                    {
-                        firstTPM = i;
-                    }
-                    else if (userControl is BackLitPanelUserControl && firstBIP < 0)
-                    {
-                        firstBIP = i;
-                    }
-                }
+                    var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
+                    var userControl = (IGamingPanelUserControl)(tabItem).Content;
 
-                if (firstPZ69 < firstPZ55)
-                {
-                    //Puff all early PZ69 forward
-                    for (var i = 0; i < TabControlPanels.Items.Count; i++)
+                    var panelType = userControl.GetPanelType();
+                    if (panelType == gamingPanelEnum)
                     {
-                        var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (IGamingPanelUserControl)tabItem.Content;
-                        if (userControl.GetName().Contains("RadioPanel") && i < firstPZ55)
-                        {
-                            TabControlPanels.Items.RemoveAt(i);
-                            TabControlPanels.Items.Insert(i + 1, tabItem);
-                            tabOrderChanged = true;
-                        }
+                        TabControlPanels.Items.RemoveAt(i);
+                        TabControlPanels.Items.Insert(0, tabItem);
                     }
                 }
+            }
 
-                if (firstPZ70 < firstPZ69)
-                {
-                    //Puff all early PZ70 forward
-                    for (var i = 0; i < TabControlPanels.Items.Count; i++)
-                    {
-                        var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (IGamingPanelUserControl)tabItem.Content;
-                        if (userControl.GetName().Contains("MultiPanel") && i < firstPZ69)
-                        {
-                            TabControlPanels.Items.RemoveAt(i);
-                            TabControlPanels.Items.Insert(i + 1, tabItem);
-                            tabOrderChanged = true;
-                        }
-                    }
-                }
-
-                if (firstTPM < firstPZ70)
-                {
-                    //Puff all early BIP forward
-                    for (var i = 0; i < TabControlPanels.Items.Count; i++)
-                    {
-                        var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (IGamingPanelUserControl)tabItem.Content;
-                        if (userControl.GetName().Contains("BackLit") && i < firstPZ70)
-                        {
-                            TabControlPanels.Items.RemoveAt(i);
-                            TabControlPanels.Items.Insert(i + 1, tabItem);
-                            tabOrderChanged = true;
-                        }
-                    }
-                }
-
-                if (firstBIP < firstTPM)
-                {
-                    //Puff all early BIP forward
-                    for (var i = 0; i < TabControlPanels.Items.Count; i++)
-                    {
-                        var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(i);
-                        var userControl = (IGamingPanelUserControl)tabItem.Content;
-                        if (userControl.GetName().Contains("BackLit") && i < firstTPM)
-                        {
-                            TabControlPanels.Items.RemoveAt(i);
-                            TabControlPanels.Items.Insert(i + 1, tabItem);
-                            tabOrderChanged = true;
-                        }
-                    }
-                }
-            } while (tabOrderChanged);
+            TabControlPanels.SelectedIndex = 0;
         }
 
 
@@ -1925,7 +1932,7 @@ namespace DCSFlightpanels
         {
             var bindingsMappingWindow = new BindingsMappingWindow(BindingMappingManager.PanelBindings, GamingPanel.GamingPanels);
             bindingsMappingWindow.ShowDialog();
-            
+
             return bindingsMappingWindow.ModifiedGenericBindings;
         }
     }

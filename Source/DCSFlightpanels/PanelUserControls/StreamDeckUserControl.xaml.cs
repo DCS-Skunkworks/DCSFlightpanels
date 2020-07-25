@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls.StreamDeck;
 using DCSFlightpanels.Windows.StreamDeck;
 using NonVisuals;
@@ -150,6 +151,11 @@ namespace DCSFlightpanels.PanelUserControls
         public override GamingPanel GetGamingPanel()
         {
             return _streamDeckPanel;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return _streamDeckPanel.TypeOfPanel;
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }

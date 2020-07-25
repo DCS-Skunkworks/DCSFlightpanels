@@ -53,7 +53,7 @@ namespace NonVisuals
         {
             _typeOfGamingPanel = typeOfGamingPanel;
             HIDSkeletonBase = hidSkeleton;
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
             }

@@ -11,6 +11,7 @@ using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
@@ -72,6 +73,11 @@ namespace DCSFlightpanels.PanelUserControls
             return _multiPanelPZ70;
         }
 
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ70MultiPanel;
+        }
+
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
         public string GetName()
@@ -93,7 +99,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetApplicationMode()
         {
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Visible;
                 ButtonLcdLower.Visibility = Visibility.Visible;
@@ -663,7 +669,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     ButtonLcdLower.Visibility = Visibility.Hidden;
                 }
-                else if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+                else if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                 {
                     ButtonLcdLower.Visibility = Visibility.Visible;
                 }
@@ -1231,7 +1237,7 @@ namespace DCSFlightpanels.PanelUserControls
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Hidden;
                 ButtonLcdLower.Visibility = Visibility.Hidden;
@@ -1452,7 +1458,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var contextMenu = (ContextMenu)sender;
-                if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+                if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                 {
                     ((MenuItem)contextMenu.Items[0]).IsEnabled = true;
                 }

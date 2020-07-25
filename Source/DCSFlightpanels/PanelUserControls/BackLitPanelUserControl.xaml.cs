@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 using NonVisuals;
@@ -66,6 +67,11 @@ namespace DCSFlightpanels.PanelUserControls
         public override GamingPanel GetGamingPanel()
         {
             return _backlitPanelBIP;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.BackLitPanel;
         }
 
         public string GetName()
@@ -411,7 +417,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetContextMenuClickHandlers()
         {
-            if (!Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (!Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 return;
             }

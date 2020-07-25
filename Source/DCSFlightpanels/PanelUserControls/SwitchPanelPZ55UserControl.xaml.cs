@@ -9,6 +9,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -35,7 +36,6 @@ namespace DCSFlightpanels.PanelUserControls
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             ParentTabItem = parentTabItem;
@@ -89,6 +89,11 @@ namespace DCSFlightpanels.PanelUserControls
             return _switchPanelPZ55;
         }
 
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ55SwitchPanel;
+        }
+
         public string GetName()
         {
             return GetType().Name;
@@ -100,12 +105,12 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
                     {
                         image.ContextMenu = null;
                     }
                     else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         if (image.ContextMenu != null)
@@ -580,7 +585,7 @@ namespace DCSFlightpanels.PanelUserControls
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
@@ -654,7 +659,7 @@ namespace DCSFlightpanels.PanelUserControls
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -736,7 +741,7 @@ namespace DCSFlightpanels.PanelUserControls
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }

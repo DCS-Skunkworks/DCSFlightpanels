@@ -81,7 +81,7 @@ namespace NonVisuals.StreamDeck
                 Closed = true;
             }
         }
-
+        
         public override void Dispose()
         {
             Dispose(true);

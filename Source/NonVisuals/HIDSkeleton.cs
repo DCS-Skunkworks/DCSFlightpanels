@@ -12,6 +12,7 @@ namespace NonVisuals
         private HidDevice _hidReadDevice;
         private HidDevice _hidWriteDevice;
         private readonly GamingPanelSkeleton _gamingPanelSkeleton;
+        private bool _panelHasBeenInstantiated = false;
 
         public HIDSkeleton(GamingPanelSkeleton gamingPanelSkeleton, string instanceId)
         {
@@ -61,6 +62,14 @@ namespace NonVisuals
         {
             get => _hidWriteDevice;
             set => _hidWriteDevice = value;
+        }
+
+        public GamingPanelSkeleton GamingPanelSkeleton => _gamingPanelSkeleton;
+
+        public bool PanelHasBeenInstantiated
+        {
+            get => _panelHasBeenInstantiated;
+            set => _panelHasBeenInstantiated = value;
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using NonVisuals;
 using DCSFlightpanels.Properties;
@@ -23,6 +24,7 @@ namespace DCSFlightpanels.Radios
         public RadioPanelPZ69UserControlMiG21Bis(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
+
             ParentTabItem = parentTabItem;
 
             hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
@@ -44,6 +46,11 @@ namespace DCSFlightpanels.Radios
         public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ69RadioPanel;
         }
 
         public string GetName()

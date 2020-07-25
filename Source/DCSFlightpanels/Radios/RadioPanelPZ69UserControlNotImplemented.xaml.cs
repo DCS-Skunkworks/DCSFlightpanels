@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -30,6 +31,11 @@ namespace DCSFlightpanels.Radios
         public override GamingPanel GetGamingPanel()
         {
             return null;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ69RadioPanel;
         }
 
         public string GetName()

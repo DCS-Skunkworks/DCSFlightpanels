@@ -16,7 +16,7 @@ using System.Windows.Media;
 namespace ClassLibraryCommon
 {
     [Flags]
-    public enum OperationFlag
+    public enum EmulationMode
     {
         DCSBIOSInputEnabled = 1,
         DCSBIOSOutputEnabled = 2,
@@ -28,6 +28,10 @@ namespace ClassLibraryCommon
     public static class Common
     {
 
+        public static bool IsStreamDeck(GamingPanelEnum panelType)
+        {
+            return (panelType == GamingPanelEnum.StreamDeckMini || panelType == GamingPanelEnum.StreamDeck || panelType == GamingPanelEnum.StreamDeckXL);
+        }
 
         public static Key RealKey(this KeyEventArgs e)
         {
@@ -76,78 +80,78 @@ namespace ClassLibraryCommon
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
         private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
 
-        private static int _operationLevelFlag = 0;
+        private static int _emulationMode = 0;
 
 
         public static bool UseGenericRadio = false;
 
         public static void ValidateFlag()
         {
-            if (IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
+            if (IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
-                if (IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled) ||
-                    IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled))
+                if (IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled) ||
+                    IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled))
                 {
-                    throw new Exception("Invalid operation level flag : " + _operationLevelFlag);
+                    throw new Exception("Invalid operation level flag : " + _emulationMode);
                 }
             }
         }
 
         public static void SetOperationModeFlag(int flag)
         {
-            _operationLevelFlag = flag;
+            _emulationMode = flag;
             ValidateFlag();
         }
 
         public static int GetOperationModeFlag()
         {
             ValidateFlag();
-            return _operationLevelFlag;
+            return _emulationMode;
         }
 
-        public static void SetOperationModeFlag(OperationFlag flagValue)
+        public static void SetEmulationMode(EmulationMode emulationMode)
         {
-            _operationLevelFlag = _operationLevelFlag | (int)flagValue;
+            _emulationMode = _emulationMode | (int)emulationMode;
             ValidateFlag();
         }
 
-        public static bool IsOperationModeFlagSet(OperationFlag flagValue)
+        public static bool IsOperationModeFlagSet(EmulationMode flagValue)
         {
-            return (_operationLevelFlag & (int)flagValue) > 0;
+            return (_emulationMode & (int)flagValue) > 0;
         }
 
-        public static void ClearOperationModeFlag(OperationFlag flagValue)
+        public static void ClearOperationModeFlag(EmulationMode flagValue)
         {
-            _operationLevelFlag &= ~((int)flagValue);
+            _emulationMode &= ~((int)flagValue);
         }
 
         public static void ResetOperationModeFlag()
         {
-            _operationLevelFlag = 0;
+            _emulationMode = 0;
         }
 
         public static bool NoDCSBIOSEnabled()
         {
             ValidateFlag();
-            return !IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled) && !IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled);
+            return !IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled) && !IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled);
         }
 
         public static bool KeyEmulationOnly()
         {
             ValidateFlag();
-            return IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly);
+            return IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly);
         }
 
         public static bool FullDCSBIOSEnabled()
         {
             ValidateFlag();
-            return IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled) && IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled);
+            return IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled) && IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled);
         }
 
         public static bool PartialDCSBIOSEnabled()
         {
             ValidateFlag();
-            return IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled) || IsOperationModeFlagSet(OperationFlag.DCSBIOSInputEnabled);
+            return IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled) || IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled);
         }
 
         public static NumberFormatInfo GetPZ69FullDisplayNumberFormat()

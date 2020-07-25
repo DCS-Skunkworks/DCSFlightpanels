@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using ClassLibraryCommon;
 using NonVisuals;
 using NonVisuals.Interfaces;
 
@@ -24,6 +25,11 @@ namespace DCSFlightpanels.PanelUserControls
         public virtual GamingPanel GetGamingPanel()
         {
             return null;
+        }
+
+        public virtual GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.Unknown;
         }
 
         public IGlobalHandler GlobalHandler

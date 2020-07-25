@@ -331,21 +331,21 @@ namespace NonVisuals
         {
             if (_airframe == DCSAirframe.KEYEMULATOR)
             {
-                Common.SetOperationModeFlag(OperationFlag.KeyboardEmulationOnly);
+                Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
             }
             else if (_airframe == DCSAirframe.KEYEMULATOR_SRS)
             {
-                Common.SetOperationModeFlag(OperationFlag.KeyboardEmulationOnly);
-                Common.SetOperationModeFlag(OperationFlag.SRSEnabled);
+                Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
+                Common.SetEmulationMode(EmulationMode.SRSEnabled);
             }
             else if (_airframe == DCSAirframe.FC3_CD_SRS)
             {
-                Common.SetOperationModeFlag(OperationFlag.SRSEnabled);
-                Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled);
+                Common.SetEmulationMode(EmulationMode.SRSEnabled);
+                Common.SetEmulationMode(EmulationMode.DCSBIOSOutputEnabled);
             }
             else
             {
-                Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled | OperationFlag.DCSBIOSInputEnabled);
+                Common.SetEmulationMode(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSInputEnabled);
             }
         }
 
@@ -362,6 +362,34 @@ namespace NonVisuals
                         try
                         {
                             OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                        }
+                        catch (Exception e)
+                        {
+                            Common.ShowErrorMessageBox(e, "Error reading settings. Panel : " + genericPanelBinding.PanelType);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Common.ShowErrorMessageBox(e);
+            }
+        }
+
+        public void SendRadioSettings()
+        {
+            try
+            {
+                if (OnSettingsReadFromFile != null)
+                {
+                    foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                    {
+                        try
+                        {
+                            if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
+                            {
+                                OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                            }
                         }
                         catch (Exception e)
                         {
@@ -580,16 +608,16 @@ namespace NonVisuals
 
         public bool UseNS430
         {
-            get => Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled);
+            get => Common.IsOperationModeFlagSet(EmulationMode.NS430Enabled);
             set
             {
                 if (value)
                 {
-                    Common.SetOperationModeFlag(OperationFlag.NS430Enabled);
+                    Common.SetEmulationMode(EmulationMode.NS430Enabled);
                 }
                 else
                 {
-                    Common.ClearOperationModeFlag(OperationFlag.NS430Enabled);
+                    Common.ClearOperationModeFlag(EmulationMode.NS430Enabled);
                 }
                 SetIsDirty();
             }

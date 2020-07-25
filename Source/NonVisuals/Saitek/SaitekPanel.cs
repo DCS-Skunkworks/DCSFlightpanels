@@ -18,8 +18,11 @@ namespace NonVisuals.Saitek
         protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
         protected byte[] OldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
         protected byte[] NewSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
-        
-        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton):base(typeOfGamingPanel, hidSkeleton){}
+
+        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
+        {
+            hidSkeleton.PanelHasBeenInstantiated = true;
+        }
 
         protected override void StartListeningForPanelChanges()
         {

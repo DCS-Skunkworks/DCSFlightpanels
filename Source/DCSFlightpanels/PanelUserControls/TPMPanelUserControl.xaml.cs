@@ -8,6 +8,7 @@ using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -90,6 +91,11 @@ namespace DCSFlightpanels.PanelUserControls
         public override GamingPanel GetGamingPanel()
         {
             return _tpmPanel;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.TPM;
         }
 
         public string GetName()

@@ -11,5 +11,7 @@ namespace DCSFlightpanels
         public static string CommandLineArgumentOpenProfile = "-OpenProfile=";
         public static string CommandLineArgumentStartMinimized = "-StartMinimized";
         public static string CommandLineArgumentNoStreamDeck = "-NoStreamDeck";
+
+        public static string TemporaryRadioTabHeader = "PZ69 Temporary";    
     }
 }
