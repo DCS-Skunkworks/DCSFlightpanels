@@ -909,6 +909,7 @@
     </Resource>
     <Resource Include="Images\mi8_r863_freq_panel.png" />
     <Resource Include="Images\P47_radio.png" />
+    <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
