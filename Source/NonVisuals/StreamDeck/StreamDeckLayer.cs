@@ -203,6 +203,7 @@ namespace NonVisuals.StreamDeck
 
         public void AddButton(StreamDeckButton streamDeckButton, bool silently = false)
         {
+            streamDeckButton.RegisterButtonToStaticList();
             streamDeckButton.IsVisible = _isVisible;
 
             var found = false;
