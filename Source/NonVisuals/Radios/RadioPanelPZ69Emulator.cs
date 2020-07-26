@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Radios.Knobs;
+using NonVisuals.Radios.Misc;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios

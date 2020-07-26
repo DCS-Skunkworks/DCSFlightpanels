@@ -60,7 +60,7 @@ namespace NonVisuals
                 return null;
             }
 
-            var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? MyDocumentsPath() : Settings.Default.LastImageFileDialogLocation;
+            var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastImageFileDialogLocation;
             ClearAll();
             var openFileDialog = new OpenFileDialog();
             openFileDialog.RestoreDirectory = true;
@@ -115,12 +115,7 @@ namespace NonVisuals
         {
             return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         }*/
-
-        public string MyDocumentsPath()
-        {
-            return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)));
-        }
-
+        
         public bool ReloadProfile()
         {
             return LoadProfile(null, _hardwareConflictResolver);
@@ -408,7 +403,7 @@ namespace NonVisuals
         {
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.InitialDirectory = MyDocumentsPath();
+            saveFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastImageFileDialogLocation;
             saveFileDialog.FileName = "dcsfp_profile.bindings";
             saveFileDialog.DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT;
             saveFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;

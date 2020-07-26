@@ -77,7 +77,7 @@ namespace NonVisuals
         {
             lock (UpdateCounterLockObject)
             {
-                if (_updateCounterDCSBIOSOutput.Address == address)
+                if (_updateCounterDCSBIOSOutput != null && _updateCounterDCSBIOSOutput.Address == address)
                 {
                     var newCount = _updateCounterDCSBIOSOutput.GetUIntValue(data);
                     if (!_synchedOnce)

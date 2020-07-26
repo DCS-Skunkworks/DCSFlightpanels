@@ -32,10 +32,7 @@ namespace DCS_BIOS
 
         public DCSBIOSStringListener()
         {
-
             DCSBIOS.AttachDataReceivedListenerSO(this);
-            //var bla = new DCSBIOSString(0x11c0, 24);
-            //_dcsBiosStrings.Add(new KeyValuePair<uint, DCSBIOSString>(0x11c0, bla));
         }
 
         public void AddStringAddress(uint address, int length)

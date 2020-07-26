@@ -1,4 +1,4 @@
-﻿namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios.SRS
 {
     // ReSharper disable All
     /*

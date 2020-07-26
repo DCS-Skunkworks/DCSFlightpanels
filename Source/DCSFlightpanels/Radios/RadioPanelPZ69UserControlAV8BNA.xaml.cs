@@ -10,6 +10,7 @@ using NonVisuals;
 using DCSFlightpanels.Properties;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Radios

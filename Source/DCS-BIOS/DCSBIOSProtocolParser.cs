@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using ClassLibraryCommon;
@@ -30,6 +31,9 @@ namespace DCS_BIOS
 
         public void Attach(IDcsBiosDataListener iDcsBiosDataListener)
         {
+            //Try to remove it first so not to get duplicate
+            OnDcsDataAddressValue -= iDcsBiosDataListener.DcsBiosDataReceived;
+
             OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
         }
 
@@ -228,6 +232,11 @@ namespace DCS_BIOS
                             try
                             {
                                 OnDcsDataAddressValue?.Invoke(this, new DCSBIOSDataEventArgs() { Address = _address, Data = _data });
+
+                                if (OnDcsDataAddressValue != null)
+                                {
+                                    Debug.WriteLine("OnDcsDataAddressValue : " + OnDcsDataAddressValue.GetInvocationList().Length);
+                                }
                             }
                             catch (Exception e)
                             {

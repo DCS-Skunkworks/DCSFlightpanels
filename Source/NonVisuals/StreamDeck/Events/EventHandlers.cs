@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using DCS_BIOS;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck.Events
@@ -6,6 +7,20 @@ namespace NonVisuals.StreamDeck.Events
     public static class EventHandlers
     {
 
+
+
+
+
+
+
+        /*
+         *          _____ _                                _           _    
+         *         / ____| |                              | |         | |   
+         *        | (___ | |_ _ __ ___  __ _ _ __ ___   __| | ___  ___| | __
+         *         \___ \| __| '__/ _ \/ _` | '_ ` _ \ / _` |/ _ \/ __| |/ /
+         *         ____) | |_| | |  __/ (_| | | | | | | (_| |  __/ (__|   < 
+         *        |_____/ \__|_|  \___|\__,_|_| |_| |_|\__,_|\___|\___|_|\_\
+         */
         public static string GetInformation()
         {
             var stringBuilder = new StringBuilder(200);
@@ -42,7 +57,7 @@ namespace NonVisuals.StreamDeck.Events
         }
 
         /********************************************************************************************
-        *                    Querying whether there are unsaved configurations
+        *                    Streamdeck Querying whether there are unsaved configurations
         ********************************************************************************************/
         public delegate void DirtyConfigurationsEventHandler(object sender, StreamDeckDirtyReportArgs e);
         public static event DirtyConfigurationsEventHandler OnDirtyConfigurationsEventHandler;
@@ -149,7 +164,7 @@ namespace NonVisuals.StreamDeck.Events
 
         public static void NotifyToSyncConfiguration(object sender, string bindingHash)
         {
-            OnStreamDeckSyncConfigurationEventHandler?.Invoke(sender, new StreamDeckSyncConfigurationArgs(){BindingHash = bindingHash });
+            OnStreamDeckSyncConfigurationEventHandler?.Invoke(sender, new StreamDeckSyncConfigurationArgs() { BindingHash = bindingHash });
         }
 
         public static void AttachStreamDeckConfigListener(IStreamDeckConfigListener streamDeckConfigListener)

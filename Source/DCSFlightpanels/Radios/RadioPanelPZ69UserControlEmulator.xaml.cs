@@ -15,6 +15,7 @@ using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Windows;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Radios

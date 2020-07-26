@@ -24,7 +24,9 @@ using Microsoft.Win32;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Radios.SRS;
 using NonVisuals.Saitek;
+using NonVisuals.StreamDeck.Events;
 using Octokit;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
@@ -71,6 +73,8 @@ namespace DCSFlightpanels
         private bool _isLoaded = false;
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
+
+        private List<GamingPanel> _gamingPanels = new List<GamingPanel>();
 
         public MainWindow()
         {
@@ -121,7 +125,7 @@ namespace DCSFlightpanels
                     _hidHandler.Startup(Settings.Default.LoadStreamDeck);
                 }
 
-                StartDCSBIOS();
+                CreateDCSBIOS();
                 StartTimers();
 
                 /*******************************************************************************************/
@@ -144,12 +148,11 @@ namespace DCSFlightpanels
 
                 if (!Common.PartialDCSBIOSEnabled())
                 {
-                    _dcsBios?.Shutdown();
-                    _dcsBios = null;
+                    ShutdownDCSBIOS();
                 }
                 else
                 {
-                    _dcsBios?.Startup();
+                    StartupDCSBIOS();
                 }
 
                 SendEventRegardingForwardingOfKeys();
@@ -166,18 +169,6 @@ namespace DCSFlightpanels
             {
                 Common.ShowErrorMessageBox(ex);
             }
-        }
-
-        private void StartDCSBIOS()
-        {
-
-            _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
-            if (!_dcsBios.HasLastException())
-            {
-                RotateGear(2000);
-            }
-
-            _dcsCheckDcsBiosStatusTimer.Start();
         }
 
         private void StartTimers()
@@ -249,31 +240,25 @@ namespace DCSFlightpanels
             }
 
             LabelAirframe.Content = dcsAirframe == DCSAirframe.NOFRAMELOADEDYET ? "" : dcsAirframe.ToString();
+            
+            /*
+             * Special case as loaded type of radio panel depends on profile settings, all other panels are the same regardless of profile.
+             */
+            CloseTemporaryRadioPanels();
+            SearchForRadioPanels();
+            _profileHandler.SendRadioSettings();
 
             if (Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
-                _dcsBios?.Shutdown();
-                _dcsStopGearTimer.Stop();
-                _dcsCheckDcsBiosStatusTimer.Stop();
-                ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
+                ShutdownDCSBIOS();
                 CloseStreamDecks();
             }
             else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
             {
-                if (_dcsBios == null)
-                {
-                    _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
-                }
-
-                _dcsBios.Startup();
-                _dcsStopGearTimer.Start();
-                _dcsCheckDcsBiosStatusTimer.Start();
-                ImageDcsBiosConnected.Visibility = Visibility.Visible;
+                CreateDCSBIOS();
+                StartupDCSBIOS();
             }
 
-            CloseTemporaryRadioPanels();
-            SearchForRadioPanels();
-            _profileHandler.SendRadioSettings();
 
             SortTabs();
         }
@@ -409,8 +394,14 @@ namespace DCSFlightpanels
         }
 
 
+        /*
+         * DCS-BIOS may be created AFTER the panels are created so then
+         * they need to be added as listeners to DCS-BIOS.
+         */
         public void Attach(GamingPanel gamingPanel)
         {
+            _gamingPanels.Add(gamingPanel);
+
             OnForwardKeyPressesChanged += gamingPanel.SetForwardKeyPresses;
             _profileHandler.Attach(gamingPanel);
             gamingPanel.Attach(_profileHandler);
@@ -420,6 +411,8 @@ namespace DCSFlightpanels
 
         public void Detach(GamingPanel gamingPanel)
         {
+            _gamingPanels.Remove(gamingPanel);
+
             OnForwardKeyPressesChanged -= gamingPanel.SetForwardKeyPresses;
             _profileHandler.Detach(gamingPanel);
             gamingPanel.Detach(_profileHandler);
@@ -428,6 +421,64 @@ namespace DCSFlightpanels
 
             Dispatcher?.BeginInvoke((Action)(() => CloseTabItem(gamingPanel.HIDInstanceId)));
 
+        }
+
+        private void CreateDCSBIOS()
+        {
+            if (_dcsBios != null)
+            {
+                return;
+            }
+
+            _dcsBios = new DCSBIOS(this, Settings.Default.DCSBiosIPFrom, Settings.Default.DCSBiosIPTo, int.Parse(Settings.Default.DCSBiosPortFrom), int.Parse(Settings.Default.DCSBiosPortTo), DcsBiosNotificationMode.AddressValue);
+            if (!_dcsBios.HasLastException())
+            {
+                RotateGear(2000);
+            }
+
+            ImageDcsBiosConnected.Visibility = Visibility.Visible;
+        }
+
+        private void StartupDCSBIOS()
+        {
+            if (_dcsBios.IsRunning)
+            {
+                return;
+            }
+            _dcsBios?.Startup();
+
+            _dcsBios?.DetachDataReceivedListener(this);
+            _dcsBios?.AttachDataReceivedListener(this);
+            AttachGamingPanelsToDCSBIOS();
+            _dcsStopGearTimer.Start();
+            _dcsCheckDcsBiosStatusTimer.Start();
+        }
+
+        private void ShutdownDCSBIOS()
+        {
+            DetachGamingPanelsFromDCSBIOS();
+            _dcsBios?.Shutdown();
+            _dcsBios = null;
+
+            _dcsStopGearTimer.Stop();
+            _dcsCheckDcsBiosStatusTimer.Stop();
+            ImageDcsBiosConnected.Visibility = Visibility.Collapsed;
+        }
+
+        private void AttachGamingPanelsToDCSBIOS()
+        {
+            foreach (var gamingPanel in _gamingPanels)
+            {
+                _dcsBios?.AttachDataReceivedListener(gamingPanel);
+            }
+        }
+
+        private void DetachGamingPanelsFromDCSBIOS()
+        {
+            foreach (var gamingPanel in _gamingPanels)
+            {
+                _dcsBios?.DetachDataReceivedListener(gamingPanel);
+            }
         }
 
         public DCSAirframe GetAirframe()
@@ -1189,7 +1240,7 @@ namespace DCSFlightpanels
 
             try
             {
-                _dcsBios?.Shutdown();
+                ShutdownDCSBIOS();
             }
             catch (Exception ex)
             {
@@ -1665,8 +1716,8 @@ namespace DCSFlightpanels
                     _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
                     _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
                     _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
-                    _dcsBios.Shutdown();
-                    _dcsBios.Startup();
+                    _dcsBios.Shutdown(); 
+                    _dcsBios.Startup(); 
                     _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;
                 }
 
@@ -1877,7 +1928,7 @@ namespace DCSFlightpanels
                     _exceptionTimer.Dispose();
                     _statusMessagesTimer.Dispose();
                     ; _exceptionTimer.Dispose();
-                    _dcsBios?.Dispose();
+                    _dcsBios?.Dispose(); 
                 }
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.

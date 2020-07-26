@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using DCSFlightpanels.Properties;
+using NonVisuals;
 
 namespace DCSFlightpanels
 {

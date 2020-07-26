@@ -4,6 +4,7 @@ using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 

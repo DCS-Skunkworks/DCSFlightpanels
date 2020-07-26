@@ -139,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingMappingManager.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
@@ -155,7 +156,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadiopanelKnobP47D.cs" />
+    <Compile Include="Radios\Knobs\RadiopanelKnobP47D.cs" />
     <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
@@ -226,38 +227,38 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelKnobAV8BNA.cs" />
-    <Compile Include="Radios\RadioPanelKnobF14B.cs" />
-    <Compile Include="Radios\RadioPanelKnobF5E.cs" />
-    <Compile Include="Radios\RadioPanelKnobM2000C.cs" />
-    <Compile Include="Radios\RadioPanelKnobFA18C.cs" />
-    <Compile Include="Radios\RadioPanelKnobSRS.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobAV8BNA.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobF14B.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobF5E.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobM2000C.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobFA18C.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobSRS.cs" />
     <Compile Include="Radios\RadioPanelPZ69AV8BNA.cs" />
     <Compile Include="Radios\RadioPanelPZ69F14B.cs" />
     <Compile Include="Radios\RadioPanelPZ69F5E.cs" />
-    <Compile Include="Radios\RadioPanelPZ69DisplayValue.cs" />
+    <Compile Include="Radios\Misc\RadioPanelPZ69DisplayValue.cs" />
     <Compile Include="Radios\RadioPanelPZ69EmulatorFull.cs" />
     <Compile Include="Radios\RadioPanelPZ69M2000C.cs" />
     <Compile Include="Radios\RadioPanelPZ69FA18C.cs" />
-    <Compile Include="Radios\RadioPanelPZ69KnobEmulator.cs" />
-    <Compile Include="Radios\RadioPanelKnobSA342.cs" />
-    <Compile Include="Radios\RadioPanelKnobAJS37.cs" />
-    <Compile Include="Radios\RadioPanelKnobBf109.cs" />
-    <Compile Include="Radios\RadioPanelKnobF86F.cs" />
-    <Compile Include="Radios\RadioPanelKnobKa50.cs" />
-    <Compile Include="Radios\RadioPanelKnobMi8.cs" />
-    <Compile Include="Radios\RadioPanelKnobMiG21Bis.cs" />
-    <Compile Include="Radios\RadioPanelKnobA10C.cs" />
-    <Compile Include="Radios\RadioPanelKnobP51D.cs" />
-    <Compile Include="Radios\RadiopanelKnobSpitfireLFMkIX.cs" />
-    <Compile Include="Radios\RadioPanelKnobUH1H.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelPZ69KnobEmulator.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobSA342.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobAJS37.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobBf109.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobF86F.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobKa50.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobMi8.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobMiG21Bis.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobA10C.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobP51D.cs" />
+    <Compile Include="Radios\Knobs\RadiopanelKnobSpitfireLFMkIX.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobUH1H.cs" />
     <Compile Include="Radios\RadioPanelPZ69SA342.cs" />
     <Compile Include="Radios\RadioPanelPZ69AJS37.cs" />
     <Compile Include="Radios\RadioPanelPZ69Bf109.cs" />
     <Compile Include="Radios\RadioPanelPZ69F86F.cs" />
     <Compile Include="Radios\RadioPanelPZ69Fw190.cs" />
     <Compile Include="Radios\RadioPanelPZ69Ka50.cs" />
-    <Compile Include="Radios\RadioPanelKnobFw190.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobFw190.cs" />
     <Compile Include="Radios\RadioPanelPZ69Mi8.cs" />
     <Compile Include="Radios\RadioPanelPZ69MiG21Bis.cs" />
     <Compile Include="Radios\RadioPanelPZ69A10C.cs" />
@@ -268,9 +269,9 @@
     <Compile Include="Radios\RadiopanelSpitfireLFMkIX.cs" />
     <Compile Include="Saitek\SaitekPanel.cs" />
     <Compile Include="Radios\RadioPanelPZ69Emulator.cs" />
-    <Compile Include="Radios\SRSRadio.cs" />
-    <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
-    <Compile Include="Radios\SRSRadioInformation.cs" />
+    <Compile Include="Radios\SRS\SRSRadio.cs" />
+    <Compile Include="Radios\SRS\SRSPlayerRadioInfo.cs" />
+    <Compile Include="Radios\SRS\SRSRadioInformation.cs" />
     <Compile Include="StreamDeck\StreamDeckConstants.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />

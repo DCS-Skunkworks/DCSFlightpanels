@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using NonVisuals.Radios;
+using NonVisuals.Radios.Knobs;
 
 namespace NonVisuals.Saitek
 {
