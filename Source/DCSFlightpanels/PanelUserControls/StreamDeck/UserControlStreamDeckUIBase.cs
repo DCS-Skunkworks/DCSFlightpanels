@@ -462,7 +462,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 /*
                  * Only do it when it is a different button selected. Should make more comments...
                  */
-                if (_streamDeckPanel.BindingHash == e.BindingHash && SelectedImageBill == null || SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash())
+                if ((_streamDeckPanel.BindingHash == e.BindingHash && SelectedImageBill == null) || (SelectedImageBill != null && SelectedImageBill.Button.GetHash() != e.SelectedButton.GetHash()))
                 {
                     SetSelectedButtonUIOnly(e.SelectedButton.StreamDeckButtonName);
                 }

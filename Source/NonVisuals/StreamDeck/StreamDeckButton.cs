@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace NonVisuals.StreamDeck
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;
         private volatile bool _isVisible = false;
-        
+
         [NonSerialized] private static List<StreamDeckButton> _staticStreamDeckButtons = new List<StreamDeckButton>();
 
 
@@ -36,6 +37,17 @@ namespace NonVisuals.StreamDeck
         {
             _streamDeckButtonName = enumStreamDeckButton;
             _streamDeckPanel = streamDeckPanel;
+        }
+
+        /*
+         * Used for easier access to the buttons instead of having to go through the layer
+         */
+        public void RegisterButtonToStaticList()
+        {
+            if (_staticStreamDeckButtons.Exists(o => o == this))
+            {
+                return;
+            }
             _staticStreamDeckButtons.Add(this);
         }
 
@@ -69,7 +81,7 @@ namespace NonVisuals.StreamDeck
         {
             Dispose(false);
         }
-        
+
         public static StreamDeckButton GetStatic(EnumStreamDeckButtonNames streamDeckButtonName)
         {
             return _staticStreamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
@@ -79,19 +91,23 @@ namespace NonVisuals.StreamDeck
         {
             for (var i = 0; i < _staticStreamDeckButtons.Count; i++)
             {
-                var streamDeckButton= _staticStreamDeckButtons[i];
+                var streamDeckButton = _staticStreamDeckButtons[i];
                 streamDeckButton.Dispose();
             }
         }
 
-        public static List<StreamDeckButton> GetStaticButtons(StreamDeckPanel streamDeckPanelInstance)
+        public static List<StreamDeckButton> WarningGetStaticButtons()
         {
-            if (streamDeckPanelInstance == null)
+            return _staticStreamDeckButtons;
+        }
+
+        public static List<StreamDeckButton> GetStaticButtons(StreamDeckPanel streamDeckPanel)
+        {
+            if (streamDeckPanel == null)
             {
                 return _staticStreamDeckButtons;
             }
-            
-            return _staticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanelInstance.BindingHash).ToList();
+            return _staticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanel.BindingHash).ToList();
         }
 
         public void DoPress()
@@ -177,12 +193,12 @@ namespace NonVisuals.StreamDeck
 
         public bool CheckIfWouldOverwrite(StreamDeckButton newStreamDeckButton)
         {
-            var result = _buttonFace != null && newStreamDeckButton.Face != null || 
-                         _buttonActionForPress != null && newStreamDeckButton.ActionForPress != null || 
+            var result = _buttonFace != null && newStreamDeckButton.Face != null ||
+                         _buttonActionForPress != null && newStreamDeckButton.ActionForPress != null ||
                          _buttonActionForRelease != null && newStreamDeckButton.ActionForRelease != null;
             return result;
         }
-        
+
         public void Consume(StreamDeckButton newStreamDeckButton)
         {
             if (!this.Equals(newStreamDeckButton))
@@ -347,7 +363,7 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
-       
+
         [JsonIgnore]
         public StreamDeckPanel StreamDeckPanelInstance
         {

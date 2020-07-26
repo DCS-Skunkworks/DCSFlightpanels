@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -78,12 +79,22 @@ namespace NonVisuals.StreamDeck
 
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
 
+            Debug.WriteLine("Count #1 is " + StreamDeckButton.WarningGetStaticButtons().Count);
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
-
+            RegisterButtons();
+            Debug.WriteLine("Count #2 is " + StreamDeckButton.WarningGetStaticButtons().Count);
             _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
             SetStreamDeckPanelInstance(_streamDeckPanel);
             CheckHomeLayerExists();
+        }
+
+        private void RegisterButtons()
+        {
+            foreach (var streamDeckLayer in _layerList)
+            {
+                streamDeckLayer.RegisterStreamDeckButtons();
+            }
         }
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
@@ -278,6 +289,16 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public void EraseLayerButtons(string layerName)
+        {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return;
+            }
+
+            GetLayer(layerName).RemoveButtons(true);
+        }
+
         public List<StreamDeckLayer> LayerList
         {
             get => _layerList;
@@ -410,11 +431,14 @@ namespace NonVisuals.StreamDeck
 
         private void MarkAllButtonsHiddenAndClearFaces()
         {
-            foreach (var streamDeckButton in StreamDeckButton.GetStaticButtons(_streamDeckPanel))
+            if (StreamDeckButton.GetStaticButtons(_streamDeckPanel) != null)
             {
-                streamDeckButton.IsVisible = false;
+                foreach (var streamDeckButton in StreamDeckButton.GetStaticButtons(_streamDeckPanel))
+                {
+                    streamDeckButton.IsVisible = false;
+                }
+                ClearAllFaces();
             }
-            ClearAllFaces();
         }
 
         private void SetSelectedLayer(string layerName)

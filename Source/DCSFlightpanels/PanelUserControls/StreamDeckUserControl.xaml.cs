@@ -134,6 +134,7 @@ namespace DCSFlightpanels.PanelUserControls
                 ComboBoxLayers.IsEnabled = !(UCStreamDeckButtonAction.IsDirty || UCStreamDeckButtonFace.IsDirty);
                 ButtonNewLayer.IsEnabled = ComboBoxLayers.IsEnabled;
                 ButtonDeleteLayer.IsEnabled = ComboBoxLayers.IsEnabled && ComboBoxLayers.Text != null;
+                ButtonEraseLayerButtons.IsEnabled = ButtonDeleteLayer.IsEnabled && _streamDeckPanel.SelectedLayer.HasButtons;
             }
             catch (Exception ex)
             {
@@ -377,7 +378,6 @@ namespace DCSFlightpanels.PanelUserControls
                 if (MessageBox.Show("Delete layer " + ComboBoxLayers.Text + "?", "Can not be undone!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     _streamDeckPanel.DeleteLayer(ComboBoxLayers.Text);
-
                 }
             }
             catch (Exception ex)
@@ -385,8 +385,21 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
+        
+        private void ButtonEraseLayerButtons_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Erase all buttons on layer " + ComboBoxLayers.Text + "?", "Can not be undone!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    _streamDeckPanel.EraseLayerButtons(ComboBoxLayers.Text);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
 
         private void ButtonAcceptButtonChanges_OnClick(object sender, RoutedEventArgs e)
         {
@@ -674,5 +687,6 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.LogError(ex);
             }
         }
+
     }
 }

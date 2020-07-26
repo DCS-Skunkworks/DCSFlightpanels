@@ -29,8 +29,6 @@ namespace NonVisuals
                     _genericBindings.Add(genericBinding);
                 }
             }
-
-            Debug.WriteLine("Count is " + _genericBindings.Count);
         }
 
         public static void AddBinding(GenericPanelBinding genericBinding)
@@ -61,8 +59,6 @@ namespace NonVisuals
                     _genericBindings.Add(genericBinding);
                 }
             }
-
-            Debug.WriteLine("Count is " + _genericBindings.Count);
         }
 
         public static bool Exists(GenericPanelBinding genericPanelBinding)

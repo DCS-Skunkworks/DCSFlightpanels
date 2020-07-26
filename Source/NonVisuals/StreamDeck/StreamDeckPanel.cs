@@ -405,6 +405,12 @@ namespace NonVisuals.StreamDeck
             SetIsDirty();
         }
 
+        public void EraseLayerButtons(string streamDeckLayerName)
+        {
+            _streamDeckLayerHandler.EraseLayerButtons(streamDeckLayerName);
+            SetIsDirty();
+        }
+
         public StreamDeckLayer HomeLayer
         {
             get => _streamDeckLayerHandler.HomeLayer;

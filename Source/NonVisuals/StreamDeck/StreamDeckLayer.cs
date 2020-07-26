@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
@@ -31,6 +32,8 @@ namespace NonVisuals.StreamDeck
             {
                 ImportButtons(importMode, streamDeckButtons);
             }
+
+            RegisterStreamDeckButtons();
         }
         
         public void ImportButtons(EnumButtonImportMode importMode, List<StreamDeckButton> newStreamDeckButtons)
@@ -40,8 +43,14 @@ namespace NonVisuals.StreamDeck
             {
                 var found = false;
 
+                newStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
+
                 foreach (var oldStreamDeckButton in _streamDeckButtons)
                 {
+                    if (oldStreamDeckButton.StreamDeckPanelInstance == null)
+                    {
+                        Debugger.Break();
+                    }
                     if (oldStreamDeckButton.StreamDeckButtonName == newStreamDeckButton.StreamDeckButtonName)
                     {
                         found = true;
@@ -50,12 +59,16 @@ namespace NonVisuals.StreamDeck
                         {
                             oldStreamDeckButton.ClearConfiguration();
                             oldStreamDeckButton.Consume(true, newStreamDeckButton);
+                            // Let propagate down so it isn't null
+                            oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
 
                             changesMade = true;
                         }
                         else if (importMode == EnumButtonImportMode.Overwrite)
                         {
                             oldStreamDeckButton.Consume(true, newStreamDeckButton);
+                            // Let propagate down so it isn't null
+                            oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
 
                             changesMade = true;
                         }
@@ -65,7 +78,7 @@ namespace NonVisuals.StreamDeck
                             {
                                 var face = newStreamDeckButton.Face.DeepClone();
                                 face.AfterClone();
-
+                                oldStreamDeckButton.Face = face;
                                 changesMade = true;
                             }
                             if (oldStreamDeckButton.ActionForPress == null && newStreamDeckButton.ActionForPress != null)
@@ -80,16 +93,16 @@ namespace NonVisuals.StreamDeck
 
                                 changesMade = true;
                             }
+                            // Let propagate down so it isn't null
+                            oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
                         }
 
-                        oldStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
                         break;
                     }
                 }
 
                 if (!found)
                 {
-                    newStreamDeckButton.StreamDeckPanelInstance = _streamDeckPanel;
                     _streamDeckButtons.Add(newStreamDeckButton);
                     changesMade = true;
                 }
@@ -104,6 +117,14 @@ namespace NonVisuals.StreamDeck
         private void NotifyChanges()
         {
             EventHandlers.NotifyStreamDeckConfigurationChange(this, _streamDeckPanel.BindingHash);
+        }
+
+        public void RegisterStreamDeckButtons()
+        {
+            foreach (var streamDeckButton in _streamDeckButtons)
+            {
+                streamDeckButton.RegisterButtonToStaticList();
+            }
         }
 
         public Font TextFont
@@ -251,6 +272,15 @@ namespace NonVisuals.StreamDeck
             get
             {
                 return _streamDeckButtons.Any(o => o.HasConfig);
+            }
+        }
+
+        [JsonIgnore]
+        public bool HasButtons
+        {
+            get
+            {
+                return _streamDeckButtons.Count > 0;
             }
         }
 
