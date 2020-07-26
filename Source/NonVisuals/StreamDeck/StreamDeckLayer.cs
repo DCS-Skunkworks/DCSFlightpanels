@@ -47,10 +47,6 @@ namespace NonVisuals.StreamDeck
 
                 foreach (var oldStreamDeckButton in _streamDeckButtons)
                 {
-                    if (oldStreamDeckButton.StreamDeckPanelInstance == null)
-                    {
-                        Debugger.Break();
-                    }
                     if (oldStreamDeckButton.StreamDeckButtonName == newStreamDeckButton.StreamDeckButtonName)
                     {
                         found = true;

@@ -54,14 +54,7 @@ namespace NonVisuals.StreamDeck
             DCSBIOSStringManager.DetachListener(this);
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
             _shutdown = true;
-            try
-            {
-                //_autoResetEvent.Set();
-            }
-            catch (Exception e)
-            {
-                Debugger.Break();
-            }
+
             try
             {
                 if (_imageUpdateTread != null && (_imageUpdateTread.ThreadState & (ThreadState.Aborted | ThreadState.AbortRequested)) == 0)
