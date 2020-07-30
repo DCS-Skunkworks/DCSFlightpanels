@@ -173,7 +173,9 @@
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\ButtonExport.cs" />
+    <Compile Include="StreamDeck\ColorCounter.cs" />
     <Compile Include="StreamDeck\Events\EventHandlers.cs" />
+    <Compile Include="StreamDeck\LockedBitmap.cs" />
     <Compile Include="StreamDeck\StreamDeckCommon.cs" />
     <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />
     <Compile Include="StreamDeck\ActionTypeDCSBIOS.cs" />

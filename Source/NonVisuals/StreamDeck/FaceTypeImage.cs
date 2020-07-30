@@ -47,6 +47,12 @@ namespace NonVisuals.StreamDeck
             if (_bitmap == null || RefreshBitmap)
             {
                 _bitmap = StreamDeckPanel.Validate(_imageFile);
+                
+                if (BitMapCreator.IsSmallerThanStreamdeckDefault(_bitmap))
+                {
+                    _bitmap = BitMapCreator.AdjustBitmap(_bitmap, 1.0f, 4.0f, 1.0f);
+                    _bitmap = BitMapCreator.EnlargeBitmapCanvas(_bitmap);
+                }
                 RefreshBitmap = false;
             }
 
