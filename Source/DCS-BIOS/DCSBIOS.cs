@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -52,8 +51,7 @@ namespace DCS_BIOS
         private readonly IDcsBiosDataListener _iDcsBiosDataListener;
         private readonly object _lockObjectForSendingData = new object();
         private Encoding _iso8859_1 = Encoding.GetEncoding("ISO-8859-1");
-        private bool _started;
-        private bool _shutdown;
+        private bool _isRunning;
 
         public DCSBIOS(IDcsBiosDataListener iDcsBiosDataListener, string ipFromUdp, string ipToUdp, int portFromUdp, int portToUdp, DcsBiosNotificationMode dcsNoficationMode)
         {
@@ -76,6 +74,21 @@ namespace DCS_BIOS
                 _dcsbiosSendPortUdp = portToUdp;
             }
             _dcsBiosNotificationMode = dcsNoficationMode;
+            
+            _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
+            _dcsProtocolParser.Attach(_iDcsBiosDataListener);
+
+            _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
+            _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
+
+            _udpReceiveClient = new UdpClient();
+            _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
+            _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIp));
+
+            _udpSendClient = new UdpClient();
+            _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udpSendClient.EnableBroadcast = true;
 
             //_tcpIpPort = tcpIpPort;
             _dcsBIOSInstance = this;
@@ -108,7 +121,7 @@ namespace DCS_BIOS
         {
             try
             {
-                while (!_shutdown)
+                while (_isRunning)
                 {
                     var byteData = _udpReceiveClient.Receive(ref _ipEndPointReceiverUdp);
                     if ((_dcsBiosNotificationMode & DcsBiosNotificationMode.AddressValue) == DcsBiosNotificationMode.AddressValue)
@@ -143,32 +156,15 @@ namespace DCS_BIOS
                 /*
                     Master, start listening TCP socket, for every client contacting via TCP add them as clients and send raw DCS-BIOS data to them
                 */
-                Shutdown();
-                if (_started)
+                if (_isRunning)
                 {
                     return;
                 }
-                _shutdown = false;
-                _dcsProtocolParser = DCSBIOSProtocolParser.GetParser();
-                _dcsProtocolParser.Attach(_iDcsBiosDataListener);
-
-                _ipEndPointReceiverUdp = new IPEndPoint(IPAddress.Any, ReceivePort);
-                _ipEndPointSenderUdp = new IPEndPoint(IPAddress.Parse(SendToIp), SendPort);
-
-                _udpReceiveClient = new UdpClient();
-                _udpReceiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                _udpReceiveClient.Client.Bind(_ipEndPointReceiverUdp);
-                _udpReceiveClient.JoinMulticastGroup(IPAddress.Parse(ReceiveFromIp));
-
-                _udpSendClient = new UdpClient();
-                _udpSendClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                _udpSendClient.EnableBroadcast = true;
-
                 _dcsbiosListeningThread = new Thread(ReceiveDataUdp);
                 _dcsbiosListeningThread.Start();
                 _dcsProtocolParser.Startup();
 
-                _started = true;
+                _isRunning = true;
             }
             catch (Exception e)
             {
@@ -191,7 +187,6 @@ namespace DCS_BIOS
         {
             try
             {
-                _shutdown = true;
                 _udpReceiveClient?.Close();
                 _udpReceiveClient?.Close();
                 _dcsProtocolParser?.Detach(_iDcsBiosDataListener);
@@ -200,13 +195,18 @@ namespace DCS_BIOS
                 _udpReceiveClient = null;
                 _udpReceiveClient = null;
                 _dcsProtocolParser = null;
-                _started = false;
+                _isRunning = false;
             }
             catch (Exception ex)
             {
                 SetLastException(ex);
                 Common.LogError(ex, "DCSBIOS.Shutdown()");
             }
+        }
+
+        public bool IsRunning
+        {
+            get => _isRunning;
         }
 
         public static DCSBIOS GetInstance()
@@ -228,6 +228,7 @@ namespace DCS_BIOS
             {
                 return;
             }
+            
             _dcsProtocolParser.OnDcsDataAddressValue += iDcsBiosDataListener.DcsBiosDataReceived;
         }
 

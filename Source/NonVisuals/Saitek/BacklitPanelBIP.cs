@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
@@ -175,22 +176,24 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
             ClearSettings();
-            if (settings == null || settings.Count == 0)
-            {
-                return;
-            }
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId) && setting.StartsWith("PanelBIP{"))
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
+
                     var colorOutput = new DcsOutputAndColorBindingBIP();
                     colorOutput.ImportSettings(setting);
                     _listColorOutputBinding.Add(colorOutput);
                 }
             }
+
             SettingsApplied();
         }
 
@@ -221,7 +224,7 @@ namespace NonVisuals.Saitek
             }
             SetIsDirty();
         }
-        
+
         internal void CheckDcsDataForColorChangeHook(uint address, uint data)
         {
             foreach (var cavb in _listColorOutputBinding)
@@ -341,7 +344,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return PanelLEDColor.RED;
         }
@@ -389,7 +392,7 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
@@ -422,6 +425,44 @@ namespace NonVisuals.Saitek
         {
             //Position_1_1
             return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(0, 1));
+        }
+
+
+        public override void Identify()
+        {
+            try
+            {
+                var thread = new Thread(ShowIdentifyingValue);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private void ShowIdentifyingValue()
+        {
+            try
+            {
+                var spins = 40;
+                var random = new Random();
+                var arrayBIPLedPositionEnum = Enum.GetValues(typeof(BIPLedPositionEnum));
+                var arrayPanelLEDColor = Enum.GetValues(typeof(PanelLEDColor));
+
+                while (spins > 0)
+                {
+                    var randomBIPLedPositionEnum = (BIPLedPositionEnum)arrayBIPLedPositionEnum.GetValue(random.Next(arrayBIPLedPositionEnum.Length));
+                    var randomPanelLEDColor = (PanelLEDColor)arrayPanelLEDColor.GetValue(random.Next(arrayPanelLEDColor.Length));
+                    SetLED(randomBIPLedPositionEnum, randomPanelLEDColor);
+
+                    Thread.Sleep(50);
+                    spins--;
+                }
+
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         public void SetLED(BIPLedPositionEnum bipLedPositionEnum, PanelLEDColor panelLEDColor)
@@ -552,12 +593,12 @@ namespace NonVisuals.Saitek
                 finalArray[4] = _upperRowBytes[1];
                 finalArray[5] = _middleRowBytes[1];
                 finalArray[6] = _lowerRowBytes[1];
-                
+
                 SendLEDData(finalArray);
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -630,11 +671,6 @@ namespace NonVisuals.Saitek
             }
             _ledBrightness += 10;
             SetLedStrength();
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
     }
 

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Properties;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -19,33 +21,35 @@ namespace DCSFlightpanels.Radios
     public partial class RadioPanelPZ69UserControlAJS37 : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69AJS37 _radioPanelPZ69;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
 
         public RadioPanelPZ69UserControlAJS37(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             HideAllImages();
             _radioPanelPZ69 = new RadioPanelPZ69AJS37(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivity;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
-            _globalHandler = globalHandler;
-
-            //LoadConfiguration();
+            GlobalHandler = globalHandler;
         }
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ69RadioPanel;
         }
 
         public string GetName()
@@ -69,7 +73,7 @@ namespace DCSFlightpanels.Radios
             }
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
         public void SettingsCleared(object sender, PanelEventArgs e) { }
 
@@ -374,8 +378,8 @@ namespace DCSFlightpanels.Radios
                 if (_radioPanelPZ69 != null)
                 {
                     TextBoxLogPZ69.Text = "";
-                    TextBoxLogPZ69.Text = _radioPanelPZ69.InstanceId;
-                    Clipboard.SetText(_radioPanelPZ69.InstanceId);
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
+                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -480,6 +484,18 @@ namespace DCSFlightpanels.Radios
             LowerRightSwitch.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobDec.Visibility = Visibility.Collapsed;
             LowerSmallerLCDKnobInc.Visibility = Visibility.Collapsed;
+        }
+
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _radioPanelPZ69.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
     }
 }

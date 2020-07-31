@@ -6,9 +6,8 @@ using System.Text;
 using System.Windows;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using HidLibrary;
 using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
+using NonVisuals.Properties;
 using Theraot.Core;
 using MessageBox = System.Windows.MessageBox;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -24,7 +23,7 @@ namespace NonVisuals
         private string _lastProfileUsed = "";
         private bool _isDirty;
         private bool _isNewProfile;
-        private readonly List<string> _listPanelSettingsData = new List<string>();
+        //private readonly List<string> _listPanelSettingsData = new List<string>();
         private readonly object _lockObject = new object();
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
@@ -34,7 +33,7 @@ namespace NonVisuals
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private bool _profileLoaded;
 
-
+        private IHardwareConflictResolver _hardwareConflictResolver;
 
 
 
@@ -54,13 +53,14 @@ namespace NonVisuals
             _lastProfileUsed = lastProfileUsed;
         }
 
-        public void OpenProfile()
+        public string OpenProfile()
         {
             if (IsDirty && MessageBox.Show("Discard unsaved changes to current profile?", "Discard changes?", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
-                return;
+                return null;
             }
-            var tempDirectory = string.IsNullOrEmpty(Filename) ? MyDocumentsPath() : Path.GetDirectoryName(Filename);
+
+            var tempDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastImageFileDialogLocation;
             ClearAll();
             var openFileDialog = new OpenFileDialog();
             openFileDialog.RestoreDirectory = true;
@@ -70,11 +70,15 @@ namespace NonVisuals
             openFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
             if (openFileDialog.ShowDialog() == true)
             {
-                LoadProfile(openFileDialog.FileName);
+                Settings.Default.LastImageFileDialogLocation = Path.GetDirectoryName(openFileDialog.FileName);
+                Settings.Default.Save();
+                return openFileDialog.FileName;
             }
+
+            return null;
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
@@ -84,7 +88,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -104,34 +108,31 @@ namespace NonVisuals
 
         public void ClearAll()
         {
-            _listPanelSettingsData.Clear();
             _profileFileInstanceIDs.Clear();
         }
 
-        public string DefaultFile()
+        /*public string DefaultFile()
         {
             return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
-        }
-
-        public string MyDocumentsPath()
-        {
-            return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)));
-        }
-
+        }*/
+        
         public bool ReloadProfile()
         {
-            return LoadProfile(null);
+            return LoadProfile(null, _hardwareConflictResolver);
         }
 
-        public bool LoadProfile(string filename)
+        public bool LoadProfile(string filename, IHardwareConflictResolver hardwareConflictResolver)
         {
             try
-            {/*
+            {
+                /*
                  * 0 Open specified filename (parameter) if not null
                  * 1 If exists open last profile used (settings)
                  * 2 Try and open default profile located in My Documents
                  * 3 If none found create default file
                  */
+                _hardwareConflictResolver = hardwareConflictResolver;
+
                 _isNewProfile = false;
                 ClearAll();
 
@@ -146,13 +147,12 @@ namespace NonVisuals
                     {
                         _filename = _lastProfileUsed;
                     }
-                    else if (File.Exists(DefaultFile()))
+                    else
                     {
-                        _filename = DefaultFile();
-                        _lastProfileUsed = filename;
+                        return false;
                     }
                 }
-                
+
                 if (string.IsNullOrEmpty(_filename) || !File.Exists(_filename))
                 {
                     //Main window will handle this
@@ -175,9 +175,11 @@ namespace NonVisuals
                 var fileLines = File.ReadAllLines(_filename);
                 var currentPanelType = GamingPanelEnum.Unknown;
                 string currentPanelInstanceID = null;
-                string currentPanelSettingsVersion = null;
+                string currentBindingHash = null;
                 var insidePanel = false;
                 var insideJSONPanel = false;
+
+                GenericPanelBinding genericPanelBinding = null;
 
                 foreach (var fileLine in fileLines)
                 {
@@ -225,15 +227,23 @@ namespace NonVisuals
                         if (fileLine.StartsWith("PanelType="))
                         {
                             currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", "").Trim());
+                            genericPanelBinding = new GenericPanelBinding();
+                            genericPanelBinding.PanelType = currentPanelType;
                         }
                         else if (fileLine.StartsWith("PanelInstanceID="))
                         {
                             currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
+                            genericPanelBinding.HIDInstance = currentPanelInstanceID;
                             _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstanceID, currentPanelType));
+                        }
+                        else if (fileLine.StartsWith("BindingHash="))
+                        {
+                            currentBindingHash = fileLine.Replace("BindingHash=", "").Trim();
+                            genericPanelBinding.BindingHash = currentBindingHash;
                         }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
                         {
-                            currentPanelSettingsVersion = fileLine.Trim();
+                            //do nothing, this will be phased out
                         }
                         else if (fileLine.Equals("BeginPanel"))
                         {
@@ -241,6 +251,10 @@ namespace NonVisuals
                         }
                         else if (fileLine.Equals("EndPanel"))
                         {
+                            if (genericPanelBinding != null)
+                            {
+                                BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
+                            }
                             insidePanel = false;
                         }
                         else if (fileLine.Equals("BeginPanelJSON"))
@@ -249,6 +263,10 @@ namespace NonVisuals
                         }
                         else if (fileLine.Equals("EndPanelJSON"))
                         {
+                            if (genericPanelBinding != null)
+                            {
+                                BindingMappingManager.RegisterBindingFromFile(genericPanelBinding);
+                            }
                             insideJSONPanel = false;
                         }
                         else
@@ -260,29 +278,13 @@ namespace NonVisuals
                                 {
                                     line = line.Replace("\t", "");
                                 }
-                                if (currentPanelSettingsVersion != null)
-                                {
-                                    //0X marks that setting version isn't used (yet). Any number above 0 indicated the panel are using new versions of the settings
-                                    //and that old settings won't be loaded.
-                                    if (currentPanelSettingsVersion.EndsWith("0X"))
-                                    {
-                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
-                                    }
-                                    else
-                                    {
-                                        _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID + SaitekConstants.SEPARATOR_SYMBOL + currentPanelSettingsVersion);
-                                    }
-                                }
-                                else
-                                {
-                                    _listPanelSettingsData.Add(line + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
-                                }
+                                
+                                genericPanelBinding.Settings.Add(line);
                             }
-
 
                             if (insideJSONPanel)
                             {
-                                _listPanelSettingsData.Add(fileLine + SaitekConstants.SEPARATOR_SYMBOL + currentPanelInstanceID);
+                                genericPanelBinding.JSONAddLine(fileLine);
                             }
                         }
                     }
@@ -293,94 +295,107 @@ namespace NonVisuals
                     SetOperationLevelFlag();
                 }
 
-                SendSettingsReadEvent();
-                CheckAllProfileInstanceIDsAgainstAttachedHardware();
+                CheckHardwareConflicts();
+
+                SendBindingsReadEvent();
                 return true;
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
                 return false;
             }
         }
-        
+
+        private void CheckHardwareConflicts()
+        {
+            var settingsWereModified = false;
+            if (!BindingMappingManager.VerifyBindings(ref settingsWereModified))
+            {
+                var modifiedBindings = _hardwareConflictResolver.ResolveConflicts();
+                BindingMappingManager.MergeModifiedBindings(modifiedBindings);
+                settingsWereModified = modifiedBindings != null && modifiedBindings.Count > 0;
+            }
+            if (settingsWereModified)
+            {
+                SetIsDirty();
+            }
+        }
+
         private void SetOperationLevelFlag()
         {
             if (_airframe == DCSAirframe.KEYEMULATOR)
             {
-                Common.SetOperationModeFlag(OperationFlag.KeyboardEmulationOnly);
+                Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
             }
             else if (_airframe == DCSAirframe.KEYEMULATOR_SRS)
             {
-                Common.SetOperationModeFlag(OperationFlag.KeyboardEmulationOnly);
-                Common.SetOperationModeFlag(OperationFlag.SRSEnabled);
+                Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
+                Common.SetEmulationMode(EmulationMode.SRSEnabled);
             }
             else if (_airframe == DCSAirframe.FC3_CD_SRS)
             {
-                Common.SetOperationModeFlag(OperationFlag.SRSEnabled);
-                Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled);
+                Common.SetEmulationMode(EmulationMode.SRSEnabled);
+                Common.SetEmulationMode(EmulationMode.DCSBIOSOutputEnabled);
             }
             else
             {
-                Common.SetOperationModeFlag(OperationFlag.DCSBIOSOutputEnabled | OperationFlag.DCSBIOSInputEnabled);
+                Common.SetEmulationMode(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSInputEnabled);
             }
         }
 
-        private void CheckAllProfileInstanceIDsAgainstAttachedHardware()
-        {
-            foreach (var saitekPanelSkeleton in Common.GamingPanelSkeletons)
-            {
-                foreach (var hidDevice in HidDevices.Enumerate(saitekPanelSkeleton.VendorId, saitekPanelSkeleton.ProductId))
-                {
-                    if (hidDevice != null)
-                    {
-                        try
-                        {
-                            _profileFileInstanceIDs.RemoveAll(item => item.Key.Equals(hidDevice.DevicePath));
-                        }
-                        catch (Exception ex)
-                        {
-                            Common.ShowErrorMessageBox( ex);
-                        }
-                    }
-                }
-            }
-            if (_profileFileInstanceIDs.Count > 0)
-            {
-                if (OnUserMessageEventHandler != null)
-                {
-                    foreach (var profileFileInstanceID in _profileFileInstanceIDs)
-                    {
-                        if (profileFileInstanceID.Key != HIDSkeletonIgnore.HidSkeletonIgnore)
-                        {
-                            OnUserMessageEventHandler(this,
-                                new UserMessageEventArgs()
-                                {
-                                    UserMessage = "The " + profileFileInstanceID.Value + " panel with USB Instance ID :" + Environment.NewLine + profileFileInstanceID.Key + Environment.NewLine +
-                                                  "cannot be found. Have you rearranged your panels (USB ports) or have you copied someone else's profile?" + Environment.NewLine +
-                                                  "Use the ID button to copy current Instance ID and replace the faulty one in the profile file."
-                                });
-                        }
-                    }
-                }
-            }
-        }
-
-        public void SendSettingsReadEvent()
+        public void SendBindingsReadEvent()
         {
             try
             {
                 if (OnSettingsReadFromFile != null)
                 {
-                    //TODO DENNA ORSAKAR HÄNGANDE!!
                     OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Airframe = _airframe });
-                    //TODO DENNA ORSAKAR HÄNGANDE!!
-                    OnSettingsReadFromFile(this, new SettingsReadFromFileEventArgs() { Settings = _listPanelSettingsData });
+
+                    foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                    {
+                        try
+                        {
+                            OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                        }
+                        catch (Exception e)
+                        {
+                            Common.ShowErrorMessageBox(e, "Error reading settings. Panel : " + genericPanelBinding.PanelType);
+                        }
+                    }
                 }
             }
             catch (Exception e)
             {
-                Common.ShowErrorMessageBox( e);
+                Common.ShowErrorMessageBox(e);
+            }
+        }
+
+        public void SendRadioSettings()
+        {
+            try
+            {
+                if (OnSettingsReadFromFile != null)
+                {
+                    foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
+                    {
+                        try
+                        {
+                            if (genericPanelBinding.PanelType == GamingPanelEnum.PZ69RadioPanel)
+                            {
+                                OnSettingsReadFromFile(this, new PanelBindingReadFromFileEventArgs() { PanelBinding = genericPanelBinding });
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Common.ShowErrorMessageBox(e, "Error reading settings. Panel : " + genericPanelBinding.PanelType);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Common.ShowErrorMessageBox(e);
             }
         }
 
@@ -388,7 +403,7 @@ namespace NonVisuals
         {
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.InitialDirectory = MyDocumentsPath();
+            saveFileDialog.InitialDirectory = string.IsNullOrEmpty(Settings.Default.LastImageFileDialogLocation) ? Constants.PathRootDriveC : Settings.Default.LastImageFileDialogLocation;
             saveFileDialog.FileName = "dcsfp_profile.bindings";
             saveFileDialog.DefaultExt = OPEN_FILE_DIALOG_DEFAULT_EXT;
             saveFileDialog.Filter = OPEN_FILE_DIALOG_FILTER;
@@ -418,50 +433,31 @@ namespace NonVisuals
             set => _filename = value;
         }
 
-        public void RegisterProfileData(GamingPanel gamingPanel, List<string> strings)
+        public void RegisterPanelBinding(GamingPanel gamingPanel, List<string> strings)
         {
             try
             {
                 lock (_lockObject)
                 {
-                    if (strings == null || strings.Count == 0)
+                    var genericPanelBinding = BindingMappingManager.GetBinding(gamingPanel);
+
+                    if (genericPanelBinding == null)
                     {
-                        return;
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstanceId, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
+                        BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
-                    /*
-                     * Example:
-                     *         
-                     * PanelType=PZ55SwitchPanel
-                     * PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&3f11a32&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
-                     * PanelSettingsVersion=2X
-                     * BeginPanel
-                     *      SwitchPanelKey{1KNOB_ENGINE_RIGHT}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_Q}
-                     *      SwitchPanelKey{1KNOB_ENGINE_LEFT}\o/OSKeyPress{FiftyMilliSec,LCONTROL + VK_Q}
-                     *      SwitchPanelKey{1KNOB_ENGINE_BOTH}\o/OSKeyPress{FiftyMilliSec,LSHIFT + VK_C}
-                     * EndPanel
-                     * 
-                     */
-                    _listPanelSettingsData.Add(Environment.NewLine);
-                    _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
-                    _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
-                    _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
-                    _listPanelSettingsData.Add("BeginPanel");
+                    genericPanelBinding.ClearSettings();
 
-                    foreach (var s in strings)
+                    foreach (var str in strings)
                     {
-                        if (s != null)
-                        {
-                            _listPanelSettingsData.Add("\t" + s);
-                        }
+                        genericPanelBinding.Settings.Add(str);
                     }
-
-                    _listPanelSettingsData.Add("EndPanel");
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -471,23 +467,20 @@ namespace NonVisuals
             {
                 lock (_lockObject)
                 {
-                    if (string.IsNullOrEmpty(jsonData))
+                    var genericPanelBinding = BindingMappingManager.GetBinding(gamingPanel);
+
+                    if (genericPanelBinding == null)
                     {
-                        return;
+                        genericPanelBinding = new GenericPanelBinding(gamingPanel.HIDInstanceId, gamingPanel.BindingHash, gamingPanel.TypeOfPanel);
+                        BindingMappingManager.AddBinding(genericPanelBinding);
                     }
 
-                    _listPanelSettingsData.Add(Environment.NewLine);
-                    _listPanelSettingsData.Add("PanelType=" + gamingPanel.TypeOfPanel);
-                    _listPanelSettingsData.Add("PanelInstanceID=" + gamingPanel.InstanceId);
-                    _listPanelSettingsData.Add("PanelSettingsVersion=" + gamingPanel.SettingsVersion());
-                    _listPanelSettingsData.Add("BeginPanelJSON");
-                    _listPanelSettingsData.Add(jsonData);
-                    _listPanelSettingsData.Add("EndPanelJSON");
+                    genericPanelBinding.JSONString = jsonData;
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -514,29 +507,40 @@ namespace NonVisuals
                 headerStringBuilder.AppendLine("#by deleting the + LCONTROL part.");
                 headerStringBuilder.AppendLine("#So for example AltGr + HOME pressed on the keyboard becomes RMENU + LCONTROL + HOME");
                 headerStringBuilder.AppendLine("#Open text editor and delete the LCONTROL ==> RMENU + HOME");
+                headerStringBuilder.AppendLine("#Supported panels :");
+                headerStringBuilder.AppendLine("#   PZ55SwitchPanel");
+                headerStringBuilder.AppendLine("#   PZ69RadioPanel");
+                headerStringBuilder.AppendLine("#   PZ70MultiPanel");
+                headerStringBuilder.AppendLine("#   BackLitPanel");
+                headerStringBuilder.AppendLine("#   StreamDeckMini");
+                headerStringBuilder.AppendLine("#   StreamDeck");
+                headerStringBuilder.AppendLine("#   StreamDeckXL");
+
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
                 stringBuilder.AppendLine("Airframe=" + _airframe);
                 stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
-                stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio);
+                stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio + Environment.NewLine);
 
-                foreach (var s in _listPanelSettingsData)
+                foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {
-                    stringBuilder.AppendLine(s);
+                    if (!genericPanelBinding.HasBeenDeleted)
+                    {
+                        stringBuilder.AppendLine(genericPanelBinding.ExportBinding());
+                    }
                 }
-                //if (!Common.Debug)
-                //{
+
                 stringBuilder.AppendLine(GetFooter());
-                //}
+
                 File.WriteAllText(_filename, stringBuilder.ToString(), Encoding.ASCII);
                 _isDirty = false;
                 _isNewProfile = false;
-                LoadProfile(_filename);
+                LoadProfile(_filename, _hardwareConflictResolver);
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -599,23 +603,23 @@ namespace NonVisuals
 
         public bool UseNS430
         {
-            get => Common.IsOperationModeFlagSet(OperationFlag.NS430Enabled);
+            get => Common.IsOperationModeFlagSet(EmulationMode.NS430Enabled);
             set
             {
                 if (value)
                 {
-                    Common.SetOperationModeFlag(OperationFlag.NS430Enabled);
+                    Common.SetEmulationMode(EmulationMode.NS430Enabled);
                 }
                 else
                 {
-                    Common.ClearOperationModeFlag(OperationFlag.NS430Enabled);
+                    Common.ClearOperationModeFlag(EmulationMode.NS430Enabled);
                 }
                 SetIsDirty();
             }
         }
 
 
-        public delegate void ProfileReadFromFileEventHandler(object sender, SettingsReadFromFileEventArgs e);
+        public delegate void ProfileReadFromFileEventHandler(object sender, PanelBindingReadFromFileEventArgs e);
         public event ProfileReadFromFileEventHandler OnSettingsReadFromFile;
 
         public delegate void SavePanelSettingsEventHandler(object sender, ProfileHandlerEventArgs e);
@@ -635,7 +639,7 @@ namespace NonVisuals
 
         public void Attach(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile += gamingPanel.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile += gamingPanel.PanelBindingReadFromFile;
             OnSavePanelSettings += gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings += gamingPanel.ClearPanelSettings;
@@ -644,7 +648,7 @@ namespace NonVisuals
 
         public void Detach(GamingPanel gamingPanel)
         {
-            OnSettingsReadFromFile -= gamingPanel.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile -= gamingPanel.PanelBindingReadFromFile;
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
@@ -653,13 +657,13 @@ namespace NonVisuals
 
         public void Attach(IProfileHandlerListener gamingPanelSettingsListener)
         {
-            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile += gamingPanelSettingsListener.PanelBindingReadFromFile;
             OnAirframeSelected += gamingPanelSettingsListener.SelectedAirframe;
         }
 
         public void Detach(IProfileHandlerListener gamingPanelSettingsListener)
         {
-            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelSettingsReadFromFile;
+            OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelBindingReadFromFile;
             OnAirframeSelected -= gamingPanelSettingsListener.SelectedAirframe;
         }
 
@@ -678,7 +682,7 @@ namespace NonVisuals
 
         }
     }
-    
+
     public class AirframeEventArgs : EventArgs
     {
         public DCSAirframe Airframe { get; set; }

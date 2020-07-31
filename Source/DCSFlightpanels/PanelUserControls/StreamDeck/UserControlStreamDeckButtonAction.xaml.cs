@@ -22,17 +22,20 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private List<StreamDeckActionTextBox> _textBoxes = new List<StreamDeckActionTextBox>();
 
         private StreamDeckButton _streamDeckButton;
-        private IGlobalHandler _globalHandler;
         private bool _isLoaded = false;
         private bool _isDirty = false;
-        public string PanelHash;
-
+        private StreamDeckPanel _streamDeckPanel;
 
 
 
         public UserControlStreamDeckButtonAction()
         {
             InitializeComponent();
+        }
+
+        internal void SetStreamDeckPanel(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
         }
 
         private void UserControlStreamDeckButtonAction_OnLoaded(object sender, RoutedEventArgs e)
@@ -71,6 +74,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             RadioButtonLayerNav.IsChecked = false;
 
             ComboBoxLayerNavigationButton.SelectedIndex = 0;
+            ComboBoxRemoteStreamDecks.SelectedIndex = 0;
+            ComboBoxRemoteLayers.SelectedIndex = 0;
+
+            ActivateCheckBoxControlRemoteStreamdeck(false);
+            CheckBoxControlRemoteStreamdeck.IsChecked = false;
+            ActivateCheckBoxControlRemoteStreamdeck(true);
 
             _isDirty = false;
 
@@ -90,7 +99,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 StackPanelButtonOSCommandSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.OSCommand ? Visibility.Visible : Visibility.Collapsed;
                 StackPanelButtonLayerNavigationSettings.Visibility = GetSelectedActionType() == EnumStreamDeckActionType.LayerNavigation ? Visibility.Visible : Visibility.Collapsed;
 
-                //StackPanelChooseButtonActionType.IsEnabled = StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
+                StackPanelChooseButtonActionType.IsEnabled = _streamDeckPanel.SelectedButtonName != EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
                 ButtonDeleteKeySequenceButtonOn.IsEnabled = TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
                                                             TextBoxKeyPressButtonOn.Bill.ContainsKeyPress();
@@ -100,10 +109,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 ButtonDeleteDCSBIOSActionButtonOff.IsEnabled = TextBoxDCSBIOSActionButtonOff.Bill.ContainsDCSBIOS();
                 ButtonDeleteOSCommandButtonOn.IsEnabled = TextBoxOSCommandButtonOn.Bill.ContainsOSCommand();
                 ButtonDeleteOSCommandButtonOff.IsEnabled = TextBoxOSCommandButtonOff.Bill.ContainsOSCommand();
+
+                StackPanelControlRemoteStreamdeck.IsEnabled = CheckBoxControlRemoteStreamdeck.IsChecked == true;
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -161,7 +172,27 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         private void RadioButtonButtonActionTypePress_OnClick(object sender, RoutedEventArgs e)
         {
-            SetFormState();
+            try
+            {
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void RadioButtonButtonActionTypeLayerNavigationPress_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                LoadComboBoxRemoteStreamDecks();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
         public EnumStreamDeckActionType GetSelectedActionType()
@@ -190,7 +221,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             foreach (var textBox in _textBoxes)
             {
-                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, !textBox.Name.Contains("Off")));
+                textBox.Bill = new BillStreamDeckAction(textBox, new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, !textBox.Name.Contains("Off")), _streamDeckPanel);
             }
         }
 
@@ -202,7 +233,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         public void SetIsDirty()
         {
             _isDirty = true;
-            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, "");
+            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, "", _streamDeckPanel.BindingHash);
         }
 
         public bool IsDirty
@@ -247,7 +278,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             Clear();
             _streamDeckButton = streamDeckButton;
-            LoadComboBoxLayers();
             if (streamDeckButton == null)
             {
                 return;
@@ -292,8 +322,24 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     }
                 case EnumStreamDeckActionType.LayerNavigation:
                     {
+                        ActivateCheckBoxControlRemoteStreamdeck(false);
+                        CheckBoxControlRemoteStreamdeck.IsChecked = false;
+                        LoadComboBoxLayers();
                         var layerBindingStreamDeck = (ActionTypeLayer)streamDeckButtonAction;
+                        ComboBoxLayerNavigationButton.Text = layerBindingStreamDeck.TargetLayer;
+
+                        if (layerBindingStreamDeck.ControlsRemoteStreamDeck)
+                        {
+                            CheckBoxControlRemoteStreamdeck.IsChecked = true;
+                            LoadComboBoxRemoteStreamDecks();
+                            var streamDeckPanel = StreamDeckPanel.GetInstance(layerBindingStreamDeck.RemoteStreamdeckBindingHash);
+                            LoadComboBoxRemoteStreamDecks();
+                            ComboBoxRemoteStreamDecks.Text = streamDeckPanel.TypeOfPanel.ToString();
+                            ComboBoxRemoteLayers.Text = layerBindingStreamDeck.RemoteStreamdeckTargetLayer;
+                        }
+
                         TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck;
+                        ActivateCheckBoxControlRemoteStreamdeck(true);
                         SetFormState();
                         return;
                     }
@@ -318,9 +364,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         if (textBoxKeyPress.Bill.ContainsKeyPress())
                         {
                             ActionTypeKey result;
-                            result = new ActionTypeKey();
+                            result = new ActionTypeKey(_streamDeckPanel);
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            result.PanelHash = PanelHash;
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSKeyPress = textBoxKeyPress.Bill.KeyPress;
 
@@ -335,7 +380,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            textBoxDCSBIOS.Bill.DCSBIOSBinding.PanelHash = PanelHash;
                             return textBoxDCSBIOS.Bill.DCSBIOSBinding;
                         }
                         return null;
@@ -344,11 +388,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     {
                         if (textBoxOSCommand.Bill.ContainsOSCommand())
                         {
-                            var result = new ActionTypeOS();
+                            var result = new ActionTypeOS(_streamDeckPanel);
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSCommandObject = textBoxOSCommand.Bill.OSCommandObject;
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            result.PanelHash = PanelHash;
                             return result;
                         }
                         return null;
@@ -359,15 +402,48 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             return null;
                         }
-                        if (TextBoxLayerNavButton.Bill.ContainsStreamDeckLayer())
+
+                        var target = new ActionTypeLayer(_streamDeckPanel);
+                        target.TargetLayer = ComboBoxLayerNavigationButton.Text;
+                        switch (ComboBoxLayerNavigationButton.Text)
                         {
-                            var result = TextBoxLayerNavButton.Bill.StreamDeckLayerTarget;
-                            result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            result.PanelHash = PanelHash;
-                            return result;
+                            case StreamDeckConstants.NO_ACTION:
+                                {
+                                    target.NavigationType = LayerNavType.None;
+                                    break;
+                                }
+                            case StreamDeckConstants.GO_TO_HOME_LAYER_STRING:
+                                {
+                                    target.NavigationType = LayerNavType.Home;
+                                    break;
+                                }
+                            case StreamDeckConstants.GO_BACK_ONE_LAYER_STRING:
+                                {
+                                    target.NavigationType = LayerNavType.Back;
+                                    break;
+                                }
+                            default:
+                                {
+                                    target.NavigationType = LayerNavType.SwitchToSpecificLayer;
+                                    break;
+                                }
                         }
 
-                        return null;
+                        if (CheckBoxControlRemoteStreamdeck.IsChecked == true)
+                        {
+                            var streamdeck = (StreamDeckPanel)ComboBoxRemoteStreamDecks.SelectedItem;
+                            if (streamdeck != null && !string.IsNullOrEmpty(ComboBoxRemoteLayers.Text))
+                            {
+                                target.RemoteStreamdeckBindingHash = streamdeck.BindingHash;
+                                target.RemoteStreamdeckTargetLayer = ComboBoxRemoteLayers.Text;
+                            }
+                        }
+
+                        TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = target;
+
+                        var result = target;
+                        result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
+                        return result;
                     }
                 case EnumStreamDeckActionType.Unknown:
                     {
@@ -378,12 +454,6 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             throw new ArgumentException("GetStreamDeckButtonAction, failed to determine Action Type for button");
         }
 
-        public IGlobalHandler GlobalHandler
-        {
-            get => _globalHandler;
-            set => _globalHandler = value;
-        }
-        
         private void ButtonAddEditKeySequenceButtonOn_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditKeyPress(TextBoxKeyPressButtonOn);
@@ -440,7 +510,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -450,7 +520,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 TextBoxKeyPressButtonOn.Bill.Clear();
                 SetIsDirty();
-                
+
             }
             catch (Exception ex)
             {
@@ -464,7 +534,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 TextBoxKeyPressButtonOff.Bill.Clear();
                 SetIsDirty();
-                
+
             }
             catch (Exception ex)
             {
@@ -485,7 +555,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(),
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(),
                         textBox.Name.Replace("TextBox", ""),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
@@ -495,7 +565,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null, true);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();
@@ -513,13 +583,13 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     textBox.Bill.DCSBIOSBinding.IsSequenced = dcsbiosControlsConfigsWindow.IsSequenced;
                     textBox.Bill.DCSBIOSBinding.Description = dcsbiosControlsConfigsWindow.Description;
                     SetIsDirty();
-                    
+
                 }
                 ButtonFocus.Focus();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -541,7 +611,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 TextBoxDCSBIOSActionButtonOn.Bill.Clear();
-                
+
             }
             catch (Exception ex)
             {
@@ -554,7 +624,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 AddEditDCSBIOS(TextBoxDCSBIOSActionButtonOff);
-                
+
             }
             catch (Exception ex)
             {
@@ -607,11 +677,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     SetIsDirty();
                 }
                 ButtonFocus.Focus();
-                
+
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -633,7 +703,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 TextBoxOSCommandButtonOn.Bill.Clear();
-                
+
             }
             catch (Exception ex)
             {
@@ -659,63 +729,119 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 TextBoxOSCommandButtonOff.Bill.Clear();
-                
+
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ComboBoxLayerNavigationButton_OnDropDownClosed(object sender, EventArgs e)
         {
             try
             {
-                var target = new ActionTypeLayer();
-                target.TargetLayer = ComboBoxLayerNavigationButton.Text;
-                switch (ComboBoxLayerNavigationButton.Text)
-                {
-                    case StreamDeckConstants.GO_TO_HOME_LAYER_STRING:
-                        {
-                            target.NavigationType = LayerNavType.Home;
-                            break;
-                        }
-                    case StreamDeckConstants.GO_BACK_ONE_LAYER_STRING:
-                        {
-                            target.NavigationType = LayerNavType.Back;
-                            break;
-                        }
-                    default:
-                        {
-                            target.NavigationType = LayerNavType.SwitchToSpecificLayer;
-                            break;
-                        }
-                }
-
-                TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = target;
                 ActionTypeChangedLayerNavigation(StreamDeckConstants.TranslateLayerName(ComboBoxLayerNavigationButton.Text));
                 SetIsDirty();
-                
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void ButtonIdentifyStreamdeck_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var streamdeck = (StreamDeckPanel)ComboBoxRemoteStreamDecks.SelectedItem;
+                streamdeck?.Identify();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+
+        private void ComboBoxRemoteStreamDecks_OnDropDownClosed(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CheckBoxControlRemoteStreamdeck.IsChecked == true)
+                {
+                    SetIsDirty();
+                }
+                LoadComboBoxRemoteLayers();
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LoadComboBoxRemoteLayers()
+        {
+            ComboBoxRemoteLayers.ItemsSource = null;
+            var streamdeck = (StreamDeckPanel)ComboBoxRemoteStreamDecks.SelectedItem;
+            if (streamdeck != null)
+            {
+                var layerList = streamdeck.LayerList;
+                ComboBoxRemoteLayers.ItemsSource = layerList;
+            }
+        }
+
+        private void ComboBoxRemoteLayers_OnDropDownClosed(object sender, EventArgs e)
+        {
+            try
+            {
+                if (CheckBoxControlRemoteStreamdeck.IsChecked == true)
+                {
+                    SetIsDirty();
+                }
+                SetFormState();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void LoadComboBoxRemoteStreamDecks()
+        {
+            if (CheckBoxControlRemoteStreamdeck.IsChecked == false)
+            {
+                return;
+            }
+
+            var streamDeckList = StreamDeckPanel.GetStreamDeckPanels();
+
+            var modifiedList = new List<StreamDeckPanel>();
+            modifiedList.AddRange(streamDeckList);
+
+            //Remove current Streamdeck
+            modifiedList.RemoveAll(o => o.HIDInstanceId == _streamDeckPanel.HIDInstanceId);
+
+            ComboBoxRemoteStreamDecks.ItemsSource = modifiedList;
+            ComboBoxRemoteStreamDecks.Items.Refresh();
+            LoadComboBoxRemoteLayers();
         }
 
         private void LoadComboBoxLayers()
         {
 
-            if (StreamDeckPanel.GetInstance(PanelHash).SelectedLayer == null)
+            if (_streamDeckPanel.SelectedLayer == null)
             {
                 return;
             }
 
-            var selectedLayerName = StreamDeckPanel.GetInstance(PanelHash).SelectedLayer.Name;
+            var selectedLayerName = _streamDeckPanel.SelectedLayer.Name;
 
             var selectedIndex = ComboBoxLayerNavigationButton.SelectedIndex;
 
-            var layerList = StreamDeckPanel.GetInstance(PanelHash).GetStreamDeckLayerNames();
+            var layerList = _streamDeckPanel.GetStreamDeckLayerNames();
 
             if (layerList == null)
             {
@@ -723,6 +849,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             layerList.Insert(0, StreamDeckConstants.GO_BACK_ONE_LAYER_STRING);
             layerList.Insert(0, StreamDeckConstants.GO_TO_HOME_LAYER_STRING);
+            layerList.Insert(0, StreamDeckConstants.NO_ACTION);
             ComboBoxLayerNavigationButton.ItemsSource = layerList;
             ComboBoxLayerNavigationButton.Items.Refresh();
 
@@ -768,6 +895,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         public class ActionTypeChangedEventArgs : EventArgs
         {
+            public string BindingHash { get; set; }
             public EnumStreamDeckActionType ActionType { get; set; }
             public string TargetLayerName { get; set; }
         }
@@ -775,11 +903,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         private void ActionTypeChangedLayerNavigation(string layerName)
         {
             var arguments = new ActionTypeChangedEventArgs();
+            arguments.BindingHash = _streamDeckPanel.BindingHash;
             arguments.ActionType = GetSelectedActionType();
             arguments.TargetLayerName = layerName;
             OnActionTypeChanged?.Invoke(this, arguments);
         }
-        
+
         public StreamDeckButtonOnOff GetStreamDeckButtonOnOff(StreamDeckActionTextBox textBox)
         {
             try
@@ -790,11 +919,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             if (textBox.Equals(TextBoxKeyPressButtonOn))
                             {
-                                return new StreamDeckButtonOnOff( StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, true);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxKeyPressButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, false);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
                             }
 
                             break;
@@ -803,11 +932,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             if (textBox.Equals(TextBoxDCSBIOSActionButtonOn))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, true);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxDCSBIOSActionButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, false);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
                             }
 
                             break;
@@ -816,11 +945,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             if (textBox.Equals(TextBoxOSCommandButtonOn))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, true);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, true);
                             }
                             if (textBox.Equals(TextBoxOSCommandButtonOff))
                             {
-                                return new StreamDeckButtonOnOff(StreamDeckPanel.GetInstance(PanelHash).SelectedButtonName, false);
+                                return new StreamDeckButtonOnOff(_streamDeckPanel.SelectedButtonName, false);
                             }
 
                             break;
@@ -842,7 +971,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
             throw new Exception("Failed to determine focused component (GetStreamDeckButtonOnOff) ");
         }
@@ -851,11 +980,29 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() =>
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
                 {
-                    Clear();
-                    SetFormState();
-                }));
+                    Dispatcher?.BeginInvoke((Action) (() =>
+                    {
+                        Clear();
+                        SetFormState();
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                if (_streamDeckPanel.BindingHash == e.RemoteBindingHash)
+                {
+                    Dispatcher?.BeginInvoke((Action) (SetFormState));
+                }
             }
             catch (Exception ex)
             {
@@ -867,8 +1014,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                ShowStreamDeckButton(StreamDeckPanel.GetInstance(PanelHash).SelectedButton);
-                SetFormState();
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    ShowStreamDeckButton(_streamDeckPanel.SelectedButton);
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -897,7 +1047,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                SetFormState();
+                if (_streamDeckPanel.BindingHash == e.BindingHash)
+                {
+                    SetFormState();
+                }
             }
             catch (Exception ex)
             {
@@ -909,7 +1062,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                if (e.ClearActionConfiguration)
+                if (_streamDeckPanel.BindingHash == e.BindingHash && e.ClearActionConfiguration)
                 {
                     Clear();
                 }
@@ -919,6 +1072,40 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             {
                 Common.LogError(ex);
             }
+        }
+
+        private void CheckBoxControlRemoteStreamdeck_CheckedChange(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CheckBoxControlRemoteStreamdeck.IsChecked == false)
+                {
+                    ComboBoxRemoteStreamDecks.ItemsSource = null;
+                    ComboBoxRemoteLayers.ItemsSource = null;
+                }
+                SetIsDirty();
+                SetFormState();
+                LoadComboBoxRemoteStreamDecks();
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        private void ActivateCheckBoxControlRemoteStreamdeck(bool activate)
+        {
+            if (activate)
+            {
+                CheckBoxControlRemoteStreamdeck.Checked += CheckBoxControlRemoteStreamdeck_CheckedChange;
+                CheckBoxControlRemoteStreamdeck.Unchecked += CheckBoxControlRemoteStreamdeck_CheckedChange;
+            }
+            else
+            {
+                CheckBoxControlRemoteStreamdeck.Checked -= CheckBoxControlRemoteStreamdeck_CheckedChange;
+                CheckBoxControlRemoteStreamdeck.Unchecked -= CheckBoxControlRemoteStreamdeck_CheckedChange;
+            }
+
         }
     }
 }

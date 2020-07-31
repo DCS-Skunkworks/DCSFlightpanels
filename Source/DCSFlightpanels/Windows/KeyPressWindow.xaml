@@ -28,7 +28,7 @@
             <controls:Label Content="Time to for key press (ms)"/>
             <controls:ComboBox Name="ComboBoxKeyPressTime" ItemsSource="{data:Binding Source={StaticResource KeyPressLengthEnum}}" TabIndex="20" SelectionChanged="ComboBoxSelectionChanged"/>
         </controls:StackPanel>
-        <controls:Button Content="Add NULL Key" Height="23"  Name="ButtonAddNullKey"  Width="115" Margin="286,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" controls:Grid.Row="1" Click="ButtonAddNullKey_OnClick" TabIndex="30" />
+        <controls:Button Content="Add VKNULL Key" Height="23"  Name="ButtonAddNullKey"  Width="115" Margin="286,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" controls:Grid.Row="1" Click="ButtonAddNullKey_OnClick" TabIndex="30" />
         <controls:Button Content="OK" Height="23"  Name="ButtonOk"  Width="75" Margin="446,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" controls:Grid.Row="1" Click="ButtonOkClick" TabIndex="30" />
         <controls:Button Content="Cancel" Height="23"  Name="ButtonCancel"  Width="75" Margin="0,0,6,12" HorizontalAlignment="Right" VerticalAlignment="Bottom"  controls:Grid.Column="2" controls:Grid.Row="1" Click="ButtonCancelClick" TabIndex="40" />
     </controls:Grid>

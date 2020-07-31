@@ -11,6 +11,7 @@ using NonVisuals;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
@@ -25,21 +26,20 @@ namespace DCSFlightpanels.PanelUserControls
     public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private readonly IGlobalHandler _globalHandler;
-        private bool _userControlLoaded;
+        
         private bool _textBoxBillsSet;
 
         public MultiPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             _multiPanelPZ70 = new MultiPanelPZ70(hidSkeleton);
             _multiPanelPZ70.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_multiPanelPZ70);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
 
             HideAllImages();
         }
@@ -57,7 +57,7 @@ namespace DCSFlightpanels.PanelUserControls
             ComboBoxLcdKnobSensitivity.SelectedValue = Settings.Default.PZ70LcdKnobSensitivity;
             SetTextBoxBills();
             SetContextMenuClickHandlers();
-            _userControlLoaded = true;
+            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
 
@@ -68,9 +68,14 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _multiPanelPZ70;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ70MultiPanel;
         }
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
@@ -94,7 +99,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetApplicationMode()
         {
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Visible;
                 ButtonLcdLower.Visibility = Visibility.Visible;
@@ -110,7 +115,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel && e.UniqueId.Equals(_multiPanelPZ70.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel && e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId))
                 {
                     NotifyKnobChanges(e.Switches);
                 }
@@ -121,11 +126,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.PanelBinding.HIDInstance)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -137,8 +145,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ClearAll(false);
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.PZ70MultiPanel && _multiPanelPZ70.HIDInstanceId == e.HidInstance)
+                {
+                    ClearAll(false);
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -188,7 +199,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_multiPanelPZ70.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ70MultiPanel)
+                if (e.HidInstance.Equals(_multiPanelPZ70.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ70MultiPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ70.Text = ""));
@@ -211,8 +222,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_multiPanelPZ70 != null)
                 {
                     TextBoxLogPZ70.Text = "";
-                    TextBoxLogPZ70.Text = _multiPanelPZ70.InstanceId;
-                    Clipboard.SetText(_multiPanelPZ70.InstanceId);
+                    TextBoxLogPZ70.Text = _multiPanelPZ70.HIDInstanceId;
+                    Clipboard.SetText(_multiPanelPZ70.HIDInstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");
                 }
             }
@@ -533,16 +544,16 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         if (dcsbiosBindingLCDPZ70.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
                         break;
                     }
                 }
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();
@@ -595,7 +606,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_userControlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }
@@ -658,7 +669,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     ButtonLcdLower.Visibility = Visibility.Hidden;
                 }
-                else if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+                else if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                 {
                     ButtonLcdLower.Visibility = Visibility.Visible;
                 }
@@ -1016,11 +1027,11 @@ namespace DCSFlightpanels.PanelUserControls
                 DCSBIOSOutputControlsWindow dcsBIOSInputControlsWindow;
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSOutputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSInputControlsWindow = new DCSBIOSOutputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSOutputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsBIOSInputControlsWindow = new DCSBIOSOutputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
                 dcsBIOSInputControlsWindow.ShowDialog();
                 if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -1226,7 +1237,7 @@ namespace DCSFlightpanels.PanelUserControls
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Hidden;
                 ButtonLcdLower.Visibility = Visibility.Hidden;
@@ -1447,7 +1458,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var contextMenu = (ContextMenu)sender;
-                if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+                if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                 {
                     ((MenuItem)contextMenu.Items[0]).IsEnabled = true;
                 }
@@ -1497,7 +1508,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.PZ70LcdKnobSensitivity = int.Parse(ComboBoxLcdKnobSensitivity.SelectedValue.ToString());
                     _multiPanelPZ70.LCDKnobSensitivity = int.Parse(ComboBoxLcdKnobSensitivity.SelectedValue.ToString());
@@ -1901,14 +1912,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (contextMenuItem.Name == "contextMenuItemKeepPressed")
                 {
-                    var message = "Remember to set a command for the opposing action!\n\n" +
-                                  "For example if you set Keep Pressed for the \"On\" position for a button you need to set a command for \"Off\" position.\n" +
-                                  "This way the continuous Keep Pressed will be canceled.\n" +
-                                  "If you do not want a key press to cancel the continuous key press you can add a \"VK_NULL\" key.\n" +
-                                  "\"VK_NULL\'s\" sole purpose is to cancel a continuous key press.";
-                    var infoDialog = new InformationTextBlockWindow(message);
-                    infoDialog.Height = 250;
-                    infoDialog.ShowDialog();
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")
@@ -1971,6 +1974,18 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
                 }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _multiPanelPZ70.Identify();
             }
             catch (Exception ex)
             {

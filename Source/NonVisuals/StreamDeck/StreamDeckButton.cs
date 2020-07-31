@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
@@ -19,10 +20,11 @@ namespace NonVisuals.StreamDeck
         private IStreamDeckButtonAction _buttonActionForRelease = null;
         [NonSerialized] private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         [NonSerialized] private Thread _keyPressedThread;
-        private string _panelHash;
-        private bool _isVisible = false;
-        
-        [NonSerialized] private static List<StreamDeckButton> _streamDeckButtons = new List<StreamDeckButton>();
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
+        private volatile bool _isVisible = false;
+
+        [NonSerialized] private static List<StreamDeckButton> _staticStreamDeckButtons = new List<StreamDeckButton>();
 
 
 
@@ -31,11 +33,22 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, string panelHash)
+        public StreamDeckButton(EnumStreamDeckButtonNames enumStreamDeckButton, StreamDeckPanel streamDeckPanel)
         {
             _streamDeckButtonName = enumStreamDeckButton;
-            _panelHash = panelHash;
-            _streamDeckButtons.Add(this);
+            _streamDeckPanel = streamDeckPanel;
+        }
+
+        /*
+         * Used for easier access to the buttons instead of having to go through the layer
+         */
+        public void RegisterButtonToStaticList()
+        {
+            if (_staticStreamDeckButtons.Exists(o => o == this))
+            {
+                return;
+            }
+            _staticStreamDeckButtons.Add(this);
         }
 
         private void ReleaseUnmanagedResources()
@@ -49,12 +62,12 @@ namespace NonVisuals.StreamDeck
             if (disposing)
             {
                 _cancellationTokenSource?.Dispose();
-                _streamDeckButtons.Remove(this);
+                _staticStreamDeckButtons.Remove(this);
                 IsVisible = false;
                 _buttonFace?.Dispose();
                 _buttonActionForPress = null;
                 _buttonActionForRelease = null;
-                _streamDeckButtons.Remove(this);
+                _staticStreamDeckButtons.Remove(this);
             }
         }
 
@@ -68,24 +81,33 @@ namespace NonVisuals.StreamDeck
         {
             Dispose(false);
         }
-        
-        public static StreamDeckButton Get(EnumStreamDeckButtonNames streamDeckButtonName)
+
+        public static StreamDeckButton GetStatic(EnumStreamDeckButtonNames streamDeckButtonName)
         {
-            return _streamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
+            return _staticStreamDeckButtons.Find(o => o.StreamDeckButtonName == streamDeckButtonName);
         }
 
         public static void DisposeAll()
         {
-            for (var i = 0; i < _streamDeckButtons.Count; i++)
+            for (var i = 0; i < _staticStreamDeckButtons.Count; i++)
             {
-                var streamDeckButton= _streamDeckButtons[i];
+                var streamDeckButton = _staticStreamDeckButtons[i];
                 streamDeckButton.Dispose();
             }
         }
 
-        public static List<StreamDeckButton> GetButtons()
+        public static List<StreamDeckButton> WarningGetStaticButtons()
         {
-            return _streamDeckButtons;
+            return _staticStreamDeckButtons;
+        }
+
+        public static List<StreamDeckButton> GetStaticButtons(StreamDeckPanel streamDeckPanel)
+        {
+            if (streamDeckPanel == null)
+            {
+                return _staticStreamDeckButtons;
+            }
+            return _staticStreamDeckButtons.FindAll(o => o.StreamDeckPanelInstance.BindingHash == streamDeckPanel.BindingHash).ToList();
         }
 
         public void DoPress()
@@ -123,7 +145,7 @@ namespace NonVisuals.StreamDeck
 
         public void ClearFace()
         {
-            StreamDeckPanel.GetInstance(_panelHash).ClearFace(_streamDeckButtonName);
+            _streamDeckPanel.ClearFace(_streamDeckButtonName);
         }
 
         private void ThreadedPress(CancellationToken threadCancellationToken)
@@ -171,12 +193,12 @@ namespace NonVisuals.StreamDeck
 
         public bool CheckIfWouldOverwrite(StreamDeckButton newStreamDeckButton)
         {
-            var result = _buttonFace != null && newStreamDeckButton.Face != null || 
-                         _buttonActionForPress != null && newStreamDeckButton.ActionForPress != null || 
+            var result = _buttonFace != null && newStreamDeckButton.Face != null ||
+                         _buttonActionForPress != null && newStreamDeckButton.ActionForPress != null ||
                          _buttonActionForRelease != null && newStreamDeckButton.ActionForRelease != null;
             return result;
         }
-        
+
         public void Consume(StreamDeckButton newStreamDeckButton)
         {
             if (!this.Equals(newStreamDeckButton))
@@ -341,22 +363,26 @@ namespace NonVisuals.StreamDeck
                 return result;
             }
         }
-       
-        //fugly
-        public void SetStreamDeckPanelHash(string panelHash)
+
+        [JsonIgnore]
+        public StreamDeckPanel StreamDeckPanelInstance
         {
-            _panelHash = panelHash;
-            if (_buttonFace != null)
+            get => _streamDeckPanel;
+            set
             {
-                _buttonFace.PanelHash = _panelHash;
-            }
-            if (_buttonActionForPress != null)
-            {
-                _buttonActionForPress.PanelHash = _panelHash;
-            }
-            if (_buttonActionForRelease != null)
-            {
-                _buttonActionForRelease.PanelHash = _panelHash;
+                _streamDeckPanel = value;
+                if (_buttonFace != null)
+                {
+                    _buttonFace.StreamDeckPanelInstance = value;
+                }
+                if (_buttonActionForPress != null)
+                {
+                    _buttonActionForPress.StreamDeckPanelInstance = value;
+                }
+                if (_buttonActionForRelease != null)
+                {
+                    _buttonActionForRelease.StreamDeckPanelInstance = value;
+                }
             }
         }
 

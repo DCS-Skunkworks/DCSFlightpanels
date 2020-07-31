@@ -6,6 +6,8 @@ using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Radios.Knobs;
+using NonVisuals.Radios.Misc;
 using NonVisuals.Saitek;
 
 
@@ -76,18 +78,18 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            //Clear current bindings
             ClearSettings();
-            if (settings == null || settings.Count == 0)
-            {
-                return;
-            }
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
+
                     if (setting.StartsWith("RadioPanelKeyDialPos{"))
                     {
                         var keyBinding = new KeyBindingPZ69DialPosition();
@@ -125,10 +127,10 @@ namespace NonVisuals.Radios
                         _dcsBiosBindings.Add(dcsbiosBindingPZ69);
                     }
                 }
-            }
 
-            _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
-            SettingsApplied();
+                _keyBindings = KeyBindingPZ69DialPosition.SetNegators(_keyBindings);
+                SettingsApplied();
+            }
         }
 
         public override List<string> ExportSettings()
@@ -190,7 +192,7 @@ namespace NonVisuals.Radios
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -996,15 +998,10 @@ namespace NonVisuals.Radios
             dcsOutputAndColorBinding.SaitekLEDPosition = saitekPanelLEDPosition;
             return dcsOutputAndColorBinding;
         }
-        
+
         private void CreateSwitchKeys()
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
-        }
-        
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
 
         public HashSet<DCSBIOSOutputBindingPZ69> LCDBindings

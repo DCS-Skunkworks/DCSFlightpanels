@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
 
 namespace NonVisuals.DCSBIOSBindings
 {
@@ -15,7 +13,7 @@ namespace NonVisuals.DCSBIOSBindings
          Pressing the button will send a DCSBIOS command.
          */
         private SwitchPanelPZ55Keys _switchPanelPZ55Key;
-        
+
         ~DCSBIOSActionBindingPZ55()
         {
             CancelSendDCSBIOSCommands = true;
@@ -56,13 +54,15 @@ namespace NonVisuals.DCSBIOSBindings
                 //The rest of the array besides last entry are DCSBIOSInput
                 //DCSBIOSInput{AAP_EGIPWR|FIXED_STEP|INC}
                 DCSBIOSInputs = new List<DCSBIOSInput>();
-                for (int i = 1; i < parameters.Length - 1; i++)
+                for (var i = 0; i < parameters.Length; i++)
                 {
-                    var dcsbiosInput = new DCSBIOSInput();
-                    dcsbiosInput.ImportString(parameters[i]);
-                    DCSBIOSInputs.Add(dcsbiosInput);
+                    if (parameters[i].StartsWith("DCSBIOSInput{"))
+                    {
+                        var dcsbiosInput = new DCSBIOSInput();
+                        dcsbiosInput.ImportString(parameters[i]);
+                        DCSBIOSInputs.Add(dcsbiosInput);
+                    }
                 }
-
             }
         }
 
@@ -86,7 +86,7 @@ namespace NonVisuals.DCSBIOSBindings
             }
             return "SwitchPanelDCSBIOSControl{" + onStr + Enum.GetName(typeof(SwitchPanelPZ55Keys), SwitchPanelPZ55Key) + "}" + SaitekConstants.SEPARATOR_SYMBOL + stringBuilder.ToString();
         }
-        
+
         public SwitchPanelPZ55Keys SwitchPanelPZ55Key
         {
             get => _switchPanelPZ55Key;

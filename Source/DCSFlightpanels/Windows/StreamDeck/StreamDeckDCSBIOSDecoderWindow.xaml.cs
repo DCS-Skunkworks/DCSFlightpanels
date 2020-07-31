@@ -33,7 +33,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     /// </summary>
     public partial class StreamDeckDCSBIOSDecoderWindow : Window, IIsDirty, IDisposable
     {
-        private string _panelHash;
+        private StreamDeckPanel _streamDeckPanel;
         private bool _formLoaded;
         private Popup _popupSearch;
         private DataGrid _popupDataGrid;
@@ -45,7 +45,6 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private bool _populatingData = false;
 
         private DCSBIOSDecoder _dcsbiosDecoder = null;
-
         private bool _exitThread;
 
         private readonly string _formulaFile = AppDomain.CurrentDomain.BaseDirectory + "\\formulas.txt";
@@ -54,28 +53,29 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
 
 
-        public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, string panelHash)
+        public StreamDeckDCSBIOSDecoderWindow(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {
             InitializeComponent();
             _dcsbiosDecoder = dcsbiosDecoder;
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _panelHash = panelHash;
+            _streamDeckPanel = streamDeckPanel;
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }
 
-        public StreamDeckDCSBIOSDecoderWindow(string panelHash)
+        public StreamDeckDCSBIOSDecoderWindow(StreamDeckPanel streamDeckPanel)
         {
             InitializeComponent();
-            _dcsbiosDecoder = new DCSBIOSDecoder();
+            _streamDeckPanel = streamDeckPanel;
+            _dcsbiosDecoder = new DCSBIOSDecoder(streamDeckPanel);
             _dcsbiosDecoder.DecoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
-            _dcsbiosDecoder.PanelHash = panelHash;
+            _dcsbiosDecoder.StreamDeckPanelInstance = streamDeckPanel;
             LoadDefaults();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
-            _dcsbiosDecoder.StreamDeckButtonName = StreamDeckPanel.GetInstance(panelHash).SelectedButtonName;
-            _panelHash = panelHash;
+            _dcsbiosDecoder.StreamDeckButtonName = streamDeckPanel.SelectedButtonName;
+            
             var thread = new Thread(ThreadLoop);
             thread.Start();
         }
@@ -180,7 +180,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
 
             SetInfoTextBoxes();
 
-            DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _panelHash);
+            DCSBIOSDecoder.ShowOnly(_dcsbiosDecoder, _streamDeckPanel);
             if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
             {
                 RadioButtonIntegerSource.IsChecked = true;
@@ -561,11 +561,13 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _panelHash);
+                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _streamDeckPanel);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
-                    _dcsbiosDecoder.Add(window.DCSBIOSConverter.DeepClone());
+                    DCSBIOSConverter dcsbiosConverter = window.DCSBIOSConverter.DeepClone();
+                    dcsbiosConverter.StreamDeckPanelInstance = _streamDeckPanel;
+                    _dcsbiosDecoder.Add(dcsbiosConverter);
                     window.DCSBIOSConverter = null;
                     ShowConverters();
                     SetFormState();
@@ -587,7 +589,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     return;
                 }
                 var converter = (DCSBIOSConverter)DataGridConverters.SelectedItems[0];
-                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, _panelHash, converter);
+                var window = new StreamDeckDCSBIOSConverterWindow(_dcsbiosDecoder.StreamDeckButtonName, converter, _streamDeckPanel);
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {

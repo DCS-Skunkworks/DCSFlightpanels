@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Properties;
 using DCSFlightpanels.Windows;
 using NonVisuals;
@@ -20,8 +21,7 @@ namespace DCSFlightpanels.PanelUserControls
     {
 
         private readonly BacklitPanelBIP _backlitPanelBIP;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
+
         private readonly List<Image> _colorImages = new List<Image>();
         private readonly List<Image> _configurationIndicatorImages = new List<Image>();
         private readonly BitmapImage _blackImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/black.png"));
@@ -29,25 +29,24 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
-        private bool _loaded;
-        private readonly IGlobalHandler _globalHandler;
 
         public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
             _backlitPanelBIP = new BacklitPanelBIP(Settings.Default.BIPLedStrength, hidSkeleton);
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
 
             _backlitPanelBIP.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_backlitPanelBIP);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
         }
 
         private void BackLitPanelUserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             Init();
-            _loaded = true;
+            UserControlLoaded = true;
             SetContextMenuClickHandlers();
             SetAllBlack();
             ShowGraphicConfiguration();
@@ -65,9 +64,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _backlitPanelBIP;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.BackLitPanel;
         }
 
         public string GetName()
@@ -76,11 +80,11 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
         public void SelectedAirframe(object sender, AirframeEventArgs e) { }
-        
+
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
         public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e) { }
 
@@ -88,11 +92,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.BackLitPanel && _backlitPanelBIP.HIDInstanceId == e.HidInstance)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -100,7 +107,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -108,7 +115,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -118,7 +125,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -126,7 +133,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -134,7 +141,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -142,7 +149,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -150,14 +157,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -165,14 +172,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.BackLitPanel && e.UniqueId.Equals(_backlitPanelBIP.InstanceId))
+                if (e.PanelType == GamingPanelEnum.BackLitPanel && e.HidInstance.Equals(_backlitPanelBIP.HIDInstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -196,7 +203,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_loaded)
+                if (!UserControlLoaded)
                 {
                     return;
                 }
@@ -210,7 +217,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -232,7 +239,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var imageName = contextMenu.Tag.ToString();
                 var position = GetLedPosition(imageName);
 
-                var ledConfigsWindow = new LEDConfigsWindow(_globalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
+                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position
@@ -242,7 +249,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -403,14 +410,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
             return result;
         }
 
         private void SetContextMenuClickHandlers()
         {
-            if (!Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (!Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 return;
             }
@@ -569,9 +576,10 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
+
 
         private void LEDIncrease_OnClick(object sender, RoutedEventArgs e)
         {
@@ -581,7 +589,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -593,7 +601,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -605,14 +613,14 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_backlitPanelBIP != null)
                 {
                     TextBoxLogBIP.Text = "";
-                    TextBoxLogBIP.Text = _backlitPanelBIP.InstanceId;
-                    Clipboard.SetText(_backlitPanelBIP.InstanceId);
+                    TextBoxLogBIP.Text = _backlitPanelBIP.HIDInstanceId;
+                    Clipboard.SetText(_backlitPanelBIP.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -622,13 +630,25 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_backlitPanelBIP != null)
                 {
-                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.InstanceId));
+                    Clipboard.SetText(Common.GetMd5Hash(_backlitPanelBIP.HIDInstanceId));
                     MessageBox.Show("The MD5 hash for the panel has been copied to the Clipboard.\nUse this value when you connect switches to B.I.P. lights.");
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _backlitPanelBIP.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
     }

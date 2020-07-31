@@ -11,10 +11,12 @@ using DCSFlightpanels.Properties;
 using DCS_BIOS;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Windows;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -26,9 +28,6 @@ namespace DCSFlightpanels.Radios
     public partial class RadioPanelPZ69UserControlEmulatorFull : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69EmulatorFull _radioPanelPZ69;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private IGlobalHandler _globalHandler;
         private bool _userControlLoaded;
         private bool _textBoxBillsSet;
         private bool _buttonBillsSet;
@@ -39,17 +38,17 @@ namespace DCSFlightpanels.Radios
         public RadioPanelPZ69UserControlEmulatorFull(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             HideAllImages();
 
             _radioPanelPZ69 = new RadioPanelPZ69EmulatorFull(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
-            _globalHandler = globalHandler;
-
-            //LoadConfiguration();
+            GlobalHandler = globalHandler;
         }
 
         private void RadioPanelPZ69UserControlEmulatorFull_OnLoaded(object sender, RoutedEventArgs e)
@@ -76,9 +75,14 @@ namespace DCSFlightpanels.Radios
             SetContextMenuClickHandlers();
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ69RadioPanel;
         }
 
         public string GetName()
@@ -94,7 +98,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel && e.UniqueId.Equals(_radioPanelPZ69.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel && e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -105,7 +109,7 @@ namespace DCSFlightpanels.Radios
             }
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
         public void SettingsCleared(object sender, PanelEventArgs e) { }
 
@@ -121,7 +125,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (e.UniqueId.Equals(_radioPanelPZ69.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ69RadioPanel)
+                if (e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ69RadioPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = ""));
@@ -1835,8 +1839,8 @@ namespace DCSFlightpanels.Radios
                 if (_radioPanelPZ69 != null)
                 {
                     TextBoxLogPZ69.Text = "";
-                    TextBoxLogPZ69.Text = _radioPanelPZ69.InstanceId;
-                    Clipboard.SetText(_radioPanelPZ69.InstanceId);
+                    TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
+                    Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -1918,16 +1922,16 @@ namespace DCSFlightpanels.Radios
                     {
                         if (dcsbiosBindingLCDPZ69.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputFormulaObject);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputFormulaObject);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputObject);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputObject);
                         break;
                     }
                 }
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(_globalHandler.GetAirframe(), description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();
@@ -2299,11 +2303,11 @@ namespace DCSFlightpanels.Radios
                 DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
                 dcsBIOSInputControlsWindow.ShowDialog();
                 if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -2498,14 +2502,6 @@ namespace DCSFlightpanels.Radios
             {
                 if (contextMenuItem.Name == "contextMenuItemKeepPressed")
                 {
-                    var message = "Remember to set a command for the opposing action!\n\n" +
-                                  "For example if you set Keep Pressed for the \"On\" position for a button you need to set a command for \"Off\" position.\n" +
-                                  "This way the continuous Keep Pressed will be canceled.\n" +
-                                  "If you do not want a key press to cancel the continuous key press you can add a \"VK_NULL\" key.\n" +
-                                  "\"VK_NULL\'s\" sole purpose is to cancel a continuous key press.";
-                    var infoDialog = new InformationTextBlockWindow(message);
-                    infoDialog.Height = 250;
-                    infoDialog.ShowDialog();
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")
@@ -2568,6 +2564,18 @@ namespace DCSFlightpanels.Radios
                 {
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
                 }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _radioPanelPZ69.Identify();
             }
             catch (Exception ex)
             {

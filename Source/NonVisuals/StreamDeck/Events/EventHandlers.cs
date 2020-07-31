@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using DCS_BIOS;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck.Events
@@ -6,6 +7,20 @@ namespace NonVisuals.StreamDeck.Events
     public static class EventHandlers
     {
 
+
+
+
+
+
+
+        /*
+         *          _____ _                                _           _    
+         *         / ____| |                              | |         | |   
+         *        | (___ | |_ _ __ ___  __ _ _ __ ___   __| | ___  ___| | __
+         *         \___ \| __| '__/ _ \/ _` | '_ ` _ \ / _` |/ _ \/ __| |/ /
+         *         ____) | |_| | |  __/ (_| | | | | | | (_| |  __/ (__|   < 
+         *        |_____/ \__|_|  \___|\__,_|_| |_| |_|\__,_|\___|\___|_|\_\
+         */
         public static string GetInformation()
         {
             var stringBuilder = new StringBuilder(200);
@@ -27,6 +42,7 @@ namespace NonVisuals.StreamDeck.Events
             OnDirtyConfigurationsEventHandler += streamDeckListener.IsDirtyQueryReport;
             OnDirtyNotificationEventHandler += streamDeckListener.SenderIsDirtyNotification;
             OnStreamDeckShowNewLayerEventHandler += streamDeckListener.LayerSwitched;
+            OnRemoteStreamDeckShowNewLayerEventHandler += streamDeckListener.RemoteLayerSwitch;
             OnStreamDeckSelectedButtonChangedEventHandler += streamDeckListener.SelectedButtonChanged;
             OnStreamDeckClearSettingsEventHandler += streamDeckListener.ClearSettings;
         }
@@ -41,7 +57,7 @@ namespace NonVisuals.StreamDeck.Events
         }
 
         /********************************************************************************************
-        *                    Querying whether there are unsaved configurations
+        *                    Streamdeck Querying whether there are unsaved configurations
         ********************************************************************************************/
         public delegate void DirtyConfigurationsEventHandler(object sender, StreamDeckDirtyReportArgs e);
         public static event DirtyConfigurationsEventHandler OnDirtyConfigurationsEventHandler;
@@ -69,14 +85,15 @@ namespace NonVisuals.StreamDeck.Events
         }
 
         /********************************************************************************************
-        *                    UserControl Pro-actively reports it is dirty
+        *                    Streamdeck UserControl Pro-actively reports it is dirty
         ********************************************************************************************/
         public delegate void DirtyNotificationEventHandler(object sender, StreamDeckDirtyNotificationArgs e);
         public static event DirtyNotificationEventHandler OnDirtyNotificationEventHandler;
 
-        public static void SenderNotifiesIsDirty(object sender, EnumStreamDeckButtonNames buttonName, string layerName)
+        public static void SenderNotifiesIsDirty(object sender, EnumStreamDeckButtonNames buttonName, string layerName, string bindingHash)
         {
             var eventArguments = new StreamDeckDirtyNotificationArgs();
+            eventArguments.BindingHash = bindingHash;
             eventArguments.ButtonName = buttonName;
             eventArguments.LayerName = layerName;
 
@@ -85,38 +102,52 @@ namespace NonVisuals.StreamDeck.Events
 
 
         /********************************************************************************************
-         *                                      Layer switched
+         *                                      Streamdeck Layer switched
          ********************************************************************************************/
         public delegate void StreamDeckShowNewLayerEventHandler(object sender, StreamDeckShowNewLayerArgs e);
         public static event StreamDeckShowNewLayerEventHandler OnStreamDeckShowNewLayerEventHandler;
 
-        public static void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e)
+        public static void LayerSwitched(object sender, string bindingHash, string layerName)
         {
-            OnStreamDeckShowNewLayerEventHandler?.Invoke(sender, e);
+            var eventArgs = new StreamDeckShowNewLayerArgs() { SelectedLayerName = layerName, BindingHash = bindingHash };
+            OnStreamDeckShowNewLayerEventHandler?.Invoke(sender, eventArgs);
         }
 
         /********************************************************************************************
-         *                                      Button change
+         *                                      Remote Streamdeck layer switch
+         ********************************************************************************************/
+        public delegate void RemoteStreamDeckShowNewLayerEventHandler(object sender, RemoteStreamDeckShowNewLayerArgs e);
+        public static event RemoteStreamDeckShowNewLayerEventHandler OnRemoteStreamDeckShowNewLayerEventHandler;
+
+        public static void RemoteLayerSwitch(object sender, string remoteBindingHash, string layerName)
+        {
+            var eventArgs = new RemoteStreamDeckShowNewLayerArgs() { SelectedLayerName = layerName, RemoteBindingHash = remoteBindingHash };
+            OnRemoteStreamDeckShowNewLayerEventHandler?.Invoke(sender, eventArgs);
+        }
+
+        /********************************************************************************************
+         *                                      Streamdeck button change
          ********************************************************************************************/
         public delegate void StreamDeckSelectedButtonChangedEventHandler(object sender, StreamDeckSelectedButtonChangedArgs e);
         public static event StreamDeckSelectedButtonChangedEventHandler OnStreamDeckSelectedButtonChangedEventHandler;
 
-        public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton)
+        public static void SelectedButtonChanged(object sender, StreamDeckButton streamDeckButton, string bindingHash)
         {
-            var eventArgs = new StreamDeckSelectedButtonChangedArgs() { SelectedButton = streamDeckButton };
+            var eventArgs = new StreamDeckSelectedButtonChangedArgs() { SelectedButton = streamDeckButton, BindingHash = bindingHash };
             OnStreamDeckSelectedButtonChangedEventHandler?.Invoke(sender, eventArgs);
         }
 
 
         /********************************************************************************************
-         *                                      Clear all settings
+         *                                      Streamdeck clear all settings
          ********************************************************************************************/
         public delegate void StreamDeckClearSettingsEventHandler(object sender, StreamDeckClearSettingsArgs e);
         public static event StreamDeckClearSettingsEventHandler OnStreamDeckClearSettingsEventHandler;
 
-        public static void ClearSettings(object sender, bool clearAction, bool clearFace, bool clearUI)
+        public static void ClearSettings(object sender, bool clearAction, bool clearFace, bool clearUI, string bindingHash)
         {
             var newEvent = new StreamDeckClearSettingsArgs();
+            newEvent.BindingHash = bindingHash;
             newEvent.ClearActionConfiguration = clearAction;
             newEvent.ClearFaceConfiguration = clearFace;
             newEvent.ClearUIConfiguration = clearUI;
@@ -126,14 +157,14 @@ namespace NonVisuals.StreamDeck.Events
 
 
         /********************************************************************************************
-        *                            Event to notify listener to sync configuration
+        *                   Streamdeck Event to notify listener to sync configuration
         ********************************************************************************************/
         public delegate void StreamDeckSyncConfigurationEventHandler(object sender, StreamDeckSyncConfigurationArgs e);
         public static event StreamDeckSyncConfigurationEventHandler OnStreamDeckSyncConfigurationEventHandler;
 
-        public static void NotifyToSyncConfiguration(object sender)
+        public static void NotifyToSyncConfiguration(object sender, string bindingHash)
         {
-            OnStreamDeckSyncConfigurationEventHandler?.Invoke(sender, new StreamDeckSyncConfigurationArgs());
+            OnStreamDeckSyncConfigurationEventHandler?.Invoke(sender, new StreamDeckSyncConfigurationArgs() { BindingHash = bindingHash });
         }
 
         public static void AttachStreamDeckConfigListener(IStreamDeckConfigListener streamDeckConfigListener)
@@ -149,18 +180,18 @@ namespace NonVisuals.StreamDeck.Events
         }
 
         /********************************************************************************************
-        *                   Event to notify changes in Stream Deck configuration button/layer
+        *         Streamdeck Event to notify changes in Stream Deck configuration button/layer
         ********************************************************************************************/
         public delegate void StreamDeckConfigurationChangeEventHandler(object sender, StreamDeckConfigurationChangedArgs e);
         public static event StreamDeckConfigurationChangeEventHandler OnStreamDeckConfigurationChangeEventHandler;
 
-        public static void NotifyStreamDeckConfigurationChange(object sender)
+        public static void NotifyStreamDeckConfigurationChange(object sender, string bindingHash)
         {
-            OnStreamDeckConfigurationChangeEventHandler?.Invoke(sender, new StreamDeckConfigurationChangedArgs());
+            OnStreamDeckConfigurationChangeEventHandler?.Invoke(sender, new StreamDeckConfigurationChangedArgs() { BindingHash = bindingHash });
         }
 
         /********************************************************************************************
-        *                   Event to notify DCSBIOSDecoders to go invisible (ugly workaround when I can't get handle of the various threads)
+        * Event to notify DCSBIOSDecoders to go invisible (ugly workaround when I can't get handle of the various threads)
         ********************************************************************************************/
         public delegate void StreamDeckHideDecodersEventHandler(object sender, StreamDeckHideDecoderEventArgs e);
         public static event StreamDeckHideDecodersEventHandler OnStreamDeckHideDecodersEventHandler;
@@ -175,39 +206,16 @@ namespace NonVisuals.StreamDeck.Events
             OnStreamDeckHideDecodersEventHandler -= dcsbiosDecoder.HideAllEvent;
         }
 
-        public static void HideDCSBIOSDecoders(DCSBIOSDecoder dcsbiosDecoder, string layerName)
+        public static void HideDCSBIOSDecoders(DCSBIOSDecoder dcsbiosDecoder, string layerName, string bindingHash)
         {
             var eventArgs = new StreamDeckHideDecoderEventArgs();
+            eventArgs.BindingHash = bindingHash;
             eventArgs.StreamDeckButtonName = dcsbiosDecoder.StreamDeckButtonName;
             eventArgs.LayerName = layerName;
-            eventArgs.PanelHash = dcsbiosDecoder.PanelHash;
             OnStreamDeckHideDecodersEventHandler?.Invoke(dcsbiosDecoder, eventArgs);
         }
 
-        /********************************************************************************************
-        *                Event to when physical panel image changes so UI can replicate
-        ********************************************************************************************/
-        /*public delegate void StreamDeckOledImageChangeEventHandler(object sender, StreamDeckOledImageChangeEventArgs e);
-        public static event StreamDeckOledImageChangeEventHandler OnStreamDeckOledImageChangeEventHandler;
 
-        public static void AttachOledImageListener(IOledImageListener oledImageListener)
-        {
-            OnStreamDeckOledImageChangeEventHandler += oledImageListener.OledImageChanged;
-        }
-
-        public static void DetachOledImageListener(IOledImageListener oledImageListener)
-        {
-            OnStreamDeckOledImageChangeEventHandler -= oledImageListener.OledImageChanged;
-        }
-
-        public static void NotifyOledImageChange(object sender, string panelHash, EnumStreamDeckButtonNames streamDeckButtonName, System.Drawing.Bitmap bitMap)
-        {
-            var eventArgs = new StreamDeckOledImageChangeEventArgs();
-            eventArgs.StreamDeckButtonName = streamDeckButtonName;
-            eventArgs.PanelHash = panelHash;
-            eventArgs.Bitmap = bitMap;
-            OnStreamDeckOledImageChangeEventHandler?.Invoke(sender, eventArgs);
-        }*/
     }
 
 }

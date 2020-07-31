@@ -33,7 +33,7 @@ namespace NonVisuals.StreamDeck
 
 
 
-        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.StreamDeck, hidSkeleton)
+        public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
             switch (panelType)
             {
@@ -81,7 +81,7 @@ namespace NonVisuals.StreamDeck
                 Closed = true;
             }
         }
-
+        
         public override void Dispose()
         {
             Dispose(true);
@@ -93,17 +93,77 @@ namespace NonVisuals.StreamDeck
             Dispose(false);
         }
 
-        public static StreamDeckPanel GetInstance(string panelHash)
+        public static StreamDeckPanel GetInstance(string bindingHash)
         {
             foreach (var streamDeckPanel in StreamDeckPanels)
             {
-                if (streamDeckPanel.PanelHash == panelHash)
+                if (streamDeckPanel.BindingHash == bindingHash)
                 {
                     return streamDeckPanel;
                 }
             }
 
             return null;
+        }
+
+        public static StreamDeckPanel GetInstance(GamingPanel gamingPanel)
+        {
+            foreach (var streamDeckPanel in StreamDeckPanels)
+            {
+                if (streamDeckPanel.BindingHash == gamingPanel.BindingHash)
+                {
+                    return streamDeckPanel;
+                }
+            }
+
+            return null;
+        }
+
+
+        public override void Identify()
+        {
+            try
+            {
+                var thread = new Thread(ShowIdentifyingValue);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private readonly Color[] _colors = new Color[]
+        {
+            Color.White, Color.Aqua, Color.Black, Color.Blue, Color.BurlyWood, Color.Chartreuse, Color.DarkOrange, Color.Lavender, Color.Silver, Color.Red,
+            Color.Yellow, Color.Violet, Color.Thistle, Color.Teal, Color.Salmon, Color.SeaShell, Color.PowderBlue, Color.PaleGreen, Color.Olive, Color.LawnGreen
+        };
+
+        private void ShowIdentifyingValue()
+        {
+            try
+            {
+                var spins = 40;
+                var random = new Random();
+                var ledPositionArray = Enum.GetValues(typeof(SwitchPanelPZ55LEDPosition));
+                var panelColorArray = Enum.GetValues(typeof(PanelLEDColor));
+
+                while (spins > 0)
+                {
+                    var bitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(_colors[random.Next(0, 20)]);
+                    SetImage(random.Next(0, ButtonCount - 1), bitmap);
+
+                    Thread.Sleep(50);
+                    spins--;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        public static List<StreamDeckPanel> GetStreamDeckPanels()
+        {
+            return StreamDeckPanels;
         }
 
         public sealed override void Startup()
@@ -189,7 +249,6 @@ namespace NonVisuals.StreamDeck
 
             lock (_updateStreamDeckOledLockObject)
             {
-                //EventHandlers.NotifyOledImageChange(this, PanelHash, streamDeckButtonName, bitmap);
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }
@@ -203,7 +262,6 @@ namespace NonVisuals.StreamDeck
             var keyBitmap = KeyBitmap.Create.FromBitmap(BitMapCreator.BitmapImage2Bitmap(bitmapImage));
             lock (_updateStreamDeckOledLockObject)
             {
-                //EventHandlers.NotifyOledImageChange(this, PanelHash, streamDeckButtonName, BitMapCreator.BitmapImage2Bitmap(bitmapImage));
                 _streamDeckBoard.SetKeyBitmap(StreamDeckCommon.ButtonNumber(streamDeckButtonName) - 1, keyBitmap);
             }
         }
@@ -227,26 +285,18 @@ namespace NonVisuals.StreamDeck
             return new List<string>();
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            SettingsLoading = true;
-            //Clear current bindings
             ClearSettings();
-            if (settings == null || settings.Count == 0)
-            {
-                return;
-            }
 
-            var stringBuilder = new StringBuilder();
+            BindingHash = genericPanelBinding.BindingHash;
 
-            foreach (var setting in settings)
+            SettingsLoading = true;
+
+            if (!string.IsNullOrEmpty(genericPanelBinding.JSONString))
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
-                {
-                    stringBuilder.Append(setting.Replace(SaitekConstants.SEPARATOR_SYMBOL, "").Replace(InstanceId, "") + Environment.NewLine);
-                }
+                _streamDeckLayerHandler.ImportJSONSettings(genericPanelBinding.JSONString);
             }
-            _streamDeckLayerHandler.ImportJSONSettings(stringBuilder.ToString());
             SettingsLoading = false;
             SettingsApplied();
         }
@@ -258,7 +308,8 @@ namespace NonVisuals.StreamDeck
                 return null;
             }
 
-            return _streamDeckLayerHandler.ExportJSONSettings();
+            var str = _streamDeckLayerHandler.ExportJSONSettings();
+            return str;
         }
 
         public string GetKeyPressForLoggingPurposes(StreamDeckButton streamDeckButton)
@@ -332,11 +383,6 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckLayerHandler.SelectedLayerName = value;
         }
 
-        public override string SettingsVersion()
-        {
-            return "2X";
-        }
-
         public List<string> LayerNameList
         {
             get => _streamDeckLayerHandler.GetLayerNameList();
@@ -356,6 +402,12 @@ namespace NonVisuals.StreamDeck
         public void DeleteLayer(string streamDeckLayerName)
         {
             _streamDeckLayerHandler.DeleteLayer(streamDeckLayerName);
+            SetIsDirty();
+        }
+
+        public void EraseLayerButtons(string streamDeckLayerName)
+        {
+            _streamDeckLayerHandler.EraseLayerButtons(streamDeckLayerName);
             SetIsDirty();
         }
 
@@ -464,7 +516,7 @@ namespace NonVisuals.StreamDeck
                 tmpBitMapImage.CacheOption = BitmapCacheOption.OnLoad;
                 tmpBitMapImage.EndInit();
             }
-            
+
             _fileNotFoundBitMap = BitMapCreator.BitmapImage2Bitmap(tmpBitMapImage);
             return _fileNotFoundBitMap;
         }
@@ -473,6 +525,23 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
+
+        public void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e)
+        {
+            try
+            {
+                if (e.RemoteBindingHash == BindingHash && _streamDeckLayerHandler.LayerExists(e.SelectedLayerName))
+                {
+                    _streamDeckLayerHandler.SelectedLayerName = e.SelectedLayerName;
+                }
             }
             catch (Exception ex)
             {
@@ -484,6 +553,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -495,6 +566,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -506,6 +579,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -517,6 +592,8 @@ namespace NonVisuals.StreamDeck
         {
             try
             {
+                if (BindingHash == e.BindingHash)
+                { }
             }
             catch (Exception ex)
             {
@@ -525,13 +602,27 @@ namespace NonVisuals.StreamDeck
         }
 
 
-        public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e) { }
+        public void SyncConfiguration(object sender, StreamDeckSyncConfigurationArgs e)
+        {
+            try
+            {
+                if (BindingHash == e.BindingHash)
+                { }
+            }
+            catch (Exception ex)
+            {
+                Common.LogError(ex);
+            }
+        }
 
         public void ConfigurationChanged(object sender, StreamDeckConfigurationChangedArgs e)
         {
             try
             {
-                SetIsDirty();
+                if (e.BindingHash == BindingHash)
+                {
+                    SetIsDirty();
+                }
             }
             catch (Exception ex)
             {

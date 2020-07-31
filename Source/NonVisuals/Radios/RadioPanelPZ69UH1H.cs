@@ -6,6 +6,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -3115,11 +3116,6 @@ namespace NonVisuals.Radios
         private bool VhfNavSyncing()
         {
             return Interlocked.Read(ref _vhfNavThreadNowSynching) > 0;
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
 
     }

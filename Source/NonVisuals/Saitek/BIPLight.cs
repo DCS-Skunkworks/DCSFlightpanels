@@ -34,7 +34,7 @@ namespace NonVisuals.Saitek
         public PanelLEDColor LEDColor { get; set; }
         public BIPLedPositionEnum BIPLedPosition { get; set; }
         public BIPLightDelays DelayBefore { get; set; }
-        public string Hash { get; set; }
+        public string BindingHash { get; set; }
         public string[] Separator { get; } = { "|" };
     }
 
@@ -56,7 +56,7 @@ namespace NonVisuals.Saitek
             BIPLedPosition = (BIPLedPositionEnum)Enum.Parse(typeof(BIPLedPositionEnum), settingsArray[0].ToString());
             LEDColor = (PanelLEDColor)Enum.Parse(typeof(PanelLEDColor), settingsArray[1].ToString());
             DelayBefore = (BIPLightDelays) Enum.Parse(typeof(BIPLightDelays), settingsArray[2].ToString());
-            Hash = settingsArray[3].ToString();
+            BindingHash = settingsArray[3];
         }
 
         public override string ExportSettings()
@@ -64,7 +64,7 @@ namespace NonVisuals.Saitek
             //BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}
             var stringBuilder = new StringBuilder();
             var position = BIPLedPosition.ToString();
-            stringBuilder.Append("BIPLight{" + position + "|" + LEDColor + "|" + DelayBefore + "|" + Hash + "}");
+            stringBuilder.Append("BIPLight{" + position + "|" + LEDColor + "|" + DelayBefore + "|" + BindingHash + "}");
             return stringBuilder.ToString();
         }
     }

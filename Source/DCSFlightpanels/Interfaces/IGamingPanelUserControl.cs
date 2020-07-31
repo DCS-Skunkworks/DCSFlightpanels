@@ -1,10 +1,12 @@
-﻿using NonVisuals;
+﻿using ClassLibraryCommon;
+using NonVisuals;
 
-namespace DCSFlightpanels
+namespace DCSFlightpanels.Interfaces
 {
-    interface IGamingPanelUserControl
+    internal interface IGamingPanelUserControl
     {
         GamingPanel GetGamingPanel();
+        GamingPanelEnum GetPanelType();
         string GetName();
     }
 }

@@ -11,7 +11,6 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using Newtonsoft.Json;
 using NonVisuals.StreamDeck.Events;
-using OpenMacroBoard.SDK;
 using ThreadState = System.Threading.ThreadState;
 
 namespace NonVisuals.StreamDeck
@@ -25,7 +24,7 @@ namespace NonVisuals.StreamDeck
         private double _formulaResult = Double.MaxValue;
         private string _lastFormulaError = "";
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
-        private volatile bool _valueUpdated;
+        private volatile bool _valueUpdated = true;
         [NonSerialized] private int _jaceId = 0;
         private DCSBiosOutputType _decoderSourceType = DCSBiosOutputType.INTEGER_TYPE;
         private bool _treatStringAsNumber = false;
@@ -40,7 +39,7 @@ namespace NonVisuals.StreamDeck
 
         Bitmap _converterBitmap = null;
 
-        public DCSBIOSDecoder()
+        public DCSBIOSDecoder(StreamDeckPanel streamDeckPanel) : base(streamDeckPanel)
         {
             _jaceId = RandomFactory.Get();
             _imageUpdateTread = new Thread(ImageRefreshingThread);
@@ -49,21 +48,13 @@ namespace NonVisuals.StreamDeck
             EventHandlers.AttachDCSBIOSDecoder(this);
         }
 
-
         public override void Dispose()
         {
             EventHandlers.DetachDCSBIOSDecoder(this);
             DCSBIOSStringManager.DetachListener(this);
             DCSBIOS.GetInstance()?.DetachDataReceivedListener(this);
             _shutdown = true;
-            try
-            {
-                //_autoResetEvent.Set();
-            }
-            catch (Exception e)
-            {
-                Debugger.Break();
-            }
+
             try
             {
                 if (_imageUpdateTread != null && (_imageUpdateTread.ThreadState & (ThreadState.Aborted | ThreadState.AbortRequested)) == 0)
@@ -93,15 +84,15 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, string panelHash)
+        public static void ShowOnly(DCSBIOSDecoder dcsbiosDecoder, StreamDeckPanel streamDeckPanel)
         {
-            EventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, StreamDeckPanel.GetInstance(panelHash).SelectedLayerName);
+            EventHandlers.HideDCSBIOSDecoders(dcsbiosDecoder, streamDeckPanel.SelectedLayerName, streamDeckPanel.BindingHash);
             dcsbiosDecoder.IsVisible = true;
         }
 
         public void HideAllEvent(object sender, StreamDeckHideDecoderEventArgs e)
         {
-            if (PanelHash == e.PanelHash && StreamDeckButtonName == e.StreamDeckButtonName)
+            if (StreamDeckPanelInstance.BindingHash == e.BindingHash && StreamDeckButtonName == e.StreamDeckButtonName)
             {
                 IsVisible = false;
             }
@@ -324,17 +315,39 @@ namespace NonVisuals.StreamDeck
 
         private void BlackoutKey()
         {
-            StreamDeckPanel.GetInstance(PanelHash).ClearFace(StreamDeckButtonName);
+            StreamDeckPanelInstance.ClearFace(StreamDeckButtonName);
         }
 
         private void ShowBitmap(Bitmap bitmap)
         {
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, bitmap);
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
+            }
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmap);
         }
 
         private void ShowBitmapImage(BitmapImage bitmapImage)
         {
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, bitmapImage);
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [DCSBIOSDecoder]");
+            }
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, bitmapImage);
+        }
+
+        [JsonIgnore]
+        public new StreamDeckPanel StreamDeckPanelInstance
+        {
+            get => base.StreamDeckPanelInstance;
+            set
+            {
+                base.StreamDeckPanelInstance = value;
+                foreach (var dcsbiosConverter in _dcsbiosConverters)
+                {
+                    dcsbiosConverter.StreamDeckPanelInstance = base.StreamDeckPanelInstance;
+                }
+            }
         }
 
         public void RemoveDCSBIOSOutput()
@@ -528,7 +541,7 @@ namespace NonVisuals.StreamDeck
          */
         public bool DecoderConfigurationOK()
         {
-            var formulaIsOK = _useFormula ? !string.IsNullOrEmpty(_formula) : true;
+            var formulaIsOK = !_useFormula || !string.IsNullOrEmpty(_formula);
             var sourceIsOK = _dcsbiosOutput != null;
             var convertersOK = _dcsbiosConverters.FindAll(o => o.FaceConfigurationIsOK == false).Count == 0;
 
@@ -593,11 +606,10 @@ namespace NonVisuals.StreamDeck
                 }
             }
         }
-
-        [JsonIgnore]
+        
         public string DefaultImageFilePath
         {
-            get => _defaultImageFilePath;
+            //No getter, this is to be phased out, setter here so that any existing setting in user's file still can be parsed by JSON.
             set => _defaultImageFilePath = value;
         }
     }

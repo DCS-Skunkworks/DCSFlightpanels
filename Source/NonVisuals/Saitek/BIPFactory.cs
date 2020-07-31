@@ -102,7 +102,7 @@ namespace NonVisuals.Saitek
         {
             foreach (var backlitPanelBIP in _backlitPanels)
             {
-                if (bipLight.Hash == backlitPanelBIP.Hash)
+                if (bipLight.BindingHash == backlitPanelBIP.BindingHash)
                 {
                     backlitPanelBIP.SetLED(bipLight.BIPLedPosition, bipLight.LEDColor);
                 }
@@ -113,7 +113,7 @@ namespace NonVisuals.Saitek
         {
             foreach (var backlitPanelBIP in _backlitPanels)
             {
-                if (hash == backlitPanelBIP.Hash)
+                if (hash == backlitPanelBIP.BindingHash)
                 {
                     foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
                     {
@@ -127,7 +127,7 @@ namespace NonVisuals.Saitek
         {
             foreach (var backlitPanelBIP in _backlitPanels)
             {
-                if (hash == backlitPanelBIP.Hash)
+                if (hash == backlitPanelBIP.BindingHash)
                 {
                     foreach (BIPLedPositionEnum position in Enum.GetValues(typeof(BIPLedPositionEnum)))
                     {
@@ -168,7 +168,7 @@ namespace NonVisuals.Saitek
 
         private void OnPanelRegistered(BacklitPanelBIP backlitPanelBip)
         {
-            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs() { UniqueId = backlitPanelBip.InstanceId, BacklitPanelBip = backlitPanelBip });
+            OnBipPanelRegistered?.Invoke(this, new BipPanelRegisteredEventArgs() { UniqueId = backlitPanelBip.HIDInstanceId, BacklitPanelBip = backlitPanelBip });
         }
     }
 

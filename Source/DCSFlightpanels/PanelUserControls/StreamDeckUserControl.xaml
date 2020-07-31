@@ -55,8 +55,9 @@
                         <Label Content="Layer"></Label>
                         <ComboBox Name="ComboBoxLayers" SelectedValuePath="Content" ContextMenuOpening="ComboBoxLayers_OnContextMenuOpening" DropDownClosed="ComboBoxLayers_OnDropDownClosed" />
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                            <Button Name="ButtonNewLayer" Content="New Layer" Height="23" Width="70" Margin="0,0,10,0" Click="ButtonNewLayer_OnClick"></Button>
-                            <Button Name="ButtonDeleteLayer" Content="Delete Layer" Height="23" Width="70" Click="ButtonDeleteLayer_OnClick"></Button>
+                            <Button Name="ButtonNewLayer" Content="New Layer" FontSize="11" Height="18" Width="70" Margin="0,0,5,0" Click="ButtonNewLayer_OnClick"></Button>
+                            <Button Name="ButtonDeleteLayer" Content="Delete Layer" FontSize="11" Height="18" Width="70" Margin="0,0,5,0"  Click="ButtonDeleteLayer_OnClick"></Button>
+                            <Button Name="ButtonEraseLayerButtons" Content="Erase Buttons" FontSize="11" Height="18" Width="70"  Click="ButtonEraseLayerButtons_OnClick"></Button>
                             <Button Name="ButtonInfoLayer" Content="Info" Height="23" Visibility="Collapsed" Width="70" Click="ButtonInfoLayer_OnClick"></Button>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0"/>

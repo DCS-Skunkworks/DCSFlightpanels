@@ -52,8 +52,11 @@ namespace ClassLibraryCommon
         PZ70MultiPanel = 0xD06,
         BackLitPanel = 0xB4E,
         TPM = 0xB4D,
+        [Description("StreamDeck Mini")]
         StreamDeckMini = 0x0063,
+        [Description("StreamDeck")]
         StreamDeck = 0x0060,
+        [Description("StreamDeck XL")]
         StreamDeckXL = 0x006C
     }
 

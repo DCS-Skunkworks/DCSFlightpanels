@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows;
 using DCSFlightpanels.Properties;
+using NonVisuals;
 
 namespace DCSFlightpanels
 {
@@ -67,11 +67,12 @@ namespace DCSFlightpanels
             {
                 InitNotificationIcon();
 
+                Settings.Default.RunMinimized = false; //Default
                 Settings.Default.LoadStreamDeck = true; //Default is loading Stream Deck.
                 Settings.Default.Save();
 
-                //DCSFlightpanels.exe OpenProfile="C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings"
-                //DCSFlightpanels.exe OpenProfile='C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings'
+                //DCSFlightpanels.exe -OpenProfile="C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings"
+                //DCSFlightpanels.exe -OpenProfile='C:\Users\User\Documents\Spitfire_Saitek_DCS_Profile.bindings'
 
                 //1 Check for start arguments.
                 //2 If argument and profile exists close running instance, start this with profile chosen
@@ -85,14 +86,25 @@ namespace DCSFlightpanels
                         for (int i = 0; i < e.Args.Length; i++)
                         {
                             var arg = e.Args[i];
-                            if (arg.Contains("OpenProfile") && e.Args[0].Contains("="))
+                            if (arg.Contains(Constants.CommandLineArgumentStartMinimized))
                             {
-                                Settings.Default.LastProfileFileUsed = e.Args[i + 1].Replace("\"", "").Replace("'", "");
                                 Settings.Default.RunMinimized = true;
+                                Settings.Default.Save();
+                            }
+                            if (arg.Contains(Constants.CommandLineArgumentOpenProfile))
+                            {
+                                if (arg.Contains("NEWPROFILE"))
+                                {
+                                    Settings.Default.LastProfileFileUsed = "";
+                                }
+                                else
+                                {
+                                    Settings.Default.LastProfileFileUsed = e.Args[i].Replace("\"", "").Replace("'", "").Replace(Constants.CommandLineArgumentOpenProfile, "");
+                                }
                                 Settings.Default.Save();
                                 closeCurrentInstance = true;
                             }
-                            else if (arg.ToLower().Contains("-nostreamdeck"))
+                            else if (arg.Contains(Constants.CommandLineArgumentNoStreamDeck))
                             {
                                 Settings.Default.LoadStreamDeck = false;
                                 Settings.Default.Save();

@@ -8,6 +8,7 @@ using System.Windows.Media;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
@@ -22,23 +23,21 @@ namespace DCSFlightpanels.PanelUserControls
     {
 
         private readonly TPMPanel _tpmPanel;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private readonly IGlobalHandler _globalHandler;
         private bool _once;
         private bool _textBoxBillsSet;
-        private bool _controlLoaded;
 
         public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             _tpmPanel = new TPMPanel(hidSkeleton);
 
             _tpmPanel.Attach((IGamingPanelListener) this);
             globalHandler.Attach(_tpmPanel);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
         }
 
         protected override void Dispose(bool disposing)
@@ -60,7 +59,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             SetTextBoxBills();
             SetContextMenuClickHandlers();
-            _controlLoaded = true;
+            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
 
@@ -89,9 +88,14 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _tpmPanel;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.TPM;
         }
 
         public string GetName()
@@ -111,7 +115,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.UniqueId.Equals(_tpmPanel.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.TPM && e.HidInstance.Equals(_tpmPanel.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -122,11 +126,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelBinding.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstanceId == e.PanelBinding.HIDInstance)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -138,8 +145,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ClearAll(false);
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.TPM && _tpmPanel.HIDInstanceId == e.HidInstance)
+                {
+                    ClearAll(false);
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -167,7 +177,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_tpmPanel.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.TPM)
+                if (e.HidInstance.Equals(_tpmPanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.TPM)
                 {
                     Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action) (() => TextBoxLogTPM.Text = ""));
@@ -281,12 +291,11 @@ namespace DCSFlightpanels.PanelUserControls
                 DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSInputControlsWindow =
-                        new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
 
                 dcsBIOSInputControlsWindow.ShowDialog();
@@ -1081,7 +1090,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_controlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }
@@ -1135,8 +1144,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_tpmPanel != null)
                 {
                     TextBoxLogTPM.Text = "";
-                    TextBoxLogTPM.Text = _tpmPanel.InstanceId;
-                    Clipboard.SetText(_tpmPanel.InstanceId);
+                    TextBoxLogTPM.Text = _tpmPanel.HIDInstanceId;
+                    Clipboard.SetText(_tpmPanel.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -1515,14 +1524,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (contextMenuItem.Name == "contextMenuItemKeepPressed")
                 {
-                    var message = "Remember to set a command for the opposing action!\n\n" +
-                                  "For example if you set Keep Pressed for the \"On\" position for a button you need to set a command for \"Off\" position.\n" +
-                                  "This way the continuous Keep Pressed will be canceled.\n" +
-                                  "If you do not want a key press to cancel the continuous key press you can add a \"VK_NULL\" key.\n" +
-                                  "\"VK_NULL\'s\" sole purpose is to cancel a continuous key press.";
-                    var infoDialog = new InformationTextBlockWindow(message);
-                    infoDialog.Height = 250;
-                    infoDialog.ShowDialog();
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")

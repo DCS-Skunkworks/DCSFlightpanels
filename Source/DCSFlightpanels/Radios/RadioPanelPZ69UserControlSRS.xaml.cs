@@ -4,11 +4,13 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using NonVisuals;
 using DCSFlightpanels.Properties;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -20,16 +22,15 @@ namespace DCSFlightpanels.Radios
     public partial class RadioPanelPZ69UserControlSRS : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
         private readonly RadioPanelPZ69SRS _radioPanelPZ69SRS;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
-        private IGlobalHandler _globalHandler;
-        private bool _userControlLoaded;
 
         public RadioPanelPZ69UserControlSRS(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+
+            ParentTabItem = parentTabItem;
+
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
             HideAllImages();
 
             _radioPanelPZ69SRS = new RadioPanelPZ69SRS(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo, hidSkeleton);
@@ -37,7 +38,7 @@ namespace DCSFlightpanels.Radios
             _radioPanelPZ69SRS.SmallFreqStepping = Settings.Default.SRSSmallFreqStepping;
             _radioPanelPZ69SRS.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69SRS);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
 
             //LoadConfiguration();
         }
@@ -46,9 +47,14 @@ namespace DCSFlightpanels.Radios
         {
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _radioPanelPZ69SRS;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ69RadioPanel;
         }
 
         public string GetName()
@@ -72,7 +78,7 @@ namespace DCSFlightpanels.Radios
             }
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e){}
 
         public void SettingsCleared(object sender, PanelEventArgs e) { }
 
@@ -391,8 +397,8 @@ namespace DCSFlightpanels.Radios
                 if (_radioPanelPZ69SRS != null)
                 {
                     TextBoxLogPZ69.Text = "";
-                    TextBoxLogPZ69.Text = _radioPanelPZ69SRS.InstanceId;
-                    Clipboard.SetText(_radioPanelPZ69SRS.InstanceId);
+                    TextBoxLogPZ69.Text = _radioPanelPZ69SRS.HIDInstanceId;
+                    Clipboard.SetText(_radioPanelPZ69SRS.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -406,7 +412,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     Settings.Default.RadioFrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
                     _radioPanelPZ69SRS.FrequencyKnobSensitivity = int.Parse(ComboBoxFreqKnobSensitivity.SelectedValue.ToString());
@@ -423,7 +429,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                if (_userControlLoaded)
+                if (UserControlLoaded)
                 {
                     var numberFormat = new NumberFormatInfo();
                     numberFormat.NumberDecimalSeparator = ".";
@@ -446,7 +452,7 @@ namespace DCSFlightpanels.Radios
             {
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivity;
                 ComboBoxSmallFreqStepping.SelectedValue = Settings.Default.SRSSmallFreqStepping;
-                _userControlLoaded = true;
+                UserControlLoaded = true;
             }
             catch (Exception ex)
             {
@@ -455,6 +461,16 @@ namespace DCSFlightpanels.Radios
         }
 
 
-
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _radioPanelPZ69SRS.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

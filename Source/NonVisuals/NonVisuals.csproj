@@ -64,16 +64,16 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Octokit, Version=0.47.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Octokit.0.47.0\lib\net46\Octokit.dll</HintPath>
+    <Reference Include="Octokit, Version=0.48.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Octokit.0.48.0\lib\net46\Octokit.dll</HintPath>
     </Reference>
-    <Reference Include="OpenMacroBoard.SDK, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenMacroBoard.SDK.1.0.0\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
+    <Reference Include="OpenMacroBoard.SDK, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenMacroBoard.SDK.2.0.0\lib\netstandard2.0\OpenMacroBoard.SDK.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="StreamDeckSharp, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StreamDeckSharp.1.1.0\lib\net40\StreamDeckSharp.dll</HintPath>
+    <Reference Include="StreamDeckSharp, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StreamDeckSharp.2.0.0\lib\netstandard2.0\StreamDeckSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.NonGeneric, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -88,7 +88,11 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.4.5.1\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net" />
@@ -107,9 +111,19 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Security.AccessControl, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.4.4.1\lib\net461\System.Security.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Permissions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.4.4.1\lib\net461\System.Security.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Principal.Windows, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.4.4.1\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -118,14 +132,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Theraot.Core, Version=3.1.4.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Theraot.Core.3.1.4\lib\net46\Theraot.Core.dll</HintPath>
+    <Reference Include="Theraot.Core, Version=3.1.5.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Theraot.Core.3.1.5\lib\net472\Theraot.Core.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingMappingManager.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
+    <Compile Include="Interfaces\IHardwareConflictResolver.cs" />
     <Compile Include="Interfaces\IOledImageListener.cs" />
     <Compile Include="Interfaces\IStreamDeckButtonTypeBase.cs" />
     <Compile Include="Interfaces\IIsDirty.cs" />
@@ -138,7 +156,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadiopanelKnobP47D.cs" />
+    <Compile Include="Radios\Knobs\RadiopanelKnobP47D.cs" />
     <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
     <Compile Include="Saitek\BacklitPanelBIP.cs" />
@@ -149,12 +167,15 @@
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="Saitek\PZ70LCDButtonByteList.cs" />
     <Compile Include="Saitek\SaitekConstants.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
     <Compile Include="StreamDeck\ButtonExport.cs" />
+    <Compile Include="StreamDeck\ColorCounter.cs" />
     <Compile Include="StreamDeck\Events\EventHandlers.cs" />
+    <Compile Include="StreamDeck\LockedBitmap.cs" />
     <Compile Include="StreamDeck\StreamDeckCommon.cs" />
     <Compile Include="StreamDeck\DCSBIOSDecoder.cs" />
     <Compile Include="StreamDeck\ActionTypeDCSBIOS.cs" />
@@ -208,38 +229,38 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelKnobAV8BNA.cs" />
-    <Compile Include="Radios\RadioPanelKnobF14B.cs" />
-    <Compile Include="Radios\RadioPanelKnobF5E.cs" />
-    <Compile Include="Radios\RadioPanelKnobM2000C.cs" />
-    <Compile Include="Radios\RadioPanelKnobFA18C.cs" />
-    <Compile Include="Radios\RadioPanelKnobSRS.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobAV8BNA.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobF14B.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobF5E.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobM2000C.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobFA18C.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobSRS.cs" />
     <Compile Include="Radios\RadioPanelPZ69AV8BNA.cs" />
     <Compile Include="Radios\RadioPanelPZ69F14B.cs" />
     <Compile Include="Radios\RadioPanelPZ69F5E.cs" />
-    <Compile Include="Radios\RadioPanelPZ69DisplayValue.cs" />
+    <Compile Include="Radios\Misc\RadioPanelPZ69DisplayValue.cs" />
     <Compile Include="Radios\RadioPanelPZ69EmulatorFull.cs" />
     <Compile Include="Radios\RadioPanelPZ69M2000C.cs" />
     <Compile Include="Radios\RadioPanelPZ69FA18C.cs" />
-    <Compile Include="Radios\RadioPanelPZ69KnobEmulator.cs" />
-    <Compile Include="Radios\RadioPanelKnobSA342.cs" />
-    <Compile Include="Radios\RadioPanelKnobAJS37.cs" />
-    <Compile Include="Radios\RadioPanelKnobBf109.cs" />
-    <Compile Include="Radios\RadioPanelKnobF86F.cs" />
-    <Compile Include="Radios\RadioPanelKnobKa50.cs" />
-    <Compile Include="Radios\RadioPanelKnobMi8.cs" />
-    <Compile Include="Radios\RadioPanelKnobMiG21Bis.cs" />
-    <Compile Include="Radios\RadioPanelKnobA10C.cs" />
-    <Compile Include="Radios\RadioPanelKnobP51D.cs" />
-    <Compile Include="Radios\RadiopanelKnobSpitfireLFMkIX.cs" />
-    <Compile Include="Radios\RadioPanelKnobUH1H.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelPZ69KnobEmulator.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobSA342.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobAJS37.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobBf109.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobF86F.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobKa50.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobMi8.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobMiG21Bis.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobA10C.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobP51D.cs" />
+    <Compile Include="Radios\Knobs\RadiopanelKnobSpitfireLFMkIX.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobUH1H.cs" />
     <Compile Include="Radios\RadioPanelPZ69SA342.cs" />
     <Compile Include="Radios\RadioPanelPZ69AJS37.cs" />
     <Compile Include="Radios\RadioPanelPZ69Bf109.cs" />
     <Compile Include="Radios\RadioPanelPZ69F86F.cs" />
     <Compile Include="Radios\RadioPanelPZ69Fw190.cs" />
     <Compile Include="Radios\RadioPanelPZ69Ka50.cs" />
-    <Compile Include="Radios\RadioPanelKnobFw190.cs" />
+    <Compile Include="Radios\Knobs\RadioPanelKnobFw190.cs" />
     <Compile Include="Radios\RadioPanelPZ69Mi8.cs" />
     <Compile Include="Radios\RadioPanelPZ69MiG21Bis.cs" />
     <Compile Include="Radios\RadioPanelPZ69A10C.cs" />
@@ -250,9 +271,9 @@
     <Compile Include="Radios\RadiopanelSpitfireLFMkIX.cs" />
     <Compile Include="Saitek\SaitekPanel.cs" />
     <Compile Include="Radios\RadioPanelPZ69Emulator.cs" />
-    <Compile Include="Radios\SRSRadio.cs" />
-    <Compile Include="Radios\SRSPlayerRadioInfo.cs" />
-    <Compile Include="Radios\SRSRadioInformation.cs" />
+    <Compile Include="Radios\SRS\SRSRadio.cs" />
+    <Compile Include="Radios\SRS\SRSPlayerRadioInfo.cs" />
+    <Compile Include="Radios\SRS\SRSRadioInformation.cs" />
     <Compile Include="StreamDeck\StreamDeckConstants.cs" />
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />

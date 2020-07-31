@@ -13,10 +13,15 @@ namespace NonVisuals.StreamDeck
         public EnumStreamDeckActionType ActionType => EnumStreamDeckActionType.OSCommand;
         public bool IsRepeatable() => true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private string _panelHash;
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
 
 
-
+        public ActionTypeOS(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+        }
+        
         public new int GetHash()
         {
             unchecked
@@ -67,10 +72,10 @@ namespace NonVisuals.StreamDeck
         }
 
         [JsonIgnore]
-        public string PanelHash
+        public StreamDeckPanel StreamDeckPanelInstance
         {
-            get => _panelHash;
-            set => _panelHash = value;
+            get => _streamDeckPanel;
+            set => _streamDeckPanel = value;
         }
     }
 }

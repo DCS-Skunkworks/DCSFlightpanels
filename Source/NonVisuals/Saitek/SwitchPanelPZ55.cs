@@ -47,7 +47,6 @@ namespace NonVisuals.Saitek
             VendorId = 0x6A3;
             ProductId = 0xD67;
             CreateSwitchKeys();
-            //SwitchPanelPZ55SO = this;
             Startup();
         }
 
@@ -59,7 +58,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -75,18 +74,19 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            //Clear current bindings
             ClearSettings();
-            if (settings == null || settings.Count == 0)
-            {
-                return;
-            }
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
+
                     if (setting.StartsWith("SwitchPanelKey{"))
                     {
                         var keyBinding = new KeyBindingPZ55();
@@ -123,8 +123,10 @@ namespace NonVisuals.Saitek
                     }
                 }
             }
+
             SettingsApplied();
             _keyBindings = KeyBindingPZ55.SetNegators(_keyBindings);
+
         }
 
         public override List<string> ExportSettings()
@@ -173,7 +175,7 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
@@ -187,6 +189,44 @@ namespace NonVisuals.Saitek
                 CheckDcsDataForColorChangeHook(e.Address, e.Data);
             }
 
+        }
+
+
+        public override void Identify()
+        {
+            try
+            {
+                var thread = new Thread(ShowIdentifyingValue);
+                thread.Start();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private void ShowIdentifyingValue()
+        {
+            try
+            {
+                var spins = 40;
+                var random = new Random();
+                var ledPositionArray = Enum.GetValues(typeof(SwitchPanelPZ55LEDPosition));
+                var panelColorArray = Enum.GetValues(typeof(PanelLEDColor));
+
+                while (spins > 0)
+                {
+                    var position = (SwitchPanelPZ55LEDPosition)ledPositionArray.GetValue(random.Next(ledPositionArray.Length));
+                    var color = (PanelLEDColor)panelColorArray.GetValue(random.Next(panelColorArray.Length));
+
+                    SetLandingGearLED(position, color);
+
+                    Thread.Sleep(50);
+                    spins--;
+                }
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         public override void ClearSettings()
@@ -270,7 +310,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "SetLandingGearLedsManually");
+                Common.LogError(ex, "SetLandingGearLedsManually");
                 throw;
             }
         }
@@ -394,7 +434,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
+                Common.LogError(ex, "CheckDcsDataForColorChangeHook(uint address, uint data)");
                 throw;
             }
         }
@@ -858,13 +898,6 @@ namespace NonVisuals.Saitek
                 SetIsDirty();
             }
         }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
-
-
     }
 
     public enum ControlListPZ55 : byte

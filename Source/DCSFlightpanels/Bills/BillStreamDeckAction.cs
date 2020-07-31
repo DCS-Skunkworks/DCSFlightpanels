@@ -14,7 +14,7 @@ namespace DCSFlightpanels.Bills
         private ActionTypeDCSBIOS _dcsbiosBindingStreamDeck;
         private BIPLinkStreamDeck _bipLinkStreamDeck;
         private ActionTypeLayer _actionTypeLayer;
-
+        private StreamDeckPanel _streamDeckPanel;
 
 
         public override void Clear()
@@ -28,10 +28,11 @@ namespace DCSFlightpanels.Bills
             TextBox.Text = "";
         }
 
-        public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button)
+        public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button, StreamDeckPanel streamDeckPanel)
         {
             TextBox = textBox;
             _button = button;
+            _streamDeckPanel = streamDeckPanel;
         }
 
         public override bool ContainsDCSBIOS()
@@ -61,7 +62,7 @@ namespace DCSFlightpanels.Bills
         {
             if (_dcsbiosBindingStreamDeck == null)
             {
-                _dcsbiosBindingStreamDeck = new ActionTypeDCSBIOS();
+                _dcsbiosBindingStreamDeck = new ActionTypeDCSBIOS(_streamDeckPanel);
             }
 
             _dcsbiosBindingStreamDeck.DCSBIOSInputs = dcsBiosInputs;

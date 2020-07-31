@@ -5,6 +5,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -2837,11 +2838,6 @@ namespace NonVisuals.Radios
         private bool RioTacanNowSyncing()
         {
             return Interlocked.Read(ref _rioTacanThreadNowSynching) > 0;
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
     }
 

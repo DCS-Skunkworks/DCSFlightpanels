@@ -4,6 +4,7 @@ using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -795,11 +796,6 @@ namespace NonVisuals.Radios
             }
 
             return result;
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
     }
 

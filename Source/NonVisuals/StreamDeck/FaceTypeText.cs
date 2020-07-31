@@ -58,7 +58,11 @@ namespace NonVisuals.StreamDeck
         protected override void Show()
         {
             DrawBitmap();
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, Bitmap);
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeDCSBIOS.]");
+            }
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 
         public override int GetHash()

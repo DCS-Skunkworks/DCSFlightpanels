@@ -97,7 +97,8 @@
             <Image Height="5" Width="5" x:Name="ImageConfigFoundLeft" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="437" Canvas.Top="140" Visibility="Visible"/>
             <Image Height="5" Width="5" x:Name="ImageConfigFoundRight" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="510" Canvas.Top="140" Visibility="Visible"/>
 
-            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="560" Canvas.Top="15" Click="ButtonGetId_OnClick"/>
+            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="560" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
+            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="560" Canvas.Top="35" Click="ButtonGetId_OnClick"/>
         </Canvas>
 
         <GroupBox Header="Knob Position"  FontSize="10" Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="2">

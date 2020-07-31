@@ -15,6 +15,7 @@ namespace NonVisuals.StreamDeck
         public static readonly string DCSBIOSValuePlaceHolderNoBrackets = "dcsbios";
         public static readonly CultureInfo DoubleCultureInfo = CultureInfo.CreateSpecificCulture("en-US");
 
+        public const string NO_ACTION = "No action";
         public const string BACK = "BACK";
         public const string GO_BACK_ONE_LAYER_STRING = "Go Back";
         public const string GO_TO_HOME_LAYER_STRING = "Go to Home";
@@ -116,6 +117,10 @@ namespace NonVisuals.StreamDeck
         {
             switch (layerName)
             {
+                case NO_ACTION:
+                {
+                    return "NOACTION";
+                }
                 case GO_TO_HOME_LAYER_STRING:
                     {
                         return "HOME";

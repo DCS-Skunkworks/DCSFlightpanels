@@ -12,9 +12,10 @@ namespace NonVisuals.StreamDeck
         [NonSerialized]protected Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
-        private string _panelHash;
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
         private StreamDeckButton _streamDeckButton;
-        private bool _isVisible;
+        private volatile bool _isVisible;
         private int _offsetX = 0;
         private int _offsetY = 0;
 
@@ -22,7 +23,6 @@ namespace NonVisuals.StreamDeck
         public abstract int GetHash();
         protected abstract void DrawBitmap();
         protected abstract void Show();
-
 
 
 
@@ -55,10 +55,13 @@ namespace NonVisuals.StreamDeck
         }
 
         [JsonIgnore]
-        public string PanelHash
+        public StreamDeckPanel StreamDeckPanelInstance
         {
-            get => _panelHash;
-            set => _panelHash = value;
+            get => _streamDeckPanel;
+            set
+            {
+                _streamDeckPanel = value;
+            }
         }
 
         [JsonIgnore]
@@ -101,7 +104,6 @@ namespace NonVisuals.StreamDeck
                 _offsetY = value;
             }
         }
-
 
     }
 }

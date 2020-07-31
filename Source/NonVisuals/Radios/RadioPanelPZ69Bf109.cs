@@ -4,6 +4,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
@@ -773,8 +774,7 @@ namespace NonVisuals.Radios
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
-
-
+        
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
             PZ69KnobChanged(isFirstReport, hashSet);
@@ -926,10 +926,6 @@ namespace NonVisuals.Radios
             return false;
         }
 
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
 
     }
 }

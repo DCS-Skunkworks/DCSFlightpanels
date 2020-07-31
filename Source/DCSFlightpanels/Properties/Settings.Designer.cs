@@ -394,5 +394,17 @@ namespace DCSFlightpanels.Properties {
                 this["LoadStreamDeck"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastDirectoryUsedForOpenProfile {
+            get {
+                return ((string)(this["LastDirectoryUsedForOpenProfile"]));
+            }
+            set {
+                this["LastDirectoryUsedForOpenProfile"] = value;
+            }
+        }
     }
 }

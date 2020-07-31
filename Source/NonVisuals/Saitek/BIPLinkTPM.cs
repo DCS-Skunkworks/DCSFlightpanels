@@ -27,7 +27,7 @@ namespace NonVisuals.Saitek
                 param0 = param0.Substring(1);
                 _tpmSwitch = (TPMPanelSwitches)Enum.Parse(typeof(TPMPanelSwitches), param0);
 
-                for (int i = 1; i < parameters.Length - 1; i++)
+                for (var i = 0; i < parameters.Length; i++)
                 {
                     if (parameters[i].StartsWith("BIPLight"))
                     {

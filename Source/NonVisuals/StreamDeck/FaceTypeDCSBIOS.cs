@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
-using OpenMacroBoard.SDK;
 
 namespace NonVisuals.StreamDeck
 {
@@ -19,7 +17,14 @@ namespace NonVisuals.StreamDeck
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;
         private uint _uintDcsBiosValue = UInt32.MaxValue;
         private string _stringDcsBiosValue = "PÖLKASD2!";
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
 
+        public FaceTypeDCSBIOS(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+        }
+        
         [JsonIgnore]
         public bool ConfigurationOK => !string.IsNullOrEmpty(_buttonTextTemplate) && _textFont != null;
 
@@ -60,7 +65,12 @@ namespace NonVisuals.StreamDeck
             {
                 return;
             }
-            StreamDeckPanel.GetInstance(PanelHash).SetImage(StreamDeckButtonName, Bitmap);
+
+            if (StreamDeckPanelInstance == null)
+            {
+                throw new Exception("StreamDeckPanelInstance is not set, cannot show image [FaceTypeDCSBIOS]");
+            }
+            StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 
         public override int GetHash()
@@ -144,7 +154,7 @@ namespace NonVisuals.StreamDeck
                 RefreshBitmap = true;
             }
         }
-
+        
         public virtual void AfterClone()
         { }
     }

@@ -8,6 +8,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -1424,13 +1425,6 @@ namespace NonVisuals.Radios
         private bool IlsNowSyncing()
         {
             return Interlocked.Read(ref _ilsThreadNowSynching) > 0;
-        }
-
-
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
     }
 

@@ -67,7 +67,7 @@ namespace DCSFlightpanels.Windows
                 _bipLight.BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue;
                 _bipLight.LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue;
                 _bipLight.DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue;
-                _bipLight.Hash = (string)ComboBoxBIPPanel.SelectedValue;
+                _bipLight.BindingHash = (string)ComboBoxBIPPanel.SelectedValue;
             }
             catch (Exception e)
             {
@@ -153,7 +153,7 @@ namespace DCSFlightpanels.Windows
                 foreach (BacklitPanelBIP bip in BipFactory.GetBips())
                 {
                     var comboBoxItem = new ComboBoxItem();
-                    comboBoxItem.Content = bip.Hash;
+                    comboBoxItem.Content = bip.BindingHash;
                     ComboBoxBIPPanel.Items.Add(comboBoxItem);
                 }
 
@@ -162,7 +162,7 @@ namespace DCSFlightpanels.Windows
                     ComboBoxPosition.SelectedValue = _bipLight.BIPLedPosition;
                     ComboBoxDelay.SelectedValue = _bipLight.DelayBefore;
                     ComboBoxColor.SelectedValue = _bipLight.LEDColor;
-                    ComboBoxBIPPanel.SelectedValue = _bipLight.Hash;
+                    ComboBoxBIPPanel.SelectedValue = _bipLight.BindingHash;
                 }
                 ShowLED();
             }
@@ -214,8 +214,8 @@ namespace DCSFlightpanels.Windows
                 _bipLight.BIPLedPosition = (BIPLedPositionEnum)ComboBoxPosition.SelectedValue;
                 _bipLight.LEDColor = (PanelLEDColor)ComboBoxColor.SelectedValue;
                 _bipLight.DelayBefore = (BIPLightDelays)ComboBoxDelay.SelectedValue;
-                _bipLight.Hash = (string)ComboBoxBIPPanel.SelectedValue;
-                BipFactory.SetDark(_bipLight.Hash);
+                _bipLight.BindingHash = (string)ComboBoxBIPPanel.SelectedValue;
+                BipFactory.SetDark(_bipLight.BindingHash);
                 BipFactory.ShowLight(_bipLight);
             }
             catch (Exception ex)
@@ -223,6 +223,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox( ex);
             }
         }
+
         public bool IsDirty => _isDirty;
 
         public void SetIsDirty()
@@ -242,7 +243,6 @@ namespace DCSFlightpanels.Windows
                 e.Handled = true;
                 Close();
             }
-
         }
     }
 }

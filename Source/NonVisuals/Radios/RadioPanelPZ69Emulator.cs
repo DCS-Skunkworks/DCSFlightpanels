@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
+using NonVisuals.Radios.Knobs;
+using NonVisuals.Radios.Misc;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
@@ -65,18 +67,19 @@ namespace NonVisuals.Radios
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            //Clear current bindings
             ClearSettings();
-            if (settings == null || settings.Count == 0)
-            {
-                return;
-            }
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
+
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
+
                     if (setting.StartsWith("RadioPanelKey{"))
                     {
                         var keyBinding = new KeyBindingPZ69();
@@ -151,7 +154,7 @@ namespace NonVisuals.Radios
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void DcsBiosDataReceived(object sender, DCSBIOSDataEventArgs e)
@@ -590,18 +593,6 @@ namespace NonVisuals.Radios
         {
             SaitekPanelKnobs = RadioPanelPZ69KnobEmulator.GetRadioPanelKnobs();
         }
-
-        /*public HashSet<DCSBIOSBindingPZ69> DCSBiosBindings
-        {
-            get { return _dcsBiosBindings; }
-            set { _dcsBiosBindings = value; }
-        }*/
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
-
 
     }
 

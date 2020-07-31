@@ -3,11 +3,13 @@ using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
+using NonVisuals.StreamDeck.Events;
 
 namespace NonVisuals.StreamDeck
 {
     public enum LayerNavType
     {
+        None = 3, //Do not change value because of JSON.
         SwitchToSpecificLayer = 0,
         Back = 1,
         Home = 2
@@ -22,8 +24,16 @@ namespace NonVisuals.StreamDeck
         private EnumStreamDeckButtonNames _streamDeckButtonName;
         public LayerNavType NavigationType;
         public string TargetLayer;
-        private string _panelHash;
+        public string RemoteStreamdeckBindingHash = "";
+        public string RemoteStreamdeckTargetLayer = "";
 
+        [NonSerialized]
+        private StreamDeckPanel _streamDeckPanel;
+
+        public ActionTypeLayer(StreamDeckPanel streamDeckPanel)
+        {
+            _streamDeckPanel = streamDeckPanel;
+        }
 
         public int GetHash()
         {
@@ -73,29 +83,44 @@ namespace NonVisuals.StreamDeck
         {
             switch (NavigationType)
             {
+                case LayerNavType.None:
+                    {
+                        break;
+                    }
                 case LayerNavType.Home:
-                {
-                    StreamDeckPanel.GetInstance(_panelHash).ShowHomeLayer();
-                    break;
-                }
+                    {
+                        _streamDeckPanel.ShowHomeLayer();
+                        break;
+                    }
                 case LayerNavType.Back:
-                {
-                    StreamDeckPanel.GetInstance(_panelHash).ShowPreviousLayer();
-                    break;
-                }
+                    {
+                        _streamDeckPanel.ShowPreviousLayer();
+                        break;
+                    }
                 case LayerNavType.SwitchToSpecificLayer:
-                {
-                    StreamDeckPanel.GetInstance(_panelHash).SelectedLayerName = TargetLayer;
-                    break;
-                }
+                    {
+                        _streamDeckPanel.SelectedLayerName = TargetLayer;
+                        break;
+                    }
+            }
+
+            if (!string.IsNullOrEmpty(RemoteStreamdeckBindingHash) && !string.IsNullOrEmpty(RemoteStreamdeckTargetLayer))
+            {
+                EventHandlers.RemoteLayerSwitch(this, RemoteStreamdeckBindingHash, RemoteStreamdeckTargetLayer);
             }
         }
 
         [JsonIgnore]
-        public string PanelHash
+        public bool ControlsRemoteStreamDeck
         {
-            get => _panelHash;
-            set => _panelHash = value;
+            get => !string.IsNullOrEmpty(RemoteStreamdeckBindingHash) && !string.IsNullOrEmpty(RemoteStreamdeckTargetLayer);
+        }
+
+        [JsonIgnore]
+        public StreamDeckPanel StreamDeckPanelInstance
+        {
+            get => _streamDeckPanel;
+            set => _streamDeckPanel = value;
         }
     }
 }

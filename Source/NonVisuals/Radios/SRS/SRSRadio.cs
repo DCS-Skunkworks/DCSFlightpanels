@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
+using NonVisuals.Radios.Knobs;
 
-
-namespace NonVisuals.Radios
+namespace NonVisuals.Radios.SRS
 {
     public enum SRSRadioMode
     {

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
 using System.Media;
 using System.Text;
-using System.Windows.Documents;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -83,11 +79,22 @@ namespace NonVisuals.StreamDeck
 
             _jsonSettings.MissingMemberHandling = MissingMemberHandling.Error;
 
+            Debug.WriteLine("Count #1 is " + StreamDeckButton.WarningGetStaticButtons().Count);
             _layerList = JsonConvert.DeserializeObject<List<StreamDeckLayer>>(jsonText, _jsonSettings);
-            
-            _layerList.SetPanelHash(_streamDeckPanel.PanelHash);
+            RegisterButtons();
+            Debug.WriteLine("Count #2 is " + StreamDeckButton.WarningGetStaticButtons().Count);
+            _layerList.SetPanel(_streamDeckPanel);
             _jsonImported = true;
+            SetStreamDeckPanelInstance(_streamDeckPanel);
             CheckHomeLayerExists();
+        }
+
+        private void RegisterButtons()
+        {
+            foreach (var streamDeckLayer in _layerList)
+            {
+                streamDeckLayer.RegisterStreamDeckButtons();
+            }
         }
 
         public void ImportButtons(EnumButtonImportMode importMode, List<ButtonExport> buttonExports)
@@ -99,13 +106,15 @@ namespace NonVisuals.StreamDeck
 
                 if (!LayerExists(importLayerName))
                 {
-                    var newLayer = new StreamDeckLayer {Name = importLayerName};
+                    var newLayer = new StreamDeckLayer(_streamDeckPanel) { Name = importLayerName };
                     AddLayer(newLayer);
                 }
 
                 var layer = GetLayer(importLayerName);
                 layer.ImportButtons(importMode, buttonExports);
             }
+
+            SetStreamDeckPanelInstance(_streamDeckPanel);
         }
 
         public List<ButtonExport> GetButtonExports()
@@ -190,6 +199,14 @@ namespace NonVisuals.StreamDeck
             SystemSounds.Asterisk.Play();
         }
 
+        public void SetStreamDeckPanelInstance(StreamDeckPanel streamDeckPanel)
+        {
+            foreach (var streamDeckLayer in LayerList)
+            {
+                streamDeckLayer.StreamDeckPanelInstance = streamDeckPanel;
+            }
+        }
+
         private void CheckHomeLayerExists()
         {
             var found = false;
@@ -205,8 +222,7 @@ namespace NonVisuals.StreamDeck
 
             if (!found)
             {
-                var streamDeckLayer = new StreamDeckLayer();
-                streamDeckLayer.PanelHash = _streamDeckPanel.PanelHash;
+                var streamDeckLayer = new StreamDeckLayer(_streamDeckPanel);
                 streamDeckLayer.Name = StreamDeckConstants.HOME_LAYER_NAME;
                 _layerList.Insert(0, streamDeckLayer);
             }
@@ -271,6 +287,16 @@ namespace NonVisuals.StreamDeck
             {
                 SetSelectedLayer(null);
             }
+        }
+
+        public void EraseLayerButtons(string layerName)
+        {
+            if (string.IsNullOrEmpty(layerName))
+            {
+                return;
+            }
+
+            GetLayer(layerName).RemoveButtons(true);
         }
 
         public List<StreamDeckLayer> LayerList
@@ -377,7 +403,7 @@ namespace NonVisuals.StreamDeck
             var stringBuilder = new StringBuilder(500);
             stringBuilder.Append("\n");
 
-            stringBuilder.Append("Layer count : " + _layerList.Count + ", button count = " + StreamDeckButton.GetButtons().Count + "\n");
+            stringBuilder.Append("Layer count : " + _layerList.Count + ", button count = " + StreamDeckButton.GetStaticButtons(null).Count + "\n");
             stringBuilder.Append("Existing layers:\n");
             foreach (var streamDeckLayer in _layerList)
             {
@@ -405,11 +431,14 @@ namespace NonVisuals.StreamDeck
 
         private void MarkAllButtonsHiddenAndClearFaces()
         {
-            foreach (var streamDeckButton in StreamDeckButton.GetButtons())
+            if (StreamDeckButton.GetStaticButtons(_streamDeckPanel) != null)
             {
-                streamDeckButton.IsVisible = false;
+                foreach (var streamDeckButton in StreamDeckButton.GetStaticButtons(_streamDeckPanel))
+                {
+                    streamDeckButton.IsVisible = false;
+                }
+                ClearAllFaces();
             }
-            ClearAllFaces();
         }
 
         private void SetSelectedLayer(string layerName)
@@ -445,7 +474,7 @@ namespace NonVisuals.StreamDeck
 
             selectedLayer.IsVisible = true;
 
-            EventHandlers.LayerSwitched(this, new StreamDeckShowNewLayerArgs() { SelectedLayerName = _selectedLayerName });
+            EventHandlers.LayerSwitched(this, _streamDeckPanel.BindingHash, _selectedLayerName);
         }
 
         public int SelectedButtonNumber
@@ -469,7 +498,7 @@ namespace NonVisuals.StreamDeck
                 if (_selectedButtonName != value)
                 {
                     _selectedButtonName = value;
-                    EventHandlers.SelectedButtonChanged(this, SelectedButton);
+                    EventHandlers.SelectedButtonChanged(this, SelectedButton, _streamDeckPanel.BindingHash);
                     return;
                 }
                 _selectedButtonName = value;
@@ -531,7 +560,7 @@ namespace NonVisuals.StreamDeck
                 throw new Exception("Button " + buttonName + " cannot be found in layer " + layerName + ".");
             }
 
-            var button = new StreamDeckButton(buttonName, _streamDeckPanel.PanelHash);
+            var button = new StreamDeckButton(buttonName, _streamDeckPanel);
 
             /*
              * Silently means there won't be any event of type "New Button added". This is an empty button

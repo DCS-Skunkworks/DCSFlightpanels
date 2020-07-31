@@ -23,7 +23,7 @@ namespace NonVisuals.Saitek
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
-            
+
         public TPMPanel(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.TPM, hidSkeleton)
         {
             if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.TPM)
@@ -45,7 +45,7 @@ namespace NonVisuals.Saitek
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -61,18 +61,18 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void ImportSettings(List<string> settings)
+        public override void ImportSettings(GenericPanelBinding genericPanelBinding)
         {
-            //Clear current bindings
             ClearSettings();
-            if (settings == null || settings.Count == 0)
-            {
-                return;
-            }
+
+            BindingHash = genericPanelBinding.BindingHash;
+
+            var settings = genericPanelBinding.Settings;
             foreach (var setting in settings)
             {
-                if (!setting.StartsWith("#") && setting.Length > 2 && setting.Contains(InstanceId))
+                if (!setting.StartsWith("#") && setting.Length > 2)
                 {
+
                     if (setting.StartsWith("TPMPanelSwitch{"))
                     {
                         var keyBinding = new KeyBindingTPM();
@@ -145,7 +145,7 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
-            e.ProfileHandlerEA.RegisterProfileData(this, ExportSettings());
+            e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
         }
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
@@ -158,6 +158,17 @@ namespace NonVisuals.Saitek
                 UpdateCounter(e.Address, e.Data);
             }
 
+        }
+
+        public override void Identify()
+        {
+            try
+            {
+                //This panel can not identify itself, no LEDs, nothing
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
@@ -536,11 +547,6 @@ namespace NonVisuals.Saitek
         {
             get => _dcsBiosBindings;
             set => _dcsBiosBindings = value;
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
     }
 

@@ -5,6 +5,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
@@ -5326,10 +5327,6 @@ namespace NonVisuals.Radios
             return Interlocked.Read(ref _tacanThreadNowSynching) > 0;
         }
 
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
     }
 
 }

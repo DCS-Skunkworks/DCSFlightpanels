@@ -18,8 +18,11 @@ namespace NonVisuals.Saitek
         protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
         protected byte[] OldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
         protected byte[] NewSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
-        
-        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton):base(typeOfGamingPanel, hidSkeleton){}
+
+        protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
+        {
+            hidSkeleton.PanelHasBeenInstantiated = true;
+        }
 
         protected override void StartListeningForPanelChanges()
         {
@@ -183,7 +186,7 @@ namespace NonVisuals.Saitek
 
         protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
-            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = InstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
+            OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = HIDInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
 
         //For those that wants to listen to this panel

@@ -5,6 +5,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
@@ -1817,11 +1818,6 @@ namespace NonVisuals.Radios
         private bool VhfAmNowSyncing()
         {
             return Interlocked.Read(ref _vhfAmThreadNowSynching) > 0;
-        }
-
-        public override string SettingsVersion()
-        {
-            return "0X";
         }
 
         private bool SwitchVhfAmDecimalDirectionUp(int cockpitValue, int desiredValue)

@@ -1,8 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -11,11 +9,11 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
@@ -29,25 +27,23 @@ namespace DCSFlightpanels.PanelUserControls
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
-        private readonly TabItem _parentTabItem;
-        private string _parentTabItemHeader;
+
         private readonly Image[] _imageArrayUpper = new Image[4];
         private readonly Image[] _imageArrayLeft = new Image[4];
         private readonly Image[] _imageArrayRight = new Image[4];
-        private readonly IGlobalHandler _globalHandler;
         private bool _textBoxBillsSet;
-        private bool _controlLoaded;
 
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
-            _parentTabItem = parentTabItem;
-            _parentTabItemHeader = _parentTabItem.Header.ToString();
+            hidSkeleton.HIDReadDevice.Removed += DeviceRemovedHandler;
+
+            ParentTabItem = parentTabItem;
             _switchPanelPZ55 = new SwitchPanelPZ55(hidSkeleton);
 
             _switchPanelPZ55.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_switchPanelPZ55);
-            _globalHandler = globalHandler;
+            GlobalHandler = globalHandler;
             _imageArrayUpper[0] = ImagePZ55LEDDarkUpper;
             _imageArrayUpper[1] = ImagePZ55LEDGreenUpper;
             _imageArrayUpper[2] = ImagePZ55LEDYellowUpper;
@@ -71,12 +67,13 @@ namespace DCSFlightpanels.PanelUserControls
                 _switchPanelPZ55.Dispose();
             }
         }
-        
+
+
         private void SwitchPanelPZ55UserControl_OnLoaded(object sender, RoutedEventArgs e)
         {
             SetTextBoxBills();
             SetContextMenuClickHandlers();
-            _controlLoaded = true;
+            UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
 
@@ -87,9 +84,14 @@ namespace DCSFlightpanels.PanelUserControls
             SetContextMenuClickHandlers();
         }
 
-        public GamingPanel GetGamingPanel()
+        public override GamingPanel GetGamingPanel()
         {
             return _switchPanelPZ55;
+        }
+
+        public override GamingPanelEnum GetPanelType()
+        {
+            return GamingPanelEnum.PZ55SwitchPanel;
         }
 
         public string GetName()
@@ -103,12 +105,12 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly))
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
                     {
                         image.ContextMenu = null;
                     }
                     else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         if (image.ContextMenu != null)
@@ -140,7 +142,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     NotifySwitchChanges(e.Switches);
                 }
@@ -151,11 +153,14 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public void PanelSettingsReadFromFile(object sender, SettingsReadFromFileEventArgs e)
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
         {
             try
             {
-                ShowGraphicConfiguration();
+                if (e.PanelBinding.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.PanelBinding.HIDInstance)
+                {
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -167,8 +172,11 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ClearAll(false);
-                ShowGraphicConfiguration();
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && _switchPanelPZ55.HIDInstanceId == e.HidInstance)
+                {
+                    ClearAll(false);
+                    ShowGraphicConfiguration();
+                }
             }
             catch (Exception ex)
             {
@@ -180,7 +188,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (_switchPanelPZ55.InstanceId.Equals(e.UniqueId))
+                if (_switchPanelPZ55.HIDInstanceId.Equals(e.UniqueId))
                 {
                     var position = (SwitchPanelPZ55LEDPosition)e.LEDPosition.Position;
                     var imageArray = _imageArrayUpper;
@@ -281,7 +289,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (connected)"));
                 }
@@ -296,7 +304,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel && e.UniqueId.Equals(_switchPanelPZ55.InstanceId))
+                if (e.PanelType == GamingPanelEnum.PZ55SwitchPanel && e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId))
                 {
                     //Dispatcher?.BeginInvoke((Action)(() => _parentTabItem.Header = _parentTabItemHeader + " (disconnected)"));
                 }
@@ -311,7 +319,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (e.UniqueId.Equals(_switchPanelPZ55.InstanceId) && e.GamingPanelEnum == GamingPanelEnum.PZ55SwitchPanel)
+                if (e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ55SwitchPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
                     Dispatcher?.BeginInvoke((Action) (() => TextBoxLogPZ55.Text = ""));
@@ -418,11 +426,11 @@ namespace DCSFlightpanels.PanelUserControls
                 DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
                 }
                 else
                 {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
+                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
                 }
                 dcsBIOSInputControlsWindow.ShowDialog();
                 if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
@@ -577,7 +585,7 @@ namespace DCSFlightpanels.PanelUserControls
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
-            if (Common.IsOperationModeFlagSet(OperationFlag.DCSBIOSOutputEnabled))
+            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
@@ -611,7 +619,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     position = SwitchPanelPZ55LEDPosition.RIGHT;
                 }
-                var ledConfigsWindow = new LEDConfigsWindow(_globalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
+                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _switchPanelPZ55.GetLedDcsBiosOutputs(position), _switchPanelPZ55);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position
@@ -651,7 +659,7 @@ namespace DCSFlightpanels.PanelUserControls
                     // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -733,7 +741,7 @@ namespace DCSFlightpanels.PanelUserControls
                     // 3) 
                     foreach (MenuItem item in contextMenu.Items)
                     {
-                        if (!Common.IsOperationModeFlagSet(OperationFlag.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
+                        if (!Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
                         {
                             item.Visibility = Visibility.Visible;
                         }
@@ -1365,7 +1373,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                if (!_controlLoaded || !_textBoxBillsSet)
+                if (!UserControlLoaded || !_textBoxBillsSet)
                 {
                     return;
                 }
@@ -1457,8 +1465,8 @@ namespace DCSFlightpanels.PanelUserControls
                 if (_switchPanelPZ55 != null)
                 {
                     TextBoxLogPZ55.Text = "";
-                    TextBoxLogPZ55.Text = _switchPanelPZ55.InstanceId;
-                    Clipboard.SetText(_switchPanelPZ55.InstanceId);
+                    TextBoxLogPZ55.Text = _switchPanelPZ55.HIDInstanceId;
+                    Clipboard.SetText(_switchPanelPZ55.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
                 }
             }
@@ -1847,19 +1855,13 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
         
         private void ButtonTEXT_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var background = new Bitmap("E:\\temp\\png\\0.png");
-                var bitmap = BitMapCreator.CreateStreamDeckBitmap("Test", SettingsManager.DefaultFont, SettingsManager.DefaultFontColor, SettingsManager.OffsetX, SettingsManager.OffsetY, background);
-                
-
-                var instanceId = @"\\?\hid#vid_0fd9&pid_0060#6&25d3ea36&1&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}";
-                
-                StreamDeckPanel.GetInstance(instanceId).SetImage(EnumStreamDeckButtonNames.BUTTON1, bitmap);
+                var window = new BindingsMappingWindow(BindingMappingManager.PanelBindings, GamingPanel.GamingPanels);
+                window.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -1956,14 +1958,6 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (contextMenuItem.Name == "contextMenuItemKeepPressed")
                 {
-                    var message = "Remember to set a command for the opposing action!\n\n" +
-                                  "For example if you set Keep Pressed for the \"On\" position for a button you need to set a command for \"Off\" position.\n" +
-                                  "This way the continuous Keep Pressed will be canceled.\n" +
-                                  "If you do not want a key press to cancel the continuous key press you can add a \"VK_NULL\" key.\n" +
-                                  "\"VK_NULL\'s\" sole purpose is to cancel a continuous key press.";
-                    var infoDialog = new InformationTextBlockWindow(message);
-                    infoDialog.Height = 250;
-                    infoDialog.ShowDialog();
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
                 }
                 else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")
@@ -2026,6 +2020,18 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
                 }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _switchPanelPZ55.Identify();
             }
             catch (Exception ex)
             {

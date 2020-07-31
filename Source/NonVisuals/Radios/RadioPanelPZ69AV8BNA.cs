@@ -4,6 +4,7 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
+using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
@@ -666,11 +667,6 @@ namespace NonVisuals.Radios
             SaitekPanelKnobs = RadioPanelKnobAV8BNA.GetRadioPanelKnobs();
         }
 
-
-        public override string SettingsVersion()
-        {
-            return "0X";
-        }
     }
 
 }
