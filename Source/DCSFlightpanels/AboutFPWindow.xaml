@@ -30,7 +30,7 @@
                 <LineBreak/>
                 This project relies heavily on other's code projects and expertise; such as:
                 <LineBreak/>
-                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/dcs-bios/dcs-bios">
+                <Hyperlink RequestNavigate="HyperlinkRequestNavigate" NavigateUri="https://github.com/DCSFlightpanels/dcs-bios">
                     -
                     <Bold>[FSF]Ian's DCS-BIOS project</Bold>
                 </Hyperlink>
