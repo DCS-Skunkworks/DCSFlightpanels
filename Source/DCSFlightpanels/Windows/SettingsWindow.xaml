@@ -29,7 +29,7 @@
 
 
 
-        <StackPanel Name="StackPanelGeneralSettings"  Margin="0,5,0,0" Grid.Column="1" Grid.Row="0" Visibility="Collapsed">
+        <StackPanel Name="StackPanelGeneralSettings"  Margin="0,5,0,0" Grid.Column="1" Grid.Row="0" Visibility="Visible">
             <StackPanel Margin="0,0,0,10">
                 <Label FontWeight="Bold">API Mode</Label>
                 <RadioButton Name="RadioButtonKeyBd" >keybd_event()</RadioButton>
@@ -49,16 +49,16 @@
             <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,20,5,0" >IMPORTANT</TextBlock>
             <TextBlock TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
                 <Italic>
-                Windows stores these settings in a filed named <Bold>user.config</Bold> in folder :
+                Windows stores these settings in a file named <Bold>user.config</Bold> in folder :
                 <LineBreak/> <Bold> C:\Users\&lt;your username&gt;\AppData\Local\DCSFlightpanels.</Bold>
                 </Italic>
                 <LineBreak/>
-                For every version a new folder with a new user.config file will be created. If you have used several DCSFP versions it is recommended that you go and <Underline>delete the old files and folders </Underline> in this location.
+                For every version of DCSFP a new folder with a new user.config file will be created. If you have used several DCSFP versions it is recommended that you go and <Underline>delete the old files and folders </Underline> in this location.
                 This way there will not be any unexplained behaviour with DCSFP reading old settings or settings not being saved properly.
                 <LineBreak/>
             </TextBlock>
         </StackPanel>
-        <StackPanel Name="StackPanelDCSBIOSSettings"  Margin="0,0,0,0" Grid.Column="1" Grid.Row="0" Visibility="Visible" >
+        <StackPanel Name="StackPanelDCSBIOSSettings"  Margin="0,0,0,0" Grid.Column="1" Grid.Row="0" Visibility="Collapsed" >
             <Label FontWeight="Bold">DCS-BIOS Settings</Label>
             <StackPanel Orientation="Horizontal">
                 <Label Content="DCS-BIOS json location" Foreground="White" Background="#f54747" Margin="0,0,0,0" VerticalAlignment="Top"/>
