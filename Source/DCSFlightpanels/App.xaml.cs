@@ -82,16 +82,14 @@ namespace DCSFlightpanels
                 {
                     try
                     {
-
-                        for (int i = 0; i < e.Args.Length; i++)
+                        foreach (var arg in e.Args)
                         {
-                            var arg = e.Args[i];
-                            if (arg.Contains(Constants.CommandLineArgumentStartMinimized))
+                            if (arg.ToLower().Contains(Constants.CommandLineArgumentStartMinimized.ToLower()))
                             {
                                 Settings.Default.RunMinimized = true;
                                 Settings.Default.Save();
                             }
-                            if (arg.Contains(Constants.CommandLineArgumentOpenProfile))
+                            if (arg.ToLower().Contains(Constants.CommandLineArgumentOpenProfile.ToLower()))
                             {
                                 if (arg.Contains("NEWPROFILE"))
                                 {
@@ -99,12 +97,12 @@ namespace DCSFlightpanels
                                 }
                                 else
                                 {
-                                    Settings.Default.LastProfileFileUsed = e.Args[i].Replace("\"", "").Replace("'", "").Replace(Constants.CommandLineArgumentOpenProfile, "");
+                                    Settings.Default.LastProfileFileUsed = arg.ToLower().Replace("\"", "").Replace("'", "").Replace(Constants.CommandLineArgumentOpenProfile.ToLower(), "");
                                 }
                                 Settings.Default.Save();
                                 closeCurrentInstance = true;
                             }
-                            else if (arg.Contains(Constants.CommandLineArgumentNoStreamDeck))
+                            else if (arg.ToLower().Contains(Constants.CommandLineArgumentNoStreamDeck.ToLower()))
                             {
                                 Settings.Default.LoadStreamDeck = false;
                                 Settings.Default.Save();
