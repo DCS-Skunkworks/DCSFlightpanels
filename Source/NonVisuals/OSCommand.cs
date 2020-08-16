@@ -106,8 +106,8 @@ namespace NonVisuals
             catch (Exception ex)
             {
                 SystemSounds.Beep.Play();
-                Common.LogError("Failed to start " + _file + " with arguments " + _arguments + "." + ex.Message + "\n" + ex.StackTrace);
-                result = "-1";
+                result = "Failed to start " + _file + " with arguments " + _arguments + "." + ex.Message + "\n" + ex.StackTrace;
+                Common.LogError(result);
             }
             return result;
         }
