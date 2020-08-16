@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Media;
 using System.Threading;
+using ClassLibraryCommon;
 using NonVisuals.Saitek;
 
 namespace NonVisuals
@@ -26,8 +28,8 @@ namespace NonVisuals
         }
 
         public OSCommand()
-        {}
-        
+        { }
+
         public OSCommand(string file, string arguments, string name)
         {
             _file = file;
@@ -73,30 +75,40 @@ namespace NonVisuals
 
         public string Execute(CancellationToken cancellationToken)
         {
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = _file,
-                    Arguments = _arguments,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                }
-            };
-            process.Start();
             var result = "";
-            while (!process.StandardOutput.EndOfStream)
+            try
             {
-                _isRunning = true;
-                if (cancellationToken.IsCancellationRequested)
+                var process = new Process
                 {
-                    break;
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = _file,
+                        Arguments = _arguments,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        CreateNoWindow = true
+                    }
+                };
+                process.Start();
+                while (!process.StandardOutput.EndOfStream)
+                {
+                    _isRunning = true;
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+                    result = result + " " + process.StandardOutput.ReadLine();
                 }
-                result = result + " " + process.StandardOutput.ReadLine();
-            }
 
-            _isRunning = false;
+                _isRunning = false;
+
+            }
+            catch (Exception ex)
+            {
+                SystemSounds.Beep.Play();
+                Common.LogError("Failed to start " + _file + " with arguments " + _arguments + "." + ex.Message + "\n" + ex.StackTrace);
+                result = "-1";
+            }
             return result;
         }
 
