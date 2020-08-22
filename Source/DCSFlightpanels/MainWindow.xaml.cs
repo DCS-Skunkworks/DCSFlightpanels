@@ -159,7 +159,7 @@ namespace DCSFlightpanels
 
                 CheckForNewDCSFPRelease();
 
-                if (Settings.Default.LoadStreamDeck && Process.GetProcessesByName("StreamDeck").Length >= 1)
+                if (Settings.Default.LoadStreamDeck == false && Process.GetProcessesByName("StreamDeck").Length >= 1)
                 {
                     MessageBox.Show("StreamDeck's official software is running in the background.", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
@@ -1451,7 +1451,9 @@ namespace DCSFlightpanels
                         MessageBox.Show("File " + bindingsFile + " does not exist.", "Error finding file", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
-                    Process.Start("dcsfp.exe", Constants.CommandLineArgumentOpenProfile + "\"" + bindingsFile + "\"");
+
+                    var streamDeckArguments = Settings.Default.LoadStreamDeck ? "" : Constants.CommandLineArgumentNoStreamDeck + " ";
+                    Process.Start("dcsfp.exe", streamDeckArguments + Constants.CommandLineArgumentOpenProfile + "\"" + bindingsFile + "\"");
                 }
             }
             catch (Exception ex)
