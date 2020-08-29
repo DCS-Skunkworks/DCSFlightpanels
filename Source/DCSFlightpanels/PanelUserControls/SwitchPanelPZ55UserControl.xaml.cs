@@ -32,6 +32,7 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly Image[] _imageArrayLeft = new Image[4];
         private readonly Image[] _imageArrayRight = new Image[4];
         private bool _textBoxBillsSet;
+        private ContextMenuPanelTextBox _contextMenuTextBox;
 
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -385,8 +386,8 @@ namespace DCSFlightpanels.PanelUserControls
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
         }
-
-        private void MenuContextEditTextBoxClick(object sender, RoutedEventArgs e)
+        
+        private void MenuItemEditSequence_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -450,7 +451,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void MenuContextEditDCSBIOSControlTextBoxClick(object sender, RoutedEventArgs e)
+        private void MenuItemEditDCSBIOS_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -492,7 +493,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void MenuContextEditBipTextBoxClick(object sender, RoutedEventArgs e)
+        private void MenuItemEditBIP_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -531,7 +532,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItemEditOSCommand_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -643,12 +644,27 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetContextMenuClickHandlers()
         {
+
+            _contextMenuTextBox = new ContextMenuPanelTextBox(Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly));
+            _contextMenuTextBox.IsVisibleChanged += TextBoxContextMenuIsVisibleChanged;
+            _contextMenuTextBox.ContextMenuItemAddNullKey.Click += MenuItemAddNullKey_OnClick;
+            _contextMenuTextBox.ContextMenuItemEditSequence.Click += MenuItemEditSequence_OnClick;
+            _contextMenuTextBox.ContextMenuItemEditDCSBIOS.Click += MenuItemEditDCSBIOS_OnClick;
+            _contextMenuTextBox.ContextMenuItemEditBIP.Click += MenuItemEditBIP_OnClick;
+            _contextMenuTextBox.ContextMenuItemEditOSCommand.Click += MenuItemEditOSCommand_OnClick;
+
+            _contextMenuTextBox.ContextMenuItemCopyKeySequence.Click += MenuItemCopyKeySequence_OnClick;
+            _contextMenuTextBox.ContextMenuItemCopyDCSBIOS.Click += MenuItemCopyDCSBIOS_OnClick;
+            _contextMenuTextBox.ContextMenuItemCopyBIPLink.Click += MenuItemCopyBIPLink_OnClick;
+            _contextMenuTextBox.ContextMenuItemCopyOSCommand.Click += MenuItemCopyOSCommand_OnClick;
+
+            _contextMenuTextBox.ContextMenuItemPaste.Click += MenuItemPaste_OnClick;
+
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ55))
                 {
-                    var contectMenu = (ContextMenu)Resources["TextBoxContextMenuPZ55"];
-                    textBox.ContextMenu = contectMenu;
+                    textBox.ContextMenu = _contextMenuTextBox;
                     textBox.ContextMenuOpening += TextBoxContextMenuOpening;
                 }
             }
@@ -699,146 +715,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-        private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ55TextBox)sender;
-                var contextMenu = textBox.ContextMenu;
-                if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
-                {
-                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        item.Visibility = Visibility.Collapsed;
-                    }
-                    return;
-                }
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.Visibility = Visibility.Collapsed;
-                }
-
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsKeySequence())
-                {
-                    // 2) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.IsEmpty())
-                {
-                    // 4) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("AddNullKey"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsSingleKey())
-                {
-                    // 5) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
-                        {
-                            if (item.Name.Contains("EditBIP"))
-                            {
-                                if (BipFactory.HasBips())
-                                {
-                                    item.Visibility = Visibility.Visible;
-                                }
-                            }
-                            else
-                            {
-                                item.Visibility = Visibility.Visible;
-                            }
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsBIPLink())
-                {
-                    // 3) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsOSCommand())
-                {
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private PZ55TextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
@@ -930,7 +807,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey())
+                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
                     {
                         EditSingleKeyPress(textBox);
                     }
@@ -941,10 +818,6 @@ namespace DCSFlightpanels.PanelUserControls
                     else if (textBox.Bill.ContainsDCSBIOS())
                     {
                         EditDCSBIOS(textBox);
-                    }
-                    else if (textBox.Bill.ContainsBIPLink())
-                    {
-                        EditBIPLink(textBox);
                     }
                     else if (textBox.Bill.ContainsOSCommand())
                     {
@@ -1819,41 +1692,131 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void SetPZ55TextBoxes()
+
+        private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            SetNextPreviousPZ55TextBoxes("OFF", TextBoxKnobOff, TextBoxKnobStart, TextBoxKnobR);
-            SetNextPreviousPZ55TextBoxes("R", TextBoxKnobR, TextBoxKnobOff, TextBoxKnobL);
-            SetNextPreviousPZ55TextBoxes("L", TextBoxKnobL, TextBoxKnobR, TextBoxKnobAll);
-            SetNextPreviousPZ55TextBoxes("BOTH/ALL", TextBoxKnobAll, TextBoxKnobL, TextBoxKnobStart);
-            SetNextPreviousPZ55TextBoxes("START", TextBoxKnobStart, TextBoxKnobAll, TextBoxKnobOff);
+            try
+            {
+                var textBox = (PZ55TextBox)sender;
+                var contextMenu = textBox.ContextMenu;
+                if (contextMenu == null)
+                {
+                    return;
+                }
 
-            PairPZ55TextBoxes("Landing Gear Down", "Landing Gear Up", TextBoxLandingOn,  TextBoxLandingOff);
+                if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
+                {
+                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
+                    _contextMenuTextBox.HideAll();
+                    return;
+                }
 
-            PairPZ55TextBoxes("Master Battery On", "Master Battery Off", TextBoxMasterBatOn,  TextBoxMasterBatOff);
-            PairPZ55TextBoxes("Master ALT. On", "Master ALT. Off", TextBoxMasterAltOn,  TextBoxMasterAltOff);
-            PairPZ55TextBoxes("Avionics Master On", "Avionics Master Off", TextBoxAvionicsMasterOn,  TextBoxAvionicsMasterOff);
-            PairPZ55TextBoxes("Fuel Pump On", "Fuel Pump Off", TextBoxFuelPumpOn,  TextBoxFuelPumpOff);
-            PairPZ55TextBoxes("De-Ice On", "De-Ice Off", TextBoxDeIceOn, TextBoxDeIceOff);
-            PairPZ55TextBoxes("Pitot Heat On", "Pitot Heat Off", TextBoxPitotHeatOn, TextBoxPitotHeatOff);
-
-            PairPZ55TextBoxes("Cowl Open", "Cowl Close",TextBoxCowlOpen, TextBoxCowlClose);
+                _contextMenuTextBox.SetVisibility(textBox.Bill.IsEmpty(),
+                                                    textBox.Bill.ContainsSingleKey(),
+                                                    textBox.Bill.ContainsKeySequence(), 
+                                                    textBox.Bill.ContainsDCSBIOS(), 
+                                                    textBox.Bill.ContainsBIPLink(), 
+                                                    textBox.Bill.ContainsOSCommand());
+                
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+        
+        private void MenuItemPaste_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
-        private void SetNextPreviousPZ55TextBoxes(string textBoxDescription, PZ55TextBox textBox, PZ55TextBox previousTextBox, PZ55TextBox nextTextBox)
+        private void MenuItemCopyKeySequence_OnClick(object sender, RoutedEventArgs e)
         {
-            textBox.Description = textBoxDescription;
-            textBox.Previous = previousTextBox;
-            textBox.Next = nextTextBox;
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
-        private void PairPZ55TextBoxes(string textBox1Description, string textBox2Description, PZ55TextBox textBox1, PZ55TextBox textBox2)
+        private void MenuItemCopyDCSBIOS_OnClick(object sender, RoutedEventArgs e)
         {
-            textBox1.Description = textBox1Description;
-            textBox2.Description = textBox2Description;
-            textBox1.Previous = textBox2;
-            textBox2.Previous = textBox1;
-            textBox1.Next = textBox2;
-            textBox2.Next = textBox1;
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void MenuItemCopyBIPLink_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void MenuItemCopyOSCommand_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void Copy()
+        {
+            var streamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+            if (streamDeckButton != null)
+            {
+                Clipboard.SetDataObject(streamDeckButton);
+            }
+        }
+
+        private bool Paste()
+        {
+            var iDataObject = Clipboard.GetDataObject();
+            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton"))
+            {
+                return false;
+            }
+
+            var result = false;
+            var newStreamDeckButton = (StreamDeckButton)iDataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
+            var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
+            if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
+                MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                result = oldStreamDeckButton.Consume(true, newStreamDeckButton);
+            }
+            else
+            {
+                result = oldStreamDeckButton.Consume(true, newStreamDeckButton);
+            }
+
+            if (result)
+            {
+                _streamDeckPanel.SelectedLayer.AddButton(oldStreamDeckButton);
+                UpdateButtonInfoFromSource();
+                SetIsDirty();
+            }
+            return result;
         }
     }
 }

@@ -203,6 +203,7 @@
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml.cs">
       <DependentUpon>UserControlStreamDeckUINormal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ContextMenuPanelTextBox.cs" />
     <Compile Include="Windows\BindingsMappingWindow.xaml.cs">
       <DependentUpon>BindingsMappingWindow.xaml</DependentUpon>
     </Compile>

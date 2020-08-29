@@ -9,13 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000" Loaded="SwitchPanelPZ55UserControl_OnLoaded">
     <UserControl.Resources>
-        <ContextMenu x:Key="TextBoxContextMenuPZ55" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged" >
-            <MenuItem Header="Add VK_NULL key" Name="contextMenuItemAddNullKey" Click="MenuItemAddNullKey_OnClick"/>
-            <MenuItem Header="Edit OS Command" Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
-            <MenuItem Header="Edit Key Sequence" Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
-            <MenuItem Header="Edit DCS-BIOS Control" Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick"/>
-            <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick" />
-        </ContextMenu>
         <ContextMenu x:Key="PZ55LEDContextMenu" x:Shared="False">
             <MenuItem Header="Configure" Name="ContextConfigureLandingGearLED" Click="ContextConfigureLandingGearLEDClick"/>
         </ContextMenu>
