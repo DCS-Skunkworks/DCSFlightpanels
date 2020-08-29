@@ -17,7 +17,7 @@ using Theraot.Core;
 
 namespace NonVisuals.StreamDeck
 {
-    public class StreamDeckPanel : GamingPanel, IStreamDeckListener, IStreamDeckConfigListener, IDisposable
+    public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;

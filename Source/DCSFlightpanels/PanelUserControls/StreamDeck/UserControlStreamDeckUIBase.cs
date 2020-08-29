@@ -16,7 +16,7 @@ using NonVisuals.StreamDeck.Events;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
-    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, IStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
+    public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
     {
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
         protected readonly List<System.Windows.Controls.Image> DotImages = new List<System.Windows.Controls.Image>();

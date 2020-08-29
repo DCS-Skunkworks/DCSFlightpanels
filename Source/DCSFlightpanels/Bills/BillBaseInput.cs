@@ -53,6 +53,11 @@ namespace DCSFlightpanels.Bills
             }
         }
 
+        public KeyPressInfo GetKeyPress()
+        {
+            return _keyPress.KeySequence[0];
+        }
+
         public SortedList<int, KeyPressInfo> GetKeySequence()
         {
             return _keyPress.KeySequence;
