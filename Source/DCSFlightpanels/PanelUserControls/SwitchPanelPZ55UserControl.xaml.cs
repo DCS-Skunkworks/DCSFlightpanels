@@ -376,7 +376,7 @@ namespace DCSFlightpanels.PanelUserControls
                     //User made no changes
                     return;
                 }
-                
+
                 textBox.Bill.Clear();
                 var keyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
                 textBox.Bill.KeyPress = keyPress;
@@ -838,7 +838,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private PZ55TextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
@@ -850,7 +850,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
             return null;
         }
-        
+
         private void ImageLEDClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -1018,59 +1018,6 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ55TextBox)sender;
-
-
-                //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
-                {
-                    return;
-                }
-                var hashSetOfKeysPressed = new HashSet<string>();
-
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
-
-                e.Handled = true;
-
-                if (keyCode > 0)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
-                }
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                }
-                var result = "";
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-
-                result = Common.RemoveRControl(result);
-
-                textBox.Text = result;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
 
         private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -1870,6 +1817,43 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void SetPZ55TextBoxes()
+        {
+            SetNextPreviousPZ55TextBoxes("OFF", TextBoxKnobOff, TextBoxKnobStart, TextBoxKnobR);
+            SetNextPreviousPZ55TextBoxes("R", TextBoxKnobR, TextBoxKnobOff, TextBoxKnobL);
+            SetNextPreviousPZ55TextBoxes("L", TextBoxKnobL, TextBoxKnobR, TextBoxKnobAll);
+            SetNextPreviousPZ55TextBoxes("BOTH/ALL", TextBoxKnobAll, TextBoxKnobL, TextBoxKnobStart);
+            SetNextPreviousPZ55TextBoxes("START", TextBoxKnobStart, TextBoxKnobAll, TextBoxKnobOff);
+
+            PairPZ55TextBoxes("Landing Gear Down", "Landing Gear Up", TextBoxLandingOn,  TextBoxLandingOff);
+
+            PairPZ55TextBoxes("Master Battery On", "Master Battery Off", TextBoxMasterBatOn,  TextBoxMasterBatOff);
+            PairPZ55TextBoxes("Master ALT. On", "Master ALT. Off", TextBoxMasterAltOn,  TextBoxMasterAltOff);
+            PairPZ55TextBoxes("Avionics Master On", "Avionics Master Off", TextBoxAvionicsMasterOn,  TextBoxAvionicsMasterOff);
+            PairPZ55TextBoxes("Fuel Pump On", "Fuel Pump Off", TextBoxFuelPumpOn,  TextBoxFuelPumpOff);
+            PairPZ55TextBoxes("De-Ice On", "De-Ice Off", TextBoxDeIceOn, TextBoxDeIceOff);
+            PairPZ55TextBoxes("Pitot Heat On", "Pitot Heat Off", TextBoxPitotHeatOn, TextBoxPitotHeatOff);
+
+            PairPZ55TextBoxes("Cowl Open", "Cowl Close",TextBoxCowlOpen, TextBoxCowlClose);
+        }
+
+        private void SetNextPreviousPZ55TextBoxes(string textBoxDescription, PZ55TextBox textBox, PZ55TextBox previousTextBox, PZ55TextBox nextTextBox)
+        {
+            textBox.Description = textBoxDescription;
+            textBox.Previous = previousTextBox;
+            textBox.Next = nextTextBox;
+        }
+
+        private void PairPZ55TextBoxes(string textBox1Description, string textBox2Description, PZ55TextBox textBox1, PZ55TextBox textBox2)
+        {
+            textBox1.Description = textBox1Description;
+            textBox2.Description = textBox2Description;
+            textBox1.Previous = textBox2;
+            textBox2.Previous = textBox1;
+            textBox1.Next = textBox2;
+            textBox2.Next = textBox1;
         }
     }
 }

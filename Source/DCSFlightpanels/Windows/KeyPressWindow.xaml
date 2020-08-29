@@ -20,7 +20,7 @@
             <controls:RowDefinition Height="4*" />
             <controls:RowDefinition Height="1*" />
         </controls:Grid.RowDefinitions>
-        <controls:StackPanel>
+        <controls:StackPanel Margin="5,0,5,0">
             <controls:Label Content="Break (ms)"/>
             <controls:ComboBox Name="ComboBoxBreak" ItemsSource="{data:Binding Source={StaticResource KeyPressLengthEnum}}" TabIndex="20" SelectionChanged="ComboBoxSelectionChanged" />
             <controls:Label Content="Key press" TabIndex="10" />
@@ -28,8 +28,11 @@
             <controls:Label Content="Time to for key press (ms)"/>
             <controls:ComboBox Name="ComboBoxKeyPressTime" ItemsSource="{data:Binding Source={StaticResource KeyPressLengthEnum}}" TabIndex="20" SelectionChanged="ComboBoxSelectionChanged"/>
         </controls:StackPanel>
-        <controls:Button Content="Add VKNULL Key" Height="23"  Name="ButtonAddNullKey"  Width="115" Margin="286,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" controls:Grid.Row="1" Click="ButtonAddNullKey_OnClick" TabIndex="30" />
-        <controls:Button Content="OK" Height="23"  Name="ButtonOk"  Width="75" Margin="446,0,0,12" HorizontalAlignment="Left" VerticalAlignment="Bottom" controls:Grid.Row="1" Click="ButtonOkClick" TabIndex="30" />
-        <controls:Button Content="Cancel" Height="23"  Name="ButtonCancel"  Width="75" Margin="0,0,6,12" HorizontalAlignment="Right" VerticalAlignment="Bottom"  controls:Grid.Column="2" controls:Grid.Row="1" Click="ButtonCancelClick" TabIndex="40" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0,5,12">
+            <controls:Button Content="Add VKNULL Key" Height="23"  Name="ButtonAddNullKey"  Width="115" Margin="0,0,100,0" Click="ButtonAddNullKey_OnClick" TabIndex="30" />
+            <controls:Button Content="OK" Height="23"  Name="ButtonOk"  Width="75" Margin="0,0,5,0" HorizontalAlignment="Left" Click="ButtonOkClick" TabIndex="30" />
+            <controls:Button Content="Cancel" Height="23"  Name="ButtonCancel"  Width="75" Click="ButtonCancelClick" TabIndex="40" />
+        </StackPanel>
     </controls:Grid>
 </windows:Window>

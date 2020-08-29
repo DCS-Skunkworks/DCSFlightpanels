@@ -49,6 +49,7 @@
                 <MenuItem Name ="MenuItemUseNS430" Header="Load NS 430" Click="MenuItemUseNS430_OnClick" IsChecked="false"/>
             </MenuItem>
             <MenuItem Header="Help">
+                <MenuItem Header="Wiki (Github)" Click="MenuItemWikiClick" />
                 <MenuItem Header="About" Click="MenuItemAboutClick" />
             </MenuItem>
         </Menu>

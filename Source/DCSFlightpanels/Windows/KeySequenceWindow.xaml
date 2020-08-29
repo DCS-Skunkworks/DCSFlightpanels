@@ -16,11 +16,24 @@
             <controls:ColumnDefinition Width="3*" />
             <controls:ColumnDefinition Width="3*" />
         </controls:Grid.ColumnDefinitions>
-        <controls:DataGrid AutoGenerateColumns="false" HorizontalAlignment="Stretch" Name="DataGridSequences" VerticalAlignment="Stretch" controls:Grid.ColumnSpan="2" VerticalScrollBarVisibility="Visible" SelectionChanged="DataGridSequencesSelectionChanged" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False">
+        <controls:DataGrid 
+            AutoGenerateColumns="false" 
+            HorizontalAlignment="Stretch" 
+            Name="DataGridSequences" 
+            VerticalAlignment="Stretch" 
+            controls:Grid.ColumnSpan="2" 
+            VerticalScrollBarVisibility="Visible" 
+            SelectionChanged="DataGridSequencesSelectionChanged" 
+            CanUserReorderColumns="False" 
+            CanUserResizeRows="False" 
+            CanUserSortColumns="False" 
+            MouseDoubleClick="DataGridSequences_OnMouseDoubleClick"
+            MouseUp="DataGridSequences_OnMouseUp">
+
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn Header="Seq #" IsReadOnly="True" Binding="{data:Binding Path=Key}"/>
                 <controls:DataGridTextColumn Header="Break (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.LengthOfBreak}"/>
-                <controls:DataGridTextColumn Header="Key(s) to press" IsReadOnly="True" Binding="{data:Binding Path=Value.VirtualKeyCodesAsString}"/>
+                <controls:DataGridTextColumn Header="Key(s) to press" IsReadOnly="True" Width="*" Binding="{data:Binding Path=Value.VirtualKeyCodesAsString}"/>
                 <controls:DataGridTextColumn Header="Time to press (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.LengthOfKeyPress}"/>
             </controls:DataGrid.Columns>
         </controls:DataGrid>
@@ -43,9 +56,10 @@
             <controls:Label Content="Information" />
             <controls:TextBox Name="TextBoxInformation" MaxLines="10" Height="65" TextChanged="TextBoxInformationTextChanged" />
         </controls:StackPanel>
-        <controls:Button Content="OK" Height="23"  Name="ButtonOk"  Width="75" Margin="10,0,0,12" VerticalAlignment="Bottom" HorizontalAlignment="Right" controls:Grid.Column="2" controls:Grid.Row="1" Click="ButtonOkClick" />
-        <controls:DockPanel controls:Grid.Column="3" controls:Grid.Row="1">
+        <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+            <controls:Button Content="OK" Height="23"  Name="ButtonOk"  Width="75" Margin="0,0,5,12" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="ButtonOkClick" />
             <controls:Button Content="Cancel" Height="23"  Name="ButtonCancel"  Width="75" Margin="0,0,0,12" VerticalAlignment="Bottom"  Click="ButtonCancelClick" />
-        </controls:DockPanel>
+        </StackPanel>
+        
     </controls:Grid>
 </windows:Window>

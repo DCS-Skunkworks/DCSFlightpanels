@@ -7,7 +7,7 @@
         xmlns:common="clr-namespace:ClassLibraryCommon;assembly=ClassLibraryCommon"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Single Key Emulation" Height="200" Width="250" WindowStartupLocation="CenterScreen" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
+        Title="" Height="200" Width="250" WindowStartupLocation="CenterScreen" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
         ResizeMode="NoResize"
         Loaded="KeyPressReadingWindow_OnLoaded"
         KeyDown="KeyPressReadingWindow_OnKeyDown">
@@ -43,8 +43,8 @@
             <Button Name="ButtonDelete" HorizontalAlignment="Left" Content="Delete" Width="50" Height="23" Click="ButtonDelete_OnClick"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="5,0,5,0">
-            <Button Name="ButtonCancel" Content="Cancel" Height="23" Width="50" Margin="0,0,5,0" Click="ButtonCancel_OnClick"/>
-            <Button Name="ButtonOk" Content="OK" Height="23" Width="50" Click="ButtonOk_OnClick"/>
+            <Button Name="ButtonOk" Content="OK" Height="23" Width="50" Margin="0,0,5,0"  Click="ButtonOk_OnClick"/>
+            <Button Name="ButtonCancel" Content="Cancel" Height="23" Width="50" Click="ButtonCancel_OnClick"/>
         </StackPanel>
     </Grid>
 </Window>

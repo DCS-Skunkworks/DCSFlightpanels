@@ -1377,6 +1377,19 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
+        
+        private void MenuItemWikiClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start("https://github.com/DCSFlightpanels/DCSFlightpanels/wiki");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
         {
             try
