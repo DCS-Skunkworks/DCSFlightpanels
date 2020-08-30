@@ -96,6 +96,7 @@ namespace DCSFlightpanels.Bills
             _dcsbiosBindingPZ55 = null;
             _bipLinkPZ55 = null;
             KeyPress = null;
+            OSCommandObject = null;
             TextBox.Background = Brushes.White;
             TextBox.Text = "";
         }

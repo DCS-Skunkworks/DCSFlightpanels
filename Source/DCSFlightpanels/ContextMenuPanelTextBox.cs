@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using ClassLibraryCommon;
 using NonVisuals.Saitek;
 using CommonClassLibraryJD;
+using NonVisuals;
 
 namespace DCSFlightpanels
 {
@@ -24,6 +25,9 @@ namespace DCSFlightpanels
         private MenuItem _contextMenuItemCopyBIPLink;
         private MenuItem _contextMenuItemCopyOSCommand;
         private MenuItem _contextMenuItemPaste;
+        private MenuItem _contextMenuItemDeleteSettings;
+
+
 
         private bool _keyboardEmulationOnly;
 
@@ -57,6 +61,9 @@ namespace DCSFlightpanels
 
             _contextMenuItemPaste = new MenuItem() { Header = "Paste" };
             Items.Add(_contextMenuItemPaste);
+
+            _contextMenuItemDeleteSettings = new MenuItem() { Header = "Delete Settings" };
+            Items.Add(_contextMenuItemDeleteSettings);
         }
 
         public void SetVisibility(bool isEmpty, bool containsSinglePress, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
@@ -64,6 +71,13 @@ namespace DCSFlightpanels
             try
             {
                 HideAll();
+
+                CopyPackage copyPackage = null;
+                var iDataObject = Clipboard.GetDataObject();
+                if (iDataObject != null && iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
+                {
+                    copyPackage = (CopyPackage)iDataObject.GetData("NonVisuals.CopyPackage");
+                }
 
                 if (isEmpty)
                 {
@@ -78,12 +92,22 @@ namespace DCSFlightpanels
                         _contextMenuItemEditBIP.Visibility = Visibility.Visible;
                     }
                     _contextMenuItemEditOSCommand.Visibility = Visibility.Visible;
+
+                    if (copyPackage != null)
+                    {
+                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                    }
                 }
                 if (containsSinglePress)
                 {
                     if (BipFactory.HasBips())
                     {
                         _contextMenuItemEditBIP.Visibility = Visibility.Visible;
+                    }
+
+                    if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
+                    {
+                        _contextMenuItemPaste.Visibility = Visibility.Visible;
                     }
                 }
                 if (containsKeySequence)
@@ -95,6 +119,11 @@ namespace DCSFlightpanels
                     }
                     _contextMenuItemCopy.Visibility = Visibility.Visible;
                     _contextMenuItemCopyKeySequence.Visibility = Visibility.Visible;
+
+                    if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
+                    {
+                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                    }
                 }
                 if (containsDCSBIOS)
                 {
@@ -109,18 +138,74 @@ namespace DCSFlightpanels
                     {
                         _contextMenuItemEditBIP.Visibility = Visibility.Visible;
                     }
+
+                    if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
+                    {
+                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                    }
                 }
+
                 if (containsBIPLink)
                 {
                     _contextMenuItemEditBIP.Visibility = Visibility.Visible;
                     _contextMenuItemCopy.Visibility = Visibility.Visible;
                     _contextMenuItemCopyBIPLink.Visibility = Visibility.Visible;
+
+                    if (copyPackage != null)
+                    {
+                        switch (copyPackage.ContentType)
+                        {
+                            case CopyContentType.KeySequence:
+                            {
+                                if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                {
+                                    _contextMenuItemPaste.Visibility = Visibility.Visible;
+                                }
+
+                                break;
+                            }
+                            case CopyContentType.DCSBIOS:
+                            {
+                                if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                {
+                                    _contextMenuItemPaste.Visibility = Visibility.Visible;
+                                }
+
+                                break;
+                            }
+                            case CopyContentType.BIPLink:
+                            {
+                                //Cannot paste BIPLink on BIPLink
+                                break;
+                            }
+                            case CopyContentType.OSCommand:
+                            {
+                                if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                {
+                                    _contextMenuItemPaste.Visibility = Visibility.Visible;
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if (containsOSCommand)
+                    {
+                        _contextMenuItemEditOSCommand.Visibility = Visibility.Visible;
+                        _contextMenuItemCopy.Visibility = Visibility.Visible;
+                        _contextMenuItemCopyOSCommand.Visibility = Visibility.Visible;
+
+                        if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
+                        {
+                            _contextMenuItemPaste.Visibility = Visibility.Visible;
+                        }
+                    }
                 }
-                if (containsOSCommand)
+
+                if (!isEmpty)
                 {
-                    _contextMenuItemEditOSCommand.Visibility = Visibility.Visible;
-                    _contextMenuItemCopy.Visibility = Visibility.Visible;
-                    _contextMenuItemCopyOSCommand.Visibility = Visibility.Visible;
+                    _contextMenuItemDeleteSettings.Visibility = Visibility.Visible;
                 }
             }
             catch (Exception ex)
@@ -195,6 +280,12 @@ namespace DCSFlightpanels
             set => _contextMenuItemPaste = value;
         }
 
+        public MenuItem ContextMenuItemDeleteSettings
+        {
+            get => _contextMenuItemDeleteSettings;
+            set => _contextMenuItemDeleteSettings = value;
+        }
+
         public void HideAll()
         {
             HideItems(Items);
@@ -206,7 +297,7 @@ namespace DCSFlightpanels
             {
                 if (item is MenuItem)
                 {
-                    var contextMenuItem = (MenuItem) item;
+                    var contextMenuItem = (MenuItem)item;
                     contextMenuItem.Visibility = Visibility.Collapsed;
                     HideItems(contextMenuItem.Items);
                 }

@@ -386,7 +386,7 @@ namespace DCSFlightpanels.PanelUserControls
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
         }
-        
+
         private void MenuItemEditSequence_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -407,16 +407,9 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void EditKeySequence(PZ55TextBox textBox)
         {
-            KeySequenceWindow keySequenceWindow;
-            if (textBox.Bill.ContainsKeySequence())
-            {
-                keySequenceWindow = new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence());
-            }
-            else
-            {
-                keySequenceWindow = new KeySequenceWindow();
-            }
+            var keySequenceWindow = textBox.Bill.ContainsKeySequence() ? new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence()) : new KeySequenceWindow();
             keySequenceWindow.ShowDialog();
+
             if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
             {
                 //Clicked OK
@@ -427,7 +420,11 @@ namespace DCSFlightpanels.PanelUserControls
                     return;
                 }
                 var sequenceList = keySequenceWindow.GetSequence;
-                if (sequenceList.Count > 1)
+                if (sequenceList.Count == 0)
+                {
+                    DeleteSequence(textBox);
+                }
+                else if (sequenceList.Count > 1)
                 {
                     var keyPress = new KeyPress("Key press sequence", sequenceList);
                     textBox.Bill.KeyPress = keyPress;
@@ -438,7 +435,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                     UpdateKeyBindingProfileSequencedKeyStrokesPZ55(textBox);
                 }
-                else
+                else if (sequenceList.Count == 1)
                 {
                     //If only one press was created treat it as a simple keypress
                     textBox.Bill.Clear();
@@ -449,6 +446,13 @@ namespace DCSFlightpanels.PanelUserControls
                     UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                 }
             }
+        }
+
+        private void DeleteSequence(PZ55TextBox textBox)
+        {
+            textBox.Bill.KeyPress.KeySequence.Clear();
+            textBox.Text = "";
+            UpdateKeyBindingProfileSequencedKeyStrokesPZ55(textBox);
         }
 
         private void MenuItemEditDCSBIOS_OnClick(object sender, RoutedEventArgs e)
@@ -484,13 +488,27 @@ namespace DCSFlightpanels.PanelUserControls
             if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
             {
                 var dcsBiosInputs = dcsBIOSInputControlsWindow.DCSBIOSInputs;
-                var text = string.IsNullOrWhiteSpace(dcsBIOSInputControlsWindow.Description) ? "DCS-BIOS" : dcsBIOSInputControlsWindow.Description;
-                //1 appropriate text to textbox
-                //2 update bindings
-                textBox.Text = text;
-                textBox.Bill.Consume(dcsBiosInputs);
-                UpdateDCSBIOSBinding(textBox);
+                if (dcsBiosInputs.Count == 0)
+                {
+                    DeleteDCSBIOS(textBox);
+                }
+                else
+                {
+                    var text = string.IsNullOrWhiteSpace(dcsBIOSInputControlsWindow.Description) ? "DCS-BIOS" : dcsBIOSInputControlsWindow.Description;
+                    //1 appropriate text to textbox
+                    //2 update bindings
+                    textBox.Text = text;
+                    textBox.Bill.Consume(dcsBiosInputs);
+                    UpdateDCSBIOSBinding(textBox);
+                }
             }
+        }
+
+        private void DeleteDCSBIOS(PZ55TextBox textBox)
+        {
+            textBox.Text = "";
+            _switchPanelPZ55.RemoveSwitchPanelKeyFromList(ControlListPZ55.DCSBIOS, GetPZ55Key(textBox).SwitchPanelPZ55Key, GetPZ55Key(textBox).ButtonState);
+            textBox.Bill.DCSBIOSBinding = null;
         }
 
         private void MenuItemEditBIP_OnClick(object sender, RoutedEventArgs e)
@@ -526,10 +544,25 @@ namespace DCSFlightpanels.PanelUserControls
             bipLinkWindow.ShowDialog();
             if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
             {
-                textBox.Bill.BIPLink = (BIPLinkPZ55)bipLinkWindow.BIPLink;
-                UpdateBIPLinkBindings(textBox);
+                var tmpBIPLink = (BIPLinkPZ55)bipLinkWindow.BIPLink;
 
+                if (tmpBIPLink.BIPLights.Count == 0)
+                {
+                    DeleteBIPLink(textBox);
+                }
+                else
+                {
+                    textBox.Bill.BIPLink = tmpBIPLink;
+                    UpdateBIPLinkBindings(textBox);
+                }
             }
+        }
+
+        private void DeleteBIPLink(PZ55TextBox textBox)
+        {
+            textBox.Bill.BIPLink.BIPLights.Clear();
+            textBox.Background = Brushes.White;
+            UpdateBIPLinkBindings(textBox);
         }
 
         private void MenuItemEditOSCommand_OnClick(object sender, RoutedEventArgs e)
@@ -575,6 +608,13 @@ namespace DCSFlightpanels.PanelUserControls
                 UpdateOSCommandBindingsPZ55(textBox);
             }
             TextBoxLogPZ55.Focus();
+        }
+
+        private void DeleteOSCommandPZ55(PZ55TextBox textBox)
+        {
+            textBox.Text = "";
+            _switchPanelPZ55.RemoveSwitchPanelKeyFromList(ControlListPZ55.OSCOMMANDS, GetPZ55Key(textBox).SwitchPanelPZ55Key, GetPZ55Key(textBox).ButtonState);
+            textBox.Bill.OSCommandObject = null;
         }
 
         private void TextBoxContextMenuIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -660,6 +700,8 @@ namespace DCSFlightpanels.PanelUserControls
 
             _contextMenuTextBox.ContextMenuItemPaste.Click += MenuItemPaste_OnClick;
 
+            _contextMenuTextBox.ContextMenuItemDeleteSettings.Click += MenuItemDeleteSettings_OnClick;
+
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ55))
@@ -715,7 +757,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private PZ55TextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<TextBox>(this))
@@ -1329,7 +1371,6 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ButtonSwitchPanelInfo_OnClick(object sender, RoutedEventArgs e)
         {
-            Common.LogError("asd");
             var bytes = Encoding.UTF8.GetBytes(Properties.Resources.PZ55Notes);
             var informationWindow = new InformationRichTextWindow(bytes);
             informationWindow.ShowDialog();
@@ -1713,18 +1754,18 @@ namespace DCSFlightpanels.PanelUserControls
 
                 _contextMenuTextBox.SetVisibility(textBox.Bill.IsEmpty(),
                                                     textBox.Bill.ContainsSingleKey(),
-                                                    textBox.Bill.ContainsKeySequence(), 
-                                                    textBox.Bill.ContainsDCSBIOS(), 
-                                                    textBox.Bill.ContainsBIPLink(), 
+                                                    textBox.Bill.ContainsKeySequence(),
+                                                    textBox.Bill.ContainsDCSBIOS(),
+                                                    textBox.Bill.ContainsBIPLink(),
                                                     textBox.Bill.ContainsOSCommand());
-                
+
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MenuItemPaste_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1736,10 +1777,55 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
+        private void CopySetting(CopyContentType copyContentType)
+        {
+            var textBox = GetTextBoxInFocus();
+            if (textBox == null)
+            {
+                return;
+            }
+
+            object content = null;
+
+            switch (copyContentType)
+            {
+                case CopyContentType.KeySequence:
+                    {
+                        content = textBox.Bill.GetKeySequence();
+                        break;
+                    }
+                case CopyContentType.DCSBIOS:
+                {
+                    content = textBox.Bill.DCSBIOSBinding;
+                    break;
+                    }
+                case CopyContentType.BIPLink:
+                {
+                    content = textBox.Bill.BIPLink;
+                    break;
+                    }
+                case CopyContentType.OSCommand:
+                {
+                    content = textBox.Bill.OSCommandObject;
+                    break;
+                }
+            }
+            
+            if (content != null)
+            {
+                var copyPackage = new CopyPackage();
+                copyPackage.ContentType = copyContentType;
+                copyPackage.Content = content;
+                copyPackage.SourceName = textBox.Name;
+                Clipboard.SetDataObject(copyPackage);
+            }
+        }
+
         private void MenuItemCopyKeySequence_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
+                CopySetting(CopyContentType.KeySequence);
             }
             catch (Exception ex)
             {
@@ -1751,6 +1837,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                CopySetting(CopyContentType.DCSBIOS);
             }
             catch (Exception ex)
             {
@@ -1762,6 +1849,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                CopySetting(CopyContentType.BIPLink);
             }
             catch (Exception ex)
             {
@@ -1773,6 +1861,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
+                CopySetting(CopyContentType.OSCommand);
             }
             catch (Exception ex)
             {
@@ -1780,42 +1869,38 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void Copy()
+        private void MenuItemDeleteSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            var streamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
-            if (streamDeckButton != null)
+            try
             {
-                Clipboard.SetDataObject(streamDeckButton);
+                var textBox = GetTextBoxInFocus();
+                if (textBox == null)
+                {
+                    return;
+                }
+                DeleteSequence(textBox);
+                DeleteDCSBIOS(textBox);
+                DeleteBIPLink(textBox);
+                DeleteOSCommandPZ55(textBox);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
         private bool Paste()
         {
             var iDataObject = Clipboard.GetDataObject();
-            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.StreamDeck.StreamDeckButton"))
+            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
             {
                 return false;
             }
 
             var result = false;
-            var newStreamDeckButton = (StreamDeckButton)iDataObject.GetData("NonVisuals.StreamDeck.StreamDeckButton");
-            var oldStreamDeckButton = _streamDeckPanel.SelectedLayer.GetStreamDeckButton(SelectedButtonName);
-            if (oldStreamDeckButton.CheckIfWouldOverwrite(newStreamDeckButton) &&
-                MessageBox.Show("Overwrite previous configuration (partial or fully)", "Overwrite?)", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                result = oldStreamDeckButton.Consume(true, newStreamDeckButton);
-            }
-            else
-            {
-                result = oldStreamDeckButton.Consume(true, newStreamDeckButton);
-            }
+            var copyPackage = (CopyPackage)iDataObject.GetData("NonVisuals.CopyPackage");
+            
 
-            if (result)
-            {
-                _streamDeckPanel.SelectedLayer.AddButton(oldStreamDeckButton);
-                UpdateButtonInfoFromSource();
-                SetIsDirty();
-            }
             return result;
         }
     }

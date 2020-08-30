@@ -27,7 +27,7 @@ namespace NonVisuals.Saitek
          */
         private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
-        private HashSet<OSCommandBindingPZ55> _osCommandBindings = new HashSet<OSCommandBindingPZ55>();
+        private List<OSCommandBindingPZ55> _osCommandBindings = new List<OSCommandBindingPZ55>();
         private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
@@ -250,7 +250,7 @@ namespace NonVisuals.Saitek
             set => _bipLinks = value;
         }
 
-        public HashSet<OSCommandBindingPZ55> OSCommandHashSet
+        public List<OSCommandBindingPZ55> OSCommandHashSet
         {
             get => _osCommandBindings;
             set => _osCommandBindings = value;
@@ -456,7 +456,7 @@ namespace NonVisuals.Saitek
         {
             if (string.IsNullOrEmpty(keys))
             {
-                RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveSwitchPanelKeyFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
                 SetIsDirty();
                 return;
             }
@@ -493,7 +493,7 @@ namespace NonVisuals.Saitek
         {
             if (sortedList.Count == 0)
             {
-                RemoveSwitchPanelSwitchFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveSwitchPanelKeyFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
                 SetIsDirty();
                 return;
             }
@@ -562,7 +562,7 @@ namespace NonVisuals.Saitek
         {
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchPanelSwitchFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveSwitchPanelKeyFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55Key, whenTurnedOn);
                 SetIsDirty();
                 return;
             }
@@ -597,7 +597,7 @@ namespace NonVisuals.Saitek
         {
             if (bipLinkPZ55.BIPLights.Count == 0)
             {
-                RemoveSwitchPanelSwitchFromList(ControlListPZ55.BIPS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveSwitchPanelKeyFromList(ControlListPZ55.BIPS, switchPanelPZ55Key, whenTurnedOn);
                 SetIsDirty();
                 return;
             }
@@ -623,7 +623,7 @@ namespace NonVisuals.Saitek
             SetIsDirty();
         }
 
-        public void RemoveSwitchPanelSwitchFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn)
+        public void RemoveSwitchPanelKeyFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn)
         {
             bool found = false;
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
@@ -648,6 +648,7 @@ namespace NonVisuals.Saitek
                     }
                 }
             }
+
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
@@ -655,6 +656,20 @@ namespace NonVisuals.Saitek
                     if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
                     {
                         bipLink.BIPLights.Clear();
+                        found = true;
+                    }
+                }
+            }
+            
+            if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.OSCOMMANDS)
+            {
+                for (int i = 0; i < _osCommandBindings.Count; i++)
+                {
+                    var osCommand = _osCommandBindings[i];
+
+                    if (osCommand.SwitchPanelPZ55Key == switchPanelPZ55Key && osCommand.WhenTurnedOn == whenTurnedOn)
+                    {
+                        _osCommandBindings[i] = null;
                         found = true;
                     }
                 }
@@ -905,7 +920,8 @@ namespace NonVisuals.Saitek
         ALL,
         DCSBIOS,
         KEYS,
-        BIPS
+        BIPS,
+        OSCOMMANDS
     }
 }
 
