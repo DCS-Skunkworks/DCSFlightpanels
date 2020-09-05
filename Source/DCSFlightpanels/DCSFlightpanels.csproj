@@ -175,6 +175,7 @@
     <Compile Include="CustomControls\FontInfoTextBox.cs" />
     <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Interfaces\IPanelUI.cs" />
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml.cs">
       <DependentUpon>UserControlStreamDeckUIMini.xaml</DependentUpon>
     </Compile>
