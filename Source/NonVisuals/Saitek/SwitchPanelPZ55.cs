@@ -558,11 +558,11 @@ namespace NonVisuals.Saitek
         }
 
 
-        public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
+        public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55KeyOnOff switchPanelPZ55KeyOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
         {
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveSwitchPanelKeyFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveKeyFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55KeyOnOff);
                 SetIsDirty();
                 return;
             }
@@ -573,7 +573,7 @@ namespace NonVisuals.Saitek
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelPZ55KeyOnOff.ButtonState)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
@@ -584,9 +584,9 @@ namespace NonVisuals.Saitek
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingPZ55();
-                dcsBiosBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
+                dcsBiosBinding.SwitchPanelPZ55Key = switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
+                dcsBiosBinding.WhenTurnedOn = switchPanelPZ55KeyOnOff.ButtonState;
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
@@ -623,14 +623,17 @@ namespace NonVisuals.Saitek
             SetIsDirty();
         }
 
-        public void RemoveSwitchPanelKeyFromList(ControlListPZ55 controlListPZ55, SwitchPanelPZ55Keys switchPanelPZ55Key, bool whenTurnedOn)
+        public override void RemoveKeyFromList(object controlList, PanelKeyOnOff panelKeyOnOff)
         {
-            bool found = false;
+            var controlListPZ55 = (ControlListPZ55) controlList;
+            var switchPanelPZ55KeyOnOff = (SwitchPanelPZ55KeyOnOff) panelKeyOnOff;
+
+            var  found = false;
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
             {
                 foreach (var keyBindingPZ55 in _keyBindings)
                 {
-                    if (keyBindingPZ55.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBindingPZ55.WhenTurnedOn == whenTurnedOn)
+                    if (keyBindingPZ55.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && keyBindingPZ55.WhenTurnedOn == switchPanelPZ55KeyOnOff.ButtonState)
                     {
                         keyBindingPZ55.OSKeyPress = null;
                         found = true;
@@ -641,7 +644,7 @@ namespace NonVisuals.Saitek
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                    if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelPZ55KeyOnOff.ButtonState)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                         found = true;

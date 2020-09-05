@@ -10,7 +10,12 @@ namespace NonVisuals.Saitek
 
     public abstract class SaitekPanel : GamingPanel
     {
-        
+        public abstract void RemoveKeyFromList(object controlList, PanelKeyOnOff panelKeyOnOff);
+        public abstract void AddOrUpdateSingleKeyBinding(PanelKeyOnOff panelKeyOnOff, string keyPress, KeyPressLength keyPressLength);
+        public abstract void AddOrUpdateSequencedKeyBinding(PanelKeyOnOff panelKeyOnOff, string description, SortedList<int, KeyPressInfo> keySequence);
+        public abstract void AddOrUpdateDCSBIOSBinding(PanelKeyOnOff panelKeyOnOff, List<DCSBIOSInput> dcsbiosInputs, string description);
+        public abstract void AddOrUpdateBIPLinkKeyBinding(PanelKeyOnOff panelKeyOnOff, BIPLink bipLink);
+        public abstract void AddOrUpdateOSCommandBinding(PanelKeyOnOff panelKeyOnOff, OSCommand osCommand);
         public abstract DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput);
 
         protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new HashSet<ISaitekPanelKnob>();

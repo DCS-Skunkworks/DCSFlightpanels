@@ -1,11 +1,11 @@
-﻿using DCSFlightpanels.CustomControls;
+﻿using System.Windows.Controls;
 using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Interfaces
 {
-    public interface IPanelUIPZ55
+    public interface IPanelUI
     {
-        SwitchPanelPZ55KeyOnOff GetPZ55Key(PZ55TextBox textBox);
-        PZ55TextBox GetTextBox(SwitchPanelPZ55Keys key, bool whenTurnedOn);
+        PanelKeyOnOff GetKey(TextBox textBox);
+        TextBox GetTextBox(object key, bool whenTurnedOn);
     }
 }

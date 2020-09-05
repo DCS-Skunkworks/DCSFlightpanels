@@ -23,7 +23,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
-    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUIPZ55
+    public partial class SwitchPanelPZ55UserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
 
         private readonly SwitchPanelPZ55 _switchPanelPZ55;
@@ -382,7 +382,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox, GetPZ55Key(textBox));
+                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox, (SwitchPanelPZ55KeyOnOff)GetKey(textBox));
             }
             _textBoxBillsSet = true;
         }
@@ -872,7 +872,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 foreach (var keyBinding in _switchPanelPZ55.KeyBindingsHashSet)
                 {
-                    var textBox = GetTextBox(keyBinding.SwitchPanelPZ55Key, keyBinding.WhenTurnedOn);
+                    var textBox = (PZ55TextBox)GetTextBox(keyBinding.SwitchPanelPZ55Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
@@ -881,7 +881,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var osCommand in _switchPanelPZ55.OSCommandHashSet)
                 {
-                    var textBox = GetTextBox(osCommand.SwitchPanelPZ55Key, osCommand.WhenTurnedOn);
+                    var textBox = (PZ55TextBox)GetTextBox(osCommand.SwitchPanelPZ55Key, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)
                     {
                         textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
@@ -890,7 +890,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var dcsBiosBinding in _switchPanelPZ55.DCSBiosBindings)
                 {
-                    var textBox = GetTextBox(dcsBiosBinding.SwitchPanelPZ55Key, dcsBiosBinding.WhenTurnedOn);
+                    var textBox = (PZ55TextBox)GetTextBox(dcsBiosBinding.SwitchPanelPZ55Key, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
@@ -900,7 +900,7 @@ namespace DCSFlightpanels.PanelUserControls
                 SetTextBoxBackgroundColors(Brushes.White);
                 foreach (var bipLinkPZ55 in _switchPanelPZ55.BIPLinkHashSet)
                 {
-                    var textBox = GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
+                    var textBox = (PZ55TextBox)GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
                     if (bipLinkPZ55.BIPLights.Count > 0)
                     {
                         textBox.Bill.BIPLink = bipLinkPZ55;
@@ -991,7 +991,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public SwitchPanelPZ55KeyOnOff GetPZ55Key(PZ55TextBox textBox)
+        public PanelKeyOnOff GetKey(TextBox textBox)
         {
             try
             {
@@ -1135,8 +1135,11 @@ namespace DCSFlightpanels.PanelUserControls
             throw new Exception("Failed to find key based on text box (SwitchPanelPZ55UserControl) : " + textBox.Name);
         }
 
-        public PZ55TextBox GetTextBox(SwitchPanelPZ55Keys key, bool whenTurnedOn)
+
+
+        public TextBox GetTextBox(object general_key, bool whenTurnedOn)
         {
+            var key = (SwitchPanelPZ55Keys) general_key;
             try
             {
                 if (key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF && whenTurnedOn)
