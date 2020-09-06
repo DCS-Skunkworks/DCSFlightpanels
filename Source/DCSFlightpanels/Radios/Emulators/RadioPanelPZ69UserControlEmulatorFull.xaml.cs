@@ -20,7 +20,7 @@ using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 
-namespace DCSFlightpanels.Radios
+namespace DCSFlightpanels.Radios.Emulators
 {
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlEmulator.xaml
@@ -175,7 +175,7 @@ namespace DCSFlightpanels.Radios
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69Full(textBox);
+                textBox.Bill = new BillPZ69Full(GlobalHandler, this, _radioPanelPZ69, textBox, (PZ69SwitchOnOff)GetSwitch(textBox));
             }
             _textBoxBillsSet = true;
         }
@@ -267,7 +267,7 @@ namespace DCSFlightpanels.Radios
                 BIPLinkWindow bipLinkWindow;
                 if (textBox.Bill.ContainsBIPLink())
                 {
-                    var bipLink = textBox.Bill.BIPLink;
+                    var bipLink = textBox.Bill.BipLink;
                     bipLinkWindow = new BIPLinkWindow(bipLink);
                 }
                 else
@@ -278,7 +278,7 @@ namespace DCSFlightpanels.Radios
                 bipLinkWindow.ShowDialog();
                 if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null && bipLinkWindow.BIPLink.BIPLights.Count > 0)
                 {
-                    textBox.Bill.BIPLink = (BIPLinkPZ69)bipLinkWindow.BIPLink;
+                    textBox.Bill.BipLink = (BIPLinkPZ69)bipLinkWindow.BIPLink;
                     UpdateBipLinkBindings(textBox);
                 }
 
@@ -308,7 +308,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
-                _radioPanelPZ69.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BIPLink);
+                _radioPanelPZ69.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BipLink);
             }
             catch (Exception ex)
             {
@@ -800,7 +800,7 @@ namespace DCSFlightpanels.Radios
                         {
                             return;
                         }
-                        textBox.Bill.BIPLink.BIPLights.Clear();
+                        textBox.Bill.BipLink.BIPLights.Clear();
                         textBox.Background = Brushes.White;
                         UpdateBipLinkBindings(textBox);
                     }
@@ -860,6 +860,7 @@ namespace DCSFlightpanels.Radios
         {
             try
             {
+                fortsätt här
                 var textBox = ((PZ69FullTextBox)sender);
 
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
@@ -1383,7 +1384,7 @@ namespace DCSFlightpanels.Radios
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
                     var textBox = (PZ69FullTextBox)GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
-                    textBox.Bill.BIPLink = bipLinkPZ69;
+                    textBox.Bill.BipLink = bipLinkPZ69;
                 }
 
                 foreach (var lcdBinding in _radioPanelPZ69.LCDBindings)

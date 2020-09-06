@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
+using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Bills
@@ -12,12 +15,48 @@ namespace DCSFlightpanels.Bills
         private PZ69SwitchOnOff _knob;
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public BillPZ69(PZ69TextBox textBox, PZ69SwitchOnOff knob)
+        public BillPZ69(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, PZ69SwitchOnOff knob) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
             TextBox = textBox;
             _knob = knob;
         }
 
+        protected override void ClearDCSBIOSFromBill()
+        {
+        }
+
+        public override BIPLink BipLink
+        {
+            get => _bipLinkPZ69;
+            set
+            {
+                _bipLinkPZ69 = (BIPLinkPZ69)value;
+                if (_bipLinkPZ69 != null)
+                {
+                    TextBox.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    TextBox.Background = Brushes.White;
+                }
+            }
+        }
+
+        public override List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get => null;
+            set
+            {
+            }
+        }
+
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
+        {
+            get => null;
+            set
+            {
+            }
+        }
 
         public override bool ContainsDCSBIOS()
         {
@@ -37,23 +76,6 @@ namespace DCSFlightpanels.Bills
         public override bool IsEmpty()
         {
             return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeySequence.Count == 0);
-        }
-        
-        public BIPLinkPZ69 BIPLink
-        {
-            get => _bipLinkPZ69;
-            set
-            {
-                _bipLinkPZ69 = value;
-                if (_bipLinkPZ69 != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
-            }
         }
 
         public PZ69SwitchOnOff Knob => _knob;

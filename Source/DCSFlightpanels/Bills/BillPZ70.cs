@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
 using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Bills
@@ -14,35 +17,52 @@ namespace DCSFlightpanels.Bills
         private DCSBIOSActionBindingPZ70 _dcsbiosBindingPZ70;
         private BIPLinkPZ70 _bipLinkPZ70;
 
-        public BillPZ70(PZ70TextBox textBox, PZ70SwitchOnOff key)
+        public BillPZ70(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, PZ70SwitchOnOff key) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
             TextBox = textBox;
             _key = key;
         }
 
-        public override bool ContainsDCSBIOS()
+        protected override void ClearDCSBIOSFromBill()
         {
-            return _dcsbiosBindingPZ70 != null;// && _dcsbiosInputs.Count > 0;
+            DCSBIOSBinding = null;
         }
 
-        public override bool ContainsBIPLink()
+        public override BIPLink BipLink
         {
-            return _bipLinkPZ70 != null && _bipLinkPZ70.BIPLights.Count > 0;
-        }
-
-        public override bool IsEmpty()
-        {
-            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
-        }
-
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
-        {
-            if (_dcsbiosBindingPZ70 == null)
+            get => _bipLinkPZ70;
+            set
             {
-                _dcsbiosBindingPZ70 = new DCSBIOSActionBindingPZ70();
+                _bipLinkPZ70 = (BIPLinkPZ70)value;
+                if (_bipLinkPZ70 != null)
+                {
+                    TextBox.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    TextBox.Background = Brushes.White;
+                }
             }
+        }
 
-            _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
+        public override List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get
+            {
+                if (ContainsDCSBIOS())
+                {
+                    return _dcsbiosBindingPZ70.DCSBIOSInputs;
+                }
+
+                return null;
+            }
+            set
+            {
+                if (ContainsDCSBIOS())
+                {
+                    _dcsbiosBindingPZ70.DCSBIOSInputs = value;
+                }
+            }
         }
 
         public override DCSBIOSActionBindingBase DCSBIOSBinding
@@ -72,22 +92,29 @@ namespace DCSFlightpanels.Bills
                 }
             }
         }
-
-        public BIPLinkPZ70 BIPLink
+        public override bool ContainsDCSBIOS()
         {
-            get => _bipLinkPZ70;
-            set
+            return _dcsbiosBindingPZ70 != null;// && _dcsbiosInputs.Count > 0;
+        }
+
+        public override bool ContainsBIPLink()
+        {
+            return _bipLinkPZ70 != null && _bipLinkPZ70.BIPLights.Count > 0;
+        }
+
+        public override bool IsEmpty()
+        {
+            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+        }
+
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        {
+            if (_dcsbiosBindingPZ70 == null)
             {
-                _bipLinkPZ70 = value;
-                if (_bipLinkPZ70 != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
+                _dcsbiosBindingPZ70 = new DCSBIOSActionBindingPZ70();
             }
+
+            _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
         }
 
         public PZ70SwitchOnOff Key

@@ -724,7 +724,7 @@ namespace NonVisuals.Radios
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new KeyPress(information, keySequence);
+                        keyBinding.OSKeyPress = new KeyPress(description, keySequence);
                     }
                     found = true;
                     break;
@@ -735,7 +735,7 @@ namespace NonVisuals.Radios
                 var keyBinding = new KeyBindingPZ69DialPosition();
                 keyBinding.RadioPanelPZ69Key = radioPanelPZ69KeyOnOff.Switch;
                 keyBinding.DialPosition = pz69DialPosition;
-                keyBinding.OSKeyPress = new KeyPress(information, keySequence);
+                keyBinding.OSKeyPress = new KeyPress(description, keySequence);
                 keyBinding.WhenTurnedOn = radioPanelPZ69KeyOnOff.ButtonState;
                 _keyBindings.Add(keyBinding);
             }
@@ -743,10 +743,10 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLinak)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
             var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
-            var 
+            var bipLinkPZ69 = (BIPLinkPZ69) bipLink;
 
             if (bipLinkPZ69.BIPLights.Count == 0)
             {
@@ -757,13 +757,13 @@ namespace NonVisuals.Radios
             //This must accept lists
             var found = false;
 
-            foreach (var bipLink in _bipLinks)
+            foreach (var tmpBipLink in _bipLinks)
             {
-                if (bipLink.RadioPanelPZ69Knob == radioPanelPZ69KeyOnOff.Switch && bipLink.WhenTurnedOn == radioPanelPZ69KeyOnOff.ButtonState)
+                if (tmpBipLink.RadioPanelPZ69Knob == radioPanelPZ69KeyOnOff.Switch && tmpBipLink.WhenTurnedOn == radioPanelPZ69KeyOnOff.ButtonState)
                 {
-                    bipLink.BIPLights = bipLinkPZ69.BIPLights;
-                    bipLink.Description = bipLinkPZ69.Description;
-                    bipLink.RadioPanelPZ69Knob = radioPanelPZ69KeyOnOff.Switch;
+                    tmpBipLink.BIPLights = bipLinkPZ69.BIPLights;
+                    tmpBipLink.Description = bipLinkPZ69.Description;
+                    tmpBipLink.RadioPanelPZ69Knob = radioPanelPZ69KeyOnOff.Switch;
                     found = true;
                     break;
                 }

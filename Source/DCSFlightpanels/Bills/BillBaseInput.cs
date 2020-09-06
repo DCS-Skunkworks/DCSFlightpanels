@@ -35,8 +35,11 @@ namespace DCSFlightpanels.Bills
 
         
 
-        protected BillBaseInput(SaitekPanel saitekPanel)
+        protected BillBaseInput(IGlobalHandler globalHandler, TextBox textBox, IPanelUI panelUI, SaitekPanel saitekPanel)
         {
+            _globalHandler = globalHandler;
+            _textBox = textBox;
+            _panelUI = panelUI;
             _saitekPanel = saitekPanel;
         }
 

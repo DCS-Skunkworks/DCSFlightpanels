@@ -382,7 +382,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox, (PZ55SwitchOnOff)GetKey(textBox));
+                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox, (PZ55SwitchOnOff)GetSwitch(textBox));
             }
             _textBoxBillsSet = true;
         }
@@ -903,7 +903,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ55TextBox)GetTextBox(bipLinkPZ55.SwitchPanelPZ55Key, bipLinkPZ55.WhenTurnedOn);
                     if (bipLinkPZ55.BIPLights.Count > 0)
                     {
-                        textBox.Bill.BIPLink = bipLinkPZ55;
+                        textBox.Bill.BipLink = bipLinkPZ55;
                     }
                 }
 

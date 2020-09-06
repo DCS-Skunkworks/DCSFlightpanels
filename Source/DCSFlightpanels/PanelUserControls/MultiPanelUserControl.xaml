@@ -115,39 +115,39 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="2">
                         <Label Content="AP Button ON" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox Height="18" IsReadOnly="True" x:Name="TextBoxApButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox Height="18" IsReadOnly="True" x:Name="TextBoxApButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="HDG Button ON" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox Height="18" IsReadOnly="True" x:Name="TextBoxHdgButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox Height="18" IsReadOnly="True" x:Name="TextBoxHdgButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="NAV Button ON" Height="23"  FontSize="10"  />
-                        <customControl:PZ70TextBox Height="18" IsReadOnly="True" x:Name="TextBoxNavButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox Height="18" IsReadOnly="True" x:Name="TextBoxNavButtonOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="IAS Button ON" Height="23"  FontSize="10"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxIasButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxIasButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="ALT Button ON" Height="23"  FontSize="10"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAltButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAltButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="VS Button ON" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxVsButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxVsButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="APR Button ON" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAprButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAprButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="REV Button ON" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxRevButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxRevButtonOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                     </StackPanel>
                     <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
                         <Label Content="AP Button OFF" FontSize="10" Height="23" />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxApButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxApButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="HDG Button OFF" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxHdgButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxHdgButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="NAV Button OFF" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxNavButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxNavButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="IAS Button OFF" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxIasButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxIasButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="ALT Button OFF" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAltButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAltButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="VS Button OFF" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxVsButtonOff" MouseDoubleClick="TextBoxMouseDoubleClick" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxVsButtonOff" MouseDoubleClick="TextBoxMouseDoubleClick" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="APR Button OFF" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAprButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAprButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="REV Button OFF" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxRevButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxRevButtonOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                     </StackPanel>
                 </Grid>
             </GroupBox>
@@ -194,25 +194,25 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox" Grid.ColumnSpan="2">
                         <Label Content="LCD Knob (+/-) DEC" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxLcdKnobDecrease"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxLcdKnobDecrease"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="Auto Throttle OFF" FontSize="10" Height="23" />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True"  x:Name="TextBoxAutoThrottleOff" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True"  x:Name="TextBoxAutoThrottleOff" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="Flaps UP" FontSize="10" Height="23" />
-                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsUp"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsUp"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
                         <Label Content="Pitch Trim Up" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitchTrimUp"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitchTrimUp"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
 
                         
                     </StackPanel>
                     <StackPanel Grid.Column="2" MouseDown="MouseDownFocusLogTextBox">
                         <Label Content="LCD Knob (+/-) INC" FontSize="10" Height="23"   />
-                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxLcdKnobIncrease"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxLcdKnobIncrease"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown"  />
                         <Label Content="Auto Throttle ARM" FontSize="10" Height="23" />
-                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAutoThrottleOn" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAutoThrottleOn" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="Flaps DOWN" FontSize="10" Height="23" />
-                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsDown"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFlapsDown"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
                         <Label Content="Pitch Trim Down" FontSize="10" Height="23"  />
-                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitchTrimDown"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
+                        <customControl:PZ70TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitchTrimDown"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown" />
 
                         
                     </StackPanel>

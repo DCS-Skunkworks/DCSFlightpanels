@@ -64,8 +64,6 @@ namespace DCSFlightpanels.PanelUserControls
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
             var now = DateTime.Now.Ticks;
-            RemoveContextMenuClickHandlers();
-            SetContextMenuClickHandlers();
         }
 
         public override GamingPanel GetGamingPanel()
@@ -183,7 +181,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (!textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Bill = new BillPZ70(textBox, (PZ70SwitchOnOff)GetSwitch(textBox));
+                    textBox.Bill = new BillPZ70(GlobalHandler, this, _multiPanelPZ70, textBox, (PZ70SwitchOnOff)GetSwitch(textBox));
                 }
             }
             _textBoxBillsSet = true;
@@ -658,7 +656,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (PZ70TextBox)GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
-                        textBox.Bill.BIPLink = bipLink;
+                        textBox.Bill.BipLink = bipLink;
                     }
                 }
 
@@ -715,56 +713,31 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (PZ70TextBox)sender;
+                var textBox = (PZ55TextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-
-                    //Check if this textbox contains DCS-BIOS information. If so then prompt the user for deletion
-                    if (textBox.Bill.ContainsDCSBIOS())
+                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
                     {
-                        if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS control?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-                        textBox.Text = "";
-                        _multiPanelPZ70.RemoveSwitchFromList(ControlListPZ70.DCSBIOS, GetSwitch(textBox));
-                        textBox.Bill.DCSBIOSBinding = null;
+                        textBox.Bill.EditSingleKeyPress();
                     }
                     else if (textBox.Bill.ContainsKeySequence())
                     {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
+                        textBox.Bill.EditKeySequence();
                     }
-                    else if (textBox.Bill.ContainsSingleKey())
+                    else if (textBox.Bill.ContainsDCSBIOS())
                     {
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
+                        textBox.Bill.EditDCSBIOS();
                     }
-                    if (textBox.Bill.ContainsBIPLink())
+                    else if (textBox.Bill.ContainsOSCommand())
                     {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-                        textBox.Bill.BIPLink.BIPLights.Clear();
-                        textBox.Background = Brushes.White;
-                        UpdateBIPLinkBindings(textBox);
+                        textBox.Bill.EditOSCommand();
                     }
                 }
-                TextBoxLogPZ70.Focus();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -773,57 +746,6 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 ((PZ70TextBox)sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                var textBox = ((PZ70TextBox)sender);
-
-                //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
-                {
-                    return;
-                }
-                var hashSetOfKeysPressed = new HashSet<string>();
-
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
-                e.Handled = true;
-
-                if (keyCode > 0)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
-                }
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                }
-                var result = "";
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-                
-                result = Common.RemoveRControl(result);
-
-                textBox.Text = result;
-                textBox.Bill.KeyPress = new KeyPress(result);
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
             catch (Exception ex)
             {
@@ -1064,7 +986,7 @@ namespace DCSFlightpanels.PanelUserControls
                 BIPLinkWindow bipLinkWindow;
                 if (textBox.Bill.ContainsBIPLink())
                 {
-                    var bipLink = textBox.Bill.BIPLink;
+                    var bipLink = textBox.Bill.BipLink;
                     bipLinkWindow = new BIPLinkWindow(bipLink);
                 }
                 else
@@ -1075,7 +997,7 @@ namespace DCSFlightpanels.PanelUserControls
                 bipLinkWindow.ShowDialog();
                 if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
                 {
-                    textBox.Bill.BIPLink = (BIPLinkPZ70)bipLinkWindow.BIPLink;
+                    textBox.Bill.BipLink = (BIPLinkPZ70)bipLinkWindow.BIPLink;
                     UpdateBIPLinkBindings(textBox);
                 }
                 TextBoxLogPZ70.Focus();
@@ -1091,7 +1013,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _multiPanelPZ70.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BIPLink);
+                _multiPanelPZ70.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BipLink);
             }
             catch (Exception ex)
             {
@@ -1208,30 +1130,8 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void RemoveContextMenuClickHandlers()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ70))
-                {
-                    textBox.ContextMenu = null;
-                    textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
-                }
-            }
-        }
-
         private void SetContextMenuClickHandlers()
         {
-            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ70))
-                {
-                    var contextMenu = (ContextMenu)Resources["TextBoxContextMenuPZ70"];
-
-                    textBox.ContextMenu = contextMenu;
-                    textBox.ContextMenuOpening += TextBoxContextMenuOpening;
-                }
-            }
             if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Hidden;
@@ -1245,145 +1145,6 @@ namespace DCSFlightpanels.PanelUserControls
                 ButtonLcdLower.ContextMenu = (ContextMenu)Resources["ButtonLcdContextMenu"];
                 ButtonLcdLower.ContextMenu.Tag = ButtonLcdLower;
 
-            }
-        }
-
-        private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ70TextBox)sender;
-                var contextMenu = textBox.ContextMenu;
-                if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
-                {
-                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        item.Visibility = Visibility.Collapsed;
-                    }
-                    return;
-                }
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.Visibility = Visibility.Collapsed;
-                }
-
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsKeySequence())
-                {
-                    // 2) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.IsEmpty())
-                {
-                    // 4) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("AddNullKey"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsSingleKey())
-                {
-                    // 5) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
-                        {
-                            if (item.Name.Contains("EditBIP"))
-                            {
-                                if (BipFactory.HasBips())
-                                {
-                                    item.Visibility = Visibility.Visible;
-                                }
-                            }
-                            else
-                            {
-                                item.Visibility = Visibility.Visible;
-                            }
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsBIPLink())
-                {
-                    // 3) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsOSCommand())
-                {
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
             }
         }
 

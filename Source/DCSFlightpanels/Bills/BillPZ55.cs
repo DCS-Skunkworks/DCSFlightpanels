@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClassLibraryCommon;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Interfaces;
-using NonVisuals;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
@@ -18,13 +14,10 @@ namespace DCSFlightpanels.Bills
     {
         private DCSBIOSActionBindingPZ55 _dcsbiosBindingPZ55;
         private BIPLinkPZ55 _bipLinkPZ55;
-        private SwitchPanelPZ55 _switchPanelPZ55;
+        public PZ55SwitchOnOff Key { get; set; }
 
-        public BillPZ55(IGlobalHandler globalHandler, IPanelUI panelUI, SwitchPanelPZ55 switchPanelPZ55, PZ55TextBox textBox, PZ55SwitchOnOff key) : base(switchPanelPZ55)
+        public BillPZ55(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, PZ55SwitchOnOff key) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            GlobalHandler = globalHandler;
-            PanelUIParent = panelUI;
-            _switchPanelPZ55 = switchPanelPZ55;
             TextBox = textBox;
             Key = key;
             SetContextMenu();
@@ -37,16 +30,19 @@ namespace DCSFlightpanels.Bills
 
         public override BIPLink BipLink
         {
-            get
+            get => _bipLinkPZ55;
+            set
             {
-                if (ContainsBIPLink())
+                _bipLinkPZ55 = (BIPLinkPZ55)value;
+                if (_bipLinkPZ55 != null)
                 {
-                    return _bipLinkPZ55;
+                    TextBox.Background = Brushes.Bisque;
                 }
-
-                return null;
+                else
+                {
+                    TextBox.Background = Brushes.White;
+                }
             }
-            set => _bipLinkPZ55 = (BIPLinkPZ55)value;
         }
 
         public override List<DCSBIOSInput> DCSBIOSInputs
@@ -121,26 +117,8 @@ namespace DCSFlightpanels.Bills
             _dcsbiosBindingPZ55.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public BIPLinkPZ55 BIPLink
-        {
-            get => _bipLinkPZ55;
-            set
-            {
-                _bipLinkPZ55 = value;
-                if (_bipLinkPZ55 != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
-            }
-        }
 
-        public PZ55SwitchOnOff Key { get; set; }
-
-
+        
         public override void Clear()
         {
             _dcsbiosBindingPZ55 = null;

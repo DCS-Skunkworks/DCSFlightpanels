@@ -58,7 +58,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
 
             SetTextBoxBills();
-            SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
@@ -84,8 +83,6 @@ namespace DCSFlightpanels.PanelUserControls
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
-            RemoveContextMenuClickHandlers();
-            SetContextMenuClickHandlers();
         }
 
         public override GamingPanel GetGamingPanel()
@@ -213,189 +210,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-
-        private void MenuContextEditTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                KeySequenceWindow keySequenceWindow;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    keySequenceWindow = new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence());
-                }
-                else
-                {
-                    keySequenceWindow = new KeySequenceWindow();
-                }
-
-                keySequenceWindow.ShowDialog();
-                if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    //If the user added only a single key stroke combo then let's not treat this as a sequence
-                    if (!keySequenceWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-
-                    var sequenceList = keySequenceWindow.GetSequence;
-                    if (sequenceList.Count > 1)
-                    {
-                        var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
-                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
-                        {
-                            textBox.Text = keySequenceWindow.GetInformation;
-                        }
-
-                        UpdateKeyBindingProfileSequencedKeyStrokesTPM(textBox);
-                    }
-                    else
-                    {
-                        //If only one press was created treat it as a simple keypress
-                        textBox.Bill.Clear();
-                        var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
-                        textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-                    }
-                }
-
-                TextBoxLogTPM.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuContextEditDCSBIOSControlTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
-                }
-                else
-                {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
-                }
-
-                dcsBIOSInputControlsWindow.ShowDialog();
-                if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
-                {
-                    var dcsBiosInputs = dcsBIOSInputControlsWindow.DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSInputControlsWindow.Description) ? "DCS-BIOS" : dcsBIOSInputControlsWindow.Description;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    textBox.Text = text;
-                    textBox.Bill.Consume(dcsBiosInputs);
-                    UpdateDCSBIOSBinding(textBox);
-                }
-
-                TextBoxLogTPM.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuContextEditBipTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                BIPLinkWindow bipLinkWindow;
-                if (textBox.Bill.ContainsBIPLink())
-                {
-                    var bipLink = textBox.Bill.BIPLink;
-                    bipLinkWindow = new BIPLinkWindow(bipLink);
-                }
-                else
-                {
-                    var bipLink = new BIPLinkTPM();
-                    bipLinkWindow = new BIPLinkWindow(bipLink);
-                }
-
-                bipLinkWindow.ShowDialog();
-                if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
-                {
-                    textBox.Bill.BIPLink = (BIPLinkTPM)bipLinkWindow.BIPLink;
-                    UpdateBIPLinkBindings(textBox);
-                }
-
-                TextBoxLogTPM.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-
-        private void TextBoxContextMenuIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            try
-            {
-                var contextMenu = (ContextMenu)sender;
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    foreach (MenuItem contextMenuItem in contextMenu.Items)
-                    {
-                        contextMenuItem.Visibility = Visibility.Collapsed;
-                    }
-
-                    return;
-                    //throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                //Check new value, is menu visible?
-                if (!(bool)e.NewValue)
-                {
-                    //Do not show if not visible
-                    return;
-                }
-
-                if (!textBox.Bill.ContainsSingleKey())
-                {
-                    return;
-                }
-
-                var keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
-                CheckContextMenuItems(keyPressLength, contextMenu);
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void ClearAll(bool clearAlsoProfile)
         {
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
@@ -428,216 +242,10 @@ namespace DCSFlightpanels.PanelUserControls
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(textBox, (TPMSwitchOnOff) GetSwitch(textBox));
+                textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox, (TPMSwitchOnOff) GetSwitch(textBox));
             }
 
             _textBoxBillsSet = true;
-        }
-
-        private void RemoveContextMenuClickHandlers()
-        {
-            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogTPM))
-                {
-                    textBox.ContextMenu = null;
-                    textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
-                }
-            }
-        }
-
-        private void SetContextMenuClickHandlers()
-        {
-            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogTPM))
-                {
-                    var contectMenu = (ContextMenu)Resources["TextBoxContextMenuTPM"];
-
-                    if (!BipFactory.HasBips())
-                    {
-                        MenuItem bipMenuItem = null;
-                        foreach (var item in contectMenu.Items)
-                        {
-                            if (((MenuItem)item).Name == "contextMenuItemEditBIP")
-                            {
-                                bipMenuItem = (MenuItem)item;
-                                break;
-                            }
-                        }
-
-                        if (bipMenuItem != null)
-                        {
-                            contectMenu.Items.Remove(bipMenuItem);
-                        }
-                    }
-
-                    if (Common.NoDCSBIOSEnabled())
-                    {
-                        MenuItem dcsBIOSMenuItem = null;
-                        foreach (var item in contectMenu.Items)
-                        {
-                            if (((MenuItem)item).Name == "contextMenuItemEditDCSBIOS")
-                            {
-                                dcsBIOSMenuItem = (MenuItem)item;
-                                break;
-                            }
-                        }
-
-                        if (dcsBIOSMenuItem != null)
-                        {
-                            contectMenu.Items.Remove(dcsBIOSMenuItem);
-                        }
-                    }
-
-                    textBox.ContextMenu = contectMenu;
-                    textBox.ContextMenuOpening += TextBoxContextMenuOpening;
-                }
-            }
-        }
-
-        private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            try
-            {
-                var textBox = (TPMTextBox)sender;
-                var contextMenu = textBox.ContextMenu;
-                if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
-                {
-                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        item.Visibility = Visibility.Collapsed;
-                    }
-
-                    return;
-                }
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.Visibility = Visibility.Collapsed;
-                }
-
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsKeySequence())
-                {
-                    // 2) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.IsEmpty())
-                {
-                    // 4) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("AddNullKey"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsSingleKey())
-                {
-                    // 5) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
-                        {
-                            if (item.Name.Contains("EditBIP"))
-                            {
-                                if (BipFactory.HasBips())
-                                {
-                                    item.Visibility = Visibility.Visible;
-                                }
-                            }
-                            else
-                            {
-                                item.Visibility = Visibility.Visible;
-                            }
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsBIPLink())
-                {
-                    // 3) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsOSCommand())
-                {
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
         }
 
         private TPMTextBox GetTextBoxInFocus()
@@ -653,21 +261,6 @@ namespace DCSFlightpanels.PanelUserControls
             return null;
         }
 
-        private void TextBoxContextMenuClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus(); //OK
-                SetKeyPressLength(textBox, (MenuItem)sender);
-
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -676,53 +269,22 @@ namespace DCSFlightpanels.PanelUserControls
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-
-                    //Check if this textbox contains DCS-BIOS information. If so then prompt the user for deletion
-                    if (textBox.Bill.ContainsDCSBIOS())
+                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
                     {
-                        if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS configuration?", MessageBoxButton.OKCancel, MessageBoxImage.Question) !=
-                            MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-
-                        textBox.Text = "";
-                        _tpmPanel.RemoveSwitchFromList(ControlListTPM.DCSBIOS, GetSwitch(textBox));
-                        textBox.Bill.DCSBIOSBinding = null;
+                        textBox.Bill.EditSingleKeyPress();
                     }
                     else if (textBox.Bill.ContainsKeySequence())
                     {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
+                        textBox.Bill.EditKeySequence();
                     }
-                    else if (textBox.Bill.ContainsSingleKey())
+                    else if (textBox.Bill.ContainsDCSBIOS())
                     {
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
+                        textBox.Bill.EditDCSBIOS();
                     }
-
-                    if (textBox.Bill.ContainsBIPLink())
+                    else if (textBox.Bill.ContainsOSCommand())
                     {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-
-                        textBox.Bill.BIPLink.BIPLights.Clear();
-                        textBox.Background = Brushes.White;
-                        UpdateBIPLinkBindings(textBox);
+                        textBox.Bill.EditOSCommand();
                     }
-
-                    TextBoxLogTPM.Focus();
                 }
             }
             catch (Exception ex)
@@ -779,61 +341,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                var textBox = ((TPMTextBox)sender);
-
-                //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
-                {
-                    return;
-                }
-
-                var hashSetOfKeysPressed = new HashSet<string>();
-
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
-                e.Handled = true;
-
-                if (keyCode > 0)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
-                }
-
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                }
-
-                var result = "";
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-
-                result = Common.RemoveRControl(result);
-
-                textBox.Text = result;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -1031,7 +539,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BIPLink);
+                _tpmPanel.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BipLink);
             }
             catch (Exception ex)
             {
@@ -1127,7 +635,7 @@ namespace DCSFlightpanels.PanelUserControls
                     var textBox = (TPMTextBox)GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
                     if (bipLink.BIPLights.Count > 0)
                     {
-                        textBox.Bill.BIPLink = bipLink;
+                        textBox.Bill.BipLink = bipLink;
                     }
                 }
             }
