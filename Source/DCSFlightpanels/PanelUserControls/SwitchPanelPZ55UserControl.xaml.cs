@@ -382,7 +382,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox, (SwitchPanelPZ55KeyOnOff)GetKey(textBox));
+                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox, (PZ55SwitchOnOff)GetKey(textBox));
             }
             _textBoxBillsSet = true;
         }
@@ -991,141 +991,141 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        public PanelKeyOnOff GetKey(TextBox textBox)
+        public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
             try
             {
                 if (textBox.Equals(TextBoxKnobOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_OFF, true);
                 }
                 if (textBox.Equals(TextBoxKnobR))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT, true);
                 }
                 if (textBox.Equals(TextBoxKnobL))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT, true);
                 }
                 if (textBox.Equals(TextBoxKnobAll))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, true);
                 }
                 if (textBox.Equals(TextBoxKnobStart))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_START, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.KNOB_ENGINE_START, true);
                 }
                 if (textBox.Equals(TextBoxCowlClose))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, false);
                 }
                 if (textBox.Equals(TextBoxCowlOpen))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_CLOSE_COWL, true);
                 }
                 if (textBox.Equals(TextBoxPanelOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, false);
                 }
                 if (textBox.Equals(TextBoxPanelOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_PANEL, true);
                 }
                 if (textBox.Equals(TextBoxBeaconOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, false);
                 }
                 if (textBox.Equals(TextBoxBeaconOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_BEACON, true);
                 }
                 if (textBox.Equals(TextBoxNavOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, false);
                 }
                 if (textBox.Equals(TextBoxNavOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_NAV, true);
                 }
                 if (textBox.Equals(TextBoxStrobeOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, false);
                 }
                 if (textBox.Equals(TextBoxStrobeOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_STROBE, true);
                 }
                 if (textBox.Equals(TextBoxTaxiOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, false);
                 }
                 if (textBox.Equals(TextBoxTaxiOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_TAXI, true);
                 }
                 if (textBox.Equals(TextBoxLandingOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, false);
                 }
                 if (textBox.Equals(TextBoxLandingOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_LIGHTS_LANDING, true);
                 }
                 if (textBox.Equals(TextBoxMasterBatOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, false);
                 }
                 if (textBox.Equals(TextBoxMasterBatOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_BAT, true);
                 }
                 if (textBox.Equals(TextBoxMasterAltOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, false);
                 }
                 if (textBox.Equals(TextBoxMasterAltOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_MASTER_ALT, true);
                 }
                 if (textBox.Equals(TextBoxAvionicsMasterOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, false);
                 }
                 if (textBox.Equals(TextBoxAvionicsMasterOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_AVIONICS_MASTER, true);
                 }
                 if (textBox.Equals(TextBoxFuelPumpOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, false);
                 }
                 if (textBox.Equals(TextBoxFuelPumpOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_FUEL_PUMP, true);
                 }
                 if (textBox.Equals(TextBoxDeIceOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, false);
                 }
                 if (textBox.Equals(TextBoxDeIceOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_DE_ICE, true);
                 }
                 if (textBox.Equals(TextBoxPitotHeatOff))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, false);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, false);
                 }
                 if (textBox.Equals(TextBoxPitotHeatOn))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.SWITCHKEY_PITOT_HEAT, true);
                 }
                 if (textBox.Equals(TextBoxGearUp))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.LEVER_GEAR_UP, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.LEVER_GEAR_UP, true);
                 }
                 if (textBox.Equals(TextBoxGearDown))
                 {
-                    return new SwitchPanelPZ55KeyOnOff(SwitchPanelPZ55Keys.LEVER_GEAR_DOWN, true);
+                    return new PZ55SwitchOnOff(SwitchPanelPZ55Keys.LEVER_GEAR_DOWN, true);
                 }
             }
             catch (Exception ex)

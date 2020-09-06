@@ -170,6 +170,7 @@
     <Compile Include="AboutFPWindow.xaml.cs">
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bills\BillBaseInputStreamDeck.cs" />
     <Compile Include="Bills\BillBaseOutput.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomControls\FontInfoTextBox.cs" />

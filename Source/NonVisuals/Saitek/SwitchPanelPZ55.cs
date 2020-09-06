@@ -452,36 +452,38 @@ namespace NonVisuals.Saitek
             return result;
         }
 
-        public void AddOrUpdateSingleKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
+        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
-            if (string.IsNullOrEmpty(keys))
+            var pz55SwitchOnOff = (PZ55SwitchOnOff) panelSwitchOnOff;
+
+            if (string.IsNullOrEmpty(keyPress))
             {
-                RemoveSwitchPanelKeyFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveSwitchFromList(ControlListPZ55.KEYS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keys))
+                    if (string.IsNullOrEmpty(keyPress))
                     {
                         keyBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
+                        keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
                     }
                     found = true;
                 }
             }
-            if (!found && !string.IsNullOrEmpty(keys))
+            if (!found && !string.IsNullOrEmpty(keyPress))
             {
                 var keyBinding = new KeyBindingPZ55();
-                keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
-                keyBinding.WhenTurnedOn = whenTurnedOn;
+                keyBinding.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
+                keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
+                keyBinding.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
                 _keyBindings.Add(keyBinding);
             }
 
@@ -489,11 +491,12 @@ namespace NonVisuals.Saitek
             SetIsDirty();
         }
 
-        public void AddOrUpdateSequencedKeyBinding(string information, SwitchPanelPZ55Keys switchPanelPZ55Key, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
         {
-            if (sortedList.Count == 0)
+            var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
+            if (keySequence.Count == 0)
             {
-                RemoveSwitchPanelKeyFromList(ControlListPZ55.KEYS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveSwitchFromList(ControlListPZ55.KEYS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -502,28 +505,28 @@ namespace NonVisuals.Saitek
 
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
-                    if (sortedList.Count == 0)
+                    if (keySequence.Count == 0)
                     {
                         keyBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        var keyPress = new KeyPress(information, sortedList);
+                        var keyPress = new KeyPress(description, keySequence);
                         keyBinding.OSKeyPress = keyPress;
                     }
                     found = true;
                     break;
                 }
             }
-            if (!found && sortedList.Count > 0)
+            if (!found && keySequence.Count > 0)
             {
                 var keyBinding = new KeyBindingPZ55();
-                keyBinding.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                var keyPress = new KeyPress(information, sortedList);
+                keyBinding.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
+                var keyPress = new KeyPress(description, keySequence);
                 keyBinding.OSKeyPress = keyPress;
-                keyBinding.WhenTurnedOn = whenTurnedOn;
+                keyBinding.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
                 _keyBindings.Add(keyBinding);
             }
 
@@ -531,15 +534,15 @@ namespace NonVisuals.Saitek
             SetIsDirty();
         }
 
-
-        public void AddOrUpdateOSCommandBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, OSCommand osCommand, bool whenTurnedOn)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
         {
+            var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             //This must accept lists
             var found = false;
 
             foreach (var osCommandBinding in _osCommandBindings)
             {
-                if (osCommandBinding.SwitchPanelPZ55Key == switchPanelPZ55Key && osCommandBinding.WhenTurnedOn == whenTurnedOn)
+                if (osCommandBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && osCommandBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
                     osCommandBinding.OSCommandObject = osCommand;
                     found = true;
@@ -549,20 +552,20 @@ namespace NonVisuals.Saitek
             if (!found)
             {
                 var osCommandBindingPZ55 = new OSCommandBindingPZ55();
-                osCommandBindingPZ55.SwitchPanelPZ55Key = switchPanelPZ55Key;
+                osCommandBindingPZ55.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
                 osCommandBindingPZ55.OSCommandObject = osCommand;
-                osCommandBindingPZ55.WhenTurnedOn = whenTurnedOn;
+                osCommandBindingPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
                 _osCommandBindings.Add(osCommandBindingPZ55);
             }
             SetIsDirty();
         }
 
-
-        public void AddOrUpdateDCSBIOSBinding(SwitchPanelPZ55KeyOnOff switchPanelPZ55KeyOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
         {
+            var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveKeyFromList(ControlListPZ55.DCSBIOS, switchPanelPZ55KeyOnOff);
+                RemoveSwitchFromList(ControlListPZ55.DCSBIOS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -573,7 +576,7 @@ namespace NonVisuals.Saitek
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelPZ55KeyOnOff.ButtonState)
+                if (dcsBiosBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
@@ -584,56 +587,58 @@ namespace NonVisuals.Saitek
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingPZ55();
-                dcsBiosBinding.SwitchPanelPZ55Key = switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key;
+                dcsBiosBinding.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = switchPanelPZ55KeyOnOff.ButtonState;
+                dcsBiosBinding.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
             SetIsDirty();
         }
 
-        public void AddOrUpdateBIPLinkKeyBinding(SwitchPanelPZ55Keys switchPanelPZ55Key, BIPLinkPZ55 bipLinkPZ55, bool whenTurnedOn)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
+            var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
+            var bipLinkPZ55 = (BIPLinkPZ55) bipLink;
             if (bipLinkPZ55.BIPLights.Count == 0)
             {
-                RemoveSwitchPanelKeyFromList(ControlListPZ55.BIPS, switchPanelPZ55Key, whenTurnedOn);
+                RemoveSwitchFromList(ControlListPZ55.BIPS, pz55SwitchOnOff);
                 SetIsDirty();
                 return;
             }
             //This must accept lists
             var found = false;
 
-            foreach (var bipLink in _bipLinks)
+            foreach (var tmpBipLink in _bipLinks)
             {
-                if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
+                if (tmpBipLink.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && tmpBipLink.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
-                    bipLink.BIPLights = bipLinkPZ55.BIPLights;
-                    bipLink.Description = bipLinkPZ55.Description;
+                    tmpBipLink.BIPLights = bipLinkPZ55.BIPLights;
+                    tmpBipLink.Description = bipLinkPZ55.Description;
                     found = true;
                     break;
                 }
             }
             if (!found && bipLinkPZ55.BIPLights.Count > 0)
             {
-                bipLinkPZ55.SwitchPanelPZ55Key = switchPanelPZ55Key;
-                bipLinkPZ55.WhenTurnedOn = whenTurnedOn;
+                bipLinkPZ55.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
+                bipLinkPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
                 _bipLinks.Add(bipLinkPZ55);
             }
             SetIsDirty();
         }
 
-        public override void RemoveKeyFromList(object controlList, PanelKeyOnOff panelKeyOnOff)
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
             var controlListPZ55 = (ControlListPZ55) controlList;
-            var switchPanelPZ55KeyOnOff = (SwitchPanelPZ55KeyOnOff) panelKeyOnOff;
+            var pz55SwitchOnOff = (PZ55SwitchOnOff) panelSwitchOnOff;
 
             var  found = false;
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.KEYS)
             {
                 foreach (var keyBindingPZ55 in _keyBindings)
                 {
-                    if (keyBindingPZ55.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && keyBindingPZ55.WhenTurnedOn == switchPanelPZ55KeyOnOff.ButtonState)
+                    if (keyBindingPZ55.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && keyBindingPZ55.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
                         keyBindingPZ55.OSKeyPress = null;
                         found = true;
@@ -644,7 +649,7 @@ namespace NonVisuals.Saitek
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (dcsBiosBinding.SwitchPanelPZ55Key == switchPanelPZ55KeyOnOff.SwitchPanelPZ55Key && dcsBiosBinding.WhenTurnedOn == switchPanelPZ55KeyOnOff.ButtonState)
+                    if (dcsBiosBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                         found = true;
@@ -656,7 +661,7 @@ namespace NonVisuals.Saitek
             {
                 foreach (var bipLink in _bipLinks)
                 {
-                    if (bipLink.SwitchPanelPZ55Key == switchPanelPZ55Key && bipLink.WhenTurnedOn == whenTurnedOn)
+                    if (bipLink.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && bipLink.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
                         bipLink.BIPLights.Clear();
                         found = true;
@@ -670,7 +675,7 @@ namespace NonVisuals.Saitek
                 {
                     var osCommand = _osCommandBindings[i];
 
-                    if (osCommand.SwitchPanelPZ55Key == switchPanelPZ55Key && osCommand.WhenTurnedOn == whenTurnedOn)
+                    if (osCommand.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
                         _osCommandBindings[i] = null;
                         found = true;

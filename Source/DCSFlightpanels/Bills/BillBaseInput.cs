@@ -501,7 +501,7 @@ namespace DCSFlightpanels.Bills
                     keyPressLength = KeyPress.GetLengthOfKeyPress();
                 }
 
-                _saitekPanel.AddOrUpdateSingleKeyBinding(_panelUI.GetKey(TextBox), TextBox.Text, keyPressLength);
+                _saitekPanel.AddOrUpdateSingleKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {
@@ -513,7 +513,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateSequencedKeyBinding(_panelUI.GetKey(TextBox), TextBox.Text, _keyPress.KeySequence);
+                _saitekPanel.AddOrUpdateSequencedKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, _keyPress.KeySequence);
             }
             catch (Exception ex)
             {
@@ -525,7 +525,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateDCSBIOSBinding(_panelUI.GetKey(TextBox), DCSBIOSInputs, TextBox.Text);
+                _saitekPanel.AddOrUpdateDCSBIOSBinding(_panelUI.GetSwitch(TextBox), DCSBIOSInputs, TextBox.Text);
             }
             catch (Exception ex)
             {
@@ -537,7 +537,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateBIPLinkKeyBinding(_panelUI.GetKey(TextBox), BipLink);
+                _saitekPanel.AddOrUpdateBIPLinkBinding(_panelUI.GetSwitch(TextBox), BipLink);
             }
             catch (Exception ex)
             {
@@ -549,7 +549,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateOSCommandBinding(_panelUI.GetKey(TextBox), OSCommandObject);
+                _saitekPanel.AddOrUpdateOSCommandBinding(_panelUI.GetSwitch(TextBox), OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -568,7 +568,7 @@ namespace DCSFlightpanels.Bills
         public void DeleteDCSBIOS()
         {
             TextBox.Text = "";
-            _saitekPanel.RemoveKeyFromList(ControlListPZ55.DCSBIOS, _panelUI.GetKey(TextBox));
+            _saitekPanel.RemoveSwitchFromList(ControlListPZ55.DCSBIOS, _panelUI.GetSwitch(TextBox));
             ClearDCSBIOSFromBill();
         }
 
@@ -582,7 +582,7 @@ namespace DCSFlightpanels.Bills
         public void DeleteOSCommand()
         {
             TextBox.Text = "";
-            _saitekPanel.RemoveKeyFromList(ControlListPZ55.OSCOMMANDS, _panelUI.GetKey(_textBox));
+            _saitekPanel.RemoveSwitchFromList(ControlListPZ55.OSCOMMANDS, _panelUI.GetSwitch(_textBox));
             OSCommandObject = null;
         }
 

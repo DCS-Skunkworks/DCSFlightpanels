@@ -19,7 +19,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
 
         private readonly TPMPanel _tpmPanel;
@@ -35,7 +35,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             _tpmPanel = new TPMPanel(hidSkeleton);
 
-            _tpmPanel.Attach((IGamingPanelListener) this);
+            _tpmPanel.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_tpmPanel);
             GlobalHandler = globalHandler;
         }
@@ -179,8 +179,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.HidInstance.Equals(_tpmPanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.TPM)
                 {
-                    Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action) (() => TextBoxLogTPM.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = ""));
                 }
             }
             catch (Exception ex)
@@ -193,7 +193,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -343,7 +343,7 @@ namespace DCSFlightpanels.PanelUserControls
                 bipLinkWindow.ShowDialog();
                 if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
                 {
-                    textBox.Bill.BIPLink = (BIPLinkTPM) bipLinkWindow.BIPLink;
+                    textBox.Bill.BIPLink = (BIPLinkTPM)bipLinkWindow.BIPLink;
                     UpdateBIPLinkBindings(textBox);
                 }
 
@@ -361,7 +361,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var contextMenu = (ContextMenu) sender;
+                var contextMenu = (ContextMenu)sender;
                 var textBox = GetTextBoxInFocus();
                 if (textBox == null)
                 {
@@ -375,7 +375,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 //Check new value, is menu visible?
-                if (!(bool) e.NewValue)
+                if (!(bool)e.NewValue)
                 {
                     //Do not show if not visible
                     return;
@@ -428,7 +428,7 @@ namespace DCSFlightpanels.PanelUserControls
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(textBox, GetTPMSwitch(textBox));
+                textBox.Bill = new BillTPM(textBox, (TPMSwitchOnOff) GetSwitch(textBox));
             }
 
             _textBoxBillsSet = true;
@@ -452,16 +452,16 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (!Equals(textBox, TextBoxLogTPM))
                 {
-                    var contectMenu = (ContextMenu) Resources["TextBoxContextMenuTPM"];
+                    var contectMenu = (ContextMenu)Resources["TextBoxContextMenuTPM"];
 
                     if (!BipFactory.HasBips())
                     {
                         MenuItem bipMenuItem = null;
                         foreach (var item in contectMenu.Items)
                         {
-                            if (((MenuItem) item).Name == "contextMenuItemEditBIP")
+                            if (((MenuItem)item).Name == "contextMenuItemEditBIP")
                             {
-                                bipMenuItem = (MenuItem) item;
+                                bipMenuItem = (MenuItem)item;
                                 break;
                             }
                         }
@@ -477,9 +477,9 @@ namespace DCSFlightpanels.PanelUserControls
                         MenuItem dcsBIOSMenuItem = null;
                         foreach (var item in contectMenu.Items)
                         {
-                            if (((MenuItem) item).Name == "contextMenuItemEditDCSBIOS")
+                            if (((MenuItem)item).Name == "contextMenuItemEditDCSBIOS")
                             {
-                                dcsBIOSMenuItem = (MenuItem) item;
+                                dcsBIOSMenuItem = (MenuItem)item;
                                 break;
                             }
                         }
@@ -500,7 +500,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TPMTextBox) sender;
+                var textBox = (TPMTextBox)sender;
                 var contextMenu = textBox.ContextMenu;
                 if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
                 {
@@ -658,7 +658,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var textBox = GetTextBoxInFocus(); //OK
-                SetKeyPressLength(textBox, (MenuItem) sender);
+                SetKeyPressLength(textBox, (MenuItem)sender);
 
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -672,7 +672,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TPMTextBox) sender;
+                var textBox = (TPMTextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
@@ -687,7 +687,7 @@ namespace DCSFlightpanels.PanelUserControls
                         }
 
                         textBox.Text = "";
-                        _tpmPanel.RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, GetTPMSwitch(textBox).TPMSwitch, GetTPMSwitch(textBox).ButtonState);
+                        _tpmPanel.RemoveSwitchFromList(ControlListTPM.DCSBIOS, GetSwitch(textBox));
                         textBox.Bill.DCSBIOSBinding = null;
                     }
                     else if (textBox.Bill.ContainsKeySequence())
@@ -752,7 +752,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                ((TPMTextBox) sender).Background = Brushes.Yellow;
+                ((TPMTextBox)sender).Background = Brushes.Yellow;
             }
             catch (Exception ex)
             {
@@ -764,14 +764,14 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (TPMTextBox) sender;
+                var textBox = (TPMTextBox)sender;
                 if (textBox.Bill.ContainsBIPLink())
                 {
-                    ((TPMTextBox) sender).Background = Brushes.Bisque;
+                    ((TPMTextBox)sender).Background = Brushes.Bisque;
                 }
                 else
                 {
-                    ((TPMTextBox) sender).Background = Brushes.White;
+                    ((TPMTextBox)sender).Background = Brushes.White;
                 }
             }
             catch (Exception ex)
@@ -785,7 +785,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = ((TPMTextBox) sender);
+                var textBox = ((TPMTextBox)sender);
 
                 //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
                 if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
@@ -839,7 +839,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (TPMTextBox) sender;
+                var textBox = (TPMTextBox)sender;
                 if (textBox.Bill.ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;
@@ -860,10 +860,10 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 //Set focus to this so that virtual keypresses won't affect settings
-                Dispatcher?.BeginInvoke((Action) (() => TextBoxLogTPM.Focus()));
+                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Focus()));
                 foreach (var tpmPanelSwitch in switches)
                 {
-                    var key = (TPMPanelSwitch) tpmPanelSwitch;
+                    var key = (TPMPanelSwitch)tpmPanelSwitch;
 
                     if (_tpmPanel.ForwardPanelEvent)
                     {
@@ -904,108 +904,108 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 foreach (var tpmPanelSwitchObject in switches)
                 {
-                    var tpmPanelSwitch = (TPMPanelSwitch) tpmPanelSwitchObject;
+                    var tpmPanelSwitch = (TPMPanelSwitch)tpmPanelSwitchObject;
                     switch (tpmPanelSwitch.TPMSwitch)
                     {
                         case TPMPanelSwitches.G1:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG1On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG1Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG1On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG1Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G2:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG2On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG2Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG2On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG2Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G3:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG3On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG3Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG3On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG3Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G4:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG4On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG4Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG4On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG4Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G5:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG5On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG5Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG5On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG5Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G6:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG6On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG6Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG6On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG6Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G7:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG7On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG7Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG7On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG7Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G8:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG8On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG8Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG8On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG8Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G9:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG9On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG9Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG9On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG9Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                     }
                 }
             }
@@ -1019,7 +1019,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, textBox.Bill.Key.TPMSwitch, textBox.Bill.GetKeySequence(), textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateSequencedKeyBinding(GetSwitch(textBox), textBox.Text, textBox.Bill.GetKeySequence());
             }
             catch (Exception ex)
             {
@@ -1031,7 +1031,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateBIPLinkKeyBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.BIPLink, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BIPLink);
             }
             catch (Exception ex)
             {
@@ -1053,7 +1053,7 @@ namespace DCSFlightpanels.PanelUserControls
                     keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
 
-                _tpmPanel.AddOrUpdateSingleKeyBinding(textBox.Bill.Key.TPMSwitch, textBox.Text, keyPressLength, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateSingleKeyBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {
@@ -1065,7 +1065,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateOSCommandBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.OSCommandObject, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -1077,7 +1077,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateDCSBIOSBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateDCSBIOSBinding(GetSwitch(textBox), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
             }
             catch (Exception ex)
             {
@@ -1097,7 +1097,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var keyBinding in _tpmPanel.KeyBindingsHashSet)
                 {
-                    var textBox = GetTextBox(keyBinding.TPMSwitch, keyBinding.WhenTurnedOn);
+                    var textBox = (TPMTextBox) GetTextBox(keyBinding.TPMSwitch, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
@@ -1106,7 +1106,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var osCommand in _tpmPanel.OSCommandHashSet)
                 {
-                    var textBox = GetTextBox(osCommand.TPMSwitch, osCommand.WhenTurnedOn);
+                    var textBox = (TPMTextBox)GetTextBox(osCommand.TPMSwitch, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)
                     {
                         textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
@@ -1115,7 +1115,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var dcsBiosBinding in _tpmPanel.DCSBiosBindings)
                 {
-                    var textBox = GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
+                    var textBox = (TPMTextBox)GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
@@ -1124,7 +1124,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var bipLink in _tpmPanel.BipLinkHashSet)
                 {
-                    var textBox = GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
+                    var textBox = (TPMTextBox)GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
                     if (bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BIPLink = bipLink;
@@ -1154,100 +1154,99 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-        private TPMPanelSwitchOnOff GetTPMSwitch(TPMTextBox textBox)
+        
+        public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
             try
             {
                 if (textBox.Equals(TextBoxG1Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G1, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G1, false);
                 }
 
                 if (textBox.Equals(TextBoxG1On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G1, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G1, true);
                 }
 
                 if (textBox.Equals(TextBoxG2Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G2, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G2, false);
                 }
 
                 if (textBox.Equals(TextBoxG2On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G2, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G2, true);
                 }
 
                 if (textBox.Equals(TextBoxG3Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G3, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G3, false);
                 }
 
                 if (textBox.Equals(TextBoxG3On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G3, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G3, true);
                 }
 
                 if (textBox.Equals(TextBoxG4Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G4, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G4, false);
                 }
 
                 if (textBox.Equals(TextBoxG4On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G4, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G4, true);
                 }
 
                 if (textBox.Equals(TextBoxG5Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G5, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G5, false);
                 }
 
                 if (textBox.Equals(TextBoxG5On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G5, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G5, true);
                 }
 
                 if (textBox.Equals(TextBoxG6Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G6, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G6, false);
                 }
 
                 if (textBox.Equals(TextBoxG6On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G6, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G6, true);
                 }
 
                 if (textBox.Equals(TextBoxG7Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G7, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G7, false);
                 }
 
                 if (textBox.Equals(TextBoxG7On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G7, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G7, true);
                 }
 
                 if (textBox.Equals(TextBoxG8Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G8, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G8, false);
                 }
 
                 if (textBox.Equals(TextBoxG8On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G8, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G8, true);
                 }
 
                 if (textBox.Equals(TextBoxG9Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G9, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G9, false);
                 }
 
                 if (textBox.Equals(TextBoxG9On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G9, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G9, true);
                 }
             }
             catch (Exception ex)
@@ -1257,9 +1256,10 @@ namespace DCSFlightpanels.PanelUserControls
 
             throw new Exception("Failed to find TPM switch for TextBox : " + textBox.Name);
         }
-
-        private TPMTextBox GetTextBox(TPMPanelSwitches key, bool whenTurnedOn)
+        public TextBox GetTextBox(object panelKey, bool whenTurnedOn)
         {
+            var key = (TPMPanelSwitches) panelKey;
+
             try
             {
                 if (key == TPMPanelSwitches.G1 && !whenTurnedOn)

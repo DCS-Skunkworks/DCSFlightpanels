@@ -5,7 +5,7 @@ namespace DCSFlightpanels.Interfaces
 {
     public interface IPanelUI
     {
-        PanelKeyOnOff GetKey(TextBox textBox);
-        TextBox GetTextBox(object key, bool whenTurnedOn);
+        PanelSwitchOnOff GetSwitch(TextBox textBox);
+        TextBox GetTextBox(object panelSwitch, bool whenTurnedOn);
     }
 }

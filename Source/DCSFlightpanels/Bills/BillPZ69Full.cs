@@ -65,7 +65,7 @@ namespace DCSFlightpanels.Bills
             }
         }
         
-        public DCSBIOSActionBindingPZ69 DCSBIOSBinding
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
         {
             get => _dcsbiosBindingPZ69;
             set
@@ -74,7 +74,7 @@ namespace DCSFlightpanels.Bills
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
-                _dcsbiosBindingPZ69 = value;
+                _dcsbiosBindingPZ69 = (DCSBIOSActionBindingPZ69)value;
                 if (_dcsbiosBindingPZ69 != null)
                 {
                     if (string.IsNullOrEmpty(_dcsbiosBindingPZ69.Description))

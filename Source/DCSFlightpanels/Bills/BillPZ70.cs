@@ -10,11 +10,11 @@ namespace DCSFlightpanels.Bills
 {
     public class BillPZ70 : BillBaseInput
     {
-        private MultiPanelPZ70KnobOnOff _key;
+        private PZ70SwitchOnOff _key;
         private DCSBIOSActionBindingPZ70 _dcsbiosBindingPZ70;
         private BIPLinkPZ70 _bipLinkPZ70;
 
-        public BillPZ70(PZ70TextBox textBox, MultiPanelPZ70KnobOnOff key)
+        public BillPZ70(PZ70TextBox textBox, PZ70SwitchOnOff key)
         {
             TextBox = textBox;
             _key = key;
@@ -45,7 +45,7 @@ namespace DCSFlightpanels.Bills
             _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSActionBindingPZ70 DCSBIOSBinding
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
         {
             get => _dcsbiosBindingPZ70;
             set
@@ -54,7 +54,7 @@ namespace DCSFlightpanels.Bills
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
-                _dcsbiosBindingPZ70 = value;
+                _dcsbiosBindingPZ70 = (DCSBIOSActionBindingPZ70)value;
                 if (_dcsbiosBindingPZ70 != null)
                 {
                     if (string.IsNullOrEmpty(_dcsbiosBindingPZ70.Description))
@@ -89,8 +89,8 @@ namespace DCSFlightpanels.Bills
                 }
             }
         }
-        
-        public MultiPanelPZ70KnobOnOff Key
+
+        public PZ70SwitchOnOff Key
         {
             get => _key;
             set => _key = value;

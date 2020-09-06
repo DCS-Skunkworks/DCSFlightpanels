@@ -280,50 +280,51 @@ namespace NonVisuals.Saitek
             return result;
         }
 
-        public void AddOrUpdateSingleKeyBinding(TPMPanelSwitches tpmPanelSwitch, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
+        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
-            if (string.IsNullOrEmpty(keys))
+            var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
+            if (string.IsNullOrEmpty(keyPress))
             {
-                var tmp = new TPMPanelSwitchOnOff(tpmPanelSwitch, whenTurnedOn);
-                ClearAllBindings(tmp);
+                ClearAllBindings(tpmPanelSwitchOnOff);
                 return;
             }
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.TPMSwitch == tpmPanelSwitch && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && keyBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keys))
+                    if (string.IsNullOrEmpty(keyPress))
                     {
                         keyBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
+                        keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
                     }
                     found = true;
                 }
             }
-            if (!found && !string.IsNullOrEmpty(keys))
+            if (!found && !string.IsNullOrEmpty(keyPress))
             {
                 var keyBinding = new KeyBindingTPM();
-                keyBinding.TPMSwitch = tpmPanelSwitch;
-                keyBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
-                keyBinding.WhenTurnedOn = whenTurnedOn;
+                keyBinding.TPMSwitch = tpmPanelSwitchOnOff.Switch;
+                keyBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
+                keyBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _keyBindings.Add(keyBinding);
             }
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             SetIsDirty();
         }
 
-        public void AddOrUpdateOSCommandBinding(TPMPanelSwitches tpmPanelSwitch, OSCommand osCommand, bool whenTurnedOn)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
         {
+            var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             //This must accept lists
             var found = false;
 
             foreach (var osCommandBinding in _osCommandBindings)
             {
-                if (osCommandBinding.TPMSwitch == tpmPanelSwitch && osCommandBinding.WhenTurnedOn == whenTurnedOn)
+                if (osCommandBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && osCommandBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
                     osCommandBinding.OSCommandObject = osCommand;
                     found = true;
@@ -333,27 +334,27 @@ namespace NonVisuals.Saitek
             if (!found)
             {
                 var osCommandBindingTPM = new OSCommandBindingTPM();
-                osCommandBindingTPM.TPMSwitch = tpmPanelSwitch;
+                osCommandBindingTPM.TPMSwitch = tpmPanelSwitchOnOff.Switch;
                 osCommandBindingTPM.OSCommandObject = osCommand;
-                osCommandBindingTPM.WhenTurnedOn = whenTurnedOn;
+                osCommandBindingTPM.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _osCommandBindings.Add(osCommandBindingTPM);
             }
             SetIsDirty();
         }
 
-        public void ClearAllBindings(TPMPanelSwitchOnOff tpmPanelSwitchOnOff)
+        public void ClearAllBindings(TPMSwitchOnOff tpmPanelSwitchOnOff)
         {
             //This must accept lists
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.TPMSwitch == tpmPanelSwitchOnOff.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
+                if (keyBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && keyBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
                     keyBinding.OSKeyPress = null;
                 }
             }
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.TPMSwitch == tpmPanelSwitchOnOff.TPMSwitch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
+                if (dcsBiosBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
                     dcsBiosBinding.DCSBIOSInputs.Clear();
                 }
@@ -361,11 +362,12 @@ namespace NonVisuals.Saitek
             SetIsDirty();
         }
 
-        public void AddOrUpdateSequencedKeyBinding(string information, TPMPanelSwitches tpmPanelSwitch, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
         {
-            if (sortedList.Count == 0)
+            var tpmPanelSwitchOnOff = (TPMSwitchOnOff) panelSwitchOnOff;
+            if (keySequence.Count == 0)
             {
-                RemoveTPMPanelSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitch, whenTurnedOn);
+                RemoveSwitchFromList(ControlListTPM.KEYS, tpmPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -373,69 +375,71 @@ namespace NonVisuals.Saitek
             var found = false;
             foreach (var keyBinding in _keyBindings)
             {
-                if (keyBinding.TPMSwitch == tpmPanelSwitch && keyBinding.WhenTurnedOn == whenTurnedOn)
+                if (keyBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && keyBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
-                    if (sortedList.Count == 0)
+                    if (keySequence.Count == 0)
                     {
                         keyBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        keyBinding.OSKeyPress = new KeyPress(information, sortedList);
+                        keyBinding.OSKeyPress = new KeyPress(description, keySequence);
                     }
                     found = true;
                     break;
                 }
             }
-            if (!found && sortedList.Count > 0)
+            if (!found && keySequence.Count > 0)
             {
                 var keyBinding = new KeyBindingTPM();
-                keyBinding.TPMSwitch = tpmPanelSwitch;
-                keyBinding.OSKeyPress = new KeyPress(information, sortedList);
-                keyBinding.WhenTurnedOn = whenTurnedOn;
+                keyBinding.TPMSwitch = tpmPanelSwitchOnOff.Switch;
+                keyBinding.OSKeyPress = new KeyPress(description, keySequence);
+                keyBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _keyBindings.Add(keyBinding);
             }
             _keyBindings = KeyBindingTPM.SetNegators(_keyBindings);
             SetIsDirty();
         }
 
-
-        public void AddOrUpdateBIPLinkKeyBinding(TPMPanelSwitches tpmPanelSwitch, BIPLinkTPM bipLinkTPM, bool whenTurnedOn)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
+            var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
+            var bipLinkTPM = (BIPLinkTPM) bipLink;
+
             if (bipLinkTPM.BIPLights.Count == 0)
             {
-                RemoveTPMPanelSwitchFromList(ControlListTPM.BIPS, tpmPanelSwitch, whenTurnedOn);
+                RemoveSwitchFromList(ControlListTPM.BIPS, tpmPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
             //This must accept lists
             var found = false;
 
-            foreach (var bipLink in _bipLinks)
+            foreach (var tmpBipLink in _bipLinks)
             {
-                if (bipLink.TPMSwitch == tpmPanelSwitch && bipLink.WhenTurnedOn == whenTurnedOn)
+                if (tmpBipLink.TPMSwitch == tpmPanelSwitchOnOff.Switch && tmpBipLink.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
-                    bipLink.BIPLights = bipLinkTPM.BIPLights;
-                    bipLink.Description = bipLinkTPM.Description;
+                    tmpBipLink.BIPLights = bipLinkTPM.BIPLights;
+                    tmpBipLink.Description = bipLinkTPM.Description;
                     found = true;
                     break;
                 }
             }
             if (!found && bipLinkTPM.BIPLights.Count > 0)
             {
-                bipLinkTPM.TPMSwitch = tpmPanelSwitch;
-                bipLinkTPM.WhenTurnedOn = whenTurnedOn;
+                bipLinkTPM.TPMSwitch = tpmPanelSwitchOnOff.Switch;
+                bipLinkTPM.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 _bipLinks.Add(bipLinkTPM);
             }
             SetIsDirty();
         }
 
-
-        public void AddOrUpdateDCSBIOSBinding(TPMPanelSwitches tpmPanelSwitch, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
         {
+            var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, tpmPanelSwitch, whenTurnedOn);
+                RemoveSwitchFromList(ControlListTPM.DCSBIOS, tpmPanelSwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -446,7 +450,7 @@ namespace NonVisuals.Saitek
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.TPMSwitch == tpmPanelSwitch && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                if (dcsBiosBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
@@ -457,23 +461,26 @@ namespace NonVisuals.Saitek
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingTPM();
-                dcsBiosBinding.TPMSwitch = tpmPanelSwitch;
+                dcsBiosBinding.TPMSwitch = tpmPanelSwitchOnOff.Switch;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
+                dcsBiosBinding.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
             SetIsDirty();
         }
 
-        public void RemoveTPMPanelSwitchFromList(ControlListTPM controlListTPM, TPMPanelSwitches tpmPanelSwitch, bool whenTurnedOn)
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
+            var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
+            var controlListTPM = (ControlListTPM) controlList;
+
             var found = false;
             if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.KEYS)
             {
                 foreach (var keyBindingTPM in _keyBindings)
                 {
-                    if (keyBindingTPM.TPMSwitch == tpmPanelSwitch && keyBindingTPM.WhenTurnedOn == whenTurnedOn)
+                    if (keyBindingTPM.TPMSwitch == tpmPanelSwitchOnOff.Switch && keyBindingTPM.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                     {
                         keyBindingTPM.OSKeyPress = null;
                         found = true;
@@ -484,7 +491,7 @@ namespace NonVisuals.Saitek
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (dcsBiosBinding.TPMSwitch == tpmPanelSwitch && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                    if (dcsBiosBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                         found = true;
@@ -495,7 +502,7 @@ namespace NonVisuals.Saitek
             {
                 foreach (var bipLink in _bipLinks)
                 {
-                    if (bipLink.TPMSwitch == tpmPanelSwitch && bipLink.WhenTurnedOn == whenTurnedOn)
+                    if (bipLink.TPMSwitch == tpmPanelSwitchOnOff.Switch && bipLink.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                     {
                         bipLink.BIPLights.Clear();
                         found = true;
@@ -557,6 +564,7 @@ namespace NonVisuals.Saitek
         ALL,
         DCSBIOS,
         KEYS,
-        BIPS
+        BIPS,
+        OSCOMMAND
     }
 }

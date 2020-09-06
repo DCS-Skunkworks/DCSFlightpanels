@@ -301,11 +301,12 @@ namespace NonVisuals.Saitek
             PZ70SwitchChanged(isFirstReport, hashSet);
         }
 
-        public void AddOrUpdateSingleKeyBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, string keys, KeyPressLength keyPressLength, bool whenTurnedOn)
+        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
-            if (string.IsNullOrEmpty(keys))
+            var pz70SwitchOnOff = (PZ70SwitchOnOff) panelSwitchOnOff;
+            if (string.IsNullOrEmpty(keyPress))
             {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
+                RemoveSwitchFromList(ControlListPZ70.KEYS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -313,62 +314,39 @@ namespace NonVisuals.Saitek
             var found = false;
             foreach (var knobBinding in _knobBindings)
             {
-                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
+                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && knobBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                 {
-                    if (string.IsNullOrEmpty(keys))
+                    if (string.IsNullOrEmpty(keyPress))
                     {
                         knobBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        knobBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
+                        knobBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
                     }
                     found = true;
                 }
             }
-            if (!found && !string.IsNullOrEmpty(keys))
+            if (!found && !string.IsNullOrEmpty(keyPress))
             {
                 var knobBinding = new KeyBindingPZ70();
-                knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                knobBinding.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
                 knobBinding.DialPosition = _pz70DialPosition;
-                knobBinding.OSKeyPress = new KeyPress(keys, keyPressLength);
-                knobBinding.WhenTurnedOn = whenTurnedOn;
+                knobBinding.OSKeyPress = new KeyPress(keyPress, keyPressLength);
+                knobBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
                 _knobBindings.Add(knobBinding);
             }
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             SetIsDirty();
         }
 
-        public void AddOrUpdateOSCommandBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, OSCommand osCommand, bool whenTurnedOn)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
         {
-            //This must accept lists
-            var found = false;
+            var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
 
-            foreach (var osCommandBinding in _osCommandBindings)
+            if (keySequence.Count == 0)
             {
-                if (osCommandBinding.DialPosition == _pz70DialPosition && osCommandBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && osCommandBinding.WhenTurnedOn == whenTurnedOn)
-                {
-                    osCommandBinding.OSCommandObject = osCommand;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-            {
-                var osCommandBindingPZ70 = new OSCommandBindingPZ70();
-                osCommandBindingPZ70.MultiPanelPZ70Knob = multiPanelPZ70Knob;
-                osCommandBindingPZ70.OSCommandObject = osCommand;
-                osCommandBindingPZ70.WhenTurnedOn = whenTurnedOn;
-                _osCommandBindings.Add(osCommandBindingPZ70);
-            }
-            SetIsDirty();
-        }
-
-        public void AddOrUpdateSequencedKeyBinding(string information, MultiPanelPZ70Knobs multiPanelPZ70Knob, SortedList<int, KeyPressInfo> sortedList, bool whenTurnedOn)
-        {
-            if (sortedList.Count == 0)
-            {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.KEYS, multiPanelPZ70Knob, whenTurnedOn);
+                RemoveSwitchFromList(ControlListPZ70.KEYS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -376,38 +354,40 @@ namespace NonVisuals.Saitek
             var found = false;
             foreach (var knobBinding in _knobBindings)
             {
-                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBinding.WhenTurnedOn == whenTurnedOn)
+                if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && knobBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                 {
-                    if (sortedList.Count == 0)
+                    if (keySequence.Count == 0)
                     {
                         knobBinding.OSKeyPress = null;
                     }
                     else
                     {
-                        knobBinding.OSKeyPress = new KeyPress(information, sortedList);
+                        knobBinding.OSKeyPress = new KeyPress(description, keySequence);
                     }
                     found = true;
                     break;
                 }
             }
-            if (!found && sortedList.Count > 0)
+            if (!found && keySequence.Count > 0)
             {
                 var knobBinding = new KeyBindingPZ70();
-                knobBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                knobBinding.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
                 knobBinding.DialPosition = _pz70DialPosition;
-                knobBinding.OSKeyPress = new KeyPress(information, sortedList);
-                knobBinding.WhenTurnedOn = whenTurnedOn;
+                knobBinding.OSKeyPress = new KeyPress(description, keySequence);
+                knobBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
                 _knobBindings.Add(knobBinding);
             }
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             SetIsDirty();
         }
 
-        public void AddOrUpdateDCSBIOSBinding(MultiPanelPZ70Knobs multiPanelPZ70Knob, List<DCSBIOSInput> dcsbiosInputs, string description, bool whenTurnedOn)
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
         {
+            var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
+
             if (dcsbiosInputs.Count == 0)
             {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.DCSBIOS, multiPanelPZ70Knob, whenTurnedOn);
+                RemoveSwitchFromList(ControlListPZ70.DCSBIOS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
@@ -415,7 +395,7 @@ namespace NonVisuals.Saitek
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
-                if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                 {
                     dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
                     dcsBiosBinding.Description = description;
@@ -426,10 +406,10 @@ namespace NonVisuals.Saitek
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingPZ70();
-                dcsBiosBinding.MultiPanelPZ70Knob = multiPanelPZ70Knob;
+                dcsBiosBinding.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
                 dcsBiosBinding.DialPosition = _pz70DialPosition;
                 dcsBiosBinding.DCSBIOSInputs = dcsbiosInputs;
-                dcsBiosBinding.WhenTurnedOn = whenTurnedOn;
+                dcsBiosBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
@@ -496,45 +476,78 @@ namespace NonVisuals.Saitek
             SetIsDirty();
         }
 
-        public void AddOrUpdateBIPLinkKnobBinding(MultiPanelPZ70Knobs multiPanelKnob, BIPLinkPZ70 bipLinkPZ70, bool whenTurnedOn)
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
         {
+            var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
+            var bipLinkPZ70 = (BIPLinkPZ70) bipLink;
+
             if (bipLinkPZ70.BIPLights.Count == 0)
             {
-                RemoveMultiPanelKnobFromList(ControlListPZ70.BIPS, multiPanelKnob, whenTurnedOn);
+                RemoveSwitchFromList(ControlListPZ70.BIPS, pz70SwitchOnOff);
                 SetIsDirty();
                 return;
             }
             //This must accept lists
             var found = false;
 
-            foreach (var bipLink in _bipLinks)
+            foreach (var tmpBipLink in _bipLinks)
             {
-                if (bipLink.MultiPanelPZ70Knob == multiPanelKnob && bipLink.WhenTurnedOn == whenTurnedOn)
+                if (tmpBipLink.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && tmpBipLink.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                 {
-                    bipLink.BIPLights = bipLinkPZ70.BIPLights;
-                    bipLink.Description = bipLinkPZ70.Description;
-                    bipLink.MultiPanelPZ70Knob = multiPanelKnob;
+                    tmpBipLink.BIPLights = bipLinkPZ70.BIPLights;
+                    tmpBipLink.Description = bipLinkPZ70.Description;
+                    tmpBipLink.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
                     found = true;
                     break;
                 }
             }
             if (!found && bipLinkPZ70.BIPLights.Count > 0)
             {
-                bipLinkPZ70.MultiPanelPZ70Knob = multiPanelKnob;
-                bipLinkPZ70.WhenTurnedOn = whenTurnedOn;
+                bipLinkPZ70.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
+                bipLinkPZ70.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
                 _bipLinks.Add(bipLinkPZ70);
             }
             SetIsDirty();
         }
 
-        public void RemoveMultiPanelKnobFromList(ControlListPZ70 controlListPZ70, MultiPanelPZ70Knobs multiPanelPZ70Knob, bool whenTurnedOn)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
         {
+            var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
+
+            //This must accept lists
+            var found = false;
+
+            foreach (var osCommandBinding in _osCommandBindings)
+            {
+                if (osCommandBinding.DialPosition == _pz70DialPosition && osCommandBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && osCommandBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
+                {
+                    osCommandBinding.OSCommandObject = osCommand;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                var osCommandBindingPZ70 = new OSCommandBindingPZ70();
+                osCommandBindingPZ70.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
+                osCommandBindingPZ70.OSCommandObject = osCommand;
+                osCommandBindingPZ70.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
+                _osCommandBindings.Add(osCommandBindingPZ70);
+            }
+            SetIsDirty();
+        }
+
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
+        {
+            var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
+            var controlListPZ70 = (ControlListPZ70) controlList;
+
             var found = false;
             if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.KEYS)
             {
                 foreach (var knobBindingPZ70 in _knobBindings)
                 {
-                    if (knobBindingPZ70.DialPosition == _pz70DialPosition && knobBindingPZ70.MultiPanelPZ70Knob == multiPanelPZ70Knob && knobBindingPZ70.WhenTurnedOn == whenTurnedOn)
+                    if (knobBindingPZ70.DialPosition == _pz70DialPosition && knobBindingPZ70.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && knobBindingPZ70.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                     {
                         knobBindingPZ70.OSKeyPress = null;
                         found = true;
@@ -545,7 +558,7 @@ namespace NonVisuals.Saitek
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == multiPanelPZ70Knob && dcsBiosBinding.WhenTurnedOn == whenTurnedOn)
+                    if (dcsBiosBinding.DialPosition == _pz70DialPosition && dcsBiosBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                         found = true;
@@ -556,12 +569,16 @@ namespace NonVisuals.Saitek
             {
                 foreach (var bipLink in _bipLinks)
                 {
-                    if (bipLink.DialPosition == _pz70DialPosition && bipLink.MultiPanelPZ70Knob == multiPanelPZ70Knob && bipLink.WhenTurnedOn == whenTurnedOn)
+                    if (bipLink.DialPosition == _pz70DialPosition && bipLink.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && bipLink.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                     {
                         bipLink.BIPLights.Clear();
                         found = true;
                     }
                 }
+            }
+            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.OSCOMMAND)
+            {
+                _osCommandBindings.Clear();
             }
 
             if (found)
@@ -1287,7 +1304,8 @@ namespace NonVisuals.Saitek
         ALL,
         DCSBIOS,
         KEYS,
-        BIPS
+        BIPS,
+        OSCOMMAND
     }
 
 }

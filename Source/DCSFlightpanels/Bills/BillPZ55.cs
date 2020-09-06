@@ -20,7 +20,7 @@ namespace DCSFlightpanels.Bills
         private BIPLinkPZ55 _bipLinkPZ55;
         private SwitchPanelPZ55 _switchPanelPZ55;
 
-        public BillPZ55(IGlobalHandler globalHandler, IPanelUI panelUI, SwitchPanelPZ55 switchPanelPZ55, PZ55TextBox textBox, SwitchPanelPZ55KeyOnOff key) : base(switchPanelPZ55)
+        public BillPZ55(IGlobalHandler globalHandler, IPanelUI panelUI, SwitchPanelPZ55 switchPanelPZ55, PZ55TextBox textBox, PZ55SwitchOnOff key) : base(switchPanelPZ55)
         {
             GlobalHandler = globalHandler;
             PanelUIParent = panelUI;
@@ -138,7 +138,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public SwitchPanelPZ55KeyOnOff Key { get; set; }
+        public PZ55SwitchOnOff Key { get; set; }
 
 
         public override void Clear()

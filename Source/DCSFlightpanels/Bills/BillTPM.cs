@@ -10,11 +10,11 @@ namespace DCSFlightpanels.Bills
 {
     public class BillTPM : BillBaseInput
     {
-        private TPMPanelSwitchOnOff _key;
+        private TPMSwitchOnOff _key;
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
 
-        public BillTPM(TPMTextBox textBox, TPMPanelSwitchOnOff key)
+        public BillTPM(TPMTextBox textBox, TPMSwitchOnOff key)
         {
             TextBox = textBox;
             _key = key;
@@ -90,7 +90,7 @@ namespace DCSFlightpanels.Bills
             }
         }
         
-        public TPMPanelSwitchOnOff Key
+        public TPMSwitchOnOff Key
         {
             get => _key;
             set => _key = value;

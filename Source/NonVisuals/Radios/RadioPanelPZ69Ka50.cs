@@ -2321,5 +2321,29 @@ namespace NonVisuals.Radios
             }
             return "";
         }
+
+        public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
+        {
+        }
+
+        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
+        {
+        }
+
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        {
+        }
+
+        public override void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description)
+        {
+        }
+
+        public override void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink)
+        {
+        }
+
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        {
+        }
     }
 }

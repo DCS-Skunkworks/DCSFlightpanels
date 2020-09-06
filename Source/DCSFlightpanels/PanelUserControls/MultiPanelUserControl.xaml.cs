@@ -23,7 +23,7 @@ namespace DCSFlightpanels.PanelUserControls
     /// Interaction logic for MultiPanelUserControl.xaml
     /// </summary>
 
-    public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class MultiPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly MultiPanelPZ70 _multiPanelPZ70;
         
@@ -183,7 +183,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (!textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Bill = new BillPZ70(textBox, GetPZ70Knob(textBox));
+                    textBox.Bill = new BillPZ70(textBox, (PZ70SwitchOnOff)GetSwitch(textBox));
                 }
             }
             _textBoxBillsSet = true;
@@ -623,7 +623,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var keyBinding in _multiPanelPZ70.KeyBindingsHashSet)
                 {
-                    var textBox = GetTextBox(keyBinding.MultiPanelPZ70Knob, keyBinding.WhenTurnedOn);
+                    var textBox = (PZ70TextBox)GetTextBox(keyBinding.MultiPanelPZ70Knob, keyBinding.WhenTurnedOn);
                     if (keyBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition)
                     {
                         if (keyBinding.OSKeyPress != null)
@@ -635,7 +635,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var osCommand in _multiPanelPZ70.OSCommandHashSet)
                 {
-                    var textBox = GetTextBox(osCommand.MultiPanelPZ70Knob, osCommand.WhenTurnedOn);
+                    var textBox = (PZ70TextBox)GetTextBox(osCommand.MultiPanelPZ70Knob, osCommand.WhenTurnedOn);
                     if (osCommand.DialPosition == _multiPanelPZ70.PZ70DialPosition)
                         if (osCommand.OSCommandObject != null)
                         {
@@ -645,7 +645,7 @@ namespace DCSFlightpanels.PanelUserControls
             
                 foreach (var dcsBiosBinding in _multiPanelPZ70.DCSBiosBindings)
                 {
-                    var textBox = GetTextBox(dcsBiosBinding.MultiPanelPZ70Knob, dcsBiosBinding.WhenTurnedOn);
+                    var textBox = (PZ70TextBox)GetTextBox(dcsBiosBinding.MultiPanelPZ70Knob, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DialPosition == _multiPanelPZ70.PZ70DialPosition && dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
@@ -655,7 +655,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var bipLink in _multiPanelPZ70.BIPLinkHashSet)
                 {
-                    var textBox = GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
+                    var textBox = (PZ70TextBox)GetTextBox(bipLink.MultiPanelPZ70Knob, bipLink.WhenTurnedOn);
                     if (bipLink.DialPosition == _multiPanelPZ70.PZ70DialPosition && bipLink.BIPLights.Count > 0)
                     {
                         textBox.Bill.BIPLink = bipLink;
@@ -728,7 +728,7 @@ namespace DCSFlightpanels.PanelUserControls
                             return;
                         }
                         textBox.Text = "";
-                        _multiPanelPZ70.RemoveMultiPanelKnobFromList(ControlListPZ70.DCSBIOS, GetPZ70Knob(textBox).MultiPanelPZ70Knob, GetPZ70Knob(textBox).ButtonState);
+                        _multiPanelPZ70.RemoveSwitchFromList(ControlListPZ70.DCSBIOS, GetSwitch(textBox));
                         textBox.Bill.DCSBIOSBinding = null;
                     }
                     else if (textBox.Bill.ContainsKeySequence())
@@ -1091,8 +1091,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateBIPLinkKnobBinding(key.MultiPanelPZ70Knob, textBox.Bill.BIPLink, key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BIPLink);
             }
             catch (Exception ex)
             {
@@ -1104,8 +1103,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateSequencedKeyBinding(textBox.Text, key.MultiPanelPZ70Knob, textBox.Bill.GetKeySequence(), key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateSequencedKeyBinding(GetSwitch(textBox), textBox.Text, textBox.Bill.GetKeySequence());
             }
             catch (Exception ex)
             {
@@ -1127,8 +1125,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
-                var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateSingleKeyBinding(key.MultiPanelPZ70Knob, textBox.Text, keyPressLength, key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateSingleKeyBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {
@@ -1140,8 +1137,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateOSCommandBinding(key.MultiPanelPZ70Knob, textBox.Bill.OSCommandObject, key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -1153,8 +1149,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var key = GetPZ70Knob(textBox);
-                _multiPanelPZ70.AddOrUpdateDCSBIOSBinding(key.MultiPanelPZ70Knob, textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text, key.ButtonState);
+                _multiPanelPZ70.AddOrUpdateDCSBIOSBinding(GetSwitch(textBox), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
             }
             catch (Exception ex)
             {
@@ -1537,105 +1532,105 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private MultiPanelPZ70KnobOnOff GetPZ70Knob(PZ70TextBox textBox)
+        public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
             try
             {
                 if (textBox.Equals(TextBoxLcdKnobDecrease))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_DEC, true);
                 }
                 if (textBox.Equals(TextBoxLcdKnobIncrease))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_INC, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.LCD_WHEEL_INC, true);
                 }
                 if (textBox.Equals(TextBoxAutoThrottleOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, false);
                 }
                 if (textBox.Equals(TextBoxAutoThrottleOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AUTO_THROTTLE, true);
                 }
                 if (textBox.Equals(TextBoxFlapsUp))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_UP, true);
                 }
                 if (textBox.Equals(TextBoxFlapsDown))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.FLAPS_LEVER_DOWN, true);
                 }
                 if (textBox.Equals(TextBoxPitchTrimUp))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_UP, true);
                 }
                 if (textBox.Equals(TextBoxPitchTrimDown))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.PITCH_TRIM_WHEEL_DOWN, true);
                 }
                 if (textBox.Equals(TextBoxApButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AP_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AP_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxApButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.AP_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.AP_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxHdgButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxHdgButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.HDG_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxNavButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxNavButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.NAV_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxIasButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxIasButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.IAS_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxAltButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxAltButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.ALT_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxVsButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.VS_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.VS_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxVsButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.VS_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.VS_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxAprButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.APR_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.APR_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxAprButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.APR_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.APR_BUTTON, false);
                 }
                 if (textBox.Equals(TextBoxRevButtonOn))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.REV_BUTTON, true);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.REV_BUTTON, true);
                 }
                 if (textBox.Equals(TextBoxRevButtonOff))
                 {
-                    return new MultiPanelPZ70KnobOnOff(MultiPanelPZ70Knobs.REV_BUTTON, false);
+                    return new PZ70SwitchOnOff(MultiPanelPZ70Knobs.REV_BUTTON, false);
                 }
             }
             catch (Exception ex)
@@ -1646,8 +1641,9 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private PZ70TextBox GetTextBox(MultiPanelPZ70Knobs knob, bool whenTurnedOn)
+        public TextBox GetTextBox(object panelSwitch, bool whenTurnedOn)
         {
+            var knob = (MultiPanelPZ70Knobs) panelSwitch;
             try
             {
                 if (knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC && whenTurnedOn)

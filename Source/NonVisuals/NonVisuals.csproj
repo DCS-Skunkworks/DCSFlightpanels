@@ -223,7 +223,7 @@
     <Compile Include="Saitek\MultiPanelPZ70.cs" />
     <Compile Include="KeyPress.cs" />
     <Compile Include="Saitek\BIPLight.cs" />
-    <Compile Include="Saitek\PanelKeyOnOff.cs" />
+    <Compile Include="Saitek\PanelSwitchOnOff.cs" />
     <Compile Include="PerformanceTimer.cs" />
     <Compile Include="ProfileHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

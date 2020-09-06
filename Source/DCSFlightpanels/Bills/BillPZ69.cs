@@ -9,10 +9,10 @@ namespace DCSFlightpanels.Bills
 {
     public class BillPZ69 : BillBaseInput
     {
-        private RadioPanelPZ69KeyOnOff _knob;
+        private PZ69SwitchOnOff _knob;
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public BillPZ69(PZ69TextBox textBox, RadioPanelPZ69KeyOnOff knob)
+        public BillPZ69(PZ69TextBox textBox, PZ69SwitchOnOff knob)
         {
             TextBox = textBox;
             _knob = knob;
@@ -56,7 +56,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public RadioPanelPZ69KeyOnOff Knob => _knob;
+        public PZ69SwitchOnOff Knob => _knob;
 
         public override void Clear()
         {
