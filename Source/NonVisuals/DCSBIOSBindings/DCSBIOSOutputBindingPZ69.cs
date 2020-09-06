@@ -7,7 +7,7 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.DCSBIOSBindings
 {
-    
+    [Serializable]
     public class DCSBIOSOutputBindingPZ69
     {
         /*

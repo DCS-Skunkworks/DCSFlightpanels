@@ -2,6 +2,7 @@
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class OSCommandBindingTPM : OSCommandBinding
     {
         /*

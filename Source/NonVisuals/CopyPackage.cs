@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ClassLibraryCommon;
 
 namespace NonVisuals
 {
+    [Serializable]
     public class CopyPackage
     {
         private string _sourceName = "";

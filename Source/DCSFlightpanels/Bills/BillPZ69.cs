@@ -12,13 +12,11 @@ namespace DCSFlightpanels.Bills
 {
     public class BillPZ69 : BillBaseInput
     {
-        private PZ69SwitchOnOff _knob;
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public BillPZ69(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, PZ69SwitchOnOff knob) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPZ69(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            TextBox = textBox;
-            _knob = knob;
+            SetContextMenu();
         }
 
         protected override void ClearDCSBIOSFromBill()
@@ -75,11 +73,9 @@ namespace DCSFlightpanels.Bills
         
         public override bool IsEmpty()
         {
-            return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
-
-        public PZ69SwitchOnOff Knob => _knob;
-
+        
         public override void Clear()
         {
             _bipLinkPZ69 = null;

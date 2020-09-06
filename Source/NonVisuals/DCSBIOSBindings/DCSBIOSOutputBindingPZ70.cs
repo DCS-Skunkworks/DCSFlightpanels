@@ -10,6 +10,7 @@ namespace NonVisuals.DCSBIOSBindings
         LowerLCD,
     }
 
+    [Serializable]
     public class DCSBIOSOutputBindingPZ70
     {
         /*

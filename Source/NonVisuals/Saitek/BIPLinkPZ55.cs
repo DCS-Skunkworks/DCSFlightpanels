@@ -4,6 +4,7 @@ using System.Text;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class BIPLinkPZ55 : BIPLink
     {
         /*

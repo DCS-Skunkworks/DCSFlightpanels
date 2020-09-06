@@ -175,7 +175,7 @@ namespace DCSFlightpanels.Radios.Emulators
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69Full(GlobalHandler, this, _radioPanelPZ69, textBox, (PZ69SwitchOnOff)GetSwitch(textBox));
+                textBox.Bill = new BillPZ69Full(GlobalHandler, this, _radioPanelPZ69, textBox);
             }
             _textBoxBillsSet = true;
         }
@@ -475,42 +475,6 @@ namespace DCSFlightpanels.Radios.Emulators
             }
         }
 
-        private void TextBoxContextMenuIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            try
-            {
-                var contextMenu = (ContextMenu)sender;
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    foreach (MenuItem contextMenuItem in contextMenu.Items)
-                    {
-                        contextMenuItem.Visibility = Visibility.Collapsed;
-                    }
-                    return;
-                    //throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                //Check new value, is menu visible?
-                if (!(bool)e.NewValue)
-                {
-                    //Do not show if not visible
-                    return;
-                }
-
-                if (!textBox.Bill.ContainsSingleKey())
-                {
-                    return;
-                }
-                var keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
-                CheckContextMenuItems(keyPressLength, contextMenu);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void ClearAll(bool clearAlsoProfile)
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
@@ -743,76 +707,37 @@ namespace DCSFlightpanels.Radios.Emulators
             return null;
         }
 
-        private void TextBoxContextMenuClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                SetKeyPressLength(textBox, (MenuItem)sender);
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                var textBox = (PZ69FullTextBox)sender;
+                var textBox = (PZ55TextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-                    if (textBox.Bill.ContainsDCSBIOS())
+                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
                     {
-                        if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS configuration?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-                        textBox.Text = "";
-                        var knobObject = (PZ69SwitchOnOff)GetSwitch(textBox);
-                        _radioPanelPZ69.DeleteDCSBIOSBinding(knobObject.Switch, knobObject.ButtonState);
-                        textBox.Bill.DCSBIOSBinding = null;
+                        textBox.Bill.EditSingleKeyPress();
                     }
                     else if (textBox.Bill.ContainsKeySequence())
                     {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
+                        textBox.Bill.EditKeySequence();
                     }
-                    else if (textBox.Bill.ContainsSingleKey())
+                    else if (textBox.Bill.ContainsDCSBIOS())
                     {
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
+                        textBox.Bill.EditDCSBIOS();
                     }
-                    if (textBox.Bill.ContainsBIPLink())
+                    else if (textBox.Bill.ContainsOSCommand())
                     {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-                        textBox.Bill.BipLink.BIPLights.Clear();
-                        textBox.Background = Brushes.White;
-                        UpdateBipLinkBindings(textBox);
+                        textBox.Bill.EditOSCommand();
                     }
                 }
-                TextBoxLogPZ69.Focus();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
 
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
@@ -856,53 +781,6 @@ namespace DCSFlightpanels.Radios.Emulators
         }
 
 
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                fortsätt här
-                var textBox = ((PZ69FullTextBox)sender);
-
-                //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    return;
-                }
-                var hashSetOfKeysPressed = new HashSet<string>();
-
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
-                e.Handled = true;
-
-                if (keyCode > 0)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
-                }
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                }
-                var result = "";
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-                result = Common.RemoveRControl(result);
-                textBox.Text = result;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -926,7 +804,7 @@ namespace DCSFlightpanels.Radios.Emulators
                 }
                 if (!_allowedKeys.Contains(e.Key))
                 {
-                    //Only figures and persion allowed
+                    //Only digits and period allowed
                     e.Handled = true;
                     return;
                 }
@@ -2287,286 +2165,6 @@ namespace DCSFlightpanels.Radios.Emulators
                 Common.ShowErrorMessageBox(ex);
             }
             throw new Exception("Failed to find TextBox for Radiopanel knob " + knob);
-        }
-
-        private void MenuContextEditDCSBIOSControlTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-                DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
-                }
-                else
-                {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
-                }
-                dcsBIOSInputControlsWindow.ShowDialog();
-                if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
-                {
-                    var dcsBiosInputs = dcsBIOSInputControlsWindow.DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSInputControlsWindow.Description) ? "DCS-BIOS" : dcsBIOSInputControlsWindow.Description;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    textBox.Text = text;
-                    textBox.Bill.Consume(dcsBiosInputs);
-                    UpdateDCSBIOSBinding(textBox);
-                }
-                TextBoxLogPZ69.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void ContextMenuItemEditDCSBIOS_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            try
-            {
-                var contextMenu = (ContextMenu)sender;
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.IsEnabled = !Common.KeyEmulationOnly();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuItemAddNullKey_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                textBox.Bill.Clear();
-                var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
-                if (string.IsNullOrEmpty(vkNull))
-                {
-                    return;
-                }
-                var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
-                textBox.Bill.KeyPress = keyPress;
-                textBox.Bill.KeyPress.Information = "VK_NULL";
-                textBox.Text = vkNull;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-                OSCommandWindow osCommandWindow;
-                if (textBox.Bill.ContainsOSCommand())
-                {
-                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
-                }
-                else
-                {
-                    osCommandWindow = new OSCommandWindow();
-                }
-                osCommandWindow.ShowDialog();
-                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    if (!osCommandWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-                    var osCommand = osCommandWindow.OSCommandObject;
-                    textBox.Bill.OSCommandObject = osCommand;
-                    textBox.Text = osCommand.Name;
-                    UpdateOSCommandBindingsPZ55(textBox);
-                }
-                TextBoxLogPZ69.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void CheckContextMenuItems(KeyPressLength keyPressLength, ContextMenu contextMenu)
-        {
-            try
-            {
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.IsChecked = false;
-                }
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    if (item.Name == "contextMenuItemKeepPressed" && keyPressLength == KeyPressLength.Indefinite)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThirtyTwoMilliSec" && keyPressLength == KeyPressLength.ThirtyTwoMilliSec)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFiftyMilliSec" && keyPressLength == KeyPressLength.FiftyMilliSec)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemHalfSecond" && keyPressLength == KeyPressLength.HalfSecond)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSecond" && keyPressLength == KeyPressLength.Second)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSecondAndHalf" && keyPressLength == KeyPressLength.SecondAndHalf)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTwoSeconds" && keyPressLength == KeyPressLength.TwoSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThreeSeconds" && keyPressLength == KeyPressLength.ThreeSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFourSeconds" && keyPressLength == KeyPressLength.FourSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFiveSecs" && keyPressLength == KeyPressLength.FiveSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFifteenSecs" && keyPressLength == KeyPressLength.FifteenSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTenSecs" && keyPressLength == KeyPressLength.TenSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTwentySecs" && keyPressLength == KeyPressLength.TwentySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThirtySecs" && keyPressLength == KeyPressLength.ThirtySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFortySecs" && keyPressLength == KeyPressLength.FortySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSixtySecs" && keyPressLength == KeyPressLength.SixtySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void SetKeyPressLength(PZ69FullTextBox textBox, MenuItem contextMenuItem)
-        {
-            try
-            {
-                if (contextMenuItem.Name == "contextMenuItemKeepPressed")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtyTwoMilliSec);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemHalfSecond")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSecond")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSecondAndHalf")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTwoSeconds")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThreeSeconds")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFourSeconds")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFiveSecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTenSecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFifteenSecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTwentySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThirtySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFortySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSixtySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
         }
 
         private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)

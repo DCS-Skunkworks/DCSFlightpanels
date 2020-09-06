@@ -9,7 +9,7 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.DCSBIOSBindings
 {
-
+    [Serializable]
     public class DCSBIOSActionBindingPZ69 : DCSBIOSActionBindingBase
     {
         /*

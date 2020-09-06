@@ -6,6 +6,7 @@ using ClassLibraryCommon;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public abstract class BIPLink
     {
         /*

@@ -181,7 +181,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (!textBox.Equals(TextBoxLogPZ70))
                 {
-                    textBox.Bill = new BillPZ70(GlobalHandler, this, _multiPanelPZ70, textBox, (PZ70SwitchOnOff)GetSwitch(textBox));
+                    textBox.Bill = new BillPZ70(GlobalHandler, this, _multiPanelPZ70, textBox);
                 }
             }
             _textBoxBillsSet = true;
@@ -713,7 +713,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var textBox = (PZ55TextBox)sender;
+                var textBox = (PZ70TextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {

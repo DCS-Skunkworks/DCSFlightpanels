@@ -13,14 +13,12 @@ namespace DCSFlightpanels.Bills
 {
     public class BillPZ70 : BillBaseInput
     {
-        private PZ70SwitchOnOff _key;
         private DCSBIOSActionBindingPZ70 _dcsbiosBindingPZ70;
         private BIPLinkPZ70 _bipLinkPZ70;
 
-        public BillPZ70(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, PZ70SwitchOnOff key) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPZ70(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            TextBox = textBox;
-            _key = key;
+            SetContextMenu();
         }
 
         protected override void ClearDCSBIOSFromBill()
@@ -104,7 +102,7 @@ namespace DCSFlightpanels.Bills
 
         public override bool IsEmpty()
         {
-            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return (_bipLinkPZ70 == null || _bipLinkPZ70.BIPLights.Count == 0) && (_dcsbiosBindingPZ70?.DCSBIOSInputs == null || _dcsbiosBindingPZ70.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -115,12 +113,6 @@ namespace DCSFlightpanels.Bills
             }
 
             _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
-        }
-
-        public PZ70SwitchOnOff Key
-        {
-            get => _key;
-            set => _key = value;
         }
 
         public override void Clear()

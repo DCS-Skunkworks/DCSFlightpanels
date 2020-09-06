@@ -14,12 +14,9 @@ namespace DCSFlightpanels.Bills
     {
         private DCSBIOSActionBindingPZ55 _dcsbiosBindingPZ55;
         private BIPLinkPZ55 _bipLinkPZ55;
-        public PZ55SwitchOnOff Key { get; set; }
 
-        public BillPZ55(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, PZ55SwitchOnOff key) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPZ55(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            TextBox = textBox;
-            Key = key;
             SetContextMenu();
         }
 
@@ -105,7 +102,7 @@ namespace DCSFlightpanels.Bills
 
         public override bool IsEmpty()
         {
-            return (_bipLinkPZ55 == null || _bipLinkPZ55.BIPLights.Count == 0) && (_dcsbiosBindingPZ55?.DCSBIOSInputs == null || _dcsbiosBindingPZ55.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return (_bipLinkPZ55 == null || _bipLinkPZ55.BIPLights.Count == 0) && (_dcsbiosBindingPZ55?.DCSBIOSInputs == null || _dcsbiosBindingPZ55.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class KeyBindingPZ55 : KeyBinding
     {
         /*

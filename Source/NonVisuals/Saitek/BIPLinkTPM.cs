@@ -4,6 +4,7 @@ using System.Text;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class BIPLinkTPM : BIPLink
     {
         private TPMPanelSwitches _tpmSwitch;

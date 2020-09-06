@@ -242,7 +242,7 @@ namespace DCSFlightpanels.PanelUserControls
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox, (TPMSwitchOnOff) GetSwitch(textBox));
+                textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox);
             }
 
             _textBoxBillsSet = true;

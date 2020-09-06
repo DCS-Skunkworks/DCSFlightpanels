@@ -15,9 +15,9 @@ namespace DCSFlightpanels.Bills
         private BIPLinkPZ69 _bipLinkPZ69;
         private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
 
-        public BillPZ69Full(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, PZ69SwitchOnOff key) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillPZ69Full(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            TextBox = textBox;
+            SetContextMenu();
         }
 
         protected override void ClearDCSBIOSFromBill()
@@ -112,7 +112,7 @@ namespace DCSFlightpanels.Bills
 
         public override bool IsEmpty()
         {
-            return (_bipLinkPZ69 == null || _bipLinkPZ69.BIPLights.Count == 0) && (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return (_bipLinkPZ69 == null || _bipLinkPZ69.BIPLights.Count == 0) && (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
         
         public override void Clear()

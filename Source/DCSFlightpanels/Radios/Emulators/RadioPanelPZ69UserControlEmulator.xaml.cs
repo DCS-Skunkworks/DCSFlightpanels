@@ -169,7 +169,7 @@ namespace DCSFlightpanels.Radios.Emulators
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ69(GlobalHandler, this, _radioPanelPZ69, textBox, (PZ69SwitchOnOff)GetSwitch(textBox));
+                textBox.Bill = new BillPZ69(GlobalHandler, this, _radioPanelPZ69, textBox);
             }
             _textBoxBills = true;
         }

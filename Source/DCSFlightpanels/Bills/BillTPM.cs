@@ -12,14 +12,13 @@ namespace DCSFlightpanels.Bills
 {
     public class BillTPM : BillBaseInput
     {
-        private TPMSwitchOnOff _key;
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
 
         
-        public BillTPM(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox, TPMSwitchOnOff key) : base(globalHandler, textBox, panelUI, saitekPanel)
+        public BillTPM(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            _key = key;
+            SetContextMenu();
         }
 
         public override bool ContainsDCSBIOS()
@@ -34,7 +33,7 @@ namespace DCSFlightpanels.Bills
 
         public override bool IsEmpty()
         {
-            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -117,12 +116,6 @@ namespace DCSFlightpanels.Bills
                     TextBox.Text = "";
                 }
             }
-        }
-
-        public TPMSwitchOnOff Key
-        {
-            get => _key;
-            set => _key = value;
         }
 
         public override void Clear()

@@ -10,30 +10,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlEmulatorFull_OnLoaded">
     <UserControl.Resources>
-        <ContextMenu x:Key="TextBoxContextMenuPZ69" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged">
-            <MenuItem Header="Keep pressed" Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThirtyTwoMilliSec" x:Name="contextMenuItemThirtyTwoMilliSec" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FiftyMilliSec" Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="HalfSecond" Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="Second" Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="SecondAndHalf" Name="contextMenuItemSecondAndHalf" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TwoSeconds" Name="contextMenuItemTwoSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThreeSeconds" Name="contextMenuItemThreeSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FourSeconds" Name="contextMenuItemFourSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FiveSecs" Name="contextMenuItemFiveSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TenSecs" Name="contextMenuItemTenSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FifteenSecs" Name="contextMenuItemFifteenSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TwentySecs" Name="contextMenuItemTwentySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThirtySecs" Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FortySecs" Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="SixtySecs" Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="Add VK_NULL key" Name="contextMenuItemAddNullKey" Click="MenuItemAddNullKey_OnClick"/>
-            <MenuItem Header="Edit OS command" Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
-            <MenuItem Header="Edit sequence" Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
-            <MenuItem Header="Edit DCS-BIOS Control" Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick" ContextMenuOpening="ContextMenuItemEditDCSBIOS_OnContextMenuOpening"/>
-            <MenuItem Header="Edit B.I.P." Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick"/>
-        </ContextMenu>
-
         <Style TargetType="Image">
             <Setter Property="Height" Value="76"/>
             <Setter Property="Stretch" Value="None"/>
@@ -119,35 +95,35 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper COM 1" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper COM 2" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom2" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom2" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper NAV 1" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper NAV 2" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav2" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav2" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper ADF" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperADF" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperADF" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper DME" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperDME" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperDME" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper XPDR" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperXPDR" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperXPDR" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Lower COM 1" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower COM 2" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom2" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom2" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower NAV 1" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower NAV 2" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav2" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav2" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower ADF" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerADF" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerADF" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower DME" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerDME" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerDME" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower XPDR" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerXPDR" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerXPDR" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -239,31 +215,31 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper Large Dial +" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargePlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargePlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper Small Dial +" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallPlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallPlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper ACT/STBY On" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower Large Dial +" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargePlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargePlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower Small Dial +" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallPlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallPlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower ACT/STBY On" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper Large Dial -" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargeMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargeMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper Small Dial -" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Upper ACT/STBY Off" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOff" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOff" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower Large Dial -" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargeMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargeMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower Small Dial -" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                     <Label Content="Lower ACT/STBY Off" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOff" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOff" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
                 </StackPanel>
             </Grid>
         </GroupBox>

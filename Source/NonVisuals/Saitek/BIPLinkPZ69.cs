@@ -6,6 +6,7 @@ using NonVisuals.Radios.Knobs;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class BIPLinkPZ69 : BIPLink
     {
         /*

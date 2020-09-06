@@ -382,7 +382,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox, (PZ55SwitchOnOff)GetSwitch(textBox));
+                textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox);
             }
             _textBoxBillsSet = true;
         }
