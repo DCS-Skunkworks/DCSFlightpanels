@@ -14,7 +14,7 @@ namespace NonVisuals.Saitek
         private HashSet<DCSBIOSActionBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ70>();
         private HashSet<DCSBIOSOutputBindingPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingPZ70>();
         private HashSet<KeyBindingPZ70> _knobBindings = new HashSet<KeyBindingPZ70>();
-        private HashSet<OSCommandBindingPZ70> _osCommandBindings = new HashSet<OSCommandBindingPZ70>();
+        private List<OSCommandBindingPZ70> _osCommandBindings = new List<OSCommandBindingPZ70>();
         private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
         private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
 
@@ -576,9 +576,15 @@ namespace NonVisuals.Saitek
                     }
                 }
             }
-            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.OSCOMMAND)
+            for (int i = 0; i < _osCommandBindings.Count; i++)
             {
-                _osCommandBindings.Clear();
+                var osCommand = _osCommandBindings[i];
+
+                if (osCommand.DialPosition == _pz70DialPosition && osCommand.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
+                {
+                    _osCommandBindings[i] = null;
+                    found = true;
+                }
             }
 
             if (found)
@@ -1252,7 +1258,7 @@ namespace NonVisuals.Saitek
             set => _knobBindings = value;
         }
 
-        public HashSet<OSCommandBindingPZ70> OSCommandHashSet
+        public List<OSCommandBindingPZ70> OSCommandHashSet
         {
             get => _osCommandBindings;
             set => _osCommandBindings = value;

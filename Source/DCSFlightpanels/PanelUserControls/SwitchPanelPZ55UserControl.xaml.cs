@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -1309,24 +1308,5 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-
-
-
-        
-
-        private bool Paste()
-        {
-            var iDataObject = Clipboard.GetDataObject();
-            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
-            {
-                return false;
-            }
-
-            var result = false;
-            var copyPackage = (CopyPackage)iDataObject.GetData("NonVisuals.CopyPackage");
-            
-
-            return result;
-        }
     }
 }

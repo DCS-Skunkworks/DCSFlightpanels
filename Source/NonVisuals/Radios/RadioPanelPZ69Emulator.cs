@@ -21,7 +21,7 @@ namespace NonVisuals.Radios
          */
         //private HashSet<DCSBIOSBindingPZ69> _dcsBiosBindings = new HashSet<DCSBIOSBindingPZ69>();
         private HashSet<KeyBindingPZ69> _keyBindings = new HashSet<KeyBindingPZ69>();
-        private HashSet<OSCommandBindingPZ69Emulator> _osCommandBindings = new HashSet<OSCommandBindingPZ69Emulator>();
+        private List<OSCommandBindingPZ69Emulator> _osCommandBindings = new List<OSCommandBindingPZ69Emulator>();
         private readonly HashSet<RadioPanelPZ69DisplayValue> _displayValues = new HashSet<RadioPanelPZ69DisplayValue>();
         private readonly HashSet<BIPLinkPZ69> _bipLinks = new HashSet<BIPLinkPZ69>();
         private readonly byte[] _oldRadioPanelValue = { 0, 0, 0 };
@@ -177,7 +177,7 @@ namespace NonVisuals.Radios
 
         public HashSet<KeyBindingPZ69> KeyBindingsHashSet => _keyBindings;
 
-        public HashSet<OSCommandBindingPZ69Emulator> OSCommandHashSet
+        public List<OSCommandBindingPZ69Emulator> OSCommandHashSet
         {
             get => _osCommandBindings;
             set => _osCommandBindings = value;
@@ -567,6 +567,16 @@ namespace NonVisuals.Radios
                     }
                     found = true;
                     break;
+                }
+            }
+            for (int i = 0; i < _osCommandBindings.Count; i++)
+            {
+                var osCommand = _osCommandBindings[i];
+
+                if (osCommand.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
+                {
+                    _osCommandBindings[i] = null;
+                    found = true;
                 }
             }
 

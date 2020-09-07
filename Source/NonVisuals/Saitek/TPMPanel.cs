@@ -19,7 +19,7 @@ namespace NonVisuals.Saitek
          */
         private HashSet<DCSBIOSActionBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
-        private HashSet<OSCommandBindingTPM> _osCommandBindings = new HashSet<OSCommandBindingTPM>();
+        private List<OSCommandBindingTPM> _osCommandBindings = new List<OSCommandBindingTPM>();
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
@@ -190,7 +190,7 @@ namespace NonVisuals.Saitek
             set => _keyBindings = value;
         }
 
-        public HashSet<OSCommandBindingTPM> OSCommandHashSet
+        public List<OSCommandBindingTPM> OSCommandHashSet
         {
             get => _osCommandBindings;
             set => _osCommandBindings = value;
@@ -507,6 +507,16 @@ namespace NonVisuals.Saitek
                         bipLink.BIPLights.Clear();
                         found = true;
                     }
+                }
+            }
+            for (int i = 0; i < _osCommandBindings.Count; i++)
+            {
+                var osCommand = _osCommandBindings[i];
+
+                if (osCommand.TPMSwitch == tpmPanelSwitchOnOff.Switch && osCommand.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
+                {
+                    _osCommandBindings[i] = null;
+                    found = true;
                 }
             }
 

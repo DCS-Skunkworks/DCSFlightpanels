@@ -29,11 +29,12 @@ namespace DCSFlightpanels.Bills
         public abstract bool ContainsDCSBIOS();
         public abstract bool ContainsBIPLink();
         public abstract bool IsEmpty();
+        public abstract bool IsEmptyNoCareBipLink();
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
         public abstract void Clear();
         protected abstract void ClearDCSBIOSFromBill();
 
-        
+
 
         protected BillBaseInput(IGlobalHandler globalHandler, TextBox textBox, IPanelUI panelUI, SaitekPanel saitekPanel)
         {
@@ -61,6 +62,58 @@ namespace DCSFlightpanels.Bills
             set;
         }
 
+        private void Paste()
+        {
+            var iDataObject = Clipboard.GetDataObject();
+            if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
+            {
+                return;
+            }
+
+            var copyPackage = (CopyPackage)iDataObject.GetData("NonVisuals.CopyPackage");
+            if (copyPackage?.Content == null || copyPackage.SourceName == TextBox.Name)
+            {
+                return;
+            }
+
+            switch (copyPackage.ContentType)
+            {
+                case CopyContentType.KeySequence:
+                    {
+                        if (IsEmptyNoCareBipLink())
+                        {
+
+                        }
+                        break;
+                    }
+                case CopyContentType.DCSBIOS:
+                    {
+                        if (IsEmptyNoCareBipLink())
+                        {
+
+                        }
+                        break;
+                    }
+                case CopyContentType.BIPLink:
+                    {
+                        if (!ContainsBIPLink())
+                        {
+
+                        }
+                        break;
+                    }
+                case CopyContentType.OSCommand:
+                    {
+                        if (IsEmptyNoCareBipLink())
+                        {
+
+                        }
+                        break;
+                    }
+            }
+
+        }
+
         protected void SetContextMenu()
         {
             _contextMenu = new ContextMenuPanelTextBox(Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly));
@@ -80,7 +133,7 @@ namespace DCSFlightpanels.Bills
             _contextMenu.ContextMenuItemPaste.Click += MenuItemPaste_OnClick;
 
             _contextMenu.ContextMenuItemDeleteSettings.Click += MenuItemDeleteSettings_OnClick;
-
+            _contextMenu.TextBox = TextBox;
             TextBox.ContextMenu = _contextMenu;
             TextBox.ContextMenuOpening += TextBoxContextMenuOpening;
         }
@@ -190,6 +243,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
+                Paste();
             }
             catch (Exception ex)
             {
@@ -266,30 +320,30 @@ namespace DCSFlightpanels.Bills
             switch (copyContentType)
             {
                 case CopyContentType.KeySequence:
-                {
-                    content = GetKeySequence();
-                    break;
-                }
+                    {
+                        content = GetKeySequence();
+                        break;
+                    }
                 case CopyContentType.DCSBIOS:
-                {
-                    content = DCSBIOSBinding;
-                    break;
-                }
+                    {
+                        content = DCSBIOSBinding;
+                        break;
+                    }
                 case CopyContentType.BIPLink:
-                {
-                    content = BipLink;
-                    break;
-                }
+                    {
+                        content = BipLink;
+                        break;
+                    }
                 case CopyContentType.OSCommand:
-                {
-                    content = OSCommandObject;
-                    break;
-                }
+                    {
+                        content = OSCommandObject;
+                        break;
+                    }
             }
 
             if (content != null)
             {
-                var copyPackage = new CopyPackage {ContentType = copyContentType, Content = content, SourceName = TextBox.Name};
+                var copyPackage = new CopyPackage { ContentType = copyContentType, Content = content, SourceName = TextBox.Name };
                 Clipboard.SetDataObject(copyPackage);
             }
         }
@@ -413,7 +467,7 @@ namespace DCSFlightpanels.Bills
                 }
             }
         }
-        
+
         public void EditBIPLink(GamingPanelEnum panelType)
         {
             BIPLinkWindow bipLinkWindow;
@@ -564,7 +618,7 @@ namespace DCSFlightpanels.Bills
             TextBox.Text = "";
             UpdateKeyBindingSequencedKeyStrokes();
         }
-        
+
         public void DeleteDCSBIOS()
         {
             TextBox.Text = "";

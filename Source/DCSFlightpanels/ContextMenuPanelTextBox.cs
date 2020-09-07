@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mime;
 using System.Windows;
 using System.Windows.Controls;
 using ClassLibraryCommon;
@@ -23,7 +24,7 @@ namespace DCSFlightpanels
         private MenuItem _contextMenuItemDeleteSettings;
 
 
-
+        private TextBox _textBox;
         private bool _keyboardEmulationOnly;
 
         public ContextMenuPanelTextBox(bool keyboardEmulationOnly)
@@ -72,6 +73,10 @@ namespace DCSFlightpanels
                 if (iDataObject != null && iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
                 {
                     copyPackage = (CopyPackage)iDataObject.GetData("NonVisuals.CopyPackage");
+                    if (copyPackage?.SourceName == TextBox.Name)
+                    {
+                        copyPackage = null;
+                    }
                 }
 
                 if (isEmpty)
@@ -184,17 +189,17 @@ namespace DCSFlightpanels
                             }
                         }
                     }
+                }
 
-                    if (containsOSCommand)
+                if (containsOSCommand)
+                {
+                    _contextMenuItemEditOSCommand.Visibility = Visibility.Visible;
+                    _contextMenuItemCopy.Visibility = Visibility.Visible;
+                    _contextMenuItemCopyOSCommand.Visibility = Visibility.Visible;
+
+                    if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
-                        _contextMenuItemEditOSCommand.Visibility = Visibility.Visible;
-                        _contextMenuItemCopy.Visibility = Visibility.Visible;
-                        _contextMenuItemCopyOSCommand.Visibility = Visibility.Visible;
-
-                        if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
-                        {
-                            _contextMenuItemPaste.Visibility = Visibility.Visible;
-                        }
+                        _contextMenuItemPaste.Visibility = Visibility.Visible;
                     }
                 }
 
@@ -279,6 +284,12 @@ namespace DCSFlightpanels
         {
             get => _contextMenuItemDeleteSettings;
             set => _contextMenuItemDeleteSettings = value;
+        }
+
+        public TextBox TextBox
+        {
+            get => _textBox;
+            set => _textBox = value;
         }
 
         public void HideAll()

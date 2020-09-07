@@ -36,6 +36,11 @@ namespace DCSFlightpanels.Bills
             return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
+        public override bool IsEmptyNoCareBipLink()
+        {
+            return (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
+        }
+
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
         {
             if (_dcsbiosBindingTPM == null)
