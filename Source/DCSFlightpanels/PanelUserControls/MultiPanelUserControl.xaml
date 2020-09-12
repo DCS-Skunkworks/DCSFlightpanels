@@ -12,30 +12,6 @@
         <ContextMenu x:Key="ButtonLcdContextMenu" IsVisibleChanged="ButtonLcdContextMenu_OnIsVisibleChanged" x:Shared="False">
             <MenuItem Header="Delete" x:Name="contextMenuItemDeleteBinding" Click="ButtonLcdMenuItemDeleteBinding_OnClick"/>
         </ContextMenu>
-        <ContextMenu x:Key="TextBoxContextMenuPZ70" IsVisibleChanged="TextBoxContextMenuIsVisibleChanged">
-            
-            <MenuItem Header="Keep pressed" x:Name="contextMenuItemKeepPressed" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThirtyTwoMilliSec" x:Name="contextMenuItemThirtyTwoMilliSec" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FiftyMilliSec" x:Name="contextMenuItemFiftyMilliSec" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="HalfSecond" x:Name="contextMenuItemHalfSecond" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="Second" x:Name="contextMenuItemSecond" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="SecondAndHalf" x:Name="contextMenuItemSecondAndHalf" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TwoSeconds" x:Name="contextMenuItemTwoSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThreeSeconds" x:Name="contextMenuItemThreeSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FourSeconds" x:Name="contextMenuItemFourSeconds" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FiveSecs" x:Name="contextMenuItemFiveSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TenSecs" x:Name="contextMenuItemTenSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FifteenSecs" x:Name="contextMenuItemFifteenSecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="TwentySecs" x:Name="contextMenuItemTwentySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="ThirtySecs" x:Name="contextMenuItemThirtySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="FortySecs" x:Name="contextMenuItemFortySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="SixtySecs" x:Name="contextMenuItemSixtySecs" Click="TextBoxContextMenuClick"/>
-            <MenuItem Header="Add VK_NULL key" x:Name="contextMenuItemAddNullKey" Click="MenuItemAddNullKey_OnClick"/>
-            <MenuItem Header="Edit OS command" x:Name="contextMenuItemEditOSCommand" Click="MenuContextEditOSCommandTextBoxClick_OnClick"/>
-            <MenuItem Header="Edit sequence" x:Name="contextMenuItemEditSequence" Click="MenuContextEditTextBoxClick"/>
-            <MenuItem Header="Edit DCS-BIOS Control" x:Name="contextMenuItemEditDCSBIOS" Click="MenuContextEditDCSBIOSControlTextBoxClick" ContextMenuOpening="ContextMenuItemEditDCSBIOS_OnContextMenuOpening"/>
-            <MenuItem Header="Edit B.I.P." x:Name="contextMenuItemEditBIP" Click="MenuContextEditBipTextBoxClick"/>
-        </ContextMenu>
     </UserControl.Resources>
     <Grid>
         <Grid x:Name="PZ70Grid" >

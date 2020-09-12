@@ -905,16 +905,16 @@ namespace NonVisuals.Radios
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
         {
-            var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
+            var pz69SwitchOnOff = (PZ69SwitchOnOff)panelSwitchOnOff;
             var controlListPZ69 = (ControlListPZ69) controlList;
 
             var found = false;
-            var pz69DialPosition = GetDial(radioPanelPZ69KeyOnOff.Switch);
+            var pz69DialPosition = GetDial(pz69SwitchOnOff.Switch);
             if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.KEYS)
             {
                 foreach (var keyBinding in _keyBindings)
                 {
-                    if (keyBinding.RadioPanelPZ69Key == radioPanelPZ69KeyOnOff.Switch && keyBinding.WhenTurnedOn == radioPanelPZ69KeyOnOff.ButtonState && keyBinding.DialPosition == pz69DialPosition)
+                    if (keyBinding.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && keyBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState && keyBinding.DialPosition == pz69DialPosition)
                     {
                         keyBinding.OSKeyPress = null;
                     }
@@ -926,7 +926,7 @@ namespace NonVisuals.Radios
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
                 {
-                    if (dcsBiosBinding.RadioPanelPZ69Knob == radioPanelPZ69KeyOnOff.Switch && dcsBiosBinding.WhenTurnedOn == radioPanelPZ69KeyOnOff.ButtonState && dcsBiosBinding.DialPosition == pz69DialPosition)
+                    if (dcsBiosBinding.RadioPanelPZ69Knob == pz69SwitchOnOff.Switch && dcsBiosBinding.WhenTurnedOn == pz69SwitchOnOff.ButtonState && dcsBiosBinding.DialPosition == pz69DialPosition)
                     {
                         dcsBiosBinding.DCSBIOSInputs.Clear();
                     }
@@ -938,7 +938,7 @@ namespace NonVisuals.Radios
             {
                 foreach (var bipLink in _bipLinks)
                 {
-                    if (bipLink.RadioPanelPZ69Knob == radioPanelPZ69KeyOnOff.Switch && bipLink.WhenTurnedOn == radioPanelPZ69KeyOnOff.ButtonState)
+                    if (bipLink.RadioPanelPZ69Knob == pz69SwitchOnOff.Switch && bipLink.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
                     {
                         bipLink.BIPLights.Clear();
                     }
@@ -946,14 +946,23 @@ namespace NonVisuals.Radios
                     break;
                 }
             }
-            for (int i = 0; i < _osCommandBindings.Count; i++)
+            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.OSCOMMAND)
             {
-                var osCommand = _osCommandBindings[i];
-
-                if (osCommand.RadioPanelPZ69Key == radioPanelPZ69KeyOnOff.Switch && osCommand.WhenTurnedOn == radioPanelPZ69KeyOnOff.ButtonState)
+                OSCommandBindingPZ69FullEmulator osCommandBindingPZ69 = null;
+                for (int i = 0; i < _osCommandBindings.Count; i++)
                 {
-                    _osCommandBindings[i] = null;
-                    found = true;
+                    var osCommand = _osCommandBindings[i];
+
+                    if (osCommand.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
+                    {
+                        osCommandBindingPZ69 = _osCommandBindings[i];
+                        found = true;
+                    }
+                }
+
+                if (osCommandBindingPZ69 != null)
+                {
+                    _osCommandBindings.Remove(osCommandBindingPZ69);
                 }
             }
 

@@ -569,17 +569,25 @@ namespace NonVisuals.Radios
                     break;
                 }
             }
-            for (int i = 0; i < _osCommandBindings.Count; i++)
+            if (controlListPZ69 == ControlListPZ69.ALL || controlListPZ69 == ControlListPZ69.OSCOMMAND)
             {
-                var osCommand = _osCommandBindings[i];
-
-                if (osCommand.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
+                OSCommandBindingPZ69Emulator osCommandBindingPZ69 = null;
+                for (int i = 0; i < _osCommandBindings.Count; i++)
                 {
-                    _osCommandBindings[i] = null;
-                    found = true;
+                    var osCommand = _osCommandBindings[i];
+
+                    if (osCommand.RadioPanelPZ69Key == pz69SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz69SwitchOnOff.ButtonState)
+                    {
+                        osCommandBindingPZ69 = _osCommandBindings[i];
+                        found = true;
+                    }
+                }
+
+                if (osCommandBindingPZ69 != null)
+                {
+                    _osCommandBindings.Remove(osCommandBindingPZ69);
                 }
             }
-
             if (found)
             {
                 SetIsDirty();

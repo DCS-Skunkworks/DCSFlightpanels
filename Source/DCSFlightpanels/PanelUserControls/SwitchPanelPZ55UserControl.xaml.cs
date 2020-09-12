@@ -32,6 +32,9 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly Image[] _imageArrayRight = new Image[4];
         private bool _textBoxBillsSet;
 
+
+
+
         public SwitchPanelPZ55UserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
@@ -361,7 +364,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
-                textBox.Bill.Clear();
+                textBox.Bill.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -377,13 +380,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
             foreach (var textBox in Common.FindVisualChildren<PZ55TextBox>(this))
             {
-                if (textBox == TextBoxLogPZ55)
+                if (textBox.Bill != null || textBox == TextBoxLogPZ55)
                 {
                     continue;
                 }
                 textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox);
+                _textBoxBillsSet = true;
             }
-            _textBoxBillsSet = true;
         }
 
         private void SetContextMenuClickHandlers()
@@ -392,10 +395,13 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED"))
+                    if (image.ContextMenu == null && image.Name.StartsWith("ImagePZ55LED"))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
-                        if (image.ContextMenu != null) image.ContextMenu.Tag = image.Name;
+                        if (image.ContextMenu != null)
+                        {
+                            image.ContextMenu.Tag = image.Name;
+                        }
                     }
                 }
             }
@@ -878,7 +884,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                foreach (var osCommand in _switchPanelPZ55.OSCommandHashSet)
+                foreach (var osCommand in _switchPanelPZ55.OSCommandList)
                 {
                     var textBox = (PZ55TextBox)GetTextBox(osCommand.SwitchPanelPZ55Key, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)

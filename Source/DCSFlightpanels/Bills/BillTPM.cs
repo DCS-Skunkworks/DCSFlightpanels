@@ -123,7 +123,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public override void Clear()
+        public override void ClearAll()
         {
             _dcsbiosBindingTPM = null;
             _bipLinkTPM = null;

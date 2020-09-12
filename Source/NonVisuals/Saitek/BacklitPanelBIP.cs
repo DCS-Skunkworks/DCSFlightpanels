@@ -6,7 +6,7 @@ using DCS_BIOS;
 
 namespace NonVisuals.Saitek
 {
-
+    [Serializable]
     public enum BIPLedPositionEnum
     {
         Position_1_1,

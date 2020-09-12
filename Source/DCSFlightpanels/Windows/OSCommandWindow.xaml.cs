@@ -54,31 +54,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                ButtonOk.IsEnabled = TextBoxCommand.Text.Length > 6;
+                ButtonOk.IsEnabled = IsDirty && !string.IsNullOrEmpty(TextBoxCommand.Text);
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-        private void TextBoxCommand_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (!_isLoaded)
-                {
-                    return;
-                }
-                SetFormState();
-                SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
+        
         private void ButtonTest_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -125,33 +108,16 @@ namespace DCSFlightpanels.Windows
             set => _osCommand = value;
         }
 
-        private void TextBoxArguments_OnKeyUp(object sender, KeyEventArgs e)
+        private void TextBox_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
-                if (!_isLoaded)
+                if (!_isLoaded || e.Key == Key.Escape)
                 {
                     return;
                 }
-                SetFormState();
                 SetIsDirty();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void TextBoxName_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (!_isLoaded)
-                {
-                    return;
-                }
                 SetFormState();
-                SetIsDirty();
             }
             catch (Exception ex)
             {
@@ -169,6 +135,16 @@ namespace DCSFlightpanels.Windows
         public void StateSaved()
         {
             _isDirty = false;
+        }
+
+        private void OSCommandWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!ButtonOk.IsEnabled && e.Key == Key.Escape)
+            {
+                DialogResult = false;
+                e.Handled = true;
+                Close();
+            }
         }
     }
 }

@@ -120,7 +120,7 @@ namespace DCSFlightpanels.Bills
             return (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Clear()
+        public override void ClearAll()
         {
             _bipLinkPZ69 = null;
             KeyPress = null;

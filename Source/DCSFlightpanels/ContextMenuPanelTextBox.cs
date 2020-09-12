@@ -25,7 +25,7 @@ namespace DCSFlightpanels
 
 
         private TextBox _textBox;
-        private bool _keyboardEmulationOnly;
+        private readonly bool _keyboardEmulationOnly;
 
         public ContextMenuPanelTextBox(bool keyboardEmulationOnly)
         {

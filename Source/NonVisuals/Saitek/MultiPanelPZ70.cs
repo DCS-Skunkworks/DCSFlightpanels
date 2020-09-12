@@ -576,14 +576,23 @@ namespace NonVisuals.Saitek
                     }
                 }
             }
-            for (int i = 0; i < _osCommandBindings.Count; i++)
+            if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.OSCOMMAND)
             {
-                var osCommand = _osCommandBindings[i];
-
-                if (osCommand.DialPosition == _pz70DialPosition && osCommand.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
+                OSCommandBindingPZ70 osCommandBindingPZ70 = null;
+                for (int i = 0; i < _osCommandBindings.Count; i++)
                 {
-                    _osCommandBindings[i] = null;
-                    found = true;
+                    var osCommand = _osCommandBindings[i];
+
+                    if (osCommand.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
+                    {
+                        osCommandBindingPZ70 = _osCommandBindings[i];
+                        found = true;
+                    }
+                }
+
+                if (osCommandBindingPZ70 != null)
+                {
+                    _osCommandBindings.Remove(osCommandBindingPZ70);
                 }
             }
 

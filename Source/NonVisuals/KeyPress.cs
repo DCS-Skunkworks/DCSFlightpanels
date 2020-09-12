@@ -13,7 +13,7 @@ namespace NonVisuals
     public class KeyPress
     {
         private SortedList<int, KeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
-        private string _information = "Key press sequence";
+        private string _description = "Key press sequence";
         [NonSerialized]private Thread _executingThread;
 
         /*
@@ -37,7 +37,7 @@ namespace NonVisuals
                 {
                     result = (result * 397) ^ tuple.Value.GetHash();
                 }
-                result = (result * 397) ^ (string.IsNullOrWhiteSpace(_information) ? 0 : _information.GetHashCode());
+                result = (result * 397) ^ (string.IsNullOrWhiteSpace(_description) ? 0 : _description.GetHashCode());
                 return result;
             }
         }
@@ -48,18 +48,18 @@ namespace NonVisuals
 
         public KeyPress() { }
 
-        public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string information = null)
+        public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string description = null)
         {
             var keyPressInfo = new KeyPressInfo();
             keyPressInfo.VirtualKeyCodes = SplitStringKeyCodes(keycodes);
             _sortedKeyPressInfoList.Add(GetNewKeyValue(), keyPressInfo);
             keyPressInfo.LengthOfKeyPress = keyPressLength;
-            _information = information;
+            _description = description;
         }
 
         public KeyPress(string information, SortedList<int, KeyPressInfo> sortedList)
         {
-            _information = information;
+            _description = information;
             _sortedKeyPressInfoList = sortedList;
         }
 
@@ -318,9 +318,9 @@ namespace NonVisuals
         {
             if (IsMultiSequenced())
             {
-                if (!string.IsNullOrWhiteSpace(Information))
+                if (!string.IsNullOrWhiteSpace(Description))
                 {
-                    return Information;
+                    return Description;
                 }
                 return "key press sequence";
             }
@@ -422,8 +422,8 @@ namespace NonVisuals
                     //INFORMATION=^DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
                     var temp = dataString.Remove(0, 13);
                     //DENNA ÄR BLABLABLA^[FiftyMilliSec,VK_A,FiftyMilliSec][FiftyMilliSec,VK_B,FiftyMilliSec][FiftyMilliSec,VK_C,FiftyMilliSec][FiftyMilliSec,VK_D,FiftyMilliSec]
-                    _information = temp.Substring(0, temp.IndexOf("^", StringComparison.InvariantCultureIgnoreCase));
-                    dataString = temp.Remove(0, _information.Length + 1);
+                    _description = temp.Substring(0, temp.IndexOf("^", StringComparison.InvariantCultureIgnoreCase));
+                    dataString = temp.Remove(0, _description.Length + 1);
                 }
                 var array = dataString.Split(new[] { "][" }, StringSplitOptions.RemoveEmptyEntries);
                 //[FiftyMilliSec,VK_A,FiftyMilliSec]
@@ -490,10 +490,10 @@ namespace NonVisuals
             return result;
         }
 
-        public string Information
+        public string Description
         {
-            get => _information;
-            set => _information = value;
+            get => _description;
+            set => _description = value;
         }
 
         public bool IsEmpty()
@@ -516,9 +516,9 @@ namespace NonVisuals
             }
             var result = new StringBuilder();
             result.Append("OSKeyPress{");
-            if (!string.IsNullOrEmpty(_information))
+            if (!string.IsNullOrEmpty(_description))
             {
-                result.Append("INFORMATION=^" + _information + "^");
+                result.Append("INFORMATION=^" + _description + "^");
             }
             for (var i = 0; i < _sortedKeyPressInfoList.Count; i++)
             {

@@ -18,6 +18,7 @@ namespace DCSFlightpanels.Windows
 
         private readonly SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
         private bool _isDirty;
+        private bool _formLoaded = false;
 
         public KeySequenceWindow()
         {
@@ -25,16 +26,28 @@ namespace DCSFlightpanels.Windows
             SetFormState();
         }
 
-        public KeySequenceWindow(string information, SortedList<int, KeyPressInfo> sortedList)
+        public KeySequenceWindow(string description, SortedList<int, KeyPressInfo> sortedList)
         {
             InitializeComponent();
             _sortedList = sortedList;
-            TextBoxInformation.Text = information;
+            TextBoxDescription.Text = description;
             DataGridSequences.DataContext = _sortedList;
             DataGridSequences.ItemsSource = _sortedList;
             DataGridSequences.Items.Refresh();
 
             SetFormState();
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _formLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         public bool IsDirty
@@ -52,14 +65,14 @@ namespace DCSFlightpanels.Windows
             _isDirty = false;
         }
 
-        public SortedList<int, KeyPressInfo> GetSequence
+        public SortedList<int, KeyPressInfo> KeySequence
         {
             get { return _sortedList; }
         }
 
-        public string GetInformation
+        public string Description
         {
-            get { return TextBoxInformation.Text; }
+            get { return TextBoxDescription.Text; }
         }
 
         private void SetFormState()
@@ -70,17 +83,6 @@ namespace DCSFlightpanels.Windows
             ButtonEdit.IsEnabled = DataGridSequences.SelectedItems.Count == 1;
             ButtonDelete.IsEnabled = DataGridSequences.SelectedItems.Count > 0;
             ButtonOk.IsEnabled = IsDirty;
-        }
-
-        private void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
         private void ButtonAddClick(object sender, RoutedEventArgs e)
@@ -265,11 +267,16 @@ namespace DCSFlightpanels.Windows
             SetIsDirty();
         }
 
-        private void TextBoxInformationTextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxDescriptionTextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
+                if (!_formLoaded)
+                {
+                    return;
+                }
                 SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {

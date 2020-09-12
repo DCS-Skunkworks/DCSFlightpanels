@@ -30,6 +30,8 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
 
+
+
         public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
         {
             InitializeComponent();
@@ -423,10 +425,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
             foreach (var image in Common.FindVisualChildren<Image>(this))
             {
-                if (image.Name.StartsWith("ImagePosition"))
+                if (image.ContextMenu == null && image.Name.StartsWith("ImagePosition"))
                 {
                     image.ContextMenu = (ContextMenu)Resources["BIPLEDContextMenu"];
-                    image.ContextMenu.Tag = image.Name;
+                    if (image.ContextMenu != null)
+                    {
+                        image.ContextMenu.Tag = image.Name;
+                    }
                 }
             }
         }

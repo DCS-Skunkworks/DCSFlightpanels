@@ -250,7 +250,7 @@ namespace NonVisuals.Saitek
             set => _bipLinks = value;
         }
 
-        public List<OSCommandBindingPZ55> OSCommandHashSet
+        public List<OSCommandBindingPZ55> OSCommandList
         {
             get => _osCommandBindings;
             set => _osCommandBindings = value;
@@ -671,15 +671,21 @@ namespace NonVisuals.Saitek
             
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.OSCOMMANDS)
             {
+                OSCommandBindingPZ55 osCommandBindingPZ55  = null;
                 for (int i = 0; i < _osCommandBindings.Count; i++)
                 {
                     var osCommand = _osCommandBindings[i];
 
                     if (osCommand.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
-                        _osCommandBindings[i] = null;
+                        osCommandBindingPZ55 = _osCommandBindings[i];
                         found = true;
                     }
+                }
+
+                if (osCommandBindingPZ55 != null)
+                {
+                    _osCommandBindings.Remove(osCommandBindingPZ55);
                 }
             }
 

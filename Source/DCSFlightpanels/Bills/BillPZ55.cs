@@ -121,7 +121,7 @@ namespace DCSFlightpanels.Bills
 
 
         
-        public override void Clear()
+        public override void ClearAll()
         {
             _dcsbiosBindingPZ55 = null;
             _bipLinkPZ55 = null;

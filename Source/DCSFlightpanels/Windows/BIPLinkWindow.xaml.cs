@@ -244,6 +244,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _isDirty = true;
+                SetFormState();
+
             }
             catch (Exception ex)
             {

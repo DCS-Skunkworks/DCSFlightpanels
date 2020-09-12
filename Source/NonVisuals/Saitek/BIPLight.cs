@@ -3,7 +3,6 @@ using System.Text;
 
 namespace NonVisuals.Saitek
 {
-
     public enum BIPLightDelays 
     {
         Zeroms = 0,
@@ -26,6 +25,7 @@ namespace NonVisuals.Saitek
         TenSec = 10000,
     }
 
+    [Serializable]
     public abstract class PanelSwitchBIPLightBinding
     {
         public abstract void ImportSettings(string settings);
@@ -38,6 +38,7 @@ namespace NonVisuals.Saitek
         public string[] Separator { get; } = { "|" };
     }
 
+    [Serializable]
     public class BIPLight : PanelSwitchBIPLightBinding
     {
         public override void ImportSettings(string settings)

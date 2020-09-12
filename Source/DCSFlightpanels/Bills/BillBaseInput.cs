@@ -31,7 +31,7 @@ namespace DCSFlightpanels.Bills
         public abstract bool IsEmpty();
         public abstract bool IsEmptyNoCareBipLink();
         public abstract void Consume(List<DCSBIOSInput> dcsBiosInputs);
-        public abstract void Clear();
+        public abstract void ClearAll();
         protected abstract void ClearDCSBIOSFromBill();
 
 
@@ -62,6 +62,47 @@ namespace DCSFlightpanels.Bills
             set;
         }
 
+        private void CopySetting(CopyContentType copyContentType)
+        {
+            object content = null;
+            string description = null;
+
+            switch (copyContentType)
+            {
+                case CopyContentType.KeySequence:
+                {
+                    description = GetKeySequenceDescription();
+                    content = GetKeySequence();
+                    break;
+                }
+                case CopyContentType.DCSBIOS:
+                {
+                    description = DCSBIOSBinding.Description;
+                    content = DCSBIOSBinding.DCSBIOSInputs;
+                    break;
+                }
+                case CopyContentType.BIPLink:
+                {
+                    description = BipLink.Description;
+                    content = BipLink;
+                    break;
+                }
+                case CopyContentType.OSCommand:
+                {
+                    description = OSCommand.Command;
+                    content = OSCommandObject;
+                    break;
+                }
+            }
+
+            if (content != null)
+            {
+                var copyPackage = new CopyPackage { ContentType = copyContentType, Content = content, SourceName = TextBox.Name };
+                copyPackage.Description = description;
+                Clipboard.SetDataObject(copyPackage);
+            }
+        }
+
         private void Paste()
         {
             var iDataObject = Clipboard.GetDataObject();
@@ -82,7 +123,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (IsEmptyNoCareBipLink())
                         {
-
+                            AddKeySequence(copyPackage.Description, (SortedList<int, KeyPressInfo>)copyPackage.Content);
                         }
                         break;
                     }
@@ -90,7 +131,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (IsEmptyNoCareBipLink())
                         {
-
+                            AddDCSBIOS(copyPackage.Description, (List<DCSBIOSInput>)copyPackage.Content);
                         }
                         break;
                     }
@@ -98,7 +139,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (!ContainsBIPLink())
                         {
-
+                            AddBipLink((BIPLink) copyPackage.Content);
                         }
                         break;
                     }
@@ -106,7 +147,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (IsEmptyNoCareBipLink())
                         {
-
+                            AddOSCommand((OSCommand) copyPackage.Content);
                         }
                         break;
                     }
@@ -118,7 +159,6 @@ namespace DCSFlightpanels.Bills
         {
             _contextMenu = new ContextMenuPanelTextBox(Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly));
 
-            _contextMenu.IsVisibleChanged += TextBoxContextMenuIsVisibleChanged;
             _contextMenu.ContextMenuItemAddNullKey.Click += MenuItemAddNullKey_OnClick;
             _contextMenu.ContextMenuItemEditSequence.Click += MenuItemEditSequence_OnClick;
             _contextMenu.ContextMenuItemEditDCSBIOS.Click += MenuItemEditDCSBIOS_OnClick;
@@ -137,6 +177,7 @@ namespace DCSFlightpanels.Bills
             TextBox.ContextMenu = _contextMenu;
             TextBox.ContextMenuOpening += TextBoxContextMenuOpening;
         }
+
         private void MenuItemAddNullKey_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -229,16 +270,6 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        private void TextBoxContextMenuIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
         private void MenuItemPaste_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -313,44 +344,10 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        private void CopySetting(CopyContentType copyContentType)
-        {
-            object content = null;
-
-            switch (copyContentType)
-            {
-                case CopyContentType.KeySequence:
-                    {
-                        content = GetKeySequence();
-                        break;
-                    }
-                case CopyContentType.DCSBIOS:
-                    {
-                        content = DCSBIOSBinding;
-                        break;
-                    }
-                case CopyContentType.BIPLink:
-                    {
-                        content = BipLink;
-                        break;
-                    }
-                case CopyContentType.OSCommand:
-                    {
-                        content = OSCommandObject;
-                        break;
-                    }
-            }
-
-            if (content != null)
-            {
-                var copyPackage = new CopyPackage { ContentType = copyContentType, Content = content, SourceName = TextBox.Name };
-                Clipboard.SetDataObject(copyPackage);
-            }
-        }
 
         public void AddVKNULL()
         {
-            Clear();
+            ClearAll();
             var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
             if (string.IsNullOrEmpty(vkNull))
             {
@@ -358,7 +355,7 @@ namespace DCSFlightpanels.Bills
             }
             var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
             KeyPress = keyPress;
-            KeyPress.Information = "VK_NULL";
+            KeyPress.Description = "VK_NULL";
             TextBox.Text = vkNull;
             UpdateKeyBindingSimpleKeyStrokes();
         }
@@ -385,13 +382,25 @@ namespace DCSFlightpanels.Bills
                     return;
                 }
 
-                Clear();
                 var keyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
                 KeyPress = keyPress;
-                KeyPress.Information = "";
+                KeyPress.Description = "";
                 TextBox.Text = keyPressReadingWindow.VirtualKeyCodesAsString;
                 UpdateKeyBindingSimpleKeyStrokes();
             }
+        }
+
+        public void AddKeySequence(string description, SortedList<int, KeyPressInfo> keySequence)
+        {
+
+            var keyPress = new KeyPress("Key press sequence", keySequence);
+            KeyPress = keyPress;
+            KeyPress.Description = description;
+            if (!string.IsNullOrEmpty(description))
+            {
+                TextBox.Text = description;
+            }
+            UpdateKeyBindingSequencedKeyStrokes();
         }
 
         public void EditKeySequence()
@@ -408,33 +417,36 @@ namespace DCSFlightpanels.Bills
                     //User made no changes
                     return;
                 }
-                var sequenceList = keySequenceWindow.GetSequence;
+                var sequenceList = keySequenceWindow.KeySequence;
                 if (sequenceList.Count == 0)
                 {
                     DeleteSequence();
                 }
                 else if (sequenceList.Count > 1)
                 {
-                    var keyPress = new KeyPress("Key press sequence", sequenceList);
-                    KeyPress = keyPress;
-                    KeyPress.Information = keySequenceWindow.GetInformation;
-                    if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
-                    {
-                        TextBox.Text = keySequenceWindow.GetInformation;
-                    }
-                    UpdateKeyBindingSequencedKeyStrokes();
+                    AddKeySequence(keySequenceWindow.Description, keySequenceWindow.KeySequence);
                 }
                 else if (sequenceList.Count == 1)
                 {
                     //If only one press was created treat it as a simple keypress
-                    Clear();
                     var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                     KeyPress = keyPress;
-                    KeyPress.Information = keySequenceWindow.GetInformation;
+                    KeyPress.Description = keySequenceWindow.Description;
                     TextBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                     UpdateKeyBindingSimpleKeyStrokes();
                 }
             }
+        }
+
+        public void AddDCSBIOS(string description, List<DCSBIOSInput> dcsBiosInputs)
+        {
+
+            var text = string.IsNullOrWhiteSpace(description) ? "DCS-BIOS" : description;
+            //1 appropriate text to textbox
+            //2 update bindings
+            TextBox.Text = text;
+            Consume(dcsBiosInputs);
+            UpdateDCSBIOSBinding();
         }
 
         public void EditDCSBIOS()
@@ -458,14 +470,15 @@ namespace DCSFlightpanels.Bills
                 }
                 else
                 {
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSInputControlsWindow.Description) ? "DCS-BIOS" : dcsBIOSInputControlsWindow.Description;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    TextBox.Text = text;
-                    Consume(dcsBiosInputs);
-                    UpdateDCSBIOSBinding();
+                    AddDCSBIOS(dcsBIOSInputControlsWindow.Description, dcsBiosInputs);
                 }
             }
+        }
+
+        public void AddBipLink(BIPLink bipLink)
+        {
+            BipLink = bipLink;
+            UpdateBIPLinkBindings();
         }
 
         public void EditBIPLink(GamingPanelEnum panelType)
@@ -514,12 +527,17 @@ namespace DCSFlightpanels.Bills
                 }
                 else
                 {
-                    BipLink = tmpBIPLink;
-                    UpdateBIPLinkBindings();
+                    AddBipLink(tmpBIPLink);
                 }
             }
         }
 
+        public void AddOSCommand(OSCommand osCommand)
+        {
+            OSCommandObject = osCommand;
+            TextBox.Text = osCommand.Name;
+            UpdateOSCommandBindings();
+        }
 
         public void EditOSCommand()
         {
@@ -533,10 +551,7 @@ namespace DCSFlightpanels.Bills
                     //User made no changes
                     return;
                 }
-                var osCommand = osCommandWindow.OSCommandObject;
-                OSCommandObject = osCommand;
-                TextBox.Text = osCommand.Name;
-                UpdateOSCommandBindings();
+                AddOSCommand(osCommandWindow.OSCommandObject);
             }
         }
 
@@ -567,7 +582,10 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateSequencedKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, _keyPress.KeySequence);
+                if (_keyPress != null)
+                {
+                    _saitekPanel.AddOrUpdateSequencedKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, _keyPress.KeySequence);
+                }
             }
             catch (Exception ex)
             {
@@ -591,7 +609,10 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
-                _saitekPanel.AddOrUpdateBIPLinkBinding(_panelUI.GetSwitch(TextBox), BipLink);
+                if (BipLink != null)
+                {
+                    _saitekPanel.AddOrUpdateBIPLinkBinding(_panelUI.GetSwitch(TextBox), BipLink);
+                }
             }
             catch (Exception ex)
             {
@@ -614,7 +635,7 @@ namespace DCSFlightpanels.Bills
 
         public void DeleteSequence()
         {
-            KeyPress.KeySequence.Clear();
+            KeyPress?.KeySequence?.Clear();
             TextBox.Text = "";
             UpdateKeyBindingSequencedKeyStrokes();
         }
@@ -628,8 +649,8 @@ namespace DCSFlightpanels.Bills
 
         public void DeleteBIPLink()
         {
-            BipLink.BIPLights.Clear();
-            TextBox.Background = System.Windows.Media.Brushes.White;
+            BipLink?.BIPLights?.Clear();
+            TextBox.Background = Brushes.White;
             UpdateBIPLinkBindings();
         }
 
@@ -677,6 +698,11 @@ namespace DCSFlightpanels.Bills
         public KeyPressInfo GetKeyPress()
         {
             return _keyPress.KeySequence[0];
+        }
+
+        public string GetKeySequenceDescription()
+        {
+            return _keyPress.Description;
         }
 
         public SortedList<int, KeyPressInfo> GetKeySequence()

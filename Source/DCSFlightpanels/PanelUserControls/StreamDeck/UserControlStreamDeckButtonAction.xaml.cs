@@ -483,15 +483,15 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         //User made no changes
                         return;
                     }
-                    var sequenceList = keySequenceWindow.GetSequence;
+                    var sequenceList = keySequenceWindow.KeySequence;
                     if (sequenceList.Count > 1)
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
                         textBox.Bill.KeyPress = keyPress;
-                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
+                        if (!string.IsNullOrEmpty(keySequenceWindow.Description))
                         {
-                            textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
-                            textBox.Text = keySequenceWindow.GetInformation;
+                            textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
+                            textBox.Text = keySequenceWindow.Description;
                         }
                     }
                     else
@@ -500,7 +500,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         textBox.Bill.Clear();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                     }
                     SetIsDirty();

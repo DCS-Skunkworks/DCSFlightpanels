@@ -81,7 +81,7 @@ namespace DCSFlightpanels.Bills
             return (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
-        public override void Clear()
+        public override void ClearAll()
         {
             _bipLinkPZ69 = null;
             KeyPress = null;

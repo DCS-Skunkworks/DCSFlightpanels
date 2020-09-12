@@ -5,7 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Set command to execute" Height="300" Width="600"  Loaded="OSCommandWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Set command to execute" 
+        Height="300" 
+        Width="600"  
+        Loaded="OSCommandWindow_OnLoaded" 
+        WindowStartupLocation="CenterScreen"  
+        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
+        KeyDown="OSCommandWindow_OnKeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*" />
@@ -13,11 +19,11 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="5,5,5,0">
             <Label Content="Descriptive name:" Margin="5,0,0,0"/>
-            <TextBox Name="TextBoxName" KeyUp="TextBoxName_OnKeyUp"/>
+            <TextBox Name="TextBoxName" KeyUp="TextBox_OnKeyUp"/>
             <Label Content="File (e.g. (bat/cmd/ps1):" Margin="5,0,0,0"/>
-            <TextBox Name="TextBoxCommand" KeyUp="TextBoxCommand_OnKeyUp"/>
+            <TextBox Name="TextBoxCommand" KeyUp="TextBox_OnKeyUp"/>
             <Label Content="Arguments (parameters for the file):" Margin="5,0,0,0"/>
-            <TextBox Name="TextBoxArguments" KeyUp="TextBoxArguments_OnKeyUp"/>
+            <TextBox Name="TextBoxArguments" KeyUp="TextBox_OnKeyUp"/>
             <Label Content="Test Result:" Margin="5,0,0,0"/>
             <TextBox Name="TextBoxResult" IsEnabled="False"/>
         </StackPanel>

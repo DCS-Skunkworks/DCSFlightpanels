@@ -509,14 +509,24 @@ namespace NonVisuals.Saitek
                     }
                 }
             }
-            for (int i = 0; i < _osCommandBindings.Count; i++)
-            {
-                var osCommand = _osCommandBindings[i];
 
-                if (osCommand.TPMSwitch == tpmPanelSwitchOnOff.Switch && osCommand.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
+            if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.OSCOMMAND)
+            {
+                OSCommandBindingTPM osCommandBindingTPM = null;
+                for (int i = 0; i < _osCommandBindings.Count; i++)
                 {
-                    _osCommandBindings[i] = null;
-                    found = true;
+                    var osCommand = _osCommandBindings[i];
+
+                    if (osCommand.TPMSwitch == tpmPanelSwitchOnOff.Switch && osCommand.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
+                    {
+                        osCommandBindingTPM = _osCommandBindings[i];
+                        found = true;
+                    }
+                }
+
+                if (osCommandBindingTPM != null)
+                {
+                    _osCommandBindings.Remove(osCommandBindingTPM);
                 }
             }
 

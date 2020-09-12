@@ -120,7 +120,7 @@ namespace DCSFlightpanels.Bills
             _dcsbiosBindingPZ70.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public override void Clear()
+        public override void ClearAll()
         {
             _dcsbiosBindingPZ70 = null;
             _bipLinkPZ70 = null;

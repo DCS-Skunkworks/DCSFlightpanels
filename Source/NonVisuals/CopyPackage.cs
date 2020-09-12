@@ -9,7 +9,7 @@ namespace NonVisuals
         private string _sourceName = "";
         private object _content;
         private CopyContentType _copyContentType;
-
+        private string _description = "";
 
         public string SourceName
         {
@@ -27,6 +27,12 @@ namespace NonVisuals
         {
             get => _copyContentType;
             set => _copyContentType = value;
+        }
+
+        public string Description
+        {
+            get => _description;
+            set => _description = value;
         }
     }
 }

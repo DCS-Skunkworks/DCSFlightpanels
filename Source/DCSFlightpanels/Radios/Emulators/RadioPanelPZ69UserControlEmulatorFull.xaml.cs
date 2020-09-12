@@ -34,6 +34,7 @@ namespace DCSFlightpanels.Radios.Emulators
         private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
         private const string UPPER_TEXT = "Upper Dial Profile : ";
         private const string LOWER_TEXT = "Lower Dial Profile : ";
+        private bool _formLoaded = false;
 
         public RadioPanelPZ69UserControlEmulatorFull(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -55,12 +56,17 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
+                if (_formLoaded)
+                {
+                    return;
+                }
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
                 SetTextBoxBills();
                 SetButtonBills();
                 SetContextMenuClickHandlers();
                 _userControlLoaded = true;
                 ShowGraphicConfiguration();
+                _formLoaded = true;
             }
             catch (Exception ex)
             {
@@ -221,26 +227,26 @@ namespace DCSFlightpanels.Radios.Emulators
                         //User made no changes
                         return;
                     }
-                    var sequenceList = keySequenceWindow.GetSequence;
+                    var sequenceList = keySequenceWindow.KeySequence;
                     textBox.ToolTip = null;
                     if (sequenceList.Count > 1)
                     {
                         var keyPress = new KeyPress("Key press sequence", sequenceList);
                         textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
-                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
+                        textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
+                        if (!string.IsNullOrEmpty(keySequenceWindow.Description))
                         {
-                            textBox.Text = keySequenceWindow.GetInformation;
+                            textBox.Text = keySequenceWindow.Description;
                         }
                         UpdateKeyBindingProfileSequencedKeyStrokesPZ69(textBox);
                     }
                     else
                     {
                         //If only one press was created treat it as a simple keypress
-                        textBox.Bill.Clear();
+                        textBox.Bill.ClearAll();
                         var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
                         textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
+                        textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
                         textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
                         UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
                     }
@@ -483,7 +489,7 @@ namespace DCSFlightpanels.Radios.Emulators
                 {
                     continue;
                 }
-                textBox.Bill.Clear();
+                textBox.Bill.ClearAll();
             }
             if (clearAlsoProfile)
             {
@@ -508,7 +514,7 @@ namespace DCSFlightpanels.Radios.Emulators
             {
                 if (!textBox.Name.EndsWith("Numbers"))
                 {
-                    textBox.Bill.Clear();
+                    textBox.Bill.ClearAll();
                 }
             }
         }
