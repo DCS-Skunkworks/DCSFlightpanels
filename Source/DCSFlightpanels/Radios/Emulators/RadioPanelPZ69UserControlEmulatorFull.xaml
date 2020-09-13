@@ -87,7 +87,7 @@
         </Canvas>
 
 
-        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Background="Gainsboro">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -207,7 +207,7 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Background="Gainsboro">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -257,7 +257,9 @@
                 </StackPanel>
             </GroupBox>
 
-            <customControls:PZ69FullTextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" Height="100" HorizontalAlignment="Stretch" Margin="10,0,0,0"/>
+            
+                <customControls:PZ69FullTextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" Height="80" TextWrapping="Wrap" Margin="10,0,0,0"/>
+            
         </StackPanel>
     </Grid>
 </panelUserControls:UserControlBase>

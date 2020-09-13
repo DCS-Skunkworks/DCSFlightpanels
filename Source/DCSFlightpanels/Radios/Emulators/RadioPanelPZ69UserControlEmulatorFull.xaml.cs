@@ -34,7 +34,6 @@ namespace DCSFlightpanels.Radios.Emulators
         private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
         private const string UPPER_TEXT = "Upper Dial Profile : ";
         private const string LOWER_TEXT = "Lower Dial Profile : ";
-        private bool _formLoaded = false;
 
         public RadioPanelPZ69UserControlEmulatorFull(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -56,17 +55,11 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                if (_formLoaded)
-                {
-                    return;
-                }
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
                 SetTextBoxBills();
                 SetButtonBills();
-                SetContextMenuClickHandlers();
                 _userControlLoaded = true;
                 ShowGraphicConfiguration();
-                _formLoaded = true;
             }
             catch (Exception ex)
             {
@@ -77,8 +70,6 @@ namespace DCSFlightpanels.Radios.Emulators
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
             var now = DateTime.Now.Ticks;
-            RemoveContextMenuClickHandlers();
-            SetContextMenuClickHandlers();
         }
 
         public override GamingPanel GetGamingPanel()
@@ -167,8 +158,6 @@ namespace DCSFlightpanels.Radios.Emulators
             }
         }
 
-
-
         private void SetTextBoxBills()
         {
             if (_textBoxBillsSet || !Common.FindVisualChildren<PZ69FullTextBox>(this).Any())
@@ -177,7 +166,7 @@ namespace DCSFlightpanels.Radios.Emulators
             }
             foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogPZ69))
+                if (textBox.Bill != null || textBox.Equals(TextBoxLogPZ69))
                 {
                     continue;
                 }
@@ -198,165 +187,7 @@ namespace DCSFlightpanels.Radios.Emulators
             ButtonLowerRightLcd.Bill = new BillPZ69Button(ButtonLowerRightLcd);
             _buttonBillsSet = true;
         }
-
-        private void MenuContextEditTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-                KeySequenceWindow keySequenceWindow;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    keySequenceWindow = new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence());
-                }
-                else
-                {
-                    keySequenceWindow = new KeySequenceWindow();
-                }
-                keySequenceWindow.ShowDialog();
-                if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    //If the user added only a single key stroke combo then let's not treat this as a sequence
-                    if (!keySequenceWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-                    var sequenceList = keySequenceWindow.KeySequence;
-                    textBox.ToolTip = null;
-                    if (sequenceList.Count > 1)
-                    {
-                        var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
-                        if (!string.IsNullOrEmpty(keySequenceWindow.Description))
-                        {
-                            textBox.Text = keySequenceWindow.Description;
-                        }
-                        UpdateKeyBindingProfileSequencedKeyStrokesPZ69(textBox);
-                    }
-                    else
-                    {
-                        //If only one press was created treat it as a simple keypress
-                        textBox.Bill.ClearAll();
-                        var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Description = keySequenceWindow.Description;
-                        textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-                    }
-                }
-                TextBoxLogPZ69.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-
-        private void MenuContextEditBipTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-                BIPLinkWindow bipLinkWindow;
-                if (textBox.Bill.ContainsBIPLink())
-                {
-                    var bipLink = textBox.Bill.BipLink;
-                    bipLinkWindow = new BIPLinkWindow(bipLink);
-                }
-                else
-                {
-                    var bipLink = new BIPLinkPZ69();
-                    bipLinkWindow = new BIPLinkWindow(bipLink);
-                }
-                bipLinkWindow.ShowDialog();
-                if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null && bipLinkWindow.BIPLink.BIPLights.Count > 0)
-                {
-                    textBox.Bill.BipLink = (BIPLinkPZ69)bipLinkWindow.BIPLink;
-                    UpdateBipLinkBindings(textBox);
-                }
-
-                TextBoxLogPZ69.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void UpdateKeyBindingProfileSequencedKeyStrokesPZ69(PZ69FullTextBox textBox)
-        {
-            try
-            {
-                _radioPanelPZ69.AddOrUpdateSequencedKeyBinding(GetSwitch(textBox), textBox.Text, textBox.Bill.GetKeySequence());
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void UpdateBipLinkBindings(PZ69FullTextBox textBox)
-        {
-            try
-            {
-                _radioPanelPZ69.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BipLink);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void UpdateKeyBindingProfileSimpleKeyStrokes(PZ69FullTextBox textBox)
-        {
-            try
-            {
-                KeyPressLength keyPressLength;
-                if (!textBox.Bill.ContainsKeyPress() || textBox.Bill.KeyPress.KeySequence.Count == 0)
-                {
-                    keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
-                }
-                else
-                {
-                    keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
-                }
-
-                _radioPanelPZ69.AddOrUpdateSingleKeyBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void UpdateOSCommandBindingsPZ55(PZ69FullTextBox textBox)
-        {
-            try
-            {
-                _radioPanelPZ69.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void UpdateDisplayValues(PZ69FullTextBox textBox)
         {
             try
@@ -520,187 +351,6 @@ namespace DCSFlightpanels.Radios.Emulators
         }
 
 
-        private void RemoveContextMenuClickHandlers()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ69))
-                {
-                    textBox.ContextMenu = null;
-                    textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
-                }
-            }
-        }
-
-        private void SetContextMenuClickHandlers()
-        {
-            foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogPZ69) && !textBox.Name.EndsWith("Numbers"))
-                {
-                    var contextMenu = (ContextMenu)Resources["TextBoxContextMenuPZ69"];
-                    if (!BipFactory.HasBips())
-                    {
-                        MenuItem bipMenuItem = null;
-                        foreach (var item in contextMenu.Items)
-                        {
-                            if (((MenuItem)item).Name == "contextMenuItemEditBIP")
-                            {
-                                bipMenuItem = (MenuItem)item;
-                                break;
-                            }
-                        }
-                        if (bipMenuItem != null)
-                        {
-                            contextMenu.Items.Remove(bipMenuItem);
-                        }
-                    }
-                    textBox.ContextMenu = contextMenu;
-                    textBox.ContextMenuOpening += TextBoxContextMenuOpening;
-                }
-            }
-        }
-
-        private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ69FullTextBox)sender;
-                var contextMenu = textBox.ContextMenu;
-                if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
-                {
-                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        item.Visibility = Visibility.Collapsed;
-                    }
-                    return;
-                }
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.Visibility = Visibility.Collapsed;
-                }
-
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsKeySequence())
-                {
-                    // 2) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.IsEmpty())
-                {
-                    // 4) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("AddNullKey"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsSingleKey())
-                {
-                    // 5) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
-                        {
-                            if (item.Name.Contains("EditBIP"))
-                            {
-                                if (BipFactory.HasBips())
-                                {
-                                    item.Visibility = Visibility.Visible;
-                                }
-                            }
-                            else
-                            {
-                                item.Visibility = Visibility.Visible;
-                            }
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsBIPLink())
-                {
-                    // 3) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!Common.KeyEmulationOnly() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsOSCommand())
-                {
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
         private PZ69FullTextBox GetTextBoxInFocus()
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
@@ -717,7 +367,7 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                var textBox = (PZ55TextBox)sender;
+                var textBox = (PZ69FullTextBox)sender;
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
