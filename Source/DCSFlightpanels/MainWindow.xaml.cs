@@ -19,6 +19,7 @@ using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
 using DCSFlightpanels.Radios.Emulators;
+using DCSFlightpanels.Radios.PreProgrammed;
 using DCSFlightpanels.Shared;
 using DCSFlightpanels.Windows;
 using Microsoft.Win32;
