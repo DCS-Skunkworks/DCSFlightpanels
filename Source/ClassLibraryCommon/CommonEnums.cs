@@ -80,6 +80,8 @@ namespace ClassLibraryCommon
         AH6J,
         [Description("AJS37")]
         AJS37,
+        [Description("Alphajet")]
+        Alphajet,
         [Description("AV8BNA")]
         AV8BNA,
         [Description("Bf-109K-4")]
