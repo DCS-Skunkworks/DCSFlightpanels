@@ -373,39 +373,7 @@ namespace DCSFlightpanels.Radios.Emulators
             }
             return null;
         }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ69TextBox)sender;
-
-                if (e.ChangedButton == MouseButton.Left)
-                {
-                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
-                    {
-                        textBox.Bill.EditSingleKeyPress();
-                    }
-                    else if (textBox.Bill.ContainsKeySequence())
-                    {
-                        textBox.Bill.EditKeySequence();
-                    }
-                    else if (textBox.Bill.ContainsDCSBIOS())
-                    {
-                        textBox.Bill.EditDCSBIOS();
-                    }
-                    else if (textBox.Bill.ContainsOSCommand())
-                    {
-                        textBox.Bill.EditOSCommand();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+        
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
             try
@@ -421,31 +389,6 @@ namespace DCSFlightpanels.Radios.Emulators
             }
         }
 
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ((PZ69TextBox)sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            var textBox = (PZ69TextBox)sender;
-            if (textBox.Bill.ContainsBIPLink())
-            {
-                ((PZ69TextBox)sender).Background = Brushes.Bisque;
-            }
-            else
-            {
-                ((PZ69TextBox)sender).Background = Brushes.White;
-            }
-        }
 
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -484,129 +427,13 @@ namespace DCSFlightpanels.Radios.Emulators
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void TextBoxTextChangedNumbers(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void TextBoxNumbers_OnKeyUp(object sender, KeyEventArgs e)
         {
             try
             {
                 var textBox = (PZ69TextBox)sender;
                 UpdateDisplayValues(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxMouseDoubleClickNumbers(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ69TextBox)sender;
-                var radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperCOM1;
-                var radioDisplay = RadioPanelPZ69Display.UpperActive;
-
-                if (e.ChangedButton == MouseButton.Left)
-                {
-                    if (textBox.Name.Contains("Upper"))
-                    {
-                        if (textBox.Name.Contains("Com1"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperCOM1;
-                        }
-                        else if (textBox.Name.Contains("Com2"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperCOM2;
-                        }
-                        else if (textBox.Name.Contains("Nav1"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperNAV1;
-                        }
-                        else if (textBox.Name.Contains("Nav2"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperNAV2;
-                        }
-                        else if (textBox.Name.Contains("ADF"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperADF;
-                        }
-                        else if (textBox.Name.Contains("DME"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperDME;
-                        }
-                        else if (textBox.Name.Contains("XPDR"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.UpperXPDR;
-                        }
-
-                        else if (textBox.Name.Contains("Active"))
-                        {
-                            radioDisplay = RadioPanelPZ69Display.UpperActive;
-                        }
-
-                        else if (textBox.Name.Contains("Standby"))
-                        {
-                            radioDisplay = RadioPanelPZ69Display.UpperStandby;
-                        }
-                    }
-                    if (textBox.Name.Contains("Lower"))
-                    {
-                        if (textBox.Name.Contains("Com1"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerCOM1;
-                        }
-                        else if (textBox.Name.Contains("Com2"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerCOM2;
-                        }
-                        else if (textBox.Name.Contains("Nav1"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerNAV1;
-                        }
-                        else if (textBox.Name.Contains("Nav2"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerNAV2;
-                        }
-                        else if (textBox.Name.Contains("ADF"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerADF;
-                        }
-                        else if (textBox.Name.Contains("DME"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerDME;
-                        }
-                        else if (textBox.Name.Contains("XPDR"))
-                        {
-                            radioPanelKnob = RadioPanelPZ69KnobsEmulator.LowerXPDR;
-                        }
-
-                        else if (textBox.Name.Contains("Active"))
-                        {
-                            radioDisplay = RadioPanelPZ69Display.LowerActive;
-                        }
-
-                        if (textBox.Name.Contains("Standby"))
-                        {
-                            radioDisplay = RadioPanelPZ69Display.LowerStandby;
-                        }
-                    }
-
-                    _radioPanelPZ69.AddOrUpdateDisplayValue(radioPanelKnob, "-1", radioDisplay);
-                    ClearAllDisplayValues();
-                }
             }
             catch (Exception ex)
             {
@@ -621,28 +448,7 @@ namespace DCSFlightpanels.Radios.Emulators
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
          */
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                //MAKE SURE THE TAG IS SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (PZ69TextBox)sender;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    textBox.FontStyle = FontStyles.Oblique;
-                }
-                else
-                {
-                    textBox.FontStyle = FontStyles.Normal;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
+         
         private void NotifySwitchChanges(HashSet<object> switches)
         {
             try

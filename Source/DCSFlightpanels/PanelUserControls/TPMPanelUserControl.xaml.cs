@@ -261,40 +261,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             return null;
         }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                var textBox = (TPMTextBox)sender;
-
-                if (e.ChangedButton == MouseButton.Left)
-                {
-                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
-                    {
-                        textBox.Bill.EditSingleKeyPress();
-                    }
-                    else if (textBox.Bill.ContainsKeySequence())
-                    {
-                        textBox.Bill.EditKeySequence();
-                    }
-                    else if (textBox.Bill.ContainsDCSBIOS())
-                    {
-                        textBox.Bill.EditDCSBIOS();
-                    }
-                    else if (textBox.Bill.ContainsOSCommand())
-                    {
-                        textBox.Bill.EditOSCommand();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
             try
@@ -302,60 +269,6 @@ namespace DCSFlightpanels.PanelUserControls
                 if (MessageBox.Show("Clear all settings for the Switch Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     ClearAll(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ((TPMTextBox)sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = (TPMTextBox)sender;
-                if (textBox.Bill.ContainsBIPLink())
-                {
-                    ((TPMTextBox)sender).Background = Brushes.Bisque;
-                }
-                else
-                {
-                    ((TPMTextBox)sender).Background = Brushes.White;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-        
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (TPMTextBox)sender;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    textBox.FontStyle = FontStyles.Oblique;
-                }
-                else
-                {
-                    textBox.FontStyle = FontStyles.Normal;
                 }
             }
             catch (Exception ex)

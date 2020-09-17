@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -384,6 +385,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     continue;
                 }
+
                 textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox);
                 _textBoxBillsSet = true;
             }
@@ -525,39 +527,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ55TextBox)sender;
-
-                if (e.ChangedButton == MouseButton.Left)
-                {
-                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
-                    {
-                        textBox.Bill.EditSingleKeyPress();
-                    }
-                    else if (textBox.Bill.ContainsKeySequence())
-                    {
-                        textBox.Bill.EditKeySequence();
-                    }
-                    else if (textBox.Bill.ContainsDCSBIOS())
-                    {
-                        textBox.Bill.EditDCSBIOS();
-                    }
-                    else if (textBox.Bill.ContainsOSCommand())
-                    {
-                        textBox.Bill.EditOSCommand();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
             try
@@ -565,71 +534,6 @@ namespace DCSFlightpanels.PanelUserControls
                 if (MessageBox.Show("Clear all settings for the Switch Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     ClearAll(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void TextBox_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                ((TextBox)sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ((TextBox)sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ55TextBox)sender;
-                if (textBox.Bill.ContainsBIPLink())
-                {
-                    ((TextBox)sender).Background = Brushes.Bisque;
-                }
-                else
-                {
-                    ((TextBox)sender).Background = Brushes.White;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ55TextBox)sender;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    textBox.FontStyle = FontStyles.Oblique;
-                }
-                else
-                {
-                    textBox.FontStyle = FontStyles.Normal;
                 }
             }
             catch (Exception ex)

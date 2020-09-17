@@ -80,15 +80,15 @@
         <GroupBox Header="Knob Position"  FontSize="10" Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="2">
             <StackPanel MouseDown="MouseDownFocusLogTextBox">
                 <Label Content="OFF" Height="23"  FontSize="10" />
-                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobOff" IsReadOnly="True" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobOff" IsReadOnly="True" FontSize="10" />
                 <Label Content="R" Height="23"  FontSize="10" />
-                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobR" IsReadOnly="True" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobR" IsReadOnly="True" FontSize="10" />
                 <Label Content="L" Height="23"  FontSize="10" />
-                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobL" IsReadOnly="True" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobL" IsReadOnly="True" FontSize="10" />
                 <Label Content="BOTH / ALL" Height="23"  FontSize="10" />
-                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobAll" IsReadOnly="True" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobAll" IsReadOnly="True" FontSize="10" />
                 <Label Content="START" Height="23"  FontSize="10" />
-                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobStart" IsReadOnly="True" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="10" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobStart" IsReadOnly="True" FontSize="10" />
                 <!--<Button Name="ButtonTEXT" Height="30" Click="ButtonTEXT_OnClick" Visibility="Collapsed"></Button>-->
             </StackPanel>
         </GroupBox>
@@ -100,35 +100,35 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Cowl Close" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBoxCowlClose" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBoxCowlClose" FontSize="10" />
                     <Label Content="Panel On" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBoxPanelOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBoxPanelOn" FontSize="10" />
                     <Label Content="Beacon On" Height="23"  FontSize="10"  />
-                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBoxBeaconOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBoxBeaconOn" FontSize="10" />
                     <Label Content="Nav. On" Height="23" FontSize="10"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxNavOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxNavOn" />
                     <Label Content="Strobe On" Height="23"  FontSize="10"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxStrobeOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxStrobeOn" />
                     <Label Content="Taxi On" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxTaxiOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxTaxiOn" />
                     <Label Content="Landing On" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLandingOn" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLandingOn" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Cowl Open" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxCowlOpen" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxCowlOpen" />
                     <Label Content="Panel Off" FontSize="10" Height="23" />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxPanelOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxPanelOff" />
                     <Label Content="Beacon Off" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxBeaconOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxBeaconOff" />
                     <Label Content="Nav. Off" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxNavOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxNavOff" />
                     <Label Content="Strobe Off" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxStrobeOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxStrobeOff" />
                     <Label Content="Taxi Off" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxTaxiOff" MouseDoubleClick="TextBoxMouseDoubleClick" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxTaxiOff" />
                     <Label Content="Landing Off" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLandingOff" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLandingOff" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -158,36 +158,36 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Master Bat. On" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterBatOn"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterBatOn"  />
                     <Label Content="Master Alt. On" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterAltOn"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterAltOn"  />
                     <Label Content="Avionics Master On" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True"  x:Name="TextBoxAvionicsMasterOn" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown"/>
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True"  x:Name="TextBoxAvionicsMasterOn"/>
                     <Label Content="Fuel Pump On" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFuelPumpOn"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFuelPumpOn"  />
                     <Label Content="De-Ice On" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDeIceOn"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDeIceOn"  />
                     <Label Content="Pitot Heat On" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitotHeatOn"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitotHeatOn"  />
                     <Label Content="Gear Down (on)" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxGearDown"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxGearDown"  />
                     <CheckBox x:Name="CheckBoxManualLeDs" Content="Manual LEDs (via LG lever)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0" Click="CheckBoxManualLEDs_OnClick"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Master Bat. Off" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterBatOff"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown"/>
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterBatOff" />
                     <Label Content="Master Alt. Off" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterAltOff"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxMasterAltOff"  />
                     <Label Content="Avionics Master Off" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAvionicsMasterOff" LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxAvionicsMasterOff" />
                     <Label Content="Fuel Pump Off" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFuelPumpOff"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown"/>
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxFuelPumpOff" />
                     <Label Content="De-Ice Off" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDeIceOff"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxDeIceOff"  />
                     <Label Content="Pitot Heat Off" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitotHeatOff"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" MouseDown="TextBox_OnMouseDown" />
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxPitotHeatOff"  />
                     <Label Content="Gear Up (off)" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxGearUp"  LostFocus="TextBoxLostFocus" GotFocus="TextBoxGotFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged"  MouseDown="TextBox_OnMouseDown"/>
+                    <customControl:PZ55TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxGearUp" />
                 </StackPanel>
             </Grid>
         </GroupBox>

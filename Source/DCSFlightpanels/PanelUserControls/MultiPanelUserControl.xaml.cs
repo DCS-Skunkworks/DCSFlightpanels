@@ -581,26 +581,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ70TextBox)sender;
-                if (textBox.Bill.ContainsBIPLink())
-                {
-                    ((PZ70TextBox)sender).Background = Brushes.Bisque;
-                }
-                else
-                {
-                    ((PZ70TextBox)sender).Background = Brushes.White;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
         private void ShowGraphicConfiguration()
         {
             try
@@ -709,72 +689,7 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox( ex);
             }
         }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                var textBox = (PZ70TextBox)sender;
-
-                if (e.ChangedButton == MouseButton.Left)
-                {
-                    if (textBox.Bill.IsEmpty() || textBox.Bill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
-                    {
-                        textBox.Bill.EditSingleKeyPress();
-                    }
-                    else if (textBox.Bill.ContainsKeySequence())
-                    {
-                        textBox.Bill.EditKeySequence();
-                    }
-                    else if (textBox.Bill.ContainsDCSBIOS())
-                    {
-                        textBox.Bill.EditDCSBIOS();
-                    }
-                    else if (textBox.Bill.ContainsOSCommand())
-                    {
-                        textBox.Bill.EditOSCommand();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ((PZ70TextBox)sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (PZ70TextBox)sender;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    textBox.FontStyle = FontStyles.Oblique;
-                }
-                else
-                {
-                    textBox.FontStyle = FontStyles.Normal;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
+        
         private void MouseDownFocusLogTextBox(object sender, MouseButtonEventArgs e)
         {
             try
@@ -1046,17 +961,7 @@ namespace DCSFlightpanels.PanelUserControls
 
 
 
-        private void TextBox_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                ((PZ70TextBox)sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
+
 
 
         public PanelSwitchOnOff GetSwitch(TextBox textBox)

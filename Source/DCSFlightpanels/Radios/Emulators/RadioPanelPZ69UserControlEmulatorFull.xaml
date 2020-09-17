@@ -95,35 +95,35 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper COM 1" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom1" FontSize="10" />
                     <Label Content="Upper COM 2" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom2" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom2" FontSize="10" />
                     <Label Content="Upper NAV 1" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav1" FontSize="10" />
                     <Label Content="Upper NAV 2" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav2" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav2" />
                     <Label Content="Upper ADF" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperADF" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperADF" />
                     <Label Content="Upper DME" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperDME" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperDME" />
                     <Label Content="Upper XPDR" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperXPDR" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperXPDR" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Lower COM 1" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom1" FontSize="10" />
                     <Label Content="Lower COM 2" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom2" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom2" FontSize="10" />
                     <Label Content="Lower NAV 1" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav1" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav1" FontSize="10" />
                     <Label Content="Lower NAV 2" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav2" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav2" />
                     <Label Content="Lower ADF" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerADF" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerADF" />
                     <Label Content="Lower DME" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerDME" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerDME" />
                     <Label Content="Lower XPDR" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerXPDR" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerXPDR" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -135,35 +135,35 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="COM 1 Active" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="COM 2 Active" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom2ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom2ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 1 Active" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxUpperNav1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperNav1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 2 Active" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperNav2ActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperNav2ActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="ADF Active" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperADFActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperADFActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="DME Active" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperDMEActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperDMEActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="XPDR Active" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperXPDRActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperXPDRActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="COM 1 Standby" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="COM 2 Standby" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom2StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom2StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 1 Standby" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxUpperNav1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperNav1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 2 Standby" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperNav2StandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperNav2StandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="ADF Standby" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperADFStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperADFStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="DME Standby" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperDMEStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperDMEStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="XPDR Standby" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperXPDRStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperXPDRStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -175,35 +175,35 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="COM 1 Active" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="COM 2 Active" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom2ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom2ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 1 Active" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxLowerNav1ActiveNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerNav1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 2 Active" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerNav2ActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerNav2ActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="ADF Active" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerADFActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerADFActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="DME Active" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerDMEActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerDMEActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="XPDR Active" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerXPDRActiveNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerXPDRActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="COM 1 Standby" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="COM 2 Standby" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom2StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom2StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 1 Standby" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" MaxLength="6" x:Name="TextBoxLowerNav1StandbyNumbers" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerNav1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="NAV 2 Standby" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerNav2StandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerNav2StandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="ADF Standby" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerADFStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerADFStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="DME Standby" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerDMEStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerDMEStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                     <Label Content="XPDR Standby" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerXPDRStandbyNumbers" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus"  MouseDoubleClick="TextBoxMouseDoubleClickNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" TextChanged="TextBoxTextChangedNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerXPDRStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -215,31 +215,31 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper Large Dial +" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargePlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargePlus" FontSize="10" />
                     <Label Content="Upper Small Dial +" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallPlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallPlus" FontSize="10" />
                     <Label Content="Upper ACT/STBY On" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOn" FontSize="10" />
                     <Label Content="Lower Large Dial +" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargePlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargePlus" FontSize="10" />
                     <Label Content="Lower Small Dial +" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallPlus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallPlus" FontSize="10" />
                     <Label Content="Lower ACT/STBY On" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOn" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOn" FontSize="10" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper Large Dial -" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargeMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargeMinus" FontSize="10" />
                     <Label Content="Upper Small Dial -" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallMinus" FontSize="10" />
                     <Label Content="Upper ACT/STBY Off" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOff" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOff" FontSize="10" />
                     <Label Content="Lower Large Dial -" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargeMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargeMinus" FontSize="10" />
                     <Label Content="Lower Small Dial -" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallMinus" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallMinus" FontSize="10" />
                     <Label Content="Lower ACT/STBY Off" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOff" FontSize="10" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" MouseDoubleClick="TextBoxMouseDoubleClick" TextChanged="TextBoxTextChanged" />
+                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOff" FontSize="10" />
                 </StackPanel>
             </Grid>
         </GroupBox>
