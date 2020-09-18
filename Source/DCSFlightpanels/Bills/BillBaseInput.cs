@@ -103,7 +103,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        private void Paste()
+        public void Paste()
         {
             var iDataObject = Clipboard.GetDataObject();
             if (iDataObject == null || !iDataObject.GetDataPresent("NonVisuals.CopyPackage"))

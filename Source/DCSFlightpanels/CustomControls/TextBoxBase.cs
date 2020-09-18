@@ -20,6 +20,7 @@ namespace DCSFlightpanels.CustomControls
 
         protected TextBoxBaseInput()
         {
+            PreviewKeyDown += TextBox_PreviewKeyDown;
             MouseDoubleClick += TextBoxMouseDoubleClick;
             MouseDown += TextBox_OnMouseDown;
             GotFocus += TextBoxGotFocus;
@@ -27,6 +28,47 @@ namespace DCSFlightpanels.CustomControls
             TextChanged += TextBoxTextChanged;
         }
         
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                var textBox = ((TextBoxBaseInput)sender);
+                if (textBox.ContextMenu == null)
+                {
+                    return;
+                }
+
+                if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    textBox.ContextMenu.IsOpen = true;
+                    ((ContextMenuPanelTextBox)textBox.ContextMenu).SetVisibility(textBox.GetBill.IsEmpty(),
+                        textBox.GetBill.ContainsSingleKey(),
+                        textBox.GetBill.ContainsKeySequence(),
+                        textBox.GetBill.ContainsDCSBIOS(),
+                        textBox.GetBill.ContainsBIPLink(),
+                        textBox.GetBill.ContainsOSCommand());
+                    ((ContextMenuPanelTextBox)textBox.ContextMenu).OpenCopySubMenuItem();
+                }
+                else if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    var menuItemVisibilities = ((ContextMenuPanelTextBox)textBox.ContextMenu).GetVisibility(textBox.GetBill.IsEmpty(), 
+                        textBox.GetBill.ContainsSingleKey(), 
+                        textBox.GetBill.ContainsKeySequence(), 
+                        textBox.GetBill.ContainsDCSBIOS(), 
+                        textBox.GetBill.ContainsBIPLink(), 
+                        textBox.GetBill.ContainsOSCommand());
+                    if (menuItemVisibilities.PasteVisible)
+                    {
+                        textBox.GetBill.Paste();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             try
@@ -113,6 +155,7 @@ namespace DCSFlightpanels.CustomControls
             try
             {
                 var textBox = (TextBoxBaseInput)sender;
+
                 if (textBox.GetBill != null && textBox.GetBill.ContainsKeySequence())
                 {
                     textBox.FontStyle = FontStyles.Oblique;

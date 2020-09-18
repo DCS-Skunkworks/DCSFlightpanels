@@ -89,7 +89,7 @@
                 <Label Content="BOTH / ALL" Height="23"  FontSize="10" />
                 <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobAll" IsReadOnly="True" FontSize="10" />
                 <Label Content="START" Height="23"  FontSize="10" />
-                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobStart" IsReadOnly="True" FontSize="10" />
+                <customControl:PZ55TextBox Height="18" x:Name="TextBoxKnobStart" IsReadOnly="True" FontSize="10"/>
                 <!--<Button Name="ButtonTEXT" Height="30" Click="ButtonTEXT_OnClick" Visibility="Collapsed"></Button>-->
             </StackPanel>
         </GroupBox>

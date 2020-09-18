@@ -8,6 +8,22 @@ using NonVisuals;
 
 namespace DCSFlightpanels
 {
+    public class DCSFPContextMenuVisibility
+    {
+        public bool AddNullKeyVisible = false;
+        public bool EditSequenceVisible = false;
+        public bool EditDCSBIOSVisible = false;
+        public bool EditBIPVisible = false;
+        public bool EditOSCommandVisible = false;
+        public bool CopyVisible = false;
+        public bool CopyKeySequenceVisible = false;
+        public bool CopyDCSBIOSVisible = false;
+        public bool CopyBIPLinkVisible = false;
+        public bool CopyOSCommandVisible = false;
+        public bool PasteVisible = false;
+        public bool DeleteSettingsVisible = false;
+    }
+
     public class ContextMenuPanelTextBox : ContextMenu
     {
         private MenuItem _contextMenuItemAddNullKey;
@@ -62,12 +78,44 @@ namespace DCSFlightpanels
             Items.Add(_contextMenuItemDeleteSettings);
         }
 
+        public void OpenCopySubMenuItem()
+        {
+            _contextMenuItemCopy.IsSubmenuOpen = true;
+        }
+
         public void SetVisibility(bool isEmpty, bool containsSinglePress, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
         {
             try
             {
                 HideAll();
 
+                var menuItemVisibilities = GetVisibility(isEmpty, containsSinglePress, containsKeySequence, containsDCSBIOS, containsBIPLink, containsOSCommand);
+
+                _contextMenuItemAddNullKey.Visibility = menuItemVisibilities.AddNullKeyVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemEditSequence.Visibility = menuItemVisibilities.EditSequenceVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemEditDCSBIOS.Visibility = menuItemVisibilities.EditDCSBIOSVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemEditBIP.Visibility = menuItemVisibilities.EditBIPVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemEditOSCommand.Visibility = menuItemVisibilities.EditOSCommandVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopy.Visibility = menuItemVisibilities.CopyVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopyKeySequence.Visibility = menuItemVisibilities.CopyKeySequenceVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopyDCSBIOS.Visibility = menuItemVisibilities.CopyDCSBIOSVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopyBIPLink.Visibility = menuItemVisibilities.CopyBIPLinkVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopyOSCommand.Visibility = menuItemVisibilities.CopyOSCommandVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemPaste.Visibility = menuItemVisibilities.PasteVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemDeleteSettings.Visibility = menuItemVisibilities.DeleteSettingsVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+
+        public DCSFPContextMenuVisibility GetVisibility(bool isEmpty, bool containsSinglePress, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
+        {
+            var result = new DCSFPContextMenuVisibility();
+            try
+            {
                 CopyPackage copyPackage = null;
                 var iDataObject = Clipboard.GetDataObject();
                 if (iDataObject != null && iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
@@ -81,138 +129,148 @@ namespace DCSFlightpanels
 
                 if (isEmpty)
                 {
-                    _contextMenuItemAddNullKey.Visibility = Visibility.Visible;
-                    _contextMenuItemEditSequence.Visibility = Visibility.Visible;
+                    result.AddNullKeyVisible = true;
+                    result.EditSequenceVisible = true; 
                     if (Common.FullDCSBIOSEnabled())
                     {
-                        _contextMenuItemEditDCSBIOS.Visibility = Visibility.Visible;
+                        result.EditDCSBIOSVisible = true;
                     }
+
                     if (BipFactory.HasBips())
                     {
-                        _contextMenuItemEditBIP.Visibility = Visibility.Visible;
+                        result.EditBIPVisible = true;
                     }
-                    _contextMenuItemEditOSCommand.Visibility = Visibility.Visible;
+
+                    result.EditOSCommandVisible = true;
 
                     if (copyPackage != null)
                     {
-                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                        result.PasteVisible = true;
                     }
                 }
+
                 if (containsSinglePress)
                 {
                     if (BipFactory.HasBips())
                     {
-                        _contextMenuItemEditBIP.Visibility = Visibility.Visible;
+                        result.EditBIPVisible = true;
                     }
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
-                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                        result.PasteVisible = true;
                     }
                 }
+
                 if (containsKeySequence)
                 {
-                    _contextMenuItemEditSequence.Visibility = Visibility.Visible;
+                    result.EditSequenceVisible = true;
                     if (BipFactory.HasBips())
                     {
-                        _contextMenuItemEditBIP.Visibility = Visibility.Visible;
+                        result.EditBIPVisible = true;
                     }
-                    _contextMenuItemCopy.Visibility = Visibility.Visible;
-                    _contextMenuItemCopyKeySequence.Visibility = Visibility.Visible;
+
+                    result.CopyVisible = true;
+                    result.CopyKeySequenceVisible = true;
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
-                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                        result.PasteVisible = true;
                     }
                 }
+
                 if (containsDCSBIOS)
                 {
                     if (!_keyboardEmulationOnly)
                     {
-                        _contextMenuItemEditDCSBIOS.Visibility = Visibility.Visible;
-                        _contextMenuItemCopy.Visibility = Visibility.Visible;
-                        _contextMenuItemCopyDCSBIOS.Visibility = Visibility.Visible;
+                        result.EditDCSBIOSVisible = true;
+                        result.CopyVisible = true;
+                        result.CopyDCSBIOSVisible = true;
                     }
 
                     if (BipFactory.HasBips())
                     {
-                        _contextMenuItemEditBIP.Visibility = Visibility.Visible;
+                        result.EditBIPVisible = true;
                     }
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
-                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                        result.PasteVisible = true;
                     }
                 }
 
                 if (containsBIPLink)
                 {
-                    _contextMenuItemEditBIP.Visibility = Visibility.Visible;
-                    _contextMenuItemCopy.Visibility = Visibility.Visible;
-                    _contextMenuItemCopyBIPLink.Visibility = Visibility.Visible;
+                    result.EditBIPVisible = true;
+                    result.CopyVisible = true;
+                    result.CopyBIPLinkVisible = true;
 
                     if (copyPackage != null)
                     {
                         switch (copyPackage.ContentType)
                         {
                             case CopyContentType.KeySequence:
-                            {
-                                if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
                                 {
-                                    _contextMenuItemPaste.Visibility = Visibility.Visible;
-                                }
+                                    if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                    {
+                                        result.PasteVisible = true;
+                                    }
 
-                                break;
-                            }
+                                    break;
+                                }
                             case CopyContentType.DCSBIOS:
-                            {
-                                if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
                                 {
-                                    _contextMenuItemPaste.Visibility = Visibility.Visible;
-                                }
+                                    if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                    {
+                                        result.PasteVisible = true;
+                                    }
 
-                                break;
-                            }
+                                    break;
+                                }
                             case CopyContentType.BIPLink:
-                            {
-                                //Cannot paste BIPLink on BIPLink
-                                break;
-                            }
-                            case CopyContentType.OSCommand:
-                            {
-                                if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
                                 {
-                                    _contextMenuItemPaste.Visibility = Visibility.Visible;
+                                    //Cannot paste BIPLink on BIPLink
+                                    break;
                                 }
+                            case CopyContentType.OSCommand:
+                                {
+                                    if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                    {
+                                        result.PasteVisible = true;
+                                    }
 
-                                break;
-                            }
+                                    break;
+                                }
                         }
                     }
                 }
 
                 if (containsOSCommand)
                 {
-                    _contextMenuItemEditOSCommand.Visibility = Visibility.Visible;
-                    _contextMenuItemCopy.Visibility = Visibility.Visible;
-                    _contextMenuItemCopyOSCommand.Visibility = Visibility.Visible;
+                    result.EditOSCommandVisible = true;
+                    result.CopyVisible = true;
+                    result.CopyOSCommandVisible = true;
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
-                        _contextMenuItemPaste.Visibility = Visibility.Visible;
+                        result.PasteVisible = true;
                     }
                 }
 
                 if (!isEmpty)
                 {
-                    _contextMenuItemDeleteSettings.Visibility = Visibility.Visible;
+                    result.DeleteSettingsVisible = true;
                 }
+
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox(ex);
             }
+
+            return result;
         }
+
 
         public MenuItem ContextMenuItemAddNullKey
         {
