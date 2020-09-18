@@ -72,8 +72,9 @@
             <Image Name="UpperRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="562" Canvas.Top="58" />
             <Image Name="LowerRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="562" Canvas.Top="131" />
 
-            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
-            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
+            <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="340" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>
+            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
+            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
 
 
             <customControls:PZ69Button x:Name="ButtonUpperLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>

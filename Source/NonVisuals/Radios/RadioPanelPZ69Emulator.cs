@@ -167,12 +167,17 @@ namespace NonVisuals.Radios
 
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _keyBindings.Clear();
             _osCommandBindings.Clear();
             _displayValues.Clear();
             _bipLinks.Clear();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         public HashSet<KeyBindingPZ69> KeyBindingsHashSet => _keyBindings;

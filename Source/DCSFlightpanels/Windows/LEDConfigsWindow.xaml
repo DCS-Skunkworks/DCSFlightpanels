@@ -9,22 +9,20 @@
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <WrapPanel Name="LeftWrapPanel">
+        <DockPanel Name="LeftWrapPanel" >
             <DataGrid AutoGenerateColumns="false" 
                       ItemsSource="{Binding}" 
                       SelectionMode="Single" 
                       SelectionUnit="FullRow" 
                       HorizontalAlignment="Stretch" 
                       Name="DataGridValues" 
-                      VerticalAlignment="Stretch" 
+                      VerticalContentAlignment="Stretch" 
                       VerticalScrollBarVisibility="Visible" 
                       SelectionChanged="DataGridValues_OnSelectionChanged" 
                       CanUserReorderColumns="False" 
                       CanUserResizeRows="False" 
                       CanUserSortColumns="False" 
                       CanUserAddRows="False"
-                      Height="366" 
-                      Width="592"
                       ContextMenuOpening="DataGridValues_OnContextMenuOpening">
                 <DataGrid.ContextMenu>
                     <ContextMenu Name="ContextMenuColors" >
@@ -36,15 +34,14 @@
                 </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Color" IsReadOnly="True" Binding="{Binding Path=LEDColor}" Width="Auto" />
-                    <!--<DataGridTextColumn Header="Address" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.ControlId, StringFormat=0x{0:X4}}"  Width="*"/>-->
                     <DataGridTextColumn Header="Control Id" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.ControlId}"  Width="Auto"/>
-                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.ControlDescription}" Width="Auto"/>
+                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.ControlDescription}" Width="*"/>
                     <DataGridTextColumn Header="Criteria" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.DCSBiosOutputComparison}" Width="Auto"/>
                     <DataGridTextColumn Header="Trigger [int]" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.SpecifiedValueInt}" Width="Auto"/>
-                    <DataGridTextColumn Header="Trigger [string]>" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.SpecifiedValueString}" Width="Auto"/>
+                    <DataGridTextColumn Header="Trigger [string]>" IsReadOnly="True" Binding="{Binding Path=DCSBiosOutputLED.SpecifiedValueString}" Width="auto"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </WrapPanel>
+        </DockPanel>
         <StackPanel Name="RightStackPanel" Grid.Column="1" Orientation="Vertical">
             <Grid Name="RightGrid" >
                 <Grid.ColumnDefinitions>

@@ -320,12 +320,16 @@ namespace DCSFlightpanels.Radios.Emulators
                 {
                     continue;
                 }
+
                 textBox.Bill.ClearAll();
             }
+
             if (clearAlsoProfile)
             {
-                _radioPanelPZ69.ClearSettings();
+                _radioPanelPZ69.ClearSettings(true);
             }
+
+            ShowGraphicConfiguration();
         }
 
         private void ClearAllDisplayValues()
@@ -363,22 +367,6 @@ namespace DCSFlightpanels.Radios.Emulators
             return null;
         }
         
-        private void ButtonClearAllClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (MessageBox.Show("Clear all settings for the Radio Panel?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                {
-                    ClearAll(true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-        
-
         /* ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
          * ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1617,6 +1605,21 @@ namespace DCSFlightpanels.Radios.Emulators
                 Common.ShowErrorMessageBox(ex);
             }
             throw new Exception("Failed to find TextBox for Radiopanel knob " + knob);
+        }
+        
+        private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    ClearAll(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
         }
 
         private void ButtonGetIdentify_OnClick(object sender, RoutedEventArgs e)

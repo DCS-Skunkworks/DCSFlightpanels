@@ -332,9 +332,14 @@ namespace NonVisuals.StreamDeck
             e.ProfileHandlerEA.RegisterJSONProfileData(this, ExportJSONSettings());
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _streamDeckLayerHandler.ClearSettings();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
@@ -239,13 +240,18 @@ namespace NonVisuals.Saitek
 
         public override void SavePanelSettingsJSON(object sender, ProfileHandlerEventArgs e) { }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _knobBindings.Clear();
             _osCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _dcsBiosLcdBindings.Clear();
             _bipLinks.Clear();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         public override void Identify()

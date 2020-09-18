@@ -51,7 +51,8 @@
             <Image Height="5" Width="5" x:Name="ImageG9Off" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="143" Visibility="Collapsed"/>
             <Image Height="5" Width="5" x:Name="ImageG9On" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="589" Canvas.Top="169" Visibility="Collapsed"/>
 
-            <Button x:Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="20" Canvas.Top="15" Click="ButtonGetId_OnClick"/>
+            <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="20" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>
+            <Button x:Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="110" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
         </Canvas>
         <GroupBox Header="Switches 1-9"  FontSize="10" Grid.Column="1" Grid.Row="2" Grid.RowSpan="4" Grid.ColumnSpan="4">
             <Grid>

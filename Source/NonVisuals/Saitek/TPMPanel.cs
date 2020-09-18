@@ -176,12 +176,17 @@ namespace NonVisuals.Saitek
             return null;
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _keyBindings.Clear();
             _osCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _bipLinks.Clear();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         public HashSet<KeyBindingTPM> KeyBindingsHashSet

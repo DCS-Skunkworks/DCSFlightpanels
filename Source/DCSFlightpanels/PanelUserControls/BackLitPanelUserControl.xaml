@@ -28,7 +28,7 @@
         </Grid.ColumnDefinitions>
         <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
             <!-- UPPER ROW -->
-            <Image Height="226" x:Name="ImageBIPPanel" Stretch="None" Source="/dcsfp;component/Images/BIP Saitek.jpg"  />
+            <Image Height="226" x:Name="ImageBIPPanel" Stretch="None" Source="/dcsfp;component/Images/BIP Saitek2.jpg"  />
             <Image Height="30" Width="30" x:Name="ImagePosition1_1" Stretch="Fill" Source="/dcsfp;component/Images/black.png" Canvas.Left="45" Canvas.Top="46" Cursor="Hand" MouseDown="ImagePosition_OnMouseDown" ToolTip="Position_1_1" Tag="DARK"/>
             <Image Height="30" Width="30" x:Name="ImagePosition1_2" Stretch="Fill" Source="/dcsfp;component/Images/black.png" Canvas.Left="125" Canvas.Top="46" Cursor="Hand" MouseDown="ImagePosition_OnMouseDown"  ToolTip="Position_1_2" Tag="DARK"/>
             <Image Height="30" Width="30" x:Name="ImagePosition1_3" Stretch="Fill" Source="/dcsfp;component/Images/black.png" Canvas.Left="201" Canvas.Top="46" Cursor="Hand" MouseDown="ImagePosition_OnMouseDown" ToolTip="Position_1_3"  Tag="DARK"/>
@@ -84,9 +84,10 @@
             <Image Height="5" Width="5" x:Name="ImageConfigFound3_7" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="509" Canvas.Top="151" Cursor="Hand"   MouseDown="ImagePosition_OnMouseDown" Visibility="Hidden"/>
             <Image Height="5" Width="5" x:Name="ImageConfigFound3_8" Stretch="Fill" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="587" Canvas.Top="151" Cursor="Hand"   MouseDown="ImagePosition_OnMouseDown" Visibility="Hidden"/>
 
-            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="390" Canvas.Top="5" Click="ButtonGetIdentify_OnClick"/>
-            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="480" Canvas.Top="5" Click="ButtonGetId_OnClick"/>
-            <Button Name="ButtonGetHash" Content="MD5" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="570" Canvas.Top="5" Click="ButtonGetHash_OnClick"/>
+            <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="300" Canvas.Top="5" Click="ButtonClearSettings_OnClick"/>
+            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="390" Canvas.Top="5" Click="ButtonGetIdentify_OnClick"/>
+            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="480" Canvas.Top="5" Click="ButtonGetId_OnClick"/>
+            <Button Name="ButtonGetHash" Content="MD5" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="570" Canvas.Top="5" Click="ButtonGetHash_OnClick"/>
         </Canvas>
         <StackPanel Grid.Column="3" Grid.Row="0" >
             <Button Name="ToggleAll" Content="Toggle all LEDs" Click="ToggleAll_OnClick"/>

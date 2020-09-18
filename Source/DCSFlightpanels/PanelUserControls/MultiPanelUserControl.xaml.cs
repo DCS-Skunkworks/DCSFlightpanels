@@ -156,7 +156,7 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-        private void ClearAll(bool clearAlsoProfile = true)
+        private void ClearAll(bool clearAlsoProfile)
         {
             foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
             {
@@ -168,8 +168,10 @@ namespace DCSFlightpanels.PanelUserControls
             }
             if (clearAlsoProfile)
             {
-                _multiPanelPZ70.ClearSettings();
+                _multiPanelPZ70.ClearSettings(true);
             }
+
+            ShowGraphicConfiguration();
         }
 
         private void SetTextBoxBills()
@@ -1182,81 +1184,26 @@ namespace DCSFlightpanels.PanelUserControls
             throw new Exception("Failed to find TextBox from MultiPanel Knob : " + knob);
         }
         
-        private void MenuItemAddNullKey_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                textBox.Bill.ClearAll();
-                var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
-                if (string.IsNullOrEmpty(vkNull))
-                {
-                    return;
-                }
-                var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
-                textBox.Bill.KeyPress = keyPress;
-                textBox.Bill.KeyPress.Description = "VK_NULL";
-                textBox.Text = vkNull;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void MenuContextEditOSCommandTextBoxClick_OnClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-                OSCommandWindow osCommandWindow;
-                if (textBox.Bill.ContainsOSCommand())
-                {
-                    osCommandWindow = new OSCommandWindow(textBox.Bill.OSCommandObject);
-                }
-                else
-                {
-                    osCommandWindow = new OSCommandWindow();
-                }
-                osCommandWindow.ShowDialog();
-                if (osCommandWindow.DialogResult.HasValue && osCommandWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    if (!osCommandWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-                    var osCommand = osCommandWindow.OSCommandObject;
-                    textBox.Bill.OSCommandObject = osCommand;
-                    textBox.Text = osCommand.Name;
-                    UpdateOSCommandBindingsPZ70(textBox);
-                }
-                TextBoxLogPZ70.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-
-
         private void ButtonIdentify_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 _multiPanelPZ70.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    ClearAll(true);
+                }
             }
             catch (Exception ex)
             {

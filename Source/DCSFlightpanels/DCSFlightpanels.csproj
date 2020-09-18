@@ -712,9 +712,6 @@
     <Resource Include="Images\pz70multipanel.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BIP Saitek.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\PZ55_Switchpanel1.png" />
   </ItemGroup>
   <ItemGroup>
@@ -923,6 +920,7 @@
     <Resource Include="Images\mi8_r863_freq_panel.png" />
     <Resource Include="Images\P47_radio.png" />
     <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
+    <Resource Include="Images\BIP Saitek2.jpg" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

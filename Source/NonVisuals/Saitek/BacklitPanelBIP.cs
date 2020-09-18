@@ -403,9 +403,14 @@ namespace NonVisuals.Saitek
             CheckDcsDataForColorChangeHook(e.Address, e.Data);
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _listColorOutputBinding.Clear();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         public string GetPosString(BIPLedPositionEnum bipLedPositionEnum)

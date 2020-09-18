@@ -656,5 +656,30 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void ClearAll(bool clearAlsoProfile)
+        {
+            if (clearAlsoProfile)
+            {
+                _backlitPanelBIP.ClearSettings(true);
+            }
+
+            ShowGraphicConfiguration();
+        }
+
+        private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    ClearAll(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

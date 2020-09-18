@@ -233,7 +233,7 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _keyBindings.Clear();
             _osCommandBindings.Clear();
@@ -241,6 +241,11 @@ namespace NonVisuals.Radios
             _bipLinks.Clear();
             _dcsBiosLcdBindings.Clear();
             _dcsBiosBindings.Clear();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         public HashSet<KeyBindingPZ69DialPosition> KeyBindingsHashSet => _keyBindings;

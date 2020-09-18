@@ -74,8 +74,11 @@
                 <Image Height="76" x:Name="ImagePitchUp" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="52" />
                 <Image Height="76" x:Name="ImagePitchDown" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="565" Canvas.Top="155" />
 
-                <Button x:Name="ButtonIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="500" Canvas.Top="12" Click="ButtonIdentify_OnClick"/>
-                <Button x:Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76"   Canvas.Left="500" Canvas.Top="34" Click="ButtonGetId_OnClick"/>
+                <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="340" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>
+                <Button x:Name="ButtonIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="430" Canvas.Top="12" Click="ButtonIdentify_OnClick"/>
+                <Button x:Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
+
+
                 <Button x:Name="ButtonLcdUpper" Content="Upper LCD Data" Canvas.Left="165" Canvas.Top="87" Width="120" Click="ButtonLcd_OnClick"/>
                 <Button x:Name="ButtonLcdLower" Content="Lower LCD Data" Canvas.Left="165" Canvas.Top="124" Width="120" Click="ButtonLcd_OnClick"/>
 

@@ -226,8 +226,10 @@ namespace DCSFlightpanels.PanelUserControls
 
             if (clearAlsoProfile)
             {
-                _tpmPanel.ClearSettings();
+                _tpmPanel.ClearSettings(true);
             }
+
+            ShowGraphicConfiguration();
         }
 
         private void SetTextBoxBills()
@@ -857,5 +859,19 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
+        private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    ClearAll(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
     }
 }

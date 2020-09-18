@@ -345,8 +345,10 @@ namespace DCSFlightpanels.Radios.Emulators
             }
             if (clearAlsoProfile)
             {
-                _radioPanelPZ69.ClearSettings();
+                _radioPanelPZ69.ClearSettings(true);
             }
+
+            ShowGraphicConfiguration();
         }
 
         private void ClearAllDisplayValues()
@@ -1315,6 +1317,21 @@ namespace DCSFlightpanels.Radios.Emulators
             try
             {
                 _radioPanelPZ69.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    ClearAll(true);
+                }
             }
             catch (Exception ex)
             {

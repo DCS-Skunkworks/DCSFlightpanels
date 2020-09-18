@@ -605,9 +605,7 @@ namespace NonVisuals.Radios
             PZ69KnobChanged(isFirstReport, hashSet);
         }
 
-        public override void ClearSettings()
-        {
-        }
+        public override void ClearSettings(bool setIsDirty = false) { }
 
         public override DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput)
         {

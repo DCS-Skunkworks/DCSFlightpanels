@@ -229,13 +229,18 @@ namespace NonVisuals.Saitek
             }
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _keyBindings.Clear();
             _osCommandBindings.Clear();
             _listColorOutputBinding.Clear();
             _dcsBiosBindings.Clear();
             _bipLinks.Clear();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         public HashSet<KeyBindingPZ55> KeyBindingsHashSet
