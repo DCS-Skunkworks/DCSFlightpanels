@@ -96,35 +96,35 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper COM 1" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom1" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom1" FontSize="10" />
                     <Label Content="Upper COM 2" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom2" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom2" FontSize="10" />
                     <Label Content="Upper NAV 1" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav1" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav1" FontSize="10" />
                     <Label Content="Upper NAV 2" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav2" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav2" />
                     <Label Content="Upper ADF" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperADF" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperADF" />
                     <Label Content="Upper DME" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperDME" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperDME" />
                     <Label Content="Upper XPDR" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperXPDR" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperXPDR" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Lower COM 1" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom1" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom1" FontSize="10" />
                     <Label Content="Lower COM 2" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom2" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom2" FontSize="10" />
                     <Label Content="Lower NAV 1" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav1" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav1" FontSize="10" />
                     <Label Content="Lower NAV 2" Height="23" FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav2" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav2" />
                     <Label Content="Lower ADF" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerADF" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerADF" />
                     <Label Content="Lower DME" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerDME" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerDME" />
                     <Label Content="Lower XPDR" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerXPDR" />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerXPDR" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -216,31 +216,31 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper Large Dial +" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargePlus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargePlus" FontSize="10" />
                     <Label Content="Upper Small Dial +" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallPlus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallPlus" FontSize="10" />
                     <Label Content="Upper ACT/STBY On" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOn" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOn" FontSize="10" />
                     <Label Content="Lower Large Dial +" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargePlus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargePlus" FontSize="10" />
                     <Label Content="Lower Small Dial +" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallPlus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallPlus" FontSize="10" />
                     <Label Content="Lower ACT/STBY On" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOn" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOn" FontSize="10" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Upper Large Dial -" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargeMinus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargeMinus" FontSize="10" />
                     <Label Content="Upper Small Dial -" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallMinus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallMinus" FontSize="10" />
                     <Label Content="Upper ACT/STBY Off" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOff" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOff" FontSize="10" />
                     <Label Content="Lower Large Dial -" FontSize="10" Height="23"   />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargeMinus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargeMinus" FontSize="10" />
                     <Label Content="Lower Small Dial -" FontSize="10" Height="23"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallMinus" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallMinus" FontSize="10" />
                     <Label Content="Lower ACT/STBY Off" Height="23"  FontSize="10"  />
-                    <customControls:PZ69FullTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOff" FontSize="10" />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOff" FontSize="10" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -259,7 +259,7 @@
             </GroupBox>
 
             
-                <customControls:PZ69FullTextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" Height="80" TextWrapping="Wrap" Margin="10,0,0,0"/>
+                <customControls:PZ69GenericTextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" Height="80" TextWrapping="Wrap" Margin="10,0,0,0"/>
             
         </StackPanel>
     </Grid>

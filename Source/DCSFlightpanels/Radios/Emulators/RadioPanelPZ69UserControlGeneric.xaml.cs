@@ -157,11 +157,11 @@ namespace DCSFlightpanels.Radios.Emulators
 
         private void SetTextBoxBills()
         {
-            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ69FullTextBox>(this).Any())
+            if (_textBoxBillsSet || !Common.FindVisualChildren<PZ69GenericTextBox>(this).Any())
             {
                 return;
             }
-            foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
                 if (textBox.Bill != null || textBox.Equals(TextBoxLogPZ69))
                 {
@@ -311,7 +311,7 @@ namespace DCSFlightpanels.Radios.Emulators
 
         private void ClearAll(bool clearAlsoProfile)
         {
-            foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
                 if (textBox.Equals(TextBoxLogPZ69))
                 {
@@ -331,7 +331,7 @@ namespace DCSFlightpanels.Radios.Emulators
 
         private void ClearAllDisplayValues()
         {
-            foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
                 if (textBox.Name.EndsWith("Numbers"))
                 {
@@ -342,7 +342,7 @@ namespace DCSFlightpanels.Radios.Emulators
 
         private void ClearCommands()
         {
-            foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
                 if (!textBox.Name.EndsWith("Numbers"))
                 {
@@ -352,9 +352,9 @@ namespace DCSFlightpanels.Radios.Emulators
         }
 
 
-        private PZ69FullTextBox GetTextBoxInFocus()
+        private PZ69GenericTextBox GetTextBoxInFocus()
         {
-            foreach (var textBox in Common.FindVisualChildren<PZ69FullTextBox>(this))
+            foreach (var textBox in Common.FindVisualChildren<PZ69GenericTextBox>(this))
             {
                 if (!Equals(textBox, TextBoxLogPZ69) && textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow))
                 {
@@ -679,7 +679,7 @@ namespace DCSFlightpanels.Radios.Emulators
 
                 foreach (var keyBinding in _radioPanelPZ69.KeyBindingsHashSet)
                 {
-                    var textBox = (PZ69FullTextBox)GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
+                    var textBox = (PZ69GenericTextBox)GetTextBox(keyBinding.RadioPanelPZ69Key, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null && (keyBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || keyBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
@@ -688,7 +688,7 @@ namespace DCSFlightpanels.Radios.Emulators
 
                 foreach (var osCommand in _radioPanelPZ69.OSCommandHashSet)
                 {
-                    var textBox = (PZ69FullTextBox)GetTextBox(osCommand.RadioPanelPZ69Key, osCommand.WhenTurnedOn);
+                    var textBox = (PZ69GenericTextBox)GetTextBox(osCommand.RadioPanelPZ69Key, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null && (osCommand.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || osCommand.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
                         if (osCommand.OSCommandObject != null)
                         {
@@ -698,7 +698,7 @@ namespace DCSFlightpanels.Radios.Emulators
 
                 foreach (var bipLinkPZ69 in _radioPanelPZ69.BipLinkHashSet)
                 {
-                    var textBox = (PZ69FullTextBox)GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
+                    var textBox = (PZ69GenericTextBox)GetTextBox(bipLinkPZ69.RadioPanelPZ69Knob, bipLinkPZ69.WhenTurnedOn);
                     textBox.Bill.BipLink = bipLinkPZ69;
                 }
 
@@ -747,7 +747,7 @@ namespace DCSFlightpanels.Radios.Emulators
                         continue;
                     }
 
-                    var textBox = (PZ69FullTextBox)GetTextBox(dcsbiosBinding.RadioPanelPZ69Knob, dcsbiosBinding.WhenTurnedOn);
+                    var textBox = (PZ69GenericTextBox)GetTextBox(dcsbiosBinding.RadioPanelPZ69Knob, dcsbiosBinding.WhenTurnedOn);
 
                     if (dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || dcsbiosBinding.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition)
                     {
@@ -1359,7 +1359,7 @@ namespace DCSFlightpanels.Radios.Emulators
             }
         }
 
-        private void UpdateDCSBIOSBinding(PZ69FullTextBox textBox)
+        private void UpdateDCSBIOSBinding(PZ69GenericTextBox textBox)
         {
             try
             {
