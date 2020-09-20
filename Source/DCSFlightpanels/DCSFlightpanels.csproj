@@ -279,8 +279,8 @@
     <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF5E.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF5E.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\Emulators\RadioPanelPZ69UserControlEmulatorFull.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlEmulatorFull.xaml</DependentUpon>
+    <Compile Include="Radios\Emulators\RadioPanelPZ69UserControlGeneric.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlGeneric.xaml</DependentUpon>
     </Compile>
     <Compile Include="Radios\Emulators\RadioPanelPZ69UserControlEmulator.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
@@ -513,7 +513,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\Emulators\RadioPanelPZ69UserControlEmulatorFull.xaml">
+    <Page Include="Radios\Emulators\RadioPanelPZ69UserControlGeneric.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

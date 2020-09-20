@@ -22,12 +22,9 @@ using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Radios.Emulators
 {
-    /// <summary>
-    /// Interaction logic for RadioPanelPZ69UserControlEmulator.xaml
-    /// </summary>
-    public partial class RadioPanelPZ69UserControlEmulatorFull : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
+    public partial class RadioPanelPZ69UserControlGeneric : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
-        private readonly RadioPanelPZ69EmulatorFull _radioPanelPZ69;
+        private readonly RadioPanelPZ69Generic _radioPanelPZ69;
         private bool _userControlLoaded;
         private bool _textBoxBillsSet;
         private bool _buttonBillsSet;
@@ -35,7 +32,7 @@ namespace DCSFlightpanels.Radios.Emulators
         private const string UPPER_TEXT = "Upper Dial Profile : ";
         private const string LOWER_TEXT = "Lower Dial Profile : ";
 
-        public RadioPanelPZ69UserControlEmulatorFull(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
+        public RadioPanelPZ69UserControlGeneric(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
             InitializeComponent();
             ParentTabItem = parentTabItem;
@@ -44,14 +41,14 @@ namespace DCSFlightpanels.Radios.Emulators
 
             HideAllImages();
 
-            _radioPanelPZ69 = new RadioPanelPZ69EmulatorFull(hidSkeleton);
+            _radioPanelPZ69 = new RadioPanelPZ69Generic(hidSkeleton);
             _radioPanelPZ69.FrequencyKnobSensitivity = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             GlobalHandler = globalHandler;
         }
 
-        private void RadioPanelPZ69UserControlEmulatorFull_OnLoaded(object sender, RoutedEventArgs e)
+        private void RadioPanelPZ69UserControlGeneric_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -188,7 +185,7 @@ namespace DCSFlightpanels.Radios.Emulators
             _buttonBillsSet = true;
         }
         
-        private void UpdateDisplayValues(PZ69FullTextBox textBox)
+        private void UpdateDisplayValues(TextBox textBox)
         {
             try
             {
@@ -378,7 +375,7 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                var textBox = ((PZ69FullTextBox)sender);
+                var textBox = ((TextBox)sender);
 
                 if (textBox.Text.Contains("."))
                 {
@@ -409,7 +406,7 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                var textBox = (PZ69FullTextBox)sender;
+                var textBox = (TextBox)sender;
                 UpdateDisplayValues(textBox);
             }
             catch (Exception ex)

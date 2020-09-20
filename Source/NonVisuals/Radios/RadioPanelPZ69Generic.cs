@@ -14,7 +14,7 @@ using NonVisuals.Saitek;
 namespace NonVisuals.Radios
 {
 
-    public class RadioPanelPZ69EmulatorFull : RadioPanelPZ69Base
+    public class RadioPanelPZ69Generic : RadioPanelPZ69Base
     {
 
         /*
@@ -46,7 +46,7 @@ namespace NonVisuals.Radios
         private PZ69DialPosition _pz69LowerDialPosition = PZ69DialPosition.LowerCOM1;
         private long _doUpdatePanelLCD;
 
-        public RadioPanelPZ69EmulatorFull(HIDSkeleton hidSkeleton) : base(hidSkeleton)
+        public RadioPanelPZ69Generic(HIDSkeleton hidSkeleton) : base(hidSkeleton)
         {
             VendorId = 0x6A3;
             ProductId = 0xD05;

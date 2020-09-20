@@ -1,4 +1,4 @@
-﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.Radios.Emulators.RadioPanelPZ69UserControlEmulatorFull"
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.Radios.Emulators.RadioPanelPZ69UserControlGeneric"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,7 @@
              xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
              xmlns:panelUserControls1="clr-namespace:DCSFlightpanels.PanelUserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlEmulatorFull_OnLoaded">
+             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlGeneric_OnLoaded">
     <UserControl.Resources>
         <Style TargetType="Image">
             <Setter Property="Height" Value="76"/>

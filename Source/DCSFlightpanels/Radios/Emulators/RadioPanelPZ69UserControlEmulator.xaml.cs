@@ -20,9 +20,6 @@ using NonVisuals.Saitek;
 
 namespace DCSFlightpanels.Radios.Emulators
 {
-    /// <summary>
-    /// Interaction logic for RadioPanelPZ69UserControlEmulator.xaml
-    /// </summary>
     public partial class RadioPanelPZ69UserControlEmulator : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly RadioPanelPZ69Emulator _radioPanelPZ69;
@@ -209,7 +206,7 @@ namespace DCSFlightpanels.Radios.Emulators
             }
         }
 
-        private void UpdateDisplayValues(PZ69TextBox textBox)
+        private void UpdateDisplayValues(TextBox textBox)
         {
             try
             {
@@ -403,7 +400,7 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                var textBox = ((PZ69TextBox)sender);
+                var textBox = ((TextBox)sender);
 
                 if (textBox.Text.Contains("."))
                 {
@@ -434,7 +431,7 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                var textBox = (PZ69TextBox)sender;
+                var textBox = (TextBox)sender;
                 UpdateDisplayValues(textBox);
             }
             catch (Exception ex)

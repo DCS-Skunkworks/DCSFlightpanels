@@ -242,7 +242,7 @@
     <Compile Include="Radios\RadioPanelPZ69F14B.cs" />
     <Compile Include="Radios\RadioPanelPZ69F5E.cs" />
     <Compile Include="Radios\Misc\RadioPanelPZ69DisplayValue.cs" />
-    <Compile Include="Radios\RadioPanelPZ69EmulatorFull.cs" />
+    <Compile Include="Radios\RadioPanelPZ69Generic.cs" />
     <Compile Include="Radios\RadioPanelPZ69M2000C.cs" />
     <Compile Include="Radios\RadioPanelPZ69FA18C.cs" />
     <Compile Include="Radios\Knobs\RadioPanelPZ69KnobEmulator.cs" />
