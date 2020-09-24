@@ -731,7 +731,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
-                _multiPanelPZ70.AddOrUpdateSingleKeyBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
+                _multiPanelPZ70.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {

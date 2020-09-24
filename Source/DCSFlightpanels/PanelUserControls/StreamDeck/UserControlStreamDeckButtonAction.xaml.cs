@@ -251,9 +251,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     case EnumStreamDeckActionType.KeyPress:
                         {
                             return TextBoxKeyPressButtonOn.Bill.ContainsKeySequence() ||
-                                   TextBoxKeyPressButtonOn.Bill.ContainsSingleKey() ||
+                                   TextBoxKeyPressButtonOn.Bill.ContainsKeyStroke() ||
                                    TextBoxKeyPressButtonOff.Bill.ContainsKeySequence() ||
-                                   TextBoxKeyPressButtonOff.Bill.ContainsSingleKey();
+                                   TextBoxKeyPressButtonOff.Bill.ContainsKeyStroke();
                         }
                     case EnumStreamDeckActionType.DCSBIOS:
                         {

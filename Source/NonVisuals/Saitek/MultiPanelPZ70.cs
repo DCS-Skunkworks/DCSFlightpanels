@@ -307,7 +307,7 @@ namespace NonVisuals.Saitek
             PZ70SwitchChanged(isFirstReport, hashSet);
         }
 
-        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
             var pz70SwitchOnOff = (PZ70SwitchOnOff) panelSwitchOnOff;
             if (string.IsNullOrEmpty(keyPress))

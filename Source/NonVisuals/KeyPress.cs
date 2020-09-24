@@ -41,11 +41,7 @@ namespace NonVisuals
                 return result;
             }
         }
-
-
-
-
-
+        
         public KeyPress() { }
 
         public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string description = null)
@@ -457,7 +453,7 @@ namespace NonVisuals
         {
             if (IsMultiSequenced())
             {
-                throw new Exception("Key press is multisequenced. Cannot query single key press length as it may contain many such values. (OSKeyPress.GetLengthOfKeyPress())");
+                throw new Exception("Key press is multisequenced. Cannot query single key stroke length as it may contain many such values. (OSKeyPress.GetLengthOfKeyPress())");
             }
             return _sortedKeyPressInfoList[0].LengthOfKeyPress;
         }
@@ -466,7 +462,7 @@ namespace NonVisuals
         {
             if (IsMultiSequenced())
             {
-                throw new Exception("Key press is multisequenced. Cannot set single key press length as it may contain many such values. (OSKeyPress.SetLengthOfKeyPress())");
+                throw new Exception("Key press is multisequenced. Cannot set single key stroke length as it may contain many such values. (OSKeyPress.SetLengthOfKeyPress())");
             }
             _sortedKeyPressInfoList[0].LengthOfKeyPress = keyPressLength;
         }

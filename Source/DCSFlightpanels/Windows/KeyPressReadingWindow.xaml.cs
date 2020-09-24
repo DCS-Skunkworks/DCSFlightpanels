@@ -32,7 +32,7 @@ namespace DCSFlightpanels.Windows
             ComboBoxPressTimes.SelectedItem = keyPressLength;
             _keyPressLength = keyPressLength;
         }
-        
+
         private void KeyPressReadingWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             try
@@ -139,7 +139,7 @@ namespace DCSFlightpanels.Windows
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -170,14 +170,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (!string.IsNullOrEmpty(TextBoxKeyPress.Text))
-                {
-                    DialogResult = true;
-                }
-                else
-                {
-                    DialogResult = false;
-                }
+                DialogResult = true;
             }
             catch (Exception ex)
             {
@@ -195,7 +188,7 @@ namespace DCSFlightpanels.Windows
                 {
                     return;
                 }
-                var tmpKeyPressLength = (KeyPressLength) ComboBoxPressTimes.SelectedItem;
+                var tmpKeyPressLength = (KeyPressLength)ComboBoxPressTimes.SelectedItem;
                 if (tmpKeyPressLength != _keyPressLength)
                 {
                     _keyPressLength = tmpKeyPressLength;

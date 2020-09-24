@@ -16,6 +16,7 @@ namespace DCSFlightpanels
         public bool EditBIPVisible = false;
         public bool EditOSCommandVisible = false;
         public bool CopyVisible = false;
+        public bool CopyKeyStrokeVisible = false;
         public bool CopyKeySequenceVisible = false;
         public bool CopyDCSBIOSVisible = false;
         public bool CopyBIPLinkVisible = false;
@@ -32,6 +33,7 @@ namespace DCSFlightpanels
         private MenuItem _contextMenuItemEditBIP;
         private MenuItem _contextMenuItemEditOSCommand;
         private MenuItem _contextMenuItemCopy;
+        private MenuItem _contextMenuItemCopyKeyStroke;
         private MenuItem _contextMenuItemCopyKeySequence;
         private MenuItem _contextMenuItemCopyDCSBIOS;
         private MenuItem _contextMenuItemCopyBIPLink;
@@ -62,6 +64,8 @@ namespace DCSFlightpanels
 
             _contextMenuItemCopy = new MenuItem() { Header = "Copy" };
             Items.Add(_contextMenuItemCopy);
+            _contextMenuItemCopyKeyStroke = new MenuItem() { Header = "Key Stroke" };
+            _contextMenuItemCopy.Items.Add(_contextMenuItemCopyKeyStroke);
             _contextMenuItemCopyKeySequence = new MenuItem() { Header = "Key Sequence" };
             _contextMenuItemCopy.Items.Add(_contextMenuItemCopyKeySequence);
             _contextMenuItemCopyDCSBIOS = new MenuItem() { Header = "DCS-BIOS" };
@@ -83,13 +87,13 @@ namespace DCSFlightpanels
             _contextMenuItemCopy.IsSubmenuOpen = true;
         }
 
-        public void SetVisibility(bool isEmpty, bool containsSinglePress, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
+        public void SetVisibility(bool isEmpty, bool containsKeystroke, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
         {
             try
             {
                 HideAll();
 
-                var menuItemVisibilities = GetVisibility(isEmpty, containsSinglePress, containsKeySequence, containsDCSBIOS, containsBIPLink, containsOSCommand);
+                var menuItemVisibilities = GetVisibility(isEmpty, containsKeystroke, containsKeySequence, containsDCSBIOS, containsBIPLink, containsOSCommand);
 
                 _contextMenuItemAddNullKey.Visibility = menuItemVisibilities.AddNullKeyVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemEditSequence.Visibility = menuItemVisibilities.EditSequenceVisible ? Visibility.Visible : Visibility.Collapsed;
@@ -97,6 +101,7 @@ namespace DCSFlightpanels
                 _contextMenuItemEditBIP.Visibility = menuItemVisibilities.EditBIPVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemEditOSCommand.Visibility = menuItemVisibilities.EditOSCommandVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemCopy.Visibility = menuItemVisibilities.CopyVisible ? Visibility.Visible : Visibility.Collapsed;
+                _contextMenuItemCopyKeyStroke.Visibility = menuItemVisibilities.CopyKeyStrokeVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemCopyKeySequence.Visibility = menuItemVisibilities.CopyKeySequenceVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemCopyDCSBIOS.Visibility = menuItemVisibilities.CopyDCSBIOSVisible ? Visibility.Visible : Visibility.Collapsed;
                 _contextMenuItemCopyBIPLink.Visibility = menuItemVisibilities.CopyBIPLinkVisible ? Visibility.Visible : Visibility.Collapsed;
@@ -111,7 +116,7 @@ namespace DCSFlightpanels
         }
 
 
-        public DCSFPContextMenuVisibility GetVisibility(bool isEmpty, bool containsSinglePress, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
+        public DCSFPContextMenuVisibility GetVisibility(bool isEmpty, bool containsKeyStroke, bool containsKeySequence, bool containsDCSBIOS, bool containsBIPLink, bool containsOSCommand)
         {
             var result = new DCSFPContextMenuVisibility();
             try
@@ -149,12 +154,15 @@ namespace DCSFlightpanels
                     }
                 }
 
-                if (containsSinglePress)
+                if (containsKeyStroke)
                 {
                     if (BipFactory.HasBips())
                     {
                         result.EditBIPVisible = true;
                     }
+
+                    result.CopyVisible = true;
+                    result.CopyKeyStrokeVisible = true;
 
                     if (copyPackage != null && copyPackage.ContentType == CopyContentType.BIPLink)
                     {
@@ -211,7 +219,7 @@ namespace DCSFlightpanels
                         {
                             case CopyContentType.KeySequence:
                                 {
-                                    if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                    if (!containsKeyStroke && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
                                     {
                                         result.PasteVisible = true;
                                     }
@@ -220,7 +228,7 @@ namespace DCSFlightpanels
                                 }
                             case CopyContentType.DCSBIOS:
                                 {
-                                    if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                    if (!containsKeyStroke && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
                                     {
                                         result.PasteVisible = true;
                                     }
@@ -234,7 +242,7 @@ namespace DCSFlightpanels
                                 }
                             case CopyContentType.OSCommand:
                                 {
-                                    if (!containsSinglePress && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
+                                    if (!containsKeyStroke && !containsKeySequence && !containsDCSBIOS && !containsOSCommand)
                                     {
                                         result.PasteVisible = true;
                                     }
@@ -306,6 +314,12 @@ namespace DCSFlightpanels
         {
             get => _contextMenuItemCopy;
             set => _contextMenuItemCopy = value;
+        }
+
+        public MenuItem ContextMenuItemCopyKeyStroke
+        {
+            get => _contextMenuItemCopyKeyStroke;
+            set => _contextMenuItemCopyKeyStroke = value;
         }
 
         public MenuItem ContextMenuItemCopyKeySequence

@@ -69,6 +69,12 @@ namespace DCSFlightpanels.Bills
 
             switch (copyContentType)
             {
+                case CopyContentType.KeyStroke:
+                {
+                    description = "";
+                    content = GetKeyPress();
+                    break;
+                }
                 case CopyContentType.KeySequence:
                 {
                     description = GetKeySequenceDescription();
@@ -119,6 +125,14 @@ namespace DCSFlightpanels.Bills
 
             switch (copyPackage.ContentType)
             {
+                case CopyContentType.KeyStroke:
+                {
+                    if (IsEmptyNoCareBipLink())
+                    {
+                        AddKeyStroke((KeyPressInfo) copyPackage.Content);
+                    }
+                    break;
+                }
                 case CopyContentType.KeySequence:
                     {
                         if (IsEmptyNoCareBipLink())
@@ -165,6 +179,7 @@ namespace DCSFlightpanels.Bills
             _contextMenu.ContextMenuItemEditBIP.Click += MenuItemEditBIP_OnClick;
             _contextMenu.ContextMenuItemEditOSCommand.Click += MenuItemEditOSCommand_OnClick;
 
+            _contextMenu.ContextMenuItemCopyKeyStroke.Click += MenuItemCopyKeyStroke_OnClick;
             _contextMenu.ContextMenuItemCopyKeySequence.Click += MenuItemCopyKeySequence_OnClick;
             _contextMenu.ContextMenuItemCopyDCSBIOS.Click += MenuItemCopyDCSBIOS_OnClick;
             _contextMenu.ContextMenuItemCopyBIPLink.Click += MenuItemCopyBIPLink_OnClick;
@@ -201,10 +216,7 @@ namespace DCSFlightpanels.Bills
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-
-
+        
         private void MenuItemEditDCSBIOS_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -216,9 +228,7 @@ namespace DCSFlightpanels.Bills
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-
+        
         private void MenuItemEditBIP_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -257,7 +267,7 @@ namespace DCSFlightpanels.Bills
                 }
 
                 _contextMenu.SetVisibility(IsEmpty(),
-                    ContainsSingleKey(),
+                    ContainsKeyStroke(),
                     ContainsKeySequence(),
                     ContainsDCSBIOS(),
                     ContainsBIPLink(),
@@ -281,6 +291,19 @@ namespace DCSFlightpanels.Bills
                 Common.ShowErrorMessageBox(ex);
             }
         }
+
+        private void MenuItemCopyKeyStroke_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CopySetting(CopyContentType.KeyStroke);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void MenuItemCopyKeySequence_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -333,6 +356,7 @@ namespace DCSFlightpanels.Bills
         {
             try
             {
+                DeleteKeyStroke();
                 DeleteSequence();
                 DeleteDCSBIOS();
                 DeleteBIPLink();
@@ -357,10 +381,10 @@ namespace DCSFlightpanels.Bills
             KeyPress = keyPress;
             KeyPress.Description = "VK_NULL";
             TextBox.Text = vkNull;
-            UpdateKeyBindingSimpleKeyStrokes();
+            UpdateKeyBindingKeyStroke();
         }
 
-        public void EditSingleKeyPress()
+        public void EditKeyStroke()
         {
             KeyPressReadingWindow keyPressReadingWindow;
             if (ContainsKeyPress())
@@ -382,18 +406,36 @@ namespace DCSFlightpanels.Bills
                     return;
                 }
 
-                var keyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
-                KeyPress = keyPress;
-                KeyPress.Description = "";
-                TextBox.Text = keyPressReadingWindow.VirtualKeyCodesAsString;
-                UpdateKeyBindingSimpleKeyStrokes();
+                if (string.IsNullOrEmpty(keyPressReadingWindow.VirtualKeyCodesAsString))
+                {
+                    KeyPress = null;
+                    TextBox.Text = "";
+                }
+                else
+                {
+                    var keyPress = new KeyPress(keyPressReadingWindow.VirtualKeyCodesAsString, keyPressReadingWindow.LengthOfKeyPress);
+                    KeyPress = keyPress;
+                    KeyPress.Description = "";
+                    TextBox.Text = keyPressReadingWindow.VirtualKeyCodesAsString;
+                }
+                UpdateKeyBindingKeyStroke();
             }
+        }
+
+        public void AddKeyStroke(KeyPressInfo keyStroke)
+        {
+            var keyPress = new KeyPress();
+            keyPress.KeySequence.Add(0, keyStroke);
+            keyPress.Description = "";
+            KeyPress = keyPress;
+            TextBox.Text = keyStroke.VirtualKeyCodesAsString;
+            UpdateKeyBindingKeyStroke();
         }
 
         public void AddKeySequence(string description, SortedList<int, KeyPressInfo> keySequence)
         {
 
-            var keyPress = new KeyPress("Key press sequence", keySequence);
+            var keyPress = new KeyPress("Key stroke sequence", keySequence);
             KeyPress = keyPress;
             KeyPress.Description = description;
             if (!string.IsNullOrEmpty(description))
@@ -433,7 +475,7 @@ namespace DCSFlightpanels.Bills
                     KeyPress = keyPress;
                     KeyPress.Description = keySequenceWindow.Description;
                     TextBox.Text = sequenceList[0].VirtualKeyCodesAsString;
-                    UpdateKeyBindingSimpleKeyStrokes();
+                    UpdateKeyBindingKeyStroke();
                 }
             }
         }
@@ -556,7 +598,7 @@ namespace DCSFlightpanels.Bills
         }
 
 
-        public void UpdateKeyBindingSimpleKeyStrokes()
+        public void UpdateKeyBindingKeyStroke()
         {
             try
             {
@@ -570,7 +612,7 @@ namespace DCSFlightpanels.Bills
                     keyPressLength = KeyPress.GetLengthOfKeyPress();
                 }
 
-                _saitekPanel.AddOrUpdateSingleKeyBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, keyPressLength);
+                _saitekPanel.AddOrUpdateKeyStrokeBinding(_panelUI.GetSwitch(TextBox), TextBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {
@@ -632,6 +674,12 @@ namespace DCSFlightpanels.Bills
             }
         }
 
+        public void DeleteKeyStroke()
+        {
+            KeyPress?.KeySequence?.Clear();
+            TextBox.Text = "";
+            UpdateKeyBindingSequencedKeyStrokes();
+        }
 
         public void DeleteSequence()
         {
@@ -676,7 +724,7 @@ namespace DCSFlightpanels.Bills
             return _keyPress != null && _keyPress.IsMultiSequenced();
         }
 
-        public bool ContainsSingleKey()
+        public bool ContainsKeyStroke()
         {
             return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeySequence.Count > 0;
         }

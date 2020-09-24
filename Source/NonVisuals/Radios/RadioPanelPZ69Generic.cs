@@ -610,7 +610,7 @@ namespace NonVisuals.Radios
             SetIsDirty();
         }
 
-        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
             var radioPanelPZ69KeyOnOff = (PZ69SwitchOnOff) panelSwitchOnOff;
             var pz69DialPosition = GetDial(radioPanelPZ69KeyOnOff.Switch);

@@ -13,6 +13,7 @@ namespace ClassLibraryCommon
 
     public enum CopyContentType
     {
+        KeyStroke,
         KeySequence,
         DCSBIOS,
         BIPLink,

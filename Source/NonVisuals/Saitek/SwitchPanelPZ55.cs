@@ -18,13 +18,6 @@ namespace NonVisuals.Saitek
 
     public class SwitchPanelPZ55 : SaitekPanel
     {
-
-        /*
-         * For a specific toggle/switch/lever/knob the PZ55 can have :
-         * - single key binding
-         * - seqenced key binding
-         * - DCS-BIOS control
-         */
         private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
         private List<OSCommandBindingPZ55> _osCommandBindings = new List<OSCommandBindingPZ55>();
@@ -457,7 +450,7 @@ namespace NonVisuals.Saitek
             return result;
         }
 
-        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff) panelSwitchOnOff;
 

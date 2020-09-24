@@ -186,7 +186,7 @@ namespace DCSFlightpanels.Radios.Emulators
                 {
                     keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
-                _radioPanelPZ69.AddOrUpdateSingleKeyBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
+                _radioPanelPZ69.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {

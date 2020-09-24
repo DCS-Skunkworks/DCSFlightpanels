@@ -42,7 +42,7 @@ namespace DCSFlightpanels.CustomControls
                 {
                     textBox.ContextMenu.IsOpen = true;
                     ((ContextMenuPanelTextBox)textBox.ContextMenu).SetVisibility(textBox.GetBill.IsEmpty(),
-                        textBox.GetBill.ContainsSingleKey(),
+                        textBox.GetBill.ContainsKeyStroke(),
                         textBox.GetBill.ContainsKeySequence(),
                         textBox.GetBill.ContainsDCSBIOS(),
                         textBox.GetBill.ContainsBIPLink(),
@@ -52,7 +52,7 @@ namespace DCSFlightpanels.CustomControls
                 else if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
                 {
                     var menuItemVisibilities = ((ContextMenuPanelTextBox)textBox.ContextMenu).GetVisibility(textBox.GetBill.IsEmpty(), 
-                        textBox.GetBill.ContainsSingleKey(), 
+                        textBox.GetBill.ContainsKeyStroke(), 
                         textBox.GetBill.ContainsKeySequence(), 
                         textBox.GetBill.ContainsDCSBIOS(), 
                         textBox.GetBill.ContainsBIPLink(), 
@@ -82,9 +82,9 @@ namespace DCSFlightpanels.CustomControls
 
                 if (e.ChangedButton == MouseButton.Left)
                 {
-                    if (textBox.GetBill.IsEmpty() || textBox.GetBill.ContainsSingleKey() || string.IsNullOrEmpty(textBox.Text))
+                    if (textBox.GetBill.IsEmpty() || textBox.GetBill.ContainsKeyStroke() || string.IsNullOrEmpty(textBox.Text))
                     {
-                        textBox.GetBill.EditSingleKeyPress();
+                        textBox.GetBill.EditKeyStroke();
                     }
                     else if (textBox.GetBill.ContainsKeySequence())
                     {

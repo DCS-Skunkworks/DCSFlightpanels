@@ -34,7 +34,7 @@ namespace DCSFlightpanels.Bills
             return _keyPress != null && _keyPress.IsMultiSequenced();
         }
 
-        public bool ContainsSingleKey()
+        public bool ContainsKeyStroke()
         {
             return _keyPress != null && !_keyPress.IsMultiSequenced() && _keyPress.KeySequence.Count > 0;
         }

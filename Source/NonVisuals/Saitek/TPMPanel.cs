@@ -10,13 +10,6 @@ namespace NonVisuals.Saitek
 
     public class TPMPanel : SaitekPanel
     {
-
-        /*
-         * For a switch the TPM can have :
-         * - single key binding
-         * - sequenced key binding
-         * - DCS-BIOS control
-         */
         private HashSet<DCSBIOSActionBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
         private List<OSCommandBindingTPM> _osCommandBindings = new List<OSCommandBindingTPM>();
@@ -285,7 +278,7 @@ namespace NonVisuals.Saitek
             return result;
         }
 
-        public override void AddOrUpdateSingleKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
+        public override void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             if (string.IsNullOrEmpty(keyPress))
