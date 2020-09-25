@@ -16,6 +16,8 @@ using DCSFlightpanels.Windows;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
+using NonVisuals.Saitek.Switches;
 
 namespace DCSFlightpanels.PanelUserControls
 {

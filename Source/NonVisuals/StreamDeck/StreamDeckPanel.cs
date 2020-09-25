@@ -10,6 +10,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -81,7 +82,7 @@ namespace NonVisuals.StreamDeck
                 Closed = true;
             }
         }
-        
+
         public override void Dispose()
         {
             Dispose(true);
@@ -154,6 +155,12 @@ namespace NonVisuals.StreamDeck
 
                     Thread.Sleep(50);
                     spins--;
+                }
+
+                var blackBitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(Color.Black);
+                for (var i = 0; i < ButtonCount; i++)
+                {
+                    SetImage(i, blackBitmap);
                 }
             }
             catch (Exception e)

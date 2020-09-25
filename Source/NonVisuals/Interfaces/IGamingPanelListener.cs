@@ -1,4 +1,5 @@
 ﻿using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Interfaces
 {

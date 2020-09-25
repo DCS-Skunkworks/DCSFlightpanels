@@ -10,6 +10,7 @@ using DCSFlightpanels.PanelUserControls;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 // Resharper Disable all
 namespace DCSFlightpanels.Radios.PreProgrammed

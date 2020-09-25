@@ -162,7 +162,7 @@
     <Compile Include="Radios\Knobs\RadiopanelKnobP47D.cs" />
     <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
-    <Compile Include="Saitek\BacklitPanelBIP.cs" />
+    <Compile Include="Saitek\Panels\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
     <Compile Include="Saitek\BIPLink.cs" />
     <Compile Include="Saitek\BIPLinkPZ55.cs" />
@@ -219,8 +219,8 @@
     <Compile Include="Interfaces\IStreamDeckButtonFace.cs" />
     <Compile Include="StreamDeck\FaceTypeText.cs" />
     <Compile Include="StreamDeck\StreamDeckButton.cs" />
-    <Compile Include="Saitek\MultiPanelKnob.cs" />
-    <Compile Include="Saitek\MultiPanelPZ70.cs" />
+    <Compile Include="Saitek\Switches\MultiPanelKnob.cs" />
+    <Compile Include="Saitek\Panels\MultiPanelPZ70.cs" />
     <Compile Include="KeyPress.cs" />
     <Compile Include="Saitek\BIPLight.cs" />
     <Compile Include="Saitek\PanelSwitchOnOff.cs" />
@@ -272,7 +272,7 @@
     <Compile Include="Radios\RadioPanelPZ69SRS.cs" />
     <Compile Include="Radios\RadioPanelPZ69UH1H.cs" />
     <Compile Include="Radios\RadiopanelSpitfireLFMkIX.cs" />
-    <Compile Include="Saitek\SaitekPanel.cs" />
+    <Compile Include="Saitek\Panels\SaitekPanel.cs" />
     <Compile Include="Radios\RadioPanelPZ69Emulator.cs" />
     <Compile Include="Radios\SRS\SRSRadio.cs" />
     <Compile Include="Radios\SRS\SRSPlayerRadioInfo.cs" />
@@ -281,10 +281,10 @@
     <Compile Include="StreamDeck\StreamDeckLayer.cs" />
     <Compile Include="StreamDeck\StreamDeckLayerHandler.cs" />
     <Compile Include="StreamDeck\StreamDeckPanel.cs" />
-    <Compile Include="Saitek\TPMPanelSwitch.cs" />
-    <Compile Include="Saitek\SwitchPanelKey.cs" />
-    <Compile Include="Saitek\TPMPanel.cs" />
-    <Compile Include="Saitek\SwitchPanelPZ55.cs" />
+    <Compile Include="Saitek\Switches\TPMPanelSwitch.cs" />
+    <Compile Include="Saitek\Switches\SwitchPanelKey.cs" />
+    <Compile Include="Saitek\Panels\TPMPanel.cs" />
+    <Compile Include="Saitek\Panels\SwitchPanelPZ55.cs" />
     <Compile Include="StreamDeck\ZipArchiver.cs" />
     <Compile Include="VirtualKeyCode.cs" />
     <Compile Include="NativeMethods.cs" />

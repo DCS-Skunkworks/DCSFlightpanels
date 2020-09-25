@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 
-namespace NonVisuals.Saitek
+namespace NonVisuals.Saitek.Panels
 {
     [Serializable]
     public enum BIPLedPositionEnum
@@ -464,9 +465,19 @@ namespace NonVisuals.Saitek
                     spins--;
                 }
 
+                TurnOffAllLEDs();
             }
             catch (Exception e)
             {
+            }
+        }
+
+        public void TurnOffAllLEDs()
+        {
+            var positions = Enum.GetValues(typeof(BIPLedPositionEnum)).Cast<BIPLedPositionEnum>();
+            foreach (var position in positions)
+            {
+                SetLED(position, PanelLEDColor.DARK);   
             }
         }
 

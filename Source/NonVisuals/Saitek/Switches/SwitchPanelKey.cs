@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NonVisuals.Interfaces;
 
-namespace NonVisuals.Saitek
+namespace NonVisuals.Saitek.Switches
 {
 
     [Flags]

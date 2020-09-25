@@ -6,8 +6,9 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek.Switches;
 
-namespace NonVisuals.Saitek
+namespace NonVisuals.Saitek.Panels
 {
     public enum SwitchPanelPZ55LEDPosition : byte
     {
@@ -216,6 +217,10 @@ namespace NonVisuals.Saitek
                     Thread.Sleep(50);
                     spins--;
                 }
+
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.UP, PanelLEDColor.DARK);
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.LEFT, PanelLEDColor.DARK);
+                SetLandingGearLED(SwitchPanelPZ55LEDPosition.RIGHT, PanelLEDColor.DARK);
             }
             catch (Exception e)
             {

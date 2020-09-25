@@ -4,8 +4,10 @@ using System.Threading;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek;
+using NonVisuals.Saitek.Switches;
 
-namespace NonVisuals.Saitek
+namespace NonVisuals.Saitek.Panels
 {
 
     public class TPMPanel : SaitekPanel

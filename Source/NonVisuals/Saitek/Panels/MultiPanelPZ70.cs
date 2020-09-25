@@ -5,8 +5,9 @@ using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Saitek.Switches;
 
-namespace NonVisuals.Saitek
+namespace NonVisuals.Saitek.Panels
 {
     public class MultiPanelPZ70 : SaitekPanel
     {
@@ -293,6 +294,11 @@ namespace NonVisuals.Saitek
 
                     Thread.Sleep(50);
                     spins--;
+                }
+
+                foreach (var multiPanelPZ70Knob in buttonList)
+                {
+                    _lcdButtonByteListHandler.SetButtonOff(PZ70DialPosition, multiPanelPZ70Knob);
                 }
             }
             catch (Exception e)

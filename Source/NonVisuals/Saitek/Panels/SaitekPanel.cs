@@ -4,8 +4,9 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
 using NonVisuals.Interfaces;
+using NonVisuals.Saitek.Switches;
 
-namespace NonVisuals.Saitek
+namespace NonVisuals.Saitek.Panels
 {
 
     public abstract class SaitekPanel : GamingPanel

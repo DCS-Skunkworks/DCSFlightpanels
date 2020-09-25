@@ -28,6 +28,7 @@ using NonVisuals.Interfaces;
 using NonVisuals.Radios;
 using NonVisuals.Radios.SRS;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 using NonVisuals.StreamDeck.Events;
 using Octokit;
 using Application = System.Windows.Application;

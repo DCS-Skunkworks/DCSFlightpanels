@@ -12,6 +12,7 @@ using NonVisuals;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Bills
 {

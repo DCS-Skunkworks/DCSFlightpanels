@@ -12,6 +12,7 @@ using DCSFlightpanels.Windows.StreamDeck;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;
 

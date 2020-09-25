@@ -11,6 +11,7 @@ using DCSFlightpanels.Properties;
 using NonVisuals.Interfaces;
 using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 
 namespace DCSFlightpanels.Radios.PreProgrammed

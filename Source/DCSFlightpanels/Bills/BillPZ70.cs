@@ -8,6 +8,7 @@ using DCSFlightpanels.Interfaces;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Bills
 {

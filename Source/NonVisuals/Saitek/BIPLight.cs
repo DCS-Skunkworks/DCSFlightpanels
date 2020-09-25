@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Saitek
 {
