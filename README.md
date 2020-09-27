@@ -49,6 +49,8 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 
 [How to install](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki)
 
+[BaDCrC showing his cockpit that uses Helios and DCSFP](https://www.youtube.com/watch?v=lgTJa-NUnM8)
+
 [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
 
 [Tutorial #2 (DCS-BIOS)](https://youtu.be/1CnmIdzqOJs): 
