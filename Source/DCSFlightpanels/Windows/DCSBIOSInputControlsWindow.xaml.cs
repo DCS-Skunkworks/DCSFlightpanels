@@ -45,7 +45,7 @@ namespace DCSFlightpanels.Windows
             _description = description;
             TextBoxDescription.Text = _description;
             _showSequenced = showSequenced;
-            
+
             ShowItems();
         }
 
@@ -75,7 +75,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -95,7 +95,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -108,7 +108,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -128,7 +128,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -136,47 +136,57 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var dcsBIOSInput = (DCSBIOSInput)DataGridValues.SelectedItem;
-                var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsAirframe, _header, dcsBIOSInput);
-                if (dcsBiosInputWindow.ShowDialog() == true)
-                {
-                    _dcsbiosInputs.Remove(dcsBIOSInput);
-                    var tmpdcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
-                    _dcsbiosInputs.Add(tmpdcsBiosInput);
-                    SetIsDirty();
-                    ShowItems();
-                }
-                ShowItems();
-                SetFormState();
+                EditControl();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void EditControl()
+        {
+            var dcsBIOSInput = (DCSBIOSInput)DataGridValues.SelectedItem;
+            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsAirframe, _header, dcsBIOSInput);
+            if (dcsBiosInputWindow.ShowDialog() == true)
+            {
+                _dcsbiosInputs.Remove(dcsBIOSInput);
+                var tmpdcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
+                _dcsbiosInputs.Add(tmpdcsBiosInput);
+                SetIsDirty();
+                ShowItems();
+            }
+            ShowItems();
+            SetFormState();
         }
 
         private void NewControlButton_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                DCSBiosInputWindow dcsBiosInputWindow;
-                dcsBiosInputWindow = new DCSBiosInputWindow();
-                dcsBiosInputWindow.ShowDialog();
-                if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
-                {
-                    var dcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    _dcsbiosInputs.Add(dcsBiosInput);
-                    SetIsDirty();
-                }
-                SetFormState();
-                ShowItems();
+                AddNewControl();
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private void AddNewControl()
+        {
+            DCSBiosInputWindow dcsBiosInputWindow;
+            dcsBiosInputWindow = new DCSBiosInputWindow();
+            dcsBiosInputWindow.ShowDialog();
+            if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
+            {
+                var dcsBiosInput = dcsBiosInputWindow.DCSBiosInput;
+                //1 appropriate text to textbox
+                //2 update bindings
+                _dcsbiosInputs.Add(dcsBiosInput);
+                SetIsDirty();
+            }
+            SetFormState();
+            ShowItems();
         }
 
         private void DataGridValues_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -187,7 +197,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -240,7 +250,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -268,7 +278,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -280,7 +290,7 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -292,7 +302,35 @@ namespace DCSFlightpanels.Windows
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void DataGridValues_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (DataGridValues.Items.Count == 0 || DataGridValues.SelectedItems.Count == 0)
+                {
+                    AddNewControl();
+                }
+                else if (DataGridValues.SelectedItems.Count == 1)
+                {
+                    EditControl();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void DataGridValues_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is ScrollViewer)
+            {
+                //Unselect when user presses any area not containing a row
+                ((DataGrid)sender).UnselectAll();
             }
         }
     }

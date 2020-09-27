@@ -16,13 +16,25 @@
             <controls:ColumnDefinition Width="3*" />
             <controls:ColumnDefinition Width="3*" />
         </controls:Grid.ColumnDefinitions>
-        <controls:DataGrid AutoGenerateColumns="false" HorizontalAlignment="Stretch" Name="DataGridSequences" VerticalAlignment="Stretch" controls:Grid.ColumnSpan="2" VerticalScrollBarVisibility="Visible" SelectionChanged="DataGridSequencesSelectionChanged" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False">
+        <controls:DataGrid 
+            AutoGenerateColumns="false" 
+            HorizontalAlignment="Stretch" 
+            Name="DataGridSequences" 
+            VerticalAlignment="Stretch" 
+            controls:Grid.ColumnSpan="2" 
+            VerticalScrollBarVisibility="Visible" 
+            SelectionChanged="DataGridSequencesSelectionChanged" 
+            CanUserReorderColumns="False" 
+            CanUserResizeRows="False" 
+            CanUserSortColumns="False"
+            MouseDoubleClick="DataGridSequences_OnMouseDoubleClick"
+            MouseUp="DataGridSequences_OnMouseUp">
             <controls:DataGrid.Columns>
                 <controls:DataGridTextColumn Header="Seq #" IsReadOnly="True" Binding="{data:Binding Path=Key}"/>
                 <controls:DataGridTextColumn Header="Break (ms)" IsReadOnly="True" Binding="{data:Binding Path=Value.DelayBefore}"/>
                 <controls:DataGridTextColumn Header="BIP Light" IsReadOnly="True" Binding="{data:Binding Path=Value.BIPLedPosition}"/>
                 <controls:DataGridTextColumn Header="Color" IsReadOnly="True" Binding="{data:Binding Path=Value.LEDColor}"/>
-                <controls:DataGridTextColumn Header="Panel" IsReadOnly="True" Binding="{data:Binding Path=Value.Hash}"/>
+                <controls:DataGridTextColumn Header="Panel" IsReadOnly="True" Width="*" Binding="{data:Binding Path=Value.Hash}"/>
             </controls:DataGrid.Columns>
         </controls:DataGrid>
 
@@ -34,11 +46,11 @@
         </controls:GroupBox>
         
         <controls:GroupBox Header="Sequence actions" Name="GroupBoxSequenceAction" controls:Grid.Row="1" HorizontalAlignment="Left" Width="275">
-            <controls:DockPanel Width="253">
-                <controls:Button Content="Add" Height="23"  Name="ButtonAdd" controls:DockPanel.Dock="Left" Width="75" Click="ButtonAddClick" />
-                <controls:Button Content="Edit" Height="23"  Name="ButtonEdit"  controls:DockPanel.Dock="Right" Width="75" Click="ButtonEditClick" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="253">
+                <controls:Button Content="Add" Height="23"  Name="ButtonAdd" controls:DockPanel.Dock="Left" Width="75" Margin="0,0,5,0" Click="ButtonAddClick" />
+                <controls:Button Content="Edit" Height="23"  Name="ButtonEdit"  controls:DockPanel.Dock="Right" Width="75" Margin="0,0,5,0" Click="ButtonEditClick" />
                 <controls:Button Content="Delete" Height="23"  Name="ButtonDelete" controls:DockPanel.Dock="Right" Width="75" Click="ButtonDeleteClick" />
-            </controls:DockPanel>
+            </StackPanel>
         </controls:GroupBox>
         <controls:StackPanel controls:Grid.Column="1" controls:Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <controls:Label Content="Information" />

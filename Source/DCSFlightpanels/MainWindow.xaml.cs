@@ -18,6 +18,8 @@ using CommonClassLibraryJD;
 using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
+using DCSFlightpanels.Radios.Emulators;
+using DCSFlightpanels.Radios.PreProgrammed;
 using DCSFlightpanels.Shared;
 using DCSFlightpanels.Windows;
 using Microsoft.Win32;
@@ -26,6 +28,7 @@ using NonVisuals.Interfaces;
 using NonVisuals.Radios;
 using NonVisuals.Radios.SRS;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 using NonVisuals.StreamDeck.Events;
 using Octokit;
 using Application = System.Windows.Application;
@@ -793,7 +796,7 @@ namespace DCSFlightpanels
                                     }
                                     else
                                     {
-                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulatorFull(hidSkeleton, tabItem, this);
+                                        var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlGeneric(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
                                         _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
@@ -1377,6 +1380,19 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
+        
+        private void MenuItemWikiClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start("https://github.com/DCSFlightpanels/DCSFlightpanels/wiki");
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
         private void MenuItemAboutClick(object sender, RoutedEventArgs e)
         {
             try

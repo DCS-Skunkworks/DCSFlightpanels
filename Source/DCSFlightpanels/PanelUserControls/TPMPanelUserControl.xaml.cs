@@ -13,18 +13,22 @@ using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
+using NonVisuals.Saitek.Switches;
 
 namespace DCSFlightpanels.PanelUserControls
 {
     /// <summary>
     /// Interaction logic for TPMPanelUserControl.xaml
     /// </summary>
-    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
+    public partial class TPMPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
 
         private readonly TPMPanel _tpmPanel;
         private bool _once;
         private bool _textBoxBillsSet;
+
+
 
         public TPMPanelUserControl(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -35,7 +39,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             _tpmPanel = new TPMPanel(hidSkeleton);
 
-            _tpmPanel.Attach((IGamingPanelListener) this);
+            _tpmPanel.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_tpmPanel);
             GlobalHandler = globalHandler;
         }
@@ -56,9 +60,8 @@ namespace DCSFlightpanels.PanelUserControls
                 HidePositionIndicators();
                 _once = true;
             }
-
+            
             SetTextBoxBills();
-            SetContextMenuClickHandlers();
             UserControlLoaded = true;
             ShowGraphicConfiguration();
         }
@@ -84,8 +87,6 @@ namespace DCSFlightpanels.PanelUserControls
 
         public void BipPanelRegisterEvent(object sender, BipPanelRegisteredEventArgs e)
         {
-            RemoveContextMenuClickHandlers();
-            SetContextMenuClickHandlers();
         }
 
         public override GamingPanel GetGamingPanel()
@@ -179,8 +180,8 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (e.HidInstance.Equals(_tpmPanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.TPM)
                 {
-                    Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action) (() => TextBoxLogTPM.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Text = ""));
                 }
             }
             catch (Exception ex)
@@ -193,7 +194,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action) (ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
             }
             catch (Exception ex)
             {
@@ -213,189 +214,6 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-
-        private void MenuContextEditTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                KeySequenceWindow keySequenceWindow;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    keySequenceWindow = new KeySequenceWindow(textBox.Text, textBox.Bill.GetKeySequence());
-                }
-                else
-                {
-                    keySequenceWindow = new KeySequenceWindow();
-                }
-
-                keySequenceWindow.ShowDialog();
-                if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    //If the user added only a single key stroke combo then let's not treat this as a sequence
-                    if (!keySequenceWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-
-                    var sequenceList = keySequenceWindow.GetSequence;
-                    if (sequenceList.Count > 1)
-                    {
-                        var keyPress = new KeyPress("Key press sequence", sequenceList);
-                        textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
-                        if (!string.IsNullOrEmpty(keySequenceWindow.GetInformation))
-                        {
-                            textBox.Text = keySequenceWindow.GetInformation;
-                        }
-
-                        UpdateKeyBindingProfileSequencedKeyStrokesTPM(textBox);
-                    }
-                    else
-                    {
-                        //If only one press was created treat it as a simple keypress
-                        textBox.Bill.Clear();
-                        var keyPress = new KeyPress(sequenceList[0].VirtualKeyCodesAsString, sequenceList[0].LengthOfKeyPress);
-                        textBox.Bill.KeyPress = keyPress;
-                        textBox.Bill.KeyPress.Information = keySequenceWindow.GetInformation;
-                        textBox.Text = sequenceList[0].VirtualKeyCodesAsString;
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-                    }
-                }
-
-                TextBoxLogTPM.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuContextEditDCSBIOSControlTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
-                }
-                else
-                {
-                    dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null);
-                }
-
-                dcsBIOSInputControlsWindow.ShowDialog();
-                if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)
-                {
-                    var dcsBiosInputs = dcsBIOSInputControlsWindow.DCSBIOSInputs;
-                    var text = string.IsNullOrWhiteSpace(dcsBIOSInputControlsWindow.Description) ? "DCS-BIOS" : dcsBIOSInputControlsWindow.Description;
-                    //1 appropriate text to textbox
-                    //2 update bindings
-                    textBox.Text = text;
-                    textBox.Bill.Consume(dcsBiosInputs);
-                    UpdateDCSBIOSBinding(textBox);
-                }
-
-                TextBoxLogTPM.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void MenuContextEditBipTextBoxClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                BIPLinkWindow bipLinkWindow;
-                if (textBox.Bill.ContainsBIPLink())
-                {
-                    var bipLink = textBox.Bill.BIPLink;
-                    bipLinkWindow = new BIPLinkWindow(bipLink);
-                }
-                else
-                {
-                    var bipLink = new BIPLinkTPM();
-                    bipLinkWindow = new BIPLinkWindow(bipLink);
-                }
-
-                bipLinkWindow.ShowDialog();
-                if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
-                {
-                    textBox.Bill.BIPLink = (BIPLinkTPM) bipLinkWindow.BIPLink;
-                    UpdateBIPLinkBindings(textBox);
-                }
-
-                TextBoxLogTPM.Focus();
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-
-        private void TextBoxContextMenuIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            try
-            {
-                var contextMenu = (ContextMenu) sender;
-                var textBox = GetTextBoxInFocus();
-                if (textBox == null)
-                {
-                    foreach (MenuItem contextMenuItem in contextMenu.Items)
-                    {
-                        contextMenuItem.Visibility = Visibility.Collapsed;
-                    }
-
-                    return;
-                    //throw new Exception("Failed to locate which textbox is focused.");
-                }
-
-                //Check new value, is menu visible?
-                if (!(bool) e.NewValue)
-                {
-                    //Do not show if not visible
-                    return;
-                }
-
-                if (!textBox.Bill.ContainsSingleKey())
-                {
-                    return;
-                }
-
-                var keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
-                CheckContextMenuItems(keyPressLength, contextMenu);
-
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void ClearAll(bool clearAlsoProfile)
         {
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
@@ -405,13 +223,15 @@ namespace DCSFlightpanels.PanelUserControls
                     continue;
                 }
 
-                textBox.Bill.Clear();
+                textBox.Bill.ClearAll();
             }
 
             if (clearAlsoProfile)
             {
-                _tpmPanel.ClearSettings();
+                _tpmPanel.ClearSettings(true);
             }
+
+            ShowGraphicConfiguration();
         }
 
         private void SetTextBoxBills()
@@ -423,220 +243,13 @@ namespace DCSFlightpanels.PanelUserControls
 
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogTPM))
+                if (textBox.Bill != null || textBox.Equals(TextBoxLogTPM))
                 {
                     continue;
                 }
 
-                textBox.Bill = new BillTPM(textBox, GetTPMSwitch(textBox));
-            }
-
-            _textBoxBillsSet = true;
-        }
-
-        private void RemoveContextMenuClickHandlers()
-        {
-            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogTPM))
-                {
-                    textBox.ContextMenu = null;
-                    textBox.ContextMenuOpening -= TextBoxContextMenuOpening;
-                }
-            }
-        }
-
-        private void SetContextMenuClickHandlers()
-        {
-            foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
-            {
-                if (!Equals(textBox, TextBoxLogTPM))
-                {
-                    var contectMenu = (ContextMenu) Resources["TextBoxContextMenuTPM"];
-
-                    if (!BipFactory.HasBips())
-                    {
-                        MenuItem bipMenuItem = null;
-                        foreach (var item in contectMenu.Items)
-                        {
-                            if (((MenuItem) item).Name == "contextMenuItemEditBIP")
-                            {
-                                bipMenuItem = (MenuItem) item;
-                                break;
-                            }
-                        }
-
-                        if (bipMenuItem != null)
-                        {
-                            contectMenu.Items.Remove(bipMenuItem);
-                        }
-                    }
-
-                    if (Common.NoDCSBIOSEnabled())
-                    {
-                        MenuItem dcsBIOSMenuItem = null;
-                        foreach (var item in contectMenu.Items)
-                        {
-                            if (((MenuItem) item).Name == "contextMenuItemEditDCSBIOS")
-                            {
-                                dcsBIOSMenuItem = (MenuItem) item;
-                                break;
-                            }
-                        }
-
-                        if (dcsBIOSMenuItem != null)
-                        {
-                            contectMenu.Items.Remove(dcsBIOSMenuItem);
-                        }
-                    }
-
-                    textBox.ContextMenu = contectMenu;
-                    textBox.ContextMenuOpening += TextBoxContextMenuOpening;
-                }
-            }
-        }
-
-        private void TextBoxContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            try
-            {
-                var textBox = (TPMTextBox) sender;
-                var contextMenu = textBox.ContextMenu;
-                if (!(textBox.IsFocused && Equals(textBox.Background, Brushes.Yellow)))
-                {
-                    //UGLY Must use this to get around problems having different color for BIPLink and Right Clicks
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        item.Visibility = Visibility.Collapsed;
-                    }
-
-                    return;
-                }
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    item.Visibility = Visibility.Collapsed;
-                }
-
-                if (textBox.Bill.ContainsDCSBIOS())
-                {
-                    // 1) If Contains DCSBIOS, show Edit DCS-BIOS Control & BIP
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsKeySequence())
-                {
-                    // 2) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.IsEmpty())
-                {
-                    // 4) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else if (item.Name.Contains("AddNullKey"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsSingleKey())
-                {
-                    // 5) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (!(item.Name.Contains("EditSequence") || item.Name.Contains("EditDCSBIOS")))
-                        {
-                            if (item.Name.Contains("EditBIP"))
-                            {
-                                if (BipFactory.HasBips())
-                                {
-                                    item.Visibility = Visibility.Visible;
-                                }
-                            }
-                            else
-                            {
-                                item.Visibility = Visibility.Visible;
-                            }
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsBIPLink())
-                {
-                    // 3) 
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (Common.FullDCSBIOSEnabled() && item.Name.Contains("EditDCSBIOS"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (BipFactory.HasBips() && item.Name.Contains("EditBIP"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-
-                        if (item.Name.Contains("EditSequence"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                else if (textBox.Bill.ContainsOSCommand())
-                {
-                    foreach (MenuItem item in contextMenu.Items)
-                    {
-                        if (item.Name.Contains("EditOSCommand"))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
+                textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox);
+                _textBoxBillsSet = true;
             }
         }
 
@@ -652,86 +265,7 @@ namespace DCSFlightpanels.PanelUserControls
 
             return null;
         }
-
-        private void TextBoxContextMenuClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = GetTextBoxInFocus(); //OK
-                SetKeyPressLength(textBox, (MenuItem) sender);
-
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                var textBox = (TPMTextBox) sender;
-
-                if (e.ChangedButton == MouseButton.Left)
-                {
-
-                    //Check if this textbox contains DCS-BIOS information. If so then prompt the user for deletion
-                    if (textBox.Bill.ContainsDCSBIOS())
-                    {
-                        if (MessageBox.Show("Do you want to delete the DCS-BIOS configuration?", "Delete DCS-BIOS configuration?", MessageBoxButton.OKCancel, MessageBoxImage.Question) !=
-                            MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-
-                        textBox.Text = "";
-                        _tpmPanel.RemoveTPMPanelSwitchFromList(ControlListTPM.DCSBIOS, GetTPMSwitch(textBox).TPMSwitch, GetTPMSwitch(textBox).ButtonState);
-                        textBox.Bill.DCSBIOSBinding = null;
-                    }
-                    else if (textBox.Bill.ContainsKeySequence())
-                    {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete the key sequence?", "Delete key sequence?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-                    }
-                    else if (textBox.Bill.ContainsSingleKey())
-                    {
-                        textBox.Bill.KeyPress.KeySequence.Clear();
-                        textBox.Text = "";
-                        UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-                    }
-
-                    if (textBox.Bill.ContainsBIPLink())
-                    {
-                        //Check if this textbox contains sequence information. If so then prompt the user for deletion
-                        if (MessageBox.Show("Do you want to delete BIP Links?", "Delete BIP Link?", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
-                        {
-                            return;
-                        }
-
-                        textBox.Bill.BIPLink.BIPLights.Clear();
-                        textBox.Background = Brushes.White;
-                        UpdateBIPLinkBindings(textBox);
-                    }
-
-                    TextBoxLogTPM.Focus();
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
+        
         private void ButtonClearAllClick(object sender, RoutedEventArgs e)
         {
             try
@@ -747,123 +281,15 @@ namespace DCSFlightpanels.PanelUserControls
             }
         }
 
-
-        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ((TPMTextBox) sender).Background = Brushes.Yellow;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void TextBoxLostFocus(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var textBox = (TPMTextBox) sender;
-                if (textBox.Bill.ContainsBIPLink())
-                {
-                    ((TPMTextBox) sender).Background = Brushes.Bisque;
-                }
-                else
-                {
-                    ((TPMTextBox) sender).Background = Brushes.White;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void TextBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                var textBox = ((TPMTextBox) sender);
-
-                //Check if this textbox contains sequence or DCS-BIOS information. If so then exit
-                if (textBox.Bill.ContainsKeySequence() || textBox.Bill.ContainsDCSBIOS())
-                {
-                    return;
-                }
-
-                var hashSetOfKeysPressed = new HashSet<string>();
-
-                var keyCode = KeyInterop.VirtualKeyFromKey(e.RealKey());
-                e.Handled = true;
-
-                if (keyCode > 0)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), keyCode));
-                }
-
-                var modifiers = CommonVK.GetPressedVirtualKeyCodesThatAreModifiers();
-                foreach (var virtualKeyCode in modifiers)
-                {
-                    hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
-                }
-
-                var result = "";
-                foreach (var str in hashSetOfKeysPressed)
-                {
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        result = str + " + " + result;
-                    }
-                    else
-                    {
-                        result = str + " " + result;
-                    }
-                }
-
-                result = Common.RemoveRControl(result);
-
-                textBox.Text = result;
-                UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-
-        private void TextBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                //MAKE SURE THE Tag iss SET BEFORE SETTING TEXT! OTHERWISE THIS DOESN'T FIRE
-                var textBox = (TPMTextBox) sender;
-                if (textBox.Bill.ContainsKeySequence())
-                {
-                    textBox.FontStyle = FontStyles.Oblique;
-                }
-                else
-                {
-                    textBox.FontStyle = FontStyles.Normal;
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
         private void NotifySwitchChanges(HashSet<object> switches)
         {
             try
             {
                 //Set focus to this so that virtual keypresses won't affect settings
-                Dispatcher?.BeginInvoke((Action) (() => TextBoxLogTPM.Focus()));
+                Dispatcher?.BeginInvoke((Action)(() => TextBoxLogTPM.Focus()));
                 foreach (var tpmPanelSwitch in switches)
                 {
-                    var key = (TPMPanelSwitch) tpmPanelSwitch;
+                    var key = (TPMPanelSwitch)tpmPanelSwitch;
 
                     if (_tpmPanel.ForwardPanelEvent)
                     {
@@ -904,108 +330,108 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 foreach (var tpmPanelSwitchObject in switches)
                 {
-                    var tpmPanelSwitch = (TPMPanelSwitch) tpmPanelSwitchObject;
+                    var tpmPanelSwitch = (TPMPanelSwitch)tpmPanelSwitchObject;
                     switch (tpmPanelSwitch.TPMSwitch)
                     {
                         case TPMPanelSwitches.G1:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG1On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG1Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG1On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG1Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G2:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG2On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG2Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG2On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG2Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G3:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG3On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG3Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG3On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG3Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G4:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG4On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG4Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG4On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG4Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G5:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG5On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG5Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG5On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG5Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G6:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG6On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG6Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG6On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG6Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G7:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG7On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG7Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG7On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG7Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G8:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG8On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG8Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG8On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG8Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                         case TPMPanelSwitches.G9:
-                        {
-                            var key = tpmPanelSwitch;
-                            Dispatcher?.BeginInvoke(
-                                (Action) delegate
-                                {
-                                    ImageG9On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
-                                    ImageG9Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
-                                });
-                            break;
-                        }
+                            {
+                                var key = tpmPanelSwitch;
+                                Dispatcher?.BeginInvoke(
+                                    (Action)delegate
+                                   {
+                                        ImageG9On.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
+                                        ImageG9Off.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                    });
+                                break;
+                            }
                     }
                 }
             }
@@ -1019,7 +445,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateSequencedKeyBinding(textBox.Text, textBox.Bill.Key.TPMSwitch, textBox.Bill.GetKeySequence(), textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateSequencedKeyBinding(GetSwitch(textBox), textBox.Text, textBox.Bill.GetKeySequence());
             }
             catch (Exception ex)
             {
@@ -1031,7 +457,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateBIPLinkKeyBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.BIPLink, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateBIPLinkBinding(GetSwitch(textBox), textBox.Bill.BipLink);
             }
             catch (Exception ex)
             {
@@ -1053,7 +479,7 @@ namespace DCSFlightpanels.PanelUserControls
                     keyPressLength = textBox.Bill.KeyPress.GetLengthOfKeyPress();
                 }
 
-                _tpmPanel.AddOrUpdateSingleKeyBinding(textBox.Bill.Key.TPMSwitch, textBox.Text, keyPressLength, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateKeyStrokeBinding(GetSwitch(textBox), textBox.Text, keyPressLength);
             }
             catch (Exception ex)
             {
@@ -1065,7 +491,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateOSCommandBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.OSCommandObject, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateOSCommandBinding(GetSwitch(textBox), textBox.Bill.OSCommandObject);
             }
             catch (Exception ex)
             {
@@ -1077,7 +503,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                _tpmPanel.AddOrUpdateDCSBIOSBinding(textBox.Bill.Key.TPMSwitch, textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text, textBox.Bill.Key.ButtonState);
+                _tpmPanel.AddOrUpdateDCSBIOSBinding(GetSwitch(textBox), textBox.Bill.DCSBIOSBinding.DCSBIOSInputs, textBox.Text);
             }
             catch (Exception ex)
             {
@@ -1097,7 +523,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var keyBinding in _tpmPanel.KeyBindingsHashSet)
                 {
-                    var textBox = GetTextBox(keyBinding.TPMSwitch, keyBinding.WhenTurnedOn);
+                    var textBox = (TPMTextBox) GetTextBox(keyBinding.TPMSwitch, keyBinding.WhenTurnedOn);
                     if (keyBinding.OSKeyPress != null)
                     {
                         textBox.Bill.KeyPress = keyBinding.OSKeyPress;
@@ -1106,7 +532,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var osCommand in _tpmPanel.OSCommandHashSet)
                 {
-                    var textBox = GetTextBox(osCommand.TPMSwitch, osCommand.WhenTurnedOn);
+                    var textBox = (TPMTextBox)GetTextBox(osCommand.TPMSwitch, osCommand.WhenTurnedOn);
                     if (osCommand.OSCommandObject != null)
                     {
                         textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
@@ -1115,7 +541,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var dcsBiosBinding in _tpmPanel.DCSBiosBindings)
                 {
-                    var textBox = GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
+                    var textBox = (TPMTextBox)GetTextBox(dcsBiosBinding.TPMSwitch, dcsBiosBinding.WhenTurnedOn);
                     if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
                     {
                         textBox.Bill.DCSBIOSBinding = dcsBiosBinding;
@@ -1124,10 +550,10 @@ namespace DCSFlightpanels.PanelUserControls
 
                 foreach (var bipLink in _tpmPanel.BipLinkHashSet)
                 {
-                    var textBox = GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
+                    var textBox = (TPMTextBox)GetTextBox(bipLink.TPMSwitch, bipLink.WhenTurnedOn);
                     if (bipLink.BIPLights.Count > 0)
                     {
-                        textBox.Bill.BIPLink = bipLink;
+                        textBox.Bill.BipLink = bipLink;
                     }
                 }
             }
@@ -1154,100 +580,99 @@ namespace DCSFlightpanels.PanelUserControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-
-        private TPMPanelSwitchOnOff GetTPMSwitch(TPMTextBox textBox)
+        
+        public PanelSwitchOnOff GetSwitch(TextBox textBox)
         {
             try
             {
                 if (textBox.Equals(TextBoxG1Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G1, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G1, false);
                 }
 
                 if (textBox.Equals(TextBoxG1On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G1, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G1, true);
                 }
 
                 if (textBox.Equals(TextBoxG2Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G2, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G2, false);
                 }
 
                 if (textBox.Equals(TextBoxG2On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G2, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G2, true);
                 }
 
                 if (textBox.Equals(TextBoxG3Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G3, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G3, false);
                 }
 
                 if (textBox.Equals(TextBoxG3On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G3, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G3, true);
                 }
 
                 if (textBox.Equals(TextBoxG4Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G4, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G4, false);
                 }
 
                 if (textBox.Equals(TextBoxG4On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G4, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G4, true);
                 }
 
                 if (textBox.Equals(TextBoxG5Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G5, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G5, false);
                 }
 
                 if (textBox.Equals(TextBoxG5On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G5, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G5, true);
                 }
 
                 if (textBox.Equals(TextBoxG6Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G6, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G6, false);
                 }
 
                 if (textBox.Equals(TextBoxG6On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G6, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G6, true);
                 }
 
                 if (textBox.Equals(TextBoxG7Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G7, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G7, false);
                 }
 
                 if (textBox.Equals(TextBoxG7On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G7, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G7, true);
                 }
 
                 if (textBox.Equals(TextBoxG8Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G8, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G8, false);
                 }
 
                 if (textBox.Equals(TextBoxG8On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G8, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G8, true);
                 }
 
                 if (textBox.Equals(TextBoxG9Off))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G9, false);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G9, false);
                 }
 
                 if (textBox.Equals(TextBoxG9On))
                 {
-                    return new TPMPanelSwitchOnOff(TPMPanelSwitches.G9, true);
+                    return new TPMSwitchOnOff(TPMPanelSwitches.G9, true);
                 }
             }
             catch (Exception ex)
@@ -1257,9 +682,10 @@ namespace DCSFlightpanels.PanelUserControls
 
             throw new Exception("Failed to find TPM switch for TextBox : " + textBox.Name);
         }
-
-        private TPMTextBox GetTextBox(TPMPanelSwitches key, bool whenTurnedOn)
+        public TextBox GetTextBox(object panelKey, bool whenTurnedOn)
         {
+            var key = (TPMPanelSwitches) panelKey;
+
             try
             {
                 if (key == TPMPanelSwitches.G1 && !whenTurnedOn)
@@ -1371,7 +797,7 @@ namespace DCSFlightpanels.PanelUserControls
                     throw new Exception("Failed to locate which textbox is focused.");
                 }
 
-                textBox.Bill.Clear();
+                textBox.Bill.ClearAll();
                 var vkNull = Enum.GetName(typeof(VirtualKeyCode), VirtualKeyCode.VK_NULL);
                 if (string.IsNullOrEmpty(vkNull))
                 {
@@ -1380,7 +806,7 @@ namespace DCSFlightpanels.PanelUserControls
 
                 var keyPress = new KeyPress(vkNull, KeyPressLength.ThirtyTwoMilliSec);
                 textBox.Bill.KeyPress = keyPress;
-                textBox.Bill.KeyPress.Information = "VK_NULL";
+                textBox.Bill.KeyPress.Description = "VK_NULL";
                 textBox.Text = vkNull;
                 UpdateKeyBindingProfileSimpleKeyStrokes(textBox);
             }
@@ -1435,156 +861,13 @@ namespace DCSFlightpanels.PanelUserControls
         }
 
 
-        private void CheckContextMenuItems(KeyPressLength keyPressLength, ContextMenu contextMenu)
+        private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                foreach (MenuItem item in contextMenu.Items)
+                if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
-                    item.IsChecked = false;
-                }
-
-                foreach (MenuItem item in contextMenu.Items)
-                {
-                    if (item.Name == "contextMenuItemKeepPressed" && keyPressLength == KeyPressLength.Indefinite)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThirtyTwoMilliSec" && keyPressLength == KeyPressLength.ThirtyTwoMilliSec)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFiftyMilliSec" && keyPressLength == KeyPressLength.FiftyMilliSec)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemHalfSecond" && keyPressLength == KeyPressLength.HalfSecond)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSecond" && keyPressLength == KeyPressLength.Second)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSecondAndHalf" && keyPressLength == KeyPressLength.SecondAndHalf)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTwoSeconds" && keyPressLength == KeyPressLength.TwoSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThreeSeconds" && keyPressLength == KeyPressLength.ThreeSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFourSeconds" && keyPressLength == KeyPressLength.FourSeconds)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFiveSecs" && keyPressLength == KeyPressLength.FiveSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFifteenSecs" && keyPressLength == KeyPressLength.FifteenSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTenSecs" && keyPressLength == KeyPressLength.TenSecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemTwentySecs" && keyPressLength == KeyPressLength.TwentySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemThirtySecs" && keyPressLength == KeyPressLength.ThirtySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemFortySecs" && keyPressLength == KeyPressLength.FortySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                    else if (item.Name == "contextMenuItemSixtySecs" && keyPressLength == KeyPressLength.SixtySecs)
-                    {
-                        item.IsChecked = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox(ex);
-            }
-        }
-
-        private void SetKeyPressLength(TPMTextBox textBox, MenuItem contextMenuItem)
-        {
-            try
-            {
-                if (contextMenuItem.Name == "contextMenuItemKeepPressed")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Indefinite);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThirtyTwoMilliSec")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtyTwoMilliSec);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFiftyMilliSec")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FiftyMilliSec);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemHalfSecond")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.HalfSecond);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSecond")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.Second);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSecondAndHalf")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SecondAndHalf);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTwoSeconds")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TwoSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThreeSeconds")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThreeSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFourSeconds")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FourSeconds);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFiveSecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FiveSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTenSecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TenSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFifteenSecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FifteenSecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemTwentySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.TwentySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemThirtySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.ThirtySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemFortySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.FortySecs);
-                }
-                else if (contextMenuItem.Name == "contextMenuItemSixtySecs")
-                {
-                    textBox.Bill.KeyPress.SetLengthOfKeyPress(KeyPressLength.SixtySecs);
+                    ClearAll(true);
                 }
             }
             catch (Exception ex)

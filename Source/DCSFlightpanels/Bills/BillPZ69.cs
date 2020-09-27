@@ -1,23 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
+using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Bills
 {
     public class BillPZ69 : BillBaseInput
     {
-        private RadioPanelPZ69KeyOnOff _knob;
         private BIPLinkPZ69 _bipLinkPZ69;
 
-        public BillPZ69(PZ69TextBox textBox, RadioPanelPZ69KeyOnOff knob)
+        public BillPZ69(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            TextBox = textBox;
-            _knob = knob;
+            SetContextMenu();
         }
 
+        protected override void ClearDCSBIOSFromBill()
+        {
+        }
+
+        public override BIPLink BipLink
+        {
+            get => _bipLinkPZ69;
+            set
+            {
+                _bipLinkPZ69 = (BIPLinkPZ69)value;
+                if (_bipLinkPZ69 != null)
+                {
+                    TextBox.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    TextBox.Background = Brushes.White;
+                }
+            }
+        }
+
+        public override List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get => null;
+            set
+            {
+            }
+        }
+
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
+        {
+            get => null;
+            set
+            {
+            }
+        }
 
         public override bool ContainsDCSBIOS()
         {
@@ -36,29 +74,15 @@ namespace DCSFlightpanels.Bills
         
         public override bool IsEmpty()
         {
-            return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return _bipLinkPZ69 == null && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
-        
-        public BIPLinkPZ69 BIPLink
+
+        public override bool IsEmptyNoCareBipLink()
         {
-            get => _bipLinkPZ69;
-            set
-            {
-                _bipLinkPZ69 = value;
-                if (_bipLinkPZ69 != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
-            }
+            return (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
-        public RadioPanelPZ69KeyOnOff Knob => _knob;
-
-        public override void Clear()
+        public override void ClearAll()
         {
             _bipLinkPZ69 = null;
             KeyPress = null;

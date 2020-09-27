@@ -11,6 +11,15 @@ namespace ClassLibraryCommon
         LowerStandby
     }
 
+    public enum CopyContentType
+    {
+        KeyStroke,
+        KeySequence,
+        DCSBIOS,
+        BIPLink,
+        OSCommand
+    }
+
     public enum KeyPressLength
     {
         //Zero = 0, <-- DCS & keybd_event does not work without delay between key press & release

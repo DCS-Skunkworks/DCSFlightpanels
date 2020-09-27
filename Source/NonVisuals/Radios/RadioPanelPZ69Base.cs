@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Radios
 {
@@ -227,6 +228,26 @@ namespace NonVisuals.Radios
                     spins--;
                 }
 
+                TurnOffAllDisplays();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        protected void TurnOffAllDisplays()
+        {
+            try
+            {
+                var bytes = new byte[21];
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                SendLCDData(bytes);
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                SendLCDData(bytes);
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.LOWER_STBY_RIGHT);
+                SendLCDData(bytes);
+                SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
+                SendLCDData(bytes);
             }
             catch (Exception e)
             {

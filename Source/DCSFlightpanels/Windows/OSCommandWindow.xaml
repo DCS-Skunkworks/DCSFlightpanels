@@ -5,27 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DCSFlightpanels"
         mc:Ignorable="d"
-        Title="Set command to execute" Height="350" Width="600"  Loaded="OSCommandWindow_OnLoaded" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico">
+        Title="Set command to execute" 
+        Height="300" 
+        Width="600"  
+        Loaded="OSCommandWindow_OnLoaded" 
+        WindowStartupLocation="CenterScreen"  
+        Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
+        KeyDown="OSCommandWindow_OnKeyDown">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="5*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="5,5,5,0">
             <Label Content="Descriptive name:" Margin="5,0,0,0"/>
-            <TextBox Name="TextBoxName" KeyUp="TextBoxName_OnKeyUp"/>
+            <TextBox Name="TextBoxName" KeyUp="TextBox_OnKeyUp"/>
             <Label Content="File (e.g. (bat/cmd/ps1):" Margin="5,0,0,0"/>
-            <TextBox Name="TextBoxCommand" KeyUp="TextBoxCommand_OnKeyUp"/>
+            <TextBox Name="TextBoxCommand" KeyUp="TextBox_OnKeyUp"/>
             <Label Content="Arguments (parameters for the file):" Margin="5,0,0,0"/>
-            <TextBox Name="TextBoxArguments" KeyUp="TextBoxArguments_OnKeyUp"/>
+            <TextBox Name="TextBoxArguments" KeyUp="TextBox_OnKeyUp"/>
             <Label Content="Test Result:" Margin="5,0,0,0"/>
             <TextBox Name="TextBoxResult" IsEnabled="False"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Margin="5,5,5,0" >
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Name="ButtonTest" Content="Test" Click="ButtonTest_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,100,0" />
-                <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button Name="ButtonTest" Content="Test" Click="ButtonTest_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,150,0" />
                 <Button Name="ButtonOk" Content="Ok" Click="ButtonOk_OnClick" Grid.Row="3" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
+                <Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_OnClick" Grid.Row="3" Width="75" Height="25" Margin="0,0,10,0" />
             </StackPanel>
         </StackPanel>
     </Grid>

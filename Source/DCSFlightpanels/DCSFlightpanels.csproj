@@ -18,6 +18,8 @@
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -32,8 +34,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>flightpanels02_8Rc_icon.ico</ApplicationIcon>
@@ -64,8 +64,8 @@
     <Reference Include="CommonClassLibraryJD">
       <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
     </Reference>
-    <Reference Include="HidLibrary, Version=3.3.28.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\hidlibrary.3.3.28\lib\net45\HidLibrary.dll</HintPath>
+    <Reference Include="HidLibrary, Version=3.2.49.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\hidlibrary.3.3.37\lib\net45\HidLibrary.dll</HintPath>
     </Reference>
     <Reference Include="HidSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HidSharp.2.1.0\lib\net35\HidSharp.dll</HintPath>
@@ -88,11 +88,11 @@
     <Reference Include="Octokit, Version=0.48.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.48.0\lib\net46\Octokit.dll</HintPath>
     </Reference>
-    <Reference Include="OpenMacroBoard.SDK, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenMacroBoard.SDK.2.0.0\lib\netstandard2.0\OpenMacroBoard.SDK.dll</HintPath>
+    <Reference Include="OpenMacroBoard.SDK, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenMacroBoard.SDK.2.1.0\lib\netstandard2.0\OpenMacroBoard.SDK.dll</HintPath>
     </Reference>
-    <Reference Include="StreamDeckSharp, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StreamDeckSharp.2.0.0\lib\netstandard2.0\StreamDeckSharp.dll</HintPath>
+    <Reference Include="StreamDeckSharp, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StreamDeckSharp.2.2.0\lib\netstandard2.0\StreamDeckSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.NonGeneric, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -105,11 +105,12 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Drawing.Common.4.5.1\lib\net461\System.Drawing.Common.dll</HintPath>
+      <HintPath>..\packages\System.Drawing.Common.4.7.0\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -127,15 +128,17 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Security.AccessControl, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.AccessControl.4.4.1\lib\net461\System.Security.AccessControl.dll</HintPath>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.AccessControl, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.AccessControl.4.7.0\lib\net461\System.Security.AccessControl.dll</HintPath>
     </Reference>
-    <Reference Include="System.Security.Permissions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Permissions.4.4.1\lib\net461\System.Security.Permissions.dll</HintPath>
+    <Reference Include="System.Security.Permissions, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Permissions.4.7.0\lib\net461\System.Security.Permissions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Principal.Windows.4.4.1\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    <Reference Include="System.Security.Principal.Windows, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Principal.Windows.4.7.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
@@ -167,20 +170,22 @@
     <Compile Include="AboutFPWindow.xaml.cs">
       <DependentUpon>AboutFPWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bills\BillBaseInputStreamDeck.cs" />
     <Compile Include="Bills\BillBaseOutput.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomControls\FontInfoTextBox.cs" />
     <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Interfaces\IPanelUI.cs" />
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml.cs">
       <DependentUpon>UserControlStreamDeckUIMini.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlP47D.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP47D.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlP47D.xaml</DependentUpon>
     </Compile>
     <Compile Include="Shared\CommonUI.cs" />
     <Compile Include="Shared\StreamDeckUICommon.cs" />
-    <Compile Include="CustomControls\PZ69FullTextBox.cs" />
+    <Compile Include="CustomControls\PZ69GenericTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckFaceTextBox.cs" />
     <Compile Include="CustomControls\StreamDeckImage.cs" />
     <Compile Include="CustomControls\TextBoxBase.cs" />
@@ -200,6 +205,7 @@
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUINormal.xaml.cs">
       <DependentUpon>UserControlStreamDeckUINormal.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ContextMenuPanelTextBox.cs" />
     <Compile Include="Windows\BindingsMappingWindow.xaml.cs">
       <DependentUpon>BindingsMappingWindow.xaml</DependentUpon>
     </Compile>
@@ -234,6 +240,9 @@
     <Compile Include="Windows\JaceHelpWindow.xaml.cs">
       <DependentUpon>JaceHelpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\KeyPressReadingWindow.xaml.cs">
+      <DependentUpon>KeyPressReadingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\StreamDeck\ImportWindow.xaml.cs">
       <DependentUpon>ImportWindow.xaml</DependentUpon>
     </Compile>
@@ -261,67 +270,67 @@
     <Compile Include="Windows\LEDConfigsWindow.xaml.cs">
       <DependentUpon>LEDConfigsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlAV8BNA.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAV8BNA.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlAV8BNA.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlF14B.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF14B.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF14B.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlF5E.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF5E.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF5E.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlEmulatorFull.xaml.cs">
-      <DependentUpon>RadioPanelPZ69UserControlEmulatorFull.xaml</DependentUpon>
+    <Compile Include="Radios\Emulators\RadioPanelPZ69UserControlGeneric.xaml.cs">
+      <DependentUpon>RadioPanelPZ69UserControlGeneric.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlEmulator.xaml.cs">
+    <Compile Include="Radios\Emulators\RadioPanelPZ69UserControlEmulator.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlEmulator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlA10C.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlA10C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlA10C.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlM2000C.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlM2000C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlM2000C.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlFA18C.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFA18C.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlFA18C.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlSA342.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSA342.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSA342.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlAJS37.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAJS37.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlAJS37.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlBf109.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlBf109.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlBf109.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlF86F.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF86F.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlF86F.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlFw190.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFw190.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlFw190.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlKa50.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlKa50.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlKa50.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlMi8.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi8.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlMi8.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlMiG21bis.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMiG21bis.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlMiG21bis.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlP51D.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP51D.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlP51D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSpitfireLFMkIX.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlNotImplemented.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlNotImplemented.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlNotImplemented.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlSRS.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSRS.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlSRS.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Radios\RadioPanelPZ69UserControlUH1H.xaml.cs">
+    <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlUH1H.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>RadioPanelPZ69UserControlUH1H.xaml</DependentUpon>
     </Compile>
@@ -392,7 +401,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlP47D.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP47D.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -444,6 +453,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\KeyPressReadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\StreamDeck\ImportWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -488,87 +501,87 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlAV8BNA.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAV8BNA.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlF14B.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF14B.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlF5E.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF5E.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlEmulatorFull.xaml">
+    <Page Include="Radios\Emulators\RadioPanelPZ69UserControlGeneric.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlEmulator.xaml">
+    <Page Include="Radios\Emulators\RadioPanelPZ69UserControlEmulator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlA10C.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlA10C.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlM2000C.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlM2000C.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlFA18C.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFA18C.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlSA342.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSA342.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlAJS37.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlAJS37.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlBf109.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlBf109.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlF86F.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlF86F.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlFw190.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlFw190.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlKa50.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlKa50.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlMi8.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMi8.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlMiG21bis.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlMiG21bis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlP51D.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP51D.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSpitfireLFMkIX.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlNotImplemented.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlNotImplemented.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlSRS.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlSRS.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Radios\RadioPanelPZ69UserControlUH1H.xaml">
+    <Page Include="Radios\PreProgrammed\RadioPanelPZ69UserControlUH1H.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -697,9 +710,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\pz70multipanel.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\BIP Saitek.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\PZ55_Switchpanel1.png" />
@@ -910,6 +920,7 @@
     <Resource Include="Images\mi8_r863_freq_panel.png" />
     <Resource Include="Images\P47_radio.png" />
     <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
+    <Resource Include="Images\BIP Saitek2.jpg" />
     <Content Include="StreamDeckGallery\NumberButtons\10_blue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -23,15 +23,13 @@
                       CanUserSortColumns="False" 
                       CanUserAddRows="False"
                       Height="366" 
-                      Width="592">
+                      Width="592"
+                      MouseDoubleClick="DataGridValues_OnMouseDoubleClick"
+                      MouseUp="DataGridValues_OnMouseUp">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Control ID" IsReadOnly="True" Binding="{Binding Path=ControlId}"  Width="Auto"/>
-                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=ControlDescription}" Width="Auto"/>
+                    <DataGridTextColumn Header="Description" IsReadOnly="True" Binding="{Binding Path=ControlDescription}" Width="*"/>
                     <DataGridTextColumn Header="Delay" IsReadOnly="True" Binding="{Binding Path=Delay}" Width="Auto"/>
-                    <!--<DataGridTextColumn Header="FixedStep" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedFixedStepArgument}" Width="Auto"/>
-                    <DataGridTextColumn Header="Action" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedActionArgument}" Width="Auto"/>
-                    <DataGridTextColumn Header="SetState" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedSetStateArgument}" Width="Auto"/>
-                    <DataGridTextColumn Header="VariableStep" IsReadOnly="True" Binding="{Binding Path=SelectedDCSBIOSInput.SpecifiedVariableStepArgument}" Width="Auto"/>-->
                 </DataGrid.Columns>
             </DataGrid>
         </WrapPanel>

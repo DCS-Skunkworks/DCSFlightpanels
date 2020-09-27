@@ -3,9 +3,11 @@ using System.Linq;
 using System.Text;
 using NonVisuals.Radios;
 using NonVisuals.Radios.Knobs;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class BIPLinkPZ69 : BIPLink
     {
         /*

@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Bills
 {
     public class BillTPM : BillBaseInput
     {
-        private TPMPanelSwitchOnOff _key;
         private DCSBIOSActionBindingTPM _dcsbiosBindingTPM;
         private BIPLinkTPM _bipLinkTPM;
 
-        public BillTPM(TPMTextBox textBox, TPMPanelSwitchOnOff key)
+        
+        public BillTPM(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            TextBox = textBox;
-            _key = key;
+            SetContextMenu();
         }
 
         public override bool ContainsDCSBIOS()
@@ -29,10 +31,15 @@ namespace DCSFlightpanels.Bills
         {
             return _bipLinkTPM != null && _bipLinkTPM.BIPLights.Count > 0;
         }
-        
+
         public override bool IsEmpty()
         {
-            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
+            return (_bipLinkTPM == null || _bipLinkTPM.BIPLights.Count == 0) && (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
+        }
+
+        public override bool IsEmptyNoCareBipLink()
+        {
+            return (_dcsbiosBindingTPM?.DCSBIOSInputs == null || _dcsbiosBindingTPM.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
         }
 
         public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
@@ -45,7 +52,51 @@ namespace DCSFlightpanels.Bills
             _dcsbiosBindingTPM.DCSBIOSInputs = dcsBiosInputs;
         }
 
-        public DCSBIOSActionBindingTPM DCSBIOSBinding
+        protected override void ClearDCSBIOSFromBill()
+        {
+            DCSBIOSBinding = null;
+        }
+
+
+
+        public override BIPLink BipLink
+        {
+            get => _bipLinkTPM;
+            set
+            {
+                _bipLinkTPM = (BIPLinkTPM)value;
+                if (_bipLinkTPM != null)
+                {
+                    TextBox.Background = Brushes.Bisque;
+                }
+                else
+                {
+                    TextBox.Background = Brushes.White;
+                }
+            }
+        }
+
+        public override List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get
+            {
+                if (ContainsDCSBIOS())
+                {
+                    return _dcsbiosBindingTPM.DCSBIOSInputs;
+                }
+
+                return null;
+            }
+            set
+            {
+                if (ContainsDCSBIOS())
+                {
+                    _dcsbiosBindingTPM.DCSBIOSInputs = value;
+                }
+            }
+        }
+
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
         {
             get => _dcsbiosBindingTPM;
             set
@@ -54,7 +105,7 @@ namespace DCSFlightpanels.Bills
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
-                _dcsbiosBindingTPM = value;
+                _dcsbiosBindingTPM = (DCSBIOSActionBindingTPM)value;
                 if (_dcsbiosBindingTPM != null)
                 {
                     if (string.IsNullOrEmpty(_dcsbiosBindingTPM.Description))
@@ -73,30 +124,7 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public BIPLinkTPM BIPLink
-        {
-            get => _bipLinkTPM;
-            set
-            {
-                _bipLinkTPM = value;
-                if (_bipLinkTPM != null)
-                {
-                    TextBox.Background = Brushes.Bisque;
-                }
-                else
-                {
-                    TextBox.Background = Brushes.White;
-                }
-            }
-        }
-        
-        public TPMPanelSwitchOnOff Key
-        {
-            get => _key;
-            set => _key = value;
-        }
-
-        public override void Clear()
+        public override void ClearAll()
         {
             _dcsbiosBindingTPM = null;
             _bipLinkTPM = null;

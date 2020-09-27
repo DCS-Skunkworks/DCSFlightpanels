@@ -46,8 +46,7 @@ namespace DCSFlightpanels.Bills
 
         public override bool IsEmpty()
         {
-            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) &&
-                   _streamDeckTargetLayer == null;
+            return (_bipLinkStreamDeck == null || _bipLinkStreamDeck.BIPLights.Count == 0) && _streamDeckTargetLayer == null;
         }
 
 

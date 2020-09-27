@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
+using DCSFlightpanels.Interfaces;
 using NonVisuals.DCSBIOSBindings;
+using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Bills
 {
@@ -13,47 +16,22 @@ namespace DCSFlightpanels.Bills
         private BIPLinkPZ69 _bipLinkPZ69;
         private DCSBIOSActionBindingPZ69 _dcsbiosBindingPZ69;
 
-        public BillPZ69Full(PZ69FullTextBox textBox)
+        public BillPZ69Full(IGlobalHandler globalHandler, IPanelUI panelUI, SaitekPanel saitekPanel, TextBox textBox) : base(globalHandler, textBox, panelUI, saitekPanel)
         {
-            TextBox = textBox;
+            SetContextMenu();
         }
 
-        public override bool ContainsDCSBIOS()
+        protected override void ClearDCSBIOSFromBill()
         {
-            return _dcsbiosBindingPZ69 != null;// && _dcsbiosInputs.Count > 0;
+            DCSBIOSBinding = null;
         }
 
-        public override bool ContainsBIPLink()
-        {
-            return _bipLinkPZ69 != null && _bipLinkPZ69.BIPLights.Count > 0;
-        }
-
-        public bool ContainsDCSBIOSBinding()
-        {
-            return _dcsbiosBindingPZ69 != null && _dcsbiosBindingPZ69.HasBinding();
-        }
-
-        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
-        {
-            if (_dcsbiosBindingPZ69 == null)
-            {
-                _dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
-            }
-
-            _dcsbiosBindingPZ69.DCSBIOSInputs = dcsBiosInputs;
-        }
-
-        public override bool IsEmpty()
-        {
-            return (_bipLinkPZ69 == null || _bipLinkPZ69.BIPLights.Count == 0) && (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0);
-        }
-
-        public BIPLinkPZ69 BIPLink
+        public override BIPLink BipLink
         {
             get => _bipLinkPZ69;
             set
             {
-                _bipLinkPZ69 = value;
+                _bipLinkPZ69 = (BIPLinkPZ69)value;
                 if (_bipLinkPZ69 != null)
                 {
                     TextBox.Background = Brushes.Bisque;
@@ -64,8 +42,28 @@ namespace DCSFlightpanels.Bills
                 }
             }
         }
-        
-        public DCSBIOSActionBindingPZ69 DCSBIOSBinding
+
+        public override List<DCSBIOSInput> DCSBIOSInputs
+        {
+            get
+            {
+                if (ContainsDCSBIOS())
+                {
+                    return _dcsbiosBindingPZ69.DCSBIOSInputs;
+                }
+
+                return null;
+            }
+            set
+            {
+                if (ContainsDCSBIOS())
+                {
+                    _dcsbiosBindingPZ69.DCSBIOSInputs = value;
+                }
+            }
+        }
+
+        public override DCSBIOSActionBindingBase DCSBIOSBinding
         {
             get => _dcsbiosBindingPZ69;
             set
@@ -74,7 +72,7 @@ namespace DCSFlightpanels.Bills
                 {
                     throw new Exception("Cannot insert DCSBIOSInputs, Bill already contains KeyPress");
                 }
-                _dcsbiosBindingPZ69 = value;
+                _dcsbiosBindingPZ69 = (DCSBIOSActionBindingPZ69)value;
                 if (_dcsbiosBindingPZ69 != null)
                 {
                     if (string.IsNullOrEmpty(_dcsbiosBindingPZ69.Description))
@@ -93,7 +91,37 @@ namespace DCSFlightpanels.Bills
             }
         }
 
-        public override void Clear()
+        public override bool ContainsDCSBIOS()
+        {
+            return _dcsbiosBindingPZ69 != null;// && _dcsbiosInputs.Count > 0;
+        }
+
+        public override bool ContainsBIPLink()
+        {
+            return _bipLinkPZ69 != null && _bipLinkPZ69.BIPLights.Count > 0;
+        }
+        
+        public override void Consume(List<DCSBIOSInput> dcsBiosInputs)
+        {
+            if (_dcsbiosBindingPZ69 == null)
+            {
+                _dcsbiosBindingPZ69 = new DCSBIOSActionBindingPZ69();
+            }
+
+            _dcsbiosBindingPZ69.DCSBIOSInputs = dcsBiosInputs;
+        }
+
+        public override bool IsEmpty()
+        {
+            return (_bipLinkPZ69 == null || _bipLinkPZ69.BIPLights.Count == 0) && (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
+        }
+
+        public override bool IsEmptyNoCareBipLink()
+        {
+            return (_dcsbiosBindingPZ69?.DCSBIOSInputs == null || _dcsbiosBindingPZ69.DCSBIOSInputs.Count == 0) && (KeyPress == null || KeyPress.KeySequence.Count == 0) && OSCommandObject == null;
+        }
+
+        public override void ClearAll()
         {
             _bipLinkPZ69 = null;
             KeyPress = null;

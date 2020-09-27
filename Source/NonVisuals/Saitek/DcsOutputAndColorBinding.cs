@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using DCS_BIOS;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Saitek
 {

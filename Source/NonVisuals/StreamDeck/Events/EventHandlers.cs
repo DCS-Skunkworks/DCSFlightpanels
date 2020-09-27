@@ -37,7 +37,7 @@ namespace NonVisuals.StreamDeck.Events
             return stringBuilder.ToString();
         }
 
-        public static void AttachStreamDeckListener(IStreamDeckListener streamDeckListener)
+        public static void AttachStreamDeckListener(INvStreamDeckListener streamDeckListener)
         {
             OnDirtyConfigurationsEventHandler += streamDeckListener.IsDirtyQueryReport;
             OnDirtyNotificationEventHandler += streamDeckListener.SenderIsDirtyNotification;
@@ -47,7 +47,7 @@ namespace NonVisuals.StreamDeck.Events
             OnStreamDeckClearSettingsEventHandler += streamDeckListener.ClearSettings;
         }
 
-        public static void DetachStreamDeckListener(IStreamDeckListener streamDeckListener)
+        public static void DetachStreamDeckListener(INvStreamDeckListener streamDeckListener)
         {
             OnDirtyConfigurationsEventHandler -= streamDeckListener.IsDirtyQueryReport;
             OnDirtyNotificationEventHandler -= streamDeckListener.SenderIsDirtyNotification;

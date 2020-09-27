@@ -1,0 +1,50 @@
+﻿<Window x:Class="DCSFlightpanels.Windows.KeyPressReadingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCSFlightpanels.Windows"
+        xmlns:common="clr-namespace:ClassLibraryCommon;assembly=ClassLibraryCommon"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="" Height="200" Width="250" WindowStartupLocation="CenterScreen" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
+        ResizeMode="NoResize"
+        Loaded="KeyPressReadingWindow_OnLoaded"
+        KeyDown="KeyPressReadingWindow_OnKeyDown">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="DataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="common:KeyPressLength"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="11*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,0,5,0">
+            <Label Content="Key press"></Label>
+            <TextBox Name="TextBoxKeyPress" IsReadOnly="True"  Margin="0,5,0,0" GotFocus="TextBoxGotFocus" LostFocus="TextBoxLostFocus" FontSize="12" PreviewKeyDown="TextBoxPreviewKeyDown" TextChanged="TextBoxTextChanged" ></TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,0,5,0">
+            <Label Content="Press time"></Label>
+            <ComboBox Name="ComboBoxPressTimes" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource DataFromEnum}}" SelectionChanged="ComboBoxPressTimes_OnSelectionChanged"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left"  Margin="5,0,5,0">
+            <Button Name="ButtonDelete" HorizontalAlignment="Left" Content="Delete" Width="50" Height="23" Click="ButtonDelete_OnClick"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="5,0,5,0">
+            <Button Name="ButtonOk" Content="OK" Height="23" Width="50" Margin="0,0,5,0"  Click="ButtonOk_OnClick"/>
+            <Button Name="ButtonCancel" Content="Cancel" Height="23" Width="50" Click="ButtonCancel_OnClick"/>
+        </StackPanel>
+    </Grid>
+</Window>

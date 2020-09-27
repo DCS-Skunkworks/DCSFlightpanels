@@ -2,7 +2,7 @@
 
 namespace NonVisuals.Interfaces
 {
-    public interface IStreamDeckListener
+    public interface INvStreamDeckListener
     {
         void LayerSwitched(object sender, StreamDeckShowNewLayerArgs e);
         void RemoteLayerSwitch(object sender, RemoteStreamDeckShowNewLayerArgs e);

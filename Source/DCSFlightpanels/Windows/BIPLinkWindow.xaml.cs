@@ -64,24 +64,29 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var bipLightWindow = new BipLightWindow();
-                bipLightWindow.ShowDialog();
-                if (bipLightWindow.DialogResult.HasValue && bipLightWindow.DialogResult.Value)
-                {
-                    
-                    _bipLink.BIPLights.Add(GetNewKeyValue(), bipLightWindow.BIPLight);
-
-                    DataGridSequences.DataContext = _bipLink.BIPLights;
-                    DataGridSequences.ItemsSource = _bipLink.BIPLights;
-                    DataGridSequences.Items.Refresh();
-                    _isDirty = true;
-                }
-                SetFormState();
+                AddBIPLight();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
             }
+        }
+
+        private void AddBIPLight()
+        {
+            var bipLightWindow = new BipLightWindow();
+            bipLightWindow.ShowDialog();
+            if (bipLightWindow.DialogResult.HasValue && bipLightWindow.DialogResult.Value)
+            {
+
+                _bipLink.BIPLights.Add(GetNewKeyValue(), bipLightWindow.BIPLight);
+
+                DataGridSequences.DataContext = _bipLink.BIPLights;
+                DataGridSequences.ItemsSource = _bipLink.BIPLights;
+                DataGridSequences.Items.Refresh();
+                _isDirty = true;
+            }
+            SetFormState();
         }
 
         private int GetNewKeyValue()
@@ -113,29 +118,34 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var keyValuePair = (KeyValuePair<int, BIPLight>)DataGridSequences.SelectedItem;
-                var bipLightWindow = new BipLightWindow(keyValuePair.Value, _bipLink.Description);
-                bipLightWindow.ShowDialog();
-                if (bipLightWindow.DialogResult.HasValue && bipLightWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    if (!bipLightWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-                    _bipLink.BIPLights[keyValuePair.Key] = bipLightWindow.BIPLight;
-                    DataGridSequences.DataContext = _bipLink.BIPLights;
-                    DataGridSequences.ItemsSource = _bipLink.BIPLights;
-                    DataGridSequences.Items.Refresh();
-                    _isDirty = true;
-                }
-                SetFormState();
+                EditBIPLight();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
             }
+        }
+
+        private void EditBIPLight()
+        {
+            var keyValuePair = (KeyValuePair<int, BIPLight>)DataGridSequences.SelectedItem;
+            var bipLightWindow = new BipLightWindow(keyValuePair.Value, _bipLink.Description);
+            bipLightWindow.ShowDialog();
+            if (bipLightWindow.DialogResult.HasValue && bipLightWindow.DialogResult.Value)
+            {
+                //Clicked OK
+                if (!bipLightWindow.IsDirty)
+                {
+                    //User made no changes
+                    return;
+                }
+                _bipLink.BIPLights[keyValuePair.Key] = bipLightWindow.BIPLight;
+                DataGridSequences.DataContext = _bipLink.BIPLights;
+                DataGridSequences.ItemsSource = _bipLink.BIPLights;
+                DataGridSequences.Items.Refresh();
+                _isDirty = true;
+            }
+            SetFormState();
         }
 
         private void ButtonUpClick(object sender, RoutedEventArgs e)
@@ -234,6 +244,8 @@ namespace DCSFlightpanels.Windows
             try
             {
                 _isDirty = true;
+                SetFormState();
+
             }
             catch (Exception ex)
             {
@@ -249,6 +261,34 @@ namespace DCSFlightpanels.Windows
             {
                 e.Handled = true;
                 Close();
+            }
+        }
+
+        private void DataGridSequences_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is ScrollViewer)
+            {
+                //Unselect when user presses any area not containing a row
+                ((DataGrid)sender).UnselectAll();
+            }
+        }
+
+        private void DataGridSequences_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (DataGridSequences.Items.Count == 0 || DataGridSequences.SelectedItems.Count == 0)
+                {
+                    AddBIPLight();
+                }
+                else if (DataGridSequences.SelectedItems.Count == 1)
+                {
+                    EditBIPLight();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
     }

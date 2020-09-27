@@ -18,6 +18,7 @@ namespace DCSFlightpanels.Windows
 
         private readonly SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
         private bool _isDirty;
+        private bool _formLoaded = false;
 
         public KeySequenceWindow()
         {
@@ -25,16 +26,28 @@ namespace DCSFlightpanels.Windows
             SetFormState();
         }
 
-        public KeySequenceWindow(string information, SortedList<int, KeyPressInfo> sortedList)
+        public KeySequenceWindow(string description, SortedList<int, KeyPressInfo> sortedList)
         {
             InitializeComponent();
             _sortedList = sortedList;
-            TextBoxInformation.Text = information;
+            TextBoxDescription.Text = description;
             DataGridSequences.DataContext = _sortedList;
             DataGridSequences.ItemsSource = _sortedList;
             DataGridSequences.Items.Refresh();
 
             SetFormState();
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _formLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         public bool IsDirty
@@ -52,14 +65,14 @@ namespace DCSFlightpanels.Windows
             _isDirty = false;
         }
 
-        public SortedList<int, KeyPressInfo> GetSequence
+        public SortedList<int, KeyPressInfo> KeySequence
         {
             get { return _sortedList; }
         }
 
-        public string GetInformation
+        public string Description
         {
-            get { return TextBoxInformation.Text; }
+            get { return TextBoxDescription.Text; }
         }
 
         private void SetFormState()
@@ -72,42 +85,36 @@ namespace DCSFlightpanels.Windows
             ButtonOk.IsEnabled = IsDirty;
         }
 
-        private void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         private void ButtonAddClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                var keyPressWindow = new KeyPressWindow();
-                keyPressWindow.ShowDialog();
-                if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    var keyPressInfo = new KeyPressInfo();
-                    keyPressInfo.LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
-                    keyPressInfo.VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
-                    keyPressInfo.LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
-                    _sortedList.Add(GetNewKeyValue(), keyPressInfo);
-
-                    DataGridSequences.DataContext = _sortedList;
-                    DataGridSequences.ItemsSource = _sortedList;
-                    DataGridSequences.Items.Refresh();
-                    SetIsDirty();
-                    SetFormState();
-                }
+                AddKeyPress();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
+            }
+        }
+
+        private void AddKeyPress()
+        {
+            var keyPressWindow = new KeyPressWindow();
+            keyPressWindow.ShowDialog();
+            if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
+            {
+                //Clicked OK
+                var keyPressInfo = new KeyPressInfo();
+                keyPressInfo.LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
+                keyPressInfo.VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
+                keyPressInfo.LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
+                _sortedList.Add(GetNewKeyValue(), keyPressInfo);
+
+                DataGridSequences.DataContext = _sortedList;
+                DataGridSequences.ItemsSource = _sortedList;
+                DataGridSequences.Items.Refresh();
+                SetIsDirty();
+                SetFormState();
             }
         }
 
@@ -139,29 +146,34 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                var keyValuePair = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
-                var keyPressWindow = new KeyPressWindow(keyValuePair.Value);
-                keyPressWindow.ShowDialog();
-                if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
-                {
-                    //Clicked OK
-                    if (!keyPressWindow.IsDirty)
-                    {
-                        //User made no changes
-                        return;
-                    }
-                    _sortedList[keyValuePair.Key].LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
-                    _sortedList[keyValuePair.Key].VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
-                    _sortedList[keyValuePair.Key].LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
-                    DataGridSequences.DataContext = _sortedList;
-                    DataGridSequences.ItemsSource = _sortedList;
-                    DataGridSequences.Items.Refresh();
-                    SetIsDirty();
-                }
+                EditKeyPress();
             }
             catch (Exception ex)
             {
                 Common.ShowErrorMessageBox( ex);
+            }
+        }
+
+        private void EditKeyPress()
+        {
+            var keyValuePair = (KeyValuePair<int, KeyPressInfo>)DataGridSequences.SelectedItem;
+            var keyPressWindow = new KeyPressWindow(keyValuePair.Value);
+            keyPressWindow.ShowDialog();
+            if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
+            {
+                //Clicked OK
+                if (!keyPressWindow.IsDirty)
+                {
+                    //User made no changes
+                    return;
+                }
+                _sortedList[keyValuePair.Key].LengthOfBreak = (KeyPressLength)keyPressWindow.ComboBoxBreak.SelectedItem;
+                _sortedList[keyValuePair.Key].VirtualKeyCodes = KeyPress.SplitStringKeyCodes(keyPressWindow.TextBoxKeyPress.Text);
+                _sortedList[keyValuePair.Key].LengthOfKeyPress = (KeyPressLength)keyPressWindow.ComboBoxKeyPressTime.SelectedItem;
+                DataGridSequences.DataContext = _sortedList;
+                DataGridSequences.ItemsSource = _sortedList;
+                DataGridSequences.Items.Refresh();
+                SetIsDirty();
             }
         }
 
@@ -255,11 +267,16 @@ namespace DCSFlightpanels.Windows
             SetIsDirty();
         }
 
-        private void TextBoxInformationTextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxDescriptionTextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
+                if (!_formLoaded)
+                {
+                    return;
+                }
                 SetIsDirty();
+                SetFormState();
             }
             catch (Exception ex)
             {
@@ -274,6 +291,34 @@ namespace DCSFlightpanels.Windows
                 DialogResult = false;
                 e.Handled = true;
                 Close();
+            }
+        }
+
+        private void DataGridSequences_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (DataGridSequences.Items.Count == 0 || DataGridSequences.SelectedItems.Count == 0)
+                {
+                    AddKeyPress();
+                }
+                else if (DataGridSequences.SelectedItems.Count == 1)
+                {
+                    EditKeyPress();
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void DataGridSequences_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is ScrollViewer)
+            {
+                //Unselect when user presses any area not containing a row
+                ((DataGrid)sender).UnselectAll();
             }
         }
     }

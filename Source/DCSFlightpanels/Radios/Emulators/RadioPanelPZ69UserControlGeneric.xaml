@@ -1,0 +1,266 @@
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.Radios.Emulators.RadioPanelPZ69UserControlGeneric"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             xmlns:customControls="clr-namespace:DCSFlightpanels.CustomControls"
+             xmlns:panelUserControls1="clr-namespace:DCSFlightpanels.PanelUserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="750" d:DesignWidth="1000" Loaded="RadioPanelPZ69UserControlGeneric_OnLoaded">
+    <UserControl.Resources>
+        <Style TargetType="Image">
+            <Setter Property="Height" Value="76"/>
+            <Setter Property="Stretch" Value="None"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid Name="PZ69Grid" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="240" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80*" />
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="80*" />
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="80*"/>
+        </Grid.ColumnDefinitions>
+        <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
+            <Image Height="226" Name="ImagePZ69RadioPanel" Stretch="None" Source="/dcsfp;component/Images/PZ69_Radiopanel.jpg" />
+
+            <!-- UPPER LEFT SELECTOR -->
+            <Image Name="TopLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="65" Canvas.Top="34" />
+            <Image Name="TopLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="54" Canvas.Top="36" />
+            <Image Name="TopLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="46" Canvas.Top="45" />
+            <Image Name="TopLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="43" Canvas.Top="57" />
+            <Image Name="TopLeftADF" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="46" Canvas.Top="69"  />
+            <Image Name="TopLeftDME" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="56" Canvas.Top="77" />
+            <Image Name="TopLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="66" Canvas.Top="81" />
+
+            <!-- LOWER LEFT SELECTOR -->
+            <Image Name="LowerLeftCom1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="65" Canvas.Top="112" />
+            <Image Name="LowerLeftCom2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="54" Canvas.Top="114" />
+            <Image Name="LowerLeftNav1" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="45" Canvas.Top="122" />
+            <Image Name="LowerLeftNav2" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="43" Canvas.Top="134" />
+            <Image Name="LowerLeftADF" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="46" Canvas.Top="147"  />
+            <Image Name="LowerLeftDME" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="56" Canvas.Top="156" />
+            <Image Name="LowerLeftXPDR" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="66" Canvas.Top="159" />
+
+            <!-- UPPER LCD KNOB -->
+            <Image Name="UpperSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="484" Canvas.Top="60" />
+            <Image Name="UpperSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="469" Canvas.Top="60" />
+            <Image Name="UpperLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="498" Canvas.Top="60" />
+            <Image Name="UpperLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="447" Canvas.Top="60" />
+
+            <!-- LOWER LCD KNOB -->
+            <Image Name="LowerSmallerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="484" Canvas.Top="136" />
+            <Image Name="LowerSmallerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="469" Canvas.Top="136" />
+            <Image Name="LowerLargerLCDKnobInc" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="498" Canvas.Top="136" />
+            <Image Name="LowerLargerLCDKnobDec" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="447" Canvas.Top="136" />
+
+            <!-- Right Switches -->
+            <Image Name="UpperRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="562" Canvas.Top="58" />
+            <Image Name="LowerRightSwitch" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="562" Canvas.Top="131" />
+
+            <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="340" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>
+            <Button Name="ButtonGetIdentify" Content="Identify" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="430" Canvas.Top="12" Click="ButtonGetIdentify_OnClick"/>
+            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="520" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
+
+
+            <customControls:PZ69Button x:Name="ButtonUpperLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>
+            <customControls:PZ69Button x:Name="ButtonLowerLeftLcd" Content="LCD Data" Canvas.Left="132" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
+            <customControls:PZ69Button x:Name="ButtonUpperRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="83" Width="100" Click="ButtonLcd_OnClick"/>
+            <customControls:PZ69Button x:Name="ButtonLowerRightLcd" Content="LCD Data" Canvas.Left="295" Canvas.Top="156" Width="100" Click="ButtonLcd_OnClick"/>
+            <Image Name="DotTopLeftLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="178" Canvas.Top="69" />
+            <Image Name="DotBottomLeftLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="178" Canvas.Top="143" />
+            <Image Name="DotTopRightLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="341" Canvas.Top="69" />
+            <Image Name="DotBottomRightLcd" Source="/dcsfp;component/Images/dot.jpg" Canvas.Left="341" Canvas.Top="143" />
+        </Canvas>
+
+
+        <GroupBox Header="Mode Dial"  FontSize="10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Background="Gainsboro">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Upper COM 1" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom1" FontSize="10" />
+                    <Label Content="Upper COM 2" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperCom2" FontSize="10" />
+                    <Label Content="Upper NAV 1" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav1" FontSize="10" />
+                    <Label Content="Upper NAV 2" Height="23" FontSize="10"  />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperNav2" />
+                    <Label Content="Upper ADF" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperADF" />
+                    <Label Content="Upper DME" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperDME" />
+                    <Label Content="Upper XPDR" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxUpperXPDR" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Lower COM 1" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom1" FontSize="10" />
+                    <Label Content="Lower COM 2" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerCom2" FontSize="10" />
+                    <Label Content="Lower NAV 1" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav1" FontSize="10" />
+                    <Label Content="Lower NAV 2" Height="23" FontSize="10"  />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerNav2" />
+                    <Label Content="Lower ADF" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerADF" />
+                    <Label Content="Lower DME" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerDME" />
+                    <Label Content="Lower XPDR" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxLowerXPDR" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Upper Radio Display Values"  FontSize="10" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Active" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Active" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom2ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Active" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperNav1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Active" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperNav2ActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Active" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperADFActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Active" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperDMEActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Active" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperXPDRActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Standby" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Standby" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperCom2StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Standby" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxUpperNav1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Standby" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperNav2StandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Standby" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperADFStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Standby" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperDMEStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Standby" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxUpperXPDRStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Lower Radio Display Values"  FontSize="10" Grid.Column="4" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Active" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Active" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom2ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Active" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerNav1ActiveNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Active" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerNav2ActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Active" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerADFActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Active" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerDMEActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Active" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerXPDRActiveNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="COM 1 Standby" FontSize="10" Height="23"   />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="COM 2 Standby" FontSize="10" Height="23"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerCom2StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 1 Standby" Height="23"  FontSize="10"  />
+                    <TextBox Height="18" MaxLength="6" x:Name="TextBoxLowerNav1StandbyNumbers" FontSize="10" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="NAV 2 Standby" Height="23" FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerNav2StandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="ADF Standby" Height="23"  FontSize="10"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerADFStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="DME Standby" FontSize="10" Height="23"   />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerDMEStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                    <Label Content="XPDR Standby" FontSize="10" Height="23"  />
+                    <TextBox FontSize="10" Height="18" MaxLength="6" x:Name="TextBoxLowerXPDRStandbyNumbers" PreviewKeyDown="TextBoxPreviewKeyDownNumbers" KeyUp="TextBoxNumbers_OnKeyUp" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Radio Dials"  FontSize="10" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Background="Gainsboro">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Upper Large Dial +" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargePlus" FontSize="10" />
+                    <Label Content="Upper Small Dial +" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallPlus" FontSize="10" />
+                    <Label Content="Upper ACT/STBY On" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOn" FontSize="10" />
+                    <Label Content="Lower Large Dial +" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargePlus" FontSize="10" />
+                    <Label Content="Lower Small Dial +" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallPlus" FontSize="10" />
+                    <Label Content="Lower ACT/STBY On" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOn" FontSize="10" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Upper Large Dial -" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperLargeMinus" FontSize="10" />
+                    <Label Content="Upper Small Dial -" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperSmallMinus" FontSize="10" />
+                    <Label Content="Upper ACT/STBY Off" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxUpperActStbyOff" FontSize="10" />
+                    <Label Content="Lower Large Dial -" FontSize="10" Height="23"   />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerLargeMinus" FontSize="10" />
+                    <Label Content="Lower Small Dial -" FontSize="10" Height="23"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerSmallMinus" FontSize="10" />
+                    <Label Content="Lower ACT/STBY Off" Height="23"  FontSize="10"  />
+                    <customControls:PZ69GenericTextBox Height="18" IsReadOnly="True" x:Name="TextBoxLowerActStbyOff" FontSize="10" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <StackPanel Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="3" >
+            <Label Name="LabelDialPosUpper" Content="Upper Dial Profile : COM1" FontSize="20" FontWeight="Bold" Margin="10,0,0,0"/>
+            <Label Name="LabelDialPosLower" Content="Lower Dial Profile : COM1" FontSize="20" FontWeight="Bold" Margin="10,0,0,0"/>
+            <GroupBox Header="Settings" FontSize="10" FontWeight="Bold" Margin="10,0,0,0">
+                <StackPanel Margin="10,0,0,0">
+                    <Label Content="Frequency Knobs sensitivity"></Label>
+                    <ComboBox Name="ComboBoxFreqKnobSensitivity" Width="100" HorizontalAlignment="Left" Margin="5,5,0,0" SelectedIndex="0" SelectedValuePath="Content" IsReadOnly="True" SelectionChanged="ComboBoxFreqKnobSensitivity_OnSelectionChanged">
+                        <ComboBoxItem >0</ComboBoxItem>
+                        <ComboBoxItem >-1</ComboBoxItem>
+                        <ComboBoxItem >-2</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+            </GroupBox>
+
+            
+                <customControls:PZ69GenericTextBox x:Name="TextBoxLogPZ69" VerticalScrollBarVisibility="Visible" Height="80" TextWrapping="Wrap" Margin="10,0,0,0"/>
+            
+        </StackPanel>
+    </Grid>
+</panelUserControls:UserControlBase>

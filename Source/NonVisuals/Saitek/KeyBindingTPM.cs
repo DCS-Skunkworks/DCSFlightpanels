@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class KeyBindingTPM : KeyBinding
     {
         /*

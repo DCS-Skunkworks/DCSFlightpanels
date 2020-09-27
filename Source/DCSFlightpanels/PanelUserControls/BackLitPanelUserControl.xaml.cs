@@ -11,6 +11,7 @@ using DCSFlightpanels.Windows;
 using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.PanelUserControls
 {
@@ -29,6 +30,8 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
+
+
 
         public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
         {
@@ -423,10 +426,13 @@ namespace DCSFlightpanels.PanelUserControls
             }
             foreach (var image in Common.FindVisualChildren<Image>(this))
             {
-                if (image.Name.StartsWith("ImagePosition"))
+                if (image.ContextMenu == null && image.Name.StartsWith("ImagePosition"))
                 {
                     image.ContextMenu = (ContextMenu)Resources["BIPLEDContextMenu"];
-                    image.ContextMenu.Tag = image.Name;
+                    if (image.ContextMenu != null)
+                    {
+                        image.ContextMenu.Tag = image.Name;
+                    }
                 }
             }
         }
@@ -645,6 +651,31 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 _backlitPanelBIP.Identify();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ClearAll(bool clearAlsoProfile)
+        {
+            if (clearAlsoProfile)
+            {
+                _backlitPanelBIP.ClearSettings(true);
+            }
+
+            ShowGraphicConfiguration();
+        }
+
+        private void ButtonClearSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                {
+                    ClearAll(true);
+                }
             }
             catch (Exception ex)
             {

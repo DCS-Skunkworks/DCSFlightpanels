@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using DCS_BIOS;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
+using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.DCSBIOSBindings
 {
+    [Serializable]
     public class DCSBIOSActionBindingPZ70 : DCSBIOSActionBindingBase
     {
         /*

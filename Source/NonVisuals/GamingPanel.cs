@@ -32,7 +32,7 @@ namespace NonVisuals
         public abstract void Startup();
         public abstract void Identify();
         public abstract void Dispose();
-        public abstract void ClearSettings();
+        public abstract void ClearSettings(bool setIsDirty = false);
         public abstract void ImportSettings(GenericPanelBinding genericPanelBinding);
         public abstract List<string> ExportSettings();
         public abstract void SavePanelSettings(object sender, ProfileHandlerEventArgs e);

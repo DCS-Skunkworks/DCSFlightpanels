@@ -10,6 +10,7 @@ using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals.Interfaces;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 using NonVisuals.StreamDeck.Events;
 using OpenMacroBoard.SDK;
 using StreamDeckSharp;
@@ -17,7 +18,7 @@ using Theraot.Core;
 
 namespace NonVisuals.StreamDeck
 {
-    public class StreamDeckPanel : GamingPanel, IStreamDeckListener, IStreamDeckConfigListener, IDisposable
+    public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
         private IStreamDeckBoard _streamDeckBoard;
         private int _lcdKnobSensitivity;
@@ -81,7 +82,7 @@ namespace NonVisuals.StreamDeck
                 Closed = true;
             }
         }
-        
+
         public override void Dispose()
         {
             Dispose(true);
@@ -154,6 +155,12 @@ namespace NonVisuals.StreamDeck
 
                     Thread.Sleep(50);
                     spins--;
+                }
+
+                var blackBitmap = BitMapCreator.CreateEmptyStreamDeckBitmap(Color.Black);
+                for (var i = 0; i < ButtonCount; i++)
+                {
+                    SetImage(i, blackBitmap);
                 }
             }
             catch (Exception e)
@@ -332,9 +339,14 @@ namespace NonVisuals.StreamDeck
             e.ProfileHandlerEA.RegisterJSONProfileData(this, ExportJSONSettings());
         }
 
-        public override void ClearSettings()
+        public override void ClearSettings(bool setIsDirty = false)
         {
             _streamDeckLayerHandler.ClearSettings();
+
+            if (setIsDirty)
+            {
+                SetIsDirty();
+            }
         }
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)

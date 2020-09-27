@@ -6,6 +6,7 @@ using ClassLibraryCommon;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public abstract class BIPLink
     {
         /*
@@ -14,6 +15,7 @@ namespace NonVisuals.Saitek
         internal SortedList<int, BIPLight> _bipLights = new SortedList<int, BIPLight>();
         internal bool WhenOnTurnedOn = true;
         internal string _description;
+        [NonSerialized]
         private Thread _executingThread;
         private long _abortCurrentSequence;
         private long _threadHasFinished = 1;

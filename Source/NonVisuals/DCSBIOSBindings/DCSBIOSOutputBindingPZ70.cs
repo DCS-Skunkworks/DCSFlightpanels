@@ -1,6 +1,7 @@
 ﻿using System;
 using DCS_BIOS;
 using NonVisuals.Saitek;
+using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.DCSBIOSBindings
 {
@@ -10,6 +11,7 @@ namespace NonVisuals.DCSBIOSBindings
         LowerLCD,
     }
 
+    [Serializable]
     public class DCSBIOSOutputBindingPZ70
     {
         /*

@@ -5,6 +5,7 @@ using NonVisuals.Radios.Knobs;
 
 namespace NonVisuals.Saitek
 {
+    [Serializable]
     public class OSCommandBindingPZ69FullEmulator : OSCommandBinding
     {
         /*
