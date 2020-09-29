@@ -27,7 +27,6 @@ namespace DCSFlightpanels.Radios.Emulators
         private bool _userControlLoaded;
         private bool _textBoxBillsSet;
         private readonly List<Key> _allowedKeys = new List<Key>() { Key.D0, Key.D1, Key.D2, Key.D3, Key.D4, Key.D5, Key.D6, Key.D7, Key.D8, Key.D9, Key.OemPeriod, Key.Delete, Key.Back, Key.Left, Key.Right, Key.NumPad0, Key.NumPad1, Key.NumPad2, Key.NumPad3, Key.NumPad4, Key.NumPad5, Key.NumPad6, Key.NumPad7, Key.NumPad8, Key.NumPad9 };
-        private bool _formLoaded = false;
 
         public RadioPanelPZ69UserControlEmulator(HIDSkeleton hidSkeleton, TabItem parentTabItem, IGlobalHandler globalHandler)
         {
@@ -49,15 +48,10 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                if (_formLoaded)
-                {
-                    return;
-                }
                 ComboBoxFreqKnobSensitivity.SelectedValue = Settings.Default.RadioFrequencyKnobSensitivityEmulator;
                 SetTextBoxBills();
                 _userControlLoaded = true;
                 ShowGraphicConfiguration();
-                _formLoaded = true;
             }
             catch (Exception ex)
             {
