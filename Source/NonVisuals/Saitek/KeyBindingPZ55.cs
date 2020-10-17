@@ -58,10 +58,18 @@ namespace NonVisuals.Saitek
         {
             if (knobBindings == null)
             {
-                return knobBindings;
+                return null;
             }
             foreach (var keyBindingPZ55 in knobBindings)
             {
+                /*
+                 * Some deleted keystrokes may be included here, they have a wrapper although the actual OSKeyPress is null
+                 * and will be removed until next "Save". So disregard those.
+                 */
+                if (keyBindingPZ55.OSKeyPress == null)
+                {
+                    continue;
+                }
                 //Clear all negators
                 keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Clear();
 
