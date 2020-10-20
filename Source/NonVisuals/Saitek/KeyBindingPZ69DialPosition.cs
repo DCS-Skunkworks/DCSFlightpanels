@@ -97,6 +97,15 @@ namespace NonVisuals.Saitek
 
             foreach (var keyBindingPZ69 in knobBindings)
             {
+                /*
+                 * Some deleted keystrokes may be included here, they have a wrapper although the actual OSKeyPress is null
+                 * and will be removed until next "Save". So disregard those.
+                 */
+                if (keyBindingPZ69.OSKeyPress == null)
+                {
+                    continue;
+                }
+
                 if (keyBindingPZ69.RadioPanelPZ69Key != RadioPanelPZ69KnobsEmulator.UpperFreqSwitch &&
                     keyBindingPZ69.RadioPanelPZ69Key != RadioPanelPZ69KnobsEmulator.LowerFreqSwitch)
                 {

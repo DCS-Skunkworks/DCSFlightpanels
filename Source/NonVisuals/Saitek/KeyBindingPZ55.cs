@@ -94,6 +94,15 @@ namespace NonVisuals.Saitek
 
             foreach (var keyBindingPZ55 in knobBindings)
             {
+                /*
+                 * Some deleted keystrokes may be included here, they have a wrapper although the actual OSKeyPress is null
+                 * and will be removed until next "Save". So disregard those.
+                 */
+                if (keyBindingPZ55.OSKeyPress == null)
+                {
+                    continue;
+                }
+
                 if (keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH ||
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT ||
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT ||
