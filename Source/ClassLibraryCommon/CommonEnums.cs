@@ -117,6 +117,8 @@ namespace ClassLibraryCommon
         Fw190a8,
         [Description("FW-190D9")]
         Fw190d9,
+        [Description("C-130")]
+        Hercules,
         [Description("I-16")]
         I16,
         [Description("JF-17")]
