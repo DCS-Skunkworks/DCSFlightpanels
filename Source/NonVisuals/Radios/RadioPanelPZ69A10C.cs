@@ -4739,6 +4739,7 @@ namespace NonVisuals.Radios
         {
             const string inc = "INC\n";
             const string dec = "DEC\n";
+
             switch (desiredDialPosition)
             {
                 case 0:
