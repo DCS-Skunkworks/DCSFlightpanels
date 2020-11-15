@@ -28,7 +28,8 @@ namespace NonVisuals
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
         private const string OPEN_FILE_DIALOG_FILTER = "DCSFlightpanels (.bindings)|*.bindings";
-        private DCSAirframe _airframe = DCSAirframe.NOFRAMELOADEDYET;
+        //private DCSFPProfile _airframe = DCSFPProfile.NOFRAMELOADEDYET;
+        private DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
         private bool _profileLoaded;
@@ -100,7 +101,7 @@ namespace NonVisuals
             }
             _isNewProfile = true;
             ClearAll();
-            Airframe = DCSAirframe.NOFRAMELOADEDYET;//Just a default that doesn't remove non emulation panels from the GUI
+            Profile = DCSFPProfile.GetNoFrameLoadedYet();//Just a default that doesn't remove non emulation panels from the GUI
             Common.UseGenericRadio = false;
             //This sends info to all to clear their settings
             OnClearPanelSettings?.Invoke(this);
@@ -183,12 +184,12 @@ namespace NonVisuals
 
                 foreach (var fileLine in fileLines)
                 {
-                    if (fileLine.StartsWith("Airframe="))
+                    if (fileLine.StartsWith("Airframe=")) // <== Backward compability
                     {
                         if (fileLine.StartsWith("Airframe=NONE"))
                         {
                             //Backward compability
-                            _airframe = DCSAirframe.KEYEMULATOR;
+                            Profile = DCSFPProfile.GetKeyEmulator();
                         }
                         else
                         {
@@ -196,22 +197,27 @@ namespace NonVisuals
                             var airframeAsString = fileLine.Replace("Airframe=", "").Trim();
                             if (airframeAsString.StartsWith("SA342"))
                             {
-                                _airframe = DCSAirframe.SA342M;
+                                Profile = DCSFPProfile.GetSA342M();
                             }
                             else if (airframeAsString.StartsWith("P51D") || airframeAsString.StartsWith("TF51D"))
                             {
-                                _airframe = DCSAirframe.P51D;
+                                Profile = DCSFPProfile.GetP51D();
                             }
                             else if (airframeAsString.StartsWith("L39"))
                             {
-                                _airframe = DCSAirframe.L39ZA;
+                                Profile = DCSFPProfile.GetL39ZA();
                             }
                             else
                             {
-                                _airframe = (DCSAirframe)Enum.Parse(typeof(DCSAirframe), airframeAsString);
+                                Profile = DCSFPProfile.GetProfileBackwardCompat(airframeAsString);
                             }
                         }
-                        DCSBIOSControlLocator.Airframe = _airframe;
+                        DCSBIOSControlLocator.Profile = Profile;
+                    }
+                    else if (fileLine.StartsWith("Profile="))
+                    {
+                        Profile = DCSFPProfile.GetProfile(fileLine.Replace("Profile=", ""));
+                        DCSBIOSControlLocator.Profile = Profile;
                     }
                     else if (fileLine.StartsWith("OperationLevelFlag="))
                     {
@@ -324,16 +330,16 @@ namespace NonVisuals
 
         private void SetOperationLevelFlag()
         {
-            if (_airframe == DCSAirframe.KEYEMULATOR)
+            if (DCSFPProfile.IsKeyEmulator(Profile))
             {
                 Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
             }
-            else if (_airframe == DCSAirframe.KEYEMULATOR_SRS)
+            else if (DCSFPProfile.IsKeyEmulatorSRS(Profile))
             {
                 Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
                 Common.SetEmulationMode(EmulationMode.SRSEnabled);
             }
-            else if (_airframe == DCSAirframe.FC3_CD_SRS)
+            else if (DCSFPProfile.IsFlamingCliff(Profile))
             {
                 Common.SetEmulationMode(EmulationMode.SRSEnabled);
                 Common.SetEmulationMode(EmulationMode.DCSBIOSOutputEnabled);
@@ -350,7 +356,7 @@ namespace NonVisuals
             {
                 if (OnSettingsReadFromFile != null)
                 {
-                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Airframe = _airframe });
+                    OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Profile = _dcsfpProfile });
 
                     foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                     {
@@ -519,7 +525,7 @@ namespace NonVisuals
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
-                stringBuilder.AppendLine("Airframe=" + _airframe);
+                stringBuilder.AppendLine("Profile=" + Profile.JSONFilename);
                 stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
                 stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio + Environment.NewLine);
 
@@ -568,7 +574,7 @@ namespace NonVisuals
             _isDirty = true;
         }
 
-        public DCSAirframe Airframe
+        /*public DCSFPProfile Airframe
         {
             get => _airframe;
             set
@@ -582,6 +588,23 @@ namespace NonVisuals
                 Common.ResetOperationModeFlag();
                 SetOperationLevelFlag();
                 OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Airframe = _airframe });
+            }
+        }*/
+
+        public DCSFPProfile Profile
+        {
+            get => _dcsfpProfile;
+            set
+            {
+                //Called only when user creates a new profile
+                if (value != _dcsfpProfile)
+                {
+                    SetIsDirty();
+                }
+                _dcsfpProfile = value;
+                Common.ResetOperationModeFlag();
+                SetOperationLevelFlag();
+                OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Profile = _dcsfpProfile });
             }
         }
 
@@ -597,7 +620,7 @@ namespace NonVisuals
             set => DCSBIOSControlLocator.JSONDirectory = value;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
+        public void SelectedProfile(object sender, AirframeEventArgs e) { }
 
         public bool ProfileLoaded => _profileLoaded || _isNewProfile;
 
@@ -643,7 +666,7 @@ namespace NonVisuals
             OnSavePanelSettings += gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON += gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings += gamingPanel.ClearPanelSettings;
-            OnAirframeSelected += gamingPanel.SelectedAirframe;
+            OnAirframeSelected += gamingPanel.SelectedProfile;
         }
 
         public void Detach(GamingPanel gamingPanel)
@@ -652,19 +675,19 @@ namespace NonVisuals
             OnSavePanelSettings -= gamingPanel.SavePanelSettings;
             OnSavePanelSettingsJSON -= gamingPanel.SavePanelSettingsJSON;
             OnClearPanelSettings -= gamingPanel.ClearPanelSettings;
-            OnAirframeSelected -= gamingPanel.SelectedAirframe;
+            OnAirframeSelected -= gamingPanel.SelectedProfile;
         }
 
         public void Attach(IProfileHandlerListener gamingPanelSettingsListener)
         {
             OnSettingsReadFromFile += gamingPanelSettingsListener.PanelBindingReadFromFile;
-            OnAirframeSelected += gamingPanelSettingsListener.SelectedAirframe;
+            OnAirframeSelected += gamingPanelSettingsListener.SelectedProfile;
         }
 
         public void Detach(IProfileHandlerListener gamingPanelSettingsListener)
         {
             OnSettingsReadFromFile -= gamingPanelSettingsListener.PanelBindingReadFromFile;
-            OnAirframeSelected -= gamingPanelSettingsListener.SelectedAirframe;
+            OnAirframeSelected -= gamingPanelSettingsListener.SelectedProfile;
         }
 
         public void AttachUserMessageHandler(IUserMessageHandler userMessageHandler)
@@ -685,7 +708,7 @@ namespace NonVisuals
 
     public class AirframeEventArgs : EventArgs
     {
-        public DCSAirframe Airframe { get; set; }
+        public DCSFPProfile Profile { get; set; }
     }
 
     public class ProfileHandlerEventArgs : EventArgs

@@ -73,7 +73,7 @@ namespace ClassLibraryCommon
      * Description = What is defined (XYZ) in BIOS.protocol.setExportModuleAircrafts({"XYZ"})
      * Value => not used
      */
-    public enum DCSAirframe
+    public enum DCSAirframex
     {
         [Description("NoFrameLoadedYet")]
         NOFRAMELOADEDYET,

@@ -22,17 +22,17 @@ namespace DCSFlightpanels.Windows
         private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
-        private DCSAirframe _dcsAirframe;
+        private DCSFPProfile _dcsfpProfile;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
         private readonly JaceExtended _jaceExtended = new JaceExtended();
         private bool _userEditsDescription = false;
 
-        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = new DCSBIOSOutput();
@@ -40,10 +40,10 @@ namespace DCSFlightpanels.Windows
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutput dcsBiosOutput, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsBiosOutput = dcsBiosOutput;
@@ -52,10 +52,10 @@ namespace DCSFlightpanels.Windows
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputFormulaWindow(DCSAirframe dcsAirframe, string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool userEditsDescription = false)
+        public DCSBiosOutputFormulaWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutputFormula dcsBiosOutputFormula, bool userEditsDescription = false)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _userEditsDescription = userEditsDescription;
             _dcsbiosOutputFormula = dcsBiosOutputFormula;

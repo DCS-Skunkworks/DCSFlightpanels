@@ -24,28 +24,28 @@ namespace DCSFlightpanels.Windows
         private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
-        private DCSAirframe _dcsAirframe;
+        private DCSFPProfile _dcsfpProfile;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
         private readonly bool _showCriteria;
 
-        public DCSBiosOutputTriggerWindow(DCSAirframe dcsAirframe, string description, bool showCriteria = true)
+        public DCSBiosOutputTriggerWindow(DCSFPProfile dcsfpProfile, string description, bool showCriteria = true)
         {
             InitializeComponent();
             _showCriteria = showCriteria;
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsBiosOutput = new DCSBIOSOutput();
             DCSBIOSControlLocator.LoadControls();
             _dcsbiosControls = DCSBIOSControlLocator.GetIntegerOutputControls();
         }
 
-        public DCSBiosOutputTriggerWindow(DCSAirframe dcsAirframe, string description, DCSBIOSOutput dcsBiosOutput, bool showCriteria = true)
+        public DCSBiosOutputTriggerWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSOutput dcsBiosOutput, bool showCriteria = true)
         {
             InitializeComponent();
             _showCriteria = showCriteria;
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsBiosOutput = dcsBiosOutput;
             DCSBIOSControlLocator.LoadControls();

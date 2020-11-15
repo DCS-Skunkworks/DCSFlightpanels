@@ -1,43 +1,50 @@
 # This file contains information on which DCS-BIOS profiles can be opened.
 # Character : must not be used in settings as it is used as delimiter.
-# Format is [Description : Lua File]
+# Format is [Description : JSON File]
+# Do not alter, only add new if necessary.
 
+# Internal
 NoFrameLoadedYet : NOFRAMELOADEDYET
 KeyEmulator : KEYEMULATOR
 KeyEmulator_SRS : KEYEMULATOR_SRS
-A-10C Thunderbolt II : A-10C.lua
-A-4E Skyhawk : A-4E-C.lua
-Littlebird AH-6 : AH-6J.lua
-AJS 37 Viggen : AJS37.lua
-Alphajet : Alphajet.lua
-AV-8B Night Attack : AV8BNA.lua
-Bf 109 K-4 Kurfurst : Bf-109K-4.lua
-C-101 Aviojet : C-101CC.lua
-C-130 Hercules : Hercules.lua
-Christen Eagle II : Christen Eagle II.lua
-Edge 540 : Edge540.lua
-F-14B Tomcat : F-14B.lua
-F-16C Viper : F-16C_50.lua
-F-5E Tiger II : F-5E-3.lua
-F-86F Sabre : F-86F Sabre.lua
-FA-18C Hornet : FA-18C_hornet.lua
-FC3 : FC3_CD_SRS.lua
-Fw 190 A-8 : FW-190A8.lua
-Fw 190 D-9 Dora : FW-190D9.lua
-I-16 : I-16.lua
-JF-17 Thunder : JF-17.lua
-Ka-50 Black Shark : Ka-50.lua
-L-39 Albatros : L-39ZA.lua
-M-2000C : M-2000C.lua
-MB-339PAN : MB-339PAN.lua
-Mi-8MT : Mi-8MT.lua
-MiG-15bis : MiG-15bis.lua
-MiG-19P Farmer : MiG-19P.lua
-MiG-21Bis : MiG-21Bis.lua
-NS 430 GPS : NS430.lua
-P-47D Thunderbolt : P-47D.lua
-P-51D Mustang : P-51D.lua
-SA342 Gazelle : SA342M.lua
-Spitfire LF Mk. IX : SpitfireLFMkIX.lua
-UH-1H Huey : UH-1H.lua
-Yak-52 : Yak-52.lua
+
+# Flaming Cliff, minimum DCS-BIOS support
+Flaming Cliff 3 & SRS : FC3_CD_SRS.json
+
+# DCS-BIOS Modules
+# You can add module below if new DCS-BIOS has been added but is missing from DCSFP
+A-10C Thunderbolt II : A-10C.json
+A-4E Skyhawk : A-4E-C.json
+Littlebird AH-6 : AH-6J.json
+AJS 37 Viggen : AJS37.json
+Alphajet : Alphajet.json
+AV-8B Night Attack : AV8BNA.json
+Bf 109 K-4 Kurfurst : Bf-109K-4.json
+C-101 Aviojet : C-101CC.json
+C-130 Hercules : Hercules.json
+Christen Eagle II : Christen Eagle II.json
+Edge 540 : Edge540.json
+F-14B Tomcat : F-14B.json
+F-16C Viper : F-16C_50.json
+F-5E Tiger II : F-5E-3.json
+F-86F Sabre : F-86F Sabre.json
+FA-18C Hornet : FA-18C_hornet.json
+Fw 190 A-8 : FW-190A8.json
+Fw 190 D-9 Dora : FW-190D9.json
+I-16 : I-16.json
+JF-17 Thunder : JF-17.json
+Ka-50 Black Shark : Ka-50.json
+L-39 Albatros : L-39ZA.json
+M-2000C : M-2000C.json
+MB-339PAN : MB-339PAN.json
+Mi-8MT : Mi-8MT.json
+MiG-15bis : MiG-15bis.json
+MiG-19P Farmer : MiG-19P.json
+MiG-21Bis : MiG-21Bis.json
+NS 430 GPS : NS430.json
+P-47D Thunderbolt : P-47D.json
+P-51D Mustang : P-51D.json
+SA342 Gazelle : SA342M.json
+Spitfire LF Mk. IX : SpitfireLFMkIX.json
+UH-1H Huey : UH-1H.json
+Yak-52 : Yak-52.json
