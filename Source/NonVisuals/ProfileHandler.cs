@@ -195,29 +195,12 @@ namespace NonVisuals
                         {
                             //Backward compability
                             var airframeAsString = fileLine.Replace("Airframe=", "").Trim();
-                            if (airframeAsString.StartsWith("SA342"))
-                            {
-                                Profile = DCSFPProfile.GetSA342M();
-                            }
-                            else if (airframeAsString.StartsWith("P51D") || airframeAsString.StartsWith("TF51D"))
-                            {
-                                Profile = DCSFPProfile.GetP51D();
-                            }
-                            else if (airframeAsString.StartsWith("L39"))
-                            {
-                                Profile = DCSFPProfile.GetL39ZA();
-                            }
-                            else
-                            {
-                                Profile = DCSFPProfile.GetProfileBackwardCompat(airframeAsString);
-                            }
+                            Profile = DCSFPProfile.GetProfileBackwardCompat(airframeAsString);
                         }
-                        DCSBIOSControlLocator.Profile = Profile;
                     }
                     else if (fileLine.StartsWith("Profile="))
                     {
-                        Profile = DCSFPProfile.GetProfile(fileLine.Replace("Profile=", ""));
-                        DCSBIOSControlLocator.Profile = Profile;
+                        Profile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", "")));
                     }
                     else if (fileLine.StartsWith("OperationLevelFlag="))
                     {
@@ -525,7 +508,7 @@ namespace NonVisuals
                 var stringBuilder = new StringBuilder();
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
-                stringBuilder.AppendLine("Profile=" + Profile.JSONFilename);
+                stringBuilder.AppendLine("Profile=" + Profile.ID);
                 stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
                 stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio + Environment.NewLine);
 
@@ -566,12 +549,19 @@ namespace NonVisuals
         public bool IsDirty
         {
             get => _isDirty;
-            set => _isDirty = value;
+            set
+            {
+                if (value)
+                {
+                    var asd = 1;
+                }
+                _isDirty = value;
+            }
         }
 
         public void SetIsDirty()
         {
-            _isDirty = true;
+            IsDirty = true;
         }
 
         /*public DCSFPProfile Airframe
@@ -597,13 +587,14 @@ namespace NonVisuals
             set
             {
                 //Called only when user creates a new profile
-                if (value != _dcsfpProfile)
+                if (!DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) && value != _dcsfpProfile)
                 {
                     SetIsDirty();
                 }
                 _dcsfpProfile = value;
                 Common.ResetOperationModeFlag();
                 SetOperationLevelFlag();
+                DCSBIOSControlLocator.Profile = Profile;
                 OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Profile = _dcsfpProfile });
             }
         }

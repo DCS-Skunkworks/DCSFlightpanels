@@ -1,24 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace ClassLibraryCommon
 {
     public class DCSFPProfile
     {
-        private string _jsonFilename;
+        private int _id;
         private string _description;
+        private string _jsonFilename;
         private static readonly List<DCSFPProfile> ModulesList = new List<DCSFPProfile>();
-        
 
 
-        public DCSFPProfile(string luaFilename, string description)
+
+        public DCSFPProfile(int id, string description, string luaFilename)
         {
+            _id = id;
             _jsonFilename = luaFilename;
             _description = description;
         }
-        
+
+        public int ID
+        {
+            get => _id;
+            set => _id = value;
+        }
+
+        public string JSONFilename
+        {
+            get => _jsonFilename;
+            set => _jsonFilename = value;
+        }
+
+        public string Description
+        {
+            get => _description;
+            set => _description = value;
+        }
+
+        public static List<DCSFPProfile> Modules => ModulesList;
+
         public static void ParseSettings(string filename)
         {
             if (!File.Exists(filename))
@@ -35,18 +56,18 @@ namespace ClassLibraryCommon
                     continue;
                 }
 
-                var settings = s.Trim().Split(new char[]{ ':' }, StringSplitOptions.RemoveEmptyEntries);
-                //A-4E Skyhawk : A-4E-C.lua
-                var dcsBiosModule = new DCSFPProfile(settings[1], settings[0]);
+                var settings = s.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                //6 : A-4E Skyhawk : A-4E-C.lua
+                var dcsBiosModule = new DCSFPProfile(int.Parse(settings[0]), settings[1].Trim(), settings[2].Trim());
                 ModulesList.Add(dcsBiosModule);
             }
         }
 
-        public static DCSFPProfile GetProfile(string filename)
+        public static DCSFPProfile GetProfile(int id)
         {
             foreach (var dcsfpModule in Modules)
             {
-                if (dcsfpModule.JSONFilename.Equals(filename))
+                if (dcsfpModule.ID == id)
                 {
                     return dcsfpModule;
                 }
@@ -60,7 +81,7 @@ namespace ClassLibraryCommon
             foreach (var dcsfpModule in Modules)
             {
                 var description = dcsfpModule.Description.ToLower().Replace(" ", "").Replace("-", "");
-                if (description.Contains(oldEnumValue.ToLower().Replace("-","")))
+                if (description.Contains(oldEnumValue.ToLower().Replace("-", "")))
                 {
                     return dcsfpModule;
                 }
@@ -69,60 +90,9 @@ namespace ClassLibraryCommon
             throw new Exception("Failed to determine airplane/helicopter in your bindings file.\nPlease check file [Settings\\dcsfp_profiles.txt] and update your bindings file line : [Airframe=] with the correct [description] from [Settings\\dcsfp_profiles.txt]");
         }
 
-        public static bool IsKeyEmulatorSRS(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.Description == "KeyEmulator_SRS";
-        }
-
-        public static bool IsKeyEmulatorSRS(string filename)
-        {
-            return GetKeyEmulator().JSONFilename == filename;
-        }
-
-        public static DCSFPProfile GetKeyEmulatorSRS()
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsKeyEmulatorSRS(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-
-            return null;
-        }
-
-        public static bool IsKeyEmulator(DCSFPProfile dcsfpModule)
-        {
-            return dcsfpModule.Description == "KeyEmulator";
-        }
-
-        public static bool IsKeyEmulator(string filename)
-        {
-            return GetKeyEmulator().JSONFilename == filename;
-        }
-
-        public static DCSFPProfile GetKeyEmulator()
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsKeyEmulator(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-
-            return null;
-        }
-
         public static bool IsNoFrameLoadedYet(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "NoFrameLoadedYet";
-        }
-
-        public static bool IsNoFrameLoadedYet(string filename)
-        {
-            return GetNoFrameLoadedYet().JSONFilename == filename;
+            return dcsfpModule.ID == 1;
         }
 
         public static DCSFPProfile GetNoFrameLoadedYet()
@@ -137,10 +107,48 @@ namespace ClassLibraryCommon
 
             return null;
         }
+
+        public static bool IsKeyEmulator(DCSFPProfile dcsfpModule)
+        {
+            return dcsfpModule.ID == 2;
+        }
         
+        public static DCSFPProfile GetKeyEmulator()
+        {
+            foreach (var dcsfpModule in Modules)
+            {
+                if (IsKeyEmulator(dcsfpModule))
+                {
+                    return dcsfpModule;
+                }
+            }
+
+            return null;
+        }
+        
+        public static bool IsKeyEmulatorSRS(DCSFPProfile dcsfpModule)
+        {
+            return dcsfpModule.ID == 3;
+        }
+
+        public static DCSFPProfile GetKeyEmulatorSRS()
+        {
+            foreach (var dcsfpModule in Modules)
+            {
+                if (IsKeyEmulatorSRS(dcsfpModule))
+                {
+                    return dcsfpModule;
+                }
+            }
+
+            return null;
+        }
+        
+        
+
         public static bool IsFlamingCliff(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Flaming Cliff 3 & SRS";
+            return dcsfpModule.ID == 4;
         }
 
         public static DCSFPProfile GetNS430()
@@ -156,233 +164,179 @@ namespace ClassLibraryCommon
             return null;
         }
 
-        public string JSONFilename
-        {
-            get => _jsonFilename;
-            set => _jsonFilename = value;
-        }
-
-        public string Description
-        {
-            get => _description;
-            set => _description = value;
-        }
-
-        public static List<DCSFPProfile> Modules => ModulesList;
-        
-        
-        public static DCSFPProfile GetL39ZA() //Needed for backward compability
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsL39(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-
-            return null;
-        }
-        
-        public static DCSFPProfile GetP51D() //Needed for backward compability
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsP51D(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-
-            return null;
-        }
-        
-        public static DCSFPProfile GetSA342M() //Needed for backward compability
-        {
-            foreach (var dcsfpModule in Modules)
-            {
-                if (IsSA342(dcsfpModule))
-                {
-                    return dcsfpModule;
-                }
-            }
-
-            return null;
-        }
-
         public static bool IsA10C(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "A-10C Thunderbolt II";
+            return dcsfpModule.ID == 5;
         }
 
         public static bool IsA4E(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "A-4E Skyhawk";
+            return dcsfpModule.ID == 6;
         }
 
         public static bool IsAH6(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Littlebird AH-6";
+            return dcsfpModule.ID == 7;
         }
 
         public static bool IsAJS37(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "AJS 37 Viggen";
+            return dcsfpModule.ID == 8;
         }
 
         public static bool IsAlphajet(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Alphajet";
+            return dcsfpModule.ID == 9;
         }
 
         public static bool IsAV8B(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "AV-8B Night Attack";
+            return dcsfpModule.ID == 10;
         }
 
         public static bool IsBf109K4(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Bf 109 K-4 Kurfurst";
+            return dcsfpModule.ID == 11;
         }
 
         public static bool IsC101(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "C-101 Aviojet";
+            return dcsfpModule.ID == 12;
         }
 
         public static bool IsC130(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "C-130 Hercules";
+            return dcsfpModule.ID == 13;
         }
 
         public static bool IsChristenEagleII(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Christen Eagle II";
+            return dcsfpModule.ID == 14;
         }
 
         public static bool IsEdge540(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Edge 540";
+            return dcsfpModule.ID == 15;
         }
 
         public static bool IsF14B(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "F-14B Tomcat";
+            return dcsfpModule.ID == 16;
         }
 
         public static bool IsF16C(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "F-16C Viper";
+            return dcsfpModule.ID == 17;
         }
 
         public static bool IsF5E(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "F-5E Tiger II";
+            return dcsfpModule.ID == 18;
         }
 
         public static bool IsF86F(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "F-86F Sabre";
+            return dcsfpModule.ID == 19;
         }
 
         public static bool IsFA18C(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "FA-18C Hornet";
+            return dcsfpModule.ID == 20;
         }
 
         public static bool IsFW190A8(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Fw 190 A-8";
+            return dcsfpModule.ID == 21;
         }
 
         public static bool IsFW190D9(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Fw 190 D-9 Dora";
+            return dcsfpModule.ID == 22;
         }
 
         public static bool IsI16(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "I-16";
+            return dcsfpModule.ID == 23;
         }
 
         public static bool IsJF17(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "JF-17 Thunder";
+            return dcsfpModule.ID == 24;
         }
 
         public static bool IsKa50(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Ka-50 Black Shark";
+            return dcsfpModule.ID == 25;
         }
 
         public static bool IsL39(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "L-39 Albatros";
+            return dcsfpModule.ID == 26;
         }
 
         public static bool IsM2000C(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "M-2000C";
+            return dcsfpModule.ID == 27;
         }
 
         public static bool IsMB339PAN(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "MB-339PAN";
+            return dcsfpModule.ID == 28;
         }
 
         public static bool IsMi8MT(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Mi-8MT";
+            return dcsfpModule.ID == 29;
         }
 
         public static bool IsMiG15bis(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "MiG-15bis";
+            return dcsfpModule.ID == 30;
         }
 
         public static bool IsMiG19P(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "MiG-19P Farmer";
+            return dcsfpModule.ID == 31;
         }
 
         public static bool IsMiG21Bis(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "MiG-21Bis";
+            return dcsfpModule.ID == 32;
         }
 
         public static bool IsNS430(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "NS 430 GPS";
+            return dcsfpModule.ID == 33;
         }
 
         public static bool IsP47D(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "P-47D Thunderbolt";
+            return dcsfpModule.ID == 34;
         }
 
         public static bool IsP51D(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "P-51D Mustang";
+            return dcsfpModule.ID == 35;
         }
 
         public static bool IsSA342(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "SA342 Gazelle";
+            return dcsfpModule.ID == 36;
         }
 
         public static bool IsSpitfireLFMkIX(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Spitfire LF Mk. IX";
+            return dcsfpModule.ID == 37;
         }
 
         public static bool IsUH1H(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "UH-1H Huey";
+            return dcsfpModule.ID == 38;
         }
 
         public static bool IsYak52(DCSFPProfile dcsfpModule)
         {
-            return dcsfpModule.Description == "Yak-52";
+            return dcsfpModule.ID == 39;
         }
     }
 }

@@ -175,7 +175,7 @@ namespace DCSFlightpanels.Windows
         private void AddNewControl()
         {
             DCSBiosInputWindow dcsBiosInputWindow;
-            dcsBiosInputWindow = new DCSBiosInputWindow();
+            dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
             dcsBiosInputWindow.ShowDialog();
             if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
             {

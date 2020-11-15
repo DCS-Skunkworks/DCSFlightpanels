@@ -149,7 +149,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 DCSBiosInputWindow dcsBiosInputWindow;
-                dcsBiosInputWindow = new DCSBiosInputWindow();
+                dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
                 dcsBiosInputWindow.ShowDialog();
                 if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
                 {

@@ -27,7 +27,7 @@ namespace DCSFlightpanels.Windows
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
 
-        public DCSBiosInputWindow()
+        /*public DCSBiosInputWindow()
         {
             InitializeComponent();
             DCSBIOSControlLocator.LoadControls();
@@ -36,7 +36,7 @@ namespace DCSFlightpanels.Windows
             {
                 Debug.Print(dcsbiosControl.identifier);
             }
-        }
+        }*/
 
         public DCSBiosInputWindow(DCSFPProfile dcsfpProfile, string description)
         {

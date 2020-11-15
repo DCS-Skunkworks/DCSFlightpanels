@@ -55,7 +55,13 @@ namespace NonVisuals
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
-                _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+                try
+                {
+                    _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+                }
+                catch (Exception e)
+                {
+                }
             }
             GamingPanels.Add(this);
 

@@ -602,9 +602,12 @@ namespace DCSFlightpanels
             {
                 if (_doSearchForPanels)
                 {
+                    if (DCSFPProfile.IsNoFrameLoadedYet(_profileHandler.Profile))
+                    {
+                        return;
+                    }
                     foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
                     {
-
                         switch (hidSkeleton.PanelInfo.GamingPanelType)
                         {
                             case GamingPanelEnum.Unknown:
