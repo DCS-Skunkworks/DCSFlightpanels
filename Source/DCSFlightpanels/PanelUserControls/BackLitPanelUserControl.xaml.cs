@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,7 +21,6 @@ namespace DCSFlightpanels.PanelUserControls
     /// </summary>
     public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
-
         private readonly BacklitPanelBIP _backlitPanelBIP;
 
         private readonly List<Image> _colorImages = new List<Image>();
@@ -30,7 +30,7 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
-
+        private DCSFPProfile _dcsfpProfile;
 
 
         public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
@@ -82,7 +82,10 @@ namespace DCSFlightpanels.PanelUserControls
             return GetType().Name;
         }
 
-        public void SelectedProfile(object sender, AirframeEventArgs e) { }
+        public void SelectedProfile(object sender, AirframeEventArgs e)
+        {
+            _dcsfpProfile = e.Profile;
+        }
 
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
@@ -675,6 +678,23 @@ namespace DCSFlightpanels.PanelUserControls
                 if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     ClearAll(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonSelectBrightnessControl_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var outputControlsWindow = new DCSBiosOutputWindow(_dcsfpProfile, "Brightness Control", false);
+                outputControlsWindow.ShowDialog();
+                if (outputControlsWindow.DialogResult.HasValue && outputControlsWindow.DialogResult.Value)
+                {
+                    _backlitPanelBIP.SetBrightnessBinding(outputControlsWindow.DCSBiosOutput);
                 }
             }
             catch (Exception ex)

@@ -125,6 +125,8 @@ namespace NonVisuals.Saitek.Panels
         private int _ledBrightness = 50; // 0 - 100 in 5 step intervals
         private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
 
+        private DCSBIOSBrightnessBinding _dcsBiosBrightnessBinding;
+
         /*
          * 01000000 2nd BIP from left GREEN
          * 00000000
@@ -188,14 +190,45 @@ namespace NonVisuals.Saitek.Panels
             {
                 if (!setting.StartsWith("#") && setting.Length > 2)
                 {
-
-                    var colorOutput = new DcsOutputAndColorBindingBIP();
-                    colorOutput.ImportSettings(setting);
-                    _listColorOutputBinding.Add(colorOutput);
+                    if (setting.StartsWith(DCSBIOSBrightnessBinding.Keyword))
+                    {
+                        _dcsBiosBrightnessBinding = new DCSBIOSBrightnessBinding();
+                        _dcsBiosBrightnessBinding.ImportSettings(setting);
+                    }
+                    else
+                    {
+                        var colorOutput = new DcsOutputAndColorBindingBIP();
+                        colorOutput.ImportSettings(setting);
+                        _listColorOutputBinding.Add(colorOutput);
+                    }
                 }
             }
 
             SettingsApplied();
+        }
+
+        public override List<string> ExportSettings()
+        {
+            if (Closed)
+            {
+                return null;
+            }
+            var result = new List<string>();
+            if (_listColorOutputBinding.Count == 0)
+            {
+                return result;
+            }
+            foreach (var colorOutputBinding in _listColorOutputBinding)
+            {
+                result.Add(colorOutputBinding.ExportSettings());
+            }
+
+            if (_dcsBiosBrightnessBinding != null)
+            {
+                result.Add(_dcsBiosBrightnessBinding.ExportSettings());
+            }
+
+            return result;
         }
 
         public List<DcsOutputAndColorBinding> GetLedDcsBiosOutputs(BIPLedPositionEnum bipLedPositionEnum)
@@ -371,24 +404,6 @@ namespace NonVisuals.Saitek.Panels
                 SaitekLEDPosition = saitekPanelLEDPosition
             };
             return dcsOutputAndColorBinding;
-        }
-
-        public override List<string> ExportSettings()
-        {
-            if (Closed)
-            {
-                return null;
-            }
-            var result = new List<string>();
-            if (_listColorOutputBinding.Count == 0)
-            {
-                return result;
-            }
-            foreach (var colorOutputBinding in _listColorOutputBinding)
-            {
-                result.Add(colorOutputBinding.ExportSettings());
-            }
-            return result;
         }
 
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
@@ -711,6 +726,22 @@ namespace NonVisuals.Saitek.Panels
 
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
         {
+        }
+
+        public void SetBrightnessBinding(DCSBIOSOutput dcsbiosOutput)
+        {
+            _dcsBiosBrightnessBinding = new DCSBIOSBrightnessBinding(dcsbiosOutput);
+            SetIsDirty();
+        }
+
+        public DCSBIOSBrightnessBinding BrightnessBinding
+        {
+            get => _dcsBiosBrightnessBinding;
+            set
+            {
+                _dcsBiosBrightnessBinding = value;
+                SetIsDirty();
+            }
         }
     }
 
