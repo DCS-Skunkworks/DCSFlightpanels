@@ -19,6 +19,7 @@ namespace NonVisuals.Saitek
 
         public static string Keyword => _keyword;
 
+
         public DCSBIOSBrightnessBinding()
         {
         }
@@ -26,6 +27,12 @@ namespace NonVisuals.Saitek
         public DCSBIOSBrightnessBinding(DCSBIOSOutput dcsbiosOutput)
         {
             _dcsbiosOutput = dcsbiosOutput;
+        }
+
+
+        public string ControlId
+        {
+            get => _dcsbiosOutput == null ? "" : _dcsbiosOutput.ControlId;
         }
 
         public void ImportSettings(string settings)

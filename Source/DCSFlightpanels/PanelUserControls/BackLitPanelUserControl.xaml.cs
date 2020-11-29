@@ -220,6 +220,8 @@ namespace DCSFlightpanels.PanelUserControls
                     SetLEDImage(position, _backlitPanelBIP.GetColor(position));
                     SetConfigExistsImageVisibility(_backlitPanelBIP.HasConfiguration(position), position);
                 }
+
+                TextBoxBrightnessControl.Text = _backlitPanelBIP.BrightnessBinding != null ? _backlitPanelBIP.BrightnessBinding.ControlId : "";
             }
             catch (Exception ex)
             {
@@ -695,6 +697,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (outputControlsWindow.DialogResult.HasValue && outputControlsWindow.DialogResult.Value)
                 {
                     _backlitPanelBIP.SetBrightnessBinding(outputControlsWindow.DCSBiosOutput);
+                    TextBoxBrightnessControl.Text = outputControlsWindow.DCSBiosOutput.ControlId;
                 }
             }
             catch (Exception ex)

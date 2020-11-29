@@ -233,10 +233,10 @@ namespace DCS_BIOS
                             {
                                 OnDcsDataAddressValue?.Invoke(this, new DCSBIOSDataEventArgs() { Address = _address, Data = _data });
 
-                                if (OnDcsDataAddressValue != null)
+                                /*if (OnDcsDataAddressValue != null)
                                 {
                                     Debug.WriteLine("OnDcsDataAddressValue : " + OnDcsDataAddressValue.GetInvocationList().Length);
-                                }
+                                }*/
                             }
                             catch (Exception e)
                             {
