@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using ClassLibraryCommon;
@@ -7,110 +8,8 @@ using DCS_BIOS;
 
 namespace NonVisuals.Saitek.Panels
 {
-    [Serializable]
-    public enum BIPLedPositionEnum
-    {
-        Position_1_1,
-        Position_1_2,
-        Position_1_3,
-        Position_1_4,
-        Position_1_5,
-        Position_1_6,
-        Position_1_7,
-        Position_1_8,
-        Position_2_1,
-        Position_2_2,
-        Position_2_3,
-        Position_2_4,
-        Position_2_5,
-        Position_2_6,
-        Position_2_7,
-        Position_2_8,
-        Position_3_1,
-        Position_3_2,
-        Position_3_3,
-        Position_3_4,
-        Position_3_5,
-        Position_3_6,
-        Position_3_7,
-        Position_3_8
-    }
-
     public class BacklitPanelBIP : SaitekPanel
     {
-        /*
-                Byte #0
-                Header = 0xb8
-                Payload 6 bytes (48 bits)
-
-                Byte #1 (Upper row)
-                00000000
-                ||||||||_ Leftmost GREEN, YELLOW when Byte #4 same bit is &
-                |||||||_ 
-                ||||||_ 
-                |||||_ 
-                ||||_ 
-                |||_ 
-                ||_ 
-                |_ Rightmost GREEN, YELLOW when Byte #4 same bit is &
-
-                Byte #2 (Middle row)
-                00000000
-                ||||||||_ Leftmost GREEN, YELLOW when Byte #5 same bit is &
-                |||||||_ 
-                ||||||_ 
-                |||||_ 
-                ||||_ 
-                |||_ 
-                ||_ 
-                |_ Rightmost GREEN, YELLOW when Byte #5 same bit is &
-
-                Byte #3 (Lower row)
-                00000000
-                ||||||||_ Leftmost GREEN, YELLOW when Byte #6 same bit is &
-                |||||||_ 
-                ||||||_ 
-                |||||_ 
-                ||||_ 
-                |||_ 
-                ||_ 
-                |_ Rightmost GREEN, YELLOW when Byte #6 same bit is &
-
-                Byte #4 (Upper row)
-                00000000
-                ||||||||_ Leftmost RED when not same bit in Byte #1 set
-                |||||||_ 
-                ||||||_ 
-                |||||_ 
-                ||||_ 
-                |||_ 
-                ||_ 
-                |_ Rightmost RED when not same bit in Byte #1 set
-
-                Byte #5 (Middle row)
-                00000000
-                ||||||||_ Leftmost RED when not same bit in Byte #2 set
-                |||||||_ 
-                ||||||_ 
-                |||||_ 
-                ||||_ 
-                |||_ 
-                ||_ 
-                |_  Rightmost RED when not same bit in Byte #2 set
-
-                Byte #6 (Lower row)
-                00000000
-                ||||||||_ Leftmost RED when not same bit in Byte #3 set
-                |||||||_ 
-                ||||||_ 
-                |||||_ 
-                ||||_ 
-                |||_ 
-                ||_ 
-                |_  Rightmost RED when not same bit in Byte #3 set
-         */
-        //public static BacklitPanelBIP BacklitPanelBIPSO;
-        //private HidDevice _hidWriteDevice;
         private readonly byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
         private readonly byte[] _middleRowBytes = { (byte)0x0, (byte)0x0 };//byte 2 & 5
         private readonly byte[] _lowerRowBytes = { (byte)0x0, (byte)0x0 }; //byte 3 & 6
@@ -122,8 +21,12 @@ namespace NonVisuals.Saitek.Panels
         private const byte _6BIPMask = 0x20;
         private const byte _7BIPMask = 0x40;
         private const byte _8BIPMask = 0x80;
-        private int _ledBrightness = 50; // 0 - 100 in 5 step intervals
+        private uint _ledBrightness = 50; // 0 - 100 in 5 step intervals
         private readonly List<DcsOutputAndColorBindingBIP> _listColorOutputBinding = new List<DcsOutputAndColorBindingBIP>();
+
+        private DCSBIOSBrightnessBinding _dcsBiosBrightnessBinding;
+
+        private DCSBIOSOutput _dcsbiosBrightnessControl;
 
         /*
          * 01000000 2nd BIP from left GREEN
@@ -139,7 +42,7 @@ namespace NonVisuals.Saitek.Panels
          * 00000000
          *
          */
-        public BacklitPanelBIP(int ledBrightness, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
+        public BacklitPanelBIP(uint ledBrightness, HIDSkeleton hidSkeleton) : base(GamingPanelEnum.BackLitPanel, hidSkeleton)
         {
             if (hidSkeleton.PanelInfo.GamingPanelType != GamingPanelEnum.BackLitPanel)
             {
@@ -188,14 +91,45 @@ namespace NonVisuals.Saitek.Panels
             {
                 if (!setting.StartsWith("#") && setting.Length > 2)
                 {
-
-                    var colorOutput = new DcsOutputAndColorBindingBIP();
-                    colorOutput.ImportSettings(setting);
-                    _listColorOutputBinding.Add(colorOutput);
+                    if (setting.StartsWith(DCSBIOSBrightnessBinding.Keyword))
+                    {
+                        _dcsBiosBrightnessBinding = new DCSBIOSBrightnessBinding();
+                        _dcsBiosBrightnessBinding.ImportSettings(setting);
+                        HandleBrightnessBinding();
+                    }
+                    else
+                    {
+                        var colorOutput = new DcsOutputAndColorBindingBIP();
+                        colorOutput.ImportSettings(setting);
+                        _listColorOutputBinding.Add(colorOutput);
+                    }
                 }
             }
 
             SettingsApplied();
+        }
+
+        public override List<string> ExportSettings()
+        {
+            if (Closed)
+            {
+                return null;
+            }
+            var result = new List<string>();
+            if (_listColorOutputBinding.Any())
+            {
+                foreach (var colorOutputBinding in _listColorOutputBinding)
+                {
+                    result.Add(colorOutputBinding.ExportSettings());
+                }
+            }
+
+            if (_dcsBiosBrightnessBinding != null)
+            {
+                result.Add(_dcsBiosBrightnessBinding.ExportSettings());
+            }
+
+            return result;
         }
 
         public List<DcsOutputAndColorBinding> GetLedDcsBiosOutputs(BIPLedPositionEnum bipLedPositionEnum)
@@ -373,24 +307,6 @@ namespace NonVisuals.Saitek.Panels
             return dcsOutputAndColorBinding;
         }
 
-        public override List<string> ExportSettings()
-        {
-            if (Closed)
-            {
-                return null;
-            }
-            var result = new List<string>();
-            if (_listColorOutputBinding.Count == 0)
-            {
-                return result;
-            }
-            foreach (var colorOutputBinding in _listColorOutputBinding)
-            {
-                result.Add(colorOutputBinding.ExportSettings());
-            }
-            return result;
-        }
-
         public override void SavePanelSettings(object sender, ProfileHandlerEventArgs e)
         {
             e.ProfileHandlerEA.RegisterPanelBinding(this, ExportSettings());
@@ -402,6 +318,12 @@ namespace NonVisuals.Saitek.Panels
         {
             UpdateCounter(e.Address, e.Data);
             CheckDcsDataForColorChangeHook(e.Address, e.Data);
+
+            if (_dcsbiosBrightnessControl != null && e.Address == _dcsbiosBrightnessControl.Address)
+            {
+                _ledBrightness = (uint)(((double)100 / 0xFFFF) * e.Data);
+                SetLedStrength();
+            }
         }
 
         public override void ClearSettings(bool setIsDirty = false)
@@ -659,7 +581,7 @@ namespace NonVisuals.Saitek.Panels
             }
         }
 
-        public int LEDBrightness
+        public uint LEDBrightness
         {
             get => _ledBrightness;
             set
@@ -712,7 +634,135 @@ namespace NonVisuals.Saitek.Panels
         public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
         {
         }
+
+        public void SetBrightnessBinding(DCSBIOSOutput dcsbiosOutput)
+        {
+            _dcsBiosBrightnessBinding = new DCSBIOSBrightnessBinding(dcsbiosOutput);
+            HandleBrightnessBinding();
+            SetIsDirty();
+        }
+
+        public DCSBIOSBrightnessBinding BrightnessBinding
+        {
+            get => _dcsBiosBrightnessBinding;
+            set
+            {
+                _dcsBiosBrightnessBinding = value;
+                HandleBrightnessBinding();
+                SetIsDirty();
+            }
+        }
+
+        private void HandleBrightnessBinding()
+        {
+            if (_dcsBiosBrightnessBinding == null)
+            {
+                _dcsbiosBrightnessControl = null;
+                return;
+            }
+
+            _dcsbiosBrightnessControl = DCSBIOSControlLocator.GetDCSBIOSOutput(_dcsBiosBrightnessBinding.ControlId);
+        }
     }
 
+    [Serializable]
+    public enum BIPLedPositionEnum
+    {
+        Position_1_1,
+        Position_1_2,
+        Position_1_3,
+        Position_1_4,
+        Position_1_5,
+        Position_1_6,
+        Position_1_7,
+        Position_1_8,
+        Position_2_1,
+        Position_2_2,
+        Position_2_3,
+        Position_2_4,
+        Position_2_5,
+        Position_2_6,
+        Position_2_7,
+        Position_2_8,
+        Position_3_1,
+        Position_3_2,
+        Position_3_3,
+        Position_3_4,
+        Position_3_5,
+        Position_3_6,
+        Position_3_7,
+        Position_3_8
+    }
 
+    /*
+        Byte #0
+        Header = 0xb8
+        Payload 6 bytes (48 bits)
+
+        Byte #1 (Upper row)
+        00000000
+        ||||||||_ Leftmost GREEN, YELLOW when Byte #4 same bit is &
+        |||||||_ 
+        ||||||_ 
+        |||||_ 
+        ||||_ 
+        |||_ 
+        ||_ 
+        |_ Rightmost GREEN, YELLOW when Byte #4 same bit is &
+
+        Byte #2 (Middle row)
+        00000000
+        ||||||||_ Leftmost GREEN, YELLOW when Byte #5 same bit is &
+        |||||||_ 
+        ||||||_ 
+        |||||_ 
+        ||||_ 
+        |||_ 
+        ||_ 
+        |_ Rightmost GREEN, YELLOW when Byte #5 same bit is &
+
+        Byte #3 (Lower row)
+        00000000
+        ||||||||_ Leftmost GREEN, YELLOW when Byte #6 same bit is &
+        |||||||_ 
+        ||||||_ 
+        |||||_ 
+        ||||_ 
+        |||_ 
+        ||_ 
+        |_ Rightmost GREEN, YELLOW when Byte #6 same bit is &
+
+        Byte #4 (Upper row)
+        00000000
+        ||||||||_ Leftmost RED when not same bit in Byte #1 set
+        |||||||_ 
+        ||||||_ 
+        |||||_ 
+        ||||_ 
+        |||_ 
+        ||_ 
+        |_ Rightmost RED when not same bit in Byte #1 set
+
+        Byte #5 (Middle row)
+        00000000
+        ||||||||_ Leftmost RED when not same bit in Byte #2 set
+        |||||||_ 
+        ||||||_ 
+        |||||_ 
+        ||||_ 
+        |||_ 
+        ||_ 
+        |_  Rightmost RED when not same bit in Byte #2 set
+
+        Byte #6 (Lower row)
+        00000000
+        ||||||||_ Leftmost RED when not same bit in Byte #3 set
+        |||||||_ 
+        ||||||_ 
+        |||||_ 
+        ||||_ 
+        |||_ 
+        ||_ 
+        |_  Rightmost RED when not same bit in Byte #3 set
+ */
 }

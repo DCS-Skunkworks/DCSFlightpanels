@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClassLibraryCommon;
-using CommonClassLibraryJD;
 using Newtonsoft.Json;
 
 namespace DCS_BIOS
@@ -11,7 +10,7 @@ namespace DCS_BIOS
     public static class DCSBIOSControlLocator
     {
         private static readonly object LockObject = new object();
-        private static DCSAirframe _airframe;
+        private static DCSFPProfile _dcsfpProfile;
         private static string _jsonDirectory;
         private static readonly List<DCSBIOSControl> DCSBIOSControls = new List<DCSBIOSControl>();
         //private static bool _listOnce = true;
@@ -53,13 +52,13 @@ namespace DCS_BIOS
                     PrintDuplicateControlIdentifiers(_dcsbiosControls, true);*/
                     if (!DCSBIOSControls.Exists(controlObject => controlObject.identifier.Equals(controlId)))
                     {
-                        throw new Exception("Error, control " + controlId + " does not exist. (" + Airframe.GetDescription() + ".json");
+                        throw new Exception("Error, control " + controlId + " does not exist. (" + Profile.Description + ")");
                     }
                     return DCSBIOSControls.Single(controlObject => controlObject.identifier.Equals(controlId));
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Check DCS-BIOS version. Failed to find control " + controlId + " for airframe " + Airframe.GetDescription() + " (" + Airframe.GetDescription() + ".json). Did you switch airframe type for the profile and have existing control(s) for the previous type saved?" + Environment.NewLine + ioe.Message);
+                    throw new Exception("Check DCS-BIOS version. Failed to find control " + controlId + " for airframe " + Profile.Description + " (" + Profile.JSONFilename + ". Did you switch airframe type for the profile and have existing control(s) for the previous type saved?" + Environment.NewLine + ioe.Message);
                 }
             }
         }
@@ -81,14 +80,14 @@ namespace DCS_BIOS
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    throw new Exception("Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control " + controlId + " for airframe " + Airframe.GetDescription() + " ( " + Airframe.GetDescription() + ".json)." + Environment.NewLine + ioe.Message);
+                    throw new Exception("Check DCS-BIOS version. Failed to create DCSBIOSOutput based on control " + controlId + " for profile " + Profile.JSONFilename + Environment.NewLine + ioe.Message);
                 }
             }
         }
 
-        private static void ReadDataFromJsonFile(string profile)
+        private static void ReadDataFromJsonFile(string filename)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded(profile) || profile == DCSAirframe.KEYEMULATOR.GetDescription() || profile == DCSAirframe.KEYEMULATOR_SRS.GetDescription() || profile == DCSAirframe.NOFRAMELOADEDYET.GetDescription())
+            if (DCSBIOSProfileLoadStatus.IsLoaded(filename) || filename == DCSFPProfile.GetKeyEmulator().JSONFilename || filename == DCSFPProfile.GetKeyEmulatorSRS().JSONFilename || filename == DCSFPProfile.GetNoFrameLoadedYet().JSONFilename)
             {
                 return;
             }
@@ -101,7 +100,7 @@ namespace DCS_BIOS
                     IEnumerable<FileInfo> files;
                     try
                     {
-                        files = directoryInfo.EnumerateFiles(profile + ".json", SearchOption.TopDirectoryOnly);
+                        files = directoryInfo.EnumerateFiles(filename, SearchOption.TopDirectoryOnly);
                     }
                     catch (Exception ex)
                     {
@@ -143,7 +142,7 @@ namespace DCS_BIOS
                         }*/
                     }
 
-                    DCSBIOSProfileLoadStatus.SetLoaded(profile, true);
+                    DCSBIOSProfileLoadStatus.SetLoaded(filename, true);
                 }
             }
             catch (Exception ex)
@@ -164,7 +163,7 @@ namespace DCS_BIOS
              */
             try
             {
-                if (_airframe == DCSAirframe.NOFRAMELOADEDYET ||
+                if (DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) ||
                     Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
                 {
                     return;
@@ -172,7 +171,7 @@ namespace DCS_BIOS
 
                 if (!Common.IsOperationModeFlagSet(EmulationMode.NS430Enabled))
                 {
-                    if (DCSBIOSProfileLoadStatus.IsLoaded(DCSAirframe.NS430.GetDescription()))
+                    if (DCSBIOSProfileLoadStatus.IsLoaded(DCSFPProfile.GetNS430().JSONFilename))
                     {
                         //Discard all DCS-BIOS controls if user "unloaded" NS430. Not possible to remove them specifically
                         //Better to force load all controls
@@ -180,16 +179,16 @@ namespace DCS_BIOS
                     }
                     else
                     {
-                        DCSBIOSProfileLoadStatus.Remove(DCSAirframe.NS430.GetDescription());
+                        DCSBIOSProfileLoadStatus.Remove(DCSFPProfile.GetNS430().JSONFilename);
                     }
                 }
 
                 if (Common.IsOperationModeFlagSet(EmulationMode.NS430Enabled))
                 {
-                    ReadDataFromJsonFile(DCSAirframe.NS430.GetDescription());
+                    ReadDataFromJsonFile(DCSFPProfile.GetNS430().JSONFilename);
                 }
 
-                if (_airframe == DCSAirframe.FC3_CD_SRS)
+                if (DCSFPProfile.IsFlamingCliff(Profile))
                 {
                     LoadCommonData(_jsonDirectory);
                     LoadMetaDataEnd(_jsonDirectory);
@@ -199,7 +198,7 @@ namespace DCS_BIOS
                     LoadCommonData(_jsonDirectory);
                     LoadMetaDataEnd(_jsonDirectory);
                     //Load the controls for the actual aircraft/helicopter
-                    ReadDataFromJsonFile(_airframe.GetDescription());
+                    ReadDataFromJsonFile(Profile.JSONFilename);
                 }
 
                 //Remove duplicates which may come from loading NS430 or other additional profiles
@@ -254,8 +253,8 @@ namespace DCS_BIOS
             }
             if (dupes.Count > 0)
             {
-                var message = "Below is a list of duplicate identifiers found in the " + Airframe.GetDescription() + ".json profile (DCS-BIOS)\n";
-                message = message + "The identifier must be unique, please correct the profile " + Airframe.GetDescription() + ".lua in the DCS-BIOS lib folder\n";
+                var message = "Below is a list of duplicate identifiers found in the " + Profile.JSONFilename + " profile (DCS-BIOS)\n";
+                message = message + "The identifier must be unique, please correct the profile " + Profile.JSONFilename + " in the DCS-BIOS lib folder\n";
                 message = message + "---------------------------------------------\n";
                 foreach (var dupe in dupes)
                 {
@@ -269,7 +268,7 @@ namespace DCS_BIOS
 
         private static void LoadMetaDataEnd(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) || _airframe == DCSAirframe.NOFRAMELOADEDYET)
+            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
             {
                 return;
             }
@@ -293,7 +292,7 @@ namespace DCS_BIOS
 
         private static void LoadCommonData(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") || Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) || _airframe == DCSAirframe.NOFRAMELOADEDYET)
+            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") || Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
             {
                 return;
             }
@@ -315,14 +314,14 @@ namespace DCS_BIOS
             }
         }
 
-        public static DCSAirframe Airframe
+        public static DCSFPProfile Profile
         {
-            get { return _airframe; }
+            get { return _dcsfpProfile; }
             set
             {
-                if (_airframe != value)
+                if (_dcsfpProfile != value)
                 {
-                    _airframe = value;
+                    _dcsfpProfile = value;
                     Reset();
                 }
             }
