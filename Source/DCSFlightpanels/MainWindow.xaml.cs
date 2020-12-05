@@ -78,7 +78,7 @@ namespace DCSFlightpanels
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
 
-        private List<GamingPanel> _gamingPanels = new List<GamingPanel>();
+        private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
 
         public MainWindow()
         {
@@ -97,7 +97,7 @@ namespace DCSFlightpanels
                     return;
                 }
 
-                DCSFPProfile.ParseSettings(_dcsfpProfilesSettingsFile);
+                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), _dcsfpProfilesSettingsFile);
 
                 if (Settings.Default.RunMinimized)
                 {

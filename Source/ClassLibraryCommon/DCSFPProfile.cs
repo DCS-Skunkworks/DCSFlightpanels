@@ -13,10 +13,10 @@ namespace ClassLibraryCommon
 
 
 
-        public DCSFPProfile(int id, string description, string luaFilename)
+        public DCSFPProfile(int id, string description, string jsonFilename)
         {
             _id = id;
-            _jsonFilename = luaFilename;
+            _jsonFilename = jsonFilename;
             _description = description;
         }
 
@@ -40,7 +40,7 @@ namespace ClassLibraryCommon
 
         public static List<DCSFPProfile> Modules => ModulesList;
 
-        public static void ParseSettings(string filename)
+        public static void ParseSettings(string dcsbiosJsonFolder, string filename)
         {
             if (!File.Exists(filename))
             {
@@ -57,9 +57,37 @@ namespace ClassLibraryCommon
                 }
 
                 var settings = s.Trim().Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                //6 : A-4E Skyhawk : A-4E-C.lua
                 var dcsBiosModule = new DCSFPProfile(int.Parse(settings[0]), settings[1].Trim(), settings[2].Trim());
                 ModulesList.Add(dcsBiosModule);
+            }
+
+            var biosLua = Path.Combine(dcsbiosJsonFolder, "..\\..\\", "BIOS.lua");
+
+            if (!File.Exists(biosLua))
+            {
+                return;
+            }
+            stringArray = File.ReadAllLines(biosLua);
+            //dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]]) -- ID = 5, ProperName = A-10C Thunderbolt II
+
+            foreach (var s in stringArray)
+            {
+                if (s.ToLower().Contains(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower()) && s.Contains("ProperName"))
+                {
+                    var parts = s.Split(new string[]{"--"}, StringSplitOptions.RemoveEmptyEntries);
+                    //dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\A-10C.lua]])
+                    var json = parts[0].ToLower().Replace(@"dofile(lfs.writedir()..[[Scripts\DCS-BIOS\lib\".ToLower(), "").Replace(".lua]])", "").Trim() + ".json";
+
+                    //ID = 5, ProperName = A-10C Thunderbolt II
+                    var info = parts[1].Split(new string[] {","}, StringSplitOptions.RemoveEmptyEntries);
+                    //ID = 5
+                    var id = int.Parse(info[0].Split(new[] {"="}, StringSplitOptions.None)[1]);
+                    //ProperName = A-10C Thunderbolt II
+                    var properName = info[1].Split(new[] {"="}, StringSplitOptions.None)[1].Trim();
+
+                    var dcsFPProfile = new DCSFPProfile(id, properName, json);
+                    ModulesList.Add(dcsFPProfile);
+                }
             }
         }
 
