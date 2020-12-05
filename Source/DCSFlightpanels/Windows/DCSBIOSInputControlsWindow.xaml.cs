@@ -17,15 +17,15 @@ namespace DCSFlightpanels.Windows
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private readonly string _header;
         private string _description;
-        private readonly DCSAirframe _dcsAirframe = DCSAirframe.A10C;
+        private DCSFPProfile _dcsfpProfile;
         private bool _isDirty = false;
         private bool _showSequenced = false;
         private bool _isSequenced = false;
 
-        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(DCSFPProfile dcsfpProfile, string header, string description, bool showSequenced = false)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
@@ -33,10 +33,10 @@ namespace DCSFlightpanels.Windows
             ShowItems();
         }
 
-        public DCSBIOSInputControlsWindow(DCSAirframe dcsAirframe, string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool showSequenced = false)
+        public DCSBIOSInputControlsWindow(DCSFPProfile dcsfpProfile, string header, List<DCSBIOSInput> dcsbiosInputs, string description, bool showSequenced = false)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             if (dcsbiosInputs != null)
             {
                 _dcsbiosInputs = dcsbiosInputs;
@@ -51,7 +51,7 @@ namespace DCSFlightpanels.Windows
 
         private void DCSBIOSInputControlsWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            TextBoxHeader.Text = _header;
+            TextBoxHeader.Text = _header + Environment.NewLine + _dcsfpProfile.Description;
             SetFormState();
         }
 
@@ -147,7 +147,7 @@ namespace DCSFlightpanels.Windows
         private void EditControl()
         {
             var dcsBIOSInput = (DCSBIOSInput)DataGridValues.SelectedItem;
-            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsAirframe, _header, dcsBIOSInput);
+            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, _header, dcsBIOSInput);
             if (dcsBiosInputWindow.ShowDialog() == true)
             {
                 _dcsbiosInputs.Remove(dcsBIOSInput);
@@ -175,7 +175,7 @@ namespace DCSFlightpanels.Windows
         private void AddNewControl()
         {
             DCSBiosInputWindow dcsBiosInputWindow;
-            dcsBiosInputWindow = new DCSBiosInputWindow();
+            dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
             dcsBiosInputWindow.ShowDialog();
             if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
             {

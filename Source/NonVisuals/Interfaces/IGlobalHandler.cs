@@ -6,6 +6,6 @@ namespace NonVisuals.Interfaces
     {
         void Attach(GamingPanel gamingPanel);
         void Detach(GamingPanel gamingPanel);
-        DCSAirframe GetAirframe();
+        DCSFPProfile GetProfile();
     }
 }

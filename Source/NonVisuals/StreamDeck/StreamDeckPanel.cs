@@ -200,7 +200,7 @@ namespace NonVisuals.StreamDeck
             _streamDeckLayerHandler.Export(compressedFilenameAndPath, buttonExports);
         }
 
-        public override void SelectedAirframe(object sender, AirframeEventArgs e)
+        public override void SelectedProfile(object sender, AirframeEventArgs e)
         {
             _streamDeckLayerHandler.ClearSettings();
         }

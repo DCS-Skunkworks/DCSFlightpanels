@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,7 +21,6 @@ namespace DCSFlightpanels.PanelUserControls
     /// </summary>
     public partial class BackLitPanelUserControl : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl
     {
-
         private readonly BacklitPanelBIP _backlitPanelBIP;
 
         private readonly List<Image> _colorImages = new List<Image>();
@@ -30,7 +30,7 @@ namespace DCSFlightpanels.PanelUserControls
         private readonly BitmapImage _greenImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/green.png"));
         private readonly BitmapImage _yellowImage = new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/yellow1.png"));
         private PanelLEDColor _lastToggleColor = PanelLEDColor.DARK;
-
+        private DCSFPProfile _dcsfpProfile;
 
 
         public BackLitPanelUserControl(TabItem parentTabItem, IGlobalHandler globalHandler, HIDSkeleton hidSkeleton)
@@ -82,7 +82,10 @@ namespace DCSFlightpanels.PanelUserControls
             return GetType().Name;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
+        public void SelectedProfile(object sender, AirframeEventArgs e)
+        {
+            _dcsfpProfile = e.Profile;
+        }
 
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
@@ -217,6 +220,8 @@ namespace DCSFlightpanels.PanelUserControls
                     SetLEDImage(position, _backlitPanelBIP.GetColor(position));
                     SetConfigExistsImageVisibility(_backlitPanelBIP.HasConfiguration(position), position);
                 }
+
+                TextBoxBrightnessControl.Text = _backlitPanelBIP.BrightnessBinding != null ? _backlitPanelBIP.BrightnessBinding.ControlId : "";
             }
             catch (Exception ex)
             {
@@ -242,7 +247,7 @@ namespace DCSFlightpanels.PanelUserControls
                 var imageName = contextMenu.Tag.ToString();
                 var position = GetLedPosition(imageName);
 
-                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetAirframe(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
+                var ledConfigsWindow = new LEDConfigsWindow(GlobalHandler.GetProfile(), "Set configuration for LED : " + position, new SaitekPanelLEDPosition(position), _backlitPanelBIP.GetLedDcsBiosOutputs(position), _backlitPanelBIP);
                 if (ledConfigsWindow.ShowDialog() == true)
                 {
                     //must include position because if user has deleted all entries then there is nothing to go after regarding position
@@ -675,6 +680,24 @@ namespace DCSFlightpanels.PanelUserControls
                 if (MessageBox.Show("Clear all settings?", "Confirm", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
                     ClearAll(true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void ButtonSelectBrightnessControl_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var outputControlsWindow = new DCSBiosOutputWindow(_dcsfpProfile, "Brightness Control", false);
+                outputControlsWindow.ShowDialog();
+                if (outputControlsWindow.DialogResult.HasValue && outputControlsWindow.DialogResult.Value)
+                {
+                    _backlitPanelBIP.SetBrightnessBinding(outputControlsWindow.DCSBiosOutput);
+                    TextBoxBrightnessControl.Text = outputControlsWindow.DCSBiosOutput.ControlId;
                 }
             }
             catch (Exception ex)

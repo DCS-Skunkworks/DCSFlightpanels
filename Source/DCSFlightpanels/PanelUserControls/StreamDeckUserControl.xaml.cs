@@ -167,7 +167,7 @@ namespace DCSFlightpanels.PanelUserControls
             return GetType().Name;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
+        public void SelectedProfile(object sender, AirframeEventArgs e)
         {
             try
             {

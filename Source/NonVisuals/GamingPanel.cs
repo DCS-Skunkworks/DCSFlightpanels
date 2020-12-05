@@ -55,7 +55,13 @@ namespace NonVisuals
             HIDSkeletonBase = hidSkeleton;
             if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
-                _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+                try
+                {
+                    _updateCounterDCSBIOSOutput = DCSBIOSOutput.GetUpdateCounter();
+                }
+                catch (Exception e)
+                {
+                }
             }
             GamingPanels.Add(this);
 
@@ -116,7 +122,7 @@ namespace NonVisuals
             IsDirty = true;
         }
 
-        public virtual void SelectedAirframe(object sender, AirframeEventArgs e) { }
+        public virtual void SelectedProfile(object sender, AirframeEventArgs e) { }
 
         //User can choose not to in case switches needs to be reset but not affect the airframe. E.g. after crashing.
         public void SetForwardKeyPresses(object sender, ForwardPanelEventArgs e)

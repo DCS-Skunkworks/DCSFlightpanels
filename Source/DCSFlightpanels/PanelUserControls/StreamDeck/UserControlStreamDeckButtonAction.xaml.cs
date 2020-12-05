@@ -555,7 +555,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(),
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(),
                         textBox.Name.Replace("TextBox", ""),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
@@ -565,7 +565,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetAirframe(), textBox.Name.Replace("TextBox", ""), null, true);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(), textBox.Name.Replace("TextBox", ""), null, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();

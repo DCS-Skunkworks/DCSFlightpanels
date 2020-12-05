@@ -158,9 +158,9 @@ namespace DCSFlightpanels.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public int BIPLedStrength {
+        public uint BIPLedStrength {
             get {
-                return ((int)(this["BIPLedStrength"]));
+                return ((uint)(this["BIPLedStrength"]));
             }
             set {
                 this["BIPLedStrength"] = value;
