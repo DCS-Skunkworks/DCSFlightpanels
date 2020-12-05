@@ -143,6 +143,7 @@
     <Compile Include="BindingMappingManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CopyPackage.cs" />
+    <Compile Include="DCSBIOSModule.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
