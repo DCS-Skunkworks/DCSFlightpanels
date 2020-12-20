@@ -195,7 +195,7 @@ namespace NonVisuals
                         {
                             //Backward compability
                             var airframeAsString = fileLine.Replace("Airframe=", "").Trim();
-                            Profile = DCSFPProfile.GetProfileBackwardCompat(airframeAsString);
+                            Profile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
                         }
                     }
                     else if (fileLine.StartsWith("Profile="))
