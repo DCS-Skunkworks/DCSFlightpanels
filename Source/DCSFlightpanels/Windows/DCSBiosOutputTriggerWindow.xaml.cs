@@ -9,9 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ClassLibraryCommon;
-using CommonClassLibraryJD;
 using DCS_BIOS;
-using EnumEx = CommonClassLibraryJD.EnumEx;
+using EnumEx = ClassLibraryCommon.EnumEx;
 
 namespace DCSFlightpanels.Windows
 {

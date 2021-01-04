@@ -6,7 +6,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using NonVisuals;
-using EnumEx = CommonClassLibraryJD.EnumEx;
+using EnumEx = ClassLibraryCommon.EnumEx;
 
 namespace DCSFlightpanels.Windows
 {

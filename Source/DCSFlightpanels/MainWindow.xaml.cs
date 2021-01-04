@@ -14,7 +14,6 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
-using CommonClassLibraryJD;
 using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
 using DCSFlightpanels.Radios;
