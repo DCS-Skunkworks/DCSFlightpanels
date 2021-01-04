@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Interfaces;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;

@@ -1,6 +1,4 @@
-﻿
- using NonVisuals.Radios;
- using NonVisuals.Radios.Knobs;
+﻿using NonVisuals.Radios.Knobs;
  using NonVisuals.Saitek.Switches;
  using NonVisuals.StreamDeck;
 

@@ -5,8 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using NonVisuals;
-using EnumEx = ClassLibraryCommon.EnumEx;
 
 namespace DCSFlightpanels.Windows
 {

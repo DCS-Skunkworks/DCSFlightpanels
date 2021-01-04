@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using DCS_BIOS;
 using System.Threading;
 using ClassLibraryCommon;

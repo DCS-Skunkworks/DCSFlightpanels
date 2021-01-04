@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using DCS_BIOS;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck.Events

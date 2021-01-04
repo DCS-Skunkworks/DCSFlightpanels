@@ -1,5 +1,4 @@
-﻿using NonVisuals.Radios;
-using NonVisuals.Radios.SRS;
+﻿using NonVisuals.Radios.SRS;
 
 namespace NonVisuals.Interfaces
 {

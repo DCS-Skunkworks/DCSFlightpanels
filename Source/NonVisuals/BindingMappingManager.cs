@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using ClassLibraryCommon;
-using HidLibrary;
 
 namespace NonVisuals
 {

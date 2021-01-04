@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
