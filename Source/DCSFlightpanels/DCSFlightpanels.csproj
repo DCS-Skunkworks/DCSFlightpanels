@@ -61,9 +61,6 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonClassLibraryJD">
-      <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
-    </Reference>
     <Reference Include="HidLibrary, Version=3.2.49.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\hidlibrary.3.3.37\lib\net45\HidLibrary.dll</HintPath>
     </Reference>
@@ -226,6 +223,9 @@
     </Compile>
     <Compile Include="Windows\DCSBIOSOutputControlsWindow.xaml.cs">
       <DependentUpon>DCSBIOSOutputControlsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DCSBiosOutputWindow.xaml.cs">
+      <DependentUpon>DCSBiosOutputWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DCSBiosOutputFormulaWindow.xaml.cs">
       <DependentUpon>DCSBiosOutputFormulaWindow.xaml</DependentUpon>
@@ -432,6 +432,10 @@
     <Page Include="Windows\DCSBIOSOutputControlsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DCSBiosOutputWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\DCSBiosOutputFormulaWindow.xaml">
       <SubType>Designer</SubType>

@@ -14,23 +14,23 @@ namespace DCSFlightpanels.Windows
         private List<DCSBIOSInput> _dcsbiosInputs = new List<DCSBIOSInput>();
         private readonly string _header;
         private string _description;
-        private readonly DCSAirframe _dcsAirframe = DCSAirframe.A10C;
+        private DCSFPProfile _dcsfpProfile;
         private bool _isDirty = false;
 
-        public DCSBIOSOutputControlsWindow(DCSAirframe dcsAirframe, string header, string description)
+        public DCSBIOSOutputControlsWindow(DCSFPProfile dcsfpProfile, string header, string description)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _header = header;
             _description = description;
             TextBoxDescription.Text = _description;
             ShowItems();
         }
 
-        public DCSBIOSOutputControlsWindow(DCSAirframe dcsAirframe, string header, List<DCSBIOSInput> dcsbiosInputs, string description)
+        public DCSBIOSOutputControlsWindow(DCSFPProfile dcsfpProfile, string header, List<DCSBIOSInput> dcsbiosInputs, string description)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             if (dcsbiosInputs != null)
             {
                 _dcsbiosInputs = dcsbiosInputs;
@@ -126,7 +126,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 var dcsBIOSInput = (DCSBIOSInput)DataGridValues.SelectedItem;
-                var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsAirframe, _header, dcsBIOSInput);
+                var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, _header, dcsBIOSInput);
                 if (dcsBiosInputWindow.ShowDialog() == true)
                 {
                     _dcsbiosInputs.Remove(dcsBIOSInput);
@@ -149,7 +149,7 @@ namespace DCSFlightpanels.Windows
             try
             {
                 DCSBiosInputWindow dcsBiosInputWindow;
-                dcsBiosInputWindow = new DCSBiosInputWindow();
+                dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
                 dcsBiosInputWindow.ShowDialog();
                 if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
                 {

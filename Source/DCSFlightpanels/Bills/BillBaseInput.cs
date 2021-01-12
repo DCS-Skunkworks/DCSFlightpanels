@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ClassLibraryCommon;
 using DCS_BIOS;
-using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.Windows;
 using NonVisuals;
@@ -497,11 +496,11 @@ namespace DCSFlightpanels.Bills
             DCSBIOSInputControlsWindow dcsBIOSInputControlsWindow;
             if (ContainsDCSBIOS())
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), TextBox.Name.Replace("TextBox", ""), DCSBIOSInputs, TextBox.Text);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", ""), DCSBIOSInputs, TextBox.Text);
             }
             else
             {
-                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetAirframe(), TextBox.Name.Replace("TextBox", ""), null);
+                dcsBIOSInputControlsWindow = new DCSBIOSInputControlsWindow(_globalHandler.GetProfile(), TextBox.Name.Replace("TextBox", ""), null);
             }
             dcsBIOSInputControlsWindow.ShowDialog();
             if (dcsBIOSInputControlsWindow.DialogResult.HasValue && dcsBIOSInputControlsWindow.DialogResult == true)

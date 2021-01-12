@@ -35,7 +35,7 @@
     <Setting Name="DCSBiosJSONLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)">$USERDIRECTORY$\Saved Games\DCS\Scripts\DCS-BIOS\doc\json</Value>
     </Setting>
-    <Setting Name="BIPLedStrength" Type="System.Int32" Scope="User">
+    <Setting Name="BIPLedStrength" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="RadioFrequencyKnobSensitivity" Type="System.Int32" Scope="User">

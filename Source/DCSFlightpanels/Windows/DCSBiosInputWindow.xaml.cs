@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,12 +21,12 @@ namespace DCSFlightpanels.Windows
         private readonly string _description;
         private bool _formLoaded;
         private DCSBIOSControl _dcsbiosControl;
-        private DCSAirframe _dcsAirframe;
+        private DCSFPProfile _dcsfpProfile;
         private readonly IEnumerable<DCSBIOSControl> _dcsbiosControls;
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
 
-        public DCSBiosInputWindow()
+        /*public DCSBiosInputWindow()
         {
             InitializeComponent();
             DCSBIOSControlLocator.LoadControls();
@@ -36,20 +35,20 @@ namespace DCSFlightpanels.Windows
             {
                 Debug.Print(dcsbiosControl.identifier);
             }
-        }
+        }*/
 
-        public DCSBiosInputWindow(DCSAirframe dcsAirframe, string description)
+        public DCSBiosInputWindow(DCSFPProfile dcsfpProfile, string description)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsbiosControls = DCSBIOSControlLocator.GetInputControls();
         }
 
-        public DCSBiosInputWindow(DCSAirframe dcsAirframe, string description, DCSBIOSInput dcsBiosInput)
+        public DCSBiosInputWindow(DCSFPProfile dcsfpProfile, string description, DCSBIOSInput dcsBiosInput)
         {
             InitializeComponent();
-            _dcsAirframe = dcsAirframe;
+            _dcsfpProfile = dcsfpProfile;
             _description = description;
             _dcsBiosInput = dcsBiosInput;
             _dcsbiosControl = DCSBIOSControlLocator.GetControl(_dcsBiosInput.ControlId);
@@ -61,6 +60,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                LabelProfileDescription.Content = _dcsfpProfile.Description;
                 _popupSearch = (Popup)FindResource("PopUpSearchResults");
                 _popupSearch.Height = 400;
                 _dataGridValues = ((DataGrid)LogicalTreeHelper.FindLogicalNode(_popupSearch, "DataGridValues"));

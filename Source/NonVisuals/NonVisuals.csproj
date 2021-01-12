@@ -40,9 +40,6 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonClassLibraryJD">
-      <HintPath>..\..\ExternalLibraries\CommonClassLibraryJD.dll</HintPath>
-    </Reference>
     <Reference Include="HidLibrary, Version=3.2.49.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\hidlibrary.3.3.37\lib\net45\HidLibrary.dll</HintPath>
     </Reference>
@@ -143,6 +140,7 @@
     <Compile Include="BindingMappingManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CopyPackage.cs" />
+    <Compile Include="DCSBIOSModule.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericPanelBinding.cs" />
     <Compile Include="Interfaces\IFontFace.cs" />
@@ -162,6 +160,7 @@
     <Compile Include="Radios\Knobs\RadiopanelKnobP47D.cs" />
     <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
+    <Compile Include="Saitek\DCSBIOSBrightnessBinding.cs" />
     <Compile Include="Saitek\Panels\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
     <Compile Include="Saitek\BIPLink.cs" />

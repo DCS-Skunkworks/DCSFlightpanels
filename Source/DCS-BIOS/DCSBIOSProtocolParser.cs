@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using ClassLibraryCommon;
@@ -233,10 +232,10 @@ namespace DCS_BIOS
                             {
                                 OnDcsDataAddressValue?.Invoke(this, new DCSBIOSDataEventArgs() { Address = _address, Data = _data });
 
-                                if (OnDcsDataAddressValue != null)
+                                /*if (OnDcsDataAddressValue != null)
                                 {
                                     Debug.WriteLine("OnDcsDataAddressValue : " + OnDcsDataAddressValue.GetInvocationList().Length);
-                                }
+                                }*/
                             }
                             catch (Exception e)
                             {

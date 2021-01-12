@@ -14,10 +14,8 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
-using CommonClassLibraryJD;
 using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
-using DCSFlightpanels.Radios;
 using DCSFlightpanels.Radios.Emulators;
 using DCSFlightpanels.Radios.PreProgrammed;
 using DCSFlightpanels.Shared;
@@ -25,11 +23,9 @@ using DCSFlightpanels.Windows;
 using Microsoft.Win32;
 using NonVisuals;
 using NonVisuals.Interfaces;
-using NonVisuals.Radios;
 using NonVisuals.Radios.SRS;
 using NonVisuals.Saitek;
 using NonVisuals.Saitek.Panels;
-using NonVisuals.StreamDeck.Events;
 using Octokit;
 using Application = System.Windows.Application;
 using Cursors = System.Windows.Input.Cursors;
@@ -69,15 +65,16 @@ namespace DCSFlightpanels
         private readonly List<string> _statusMessages = new List<string>();
         private readonly object _lockObjectStatusMessages = new object();
         private readonly List<UserControl> _panelUserControls = new List<UserControl>();
-        private DCSAirframe _dcsAirframe;
+        private DCSFPProfile _dcsfpProfile;
         private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_debug_log.txt";
         private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_error_log.txt";
+        private readonly string _dcsfpProfilesSettingsFile = AppDomain.CurrentDomain.BaseDirectory + "Settings\\dcsfp_profiles.txt";
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded = false;
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
 
-        private List<GamingPanel> _gamingPanels = new List<GamingPanel>();
+        private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
 
         public MainWindow()
         {
@@ -95,6 +92,8 @@ namespace DCSFlightpanels
                 {
                     return;
                 }
+
+                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), _dcsfpProfilesSettingsFile);
 
                 if (Settings.Default.RunMinimized)
                 {
@@ -144,7 +143,7 @@ namespace DCSFlightpanels
                     CreateNewProfile();
                 }
 
-                _dcsAirframe = _profileHandler.Airframe;
+                _dcsfpProfile = _profileHandler.Profile;
 
                 SetWindowTitle();
                 SetWindowState();
@@ -228,22 +227,22 @@ namespace DCSFlightpanels
             {
                 _profileHandler.NewProfile();
                 Common.UseGenericRadio = chooseProfileModuleWindow.UseGenericRadio;
-                _profileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
+                _profileHandler.Profile = chooseProfileModuleWindow.Profile;
                 SendEventRegardingForwardingOfKeys();
             }
 
             SetWindowState();
         }
 
-        private void SetApplicationMode(DCSAirframe dcsAirframe)
+        private void SetApplicationMode(DCSFPProfile dcsfpProfile)
         {
             if (!IsLoaded)
             {
                 return;
             }
 
-            LabelAirframe.Content = dcsAirframe == DCSAirframe.NOFRAMELOADEDYET ? "" : dcsAirframe.ToString();
-            
+            LabelAirframe.Content = DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile) ? "" : dcsfpProfile.Description;
+
             /*
              * Special case as loaded type of radio panel depends on profile settings, all other panels are the same regardless of profile.
              */
@@ -256,12 +255,11 @@ namespace DCSFlightpanels
                 ShutdownDCSBIOS();
                 CloseStreamDecks();
             }
-            else if (dcsAirframe != DCSAirframe.NOFRAMELOADEDYET)
+            else if (!DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile))
             {
                 CreateDCSBIOS();
                 StartupDCSBIOS();
             }
-
 
             SortTabs();
         }
@@ -484,9 +482,9 @@ namespace DCSFlightpanels
             }
         }
 
-        public DCSAirframe GetAirframe()
+        public DCSFPProfile GetProfile()
         {
-            return _profileHandler.Airframe;
+            return _dcsfpProfile;
         }
 
         private void SearchForPanels()
@@ -556,7 +554,7 @@ namespace DCSFlightpanels
                             case GamingPanelEnum.StreamDeckXL:
                             case GamingPanelEnum.StreamDeck:
                                 {
-                                    if (_profileHandler.Airframe != DCSAirframe.KEYEMULATOR)
+                                    if (!DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                                     {
                                         var tabItemStreamDeck = new TabItem();
                                         tabItemStreamDeck.Header = hidSkeleton.PanelInfo.GamingPanelType.GetDescription();
@@ -600,9 +598,12 @@ namespace DCSFlightpanels
             {
                 if (_doSearchForPanels)
                 {
+                    if (DCSFPProfile.IsNoFrameLoadedYet(_profileHandler.Profile))
+                    {
+                        return;
+                    }
                     foreach (var hidSkeleton in _hidHandler.HIDSkeletons)
                     {
-
                         switch (hidSkeleton.PanelInfo.GamingPanelType)
                         {
                             case GamingPanelEnum.Unknown:
@@ -613,7 +614,7 @@ namespace DCSFlightpanels
                                 {
                                     var tabItem = new TabItem();
                                     tabItem.Header = "PZ69";
-                                    if (_profileHandler.Airframe == DCSAirframe.KEYEMULATOR)
+                                    if (DCSFPProfile.IsKeyEmulator(_profileHandler.Profile))
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlEmulator(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -622,7 +623,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (Common.IsOperationModeFlagSet(EmulationMode.SRSEnabled) || _profileHandler.Airframe == DCSAirframe.FC3_CD_SRS)
+                                    else if (Common.IsOperationModeFlagSet(EmulationMode.SRSEnabled) || DCSFPProfile.IsFlamingCliff(_profileHandler.Profile))
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSRS(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -631,7 +632,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.A10C && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
                                         //var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFullEmulator(hidSkeleton, tabItem, this);
@@ -641,7 +642,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.UH1H && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsUH1H(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlUH1H(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -650,7 +651,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.Mig21Bis && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsMiG21Bis(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMiG21Bis(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -659,7 +660,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.Ka50 && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsKa50(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlKa50(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -668,7 +669,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.Mi8 && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsMi8MT(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlMi8(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -677,7 +678,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.Bf109 && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsBf109K4(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlBf109(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -686,7 +687,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.Fw190d9 && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsFW190D9(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFw190(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -695,7 +696,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.P51D && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsP51D(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP51D(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -704,7 +705,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.F86F && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsF86F(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF86F(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -713,7 +714,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.SpitfireLFMkIX && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsSpitfireLFMkIX(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSpitfireLFMkIX(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -722,7 +723,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.AJS37 && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsAJS37(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAJS37(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -731,7 +732,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.SA342M && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsSA342(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlSA342(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -740,7 +741,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.FA18C && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsFA18C(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFA18C(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -749,7 +750,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.M2000C && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsM2000C(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlM2000C(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -758,7 +759,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.F5E && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsF5E(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF5E(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -767,7 +768,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.F14B && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsF14B(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlF14B(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -776,7 +777,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.AV8BNA && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsAV8B(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlAV8BNA(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -785,7 +786,7 @@ namespace DCSFlightpanels
                                         TabControlPanels.Items.Add(tabItem);
                                         _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
                                     }
-                                    else if (_profileHandler.Airframe == DCSAirframe.P47D && !Common.UseGenericRadio)
+                                    else if (DCSFPProfile.IsP47D(_profileHandler.Profile) && !Common.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlP47D(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
@@ -951,14 +952,14 @@ namespace DCSFlightpanels
         }
 
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
+        public void SelectedProfile(object sender, AirframeEventArgs e)
         {
             try
             {
-                if (_dcsAirframe != e.Airframe)
+                if (_dcsfpProfile != e.Profile)
                 {
-                    _dcsAirframe = e.Airframe;
-                    SetApplicationMode(_dcsAirframe);
+                    _dcsfpProfile = e.Profile;
+                    SetApplicationMode(_dcsfpProfile);
                     SendEventRegardingForwardingOfKeys();
                 }
                 if (Common.KeyEmulationOnly())
@@ -980,10 +981,10 @@ namespace DCSFlightpanels
         {
             try
             {
-                if (_profileHandler.Airframe != _dcsAirframe)
+                if (_profileHandler.Profile != _dcsfpProfile)
                 {
-                    _dcsAirframe = _profileHandler.Airframe;
-                    SetApplicationMode(_dcsAirframe);
+                    _dcsfpProfile = _profileHandler.Profile;
+                    SetApplicationMode(_dcsfpProfile);
                 }
 
                 MenuItemUseNS430.IsChecked = _profileHandler.UseNS430;
@@ -1137,7 +1138,7 @@ namespace DCSFlightpanels
 
         private void SetWindowTitle()
         {
-            if (_profileHandler.Airframe == DCSAirframe.NOFRAMELOADEDYET)
+            if (DCSFPProfile.IsNoFrameLoadedYet(_profileHandler.Profile))
             {
                 Title = "";
             }
@@ -1307,7 +1308,7 @@ namespace DCSFlightpanels
                 var chooseProfileModuleWindow = new ChooseProfileModuleWindow();
                 chooseProfileModuleWindow.ShowDialog();
                 Common.UseGenericRadio = chooseProfileModuleWindow.UseGenericRadio;
-                _profileHandler.Airframe = chooseProfileModuleWindow.DCSAirframe;
+                _profileHandler.Profile = chooseProfileModuleWindow.DCSAirframe;
                 SetWindowState();*/
                 NewProfile();
             }
@@ -1352,8 +1353,8 @@ namespace DCSFlightpanels
             _profileHandler = new ProfileHandler(Settings.Default.DCSBiosJSONLocation);
             _profileHandler.Attach(this);
             _profileHandler.AttachUserMessageHandler(this);
-            _dcsAirframe = _profileHandler.Airframe;
-            SetApplicationMode(_dcsAirframe);
+            _dcsfpProfile = _profileHandler.Profile;
+            SetApplicationMode(_dcsfpProfile);
             SetWindowTitle();
             SetWindowState();
             SendEventRegardingForwardingOfKeys();
@@ -1380,7 +1381,7 @@ namespace DCSFlightpanels
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MenuItemWikiClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1734,8 +1735,8 @@ namespace DCSFlightpanels
                     _dcsBios.ReceivePort = int.Parse(Settings.Default.DCSBiosPortFrom);
                     _dcsBios.SendToIp = Settings.Default.DCSBiosIPTo;
                     _dcsBios.SendPort = int.Parse(Settings.Default.DCSBiosPortTo);
-                    _dcsBios.Shutdown(); 
-                    _dcsBios.Startup(); 
+                    _dcsBios.Shutdown();
+                    _dcsBios.Startup();
                     _profileHandler.DCSBIOSJSONDirectory = Settings.Default.DCSBiosJSONLocation;
                 }
 
@@ -1946,7 +1947,7 @@ namespace DCSFlightpanels
                     _exceptionTimer.Dispose();
                     _statusMessagesTimer.Dispose();
                     ; _exceptionTimer.Dispose();
-                    _dcsBios?.Dispose(); 
+                    _dcsBios?.Dispose();
                 }
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.

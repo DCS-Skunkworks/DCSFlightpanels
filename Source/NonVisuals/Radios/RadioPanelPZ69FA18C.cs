@@ -26,8 +26,8 @@ namespace NonVisuals.Radios
         /*FA-18C COMM1 radio*/
         //
         //
-        private const string COMM1_CHANNEL_INC = "UFC_COMM1_CHANNEL_SELECT +3200\n";
-        private const string COMM1_CHANNEL_DEC = "UFC_COMM1_CHANNEL_SELECT -3200\n";
+        private const string COMM1_CHANNEL_INC = "UFC_COMM1_CHANNEL_SELECT INC\n";
+        private const string COMM1_CHANNEL_DEC = "UFC_COMM1_CHANNEL_SELECT DEC\n";
         private const string COMM1_VOL_INC = "UFC_COMM1_VOL +4000\n";
         private const string COMM1_VOL_DEC = "UFC_COMM1_VOL -4000\n";
         private const string COMM1_PULL_PRESS = "UFC_COMM1_PULL INC\n";
@@ -48,8 +48,8 @@ namespace NonVisuals.Radios
         /*FA-18C COMM2 radio*/
         //
         //
-        private const string COMM2_CHANNEL_INC = "UFC_COMM2_CHANNEL_SELECT +3200\n";
-        private const string COMM2_CHANNEL_DEC = "UFC_COMM2_CHANNEL_SELECT -3200\n";
+        private const string COMM2_CHANNEL_INC = "UFC_COMM2_CHANNEL_SELECT INC\n";
+        private const string COMM2_CHANNEL_DEC = "UFC_COMM2_CHANNEL_SELECT DEC\n";
         private const string COMM2_VOL_INC = "UFC_COMM2_VOL +4000\n";
         private const string COMM2_VOL_DEC = "UFC_COMM2_VOL -4000\n";
         private const string COMM2_PULL_PRESS = "UFC_COMM2_PULL INC\n";

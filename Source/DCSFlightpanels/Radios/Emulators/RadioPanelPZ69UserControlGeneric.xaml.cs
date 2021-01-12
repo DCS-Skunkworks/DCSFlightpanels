@@ -87,7 +87,7 @@ namespace DCSFlightpanels.Radios.Emulators
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
+        public void SelectedProfile(object sender, AirframeEventArgs e) { }
 
         public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
@@ -1236,16 +1236,16 @@ namespace DCSFlightpanels.Radios.Emulators
                     {
                         if (dcsbiosBindingLCDPZ69.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputFormulaObject);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputFormulaObject);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputObject);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ69.DCSBIOSOutputObject);
                         break;
                     }
                 }
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();

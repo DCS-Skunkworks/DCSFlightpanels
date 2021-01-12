@@ -71,7 +71,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
             }
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
+        public void SelectedProfile(object sender, AirframeEventArgs e)
         {
             try
             {

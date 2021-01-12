@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using ClassLibraryCommon;
-using NonVisuals.Saitek;
 using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Radios

@@ -86,7 +86,7 @@ namespace DCSFlightpanels.PanelUserControls
             return GetType().Name;
         }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e)
+        public void SelectedProfile(object sender, AirframeEventArgs e)
         {
             try
             {
@@ -547,16 +547,16 @@ namespace DCSFlightpanels.PanelUserControls
                     {
                         if (dcsbiosBindingLCDPZ70.UseFormula)
                         {
-                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
+                            dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputFormulaObject);
                             break;
                         }
-                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
+                        dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description, dcsbiosBindingLCDPZ70.DCSBIOSOutputObject);
                         break;
                     }
                 }
                 if (dcsBiosOutputFormulaWindow == null)
                 {
-                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetAirframe(), description);
+                    dcsBiosOutputFormulaWindow = new DCSBiosOutputFormulaWindow(GlobalHandler.GetProfile(), description);
                 }
 
                 dcsBiosOutputFormulaWindow.ShowDialog();

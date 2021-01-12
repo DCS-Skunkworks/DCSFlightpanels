@@ -6,7 +6,7 @@ namespace NonVisuals.Interfaces
     {
         void PanelSettingsChanged(object sender, PanelEventArgs e);
         void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e);
-        void SelectedAirframe(object sender, AirframeEventArgs e);
+        void SelectedProfile(object sender, AirframeEventArgs e);
     }
 
     public class PanelBindingReadFromFileEventArgs : EventArgs

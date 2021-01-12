@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
 using DCSFlightpanels.PanelUserControls;
@@ -63,7 +62,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
+        public void SelectedProfile(object sender, AirframeEventArgs e) { }
 
         public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {

@@ -56,7 +56,7 @@
                     <RowDefinition Height="28" />
                 </Grid.RowDefinitions>
 
-                <TextBox Name="TextBoxHeader" Text="Description here" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"  FontSize="14" IsReadOnly="True" MaxLines="2" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                <TextBox Name="TextBoxHeader" Text="Description here" AcceptsReturn="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"  FontSize="14" IsReadOnly="True" MaxLines="2" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
                 <Button Name="NewControlButton" Content="New" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" Click="NewControlButton_OnClick"/>
                 <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" Click="EditButton_OnClick"/>
                 <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="DeleteButton_OnClick" />

@@ -36,7 +36,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
             _radioPanelPZ69.Attach((IGamingPanelListener)this);
             globalHandler.Attach(_radioPanelPZ69);
             GlobalHandler = globalHandler;
-            LabelAirframe.Content = GlobalHandler.GetAirframe() + " Gazelle";
+            LabelAirframe.Content = GlobalHandler.GetProfile() + " Gazelle";
             //LoadConfiguration();
         }
 
@@ -61,7 +61,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
 
         public void UpdatesHasBeenMissed(object sender, DCSBIOSUpdatesMissedEventArgs e) { }
 
-        public void SelectedAirframe(object sender, AirframeEventArgs e) { }
+        public void SelectedProfile(object sender, AirframeEventArgs e) { }
 
         public void UISwitchesChanged(object sender, SwitchesChangedEventArgs e)
         {
