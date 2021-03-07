@@ -46,15 +46,22 @@
             <CheckBox Content="Minimize to System Tray" Name="CheckBoxMinimizeToTray" IsChecked="False" Margin="0,10,0,0" />
 
 
-            <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,20,5,0" >IMPORTANT</TextBlock>
+            <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,20,5,0" >VERY IMPORTANT - DELETE OLD SETTINGS</TextBlock>
             <TextBlock TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
                 <Italic>
-                Windows stores these settings in a file named <Bold>user.config</Bold> in folder :
-                <LineBreak/> <Bold> C:\Users\&lt;your username&gt;\AppData\Local\DCSFlightpanels.</Bold>
+                    Do this to avoid weird problems with things not working, settings not taken into account.
+                    <LineBreak/>
+                    <Bold>This removes only old DCSFP settings, not settings related to the aircraft / helicopter.</Bold>
                 </Italic>
                 <LineBreak/>
-                For every version of DCSFP a new folder with a new user.config file will be created. If you have used several DCSFP versions it is recommended that you go and <Underline>delete the old files and folders </Underline> in this location.
-                This way there will not be any unexplained behaviour with DCSFP reading old settings or settings not being saved properly.
+                <LineBreak/>
+                1. Close DCSFP.
+                <LineBreak/>
+                2. Goto address : <Bold> C:\Users\&lt;your username&gt;\AppData\Local\DCSFlightpanels.</Bold>
+                <LineBreak/>
+                3. Delete all folders (usually named e.g. <Italic>dcsfp.exe_Url_n2i5x0axp4hoy52v1z5yxhp1jnsc11lm)</Italic>
+                <LineBreak/>
+                4. Re-apply the settings in DCSFP (menu -> Settings), e.g. if you use openBeta then point DCS-BIOS to that folder again.
                 <LineBreak/>
             </TextBlock>
         </StackPanel>
