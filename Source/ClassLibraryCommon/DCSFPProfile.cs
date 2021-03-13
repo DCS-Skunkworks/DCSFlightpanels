@@ -10,7 +10,7 @@ namespace ClassLibraryCommon
         private string _description;
         private string _jsonFilename;
         private static readonly List<DCSFPProfile> ModulesList = new List<DCSFPProfile>();
-
+        private bool _useGenericRadio = false;
 
 
         public DCSFPProfile(int id, string description, string jsonFilename)
@@ -36,6 +36,12 @@ namespace ClassLibraryCommon
         {
             get => _description;
             set => _description = value;
+        }
+
+        public bool UseGenericRadio
+        {
+            get => _useGenericRadio;
+            set => _useGenericRadio = value;
         }
 
         public static List<DCSFPProfile> Modules => ModulesList;

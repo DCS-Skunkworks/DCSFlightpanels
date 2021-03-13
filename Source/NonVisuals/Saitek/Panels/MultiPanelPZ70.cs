@@ -725,7 +725,7 @@ namespace NonVisuals.Saitek.Panels
                  * Instead the buttons global bool value must be used!
                  * 
                  */
-                if (Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) && multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
+                if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) && multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
                 {
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
                     LCDDialChangesHandle(multiPanelKnob);
@@ -1101,7 +1101,7 @@ namespace NonVisuals.Saitek.Panels
             var lowerValue = 0;
             lock (_lcdDataVariablesLockObject)
             {
-                if (Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
+                if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
                 {
                     switch (_pz70DialPosition)
                     {

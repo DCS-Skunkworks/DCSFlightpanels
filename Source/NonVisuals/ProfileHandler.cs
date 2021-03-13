@@ -102,7 +102,6 @@ namespace NonVisuals
             _isNewProfile = true;
             ClearAll();
             Profile = DCSFPProfile.GetNoFrameLoadedYet();//Just a default that doesn't remove non emulation panels from the GUI
-            Common.UseGenericRadio = false;
             //This sends info to all to clear their settings
             OnClearPanelSettings?.Invoke(this);
         }
@@ -116,7 +115,7 @@ namespace NonVisuals
         {
             return Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
         }*/
-        
+
         public bool ReloadProfile()
         {
             return LoadProfile(null, _hardwareConflictResolver);
@@ -179,7 +178,7 @@ namespace NonVisuals
                 string currentBindingHash = null;
                 var insidePanel = false;
                 var insideJSONPanel = false;
-
+                DCSFPProfile tmpProfile = null;
                 GenericPanelBinding genericPanelBinding = null;
 
                 foreach (var fileLine in fileLines)
@@ -200,15 +199,19 @@ namespace NonVisuals
                     }
                     else if (fileLine.StartsWith("Profile="))
                     {
-                        Profile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", "")));
+                        tmpProfile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", "")));
                     }
                     else if (fileLine.StartsWith("OperationLevelFlag="))
                     {
-                        Common.SetOperationModeFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", "").Trim()));
+                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", "").Trim())); //backward compat 13.03.2021
+                    }
+                    else if (fileLine.StartsWith("EmulationModesFlag="))
+                    {
+                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("EmulationModesFlag=", "").Trim()));
                     }
                     else if (fileLine.StartsWith("UseGenericRadio="))
                     {
-                        Common.UseGenericRadio = (bool.Parse(fileLine.Replace("UseGenericRadio=", "").Trim()));
+                        tmpProfile.UseGenericRadio = (bool.Parse(fileLine.Replace("UseGenericRadio=", "").Trim()));
                     }
                     else if (!fileLine.StartsWith("#") && fileLine.Length > 0)
                     {
@@ -267,7 +270,7 @@ namespace NonVisuals
                                 {
                                     line = line.Replace("\t", "");
                                 }
-                                
+
                                 genericPanelBinding.Settings.Add(line);
                             }
 
@@ -279,11 +282,12 @@ namespace NonVisuals
                     }
                 }
                 //For backwards compability 10.11.2018
-                if (Common.GetOperationModeFlag() == 0)
+                if (Common.GetEmulationModesFlag() == 0)
                 {
-                    SetOperationLevelFlag();
+                    SetEmulationModeFlag();
                 }
 
+                Profile = tmpProfile;
                 CheckHardwareConflicts();
 
                 SendBindingsReadEvent();
@@ -311,25 +315,25 @@ namespace NonVisuals
             }
         }
 
-        private void SetOperationLevelFlag()
+        private void SetEmulationModeFlag()
         {
             if (DCSFPProfile.IsKeyEmulator(Profile))
             {
-                Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
+                Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
             }
             else if (DCSFPProfile.IsKeyEmulatorSRS(Profile))
             {
-                Common.SetEmulationMode(EmulationMode.KeyboardEmulationOnly);
-                Common.SetEmulationMode(EmulationMode.SRSEnabled);
+                Common.SetEmulationModes(EmulationMode.KeyboardEmulationOnly);
+                Common.SetEmulationModes(EmulationMode.SRSEnabled);
             }
             else if (DCSFPProfile.IsFlamingCliff(Profile))
             {
-                Common.SetEmulationMode(EmulationMode.SRSEnabled);
-                Common.SetEmulationMode(EmulationMode.DCSBIOSOutputEnabled);
+                Common.SetEmulationModes(EmulationMode.SRSEnabled);
+                Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled);
             }
             else
             {
-                Common.SetEmulationMode(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSInputEnabled);
+                Common.SetEmulationModes(EmulationMode.DCSBIOSOutputEnabled | EmulationMode.DCSBIOSInputEnabled);
             }
         }
 
@@ -509,8 +513,8 @@ namespace NonVisuals
                 stringBuilder.AppendLine(headerStringBuilder.ToString());
                 stringBuilder.AppendLine("#  ***Do not change the location nor content of the line below***");
                 stringBuilder.AppendLine("Profile=" + Profile.ID);
-                stringBuilder.AppendLine("OperationLevelFlag=" + Common.GetOperationModeFlag());
-                stringBuilder.AppendLine("UseGenericRadio=" + Common.UseGenericRadio + Environment.NewLine);
+                stringBuilder.AppendLine("EmulationModesFlag=" + Common.GetEmulationModesFlag());
+                stringBuilder.AppendLine("UseGenericRadio=" + Profile.UseGenericRadio + Environment.NewLine);
 
                 foreach (var genericPanelBinding in BindingMappingManager.PanelBindings)
                 {
@@ -564,23 +568,6 @@ namespace NonVisuals
             IsDirty = true;
         }
 
-        /*public DCSFPProfile Airframe
-        {
-            get => _airframe;
-            set
-            {
-                //Called only when user creates a new profile
-                if (value != _airframe)
-                {
-                    SetIsDirty();
-                }
-                _airframe = value;
-                Common.ResetOperationModeFlag();
-                SetOperationLevelFlag();
-                OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Airframe = _airframe });
-            }
-        }*/
-
         public DCSFPProfile Profile
         {
             get => _dcsfpProfile;
@@ -592,8 +579,8 @@ namespace NonVisuals
                     SetIsDirty();
                 }
                 _dcsfpProfile = value;
-                Common.ResetOperationModeFlag();
-                SetOperationLevelFlag();
+                Common.ResetEmulationModesFlag();
+                SetEmulationModeFlag();
                 DCSBIOSControlLocator.Profile = Profile;
                 OnAirframeSelected?.Invoke(this, new AirframeEventArgs() { Profile = _dcsfpProfile });
             }
@@ -617,16 +604,16 @@ namespace NonVisuals
 
         public bool UseNS430
         {
-            get => Common.IsOperationModeFlagSet(EmulationMode.NS430Enabled);
+            get => Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled);
             set
             {
                 if (value)
                 {
-                    Common.SetEmulationMode(EmulationMode.NS430Enabled);
+                    Common.SetEmulationModes(EmulationMode.NS430Enabled);
                 }
                 else
                 {
-                    Common.ClearOperationModeFlag(EmulationMode.NS430Enabled);
+                    Common.ClearEmulationModesFlag(EmulationMode.NS430Enabled);
                 }
                 SetIsDirty();
             }

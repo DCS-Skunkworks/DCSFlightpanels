@@ -135,7 +135,7 @@ namespace DCSFlightpanels
                 {
                     result.AddNullKeyVisible = true;
                     result.EditSequenceVisible = true; 
-                    if (Common.FullDCSBIOSEnabled())
+                    if (Common.FullDCSBIOSEnabled() || Common.PartialDCSBIOSEnabled())
                     {
                         result.EditDCSBIOSVisible = true;
                     }

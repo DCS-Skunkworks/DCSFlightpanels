@@ -14,7 +14,6 @@ namespace DCSFlightpanels.Windows
     public partial class ChooseProfileModuleWindow : Window
     {
         private DCSFPProfile _dcsfpProfile;
-        private bool _useGenericRadio = false;
 
         public ChooseProfileModuleWindow()
         {
@@ -66,7 +65,7 @@ namespace DCSFlightpanels.Windows
             ComboBoxAirframe.Items.Clear();
             foreach (var module in DCSFPProfile.Modules)
             {
-                if (!DCSFPProfile.IsNS430(module) &&  !DCSFPProfile.IsNoFrameLoadedYet(module))
+                if (!DCSFPProfile.IsNoFrameLoadedYet(module)) //!DCSFPProfile.IsNS430(module) &&  
                 {
                     itemsSource.Add(module);
                 }
@@ -84,6 +83,7 @@ namespace DCSFlightpanels.Windows
             {
                 _dcsfpProfile = (DCSFPProfile)ComboBoxAirframe.SelectedItem;
                 DCSBIOSControlLocator.Profile = _dcsfpProfile;
+                _dcsfpProfile.UseGenericRadio = CheckBoxUseGenericRadio.IsChecked == true;
             }
         }
 
@@ -109,32 +109,6 @@ namespace DCSFlightpanels.Windows
         public DCSFPProfile Profile
         {
             get { return _dcsfpProfile; }
-        }
-
-        public bool UseGenericRadio => _useGenericRadio;
-
-        private void CheckBoxUseGenericRadio_OnChecked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _useGenericRadio = true;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
-        }
-
-        private void CheckBoxUseGenericRadio_OnUnchecked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _useGenericRadio = false;
-            }
-            catch (Exception ex)
-            {
-                Common.ShowErrorMessageBox( ex);
-            }
         }
 
         private void ChooseProfileModuleWindow_OnKeyDown(object sender, KeyEventArgs e)
