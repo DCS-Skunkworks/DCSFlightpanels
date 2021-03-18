@@ -61,6 +61,9 @@ namespace DCSFlightpanels.Windows
             DeleteButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
             CheckBoxIsSequenced.Visibility = _showSequenced ? Visibility.Visible : Visibility.Collapsed;
             LabelSequencedInfo.Visibility = _showSequenced ? Visibility.Visible : Visibility.Collapsed;
+            DuplicateButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null;
+            UpButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null && DataGridValues.SelectedIndex > 0;
+            DownButton.IsEnabled = DataGridValues.Items.Count > 0 && DataGridValues.SelectedItem != null && DataGridValues.SelectedIndex < DataGridValues.Items.Count - 1;
             ButtonOk.IsEnabled = _isDirty;
         }
 
@@ -174,8 +177,7 @@ namespace DCSFlightpanels.Windows
 
         private void AddNewControl()
         {
-            DCSBiosInputWindow dcsBiosInputWindow;
-            dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
+            var dcsBiosInputWindow = new DCSBiosInputWindow(_dcsfpProfile, "");
             dcsBiosInputWindow.ShowDialog();
             if (dcsBiosInputWindow.DialogResult.HasValue && dcsBiosInputWindow.DialogResult.Value)
             {
@@ -331,6 +333,86 @@ namespace DCSFlightpanels.Windows
             {
                 //Unselect when user presses any area not containing a row
                 ((DataGrid)sender).UnselectAll();
+            }
+        }
+
+        private void DuplicateButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var dcsBIOSInput = DCSBIOSInputs[DataGridValues.SelectedIndex];
+                DCSBIOSInputs.Add(dcsBIOSInput);
+                ShowItems();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void UpButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var newIndex = DataGridValues.SelectedIndex - 1;
+                var index = 0;
+                var newDCSBIOSInputs = new List<DCSBIOSInput>();
+                while(index < DCSBIOSInputs.Count)
+                {
+                    if (index == newIndex)
+                    {
+                        newDCSBIOSInputs.Add(DCSBIOSInputs[index + 1]);
+                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
+                        index++;
+                    }
+                    else
+                    {
+                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
+                    }
+
+                    index++;
+                }
+
+                _dcsbiosInputs = newDCSBIOSInputs;
+                ShowItems();
+                SetIsDirty();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
+            }
+        }
+
+        private void DownButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var newIndex = DataGridValues.SelectedIndex + 1;
+                var index = 0;
+                var newDCSBIOSInputs = new List<DCSBIOSInput>();
+                while (index < DCSBIOSInputs.Count)
+                {
+                    if (index + 1 == newIndex)
+                    {
+                        newDCSBIOSInputs.Add(DCSBIOSInputs[index + 1]);
+                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
+                        index++;
+                    }
+                    else
+                    {
+                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
+                    }
+
+                    index++;
+                }
+
+                _dcsbiosInputs = newDCSBIOSInputs;
+                ShowItems();
+                SetIsDirty();
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
         }
     }

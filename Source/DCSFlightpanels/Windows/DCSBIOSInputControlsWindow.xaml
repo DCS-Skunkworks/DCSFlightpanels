@@ -56,16 +56,27 @@
                     <RowDefinition Height="28" />
                 </Grid.RowDefinitions>
 
-                <TextBox Name="TextBoxHeader" Text="Description here" AcceptsReturn="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"  FontSize="14" IsReadOnly="True" MaxLines="2" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-                <Button Name="NewControlButton" Content="New" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" Click="NewControlButton_OnClick"/>
-                <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" Click="EditButton_OnClick"/>
-                <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="DeleteButton_OnClick" />
-                <Label Content="Description" Grid.Row="6" Grid.ColumnSpan="3"/>
-                <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7" KeyDown="TextBoxDescription_OnKeyDown"/>
-                <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal">
-                    <CheckBox Name="CheckBoxIsSequenced" Margin="10,5,0,0" Content="Sequenced Commands" IsChecked="False" Click="CheckBoxIsSequenced_OnClick"/>
-                    <Label Name="LabelSequencedInfo" Content=" ? " FontWeight="Bold" Foreground="Blue" MouseDown="LabelSequencedInfo_OnMouseDown" MouseEnter="LabelSequencedInfo_OnMouseEnter" MouseLeave="LabelSequencedInfo_OnMouseLeave"></Label>
+                <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="11">
+                    <TextBox Name="TextBoxHeader" Text="Description here" Margin="0,10,0,0" AcceptsReturn="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" TextWrapping="Wrap"  FontSize="14" IsReadOnly="True" MaxLines="2" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                    <Button Name="NewControlButton" Content="New" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" Click="NewControlButton_OnClick"/>
+                    <Button Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Grid.Row="3" Click="EditButton_OnClick"/>
+                    <Button Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="DeleteButton_OnClick" />
+                    <Button Name="DuplicateButton" Content="Duplicate" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Grid.Row="4" Click="DuplicateButton_OnClick" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Name="UpButton" Content="Up" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="45" Grid.Row="4" Click="UpButton_OnClick" />
+                        <Button Name="DownButton" Content="Down" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="45" Grid.Row="4" Click="DownButton_OnClick" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        
+                    </StackPanel>
+                    <Label Content="Description" Grid.Row="6" Grid.ColumnSpan="3"/>
+                    <TextBox Name="TextBoxDescription" Margin="5,0,5,0" MaxLength="20" VerticalContentAlignment="Center" FontStyle="Italic" TextWrapping="Wrap"  FontSize="14" MaxLines="1" Grid.ColumnSpan="3" Grid.RowSpan="1" Grid.Row="7" KeyDown="TextBoxDescription_OnKeyDown"/>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Name="CheckBoxIsSequenced" Margin="10,5,0,0" Content="Sequenced Commands" IsChecked="False" Click="CheckBoxIsSequenced_OnClick"/>
+                        <Label Name="LabelSequencedInfo" Content=" ? " FontWeight="Bold" Foreground="Blue" MouseDown="LabelSequencedInfo_OnMouseDown" MouseEnter="LabelSequencedInfo_OnMouseEnter" MouseLeave="LabelSequencedInfo_OnMouseLeave"></Label>
+                    </StackPanel>
                 </StackPanel>
+
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="12" >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  >
                         <Button Name="ButtonOk"  Content="Ok" Width="70" Margin="0,0,0,0" VerticalAlignment="Center" Click="OkButton_OnClick"/>
