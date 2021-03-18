@@ -27,7 +27,7 @@ namespace DCS_BIOS
         {
             lock (LockObject)
             {
-                if (Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
+                if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
                 {
                     return null;
                 }
@@ -67,7 +67,7 @@ namespace DCS_BIOS
         {
             lock (LockObject)
             {
-                if (Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
+                if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
                 {
                     throw new Exception("DCSBIOSControlLocator.GetDCSBIOSOutput() Should not be called when only key emulator is active");
                 }
@@ -164,12 +164,12 @@ namespace DCS_BIOS
             try
             {
                 if (DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile) ||
-                    Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
+                    Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
                 {
                     return;
                 }
 
-                if (!Common.IsOperationModeFlagSet(EmulationMode.NS430Enabled))
+                if (!Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled))
                 {
                     if (DCSBIOSProfileLoadStatus.IsLoaded(DCSFPProfile.GetNS430().JSONFilename))
                     {
@@ -183,7 +183,7 @@ namespace DCS_BIOS
                     }
                 }
 
-                if (Common.IsOperationModeFlagSet(EmulationMode.NS430Enabled))
+                if (Common.IsEmulationModesFlagSet(EmulationMode.NS430Enabled))
                 {
                     ReadDataFromJsonFile(DCSFPProfile.GetNS430().JSONFilename);
                 }
@@ -268,7 +268,7 @@ namespace DCS_BIOS
 
         private static void LoadMetaDataEnd(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
+            if (DCSBIOSProfileLoadStatus.IsLoaded("MetadataEnd") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
             {
                 return;
             }
@@ -292,7 +292,7 @@ namespace DCS_BIOS
 
         private static void LoadCommonData(string jsonDirectory)
         {
-            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") || Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
+            if (DCSBIOSProfileLoadStatus.IsLoaded("CommonData") || Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) || DCSFPProfile.IsNoFrameLoadedYet(_dcsfpProfile))
             {
                 return;
             }
@@ -355,7 +355,7 @@ namespace DCS_BIOS
                                           "type": "string"
                                } ]
                 },*/
-            if (!Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 return null;
             }
@@ -366,7 +366,7 @@ namespace DCS_BIOS
 
         public static IEnumerable<DCSBIOSControl> GetIntegerOutputControls()
         {
-            if (!Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 return null;
             }
@@ -376,7 +376,7 @@ namespace DCS_BIOS
 
         public static IEnumerable<DCSBIOSControl> GetInputControls()
         {
-            if (!Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled))
+            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled))
             {
                 return null;
             }

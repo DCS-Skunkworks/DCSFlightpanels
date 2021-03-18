@@ -171,7 +171,7 @@ namespace DCSFlightpanels.Bills
 
         protected void SetContextMenu()
         {
-            _contextMenu = new ContextMenuPanelTextBox(Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly));
+            _contextMenu = new ContextMenuPanelTextBox(Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly));
 
             _contextMenu.ContextMenuItemAddNullKey.Click += MenuItemAddNullKey_OnClick;
             _contextMenu.ContextMenuItemEditSequence.Click += MenuItemEditSequence_OnClick;

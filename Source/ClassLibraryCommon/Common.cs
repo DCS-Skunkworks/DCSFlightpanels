@@ -80,78 +80,75 @@ namespace ClassLibraryCommon
         private static NumberFormatInfo _pz69NumberFormatInfoFullDisplay;
         private static NumberFormatInfo _pz69NumberFormatInfoEmpty;
 
-        private static int _emulationMode = 0;
-
-
-        public static bool UseGenericRadio = false;
-
+        private static int _emulationModesFlag = 0;
+        
         public static void ValidateFlag()
         {
-            if (IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
+            if (IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
             {
-                if (IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled) ||
-                    IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled))
+                if (IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) ||
+                    IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled))
                 {
-                    throw new Exception("Invalid operation level flag : " + _emulationMode);
+                    throw new Exception("Invalid emulation modes flag : " + _emulationModesFlag);
                 }
             }
         }
 
-        public static void SetOperationModeFlag(int flag)
+        public static void SetEmulationModesFlag(int flag)
         {
-            _emulationMode = flag;
+            _emulationModesFlag = flag;
             ValidateFlag();
         }
 
-        public static int GetOperationModeFlag()
+        public static int GetEmulationModesFlag()
         {
             ValidateFlag();
-            return _emulationMode;
+            return _emulationModesFlag;
         }
 
-        public static void SetEmulationMode(EmulationMode emulationMode)
+        public static void SetEmulationModes(EmulationMode emulationMode)
         {
-            _emulationMode = _emulationMode | (int)emulationMode;
+            _emulationModesFlag = _emulationModesFlag | (int)emulationMode;
             ValidateFlag();
         }
 
-        public static bool IsOperationModeFlagSet(EmulationMode flagValue)
+        public static bool IsEmulationModesFlagSet(EmulationMode flagValue)
         {
-            return (_emulationMode & (int)flagValue) > 0;
+            return (_emulationModesFlag & (int)flagValue) > 0;
         }
 
-        public static void ClearOperationModeFlag(EmulationMode flagValue)
+        public static void ClearEmulationModesFlag(EmulationMode flagValue)
         {
-            _emulationMode &= ~((int)flagValue);
+            _emulationModesFlag &= ~((int)flagValue);
         }
 
-        public static void ResetOperationModeFlag()
+        public static void ResetEmulationModesFlag()
         {
-            _emulationMode = 0;
+            _emulationModesFlag = 0;
         }
 
         public static bool NoDCSBIOSEnabled()
         {
             ValidateFlag();
-            return !IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled) && !IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled);
+            return !IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled) && !IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled);
         }
 
         public static bool KeyEmulationOnly()
         {
             ValidateFlag();
-            return IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly);
+            return IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly);
         }
 
         public static bool FullDCSBIOSEnabled()
         {
             ValidateFlag();
-            return IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled) && IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled);
+            return IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) && IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled);
         }
 
         public static bool PartialDCSBIOSEnabled()
         {
             ValidateFlag();
-            return IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled) || IsOperationModeFlagSet(EmulationMode.DCSBIOSInputEnabled);
+            return IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled) || IsEmulationModesFlagSet(EmulationMode.DCSBIOSInputEnabled);
         }
 
         public static NumberFormatInfo GetPZ69FullDisplayNumberFormat()

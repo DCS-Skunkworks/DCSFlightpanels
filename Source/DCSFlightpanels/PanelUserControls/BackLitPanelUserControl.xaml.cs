@@ -424,7 +424,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetContextMenuClickHandlers()
         {
-            if (!Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            if (!Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 return;
             }

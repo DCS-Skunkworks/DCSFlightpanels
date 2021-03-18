@@ -19,7 +19,7 @@
             <ComboBox Name="ComboBoxAirframe" ToolTip="Cockpit controls from DCS-BIOS will be loaded based on the selected airframe" HorizontalAlignment="Left" Margin="10,0,10,0" Width="150" SelectedIndex="0" SelectionChanged="ComboBoxAirframe_OnSelectionChanged"/>
         </StackPanel>
         <StackPanel Name="StackPanelUseGenericRadio" Grid.Row="1" Visibility="Collapsed">
-            <CheckBox Name="CheckBoxUseGenericRadio" IsChecked="False" Content="Use Generic Radio Panel" Margin="10,10,0,0" Checked="CheckBoxUseGenericRadio_OnChecked" Unchecked="CheckBoxUseGenericRadio_OnUnchecked" />
+            <CheckBox Name="CheckBoxUseGenericRadio" IsChecked="False" Content="Use Generic Radio Panel" Margin="10,10,0,0" />
         </StackPanel>
         <StackPanel Grid.Row="2" >
             <Label Margin="0,15,0,0">

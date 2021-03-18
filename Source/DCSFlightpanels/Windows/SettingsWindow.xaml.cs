@@ -46,7 +46,7 @@ namespace DCSFlightpanels.Windows
             {
                 ButtonOk.IsEnabled = false;
                 LoadSettings();
-                if (!Common.IsOperationModeFlagSet(EmulationMode.SRSEnabled))
+                if (!Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled))
                 {
                     LabelSRS.Visibility = Visibility.Collapsed;
                 }else if (Common.NoDCSBIOSEnabled())
@@ -135,7 +135,7 @@ namespace DCSFlightpanels.Windows
                 TextBoxDCSBIOSFromPort.Text = Settings.Default.DCSBiosPortFrom;
                 TextBoxDCSBIOSToPort.Text = Settings.Default.DCSBiosPortTo;
             }
-            if (Common.IsOperationModeFlagSet(EmulationMode.SRSEnabled))
+            if (Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled))
             {
                 TextBoxSRSFromIP.Text = Settings.Default.SRSIpFrom;
                 TextBoxSRSToIP.Text = Settings.Default.SRSIpTo;

@@ -100,7 +100,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetApplicationMode()
         {
-            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Visible;
                 ButtonLcdLower.Visibility = Visibility.Visible;
@@ -652,7 +652,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     ButtonLcdLower.Visibility = Visibility.Hidden;
                 }
-                else if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+                else if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                 {
                     ButtonLcdLower.Visibility = Visibility.Visible;
                 }
@@ -806,7 +806,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetContextMenuClickHandlers()
         {
-            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 ButtonLcdUpper.Visibility = Visibility.Hidden;
                 ButtonLcdLower.Visibility = Visibility.Hidden;
@@ -899,7 +899,7 @@ namespace DCSFlightpanels.PanelUserControls
             try
             {
                 var contextMenu = (ContextMenu)sender;
-                if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+                if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                 {
                     ((MenuItem)contextMenu.Items[0]).IsEnabled = true;
                 }

@@ -108,12 +108,12 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
-                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsOperationModeFlagSet(EmulationMode.KeyboardEmulationOnly))
+                    if (image.Name.StartsWith("ImagePZ55LED") && Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly))
                     {
                         image.ContextMenu = null;
                     }
                     else
-                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+                        if (image.Name.StartsWith("ImagePZ55LED") && image.ContextMenu == null && Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
                     {
                         image.ContextMenu = (ContextMenu)Resources["PZ55LEDContextMenu"];
                         if (image.ContextMenu != null)
@@ -396,7 +396,7 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void SetContextMenuClickHandlers()
         {
-            if (Common.IsOperationModeFlagSet(EmulationMode.DCSBIOSOutputEnabled))
+            if (Common.IsEmulationModesFlagSet(EmulationMode.DCSBIOSOutputEnabled))
             {
                 foreach (var image in Common.FindVisualChildren<Image>(this))
                 {
