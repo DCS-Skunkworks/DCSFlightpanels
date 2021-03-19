@@ -46,10 +46,8 @@ namespace NonVisuals.Radios
         private int _hfRadioChannelPresetDialSkipper;
         private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
         private readonly object _lockHFRadioModeDialObject1 = new object();
-        private volatile uint _hfRadio1ModeCockpitDialPosition = 1;
-        private volatile uint _hfRadio2ModeCockpitDialPosition = 1;
-        private DCSBIOSOutput _hfRadioMode1DialPresetDcsbiosOutput;
-        private DCSBIOSOutput _hfRadioMode2DialPresetDcsbiosOutput;
+        private volatile uint _hfRadioModeCockpitDialPosition = 1;
+        private DCSBIOSOutput _hfRadioModeDialPresetDcsbiosOutput;
         private int _hfRadioModePresetDialSkipper;
         /* 
         *  COM2 Large IFF Circuit D
@@ -87,7 +85,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex, "DCSBIOSStringReceived()");
+                Common.ShowErrorMessageBox(ex, "DCSBIOSStringReceived()");
             }
         }
 
@@ -177,28 +175,14 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                //HF Radio Mode 1
-                if (e.Address == _hfRadioMode1DialPresetDcsbiosOutput.Address)
+                //HF Radio Mode
+                if (e.Address == _hfRadioModeDialPresetDcsbiosOutput.Address)
                 {
                     lock (_lockHFRadioModeDialObject1)
                     {
-                        var tmp = _hfRadio1ModeCockpitDialPosition;
-                        _hfRadio1ModeCockpitDialPosition = _hfRadioMode1DialPresetDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadio1ModeCockpitDialPosition)
-                        {
-                            Interlocked.Add(ref _doUpdatePanelLCD, 1);
-                        }
-                    }
-                }
-
-                //HF Radio Mode 2
-                if (e.Address == _hfRadioMode2DialPresetDcsbiosOutput.Address)
-                {
-                    lock (_lockHFRadioModeDialObject1)
-                    {
-                        var tmp = _hfRadio2ModeCockpitDialPosition;
-                        _hfRadio2ModeCockpitDialPosition = _hfRadioMode2DialPresetDcsbiosOutput.GetUIntValue(e.Data);
-                        if (tmp != _hfRadio2ModeCockpitDialPosition)
+                        var tmp = _hfRadioModeCockpitDialPosition;
+                        _hfRadioModeCockpitDialPosition = _hfRadioModeDialPresetDcsbiosOutput.GetUIntValue(e.Data);
+                        if (tmp != _hfRadioModeCockpitDialPosition)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
@@ -240,7 +224,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -255,10 +239,12 @@ namespace NonVisuals.Radios
                     foreach (var radioPanelKnobObject in hashSet)
                     {
                         var radioPanelKnob = (RadioPanelKnobP47D)radioPanelKnobObject;
-
+                        
                         switch (radioPanelKnob.RadioPanelPZ69Knob)
                         {
+                                
                             case RadioPanelPZ69KnobsP47D.UPPER_HFRADIO:
+                                 
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
@@ -355,7 +341,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -610,7 +596,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -667,24 +653,7 @@ namespace NonVisuals.Radios
                                     }
 
                                 }
-                                lock (_lockHFRadioModeDialObject1)
-                                {
-                                    if (_hfRadio1ModeCockpitDialPosition == 0 && _hfRadio2ModeCockpitDialPosition == 0)
-                                    {
-                                        mode = 0;
-                                    }
-                                    else
-                                    if (_hfRadio1ModeCockpitDialPosition == 0 && _hfRadio2ModeCockpitDialPosition == 1)
-                                    {
-                                        mode = 1;
-                                    }
-                                    else
-                                    if (_hfRadio1ModeCockpitDialPosition == 1 && _hfRadio2ModeCockpitDialPosition == 1)
-                                    {
-                                        mode = 2;
-                                    }
-                                }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfRadioModeCockpitDialPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
@@ -743,24 +712,7 @@ namespace NonVisuals.Radios
                                     }
 
                                 }
-                                lock (_lockHFRadioModeDialObject1)
-                                {
-                                    if (_hfRadio1ModeCockpitDialPosition == 0 && _hfRadio2ModeCockpitDialPosition == 0)
-                                    {
-                                        mode = 0;
-                                    }
-                                    else
-                                    if (_hfRadio1ModeCockpitDialPosition == 0 && _hfRadio2ModeCockpitDialPosition == 1)
-                                    {
-                                        mode = 1;
-                                    }
-                                    else
-                                    if (_hfRadio1ModeCockpitDialPosition == 1 && _hfRadio2ModeCockpitDialPosition == 1)
-                                    {
-                                        mode = 2;
-                                    }
-                                }
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, mode, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfRadioModeCockpitDialPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
@@ -792,7 +744,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             Interlocked.Add(ref _doUpdatePanelLCD, -1);
         }
@@ -815,8 +767,7 @@ namespace NonVisuals.Radios
                 _hfRadioChannelBPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_B");
                 _hfRadioChannelCPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_C");
                 _hfRadioChannelDPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_D");
-                _hfRadioMode1DialPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_T_MODE1");
-                _hfRadioMode2DialPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_T_MODE2");
+                _hfRadioModeDialPresetDcsbiosOutput = DCSBIOSControlLocator.GetDCSBIOSOutput("RCTRL_T_MODE");
                 //COM2
                 _iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_B");
                 _iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetDCSBIOSOutput("IFF_D");
@@ -827,7 +778,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -872,7 +823,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -886,7 +837,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
         }
 
@@ -907,7 +858,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }
@@ -929,7 +880,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }
@@ -951,7 +902,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }
@@ -973,7 +924,7 @@ namespace NonVisuals.Radios
             }
             catch (Exception ex)
             {
-                Common.LogError( ex);
+                Common.LogError(ex);
             }
             return false;
         }
@@ -1030,27 +981,10 @@ namespace NonVisuals.Radios
             {
                 if (moveUp)
                 {
-                    if (_hfRadio1ModeCockpitDialPosition == 0 && _hfRadio2ModeCockpitDialPosition == 0)
-                    {
-                        return "RCTRL_T_MODE1 INC\n";
-                    }
-                    if (_hfRadio1ModeCockpitDialPosition == 0 && _hfRadio2ModeCockpitDialPosition == 1)
-                    {
-                        return "RCTRL_T_MODE1 INC\n";
-                    }
+                    return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition + 1) + "\n";
                 }
-                else
-                {
 
-                    if (_hfRadio1ModeCockpitDialPosition == 1 && _hfRadio2ModeCockpitDialPosition == 1)
-                    {
-                        return "RCTRL_T_MODE1 DEC\n";
-                    }
-                    if (_hfRadio1ModeCockpitDialPosition == 0 && _hfRadio2ModeCockpitDialPosition == 1)
-                    {
-                        return "RCTRL_T_MODE2 DEC\n";
-                    }
-                }
+                return "RCTRL_T_MODE " + (_hfRadioModeCockpitDialPosition - 1) + "\n";
             }
             return null;
         }

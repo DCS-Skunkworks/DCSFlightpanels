@@ -354,26 +354,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                var oldIndex = DataGridValues.SelectedIndex;
                 var newIndex = DataGridValues.SelectedIndex - 1;
-                var index = 0;
-                var newDCSBIOSInputs = new List<DCSBIOSInput>();
-                while(index < DCSBIOSInputs.Count)
-                {
-                    if (index == newIndex)
-                    {
-                        newDCSBIOSInputs.Add(DCSBIOSInputs[index + 1]);
-                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
-                        index++;
-                    }
-                    else
-                    {
-                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
-                    }
+                var dcsInputToMove = DCSBIOSInputs[DataGridValues.SelectedIndex];
+                var dcsInputToReplace = DCSBIOSInputs[DataGridValues.SelectedIndex - 1];
 
-                    index++;
-                }
+                DCSBIOSInputs[oldIndex] = dcsInputToReplace;
+                DCSBIOSInputs[newIndex] = dcsInputToMove;
 
-                _dcsbiosInputs = newDCSBIOSInputs;
                 ShowItems();
                 SetIsDirty();
             }
@@ -387,26 +375,14 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                var oldIndex = DataGridValues.SelectedIndex;
                 var newIndex = DataGridValues.SelectedIndex + 1;
-                var index = 0;
-                var newDCSBIOSInputs = new List<DCSBIOSInput>();
-                while (index < DCSBIOSInputs.Count)
-                {
-                    if (index + 1 == newIndex)
-                    {
-                        newDCSBIOSInputs.Add(DCSBIOSInputs[index + 1]);
-                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
-                        index++;
-                    }
-                    else
-                    {
-                        newDCSBIOSInputs.Add(DCSBIOSInputs[index]);
-                    }
+                var dcsInputToMove = DCSBIOSInputs[DataGridValues.SelectedIndex];
+                var dcsInputToReplace = DCSBIOSInputs[DataGridValues.SelectedIndex + 1];
 
-                    index++;
-                }
+                DCSBIOSInputs[oldIndex] = dcsInputToReplace;
+                DCSBIOSInputs[newIndex] = dcsInputToMove;
 
-                _dcsbiosInputs = newDCSBIOSInputs;
                 ShowItems();
                 SetIsDirty();
             }
