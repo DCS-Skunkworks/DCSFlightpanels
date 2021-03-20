@@ -117,7 +117,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsP47D.UPPER_IFF:
+                        case RadioPanelPZ69KnobsP47D.UPPER_NO_USE5: //case RadioPanelPZ69KnobsP47D.UPPER_IFF:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(
@@ -187,7 +187,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
                                     });
                                 break;
                             }
-                        case RadioPanelPZ69KnobsP47D.LOWER_IFF:
+                        case RadioPanelPZ69KnobsP47D.LOWER_NO_USE5: //case RadioPanelPZ69KnobsP47D.LOWER_IFF:
                             {
                                 var key = radioKnob;
                                 Dispatcher?.BeginInvoke(

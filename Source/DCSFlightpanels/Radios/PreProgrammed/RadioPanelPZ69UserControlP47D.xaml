@@ -71,7 +71,6 @@
                     COM 1 = Small Dial HF Radio OFF/A/B/C/D <LineBreak/>
                     COM 1 = Large Dial HF Radio Mode <LineBreak/>
                     COM 1 = ACT/STBY Radio Lights ON/OFF<LineBreak/>
-                    COM 2 = IFF B D<LineBreak/>
                 </TextBlock>
             </StackPanel>
         </GroupBox>
