@@ -7,7 +7,7 @@ namespace NonVisuals.Radios.Knobs
     public enum RadioPanelPZ69KnobsP47D
     {
         UPPER_HFRADIO = 0,      //COM1
-        UPPER_IFF = 2,      //COM2
+        UPPER_NO_USE5 = 2, //IFF = 2,      //COM2
         UPPER_NO_USE0 = 4,          //NAV1
         UPPER_NO_USE1 = 8,             //NAV2
         UPPER_NO_USE2 = 16,       //ADF
@@ -19,7 +19,7 @@ namespace NonVisuals.Radios.Knobs
         UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
         UPPER_FREQ_SWITCH = 2056,
         LOWER_HFRADIO = 4096,   //COM1
-        LOWER_IFF = 8192,   //COM2
+        LOWER_NO_USE5 = 8192, //IFF = 8192,   //COM2
         LOWER_NO_USE0 = 16384,      //NAV1
         LOWER_NO_USE1 = 32768,          //NAV2
         LOWER_NO_USE2 = 65536,    //ADF
@@ -46,7 +46,7 @@ namespace NonVisuals.Radios.Knobs
          */
         HFRADIO = 0,
         HFRADIO2 = 2,
-        IFF = 4,
+        //IFF = 4,
         NOUSE = 64
     }
 
@@ -83,7 +83,7 @@ namespace NonVisuals.Radios.Knobs
             result.Add(new RadioPanelKnobP47D(2, Convert.ToInt32("10000000", 2), false, RadioPanelPZ69KnobsP47D.LOWER_LARGE_FREQ_WHEEL_DEC));
 
             //Group 1
-            result.Add(new RadioPanelKnobP47D(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsP47D.LOWER_IFF)); //LOWER COM2
+            result.Add(new RadioPanelKnobP47D(1, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE5));//LOWER_IFF)); //LOWER COM2
             result.Add(new RadioPanelKnobP47D(1, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE0)); //LOWER NAV1
             result.Add(new RadioPanelKnobP47D(1, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE1)); //LOWER NAV2
             result.Add(new RadioPanelKnobP47D(1, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsP47D.LOWER_NO_USE2)); //LOWER ADF
@@ -94,7 +94,7 @@ namespace NonVisuals.Radios.Knobs
 
             //Group 2
             result.Add(new RadioPanelKnobP47D(0, Convert.ToInt32("1", 2), true, RadioPanelPZ69KnobsP47D.UPPER_HFRADIO)); //UPPER COM1
-            result.Add(new RadioPanelKnobP47D(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsP47D.UPPER_IFF)); //UPPER COM2
+            result.Add(new RadioPanelKnobP47D(0, Convert.ToInt32("10", 2), true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE5));// UPPER_IFF)); //UPPER COM2
             result.Add(new RadioPanelKnobP47D(0, Convert.ToInt32("100", 2), true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE0)); //UPPER NAV1
             result.Add(new RadioPanelKnobP47D(0, Convert.ToInt32("1000", 2), true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE1)); //UPPER NAV2
             result.Add(new RadioPanelKnobP47D(0, Convert.ToInt32("10000", 2), true, RadioPanelPZ69KnobsP47D.UPPER_NO_USE2)); //UPPER ADF
