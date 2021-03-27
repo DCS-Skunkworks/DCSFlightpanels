@@ -68,7 +68,3 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 Contributors : Tossler, ZoeESummers, Capt. Zeen
 
 Here you find our [DCSFlightpanels Discord Server](https://discord.gg/5svGwKX)
-
-(28.12.2018 My poor Git skills led to a reset in the repo with all old commits and contributors to be erased)
-
-
