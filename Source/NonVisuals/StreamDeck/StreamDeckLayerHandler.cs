@@ -151,6 +151,14 @@ namespace NonVisuals.StreamDeck
 
             foreach (var buttonExport in clonedButtonExports)
             {
+                if (buttonExport.Button.ActionForPress != null && buttonExport.Button.ActionForPress.HasSound)
+                {
+                    filesToCompressList.Add(buttonExport.Button.ActionForPress.SoundFile);
+                }checked that files aren''t duplicated
+                if (buttonExport.Button.ActionForRelease != null && buttonExport.Button.ActionForRelease.HasSound)
+                {
+                    filesToCompressList.Add(buttonExport.Button.ActionForRelease.SoundFile);
+                }
                 if (buttonExport.Button.Face != null)
                 {
                     if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))

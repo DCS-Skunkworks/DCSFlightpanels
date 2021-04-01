@@ -406,5 +406,17 @@ namespace DCSFlightpanels.Properties {
                 this["LastDirectoryUsedForOpenProfile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastSoundDirectory {
+            get {
+                return ((string)(this["LastSoundDirectory"]));
+            }
+            set {
+                this["LastSoundDirectory"] = value;
+            }
+        }
     }
 }
