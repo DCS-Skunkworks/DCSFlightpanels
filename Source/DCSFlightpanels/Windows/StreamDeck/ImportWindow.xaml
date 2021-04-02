@@ -59,7 +59,7 @@
             <GroupBox Header="Image folder" Margin="13,5,13,15">
                 <StackPanel Margin="0,2,0,2">
                     <Label>
-                        <TextBlock TextWrapping="Wrap" Text="Select to which folder images will be imported"/>
+                        <TextBlock TextWrapping="Wrap" Text="Select where to save images and sounds"/>
                     </Label>
                     <TextBox FontSize="10" Height="18"  IsReadOnly="True" x:Name="TextBoxImageImportFolder"  IsEnabled="False" Background="LightSteelBlue"/>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Right">
