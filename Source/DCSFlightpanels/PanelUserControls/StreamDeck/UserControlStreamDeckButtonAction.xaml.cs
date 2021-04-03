@@ -86,6 +86,8 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             CheckBoxControlRemoteStreamdeck.IsChecked = false;
             ActivateCheckBoxControlRemoteStreamdeck(true);
 
+            DeleteSoundConfig();
+
             _isDirty = false;
 
             SetFormState();
@@ -292,17 +294,17 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 return;
             }
             SetButtonActionType();
-            ShowActionConfiguration(streamDeckButton.ActionForPress);
-            ShowActionConfiguration(streamDeckButton.ActionForRelease);
+            ShowActionConfiguration(true, streamDeckButton.ActionForPress);
+            ShowActionConfiguration(false, streamDeckButton.ActionForRelease);
         }
 
-        private void ShowActionConfiguration(IStreamDeckButtonAction streamDeckButtonAction)
+        private void ShowActionConfiguration(bool forPress, IStreamDeckButtonAction streamDeckButtonAction)
         {
             if (streamDeckButtonAction == null)
             {
                 return;
             }
-
+            
             switch (streamDeckButtonAction.ActionType)
             {
                 case EnumStreamDeckActionType.KeyPress:
@@ -310,8 +312,11 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         var keyBindingStreamDeck = (ActionTypeKey)streamDeckButtonAction;
                         var textBoxKeyPress = keyBindingStreamDeck.WhenTurnedOn ? TextBoxKeyPressButtonOn : TextBoxKeyPressButtonOff;
                         textBoxKeyPress.Bill.KeyPress = keyBindingStreamDeck.OSKeyPress;
-                        
-                        ShowSoundConfig(keyBindingStreamDeck);
+
+                        if (forPress)
+                        {
+                            ShowSoundConfig(keyBindingStreamDeck);
+                        }
 
                         SetFormState();
                         return;
@@ -322,7 +327,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         var textBoxDCSBIOS = dcsBIOSBinding.WhenTurnedOn ? TextBoxDCSBIOSActionButtonOn : TextBoxDCSBIOSActionButtonOff;
                         textBoxDCSBIOS.Bill.DCSBIOSBinding = dcsBIOSBinding;
 
-                        ShowSoundConfig(dcsBIOSBinding);
+                        if (forPress)
+                        {
+                            ShowSoundConfig(dcsBIOSBinding);
+                        }
 
                         SetFormState();
                         return;
@@ -333,7 +341,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         var textBoxOSCommand = osCommandBindingStreamDeck.WhenTurnedOn ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
                         textBoxOSCommand.Bill.OSCommandObject = osCommandBindingStreamDeck.OSCommandObject;
 
-                        ShowSoundConfig(osCommandBindingStreamDeck);
+                        if (forPress)
+                        {
+                            ShowSoundConfig(osCommandBindingStreamDeck);
+                        }
 
                         SetFormState();
                         return;
@@ -359,7 +370,10 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         TextBoxLayerNavButton.Bill.StreamDeckLayerTarget = layerBindingStreamDeck;
                         ActivateCheckBoxControlRemoteStreamdeck(true);
 
-                        ShowSoundConfig(layerBindingStreamDeck);
+                        if (forPress)
+                        {
+                            ShowSoundConfig(layerBindingStreamDeck);
+                        }
 
                         SetFormState();
                         return;
@@ -389,7 +403,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSKeyPress = textBoxKeyPress.Bill.KeyPress;
-                            if (SoundConfigIsOk())
+                            if (SoundConfigIsOk() && forButtonPressed) // && forButtonPressed so as not to have sound for both events in case both events have actions
                             {
                                 result.SoundFile = TextBoxSoundFile.Text;
                                 result.Volume = SliderVolume.Value;
@@ -405,7 +419,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         {
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.WhenTurnedOn = forButtonPressed;
                             textBoxDCSBIOS.Bill.DCSBIOSBinding.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            if (SoundConfigIsOk())
+                            if (SoundConfigIsOk() && forButtonPressed)
                             {
                                 textBoxDCSBIOS.Bill.DCSBIOSBinding.SoundFile = TextBoxSoundFile.Text;
                                 textBoxDCSBIOS.Bill.DCSBIOSBinding.Volume = SliderVolume.Value;
@@ -422,7 +436,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                             result.WhenTurnedOn = forButtonPressed;
                             result.OSCommandObject = textBoxOSCommand.Bill.OSCommandObject;
                             result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                            if (SoundConfigIsOk())
+                            if (SoundConfigIsOk() && forButtonPressed)
                             {
                                 result.SoundFile = TextBoxSoundFile.Text;
                                 result.Volume = SliderVolume.Value;
@@ -478,7 +492,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
                         var result = target;
                         result.StreamDeckButtonName = _streamDeckButton.StreamDeckButtonName;
-                        if (SoundConfigIsOk())
+                        if (SoundConfigIsOk() && forButtonPressed)
                         {
                             result.SoundFile = TextBoxSoundFile.Text;
                             result.Volume = SliderVolume.Value;
@@ -511,7 +525,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 CheckBoxPlaySoundFile.IsChecked = false;
                 return;
             }
+
+            CheckBoxPlaySoundFile.Checked -= CheckBoxPlaySoundFile_OnChecked;
+            CheckBoxPlaySoundFile.Unchecked -= CheckBoxPlaySoundFile_OnUnchecked;
             CheckBoxPlaySoundFile.IsChecked = true;
+            CheckBoxPlaySoundFile.Checked += CheckBoxPlaySoundFile_OnChecked;
+            CheckBoxPlaySoundFile.Unchecked += CheckBoxPlaySoundFile_OnUnchecked;
             TextBoxSoundFile.Text = streamDeckButtonAction.SoundFile;
             SliderVolume.Value = streamDeckButtonAction.Volume;
         }
@@ -765,7 +784,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
             try
             {
                 TextBoxOSCommandButtonOn.Bill.Clear();
-
+                
             }
             catch (Exception ex)
             {
@@ -853,6 +872,12 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 var layerList = streamdeck.LayerList;
                 ComboBoxRemoteLayers.ItemsSource = layerList;
             }
+        }
+
+        private void DeleteSoundConfig()
+        {
+            TextBoxSoundFile.Text = "";
+            CheckBoxPlaySoundFile.IsChecked = false;
         }
 
         private void ComboBoxRemoteLayers_OnDropDownClosed(object sender, EventArgs e)

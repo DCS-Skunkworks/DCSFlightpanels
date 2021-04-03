@@ -105,7 +105,7 @@
                 </StackPanel>
 
                 <StackPanel Name="StackPanelPlaySoundFile" Margin="0,10,0,0">
-                    <CheckBox Name="CheckBoxPlaySoundFile" Content="Play Sound" Checked="CheckBoxPlaySoundFile_OnChecked" Unchecked="CheckBoxPlaySoundFile_OnUnchecked"></CheckBox>
+                    <CheckBox Name="CheckBoxPlaySoundFile" Content="Play Sound when pressing key" Checked="CheckBoxPlaySoundFile_OnChecked" Unchecked="CheckBoxPlaySoundFile_OnUnchecked"></CheckBox>
                     <StackPanel Name="StackPanelSoundDetails">
                     <Label Content="Sound File" FontSize="10" Height="23"/>
                         <StackPanel Orientation="Horizontal">
