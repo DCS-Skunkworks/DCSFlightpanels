@@ -28,6 +28,28 @@ namespace ClassLibraryCommon
     public static class Common
     {
 
+        public static void PlaySoundFile(bool showException, string soundFile, double volume) //Volume 0 - 100
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(soundFile) || !File.Exists(soundFile))
+                {
+                    return;
+                }
+                var mediaPlayer = new MediaPlayer();
+                mediaPlayer.Open(new Uri(soundFile));
+                mediaPlayer.Volume = volume / 100.0f;
+                mediaPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+                if (showException)
+                {
+                    ShowErrorMessageBox(ex);
+                }
+            }
+        }
+
         public static bool IsStreamDeck(GamingPanelEnum panelType)
         {
             return (panelType == GamingPanelEnum.StreamDeckMini || panelType == GamingPanelEnum.StreamDeck || panelType == GamingPanelEnum.StreamDeckXL);

@@ -117,7 +117,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     MessageBox.Show(stringBuilder.ToString(), "Make backup", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
-                CopyImagesToNewLocation();
+                CopyFilesToNewLocation();
 
                 var selectedButtonExports = DataGridStreamDeckButtons.SelectedItems.Cast<ButtonExport>().ToList(); ;
 
@@ -489,7 +489,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             try
             {
                 var folderBrowserDialog = new FolderBrowserDialog();
-
+                folderBrowserDialog.Description = @"Select location to where files (images, sounds) will be saved.";
 
                 folderBrowserDialog.SelectedPath = string.IsNullOrEmpty(Settings.Default.ImageImportFolder)
                     ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
@@ -501,7 +501,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     Settings.Default.ImageImportFolder = folderBrowserDialog.SelectedPath;
                     Settings.Default.Save();
                     TextBoxImageImportFolder.Text = Common.GetRelativePath(Common.GetApplicationPath(), folderBrowserDialog.SelectedPath);
-                    SetNewImageFilePaths(TextBoxImageImportFolder.Text);
+                    SetNewFilePaths(TextBoxImageImportFolder.Text);
                     DataGridStreamDeckButtons.Items.Refresh();
                 }
 
@@ -513,11 +513,21 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private void SetNewImageFilePaths(string filePath)
+        private void SetNewFilePaths(string filePath)
         {
             foreach (var buttonExport in _buttonExports)
             {
                 var streamDeckButton = buttonExport.Button;
+
+                if (streamDeckButton.ActionForPress != null && streamDeckButton.ActionForPress.HasSound)
+                {
+                    streamDeckButton.ActionForPress.SoundFile = Path.Combine(filePath, Path.GetFileName(streamDeckButton.ActionForPress.SoundFile));
+                }
+
+                if (streamDeckButton.ActionForRelease != null && streamDeckButton.ActionForRelease.HasSound)
+                {
+                    streamDeckButton.ActionForRelease.SoundFile = Path.Combine(filePath, Path.GetFileName(streamDeckButton.ActionForRelease.SoundFile));
+                }
 
                 if (streamDeckButton.Face != null)
                 {
@@ -540,7 +550,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             }
         }
 
-        private void CopyImagesToNewLocation()
+        private void CopyFilesToNewLocation()
         {
             var extractedFolderDirectoryInfo = new DirectoryInfo(_extractedFilesFolder);
             var filesToCopy = extractedFolderDirectoryInfo.GetFiles();

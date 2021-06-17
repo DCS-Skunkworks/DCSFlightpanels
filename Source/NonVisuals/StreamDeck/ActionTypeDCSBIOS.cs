@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
+using ClassLibraryCommon;
 using Newtonsoft.Json;
 using NonVisuals.DCSBIOSBindings;
 using NonVisuals.Interfaces;
@@ -43,6 +45,7 @@ namespace NonVisuals.StreamDeck
 
         public void Execute(CancellationToken threadCancellationToken)
         {
+            Common.PlaySoundFile(false, SoundFile, Volume);
             SendDCSBIOSCommands(threadCancellationToken);
         }
 
@@ -66,5 +69,13 @@ namespace NonVisuals.StreamDeck
         }
 
 
+        public string SoundFile { get; set; }
+        public double Volume { get; set; }
+        public int Delay { get; set; }
+        public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
+        public void PlaySound()
+        {
+            Common.PlaySoundFile(false, SoundFile, Volume);
+        }
     }
 }
