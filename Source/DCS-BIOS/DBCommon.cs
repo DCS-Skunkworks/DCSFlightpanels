@@ -34,15 +34,15 @@ namespace DCS_BIOS
         public static string GetDCSBIOSJSONDirectory(string jsonDirectory)
         {
             var replaceString = "$USERDIRECTORY$";
+
             //Cannot use %USERPROFILE%, DirectoryInfo gets crazy
             if (!string.IsNullOrEmpty(jsonDirectory))
             {
-                var path = jsonDirectory;
-                if (path.Contains(replaceString))
+                if (jsonDirectory.Contains(replaceString))
                 {
-                    path = path.Replace(replaceString, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+                    jsonDirectory = jsonDirectory.Replace(replaceString, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
                 }
-                return path;
+                return jsonDirectory;
             }
             return null;
         }

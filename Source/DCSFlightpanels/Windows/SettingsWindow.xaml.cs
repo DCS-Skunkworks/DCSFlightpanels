@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using ClassLibraryCommon;
+using DCS_BIOS;
 using DCSFlightpanels.Properties;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
@@ -49,7 +50,8 @@ namespace DCSFlightpanels.Windows
                 if (!Common.IsEmulationModesFlagSet(EmulationMode.SRSEnabled))
                 {
                     LabelSRS.Visibility = Visibility.Collapsed;
-                }else if (Common.NoDCSBIOSEnabled())
+                }
+                else if (Common.NoDCSBIOSEnabled())
                 {
                     LabelDCSBIOS.Visibility = Visibility.Collapsed;
                 }
@@ -88,33 +90,33 @@ namespace DCSFlightpanels.Windows
 
         private void LoadSettings()
         {
-            switch(Settings.Default.ProcessPriority)
+            switch (Settings.Default.ProcessPriority)
             {
                 case ProcessPriorityClass.BelowNormal:
-                {
-                    RadioButtonBelowNormal.IsChecked = true;
-                    break;
-                }
+                    {
+                        RadioButtonBelowNormal.IsChecked = true;
+                        break;
+                    }
                 case ProcessPriorityClass.Normal:
-                {
-                    RadioButtonNormal.IsChecked = true;
-                    break;
-                }
+                    {
+                        RadioButtonNormal.IsChecked = true;
+                        break;
+                    }
                 case ProcessPriorityClass.AboveNormal:
-                {
-                    RadioButtonAboveNormal.IsChecked = true;
-                    break;
-                }
+                    {
+                        RadioButtonAboveNormal.IsChecked = true;
+                        break;
+                    }
                 case ProcessPriorityClass.High:
-                {
-                    RadioButtonHigh.IsChecked = true;
-                    break;
-                }
+                    {
+                        RadioButtonHigh.IsChecked = true;
+                        break;
+                    }
                 case ProcessPriorityClass.RealTime:
-                {
-                    RadioButtonRealtime.IsChecked = true;
-                    break;
-                }
+                    {
+                        RadioButtonRealtime.IsChecked = true;
+                        break;
+                    }
             }
             if (Settings.Default.APIMode == 0)
             {
@@ -124,7 +126,7 @@ namespace DCSFlightpanels.Windows
             {
                 RadioButtonSendInput.IsChecked = true;
             }
-            
+
             CheckBoxMinimizeToTray.IsChecked = Settings.Default.RunMinimized;
 
             if (Common.PartialDCSBIOSEnabled())
@@ -264,18 +266,47 @@ namespace DCSFlightpanels.Windows
                 folderBrowserDialog.ShowNewFolderButton = false;
                 if (!string.IsNullOrEmpty(DCS_BIOS.DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation)))
                 {
-                    folderBrowserDialog.SelectedPath = DCS_BIOS.DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
+                    folderBrowserDialog.SelectedPath = DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation);
                 }
 
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    TextBoxDcsBiosJSONLocation.Text = folderBrowserDialog.SelectedPath;
+                    if (CheckJSONDirectory(folderBrowserDialog.SelectedPath))
+                    {
+                        TextBoxDcsBiosJSONLocation.Text = folderBrowserDialog.SelectedPath;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Cannot use selected directory as it did not contain json files.", "Invalid directory", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
+        }
+
+        private bool CheckJSONDirectory(string jsonDirectory)
+        {
+            jsonDirectory = DBCommon.GetDCSBIOSJSONDirectory(jsonDirectory);
+
+            if (string.IsNullOrEmpty(jsonDirectory) || !Directory.Exists(jsonDirectory))
+            {
+                return false;
+            }
+
+            var files = Directory.EnumerateFiles(jsonDirectory);
+
+            foreach (var filename in files)
+            {
+                if (filename.ToLower().EndsWith(".json"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void CheckValuesDCSBIOS()
@@ -455,7 +486,7 @@ namespace DCSFlightpanels.Windows
         public bool DCSBIOSChanged => _dcsbiosChanged;
 
         public bool SRSChanged => _srsChanged;
-        
+
 
         private void TextBoxDcsBios_OnTextChanged(object sender, TextChangedEventArgs e)
         {

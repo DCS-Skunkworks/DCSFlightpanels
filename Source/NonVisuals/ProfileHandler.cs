@@ -188,13 +188,13 @@ namespace NonVisuals
                         if (fileLine.StartsWith("Airframe=NONE"))
                         {
                             //Backward compability
-                            Profile = DCSFPProfile.GetKeyEmulator();
+                            tmpProfile = DCSFPProfile.GetKeyEmulator();
                         }
                         else
                         {
                             //Backward compability
                             var airframeAsString = fileLine.Replace("Airframe=", "").Trim();
-                            Profile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
+                            tmpProfile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
                         }
                     }
                     else if (fileLine.StartsWith("Profile="))
