@@ -23,5 +23,11 @@ namespace NonVisuals.Interfaces
         StreamDeckPanel StreamDeckPanelInstance { get; set; }
 
         int GetHash();
+        
+        string SoundFile { get; set; }
+        double Volume { get; set; }
+        int Delay { get; set; }
+        bool HasSound { get; }
+        void PlaySound();
     }
 }

@@ -34,6 +34,26 @@ namespace DCSFlightpanels.Shared
             return result;
         }
 
+        public static DialogResult BrowseForSoundFile(ref string initialDirectory, ref string imageRelativePath)
+        {
+
+            FileDialog fileDialog = new OpenFileDialog();
+            fileDialog.CheckPathExists = true;
+            fileDialog.CheckFileExists = true;
+
+            fileDialog.InitialDirectory = string.IsNullOrEmpty(initialDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : initialDirectory;
+            fileDialog.Filter = @"Sound files|*.mp3;*.wav";
+
+            var result = fileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                imageRelativePath = Common.GetRelativePath(Common.GetApplicationPath(), fileDialog.FileName);
+                initialDirectory = Path.GetDirectoryName(fileDialog.FileName);
+            }
+
+            return result;
+        }
+
         public static DialogResult SetFontStyle(StreamDeckFaceTextBox textBox)
         {
             var font = SettingsManager.DefaultFont;

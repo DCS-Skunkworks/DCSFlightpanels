@@ -151,6 +151,16 @@ namespace NonVisuals.StreamDeck
 
             foreach (var buttonExport in clonedButtonExports)
             {
+                if (buttonExport.Button.ActionForPress != null && buttonExport.Button.ActionForPress.HasSound)
+                {
+                    filesToCompressList = AddFileForCompression(filesToCompressList, buttonExport.Button.ActionForPress.SoundFile);
+                }
+
+                if (buttonExport.Button.ActionForRelease != null && buttonExport.Button.ActionForRelease.HasSound)
+                {
+                    filesToCompressList = AddFileForCompression(filesToCompressList, buttonExport.Button.ActionForRelease.SoundFile);
+                }
+
                 if (buttonExport.Button.Face != null)
                 {
                     if (buttonExport.Button.Face.GetType() == typeof(DCSBIOSDecoder))
@@ -159,7 +169,7 @@ namespace NonVisuals.StreamDeck
 
                         foreach (var imageFile in decoder.ImageFiles)
                         {
-                            filesToCompressList.Add(imageFile);
+                            filesToCompressList = AddFileForCompression(filesToCompressList, imageFile);
                         }
                         /*
                          * We must remove any path imageFilePath.
@@ -171,13 +181,13 @@ namespace NonVisuals.StreamDeck
                     else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeImage))
                     {
                         var faceTypeImage = ((FaceTypeImage)buttonExport.Button.Face);
-                        filesToCompressList.Add(faceTypeImage.ImageFile);
+                        filesToCompressList = AddFileForCompression(filesToCompressList, faceTypeImage.ImageFile);
                         faceTypeImage.ImageFile = Path.GetFileName(faceTypeImage.ImageFile);
                     }
                     else if (buttonExport.Button.Face.GetType() == typeof(FaceTypeDCSBIOSOverlay))
                     {
                         var faceTypeDCSBIOSOverlay = ((FaceTypeDCSBIOSOverlay)buttonExport.Button.Face);
-                        filesToCompressList.Add(faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
+                        filesToCompressList = AddFileForCompression(filesToCompressList, faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
                         faceTypeDCSBIOSOverlay.BackgroundBitmapPath = Path.GetFileName(faceTypeDCSBIOSOverlay.BackgroundBitmapPath);
                     }
                 }
@@ -187,16 +197,35 @@ namespace NonVisuals.StreamDeck
             var chars = _uniCodeEncoding.GetChars(_uniCodeEncoding.GetBytes(json));
 
             var filename = StreamDeckCommon.GetDCSFPTemporaryFolder() + "\\" + StreamDeckConstants.BUTTON_EXPORT_FILENAME;
-            filesToCompressList.Add(filename);
 
             using (var streamWriter = File.CreateText(filename))
             {
                 streamWriter.Write(chars);
             }
-
+            
+            filesToCompressList = AddFileForCompression(filesToCompressList, filename);
             ZipArchiver.CreateZipFile(compressedFilenameAndPath, filesToCompressList.Distinct().ToList());
 
             SystemSounds.Asterisk.Play();
+        }
+
+        private List<string> AddFileForCompression(List<string> list, string file)
+        {
+            if (string.IsNullOrEmpty(file) || !File.Exists(file))
+            {
+                return list;
+            }
+
+            foreach (var filename in list)
+            {
+                if (filename == file)
+                {
+                    return list;
+                }
+            }
+
+            list.Add(file);
+            return list;
         }
 
         public void SetStreamDeckPanelInstance(StreamDeckPanel streamDeckPanel)

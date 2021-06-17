@@ -45,6 +45,16 @@ namespace NonVisuals
             }
         }
 
+        public static string LastSoundFileDirectory
+        {
+            get => Properties.Settings.Default.LastImageFileDialogLocation;
+            set
+            {
+                Properties.Settings.Default.LastImageFileDialogLocation = value;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         public static int OffsetX
         {
             get => Properties.Settings.Default.OffsetX;

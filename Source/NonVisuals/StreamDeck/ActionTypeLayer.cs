@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading;
+using ClassLibraryCommon;
 using Newtonsoft.Json;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck.Events;
@@ -70,6 +72,7 @@ namespace NonVisuals.StreamDeck
         public void Execute(CancellationToken threadCancellationToken)
         {
             _isRunning = true;
+            Common.PlaySoundFile(false, SoundFile, Volume);
             Navigate(threadCancellationToken);
             _isRunning = false;
         }
@@ -121,6 +124,15 @@ namespace NonVisuals.StreamDeck
         {
             get => _streamDeckPanel;
             set => _streamDeckPanel = value;
+        }
+
+        public string SoundFile { get; set; }
+        public double Volume { get; set; }
+        public int Delay { get; set; }
+        public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
+        public void PlaySound()
+        {
+            Common.PlaySoundFile(false, SoundFile, Volume);
         }
     }
 }
