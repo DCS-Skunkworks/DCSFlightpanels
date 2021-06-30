@@ -65,8 +65,7 @@ namespace DCSFlightpanels
             try
             {
                 InitNotificationIcon();
-
-                Settings.Default.RunMinimized = false; //Default
+                                
                 Settings.Default.LoadStreamDeck = true; //Default is loading Stream Deck.
                 Settings.Default.Save();
 

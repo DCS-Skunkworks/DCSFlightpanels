@@ -43,7 +43,7 @@ namespace NonVisuals.Saitek
             get => _switchPanelPZ55Key;
             set => _switchPanelPZ55Key = value;
         }
-        
+
         public override string ExportSettings()
         {
             if (OSKeyPress == null || OSKeyPress.IsEmpty())
@@ -77,7 +77,9 @@ namespace NonVisuals.Saitek
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT ||
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT ||
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START ||
-                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF)
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN)
                 {
                     //We have to deal with them separately
                     continue;
@@ -107,7 +109,9 @@ namespace NonVisuals.Saitek
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_LEFT ||
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT ||
                     keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_START ||
-                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF)
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_OFF ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP ||
+                    keyBindingPZ55.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN)
                 {
                     switch (keyBindingPZ55.SwitchPanelPZ55Key)
                     {
@@ -160,6 +164,28 @@ namespace NonVisuals.Saitek
                                 foreach (var keyBinding in knobBindings)
                                 {
                                     if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_RIGHT || keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH)
+                                    {
+                                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+                                break;
+                            }
+                        case SwitchPanelPZ55Keys.LEVER_GEAR_UP:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_DOWN)
+                                    {
+                                        keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
+                                    }
+                                }
+                                break;
+                            }
+                        case SwitchPanelPZ55Keys.LEVER_GEAR_DOWN:
+                            {
+                                foreach (var keyBinding in knobBindings)
+                                {
+                                    if (keyBinding != keyBindingPZ55 && keyBinding.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP)
                                     {
                                         keyBindingPZ55.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
