@@ -90,4 +90,20 @@
 
         public bool ButtonState => _buttonState;
     }
+
+    public class FarmingPanelOnOff : PanelSwitchOnOff
+    {
+        private readonly FarmingPanelMKKeys _farmingPanelMKKey;
+
+        public FarmingPanelOnOff(FarmingPanelMKKeys farmingPanelKey, bool buttonState)
+        {
+            _farmingPanelMKKey = farmingPanelKey;
+            ButtonState = buttonState;
+        }
+
+        public FarmingPanelMKKeys Switch => _farmingPanelMKKey;
+
+        public bool ButtonState { get; }
+    }
+
 }

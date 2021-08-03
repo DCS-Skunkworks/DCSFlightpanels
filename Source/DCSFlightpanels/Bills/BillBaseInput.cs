@@ -528,6 +528,12 @@ namespace DCSFlightpanels.Bills
             BIPLinkWindow bipLinkWindow;
             switch (panelType)
             {
+                case GamingPanelEnum.FarmingPanel:
+                {
+                    var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkFarmingPanel();
+                    bipLinkWindow = new BIPLinkWindow(bipLink);
+                    break;
+                }
                 case GamingPanelEnum.PZ55SwitchPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ55();
@@ -561,7 +567,7 @@ namespace DCSFlightpanels.Bills
 
             if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
             {
-                var tmpBIPLink = (BIPLinkPZ55)bipLinkWindow.BIPLink;
+                var tmpBIPLink = (BIPLinkFarmingPanel)bipLinkWindow.BIPLink;
 
                 if (tmpBIPLink.BIPLights.Count == 0)
                 {

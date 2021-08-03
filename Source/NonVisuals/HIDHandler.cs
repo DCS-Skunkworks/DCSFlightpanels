@@ -67,7 +67,7 @@ namespace NonVisuals
                             {
                                 var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
                                 HIDSkeletons.Add(hidSkeleton);
-                                if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek)
+                                if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek || hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.MadCatz)
                                 {
                                     hidSkeleton.HIDReadDevice = hidDevice;
                                     hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);

@@ -1,0 +1,172 @@
+﻿<panelUserControls:UserControlBase x:Class="DCSFlightpanels.PanelUserControls.FarmingPanelUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dcsFlightpanels="clr-namespace:DCSFlightpanels"
+             xmlns:panelUserControls="clr-namespace:DCSFlightpanels.PanelUserControls"
+             xmlns:customControl="clr-namespace:DCSFlightpanels.CustomControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="1000" Loaded="SwitchPanelPZ55UserControl_OnLoaded">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="26" />
+            <RowDefinition Height="240" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="26*" />
+            <ColumnDefinition Width="450*"/>
+            <ColumnDefinition Width="357*" />
+            <ColumnDefinition Width="97*" />
+            <ColumnDefinition Width="301*" />
+        </Grid.ColumnDefinitions>
+        <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="1" Grid.RowSpan="5">
+            <Image Height="600" Name="ImageFarmingPanel" Stretch="Uniform" Source="/dcsfp;component/Images/sidepanel.png"  MouseDown="MouseDownFocusLogTextBox" />
+
+            <Image Height="76" x:Name="ImageButton1" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="55" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton2" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="119" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton3" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="183" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton4" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="247" Canvas.Top="20" />
+            <Image Height="76" x:Name="ImageButton5" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="20" />
+
+            <Image Height="76" x:Name="ImageButton6" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="55" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton7" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="119" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton8" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="183" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton9" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="247" Canvas.Top="73" />
+            <Image Height="76" x:Name="ImageButton10" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="311" Canvas.Top="73" />
+
+            <Image Height="76" x:Name="ImageButton11" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton13" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="106" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton15" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="157" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton17" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="239" Canvas.Top="165" />
+            <Image Height="76" x:Name="ImageButton18" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="302" Canvas.Top="165" />
+
+            <Image Height="76" x:Name="ImageButton12" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="56" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton14" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="106" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton16" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="157" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton19" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="239" Canvas.Top="228" />
+            <Image Height="76" x:Name="ImageButton20" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="302" Canvas.Top="228" />
+
+            <Image Height="76" x:Name="ImageButton21" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="130" Canvas.Top="300" />
+
+            <Image Height="76" x:Name="ImageButton22" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="366" />
+            <Image Height="76" x:Name="ImageButton23" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="388" />
+            <Image Height="76" x:Name="ImageButton24" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="411" />
+
+
+            <Image Height="76" x:Name="ImageButton25" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="366" />
+            <Image Height="76" x:Name="ImageButton26" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="398" />
+            <Image Height="76" x:Name="ImageButton27" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="431" />
+
+            <Image Height="76" x:Name="ImageButtonJoyLeft" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="173" Canvas.Top="322" />
+            <Image Height="76" x:Name="ImageButtonJoyRight" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="195" Canvas.Top="322" />
+
+            <Button Name="ButtonClearSettings" Content="Clear Settings" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="80" Canvas.Top="12" Click="ButtonClearSettings_OnClick"/>            
+            <Button Name="ButtonGetId" Content="ID" HorizontalAlignment="Left" VerticalAlignment="Top" Width="86"   Canvas.Left="170" Canvas.Top="12" Click="ButtonGetId_OnClick"/>
+        </Canvas>
+
+        <GroupBox Header="Standard Buttons"  FontSize="10" Grid.Column="2" Grid.Row="1" Grid.RowSpan="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Button 1" FontSize="10" Height="23"   />
+                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBox1" FontSize="10" />
+                    <Label Content="Button 3" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBox3" FontSize="10" />
+                    <Label Content="Button 5" Height="23"  FontSize="10"  />
+                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBox5" FontSize="10" />
+                    <Label Content="Button 7" Height="23" FontSize="10"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox7" />
+                    <Label Content="Button 9" Height="23"  FontSize="10"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox9" />
+                    <Label Content="Button 11" FontSize="10" Height="23"   />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox11" />
+                    <Label Content="Button 13" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox13" />
+                    <Label Content="Button 15" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox15" />
+                    <Label Content="Button 17" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox17" />
+                    <Label Content="Button 19" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox19" />
+                    <Label Content="Button 21" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox21" />
+                    <Label Content="Button 23" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox23" />
+                    <Label Content="Button 25 (press wheel)" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox25" />
+                    <Label Content="Button 27" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox27" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Button 2" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox2" />
+                    <Label Content="Button 4" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox4" />
+                    <Label Content="Button 6" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox6" />
+                    <Label Content="Button 8" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox8" />
+                    <Label Content="Button 10" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox10" />
+                    <Label Content="Button 12" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox12" />
+                    <Label Content="Button 14" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox14" />
+                    <Label Content="Button 16" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox16" />
+                    <Label Content="Button 18" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox18" />
+                    <Label Content="Button 20" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox20" />
+                    <Label Content="Button 22" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox22" />
+                    <Label Content="Button 24" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox24" />
+                    <Label Content="Button 26" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox26" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+
+        <GroupBox FontSize="10" Grid.Column="3" Grid.Row="2" Margin="0,0,0,137" Grid.RowSpan="4">
+            <StackPanel>
+
+                <TextBlock HorizontalAlignment="Stretch"  Text="Double-click in the key command boxes to erase them. Right-click to set timings." TextWrapping="Wrap" Background="#FFF5ECEC"></TextBlock>
+                <Button Content="Clear all" Height="23" HorizontalAlignment="Center" x:Name="ButtonClearAll" Width="75" Click="ButtonClearAllClick" Margin="0,20,0,0" />
+                <Button Content="DEV" Height="25" HorizontalAlignment="Center" Name="ButtonDEV" Width="75" Visibility="Collapsed" Click="ButtonDEV_OnClick" Margin="5,0" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Log"  FontSize="10"  Grid.Column="4" Grid.Row="4" Grid.RowSpan="2" Margin="0,0.5,0,-1">
+            <TextBox Name="TextBoxLogFarmingPanel" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch" TextWrapping="Wrap" />
+        </GroupBox>
+
+        <GroupBox Header="Joystick"  FontSize="10"  Grid.Column="4" Grid.Row="1" Grid.RowSpan="4" Margin="0,0,0,137">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Btn 28 / Joystick Left" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxJoyLeft" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
+                    <Label Content="Joystick Right" FontSize="10" Height="23"  />
+                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxJoyRight" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</panelUserControls:UserControlBase>

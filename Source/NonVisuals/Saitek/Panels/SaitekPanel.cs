@@ -24,6 +24,8 @@ namespace NonVisuals.Saitek.Panels
         protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
         protected byte[] OldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
         protected byte[] NewSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
+        protected byte[] OldPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        protected byte[] NewPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
         {
@@ -73,7 +75,20 @@ namespace NonVisuals.Saitek.Panels
 
                 FirstReportHasBeenRead = true;
             }
-            
+            else if (report.Data.Length == 27)
+            {
+                Array.Copy(NewPanelValueFarmingPanel, OldPanelValueFarmingPanel, 27);
+                Array.Copy(report.Data, NewPanelValueFarmingPanel, 27);
+                var hashSet = GetHashSetOfChangedKnobs(OldPanelValueFarmingPanel, NewPanelValueFarmingPanel);
+                if (hashSet.Count > 0)
+                {
+                    GamingPanelKnobChanged(!FirstReportHasBeenRead, hashSet);
+                    UISwitchesChanged(hashSet);
+                }
+
+                FirstReportHasBeenRead = true;
+            }
+
             StartListeningForPanelChanges();
         }
 
