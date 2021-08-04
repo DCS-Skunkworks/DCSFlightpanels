@@ -39,7 +39,7 @@ namespace NonVisuals.Saitek.Panels
             {
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
-                    //Common.DebugP("Adding callback " + TypeOfSaitekPanel + " " + GuidString);
+                    //Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType + " " + GuidString + "\n");
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }

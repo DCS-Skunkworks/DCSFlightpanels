@@ -21,8 +21,8 @@ namespace DCSFlightpanels.Windows
         public KeyPressReadingWindow()
         {
             InitializeComponent();
-            ComboBoxPressTimes.SelectedItem = KeyPressLength.FiftyMilliSec;
-            _keyPressLength = KeyPressLength.FiftyMilliSec;
+            ComboBoxPressTimes.SelectedItem = KeyPressLength.ThirtyTwoMilliSec;
+            _keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
         }
 
         public KeyPressReadingWindow(KeyPressLength keyPressLength, string keyPress)
