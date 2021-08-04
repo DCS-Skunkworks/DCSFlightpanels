@@ -60,8 +60,8 @@
             <Image Height="76" x:Name="ImageButton24" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="295" Canvas.Top="411" />
 
 
-            <Image Height="76" x:Name="ImageButton25" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="366" />
-            <Image Height="76" x:Name="ImageButton26" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="398" />
+            <Image Height="76" x:Name="ImageButton25" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="398" />
+            <Image Height="76" x:Name="ImageButton26" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="366" />
             <Image Height="76" x:Name="ImageButton27" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="61" Canvas.Top="431" />
 
             <Image Height="76" x:Name="ImageButtonJoyLeft" Source="/dcsfp;component/Images/dot.jpg" Stretch="None" Canvas.Left="173" Canvas.Top="322" />
@@ -79,61 +79,61 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Button 1" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBox1" FontSize="10" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox1" />
                     <Label Content="Button 3" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBox3" FontSize="10" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox3"/>
                     <Label Content="Button 5" Height="23"  FontSize="10"  />
-                    <customControl:PZ55TextBox Height="18" IsReadOnly="True" x:Name="TextBox5" FontSize="10" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox5"/>
                     <Label Content="Button 7" Height="23" FontSize="10"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox7" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox7" />
                     <Label Content="Button 9" Height="23"  FontSize="10"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox9" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox9" />
                     <Label Content="Button 11" FontSize="10" Height="23"   />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox11" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox11" />
                     <Label Content="Button 13" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox13" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox13" />
                     <Label Content="Button 15" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox15" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox15" />
                     <Label Content="Button 17" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox17" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox17" />
                     <Label Content="Button 19" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox19" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox19" />
                     <Label Content="Button 21" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox21" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox21" />
                     <Label Content="Button 23" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox23" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox23" />
                     <Label Content="Button 25 (press wheel)" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox25" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox25" />
                     <Label Content="Button 27" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox27" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox27" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Button 2" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox2" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox2" />
                     <Label Content="Button 4" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox4" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox4" />
                     <Label Content="Button 6" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox6" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox6" />
                     <Label Content="Button 8" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox8" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox8" />
                     <Label Content="Button 10" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox10" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox10" />
                     <Label Content="Button 12" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox12" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox12" />
                     <Label Content="Button 14" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox14" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox14" />
                     <Label Content="Button 16" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox16" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox16" />
                     <Label Content="Button 18" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox18" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox18" />
                     <Label Content="Button 20" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox20" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox20" />
                     <Label Content="Button 22" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox22" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox22" />
                     <Label Content="Button 24" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox24" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox24" />
                     <Label Content="Button 26" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox26" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBox26" />
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -160,11 +160,11 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Btn 28 / Joystick Left" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxJoyLeft" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxJoyLeft" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" MouseDown="MouseDownFocusLogTextBox">
                     <Label Content="Joystick Right" FontSize="10" Height="23"  />
-                    <customControl:PZ55TextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxJoyRight" />
+                    <customControl:FarmingPanelTextBox FontSize="10" Height="18" IsReadOnly="True" x:Name="TextBoxJoyRight" />
                 </StackPanel>
             </Grid>
         </GroupBox>

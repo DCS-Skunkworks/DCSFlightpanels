@@ -24,7 +24,7 @@ namespace NonVisuals.Saitek
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //FarmingPanelKey{1KNOB_ENGINE_LEFT}
-                var param0 = parameters[0].Trim().Substring(15);
+                var param0 = parameters[0].Trim().Substring(16);
                 //1KNOB_ENGINE_LEFT}
                 param0 = param0.Remove(param0.Length - 1, 1);
                 //1KNOB_ENGINE_LEFT

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;
@@ -100,6 +101,10 @@ namespace NonVisuals.Saitek.Panels
             if(TypeOfPanel == GamingPanelEnum.TPM)
             {
                 endValue = 5;
+            }
+            else if (TypeOfPanel == GamingPanelEnum.FarmingPanel)
+            {
+                endValue = 4;
             }
 
             for (var i = 0; i < endValue; i++)

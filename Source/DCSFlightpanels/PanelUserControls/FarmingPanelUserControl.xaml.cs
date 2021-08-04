@@ -432,7 +432,7 @@ namespace DCSFlightpanels.PanelUserControls
                                 Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        ImageButton5.Visibility = key.IsOn ? Visibility.Collapsed : Visibility.Visible;
+                                        ImageButton5.Visibility = key.IsOn ? Visibility.Visible : Visibility.Collapsed;
                                     });
                                 break;
                             }
