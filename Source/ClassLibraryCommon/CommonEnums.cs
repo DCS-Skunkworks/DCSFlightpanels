@@ -65,6 +65,8 @@ namespace ClassLibraryCommon
         StreamDeckMini = 0x0063,
         [Description("StreamDeck")]
         StreamDeck = 0x0060,
+        [Description("StreamDeck V2")]
+        StreamDeckV2 = 0x006D,
         [Description("StreamDeck XL")]
         StreamDeckXL = 0x006C
     }
