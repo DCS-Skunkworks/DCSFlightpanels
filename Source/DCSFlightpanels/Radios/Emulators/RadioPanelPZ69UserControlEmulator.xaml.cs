@@ -329,7 +329,7 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             foreach (var textBox in Common.FindVisualChildren<PZ69TextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogPZ69))
+                if (textBox.Equals(TextBoxLogPZ69) || textBox.Bill == null)
                 {
                     continue;
                 }
