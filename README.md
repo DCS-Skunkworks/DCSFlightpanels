@@ -33,6 +33,7 @@ Saitek / Logitech Panels Supported:
 * TPM (DCS-BIOS & KeyEmulator)
 * PZ69 Radio Panel (DCS-BIOS & KeyEmulator** & KeyEmulator_SRS***)
 * BIP Back Lit Information Panel (DCS-BIOS & KeyEmulator****)
+* Farming Simulator Side Panel
 
 - **	LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
 - ***	Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
