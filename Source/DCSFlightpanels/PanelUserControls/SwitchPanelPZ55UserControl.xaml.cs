@@ -390,8 +390,8 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 textBox.Bill = new BillPZ55(GlobalHandler, this, _switchPanelPZ55, textBox);
-                _textBoxBillsSet = true;
             }
+            _textBoxBillsSet = true;
         }
 
         private void SetContextMenuClickHandlers()
