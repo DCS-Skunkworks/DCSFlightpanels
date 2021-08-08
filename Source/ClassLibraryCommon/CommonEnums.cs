@@ -50,6 +50,7 @@ namespace ClassLibraryCommon
     public enum GamingPanelVendorEnum
     {
         Saitek = 0x6A3,
+        MadCatz = 0x0738,
         Elgato = 0xFD9
     }
 
@@ -68,7 +69,8 @@ namespace ClassLibraryCommon
         [Description("StreamDeck V2")]
         StreamDeckV2 = 0x006D,
         [Description("StreamDeck XL")]
-        StreamDeckXL = 0x006C
+        StreamDeckXL = 0x006C,
+        FarmingPanel = 0x2218
     }
 
     /*

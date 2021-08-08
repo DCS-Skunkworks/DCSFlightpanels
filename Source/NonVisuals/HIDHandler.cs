@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using ClassLibraryCommon;
 using HidLibrary;
@@ -41,7 +42,7 @@ namespace NonVisuals
             stringBuilder.Append("HIDHandler has the following skeletons (" + _instance.HIDSkeletons.Count + ") :\n");
             foreach (var skeleton in _instance.HIDSkeletons)
             {
-                stringBuilder.Append("\t").Append(skeleton.PanelInfo ).Append("\n");
+                stringBuilder.Append("\t").Append(skeleton.PanelInfo).Append("\n");
             }
 
             return stringBuilder.ToString();
@@ -67,7 +68,7 @@ namespace NonVisuals
                             {
                                 var hidSkeleton = new HIDSkeleton(gamingPanelSkeleton, instanceId);
                                 HIDSkeletons.Add(hidSkeleton);
-                                if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek)
+                                if (hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.Saitek || hidSkeleton.PanelInfo.VendorId == (int)GamingPanelVendorEnum.MadCatz)
                                 {
                                     hidSkeleton.HIDReadDevice = hidDevice;
                                     hidSkeleton.HIDReadDevice.OpenDevice(DeviceMode.NonOverlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);

@@ -33,6 +33,7 @@ Saitek / Logitech Panels Supported:
 * TPM (DCS-BIOS & KeyEmulator)
 * PZ69 Radio Panel (DCS-BIOS & KeyEmulator** & KeyEmulator_SRS***)
 * BIP Back Lit Information Panel (DCS-BIOS & KeyEmulator****)
+* Farming Simulator Side Panel
 
 - **	LCD information can not be shown in key emulator (KeyEmulator) mode (no data from game available)
 - ***	Simple Radio Standalone can be controlled with Radio Panel when using mode KeyEmulator_SRS.
@@ -49,7 +50,7 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 
 [How to install](https://github.com/DCSFlightpanels/DCSFlightpanels/wiki)
 
-[BaDCrC showing his cockpit that uses Helios and DCSFP](https://www.youtube.com/watch?v=lgTJa-NUnM8)
+[BaDCrC showing his cockpit that uses Helios and DCSFP](https://youtu.be/lgTJa-NUnM8?t=573)
 
 [Tutorial #1 (Key emulation)](https://youtu.be/mgm0JfldgYs)
 
