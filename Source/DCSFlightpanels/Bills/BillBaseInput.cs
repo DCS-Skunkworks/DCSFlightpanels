@@ -386,14 +386,16 @@ namespace DCSFlightpanels.Bills
 
         public void EditKeyStroke()
         {
+            var supportIndefinite = _saitekPanel.TypeOfPanel != GamingPanelEnum.FarmingPanel;
+
             KeyPressReadingWindow keyPressReadingWindow;
             if (ContainsKeyPress())
             {
-                keyPressReadingWindow = new KeyPressReadingWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString);
+                keyPressReadingWindow = new KeyPressReadingWindow(GetKeyPress().LengthOfKeyPress, GetKeyPress().VirtualKeyCodesAsString, supportIndefinite);
             }
             else
             {
-                keyPressReadingWindow = new KeyPressReadingWindow();
+                keyPressReadingWindow = new KeyPressReadingWindow(supportIndefinite);
             }
             keyPressReadingWindow.ShowDialog();
             if (keyPressReadingWindow.DialogResult.HasValue && keyPressReadingWindow.DialogResult.Value)
@@ -434,7 +436,6 @@ namespace DCSFlightpanels.Bills
 
         public void AddKeySequence(string description, SortedList<int, KeyPressInfo> keySequence)
         {
-
             var keyPress = new KeyPress("Key stroke sequence", keySequence);
             KeyPress = keyPress;
             KeyPress.Description = description;
@@ -447,7 +448,8 @@ namespace DCSFlightpanels.Bills
 
         public void EditKeySequence()
         {
-            var keySequenceWindow = ContainsKeySequence() ? new KeySequenceWindow(TextBox.Text, GetKeySequence()) : new KeySequenceWindow();
+            var supportIndefinite = _saitekPanel.TypeOfPanel != GamingPanelEnum.FarmingPanel;
+            var keySequenceWindow = ContainsKeySequence() ? new KeySequenceWindow(TextBox.Text, GetKeySequence(), supportIndefinite) : new KeySequenceWindow(supportIndefinite);
             keySequenceWindow.ShowDialog();
 
             if (keySequenceWindow.DialogResult.HasValue && keySequenceWindow.DialogResult.Value)
@@ -528,6 +530,12 @@ namespace DCSFlightpanels.Bills
             BIPLinkWindow bipLinkWindow;
             switch (panelType)
             {
+                case GamingPanelEnum.FarmingPanel:
+                {
+                    var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkFarmingPanel();
+                    bipLinkWindow = new BIPLinkWindow(bipLink);
+                    break;
+                }
                 case GamingPanelEnum.PZ55SwitchPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ55();
@@ -561,7 +569,7 @@ namespace DCSFlightpanels.Bills
 
             if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
             {
-                var tmpBIPLink = (BIPLinkPZ55)bipLinkWindow.BIPLink;
+                var tmpBIPLink = (BIPLinkFarmingPanel)bipLinkWindow.BIPLink;
 
                 if (tmpBIPLink.BIPLights.Count == 0)
                 {

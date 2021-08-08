@@ -140,6 +140,7 @@
     <Compile Include="BindingMappingManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CopyPackage.cs" />
+    <Compile Include="DCSBIOSBindings\DCSBIOSActionBindingFarmingPanel.cs" />
     <Compile Include="DCSBIOSModule.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericPanelBinding.cs" />
@@ -160,7 +161,10 @@
     <Compile Include="Radios\Knobs\RadiopanelKnobP47D.cs" />
     <Compile Include="Radios\RadioPanelPZ69P47D.cs" />
     <Compile Include="RandomFactory.cs" />
+    <Compile Include="Saitek\BIPLinkFarmingPanel.cs" />
     <Compile Include="Saitek\DCSBIOSBrightnessBinding.cs" />
+    <Compile Include="Saitek\KeyBindingFarmingPanel.cs" />
+    <Compile Include="Saitek\OSCommandBindingFarmingPanel.cs" />
     <Compile Include="Saitek\Panels\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
     <Compile Include="Saitek\BIPLink.cs" />
@@ -169,8 +173,10 @@
     <Compile Include="Saitek\BIPLinkPZ70.cs" />
     <Compile Include="Saitek\BIPLinkTPM.cs" />
     <Compile Include="CommonVK.cs" />
+    <Compile Include="Saitek\Panels\FarmingSidePanel.cs" />
     <Compile Include="Saitek\PZ70LCDButtonByteList.cs" />
     <Compile Include="Saitek\SaitekConstants.cs" />
+    <Compile Include="Saitek\Switches\FarmingPanelKey.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="StreamDeck\BIPLinkStreamDeck.cs" />
     <Compile Include="StreamDeck\BitMapCreator.cs" />
