@@ -15,23 +15,26 @@ namespace DCSFlightpanels.Windows
     public partial class KeyPressWindow : Window, IIsDirty
     {
         private bool _isDirty;
+        private bool _supportIndefinite;
 
-        public KeyPressWindow()
+        public KeyPressWindow(bool supportIndefinite = true)
         {
             InitializeComponent();
             SetFormState();
             TextBoxKeyPress.Focus();
             ComboBoxBreak.SelectedIndex = 0;
             ComboBoxKeyPressTime.SelectedIndex = 0;
+            _supportIndefinite = supportIndefinite;
         }
 
-        public KeyPressWindow(KeyPressInfo keyPressInfo)
+        public KeyPressWindow(KeyPressInfo keyPressInfo, bool supportIndefinite = true)
         {
             InitializeComponent();
             //comboBoxBreak.ItemsSource = Enum.GetValues(typeof(KeyPressLength));
             ComboBoxBreak.SelectedItem = keyPressInfo.LengthOfBreak;
             TextBoxKeyPress.Text = keyPressInfo.VirtualKeyCodesAsString;
             ComboBoxKeyPressTime.SelectedItem = keyPressInfo.LengthOfKeyPress;
+            _supportIndefinite = supportIndefinite;
             SetFormState();
             TextBoxKeyPress.Focus();
         }
@@ -40,6 +43,11 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                if (((KeyPressLength)ComboBoxKeyPressTime.SelectedItem) == KeyPressLength.Indefinite && !_supportIndefinite)
+                {
+                    MessageBox.Show("Indefinite is not supported for this device.", "Invalid value", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 DialogResult = true;
                 Close();
             }

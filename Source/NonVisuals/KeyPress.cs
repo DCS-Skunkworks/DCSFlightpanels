@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using ClassLibraryCommon;
 using Newtonsoft.Json;
+using ThreadState = System.Threading.ThreadState;
 
 namespace NonVisuals
 {

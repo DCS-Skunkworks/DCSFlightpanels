@@ -581,6 +581,18 @@ namespace DCSFlightpanels
                                     TabControlPanels.Items.Add(tabItem);
                                     break;
                                 }
+                            case GamingPanelEnum.FarmingPanel:
+                            {
+                                var tabItem = new TabItem();
+                                tabItem.Header = "Side Panel";
+                                var farmingSidePanelUserControl = new FarmingPanelUserControl(hidSkeleton, tabItem, this);
+                                _panelUserControls.Add(farmingSidePanelUserControl);
+                                _profileHandler.Attach(farmingSidePanelUserControl);
+                                tabItem.Content = farmingSidePanelUserControl;
+                                TabControlPanels.Items.Add(tabItem);
+                                _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(hidSkeleton.HIDReadDevice.DevicePath, hidSkeleton.PanelInfo.GamingPanelType));
+                                break;
+                            }
                         }
                     } //for each
                 }

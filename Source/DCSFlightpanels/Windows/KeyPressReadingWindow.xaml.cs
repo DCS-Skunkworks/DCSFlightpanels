@@ -17,20 +17,23 @@ namespace DCSFlightpanels.Windows
         private bool _isDirty = false;
         private bool _loaded = false;
         private KeyPressLength _keyPressLength;
+        private bool _supportIndefinite;
 
-        public KeyPressReadingWindow()
+        public KeyPressReadingWindow(bool supportIndefinite = true)
         {
             InitializeComponent();
-            ComboBoxPressTimes.SelectedItem = KeyPressLength.FiftyMilliSec;
-            _keyPressLength = KeyPressLength.FiftyMilliSec;
+            ComboBoxPressTimes.SelectedItem = KeyPressLength.ThirtyTwoMilliSec;
+            _keyPressLength = KeyPressLength.ThirtyTwoMilliSec;
+            _supportIndefinite = supportIndefinite;
         }
 
-        public KeyPressReadingWindow(KeyPressLength keyPressLength, string keyPress)
+        public KeyPressReadingWindow(KeyPressLength keyPressLength, string keyPress, bool supportIndefinite = true)
         {
             InitializeComponent();
             TextBoxKeyPress.Text = keyPress;
             ComboBoxPressTimes.SelectedItem = keyPressLength;
             _keyPressLength = keyPressLength;
+            _supportIndefinite = supportIndefinite;
         }
 
         private void KeyPressReadingWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -170,6 +173,11 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
+                if(_keyPressLength == KeyPressLength.Indefinite && !_supportIndefinite)
+                {
+                    MessageBox.Show("Indefinite is not supported for this device.", "Invalid value", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 DialogResult = true;
             }
             catch (Exception ex)

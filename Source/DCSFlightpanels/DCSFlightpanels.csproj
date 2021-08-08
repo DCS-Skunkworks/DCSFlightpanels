@@ -169,13 +169,18 @@
     </Compile>
     <Compile Include="Bills\BillBaseInputStreamDeck.cs" />
     <Compile Include="Bills\BillBaseOutput.cs" />
+    <Compile Include="Bills\BillPFarmingPanel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomControls\FontInfoTextBox.cs" />
     <Compile Include="CustomControls\OffsetInfoTextBox.cs" />
+    <Compile Include="CustomControls\FarmingPanelTextBox.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Interfaces\IPanelUI.cs" />
     <Compile Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml.cs">
       <DependentUpon>UserControlStreamDeckUIMini.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PanelUserControls\FarmingPanelUserControl.xaml.cs">
+      <DependentUpon>FarmingPanelUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Radios\PreProgrammed\RadioPanelPZ69UserControlP47D.xaml.cs">
       <DependentUpon>RadioPanelPZ69UserControlP47D.xaml</DependentUpon>
@@ -382,6 +387,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PanelUserControls\StreamDeck\UserControlStreamDeckUIMini.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PanelUserControls\FarmingPanelUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -925,6 +934,7 @@
     <Resource Include="Images\P47_radio.png" />
     <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
     <Resource Include="Images\BIP Saitek2.jpg" />
+    <Resource Include="Images\sidepanel.png" />
     <Content Include="Settings\dcsfp_profiles.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

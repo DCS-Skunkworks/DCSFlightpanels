@@ -19,14 +19,16 @@ namespace DCSFlightpanels.Windows
         private readonly SortedList<int, KeyPressInfo> _sortedList = new SortedList<int, KeyPressInfo>();
         private bool _isDirty;
         private bool _formLoaded = false;
+        private bool _supportIndefinite;
 
-        public KeySequenceWindow()
+        public KeySequenceWindow(bool supportIndefinite = true)
         {
             InitializeComponent();
             SetFormState();
+            _supportIndefinite = supportIndefinite;
         }
 
-        public KeySequenceWindow(string description, SortedList<int, KeyPressInfo> sortedList)
+        public KeySequenceWindow(string description, SortedList<int, KeyPressInfo> sortedList, bool supportIndefinite = true)
         {
             InitializeComponent();
             _sortedList = sortedList;
@@ -34,6 +36,7 @@ namespace DCSFlightpanels.Windows
             DataGridSequences.DataContext = _sortedList;
             DataGridSequences.ItemsSource = _sortedList;
             DataGridSequences.Items.Refresh();
+            _supportIndefinite = supportIndefinite;
 
             SetFormState();
         }
@@ -99,7 +102,7 @@ namespace DCSFlightpanels.Windows
 
         private void AddKeyPress()
         {
-            var keyPressWindow = new KeyPressWindow();
+            var keyPressWindow = new KeyPressWindow(_supportIndefinite);
             keyPressWindow.ShowDialog();
             if (keyPressWindow.DialogResult.HasValue && keyPressWindow.DialogResult.Value)
             {
