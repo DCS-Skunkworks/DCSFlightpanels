@@ -109,37 +109,9 @@ namespace DCS_BIOS
 
                     foreach (var file in files)
                     {
-                        var reader = file.OpenText();
-                        string text;
-                        try
-                        {
-                            text = reader.ReadToEnd();
-                            //Debug.Print(text);
-                        }
-                        finally
-                        {
-                            reader.Close();
-                        }
-
-                        var jsonData = DCSBIOSJsonFormatterVersion1.Format(text);
-
-                        //Console.WriteLine(jsonData);
-                        /*var newfile = File.CreateText(@"e:\temp\regexp_debug_output.txt.txt");
-                        newfile.Write(jsonData);
-                        newfile.Close();*/
-
-                        var dcsBiosControlList = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(jsonData);
-                        /*foreach (var control in dcsBiosControlList.DCSBIOSControls)
-                        {
-                            Debug.Print(control.identifier);
-                        }*/
-                        //Debug.Print("\n--------------------------\n" + jsonData);
-                        DCSBIOSControls.AddRange(dcsBiosControlList.DCSBIOSControls);
-                        PrintDuplicateControlIdentifiers(dcsBiosControlList.DCSBIOSControls);
-                        /*foreach (var control in _dcsbiosControls)
-                        {
-                            Debug.Print(control.identifier);
-                        }*/
+                        List<DCSBIOSControl> controls = ReadControlsFromDocJson(file.FullName);
+                        DCSBIOSControls.AddRange(controls);
+                        PrintDuplicateControlIdentifiers(controls);
                     }
 
                     DCSBIOSProfileLoadStatus.SetLoaded(filename, true);
@@ -277,10 +249,8 @@ namespace DCS_BIOS
             {
                 lock (LockObject)
                 {
-                    var metaDataEndText = File.ReadAllText(jsonDirectory + "\\MetadataEnd.json");
-                    var metaDataEndControlsText = DCSBIOSJsonFormatterVersion1.Format(metaDataEndText);
-                    var metaDataEndControls = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(metaDataEndControlsText);
-                    DCSBIOSControls.AddRange(metaDataEndControls.DCSBIOSControls);
+                    DCSBIOSControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\MetadataEnd.json"));
+
                     DCSBIOSProfileLoadStatus.SetLoaded("MetadataEnd", true);
                 }
             }
@@ -288,6 +258,17 @@ namespace DCS_BIOS
             {
                 throw new Exception(DCSBIOSNotFoundErrorMessage + " ==>[" + jsonDirectory + "]<==" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
             }
+        }
+
+        private static List<DCSBIOSControl> ReadControlsFromDocJson(string inputPath)
+        {
+            // input is a map from category string to a map from key string to control definition
+            // we read it all then flatten the grand children (the control definitions)
+            string input = File.ReadAllText(inputPath);
+            return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, DCSBIOSControl>>>(input)
+                .Values
+                .SelectMany(category => category.Values)
+                .ToList();
         }
 
         private static void LoadCommonData(string jsonDirectory)
@@ -301,10 +282,7 @@ namespace DCS_BIOS
             {
                 lock (LockObject)
                 {
-                    var commonDataText = File.ReadAllText(jsonDirectory + "\\CommonData.json");
-                    var commonDataControlsText = DCSBIOSJsonFormatterVersion1.Format(commonDataText);
-                    var commonDataControls = JsonConvert.DeserializeObject<DCSBIOSControlRootObject>(commonDataControlsText);
-                    DCSBIOSControls.AddRange(commonDataControls.DCSBIOSControls);
+                    DCSBIOSControls.AddRange(ReadControlsFromDocJson(jsonDirectory + "\\CommonData.json"));
                     DCSBIOSProfileLoadStatus.SetLoaded("CommonData", true);
                 }
             }
