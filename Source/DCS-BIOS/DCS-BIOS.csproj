@@ -140,7 +140,6 @@
     <Compile Include="DCSBIOSControlLocator.cs" />
     <Compile Include="Json\DCSBIOSControlOutput.cs" />
     <Compile Include="DCSBIOSInput.cs" />
-    <Compile Include="DCSBIOSJsonFormatterVersion1.cs" />
     <Compile Include="DCSBIOSOutput.cs" />
     <Compile Include="DCSBIOSOutputFormula.cs" />
     <Compile Include="DCSBIOSProfileLoadStatus.cs" />
