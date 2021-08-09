@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -160,14 +161,18 @@ namespace DCSFlightpanels.PanelUserControls
 
         private void ClearAll(bool clearAlsoProfile)
         {
-            foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
+            if (_textBoxBillsSet)
             {
-                if (textBox.Equals(TextBoxLogPZ70) || textBox.Bill == null)
+                foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
                 {
-                    continue;
+                      if (textBox == TextBoxLogPZ70 || textBox.Bill == null)
+                      {
+                          continue;
+                      }
+                      textBox.Bill.ClearAll();                 
                 }
-                textBox.Bill.ClearAll();
             }
+            
             if (clearAlsoProfile)
             {
                 _multiPanelPZ70.ClearSettings(true);
@@ -188,6 +193,7 @@ namespace DCSFlightpanels.PanelUserControls
                 {
                     textBox.Bill = new BillPZ70(GlobalHandler, this, _multiPanelPZ70, textBox);
                 }
+                _textBoxBillsSet = true;
             }
             _textBoxBillsSet = true;
         }
