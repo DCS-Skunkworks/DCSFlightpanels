@@ -66,6 +66,9 @@ Stream Deck Panels Supported (only with DCS-BIOS):
 
 [Demo video UH-1H](https://www.youtube.com/watch?v=jQxLX7UHMR8)
 
-Contributors : Tossler, ZoeESummers, Capt. Zeen
+[Farming Panel Overlay for named buttons](https://forums.eagle.ru/topic/115280-dcsflightpanels-dcsfp-thread-saitek-pro-flight-panels-amp-dcs/page/53/?tab=comments#comment-4745816)
+
+
+Contributors : Tossler, ZoeESummers, Capt. Zeen, Derammo
 
 Here you find our [DCSFlightpanels Discord Server](https://discord.gg/5svGwKX)
