@@ -165,11 +165,11 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 foreach (var textBox in Common.FindVisualChildren<PZ70TextBox>(this))
                 {
-                    if (textBox == TextBoxLogPZ70 || textBox.Bill == null)
-                    {
-                        continue;
-                    }
-                    textBox.Bill.ClearAll();
+                      if (textBox == TextBoxLogPZ70 || textBox.Bill == null)
+                      {
+                          continue;
+                      }
+                      textBox.Bill.ClearAll();                 
                 }
             }
             
@@ -195,6 +195,7 @@ namespace DCSFlightpanels.PanelUserControls
                 }
                 _textBoxBillsSet = true;
             }
+            _textBoxBillsSet = true;
         }
 
         public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
