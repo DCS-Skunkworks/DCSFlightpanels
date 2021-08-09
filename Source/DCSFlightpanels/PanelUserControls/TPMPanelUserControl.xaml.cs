@@ -218,7 +218,7 @@ namespace DCSFlightpanels.PanelUserControls
         {
             foreach (var textBox in Common.FindVisualChildren<TPMTextBox>(this))
             {
-                if (textBox.Equals(TextBoxLogTPM))
+                if (textBox.Equals(TextBoxLogTPM) || textBox.Bill == null)
                 {
                     continue;
                 }
@@ -249,8 +249,8 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 textBox.Bill = new BillTPM(GlobalHandler, this, _tpmPanel, textBox);
-                _textBoxBillsSet = true;
             }
+            _textBoxBillsSet = true;
         }
 
         private TPMTextBox GetTextBoxInFocus()

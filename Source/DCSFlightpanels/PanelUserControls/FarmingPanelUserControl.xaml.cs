@@ -285,8 +285,8 @@ namespace DCSFlightpanels.PanelUserControls
                 }
 
                 textBox.Bill = new BillPFarmingPanel(GlobalHandler, this, _farmingSidePanel, textBox);
-                _textBoxBillsSet = true;
             }
+            _textBoxBillsSet = true;
         }
 
         private void SetContextMenuClickHandlers()
