@@ -383,16 +383,13 @@ namespace NonVisuals.Radios
                         }
                     }
 
-                    foreach (var bipLinkPZ55 in _bipLinks)
+                    foreach (var bipLinkPZ69 in _bipLinks)
                     {
-                        //if (bipLinkPZ55.DialPosition == _pz69UpperDialPosition || keyBinding.DialPosition == _pz69LowerDialPosition)
-                        //{
-                        if (bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && bipLinkPZ55.WhenTurnedOn == radioPanelKey.IsOn)
+                        if (bipLinkPZ69.BIPLights.Count > 0 && bipLinkPZ69.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && bipLinkPZ69.WhenTurnedOn == radioPanelKey.IsOn)
                         {
-                            bipLinkPZ55.Execute();
+                            bipLinkPZ69.Execute();
                             break;
                         }
-                        //}
                     }
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
                     {

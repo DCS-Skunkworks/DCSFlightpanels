@@ -14,7 +14,7 @@ namespace NonVisuals.Saitek
         {
             if (string.IsNullOrEmpty(settings))
             {
-                throw new ArgumentException("Import string empty. (BIPLinkPZ55)");
+                throw new ArgumentException("Import string empty. (BIPLinkTPM)");
             }
             if (settings.StartsWith("TPMPanelBipLink{"))
             {
