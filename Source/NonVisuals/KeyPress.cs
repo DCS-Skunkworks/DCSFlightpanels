@@ -16,7 +16,7 @@ namespace NonVisuals
     {
         private SortedList<int, KeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
         private string _description = "Key press sequence";
-        [NonSerialized]private Thread _executingThread;
+        [NonSerialized] private Thread _executingThread;
 
         /*
          * When this OSKeyPress Executes it should cancel any execution _negatorOSKeyPress does.
@@ -43,7 +43,7 @@ namespace NonVisuals
                 return result;
             }
         }
-        
+
         public KeyPress() { }
 
         public KeyPress(string keycodes, KeyPressLength keyPressLength = KeyPressLength.FiftyMilliSec, string description = null)
@@ -113,7 +113,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -136,7 +136,7 @@ namespace NonVisuals
                         }
 
                         var array = keyPressInfo.VirtualKeyCodes.ToArray();
-                        
+
                         if (Common.APIMode == APIModeEnum.keybd_event)
                         {
                             KeyBdEventAPI(cancellationToken, keyPressInfo.LengthOfBreak, array, keyPressInfo.LengthOfKeyPress);
@@ -153,7 +153,7 @@ namespace NonVisuals
                         }
                     }
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                 }
             }
@@ -312,6 +312,14 @@ namespace NonVisuals
             return result.ToString();
         }
 
+        /*
+         * Added because Stream Deck (JSON) had this property before. Dirty fix.
+         */
+        public string Information
+        {
+            get; set;
+        }
+
         public string GetKeyPressInformation()
         {
             if (IsMultiSequenced())
@@ -394,7 +402,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
         }
 
@@ -446,7 +454,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
                 ;
             }
         }
@@ -483,7 +491,7 @@ namespace NonVisuals
             }
             catch (Exception ex)
             {
-                Common.ShowErrorMessageBox( ex);
+                Common.ShowErrorMessageBox(ex);
             }
             return result;
         }
