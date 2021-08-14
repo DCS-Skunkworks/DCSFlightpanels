@@ -104,8 +104,9 @@ namespace DCS_BIOS
             {
                 /*
                  * This is an ugly fix. I do not remember anymore whether multiple input objects can be used or only one.
+                 * This is some kind of bug but  I won't touch it no more.
                  */
-                if (_selectedDCSBIOSInput == null)
+                if (_selectedDCSBIOSInput == null && _dcsbiosInputObjects.Count > 0)
                 {
                     return _dcsbiosInputObjects[0];
                 }
