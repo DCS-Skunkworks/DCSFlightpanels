@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ClassLibraryCommon;
 // ReSharper disable All
 /*
@@ -20,150 +21,6 @@ namespace DCS_BIOS
         SET_STATE,
         ACTION,
         VARIABLE_STEP
-    }
-
-    [Serializable]
-    public class DCSBIOSInputObject
-    {
-        private string _controlId;
-        private string _description; //e.g. "description": "switch to previous or next state",
-        private DCSBIOSInputType _interface; //e.g. fixed_step, set_state, action
-        /*
-         * fixed_step = <INC/DEC>
-         * set_state = <integer>
-         * action = TOGGLE
-         * variable_step = <new_value>|-<decrease_by>|+<increase_by>
-         */
-        private int _maxValue; //Relevand when _interface = set_state
-        private string _specifiedActionArgument; //e.g. TOGGLE
-        private uint _specifiedSetStateArgument;
-        private int _specifiedVariableStepArgument;
-        private DCSBIOSFixedStepInput _specifiedFixedStepArgument;
-        private int _delay;
-
-        public void Consume(string controlId, DCSBIOSControlInput dcsbiosControlInput)
-        {
-            _controlId = controlId;
-            _description = dcsbiosControlInput.description;
-
-            if (dcsbiosControlInput.@interface.Equals("fixed_step"))
-            {
-                _interface = DCSBIOSInputType.FIXED_STEP;
-            }
-            else if (dcsbiosControlInput.@interface.Equals("set_state"))
-            {
-                _interface = DCSBIOSInputType.SET_STATE;
-            }
-            else if (dcsbiosControlInput.@interface.Equals("action"))
-            {
-                _interface = DCSBIOSInputType.ACTION;
-            }
-            else if (dcsbiosControlInput.@interface.Equals("variable_step"))
-            {
-                _interface = DCSBIOSInputType.VARIABLE_STEP;
-            }
-
-            _maxValue = dcsbiosControlInput.max_value.GetValueOrDefault();
-            _specifiedActionArgument = dcsbiosControlInput.argument;
-            //Set by user
-            //_specifiedSetStateArgument
-            //Set by user
-            //_specifiedFixedStepInput
-        }
-
-        public string GetDCSBIOSCommand()
-        {
-            var result = "";
-            switch (_interface)
-            {
-                case DCSBIOSInputType.FIXED_STEP:
-                    {
-                        result = _controlId + " " + _specifiedFixedStepArgument + "\n";
-                        break;
-                    }
-                case DCSBIOSInputType.SET_STATE:
-                    {
-                        result = _controlId + " " + _specifiedSetStateArgument + "\n";
-                        break;
-                    }
-                case DCSBIOSInputType.ACTION:
-                    {
-                        result = _controlId + " " + _specifiedActionArgument + "\n";
-                        break;
-                    }
-                case DCSBIOSInputType.VARIABLE_STEP:
-                    {
-                        if (_specifiedVariableStepArgument > 0)
-                        {
-                            result = _controlId + " +" + _specifiedVariableStepArgument + "\n";
-                        }
-                        else
-                        {
-                            result = _controlId + " " + _specifiedVariableStepArgument + "\n";
-                        }
-                        break;
-                    }
-            }
-            if (string.IsNullOrWhiteSpace(result))
-            {
-                throw new Exception("Error getting DCS-BIOSInput command. ControlId = " + _controlId + " Interface = " + _interface);
-            }
-            return result;
-        }
-
-        public int Delay
-        {
-            get { return _delay; }
-            set { _delay = value; }
-        }
-
-        public string ControlId
-        {
-            get { return _controlId; }
-            set { _controlId = value; }
-        }
-
-        public string Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
-
-        public DCSBIOSInputType Interface
-        {
-            get { return _interface; }
-            set { _interface = value; }
-        }
-
-        public int MaxValue
-        {
-            get { return _maxValue; }
-            set { _maxValue = value; }
-        }
-
-        public string SpecifiedActionArgument
-        {
-            get { return _specifiedActionArgument; }
-            set { _specifiedActionArgument = value; }
-        }
-
-        public uint SpecifiedSetStateArgument
-        {
-            get { return _specifiedSetStateArgument; }
-            set { _specifiedSetStateArgument = value; }
-        }
-
-        public int SpecifiedVariableStepArgument
-        {
-            get { return _specifiedVariableStepArgument; }
-            set { _specifiedVariableStepArgument = value; }
-        }
-
-        public DCSBIOSFixedStepInput SpecifiedFixedStepArgument
-        {
-            get { return _specifiedFixedStepArgument; }
-            set { _specifiedFixedStepArgument = value; }
-        }
     }
 
     [Serializable]
@@ -243,7 +100,17 @@ namespace DCS_BIOS
 
         public DCSBIOSInputObject SelectedDCSBIOSInput
         {
-            get { return _selectedDCSBIOSInput; }
+            get
+            {
+                /*
+                 * This is an ugly fix. I do not remember anymore whether multiple input objects can be used or only one.
+                 */
+                if (_selectedDCSBIOSInput == null)
+                {
+                    return _dcsbiosInputObjects[0];
+                }
+                return _selectedDCSBIOSInput;
+            }
             set { _selectedDCSBIOSInput = value; }
         }
 
@@ -274,24 +141,27 @@ namespace DCS_BIOS
             */
             try
             {
-
-                switch (_selectedDCSBIOSInput.Interface)
+                if (SelectedDCSBIOSInput == null || SelectedDCSBIOSInput.Interface == null)
+                {
+                    Debugger.Break();
+                }
+                switch (SelectedDCSBIOSInput.Interface)
                 {
                     case DCSBIOSInputType.FIXED_STEP:
                         {
-                            return "DCSBIOSInput{" + _controlId + "|FIXED_STEP|" + _selectedDCSBIOSInput.SpecifiedFixedStepArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                            return "DCSBIOSInput{" + _controlId + "|FIXED_STEP|" + SelectedDCSBIOSInput.SpecifiedFixedStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
                         }
                     case DCSBIOSInputType.SET_STATE:
                         {
-                            return "DCSBIOSInput{" + _controlId + "|SET_STATE|" + _selectedDCSBIOSInput.SpecifiedSetStateArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                            return "DCSBIOSInput{" + _controlId + "|SET_STATE|" + SelectedDCSBIOSInput.SpecifiedSetStateArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
                         }
                     case DCSBIOSInputType.ACTION:
                         {
-                            return "DCSBIOSInput{" + _controlId + "|ACTION|" + _selectedDCSBIOSInput.SpecifiedActionArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                            return "DCSBIOSInput{" + _controlId + "|ACTION|" + SelectedDCSBIOSInput.SpecifiedActionArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
                         }
                     case DCSBIOSInputType.VARIABLE_STEP:
                         {
-                            return "DCSBIOSInput{" + _controlId + "|VARIABLE_STEP|" + _selectedDCSBIOSInput.SpecifiedVariableStepArgument + "|" + _selectedDCSBIOSInput.Delay + "}";
+                            return "DCSBIOSInput{" + _controlId + "|VARIABLE_STEP|" + SelectedDCSBIOSInput.SpecifiedVariableStepArgument + "|" + SelectedDCSBIOSInput.Delay + "}";
                         }
                 }
             }
@@ -347,14 +217,14 @@ namespace DCS_BIOS
                             if (dcsbiosInputObject.Interface == DCSBIOSInputType.FIXED_STEP)
                             {
                                 dcsbiosInputObject.SpecifiedFixedStepArgument = (DCSBIOSFixedStepInput)Enum.Parse(typeof(DCSBIOSFixedStepInput), entries[2]);
-                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                SelectedDCSBIOSInput = dcsbiosInputObject;
                                 if (entries.Length == 4)
                                 {
-                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
                                 }
                                 else
                                 {
-                                    _selectedDCSBIOSInput.Delay = 0;
+                                    SelectedDCSBIOSInput.Delay = 0;
                                 }
                                 break;
                             }
@@ -368,14 +238,14 @@ namespace DCS_BIOS
                             if (dcsbiosInputObject.Interface == DCSBIOSInputType.SET_STATE)
                             {
                                 dcsbiosInputObject.SpecifiedSetStateArgument = uint.Parse(entries[2]);
-                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                SelectedDCSBIOSInput = dcsbiosInputObject;
                                 if (entries.Length == 4)
                                 {
-                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
                                 }
                                 else
                                 {
-                                    _selectedDCSBIOSInput.Delay = 0;
+                                    SelectedDCSBIOSInput.Delay = 0;
                                 }
                                 break;
                             }
@@ -389,14 +259,14 @@ namespace DCS_BIOS
                             if (dcsbiosInputObject.Interface == DCSBIOSInputType.ACTION)
                             {
                                 dcsbiosInputObject.SpecifiedActionArgument = entries[2];
-                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                SelectedDCSBIOSInput = dcsbiosInputObject;
                                 if (entries.Length == 4)
                                 {
-                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
                                 }
                                 else
                                 {
-                                    _selectedDCSBIOSInput.Delay = 0;
+                                    SelectedDCSBIOSInput.Delay = 0;
                                 }
                                 break;
                             }
@@ -410,14 +280,14 @@ namespace DCS_BIOS
                             if (dcsbiosInputObject.Interface == DCSBIOSInputType.VARIABLE_STEP)
                             {
                                 dcsbiosInputObject.SpecifiedVariableStepArgument = int.Parse(entries[2]);
-                                _selectedDCSBIOSInput = dcsbiosInputObject;
+                                SelectedDCSBIOSInput = dcsbiosInputObject;
                                 if (entries.Length == 4)
                                 {
-                                    _selectedDCSBIOSInput.Delay = int.Parse(entries[3]);
+                                    SelectedDCSBIOSInput.Delay = int.Parse(entries[3]);
                                 }
                                 else
                                 {
-                                    _selectedDCSBIOSInput.Delay = 0;
+                                    SelectedDCSBIOSInput.Delay = 0;
                                 }
                                 break;
                             }
