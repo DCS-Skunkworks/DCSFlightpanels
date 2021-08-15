@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using DCS_BIOS;
 using NonVisuals.Saitek;
@@ -98,6 +99,11 @@ namespace NonVisuals.DCSBIOSBindings
             var stringBuilder = new StringBuilder();
             foreach (var dcsbiosInput in DCSBIOSInputs)
             {
+
+                if (dcsbiosInput == null)
+                {
+                    Debugger.Break();
+                }
                 stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + dcsbiosInput.ToString());
             }
             if (!string.IsNullOrWhiteSpace(Description))

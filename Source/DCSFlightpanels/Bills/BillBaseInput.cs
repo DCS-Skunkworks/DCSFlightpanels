@@ -70,35 +70,35 @@ namespace DCSFlightpanels.Bills
             switch (copyContentType)
             {
                 case CopyContentType.KeyStroke:
-                {
-                    description = "";
-                    content = GetKeyPress();
-                    break;
-                }
+                    {
+                        description = "";
+                        content = GetKeyPress();
+                        break;
+                    }
                 case CopyContentType.KeySequence:
-                {
-                    description = GetKeySequenceDescription();
-                    content = GetKeySequence();
-                    break;
-                }
+                    {
+                        description = GetKeySequenceDescription();
+                        content = GetKeySequence();
+                        break;
+                    }
                 case CopyContentType.DCSBIOS:
-                {
-                    description = DCSBIOSBinding.Description;
-                    content = DCSBIOSBinding.DCSBIOSInputs;
-                    break;
-                }
+                    {
+                        description = DCSBIOSBinding.Description;
+                        content = DCSBIOSBinding.DCSBIOSInputs;
+                        break;
+                    }
                 case CopyContentType.BIPLink:
-                {
-                    description = BipLink.Description;
-                    content = BipLink;
-                    break;
-                }
+                    {
+                        description = BipLink.Description;
+                        content = BipLink;
+                        break;
+                    }
                 case CopyContentType.OSCommand:
-                {
-                    description = OSCommand.Command;
-                    content = OSCommandObject;
-                    break;
-                }
+                    {
+                        description = OSCommand.Command;
+                        content = OSCommandObject;
+                        break;
+                    }
             }
 
             if (content != null)
@@ -126,13 +126,13 @@ namespace DCSFlightpanels.Bills
             switch (copyPackage.ContentType)
             {
                 case CopyContentType.KeyStroke:
-                {
-                    if (IsEmptyNoCareBipLink())
                     {
-                        AddKeyStroke((KeyPressInfo) copyPackage.Content);
+                        if (IsEmptyNoCareBipLink())
+                        {
+                            AddKeyStroke((KeyPressInfo)copyPackage.Content);
+                        }
+                        break;
                     }
-                    break;
-                }
                 case CopyContentType.KeySequence:
                     {
                         if (IsEmptyNoCareBipLink())
@@ -153,7 +153,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (!ContainsBIPLink())
                         {
-                            AddBipLink((BIPLink) copyPackage.Content);
+                            AddBipLink((BIPLink)copyPackage.Content);
                         }
                         break;
                     }
@@ -161,7 +161,7 @@ namespace DCSFlightpanels.Bills
                     {
                         if (IsEmptyNoCareBipLink())
                         {
-                            AddOSCommand((OSCommand) copyPackage.Content);
+                            AddOSCommand((OSCommand)copyPackage.Content);
                         }
                         break;
                     }
@@ -216,7 +216,7 @@ namespace DCSFlightpanels.Bills
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MenuItemEditDCSBIOS_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -228,7 +228,7 @@ namespace DCSFlightpanels.Bills
                 Common.ShowErrorMessageBox(ex);
             }
         }
-        
+
         private void MenuItemEditBIP_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -531,11 +531,11 @@ namespace DCSFlightpanels.Bills
             switch (panelType)
             {
                 case GamingPanelEnum.FarmingPanel:
-                {
-                    var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkFarmingPanel();
-                    bipLinkWindow = new BIPLinkWindow(bipLink);
-                    break;
-                }
+                    {
+                        var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkFarmingPanel();
+                        bipLinkWindow = new BIPLinkWindow(bipLink);
+                        break;
+                    }
                 case GamingPanelEnum.PZ55SwitchPanel:
                     {
                         var bipLink = ContainsBIPLink() ? BipLink : new BIPLinkPZ55();
@@ -569,7 +569,7 @@ namespace DCSFlightpanels.Bills
 
             if (bipLinkWindow.DialogResult.HasValue && bipLinkWindow.DialogResult == true && bipLinkWindow.IsDirty && bipLinkWindow.BIPLink != null)
             {
-                var tmpBIPLink = (BIPLinkFarmingPanel)bipLinkWindow.BIPLink;
+                var tmpBIPLink = (BIPLink)bipLinkWindow.BIPLink;
 
                 if (tmpBIPLink.BIPLights.Count == 0)
                 {
