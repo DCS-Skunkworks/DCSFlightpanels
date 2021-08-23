@@ -90,7 +90,8 @@ namespace NonVisuals.StreamDeck
 
         [JsonIgnore]
         public string Text { get; set; }
-        
+
+        [JsonProperty("TextFont", Required = Required.Default)]
         public Font TextFont
         {
             get => _textFont;
@@ -101,6 +102,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("FontColor", Required = Required.Default)]
         public Color FontColor
         {
             get => _fontColor;
@@ -111,6 +113,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("BackgroundColor", Required = Required.Default)]
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -121,6 +124,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("ImageFile", Required = Required.Default)]
         public string ImageFile
         {
             get => _imageFile;

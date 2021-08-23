@@ -315,6 +315,7 @@ namespace NonVisuals
         /*
          * Added because Stream Deck (JSON) had this property before. Dirty fix.
          */
+        [JsonProperty("Information", Required = Required.Default)]
         public string Information
         {
             get; set;
@@ -496,6 +497,7 @@ namespace NonVisuals
             return result;
         }
 
+        [JsonProperty("Description", Required = Required.Default)]
         public string Description
         {
             get => _description;
@@ -507,6 +509,7 @@ namespace NonVisuals
             return _sortedKeyPressInfoList == null || _sortedKeyPressInfoList.Count == 0;
         }
 
+        [JsonProperty("KeySequence", Required = Required.Default)]
         public SortedList<int, KeyPressInfo> KeySequence
         {
             get => _sortedKeyPressInfoList;
@@ -646,6 +649,7 @@ namespace NonVisuals
             NativeMethods.SendInput((uint)inputs.Count(), inputs, Marshal.SizeOf(typeof(NativeMethods.INPUT)));
         }
 
+        [JsonProperty("Abort", Required = Required.Default)]
         public bool Abort
         {
             get => _abort;

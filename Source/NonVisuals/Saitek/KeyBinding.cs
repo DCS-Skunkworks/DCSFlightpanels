@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace NonVisuals.Saitek
 {
@@ -24,6 +25,7 @@ namespace NonVisuals.Saitek
 
         internal abstract void ImportSettings(string settings);
 
+        [JsonProperty("OSKeyPress", Required = Required.Always)]
         public KeyPress OSKeyPress
         {
             get => _keyPress;

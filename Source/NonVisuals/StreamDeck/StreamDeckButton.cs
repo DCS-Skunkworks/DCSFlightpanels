@@ -280,6 +280,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("Description", Required = Required.Default)]
         public string Description
         {
             get
@@ -302,35 +303,42 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {
             get => _streamDeckButtonName;
             set => _streamDeckButtonName = value;
         }
 
+        [JsonProperty("Face", Required = Required.Default)]
         public IStreamDeckButtonFace Face
         {
             get => _buttonFace;
             set => _buttonFace = value;
         }
 
+        [JsonProperty("ActionForPress", Required = Required.Default)]
         public IStreamDeckButtonAction ActionForPress
         {
             get => _buttonActionForPress;
             set => _buttonActionForPress = value;
         }
 
+        [JsonProperty("ActionForRelease", Required = Required.Default)]
         public IStreamDeckButtonAction ActionForRelease
         {
             get => _buttonActionForRelease;
             set => _buttonActionForRelease = value;
         }
 
+        [JsonIgnore]
         public bool HasConfig =>
             _buttonFace != null ||
             _buttonActionForPress != null ||
             _buttonActionForRelease != null;
 
+
+        [JsonProperty("ActionType", Required = Required.Default)]
         public EnumStreamDeckActionType ActionType
         {
             get
@@ -349,6 +357,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("FaceType", Required = Required.Default)]
         public EnumStreamDeckFaceType FaceType
         {
             get

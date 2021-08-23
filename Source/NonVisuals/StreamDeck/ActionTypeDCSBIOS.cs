@@ -55,6 +55,9 @@ namespace NonVisuals.StreamDeck
         {
             return null;
         }
+
+
+        [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {
             get => _streamDeckButtonName;
@@ -69,10 +72,20 @@ namespace NonVisuals.StreamDeck
         }
 
 
+        [JsonProperty("SoundFile", Required = Required.Default)]
         public string SoundFile { get; set; }
+
+
+        [JsonProperty("Volume", Required = Required.Default)]
         public double Volume { get; set; }
+
+
+        [JsonProperty("Delay", Required = Required.Default)]
         public int Delay { get; set; }
+
+        [JsonIgnore]
         public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
+
         public void PlaySound()
         {
             Common.PlaySoundFile(false, SoundFile, Volume);

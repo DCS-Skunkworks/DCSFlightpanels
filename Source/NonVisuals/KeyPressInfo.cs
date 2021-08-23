@@ -29,18 +29,21 @@ namespace NonVisuals
             }
         }
 
+        [JsonProperty("LengthOfBreak", Required = Required.Default)]
         public KeyPressLength LengthOfBreak
         {
             get => _lengthOfBreak;
             set => _lengthOfBreak = value;
         }
 
+        [JsonProperty("LengthOfKeyPress", Required = Required.Default)]
         public KeyPressLength LengthOfKeyPress
         {
             get => _lengthOfKeyPress;
             set => _lengthOfKeyPress = value;
         }
 
+        [JsonProperty("VirtualKeyCodes", Required = Required.Default)]
         public HashSet<VirtualKeyCode> VirtualKeyCodes
         {
             get => _virtualKeyCodes;

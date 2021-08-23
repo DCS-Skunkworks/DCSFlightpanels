@@ -48,6 +48,8 @@ namespace NonVisuals.StreamDeck
             set => _refreshBitmap = value;
         }
 
+
+        [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {
             get => _streamDeckButtonName;
@@ -85,6 +87,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("OffsetX", Required = Required.Default)]
         public int OffsetX
         {
             get => _offsetX;
@@ -95,6 +98,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("OffsetY", Required = Required.Default)]
         public int OffsetY
         {
             get => _offsetY;

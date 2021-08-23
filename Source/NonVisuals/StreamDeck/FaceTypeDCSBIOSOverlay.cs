@@ -43,6 +43,7 @@ namespace NonVisuals.StreamDeck
             StreamDeckPanelInstance.SetImage(StreamDeckButtonName, Bitmap);
         }
 
+        [JsonProperty("BackgroundBitmapPath", Required = Required.Default)]
         public string BackgroundBitmapPath
         {
             get => _backgroundBitmapPath;

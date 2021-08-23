@@ -88,6 +88,8 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+
+        [JsonProperty("ButtonTextTemplate", Required = Required.Default)]
         public string ButtonTextTemplate
         {
             get => _buttonTextTemplate;
@@ -109,6 +111,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("TextFont", Required = Required.Default)]
         public Font TextFont
         {
             get => _textFont;
@@ -119,12 +122,14 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonProperty("FontColor", Required = Required.Default)]
         public Color FontColor
         {
             get => _fontColor;
             set => _fontColor = value;
         }
 
+        [JsonProperty("BackgroundColor", Required = Required.Default)]
         public Color BackgroundColor
         {
             get => _backgroundColor;
@@ -135,6 +140,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonIgnore]
         public uint UintDcsBiosValue
         {
             get => _uintDcsBiosValue;
@@ -145,6 +151,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        [JsonIgnore]
         public string StringDcsBiosValue
         {
             get => _stringDcsBiosValue;
