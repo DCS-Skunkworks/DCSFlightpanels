@@ -9,6 +9,7 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class FaceTypeText : FaceTypeBase, IStreamDeckButtonFace, IFontFace
     {
+        [JsonProperty("FaceType", Required = Required.Default)]
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Text;
         private string _buttonTextTemplate = "";
         private string _buttonFinalText = "";

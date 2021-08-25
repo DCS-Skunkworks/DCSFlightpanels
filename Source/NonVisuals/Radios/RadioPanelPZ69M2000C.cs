@@ -20,6 +20,7 @@ namespace NonVisuals.Radios
         //Small dial Volume
         private readonly object _lockVUHFPresetDialObject = new object();
 
+        //private DCSBIOSString _vhfDcsbiosOutputPresetFreqString;
         private DCSBIOSOutput _vhfDcsbiosOutputPresetDial;
         private volatile uint _vhfPresetCockpitDialPos = 1;
         private const string VHFPresetCommandInc = "VHF_CH_SEL INC\n";

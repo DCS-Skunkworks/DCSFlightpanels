@@ -10,6 +10,7 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public class FaceTypeImage : FaceTypeBase, IStreamDeckButtonFace
     {
+        [JsonProperty("FaceType", Required = Required.Default)]
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Image;
         private string _imageFile;
         [NonSerialized]private KeyBitmap _keyBitmap;

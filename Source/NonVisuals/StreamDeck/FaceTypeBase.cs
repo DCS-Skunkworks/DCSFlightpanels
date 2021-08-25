@@ -8,7 +8,9 @@ namespace NonVisuals.StreamDeck
     [Serializable]
     public abstract class FaceTypeBase
     {
+        [JsonProperty("FaceType", Required = Required.Default)]
         public EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.Unknown;
+
         [NonSerialized]protected Bitmap _bitmap;
         private bool _refreshBitmap = true;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
