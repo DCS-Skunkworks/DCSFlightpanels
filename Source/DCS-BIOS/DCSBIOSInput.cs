@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using ClassLibraryCommon;
+using Newtonsoft.Json;
+
 // ReSharper disable All
 /*
  * naming of all variables can not be changed because these classes are instantiated from Json based on DCS-BIOS naming standard. *
@@ -98,6 +100,7 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonProperty("SelectedDCSBIOSInput", Required = Required.Default)]
         public DCSBIOSInputObject SelectedDCSBIOSInput
         {
             get
@@ -298,30 +301,36 @@ namespace DCS_BIOS
             }
         }
 
+        [JsonProperty("ControlId", Required = Required.Default)]
         public string ControlId
         {
             get { return _controlId; }
             set { _controlId = value; }
         }
 
+        [JsonProperty("Delay", Required = Required.Default)]
         public int Delay
         {
             get { return _delay; }
             set { _delay = value; }
         }
 
+        [Obsolete]
+        [JsonProperty("Debug", Required = Required.Default)]
         public bool Debug
         {
             get { return _debug; }
             set { _debug = value; }
         }
 
+        [JsonProperty("ControlDescription", Required = Required.Default)]
         public string ControlDescription
         {
             get { return _controlDescription; }
             set { _controlDescription = value; }
         }
 
+        [JsonProperty("ControlType", Required = Required.Default)]
         public string ControlType
         {
             get { return _controlType; }
