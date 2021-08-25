@@ -306,6 +306,8 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+
+        [JsonProperty("UseFormula", Required = Required.Default)]
         public bool UseFormula
         {
             get => _useFormula;
@@ -373,12 +375,14 @@ namespace NonVisuals.StreamDeck
             return JaceExtendedFactory.Instance(ref _jaceId).CalculationEngine.Calculate(_formula, variables);
         }
 
+        [JsonProperty("Formula", Required = Required.Default)]
         public string Formula
         {
             get => _formula;
             set => _formula = value;
         }
 
+        [JsonProperty("DCSBIOSOutput", Required = Required.Default)]
         public DCSBIOSOutput DCSBIOSOutput
         {
             get => _dcsbiosOutput;
@@ -403,6 +407,7 @@ namespace NonVisuals.StreamDeck
             _dcsbiosConverters.Add(dcsbiosConverter);
         }
 
+        [JsonProperty("ImageFiles", Required = Required.Default)]
         public List<string> ImageFiles
         {
             get
@@ -461,6 +466,7 @@ namespace NonVisuals.StreamDeck
             _dcsbiosConverters.Remove(dcsbiosConverter);
         }
 
+        [JsonProperty("DCSBIOSConverters", Required = Required.Default)]
         public List<DCSBIOSConverter> DCSBIOSConverters
         {
             get => _dcsbiosConverters;
@@ -497,36 +503,42 @@ namespace NonVisuals.StreamDeck
             return _dcsbiosOutput.ControlId;
         }
 
+        [JsonProperty("TreatStringAsNumber", Required = Required.Default)]
         public bool TreatStringAsNumber
         {
             get => _treatStringAsNumber;
             set => _treatStringAsNumber = value;
         }
 
+        [JsonProperty("RawTextFont", Required = Required.Default)]
         public Font RawTextFont
         {
             get => TextFont;
             set => TextFont = value;
         }
 
+        [JsonProperty("RawFontColor", Required = Required.Default)]
         public Color RawFontColor
         {
             get => FontColor;
             set => FontColor = value;
         }
 
+        [JsonProperty("RawBackgroundColor", Required = Required.Default)]
         public Color RawBackgroundColor
         {
             get => BackgroundColor;
             set => BackgroundColor = value;
         }
 
+        [JsonProperty("DecoderSourceType", Required = Required.Default)]
         public DCSBiosOutputType DecoderSourceType
         {
             get => _decoderSourceType;
             set => _decoderSourceType = value;
         }
 
+        [JsonProperty("DecoderOutputType", Required = Required.Default)]
         public EnumDCSBIOSDecoderOutputType DecoderOutputType
         {
             get => _decoderOutputType;
@@ -605,7 +617,8 @@ namespace NonVisuals.StreamDeck
                 }
             }
         }
-        
+
+        [JsonProperty("DefaultImageFilePath", Required = Required.Default)]
         public string DefaultImageFilePath
         {
             //No getter, this is to be phased out, setter here so that any existing setting in user's file still can be parsed by JSON.

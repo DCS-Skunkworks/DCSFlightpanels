@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Newtonsoft.Json;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.StreamDeck
@@ -9,6 +10,8 @@ namespace NonVisuals.StreamDeck
          This class binds a physical key on a Stream Deck with a BIP LED
          */
 
+
+        [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
         public string Layer { get; set; } = "";
 

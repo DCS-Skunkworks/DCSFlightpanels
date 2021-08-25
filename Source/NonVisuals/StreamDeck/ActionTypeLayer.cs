@@ -24,9 +24,15 @@ namespace NonVisuals.StreamDeck
         public bool IsRepeatable() => false;
         private volatile bool _isRunning;
         private EnumStreamDeckButtonNames _streamDeckButtonName;
+
+
+        [JsonProperty("NavigationType", Required = Required.Default)]
         public LayerNavType NavigationType;
+        [JsonProperty("TargetLayer", Required = Required.Default)]
         public string TargetLayer;
+        [JsonProperty("RemoteStreamdeckBindingHash", Required = Required.Default)]
         public string RemoteStreamdeckBindingHash = "";
+        [JsonProperty("RemoteStreamdeckTargetLayer", Required = Required.Default)]
         public string RemoteStreamdeckTargetLayer = "";
 
         [NonSerialized]
@@ -76,6 +82,9 @@ namespace NonVisuals.StreamDeck
             Navigate(threadCancellationToken);
             _isRunning = false;
         }
+
+
+        [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName
         {
             get => _streamDeckButtonName;
@@ -126,9 +135,16 @@ namespace NonVisuals.StreamDeck
             set => _streamDeckPanel = value;
         }
 
+
+        [JsonProperty("SoundFile", Required = Required.Default)]
         public string SoundFile { get; set; }
+
+        [JsonProperty("Volume", Required = Required.Default)]
         public double Volume { get; set; }
+
+        [JsonProperty("Delay", Required = Required.Default)]
         public int Delay { get; set; }
+
         public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
         public void PlaySound()
         {
