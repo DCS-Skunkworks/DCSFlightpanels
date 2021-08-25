@@ -107,7 +107,7 @@ namespace NonVisuals.Radios
             try
             {
                 // VHF Preset Channel Frequency
-                if (e.Address == _vhfDcsbiosOutputPresetFreqString.Address)
+                if (e.Address == _vhfDcsbiosOutputPresetFreqString.Address && !string.IsNullOrEmpty(e.StringData) && double.TryParse(e.StringData, out var tmpValue))
                 {
                     lock (_lockVUHFPresetFreqObject)
                     {
@@ -120,7 +120,7 @@ namespace NonVisuals.Radios
                     }
                 }
                 // UHF Preset Channel Frequency
-                if (e.Address == _uhfDcsbiosOutputPresetFreqString.Address)
+                if (e.Address == _uhfDcsbiosOutputPresetFreqString.Address && !string.IsNullOrEmpty(e.StringData) && double.TryParse(e.StringData, out var tmpValue2))
                 {
                     lock (_lockUHFPresetFreqObject)
                     {
@@ -161,8 +161,7 @@ namespace NonVisuals.Radios
                     lock (_lockVUHFPresetDialObject)
                     {
                         var tmp = _vhfPresetCockpitDialPos;
-                        _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
-                        _vhfPresetCockpitDialPos++;
+                        _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 3;
                         if (tmp != _vhfPresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -176,7 +175,7 @@ namespace NonVisuals.Radios
                     lock (_lockUHFPresetDialObject)
                     {
                         var tmp = _uhfPresetCockpitDialPos;
-                        _uhfPresetCockpitDialPos = _uhfDcsbiosOutputPresetDial.GetUIntValue(e.Data);
+                        _uhfPresetCockpitDialPos = _uhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 1;
                         if (tmp != _uhfPresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -260,7 +259,7 @@ namespace NonVisuals.Radios
                     lock (_lockVoRialObject)
                     {
                         var tmp = _vorOnesCockpitDialPos;
-                        _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data) - 1;
+                        _vorOnesCockpitDialPos = _vorDcsbiosOutputDialOnes.GetUIntValue(e.Data);
                         if (tmp != _vorOnesCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
@@ -915,7 +914,7 @@ namespace NonVisuals.Radios
                                         SetPZ69DisplayBlank(ref bytes, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                     }
                                 }
-                                
+
                                 break;
                             }
                         case CurrentM2000CRadioMode.UHF:
