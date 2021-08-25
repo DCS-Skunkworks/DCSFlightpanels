@@ -331,7 +331,7 @@ namespace NonVisuals.StreamDeck
             set => _buttonActionForRelease = value;
         }
 
-        [JsonIgnore]
+        [JsonProperty("HasConfig", Required = Required.Default)]
         public bool HasConfig =>
             _buttonFace != null ||
             _buttonActionForPress != null ||

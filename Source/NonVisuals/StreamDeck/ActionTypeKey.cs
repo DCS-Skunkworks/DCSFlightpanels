@@ -117,7 +117,7 @@ namespace NonVisuals.StreamDeck
         [JsonProperty("Delay", Required = Required.Default)]
         public int Delay { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty("HasSound", Required = Required.Default)]
         public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
 
         

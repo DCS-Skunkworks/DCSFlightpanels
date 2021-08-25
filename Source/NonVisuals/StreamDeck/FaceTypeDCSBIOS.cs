@@ -140,7 +140,6 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        [JsonIgnore]
         public uint UintDcsBiosValue
         {
             get => _uintDcsBiosValue;
@@ -151,7 +150,6 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        [JsonIgnore]
         public string StringDcsBiosValue
         {
             get => _stringDcsBiosValue;

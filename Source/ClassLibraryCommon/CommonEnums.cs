@@ -56,11 +56,17 @@ namespace ClassLibraryCommon
 
     public enum GamingPanelEnum
     {
+        [Description("Unknown Panel")]
         Unknown = 0,
+        [Description("Saitek PZ55 Switch Panel")]
         PZ55SwitchPanel = 0xD67,
+        [Description("Saitek PZ69 Radio Panel")]
         PZ69RadioPanel = 0xD05,
+        [Description("Saitek PZ70 Multi Panel")]
         PZ70MultiPanel = 0xD06,
+        [Description("Saitek BIP Back Lit Panel")]
         BackLitPanel = 0xB4E,
+        [Description("Saitek TPM Panel")]
         TPM = 0xB4D,
         [Description("StreamDeck Mini")]
         StreamDeckMini = 0x0063,
@@ -70,6 +76,7 @@ namespace ClassLibraryCommon
         StreamDeckV2 = 0x006D,
         [Description("StreamDeck XL")]
         StreamDeckXL = 0x006C,
+        [Description("Logitech Farming Side Panel")]
         FarmingPanel = 0x2218
     }
 
