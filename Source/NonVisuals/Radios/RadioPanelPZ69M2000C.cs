@@ -161,7 +161,7 @@ namespace NonVisuals.Radios
                     lock (_lockVUHFPresetDialObject)
                     {
                         var tmp = _vhfPresetCockpitDialPos;
-                        _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 3;
+                        _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 2;
                         if (tmp != _vhfPresetCockpitDialPos)
                         {
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
