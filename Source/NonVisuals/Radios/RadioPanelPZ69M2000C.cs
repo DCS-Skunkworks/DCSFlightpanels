@@ -162,8 +162,13 @@ namespace NonVisuals.Radios
                     {
                         var tmp = _vhfPresetCockpitDialPos;
                         _vhfPresetCockpitDialPos = _vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data) + 2;
+                        if (_vhfPresetCockpitDialPos == 21)
+                        {
+                            _vhfPresetCockpitDialPos = 1; //something weird with this
+                        }
                         if (tmp != _vhfPresetCockpitDialPos)
                         {
+                            Debug.WriteLine(_vhfDcsbiosOutputPresetDial.GetUIntValue(e.Data));
                             Interlocked.Add(ref _doUpdatePanelLCD, 1);
                         }
                     }
