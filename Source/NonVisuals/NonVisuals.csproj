@@ -153,6 +153,8 @@
     <Compile Include="Interfaces\IStreamDeckListener.cs" />
     <Compile Include="JaceExtendedFactory.cs" />
     <Compile Include="KeyPressInfo.cs" />
+    <Compile Include="Plugin\IPanelEventPlugin.cs" />
+    <Compile Include="Plugin\PluginManager.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -291,6 +293,7 @@
     <Compile Include="Saitek\Panels\TPMPanel.cs" />
     <Compile Include="Saitek\Panels\SwitchPanelPZ55.cs" />
     <Compile Include="StreamDeck\ZipArchiver.cs" />
+    <Compile Include="Switches.cs" />
     <Compile Include="VirtualKeyCode.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="OSCommand.cs" />

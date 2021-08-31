@@ -4,18 +4,6 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Saitek.Switches
 {
-    public enum TPMPanelSwitches
-    {
-        G1 = 0,
-        G2 = 2,
-        G3 = 4,
-        G4 = 8,
-        G5 = 16,
-        G6 = 32,
-        G7 = 64,
-        G8 = 128,
-        G9 = 256
-    }
 
     public class TPMPanelSwitch : ISaitekPanelKnob
     {

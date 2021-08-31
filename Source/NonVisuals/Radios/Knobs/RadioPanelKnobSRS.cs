@@ -4,44 +4,6 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-    public enum RadioPanelPZ69KnobsSRS
-    {
-        UPPER_COM1 = 0,   //COM1
-        UPPER_COM2 = 2,  //COM2
-        UPPER_NAV1 = 4, //NAV1
-        UPPER_NAV2 = 8, //NAV2
-        UPPER_ADF = 16, //ADF
-        UPPER_DME = 32, //DME_
-        UPPER_XPDR = 64, //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_COM1 = 4096,
-        LOWER_COM2 = 8192,
-        LOWER_NAV1 = 16384,
-        LOWER_NAV2 = 32768,
-        LOWER_ADF = 65536,
-        LOWER_DME = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    public enum CurrentSRSRadioMode
-    {
-        COM1 = 0,
-        COM2 = 2,
-        NAV1 = 4,
-        NAV2 = 8,
-        ADF = 16,
-        DME = 32,
-        XPDR = 64
-    }
 
 
     public class RadioPanelKnobSRS : ISaitekPanelKnob

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using ClassLibraryCommon;
 using DCSFlightpanels.Properties;
 using Newtonsoft.Json;
+using NonVisuals;
 using NonVisuals.StreamDeck;
 using Cursors = System.Windows.Input.Cursors;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;

@@ -48,29 +48,6 @@ namespace NonVisuals.Saitek.Switches
          */
     }
 
-    public enum SwitchPanelPZ55Keys
-    {
-        SWITCHKEY_MASTER_BAT = 0,
-        SWITCHKEY_MASTER_ALT = 2,
-        SWITCHKEY_AVIONICS_MASTER = 4,
-        SWITCHKEY_FUEL_PUMP = 8,
-        SWITCHKEY_DE_ICE = 16,
-        SWITCHKEY_PITOT_HEAT = 32,
-        SWITCHKEY_CLOSE_COWL = 64,
-        SWITCHKEY_LIGHTS_PANEL = 128,
-        SWITCHKEY_LIGHTS_BEACON = 256,
-        SWITCHKEY_LIGHTS_NAV = 512,
-        SWITCHKEY_LIGHTS_STROBE = 1024,
-        SWITCHKEY_LIGHTS_TAXI = 2048,
-        SWITCHKEY_LIGHTS_LANDING = 4096,
-        KNOB_ENGINE_OFF = 8192,
-        KNOB_ENGINE_RIGHT = 16384,
-        KNOB_ENGINE_LEFT = 32768,
-        KNOB_ENGINE_BOTH = 65536,
-        KNOB_ENGINE_START = 131072,
-        LEVER_GEAR_UP = 262144,
-        LEVER_GEAR_DOWN = 524288
-    }
 
     public class SwitchPanelKey : ISaitekPanelKnob
     {

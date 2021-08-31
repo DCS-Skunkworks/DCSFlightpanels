@@ -4,43 +4,6 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-    public enum RadioPanelPZ69KnobsKa50
-    {
-        UPPER_VHF1_R828 = 0,   //COM1
-        UPPER_VHF2_R800L1 = 2,  //COM2
-        UPPER_ABRIS = 4, //NAV1
-        UPPER_DATALINK = 8, //NAV2
-        UPPER_ADF_ARK22 = 16, //ADF
-        UPPER_NO_USE3 = 32, //DME_
-        UPPER_NO_USE4 = 64, //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHF1_R828 = 4096,
-        LOWER_VHF2_R800L1 = 8192,
-        LOWER_ABRIS = 16384,
-        LOWER_DATALINK = 32768,
-        LOWER_ADF_ARK22 = 65536,
-        LOWER_NO_USE3 = 131072,
-        LOWER_NO_USE4 = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    public enum CurrentKa50RadioMode
-    {
-        VHF1_R828 = 0,
-        VHF2_R800L1 = 2,
-        ADF_ARK22 = 4,
-        ABRIS = 8,
-        DATALINK = 16,
-        NOUSE = 32
-    }
 
     public class RadioPanelKnobKa50 : ISaitekPanelKnob
     {

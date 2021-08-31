@@ -4,29 +4,6 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Saitek.Switches
 {
-    public enum MultiPanelPZ70Knobs
-    {
-        KNOB_ALT = 0,
-        KNOB_VS = 2,
-        KNOB_IAS = 4,
-        KNOB_HDG = 8,
-        KNOB_CRS = 16,
-        LCD_WHEEL_INC = 32,
-        LCD_WHEEL_DEC = 64,
-        AUTO_THROTTLE = 512,
-        FLAPS_LEVER_UP = 1024,
-        FLAPS_LEVER_DOWN = 256,
-        PITCH_TRIM_WHEEL_UP = 2056,
-        PITCH_TRIM_WHEEL_DOWN = 128,
-        AP_BUTTON = 4096,
-        HDG_BUTTON = 8192,
-        NAV_BUTTON = 16384,
-        IAS_BUTTON = 32768,
-        ALT_BUTTON = 65536,
-        VS_BUTTON = 131072,
-        APR_BUTTON = 262144,
-        REV_BUTTON = 524288
-    }
 
     public class MultiPanelKnob : ISaitekPanelKnob
     {

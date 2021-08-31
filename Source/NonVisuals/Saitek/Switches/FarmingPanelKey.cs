@@ -4,38 +4,6 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Saitek.Switches
 {
-    public enum FarmingPanelMKKeys
-    {
-        BUTTON_1 = 0,
-        BUTTON_2 = 1,
-        BUTTON_3 = 2,
-        BUTTON_4 = 3,
-        BUTTON_5 = 4,
-        BUTTON_6 = 5,
-        BUTTON_7 = 6,
-        BUTTON_8 = 7,
-        BUTTON_9 = 8,
-        BUTTON_10 = 9,
-        BUTTON_11 = 10,
-        BUTTON_12 = 11,
-        BUTTON_13 = 12,
-        BUTTON_14 = 13,
-        BUTTON_15 = 14,
-        BUTTON_16 = 15,
-        BUTTON_17 = 16,
-        BUTTON_18 = 17,
-        BUTTON_19 = 18,
-        BUTTON_20 = 19,
-        BUTTON_21 = 20,
-        BUTTON_22 = 21,
-        BUTTON_23 = 22,
-        BUTTON_24 = 23,
-        BUTTON_25 = 24,
-        BUTTON_26 = 25,
-        BUTTON_27 = 26,
-        BUTTON_JOY_RIGHT = 27,
-        BUTTON_JOY_LEFT = 28
-    }
 
     public class FarmingPanelKey : ISaitekPanelKnob
     {

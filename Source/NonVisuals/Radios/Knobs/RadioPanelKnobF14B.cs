@@ -4,43 +4,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-    public enum RadioPanelPZ69KnobsF14B
-    {
-        UPPER_UHF = 0,
-        UPPER_VUHF = 2,
-        UPPER_PLT_TACAN = 4,
-        UPPER_RIO_TACAN = 8,
-        UPPER_ADF = 16,
-        UPPER_LINK4 = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_UHF = 4096,
-        LOWER_VUHF = 8192,
-        LOWER_PLT_TACAN = 16384,
-        LOWER_RIO_TACAN = 32768,
-        LOWER_ADF = 65536,
-        LOWER_LINK4 = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
 
-    public enum CurrentF14RadioMode
-    {
-        UHF = 0,
-        VUHF = 2,
-        PLT_TACAN = 4,
-        RIO_TACAN = 8,
-        LINK4 = 16,
-        NOUSE = 32
-    }
 
     public class RadioPanelKnobF14B : ISaitekPanelKnob
     {

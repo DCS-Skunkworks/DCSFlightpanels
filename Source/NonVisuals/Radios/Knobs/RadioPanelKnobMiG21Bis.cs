@@ -4,40 +4,6 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-    public enum RadioPanelPZ69KnobsMiG21Bis
-    {
-        UpperRadio = 0,
-        UpperCom2 = 2,
-        UpperRsbn = 4,
-        UpperNav2 = 8,
-        UpperArc = 16,
-        UpperDme = 32,
-        UpperXpdr = 64,
-        UpperSmallFreqWheelInc = 128,
-        UpperSmallFreqWheelDec = 256,
-        UpperLargeFreqWheelInc = 512,
-        UpperLargeFreqWheelDec = 1024,
-        UpperFreqSwitch = 2056,
-        LowerRadio = 4096,
-        LowerCom2 = 8192,
-        LowerRsbn = 16384,
-        LowerNav2 = 32768,
-        LowerArc = 65536,
-        LowerDme = 131072,
-        LowerXpdr = 262144,
-        LowerSmallFreqWheelInc = 8388608,
-        LowerSmallFreqWheelDec = 524288,
-        LowerLargeFreqWheelInc = 1048576,
-        LowerLargeFreqWheelDec = 2097152,
-        LowerFreqSwitch = 4194304
-    }
-
-    public enum CurrentMiG21BisRadioMode
-    {
-        Radio = 0,
-        RSBN = 2,
-        ARC = 4
-    }
 
     public class RadioPanelKnobMiG21Bis : ISaitekPanelKnob
     {

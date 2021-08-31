@@ -2,45 +2,8 @@
 using System.Collections.Generic;
 using NonVisuals.Interfaces;
 
-namespace NonVisuals.Radios.Knobs { 
-
-    public enum RadioPanelPZ69KnobsSA342
-    {
-        UPPER_VHFAM = 0,
-        UPPER_VHFFM = 2,
-        UPPER_UHF = 4,
-        UPPER_NAV2 = 8,
-        UPPER_ADF = 16,
-        UPPER_NADIR = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_VHFAM = 4096,
-        LOWER_VHFFM = 8192,
-        LOWER_UHF = 16384,
-        LOWER_NAV2 = 32768,
-        LOWER_ADF = 65536,
-        LOWER_NADIR = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    public enum CurrentSA342RadioMode
-    {
-        VHFFM = 2,
-        VHFAM = 4,
-        UHF = 8,
-        ADF = 16,
-        NADIR = 32,
-        NOUSE
-    }
+namespace NonVisuals.Radios.Knobs
+{ 
 
     public class RadioPanelKnobSA342 : ISaitekPanelKnob
     {
