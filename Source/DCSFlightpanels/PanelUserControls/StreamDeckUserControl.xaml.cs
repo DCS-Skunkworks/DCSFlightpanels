@@ -67,6 +67,7 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 case GamingPanelEnum.StreamDeck:
                 case GamingPanelEnum.StreamDeckV2:
+                case GamingPanelEnum.StreamDeckMK2:
                     {
                         var child = new UserControlStreamDeckUINormal(_streamDeckPanel);
                         _uiButtonGrid = child;
