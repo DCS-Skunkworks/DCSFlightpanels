@@ -13,6 +13,7 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using NonVisuals.Plugin;
 
     public class RadioPanelPZ69Generic : RadioPanelPZ69Base
     {
@@ -403,7 +404,12 @@ namespace NonVisuals.Radios
                         }
                     }
 
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKey.RadioPanelPZ69Knob, radioPanelKey.IsOn, 0);
+                    }
                 }
+
             }
 
             foreach (var radioPanelKeyObject in hashSet)

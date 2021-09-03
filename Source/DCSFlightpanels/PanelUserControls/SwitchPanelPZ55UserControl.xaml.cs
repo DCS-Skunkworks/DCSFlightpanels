@@ -17,6 +17,7 @@
 
     using NonVisuals;
     using NonVisuals.Interfaces;
+    using NonVisuals.Plugin;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
     using NonVisuals.Saitek.Switches;
@@ -1207,6 +1208,9 @@
             {
                 //var panelEventHandler = new PanelEventHandler();
                 //panelEventHandler.PanelEvent("A-10C", "HIDID", (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, 1, 0);
+                //var pluginManager = new PluginManager();
+                //pluginManager.LoadPlugins();
+                //pluginManager.PanelEventHandler.PanelEvent("A-10C", "HIDID", (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, 1, 0);
             }
             catch (Exception ex)
             {

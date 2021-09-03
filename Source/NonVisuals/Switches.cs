@@ -2,7 +2,7 @@
 
 namespace NonVisuals
 {
-    public enum GamingPanelInternalEnum
+    public enum PluginGamingPanelEnum
     {
         [Description("Unknown Panel")]
         Unknown = 0,

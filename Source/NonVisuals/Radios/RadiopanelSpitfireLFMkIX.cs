@@ -10,6 +10,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using NonVisuals.Plugin;
+
     public class RadioPanelPZ69SpitfireLFMkIX : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
         private CurrentSpitfireLFMkIXRadioMode _currentUpperRadioMode = CurrentSpitfireLFMkIXRadioMode.HFRADIO;
@@ -333,7 +335,13 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
+
+                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                        {
+                            PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                        }
                     }
+
                     AdjustFrequency(hashSet);
                 }
             }

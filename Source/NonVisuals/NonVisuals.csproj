@@ -153,7 +153,6 @@
     <Compile Include="Interfaces\IStreamDeckListener.cs" />
     <Compile Include="JaceExtendedFactory.cs" />
     <Compile Include="KeyPressInfo.cs" />
-    <Compile Include="Plugin\IPanelEventHandler.cs" />
     <Compile Include="Plugin\PluginManager.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -324,6 +323,10 @@
     <ProjectReference Include="..\DCS-BIOS\DCS-BIOS.csproj">
       <Project>{6ef4492f-d4b4-42bc-b209-98783098db22}</Project>
       <Name>DCS-BIOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MEF\MEF.csproj">
+      <Project>{0c0196b3-2442-4838-a587-c51660136f9c}</Project>
+      <Name>MEF</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

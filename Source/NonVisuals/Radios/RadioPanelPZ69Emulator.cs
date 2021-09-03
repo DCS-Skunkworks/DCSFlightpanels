@@ -9,6 +9,7 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using NonVisuals.Plugin;
 
     public class RadioPanelPZ69Emulator : RadioPanelPZ69Base
     {
@@ -239,6 +240,11 @@ namespace NonVisuals.Radios
                             bipLinkPZ69.Execute();
                             break;
                         }
+                    }
+
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKey.RadioPanelPZ69Knob, radioPanelKey.IsOn, 0);
                     }
                 }
             }

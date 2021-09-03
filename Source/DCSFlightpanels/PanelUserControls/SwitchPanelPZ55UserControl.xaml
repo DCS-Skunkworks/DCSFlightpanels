@@ -143,7 +143,7 @@
                 <Button x:Name="ButtonSwitchPanelInfo" Click="ButtonSwitchPanelInfo_OnClick" Margin="5,20,5,0" >
                     <Image Margin="0,8,0,0" Source="/dcsfp;component/Images/info.png" Stretch="Uniform" VerticalAlignment="Center" Width="40"  RenderOptions.BitmapScalingMode="Fant" />
                 </Button>
-                <Button Content="DEV" Height="25" HorizontalAlignment="Center" Name="ButtonDEV" Width="75" Visibility="Collapsed" Click="ButtonDEV_OnClick" Margin="5,0" />
+                <Button Content="DEV" Height="25" HorizontalAlignment="Center" Name="ButtonDEV" Width="75" Visibility="Visible" Click="ButtonDEV_OnClick" Margin="5,0" />
             </StackPanel>
         </GroupBox>
 

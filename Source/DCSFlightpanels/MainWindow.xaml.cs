@@ -1,41 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using DCS_BIOS;
-using DCSFlightpanels.Properties;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Media;
-using System.Reflection;
-using System.Text;
-using System.Windows.Navigation;
-using ClassLibraryCommon;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.PanelUserControls;
-using DCSFlightpanels.Radios.Emulators;
-using DCSFlightpanels.Radios.PreProgrammed;
-using DCSFlightpanels.Shared;
-using DCSFlightpanels.Windows;
-using Microsoft.Win32;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.SRS;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using Octokit;
-using Application = System.Windows.Application;
-using Button = System.Windows.Controls.Button;
-using Cursors = System.Windows.Input.Cursors;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MenuItem = System.Windows.Controls.MenuItem;
-using MessageBox = System.Windows.MessageBox;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-using Timer = System.Timers.Timer;
-using UserControl = System.Windows.Controls.UserControl;
+﻿
 
 /*
  Custom Resharper Naming abbreviations
@@ -43,6 +6,52 @@ using UserControl = System.Windows.Controls.UserControl;
 */
 namespace DCSFlightpanels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Media;
+    using System.Reflection;
+    using System.Text;
+    using System.Timers;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Navigation;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.PanelUserControls;
+    using DCSFlightpanels.Properties;
+    using DCSFlightpanels.Radios.Emulators;
+    using DCSFlightpanels.Radios.PreProgrammed;
+    using DCSFlightpanels.Shared;
+    using DCSFlightpanels.Windows;
+
+    using DCS_BIOS;
+
+    using Microsoft.Win32;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Plugin;
+    using NonVisuals.Radios.SRS;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+
+    using Octokit;
+
+    using Application = System.Windows.Application;
+    using Button = System.Windows.Controls.Button;
+    using Cursors = System.Windows.Input.Cursors;
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using MenuItem = System.Windows.Controls.MenuItem;
+    using MessageBox = System.Windows.MessageBox;
+    using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+    using Timer = System.Timers.Timer;
+    using UserControl = System.Windows.Controls.UserControl;
 
     /*
      * REPORT_SIZE : size of a report in bits
@@ -98,6 +107,8 @@ namespace DCSFlightpanels
                 }
 
                 DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), _dcsfpProfilesSettingsFile);
+
+                PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
 
                 if (Settings.Default.RunMinimized)
                 {
@@ -1762,6 +1773,8 @@ namespace DCSFlightpanels
                     SRSListenerFactory.SetParams(Settings.Default.SRSPortFrom, Settings.Default.SRSIpTo, Settings.Default.SRSPortTo);
                     SRSListenerFactory.ReStart();
                 }
+
+                PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
             }
         }
 

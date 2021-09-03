@@ -1,8 +1,8 @@
-﻿using Color = System.Drawing.Color;
-using Font = System.Drawing.Font;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using Color = System.Drawing.Color;
+    using Font = System.Drawing.Font;
+
     public static class SettingsManager
     {
         public static Font DefaultFont

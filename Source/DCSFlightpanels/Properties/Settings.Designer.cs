@@ -418,5 +418,17 @@ namespace DCSFlightpanels.Properties {
                 this["LastSoundDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnablePlugin {
+            get {
+                return ((bool)(this["EnablePlugin"]));
+            }
+            set {
+                this["EnablePlugin"] = value;
+            }
+        }
     }
 }

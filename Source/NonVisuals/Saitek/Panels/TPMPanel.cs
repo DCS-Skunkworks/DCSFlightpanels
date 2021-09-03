@@ -8,6 +8,7 @@ using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using NonVisuals.Plugin;
 
     public class TPMPanel : SaitekPanel
     {
@@ -235,6 +236,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 foreach (var osCommand in _osCommandBindings)
                 {
                     if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && osCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
@@ -244,6 +246,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 foreach (var bipLinkTPM in _bipLinks)
                 {
                     if (!isFirstReport && bipLinkTPM.BIPLights.Count > 0 && bipLinkTPM.TPMSwitch == tpmPanelSwitch.TPMSwitch && bipLinkTPM.WhenTurnedOn == tpmPanelSwitch.IsOn)
@@ -252,6 +255,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 if (!isFirstReport && !found)
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -262,6 +266,11 @@ namespace NonVisuals.Saitek.Panels
                             break;
                         }
                     }
+                }
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.TPM, (int)tpmPanelSwitch.TPMSwitch, tpmPanelSwitch.IsOn, 0);
                 }
             }
         }

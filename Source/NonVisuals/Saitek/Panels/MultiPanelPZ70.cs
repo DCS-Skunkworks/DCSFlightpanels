@@ -8,6 +8,8 @@ using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using NonVisuals.Plugin;
+
     public class MultiPanelPZ70 : SaitekPanel
     {
         private int _lcdKnobSensitivity;
@@ -707,7 +709,13 @@ namespace NonVisuals.Saitek.Panels
                             }
                     }
                 }
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ70MultiPanel, (int)multiPanelKnob.MultiPanelPZ70Knob, multiPanelKnob.IsOn, 0);
+                }
             }
+
             UpdateLCD();
             if (!ForwardPanelEvent)
             {

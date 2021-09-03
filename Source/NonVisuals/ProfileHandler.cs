@@ -18,20 +18,21 @@ namespace NonVisuals
 
     public class ProfileHandler : IProfileHandlerListener, IIsDirty
     {
-        //Both directory and filename
-        private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
-        private string _lastProfileUsed = "";
-        private bool _isDirty;
-        private bool _isNewProfile;
-        //private readonly List<string> _listPanelSettingsData = new List<string>();
-        private readonly object _lockObject = new object();
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
         private const string OPEN_FILE_DIALOG_FILTER = "DCSFlightpanels (.bindings)|*.bindings";
-        //private DCSFPProfile _airframe = DCSFPProfile.NOFRAMELOADEDYET;
-        private DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
+
+        private static DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
+        private readonly object _lockObject = new object();
+        
+        //Both directory and filename
+        private string _filename = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)) + "\\" + "dcsfp_profile.bindings";
+        private string _lastProfileUsed = string.Empty;
+        private bool _isDirty;
+        private bool _isNewProfile;
+
         private bool _profileLoaded;
 
         private IHardwareConflictResolver _hardwareConflictResolver;
@@ -566,6 +567,11 @@ namespace NonVisuals
         public void SetIsDirty()
         {
             IsDirty = true;
+        }
+
+        public static DCSFPProfile SelectedProfile()
+        {
+            return _dcsfpProfile;
         }
 
         public DCSFPProfile Profile

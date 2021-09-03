@@ -1,7 +1,14 @@
 ﻿namespace SamplePanelEventPlugin
 {
-    using System;
     using System.ComponentModel.Composition;
+
+    using MEF;
+
+    /*
+     * Use this class as a template for your plugin.
+     * Reference the MEF project where the interface IPanelEventHandler is located.
+     */
+
 
     [Export(typeof(IPanelEventHandler))]
     public class PanelEventHandler : IPanelEventHandler
@@ -14,12 +21,12 @@
 
         public string PluginName => "Sample Plugin";
 
-        public void PanelEvent(string profile, string panelHidId, int panelId, int switchId, int eventType, int extraInfo)
+        public void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, int extraInfo)
         {
             /*
              * Your code here
              */
-            PanelEventFileWriter.WriteInfo(profile, panelHidId, panelId, switchId, eventType, extraInfo);
+            PanelEventFileWriter.WriteInfo(profile, panelHidId, panelId, switchId, pressed, extraInfo);
         }
     }
 }

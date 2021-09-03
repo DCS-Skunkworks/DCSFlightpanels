@@ -935,6 +935,9 @@
     <SplashScreen Include="Images\dcs_screenshot_by_derbysieger_splash.png" />
     <Resource Include="Images\BIP Saitek2.jpg" />
     <Resource Include="Images\sidepanel.png" />
+    <Content Include="Extensions\readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Settings\dcsfp_profiles.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

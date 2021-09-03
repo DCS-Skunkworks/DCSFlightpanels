@@ -1,9 +1,5 @@
-﻿namespace SamplePanelEventPlugin
+﻿namespace MEF
 {
-    /*
-     * Important
-     * Most current version of this file is located in DCSFlightpanels.NonVisuals.Plugin
-     */
     public interface IPanelEventHandler
     {
         /// <summary>
@@ -36,12 +32,12 @@
         /// <param name="switchId">
         /// Each panel has its own enum describing the switches/buttons/knobs (Switches.cs)
         /// </param>
-        /// <param name="eventType">
+        /// <param name="pressed">
         /// Releases or Pressed
         /// </param>
         /// <param name="extraInfo">
         /// Can contain extra information about the event.
         /// </param>
-        void PanelEvent(string profile, string panelHidId, int panelId, int switchId, int eventType, int extraInfo);
+        void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, int extraInfo);
     }
 }

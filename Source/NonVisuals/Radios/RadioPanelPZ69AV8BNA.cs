@@ -9,6 +9,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using NonVisuals.Plugin;
+
     public class RadioPanelPZ69AV8BNA : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
         private CurrentAV8BNARadioMode _currentUpperRadioMode = CurrentAV8BNARadioMode.COMM1;
@@ -606,7 +608,13 @@ namespace NonVisuals.Radios
                                 break;
                             }
                     }
+
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                    }
                 }
+
                 AdjustFrequency(hashSet);
             }
         }

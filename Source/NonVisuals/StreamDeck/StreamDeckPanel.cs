@@ -17,6 +17,8 @@ using Theraot.Core;
 
 namespace NonVisuals.StreamDeck
 {
+    using NonVisuals.Plugin;
+
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
         private IStreamDeckBoard _streamDeckBoard;
@@ -24,7 +26,7 @@ namespace NonVisuals.StreamDeck
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
-
+        private GamingPanelEnum _panelType;
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
 
         private int _buttonCount = 0;
@@ -35,6 +37,7 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
+            _panelType = panelType;
             switch (panelType)
             {
                 case GamingPanelEnum.StreamDeckMini:
@@ -226,6 +229,42 @@ namespace NonVisuals.StreamDeck
             else
             {
                 streamDeckButton.DoRelease(CancellationToken.None);
+            }
+
+            var pluginPanel = PluginGamingPanelEnum.Unknown;
+
+            switch (_panelType)
+            {
+                case GamingPanelEnum.StreamDeckMini:
+                    {
+                        pluginPanel = PluginGamingPanelEnum.StreamDeckMini;
+                        break;
+                    }
+                case GamingPanelEnum.StreamDeck:
+                    {
+                        pluginPanel = PluginGamingPanelEnum.StreamDeck;
+                        break;
+                    }
+                case GamingPanelEnum.StreamDeckV2:
+                    {
+                        pluginPanel = PluginGamingPanelEnum.StreamDeckV2;
+                        break;
+                    }
+                case GamingPanelEnum.StreamDeckMK2:
+                    {
+                        pluginPanel = PluginGamingPanelEnum.StreamDeckMK2;
+                        break;
+                    }
+                case GamingPanelEnum.StreamDeckXL:
+                    {
+                        pluginPanel = PluginGamingPanelEnum.StreamDeckXL;
+                        break;
+                    }
+            }
+
+            if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+            {
+                PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)pluginPanel, (int)streamDeckButton.StreamDeckButtonName, e.IsDown, 0);
             }
         }
 

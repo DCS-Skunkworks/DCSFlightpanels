@@ -10,6 +10,8 @@ using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using NonVisuals.Plugin;
+
     public enum SwitchPanelPZ55LEDPosition : byte
     {
         UP = 0x0,
@@ -19,6 +21,8 @@ namespace NonVisuals.Saitek.Panels
 
     public class SwitchPanelPZ55 : SaitekPanel
     {
+        private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new List<DcsOutputAndColorBindingPZ55>();
+        private readonly object _dcsBiosDataReceivedLock = new object();
         private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
         private List<OSCommandBindingPZ55> _osCommandBindings = new List<OSCommandBindingPZ55>();
@@ -26,8 +30,6 @@ namespace NonVisuals.Saitek.Panels
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledRightColor = SwitchPanelPZ55LEDs.ALL_DARK;
-        private readonly List<DcsOutputAndColorBindingPZ55> _listColorOutputBinding = new List<DcsOutputAndColorBindingPZ55>();
-        private readonly object _dcsBiosDataReceivedLock = new object();
         private bool _manualLandingGearLeds;
         private Thread _manualLandingGearThread;
 
@@ -37,14 +39,15 @@ namespace NonVisuals.Saitek.Panels
             {
                 throw new ArgumentException();
             }
-            //Fixed values
+
+            // Fixed values
             VendorId = 0x6A3;
             ProductId = 0xD67;
             CreateSwitchKeys();
             Startup();
         }
 
-        public sealed override void Startup()
+        public override sealed void Startup()
         {
             try
             {
@@ -327,16 +330,17 @@ namespace NonVisuals.Saitek.Panels
 
             foreach (var switchPanelKeyObject in hashSet)
             {
-                //Looks which switches has been switched and sees whether any key emulation has been tied to them.
+                // Looks which switches has been switched and sees whether any key emulation has been tied to them.
                 var switchPanelKey = (SwitchPanelKey)switchPanelKeyObject;
                 var found = false;
 
-                //Look if leds are manually operated
+                // Look if leds are manually operated
                 if (!isFirstReport && _manualLandingGearLeds)
                 {
                     if (switchPanelKey.SwitchPanelPZ55Key == SwitchPanelPZ55Keys.LEVER_GEAR_UP && switchPanelKey.IsOn)
                     {
                         _manualLandingGearThread?.Abort();
+
                         // Changed Lights to go DARK when gear level is selected to UP, instead of RED.
                         _manualLandingGearThread = new Thread(() => SetLandingGearLedsManually(PanelLEDColor.DARK));
                         _manualLandingGearThread.Start();
@@ -348,6 +352,7 @@ namespace NonVisuals.Saitek.Panels
                         _manualLandingGearThread.Start();
                     }
                 }
+
                 foreach (var keyBinding in _keyBindings)
                 {
                     if (!isFirstReport && keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
@@ -357,6 +362,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 foreach (var osCommand in _osCommandBindings)
                 {
                     if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && osCommand.WhenTurnedOn == switchPanelKey.IsOn)
@@ -366,6 +372,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 foreach (var bipLinkPZ55 in _bipLinks)
                 {
                     if (!isFirstReport && bipLinkPZ55.BIPLights.Count > 0 && bipLinkPZ55.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && bipLinkPZ55.WhenTurnedOn == switchPanelKey.IsOn)
@@ -374,6 +381,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 if (!isFirstReport && !found)
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -384,6 +392,11 @@ namespace NonVisuals.Saitek.Panels
                             break;
                         }
                     }
+                }
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)switchPanelKey.SwitchPanelPZ55Key, switchPanelKey.IsOn, 0);
                 }
             }
         }

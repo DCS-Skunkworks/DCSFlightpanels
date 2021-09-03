@@ -10,6 +10,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using NonVisuals.Plugin;
+
     public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
         private HashSet<RadioPanelKnobA10C> _radioPanelKnobs = new HashSet<RadioPanelKnobA10C>();
@@ -3729,8 +3731,12 @@ namespace NonVisuals.Radios
                             }
                     }
 
-
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                    }
                 }
+
                 AdjustFrequency(hashSet);
             }
         }

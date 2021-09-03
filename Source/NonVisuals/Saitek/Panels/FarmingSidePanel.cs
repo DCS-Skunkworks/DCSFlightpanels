@@ -8,6 +8,7 @@ using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using NonVisuals.Plugin;
 
     public class FarmingSidePanel : SaitekPanel
     {
@@ -232,6 +233,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 foreach (var osCommand in _osCommandBindings)
                 {
                     if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && osCommand.WhenTurnedOn == farmingPanelKey.IsOn)
@@ -241,6 +243,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 foreach (var bipLink in _bipLinks)
                 {
                     if (!isFirstReport && bipLink.BIPLights.Count > 0 && bipLink.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && bipLink.WhenTurnedOn == farmingPanelKey.IsOn)
@@ -249,6 +252,7 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
                 if (!isFirstReport && !found)
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -259,6 +263,11 @@ namespace NonVisuals.Saitek.Panels
                             break;
                         }
                     }
+                }
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.FarmingPanel, (int)farmingPanelKey.FarmingPanelMKKey, farmingPanelKey.IsOn, 0);
                 }
             }
         }
