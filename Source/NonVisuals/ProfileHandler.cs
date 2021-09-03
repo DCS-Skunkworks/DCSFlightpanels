@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Windows;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Properties;
-using Theraot.Core;
-using MessageBox = System.Windows.MessageBox;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Text;
+    using System.Windows;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.Properties;
+
+    using Theraot.Core;
+
+    using MessageBox = System.Windows.MessageBox;
+    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+    using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
     public class ProfileHandler : IProfileHandlerListener, IIsDirty
     {
@@ -584,6 +588,7 @@ namespace NonVisuals
                 {
                     SetIsDirty();
                 }
+
                 _dcsfpProfile = value;
                 Common.ResetEmulationModesFlag();
                 SetEmulationModeFlag();

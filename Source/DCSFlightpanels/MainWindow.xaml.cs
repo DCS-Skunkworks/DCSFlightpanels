@@ -74,7 +74,6 @@ namespace DCSFlightpanels
         private readonly List<UserControl> _panelUserControls = new List<UserControl>();
         private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_debug_log.txt";
         private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_error_log.txt";
-        private readonly string _dcsfpProfilesSettingsFile = AppDomain.CurrentDomain.BaseDirectory + "Settings\\dcsfp_profiles.txt";
 
         private readonly bool _doSearchForPanels = true;
         private HIDHandler _hidHandler;
@@ -106,7 +105,7 @@ namespace DCSFlightpanels
                     return;
                 }
 
-                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation), _dcsfpProfilesSettingsFile);
+                DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
 

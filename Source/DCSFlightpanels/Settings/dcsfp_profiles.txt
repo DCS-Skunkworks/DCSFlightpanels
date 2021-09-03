@@ -1,8 +1,0 @@
-# This file contains information on which internal profiles other than DCS-BIOS profiles.
-# Character : must not be used in settings as it is used as delimiter.
-# Format is [ID : Description : JSON File]
-
-# Internal
-1 : NoFrameLoadedYet : NOFRAMELOADEDYET
-2 : Key Emulation : KEYEMULATOR
-3 : Key Emulation with SRS support : KEYEMULATOR_SRS
