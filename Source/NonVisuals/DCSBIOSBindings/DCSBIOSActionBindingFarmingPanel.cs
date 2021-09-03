@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using DCS_BIOS;
 using NonVisuals.Saitek;
-using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.DCSBIOSBindings
 {

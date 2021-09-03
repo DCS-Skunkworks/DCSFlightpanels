@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using DCS_BIOS;
-using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 

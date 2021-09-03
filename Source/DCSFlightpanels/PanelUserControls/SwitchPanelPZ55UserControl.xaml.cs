@@ -1,26 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-using DCSFlightpanels.CustomControls;
-using DCSFlightpanels.Interfaces;
-using DCSFlightpanels.Windows;
-using NonVisuals;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using Image = System.Windows.Controls.Image;
-
-namespace DCSFlightpanels.PanelUserControls
+﻿namespace DCSFlightpanels.PanelUserControls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+    using DCSFlightpanels.CustomControls;
+    using DCSFlightpanels.Interfaces;
+    using DCSFlightpanels.Windows;
+
+    using NonVisuals;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+    using NonVisuals.Saitek.Switches;
+
+    using Brush = System.Windows.Media.Brush;
+    using Brushes = System.Windows.Media.Brushes;
+    using Image = System.Windows.Controls.Image;
+    using SwitchPanelPZ55Keys = NonVisuals.SwitchPanelPZ55Keys;
+
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
@@ -1200,8 +1205,8 @@ namespace DCSFlightpanels.PanelUserControls
         {
             try
             {
-                var window = new KeyPressReadingWindow(KeyPressLength.SecondAndHalf, "ESC");
-                window.ShowDialog();
+                //var panelEventHandler = new PanelEventHandler();
+                //panelEventHandler.PanelEvent("A-10C", "HIDID", (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, 1, 0);
             }
             catch (Exception ex)
             {

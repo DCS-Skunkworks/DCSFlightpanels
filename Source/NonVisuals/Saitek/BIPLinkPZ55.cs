@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek
 {

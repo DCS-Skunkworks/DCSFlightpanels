@@ -292,6 +292,7 @@ namespace ClassLibraryCommon
                         var fileStream = File.Create(_errorLog);
                         fileStream.Close();
                     }
+
                     var tempFile = Path.GetTempFileName();
                     using (var streamWriter = new StreamWriter(tempFile))
                     using (var streamReader = File.OpenText(_errorLog))
@@ -303,6 +304,7 @@ namespace ClassLibraryCommon
                             streamWriter.WriteLine(streamReader.ReadLine());
                         }
                     }
+
                     File.Copy(tempFile, _errorLog, true);
                 }
             }

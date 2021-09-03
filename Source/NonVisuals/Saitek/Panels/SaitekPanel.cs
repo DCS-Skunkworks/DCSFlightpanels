@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using ClassLibraryCommon;
 using DCS_BIOS;
 using HidLibrary;

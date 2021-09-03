@@ -1,6 +1,5 @@
 ﻿using System;
 using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek
 {

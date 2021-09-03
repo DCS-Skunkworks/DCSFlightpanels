@@ -1,5 +1,4 @@
 ﻿using System;
-using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek
 {

@@ -12,7 +12,6 @@ using System.Linq;
 using System.Media;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 using System.Windows.Navigation;
 using ClassLibraryCommon;
 using DCSFlightpanels.Interfaces;
@@ -54,32 +53,28 @@ namespace DCSFlightpanels
     /// </summary>
     public partial class MainWindow : IGamingPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
     {
-        public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardPanelEventArgs e);
-
-        public event ForwardKeyPressesChangedEventHandler OnForwardKeyPressesChanged;
-
-        private readonly bool _doSearchForPanels = true;
-        private HIDHandler _hidHandler;
-        private ProfileHandler _profileHandler;
+        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
+        private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
         private readonly string _windowName = "DCSFlightpanels ";
         private readonly Timer _exceptionTimer = new Timer(1000);
         private readonly Timer _statusMessagesTimer = new Timer(1000);
         private readonly Timer _dcsStopGearTimer = new Timer(5000);
         private readonly Timer _dcsCheckDcsBiosStatusTimer = new Timer(5000);
-        private DCSBIOS _dcsBios;
         private readonly List<string> _statusMessages = new List<string>();
         private readonly object _lockObjectStatusMessages = new object();
         private readonly List<UserControl> _panelUserControls = new List<UserControl>();
-        private DCSFPProfile _dcsfpProfile;
         private readonly string _debugLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_debug_log.txt";
         private readonly string _errorLogFile = AppDomain.CurrentDomain.BaseDirectory + "DCSFlightpanels_error_log.txt";
         private readonly string _dcsfpProfilesSettingsFile = AppDomain.CurrentDomain.BaseDirectory + "Settings\\dcsfp_profiles.txt";
+
+        private readonly bool _doSearchForPanels = true;
+        private HIDHandler _hidHandler;
+        private ProfileHandler _profileHandler;
+        private DCSBIOS _dcsBios;
+        private DCSFPProfile _dcsfpProfile;
         private bool _disablePanelEventsFromBeingRouted;
         private bool _isLoaded = false;
 
-        private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
-
-        private readonly List<GamingPanel> _gamingPanels = new List<GamingPanel>();
 
         public MainWindow()
         {
@@ -88,6 +83,10 @@ namespace DCSFlightpanels
             // Stop annoying "Cannot find source for binding with reference .... " from being shown
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
         }
+        
+        public delegate void ForwardKeyPressesChangedEventHandler(object sender, ForwardPanelEventArgs e);
+
+        public event ForwardKeyPressesChangedEventHandler OnForwardKeyPressesChanged;
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {

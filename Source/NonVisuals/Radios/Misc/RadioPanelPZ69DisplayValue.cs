@@ -1,6 +1,5 @@
 ﻿using System;
 using ClassLibraryCommon;
-using NonVisuals.Radios.Knobs;
 using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios.Misc
