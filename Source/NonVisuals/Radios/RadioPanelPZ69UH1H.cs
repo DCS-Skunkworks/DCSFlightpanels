@@ -12,6 +12,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class RadioPanelPZ69UH1H : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
@@ -923,7 +925,7 @@ namespace NonVisuals.Radios
                     //If not the sync would pick up any changes made by the user during the
                     //sync process
                     //225.95
-                    var filler = "";
+                    var filler = string.Empty;
                     if (_uhfSmallFrequencyStandby < 10)
                     {
                         filler = "0";
@@ -1078,7 +1080,7 @@ namespace NonVisuals.Radios
                     //If not the sync would pick up any changes made by the user during the
                     //sync process
                     //107.95
-                    var filler = "";
+                    var filler = string.Empty;
                     if (_vhfNavSmallFrequencyStandby < 10)
                     {
                         filler = "0";
@@ -1226,7 +1228,7 @@ namespace NonVisuals.Radios
 
                     //Large dial 30 - 75 [step of 1]
                     //Small dial 0.00-0.95 [step of 0.05]
-                    var filler = "";
+                    var filler = string.Empty;
                     if (_vhfFmSmallFrequencyStandby < 10)
                     {
                         filler = "0";
@@ -1654,12 +1656,12 @@ namespace NonVisuals.Radios
                                     lock (_lockUhfDialsObject3)
                                     {
                                         //251.75
-                                        var filler = "";
+                                        var filler = string.Empty;
                                         if (_uhfCockpitDial3Frequency < 10)
                                         {
                                             filler = "0";
                                         }
-                                        var fillerUhf = "";
+                                        var fillerUhf = string.Empty;
                                         if (_uhfSmallFrequencyStandby < 10)
                                         {
                                             fillerUhf = "0";
@@ -1680,12 +1682,12 @@ namespace NonVisuals.Radios
                                 lock (_lockVhfNavDialsObject2)
                                 {
                                     //107.75
-                                    var filler = "";
+                                    var filler = string.Empty;
                                     if (_vhfNavCockpitDial2Frequency < 10)
                                     {
                                         filler = "0";
                                     }
-                                    var fillerVhfNav = "";
+                                    var fillerVhfNav = string.Empty;
                                     if (_vhfNavSmallFrequencyStandby < 10)
                                     {
                                         fillerVhfNav = "0";
@@ -1715,7 +1717,7 @@ namespace NonVisuals.Radios
 
                                             var lcdFrequencyCockpit = double.Parse(activeFrequencyAsString, NumberFormatInfoFullDisplay);
 
-                                            var fillerVhfFm = "";
+                                            var fillerVhfFm = string.Empty;
                                             if (_vhfFmSmallFrequencyStandby < 10)
                                             {
                                                 fillerVhfFm = "0";
@@ -1774,12 +1776,12 @@ namespace NonVisuals.Radios
                                     lock (_lockUhfDialsObject3)
                                     {
                                         //251.75
-                                        var filler = "";
+                                        var filler = string.Empty;
                                         if (_uhfCockpitDial3Frequency < 10)
                                         {
                                             filler = "0";
                                         }
-                                        var fillerUhf = "";
+                                        var fillerUhf = string.Empty;
                                         if (_uhfSmallFrequencyStandby < 10)
                                         {
                                             fillerUhf = "0";
@@ -1800,12 +1802,12 @@ namespace NonVisuals.Radios
                                 lock (_lockVhfNavDialsObject2)
                                 {
                                     //107.75
-                                    var filler = "";
+                                    var filler = string.Empty;
                                     if (_vhfNavCockpitDial2Frequency < 10)
                                     {
                                         filler = "0";
                                     }
-                                    var fillerVhfNav = "";
+                                    var fillerVhfNav = string.Empty;
                                     if (_vhfNavSmallFrequencyStandby < 10)
                                     {
                                         fillerVhfNav = "0";
@@ -1834,7 +1836,7 @@ namespace NonVisuals.Radios
 
                                             var lcdFrequencyCockpit = double.Parse(activeFrequencyAsString, NumberFormatInfoFullDisplay);
 
-                                            var fillerVhfFm = "";
+                                            var fillerVhfFm = string.Empty;
                                             if (_vhfFmSmallFrequencyStandby < 10)
                                             {
                                                 fillerVhfFm = "0";
@@ -2742,7 +2744,7 @@ namespace NonVisuals.Radios
 
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 
@@ -2759,7 +2761,7 @@ namespace NonVisuals.Radios
                 NumberFormatInfoFullDisplay = new NumberFormatInfo();
                 NumberFormatInfoFullDisplay.NumberDecimalSeparator = ".";
                 NumberFormatInfoFullDisplay.NumberDecimalDigits = 4;
-                NumberFormatInfoFullDisplay.NumberGroupSeparator = "";
+                NumberFormatInfoFullDisplay.NumberGroupSeparator = string.Empty;
 
                 //VHF COMM
                 _vhfCommDcsbiosOutputCockpitFrequency = DCSBIOSControlLocator.GetDCSBIOSOutput("VHFCOMM_FREQ");
@@ -3132,7 +3134,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -3144,7 +3146,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

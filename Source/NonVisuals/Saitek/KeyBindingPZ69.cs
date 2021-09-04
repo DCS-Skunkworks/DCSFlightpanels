@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Collections.Generic;
+
+    using MEF;
+
     [Serializable]
     public class KeyBindingPZ69 : KeyBinding
     {
@@ -20,19 +21,21 @@ namespace NonVisuals.Saitek
             }
             if (settings.StartsWith("RadioPanelKey{"))
             {
-                //RadioPanelKey{1UpperCOM1}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // RadioPanelKey{1UpperCOM1}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //RadioPanelKey{1UpperCOM1}
+                // RadioPanelKey{1UpperCOM1}
                 var param0 = parameters[0].Trim().Substring(14);
-                //1UpperCOM1}
+
+                // 1UpperCOM1}
                 param0 = param0.Remove(param0.Length - 1, 1);
-                //1UpperCOM1
-                WhenTurnedOn = (param0.Substring(0, 1) == "1");
+
+                // 1UpperCOM1
+                WhenTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param0);
 
-                //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
+                // OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
                 OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[1]);
             }

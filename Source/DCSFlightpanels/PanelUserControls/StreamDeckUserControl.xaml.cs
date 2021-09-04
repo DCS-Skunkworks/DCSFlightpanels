@@ -271,7 +271,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_streamDeckPanel != null)
                 {
-                    TextBoxLogStreamDeck.Text = "";
+                    TextBoxLogStreamDeck.Text = string.Empty;
                     TextBoxLogStreamDeck.Text = _streamDeckPanel.BindingHash;
                     Clipboard.SetText(_streamDeckPanel.HIDInstanceId);
                     MessageBox.Show("Instance id has been copied to the ClipBoard.");

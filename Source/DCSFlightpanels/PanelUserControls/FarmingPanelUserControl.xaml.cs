@@ -20,6 +20,8 @@ using Image = System.Windows.Controls.Image;
 
 namespace DCSFlightpanels.PanelUserControls
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
     /// </summary>
@@ -219,7 +221,7 @@ namespace DCSFlightpanels.PanelUserControls
                 if (e.HidInstance.Equals(_farmingSidePanel.HIDInstanceId) && e.PanelType == GamingPanelEnum.FarmingPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogFarmingPanel.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogFarmingPanel.Text = string.Empty));
                 }
             }
             catch (Exception ex)
@@ -702,12 +704,12 @@ namespace DCSFlightpanels.PanelUserControls
                     }
                 }
 
-                foreach (var osCommand in _farmingSidePanel.OSCommandList)
+                foreach (var operatingSystemCommand in _farmingSidePanel.OSCommandList)
                 {
-                    var textBox = (FarmingPanelTextBox)GetTextBox(osCommand.FarmingPanelKey, osCommand.WhenTurnedOn);
-                    if (osCommand.OSCommandObject != null)
+                    var textBox = (FarmingPanelTextBox)GetTextBox(operatingSystemCommand.FarmingPanelKey, operatingSystemCommand.WhenTurnedOn);
+                    if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
+                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                 }
 
@@ -751,7 +753,7 @@ namespace DCSFlightpanels.PanelUserControls
             {
                 if (_farmingSidePanel != null)
                 {
-                    TextBoxLogFarmingPanel.Text = "";
+                    TextBoxLogFarmingPanel.Text = string.Empty;
                     TextBoxLogFarmingPanel.Text = _farmingSidePanel.HIDInstanceId;
                     Clipboard.SetText(_farmingSidePanel.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");

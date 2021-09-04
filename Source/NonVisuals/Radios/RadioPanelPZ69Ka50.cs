@@ -11,6 +11,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class RadioPanelPZ69Ka50 : RadioPanelPZ69Base, IRadioPanel
@@ -88,7 +90,7 @@ namespace NonVisuals.Radios
         private const string ADF_VOLUME_KNOB_COMMAND_DEC = "ADF_VOLUME -2500\n";
         /*private const string ADFModeSwitchAntenna = "ADF_CMPS_ANT INC\n";
         private const string ADFModeSwitchCompass = "ADF_CMPS_ANT DEC\n";
-        private string _adfModeSwitchLastSent = "";*/
+        private string _adfModeSwitchLastSent = string.Empty;*/
         private readonly object _lockADFModeDialObject = new object();
         private DCSBIOSOutput _adfModeDcsbiosOutput;
         private volatile uint _adfModeCockpitPos = 1;
@@ -891,7 +893,7 @@ namespace NonVisuals.Radios
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                            PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 
@@ -1526,7 +1528,7 @@ namespace NonVisuals.Radios
                                 //      " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = (_vhf1CockpitPresetDialPos + 1).ToString().PadLeft(2, ' ');
@@ -1537,7 +1539,7 @@ namespace NonVisuals.Radios
                             }
                         case CurrentKa50RadioMode.VHF2_R800L1:
                             {
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockR800L1DialsObject1)
                                 {
                                     try
@@ -1602,7 +1604,7 @@ namespace NonVisuals.Radios
                                 //Preset Channel Selector
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockADFDialObject1)
                                 {
                                     switch (_adfCockpitPresetDialPos)
@@ -1648,7 +1650,7 @@ namespace NonVisuals.Radios
                                 //      " 1" " 2" " 3" " 4" " 5" " 6" " 7" "8" "9" "10"
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = (_vhf1CockpitPresetDialPos + 1).ToString().PadLeft(2, ' ');
@@ -1659,7 +1661,7 @@ namespace NonVisuals.Radios
                             }
                         case CurrentKa50RadioMode.VHF2_R800L1:
                             {
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockR800L1DialsObject1)
                                 {
                                     frequencyAsString = _r800L1Freq1DialValues[_r800L1CockpitFreq1DialPos].ToString();
@@ -1716,7 +1718,7 @@ namespace NonVisuals.Radios
                             {
                                 //Preset Channel Selector
                                 //Pos     0    1    2    3    4    5    6    7    8    9   10   11   12
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockADFDialObject1)
                                 {
                                     switch (_adfCockpitPresetDialPos)
@@ -2327,7 +2329,7 @@ namespace NonVisuals.Radios
             {
                 Common.LogError( ex);
             }
-            return "";
+            return string.Empty;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
@@ -2338,7 +2340,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -2350,7 +2352,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
     }

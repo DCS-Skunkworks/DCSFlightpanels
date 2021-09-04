@@ -1,5 +1,7 @@
 ﻿namespace MEF
 {
+    using System.Collections.Generic;
+
     public interface IPanelEventHandler
     {
         /// <summary>
@@ -35,9 +37,10 @@
         /// <param name="pressed">
         /// Releases or Pressed
         /// </param>
-        /// <param name="extraInfo">
-        /// Can contain extra information about the event.
+        /// <param name="keySequence">
+        /// List of keys including delays
+        /// Is NULL if nothing is associated with the key/switch/knob
         /// </param>
-        void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, int extraInfo);
+        void PanelEvent(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence);
     }
 }

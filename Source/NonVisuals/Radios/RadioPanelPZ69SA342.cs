@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-
-
-namespace NonVisuals.Radios
+﻿namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using MEF;
+
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69SA342 : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
         private CurrentSA342RadioMode _currentUpperRadioMode = CurrentSA342RadioMode.VHFAM;
         private CurrentSA342RadioMode _currentLowerRadioMode = CurrentSA342RadioMode.VHFAM;
 
-        //118.175
+        // 118.175
         private enum VhfAmDigit
         {
             First,
@@ -36,8 +39,8 @@ namespace NonVisuals.Radios
         }
 
         /*COM1 SA342 VHF AM Radio*/
-        //Large dial 118-143
-        //Small dial 0-975
+        // Large dial 118-143
+        // Small dial 0-975
         private readonly int[] _dialPositionsWholeNumbers = new int[] { 0, 6553, 13107, 19660, 26214, 32767, 39321, 45874, 52428, 58981 };
         private readonly int[] _dialPositionsDecial100S = new int[] { 0, 16383, 32767, 49151 };
         private double _vhfAmBigFrequencyStandby = 118;
@@ -70,8 +73,8 @@ namespace NonVisuals.Radios
         private int _vhfAmRightDialSkipper;
 
         /*COM2 SA342 FM PR4G Radio*/
-        //Large dial 0-7 Presets 1, 2, 3, 4, 5, 6, 0, RG
-        //Small dial 
+        // Large dial 0-7 Presets 1, 2, 3, 4, 5, 6, 0, RG
+        // Small dial 
         private DCSBIOSOutput _fmRadioPresetDcsbiosOutput;
         private volatile uint _fmRadioPresetCockpitDialPos = 1;
         private const string FM_RADIO_PRESET_COMMAND_INC = "FM_RADIO_CHANNEL INC\n";
@@ -79,8 +82,8 @@ namespace NonVisuals.Radios
         private readonly object _lockFmRadioPresetObject = new object();
 
         /*NAV1 SA342 UHF Radio*/
-        //Large dial 225-399
-        //Small dial 000-975 where only 2 digits can be used
+        // Large dial 225-399
+        // Small dial 000-975 where only 2 digits can be used
         private readonly ClickSpeedDetector _uhfBigFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _uhfBigFreqDecreaseChangeMonitor = new ClickSpeedDetector(20);
         private readonly ClickSpeedDetector _uhfSmallFreqIncreaseChangeMonitor = new ClickSpeedDetector(20);
@@ -133,13 +136,13 @@ namespace NonVisuals.Radios
         private int _adf1SDialSkipper;
 
 
-        //DME NADIR
-        //Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
-        //Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
-        //Large
+        // DME NADIR
+        // Large dial Mode selector (VENT, C.M DEC, V.S DER, TPS CAP,P.P, BUT)
+        // Small dial Doppler modes ARRET, VEILLE, TERRE, MER, ANEMO,TEST SOL.
+        // Large
         private const string NADIR_MODE_COMMAND_INC = "NADIR_PARAMETER INC\n";
         private const string NADIR_MODE_COMMAND_DEC = "NADIR_PARAMETER DEC\n";
-        //Small
+        // Small
         private const string NADIR_DOPPLER_COMMAND_INC = "NADIR_DOPPLER_MODE INC\n";
         private const string NADIR_DOPPLER_COMMAND_DEC = "NADIR_DOPPLER_MODE DEC\n";
         private volatile uint _nadirModeCockpitValue = 0;
@@ -462,10 +465,10 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockVhfAm1SObject)
                                 {
-                                    var frequencyWholeNumbers = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit10SFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit1SFrequencyValue);
+                                    var frequencyWholeNumbers = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit10SFrequencyValue) + string.Empty + GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpit1SFrequencyValue);
                                     if (int.Parse(frequencyWholeNumbers) != desiredPositionDialWholeNumbers)
                                     {
-                                        var command = "";
+                                        var command = string.Empty;
                                         if (int.Parse(frequencyWholeNumbers) < desiredPositionDialWholeNumbers)
                                         {
                                      
@@ -496,7 +499,7 @@ namespace NonVisuals.Radios
                             {
                                 lock (_lockVhfAmDecimal100SObject)
                                 {
-                                    var cockpitFrequencyDecimals = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpitDecimal10SFrequencyValue) + "" + GetVhfAmDialFrequencyFromRawValue(1, _vhfAmCockpitDecimal100SFrequencyValue);
+                                    var cockpitFrequencyDecimals = GetVhfAmDialFrequencyFromRawValue(0, _vhfAmCockpitDecimal10SFrequencyValue) + string.Empty + GetVhfAmDialFrequencyFromRawValue(1, _vhfAmCockpitDecimal100SFrequencyValue);
                                     if (int.Parse(cockpitFrequencyDecimals) != desiredPositionDialDecimals)
                                     {
                                         /*Debug.Print("cockpit frequencyDecimals = " + int.Parse(frequencyDecimals));
@@ -687,7 +690,7 @@ namespace NonVisuals.Radios
                             //Frequency selector 4      VHFAM_FREQ4
                             //      "00" "25" "50" "75", only "00" and "50" used.
                             //Pos     0    1    2    3
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockVhfAm10SObject)
                             {
                                 frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10SFrequencyValue);
@@ -786,7 +789,7 @@ namespace NonVisuals.Radios
                             //Frequency selector 4      VHFAM_FREQ4
                             //      "00" "25" "50" "75", only "00" and "50" used.
                             //Pos     0    1    2    3
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockVhfAm10SObject)
                             {
                                 frequencyAsString = "1" + GetVhfAmDialFrequencyForPosition(VhfAmDigit.Second, _vhfAmCockpit10SFrequencyValue);
@@ -1587,7 +1590,7 @@ namespace NonVisuals.Radios
 
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 
@@ -1989,7 +1992,7 @@ namespace NonVisuals.Radios
                         }
                 }
             }
-            return "";
+            return string.Empty;
         }
 
         private bool SkipAdf100SDialChange()
@@ -2066,7 +2069,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -2078,7 +2081,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

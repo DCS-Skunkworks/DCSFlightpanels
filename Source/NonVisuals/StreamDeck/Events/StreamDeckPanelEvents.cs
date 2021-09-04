@@ -3,6 +3,8 @@ using System.ComponentModel;
 
 namespace NonVisuals.StreamDeck.Events
 {
+    using MEF;
+
     /*
      * Buttons change => update GUI to show new Button's configuration
      * Layer change => update GUI to show new Layer's configuration

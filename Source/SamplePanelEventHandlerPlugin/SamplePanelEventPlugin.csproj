@@ -47,8 +47,6 @@
     <Compile Include="PanelEventFileWriter.cs" />
     <Compile Include="PanelEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Switches.cs" />
-    <Compile Include="TestProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MEF\MEF.csproj">

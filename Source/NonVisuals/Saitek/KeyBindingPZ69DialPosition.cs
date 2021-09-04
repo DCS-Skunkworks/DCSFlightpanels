@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Collections.Generic;
+
+    using MEF;
+
     [Serializable]
     public class KeyBindingPZ69DialPosition : KeyBinding
     {
@@ -24,9 +25,9 @@ namespace NonVisuals.Saitek
             if (settings.StartsWith("RadioPanelKeyDialPos{"))
             {
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
-                var param0 = parameters[0].Replace("RadioPanelKeyDialPos{", "").Replace("}", "");
+                var param0 = parameters[0].Replace("RadioPanelKeyDialPos{", string.Empty).Replace("}", string.Empty);
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
-                var param1 = parameters[1].Replace("{", "").Replace("}", "");
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
                 WhenTurnedOn = param1.Substring(0, 1) == "1";
                 param1 = param1.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param1);
@@ -77,7 +78,8 @@ namespace NonVisuals.Saitek
                 {
                     continue;
                 }
-                //Clear all negators
+
+                // Clear all negators
                 keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Clear();
 
                 if (keyBindingPZ69.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperFreqSwitch ||
@@ -118,8 +120,10 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperLargeFreqWheelDec:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -129,8 +133,10 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperCOM1:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -140,63 +146,75 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperCOM2:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV1)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV1))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperNAV1:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV2)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperCOM2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV2))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperNAV2:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperADF)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperADF))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperADF:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperDME)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperNAV2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperDME))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperDME:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperADF || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperXPDR)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperADF || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.UpperXPDR))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.UpperXPDR:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -206,8 +224,10 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelInc:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -217,8 +237,10 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerLargeFreqWheelDec:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -228,8 +250,10 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerCOM1:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -239,63 +263,75 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerCOM2:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerCOM1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV1)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerCOM1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV1))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerNAV1:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerCOM2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV2)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerCOM2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV2))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerNAV2:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerADF)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV1 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerADF))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerADF:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerDME)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerNAV2 || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerDME))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerDME:
                             {
                                 foreach (var keyBinding in knobBindings)
                                 {
-                                    if (keyBinding != keyBindingPZ69 && keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerADF || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerXPDR)
+                                    if (keyBinding != keyBindingPZ69 && (keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerADF || keyBinding.RadioPanelPZ69Key == RadioPanelPZ69KnobsEmulator.LowerXPDR))
                                     {
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
+
                         case RadioPanelPZ69KnobsEmulator.LowerXPDR:
                             {
                                 foreach (var keyBinding in knobBindings)
@@ -305,6 +341,7 @@ namespace NonVisuals.Saitek
                                         keyBindingPZ69.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
                                     }
                                 }
+
                                 break;
                             }
                     }

@@ -1,50 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using DCS_BIOS;
-using System.Threading;
-using ClassLibraryCommon;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Saitek.Switches;
-
-namespace NonVisuals.Saitek.Panels
+﻿namespace NonVisuals.Saitek.Panels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using MEF;
+
+    using NonVisuals.DCSBIOSBindings;
     using NonVisuals.Plugin;
+    using NonVisuals.Saitek.Switches;
 
     public class MultiPanelPZ70 : SaitekPanel
     {
-        private int _lcdKnobSensitivity;
-        private volatile byte _knobSensitivitySkipper;
-        private HashSet<DCSBIOSActionBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ70>();
-        private HashSet<DCSBIOSOutputBindingPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingPZ70>();
-        private HashSet<KeyBindingPZ70> _knobBindings = new HashSet<KeyBindingPZ70>();
-        private List<OSCommandBindingPZ70> _osCommandBindings = new List<OSCommandBindingPZ70>();
-        private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
-        private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
-
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
         private readonly PZ70LCDButtonByteList _lcdButtonByteListHandler = new PZ70LCDButtonByteList();
-        //private volatile int _upperLcdValue = 0;
-        //private volatile int _lowerLcdValue = 0;
-
-
-        //0 - 40000
-        private int _altLCDKeyEmulatorValue = 0;
-        //-6000 - 6000
-        private int _vsLCDKeyEmulatorValue = 0;
-        //0-600
-        private int _iasLCDKeyEmulatorValue = 0;
-        //0-360
-        private int _hdgLCDKeyEmulatorValue = 0;
-        //0-360
-        private int _crsLCDKeyEmulatorValue = 0;
-
         private readonly ClickSpeedDetector _altLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
         private readonly ClickSpeedDetector _vsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
         private readonly ClickSpeedDetector _iasLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
         private readonly ClickSpeedDetector _hdgLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
         private readonly ClickSpeedDetector _crsLCDKeyEmulatorValueChangeMonitor = new ClickSpeedDetector(15);
 
+        private int _lcdKnobSensitivity;
+        private volatile byte _knobSensitivitySkipper;
+        private HashSet<DCSBIOSActionBindingPZ70> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ70>();
+        private HashSet<DCSBIOSOutputBindingPZ70> _dcsBiosLcdBindings = new HashSet<DCSBIOSOutputBindingPZ70>();
+        private HashSet<KeyBindingPZ70> _knobBindings = new HashSet<KeyBindingPZ70>();
+        private List<OSCommandBindingPZ70> _operatingSystemCommandBindings = new List<OSCommandBindingPZ70>();
+        private HashSet<BIPLinkPZ70> _bipLinks = new HashSet<BIPLinkPZ70>();
+        private PZ70DialPosition _pz70DialPosition = PZ70DialPosition.ALT;
+        
+        // 0 - 40000
+        private int _altLCDKeyEmulatorValue = 0;
+
+        // -6000 - 6000
+        private int _vsLCDKeyEmulatorValue = 0;
+
+        // 0-600
+        private int _iasLCDKeyEmulatorValue = 0;
+
+        // 0-360
+        private int _hdgLCDKeyEmulatorValue = 0;
+
+        // 0-360
+        private int _crsLCDKeyEmulatorValue = 0;
+        
         private long _doUpdatePanelLCD;
 
         public MultiPanelPZ70(HIDSkeleton hidSkeleton) : base(GamingPanelEnum.PZ70MultiPanel, hidSkeleton)
@@ -89,6 +93,7 @@ namespace NonVisuals.Saitek.Panels
             {
                 return;
             }
+
             UpdateCounter(e.Address, e.Data);
             foreach (var dcsbiosBindingLCDPZ70 in _dcsBiosLcdBindings)
             {
@@ -120,6 +125,7 @@ namespace NonVisuals.Saitek.Panels
                     }
                 }
             }
+
             UpdateLCD();
         }
 
@@ -131,8 +137,7 @@ namespace NonVisuals.Saitek.Panels
 
             var settings = genericPanelBinding.Settings;
             SettingsLoading = true;
-
-
+            
             foreach (var setting in settings)
             {
                 if (!setting.StartsWith("#") && setting.Length > 2)
@@ -146,9 +151,9 @@ namespace NonVisuals.Saitek.Panels
                     }
                     else if (setting.StartsWith("MultiPanelOSPZ70"))
                     {
-                        var osCommand = new OSCommandBindingPZ70();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
+                        var operatingSystemCommand = new OSCommandBindingPZ70();
+                        operatingSystemCommand.ImportSettings(setting);
+                        _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
                     else if (setting.StartsWith("MultiPanelDCSBIOSControl{"))
                     {
@@ -182,6 +187,7 @@ namespace NonVisuals.Saitek.Panels
             {
                 return null;
             }
+
             var result = new List<string>();
 
             foreach (var knobBinding in _knobBindings)
@@ -191,13 +197,15 @@ namespace NonVisuals.Saitek.Panels
                     result.Add(knobBinding.ExportSettings());
                 }
             }
-            foreach (var osCommand in _osCommandBindings)
+
+            foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
-                if (!osCommand.OSCommandObject.IsEmpty)
+                if (!operatingSystemCommand.OSCommandObject.IsEmpty)
                 {
-                    result.Add(osCommand.ExportSettings());
+                    result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
+
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
                 if (dcsBiosBinding.DCSBIOSInputs.Count > 0)
@@ -205,6 +213,7 @@ namespace NonVisuals.Saitek.Panels
                     result.Add(dcsBiosBinding.ExportSettings());
                 }
             }
+
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
                 if (dcsBiosBindingLCD.HasBinding)
@@ -212,6 +221,7 @@ namespace NonVisuals.Saitek.Panels
                     result.Add(dcsBiosBindingLCD.ExportSettings());
                 }
             }
+
             foreach (var bipLink in _bipLinks)
             {
                 if (bipLink.BIPLights.Count > 0)
@@ -219,12 +229,13 @@ namespace NonVisuals.Saitek.Panels
                     result.Add(bipLink.ExportSettings());
                 }
             }
+
             return result;
         }
 
         public string GetKeyPressForLoggingPurposes(MultiPanelKnob multiPanelKnob)
         {
-            var result = "";
+            var result = string.Empty;
             foreach (var knobBinding in _knobBindings)
             {
                 if (knobBinding.DialPosition == _pz70DialPosition && knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
@@ -232,6 +243,7 @@ namespace NonVisuals.Saitek.Panels
                     result = knobBinding.OSKeyPress.GetNonFunctioningVirtualKeyCodesAsString();
                 }
             }
+
             return result;
         }
 
@@ -245,7 +257,7 @@ namespace NonVisuals.Saitek.Panels
         public override void ClearSettings(bool setIsDirty = false)
         {
             _knobBindings.Clear();
-            _osCommandBindings.Clear();
+            _operatingSystemCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _dcsBiosLcdBindings.Clear();
             _bipLinks.Clear();
@@ -309,8 +321,8 @@ namespace NonVisuals.Saitek.Panels
 
         protected override void GamingPanelKnobChanged(bool isFirstReport, IEnumerable<object> hashSet)
         {
-            //Set _selectedMode and LCD button statuses
-            //and performs the actual actions for key presses
+            // Set _selectedMode and LCD button statuses
+            // and performs the actual actions for key presses
             PZ70SwitchChanged(isFirstReport, hashSet);
         }
 
@@ -323,7 +335,8 @@ namespace NonVisuals.Saitek.Panels
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
+            // This must accept lists
             var found = false;
             foreach (var knobBinding in _knobBindings)
             {
@@ -340,6 +353,7 @@ namespace NonVisuals.Saitek.Panels
                     found = true;
                 }
             }
+
             if (!found && !string.IsNullOrEmpty(keyPress))
             {
                 var knobBinding = new KeyBindingPZ70();
@@ -349,11 +363,12 @@ namespace NonVisuals.Saitek.Panels
                 knobBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
                 _knobBindings.Add(knobBinding);
             }
+
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             SetIsDirty();
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
             var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
 
@@ -363,7 +378,7 @@ namespace NonVisuals.Saitek.Panels
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
             var found = false;
             foreach (var knobBinding in _knobBindings)
             {
@@ -381,6 +396,7 @@ namespace NonVisuals.Saitek.Panels
                     break;
                 }
             }
+
             if (!found && keySequence.Count > 0)
             {
                 var knobBinding = new KeyBindingPZ70();
@@ -390,6 +406,7 @@ namespace NonVisuals.Saitek.Panels
                 knobBinding.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
                 _knobBindings.Add(knobBinding);
             }
+
             _knobBindings = KeyBindingPZ70.SetNegators(_knobBindings);
             SetIsDirty();
         }
@@ -404,7 +421,7 @@ namespace NonVisuals.Saitek.Panels
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
             var found = false;
             foreach (var dcsBiosBinding in _dcsBiosBindings)
             {
@@ -416,6 +433,7 @@ namespace NonVisuals.Saitek.Panels
                     break;
                 }
             }
+
             if (!found)
             {
                 var dcsBiosBinding = new DCSBIOSActionBindingPZ70();
@@ -426,6 +444,7 @@ namespace NonVisuals.Saitek.Panels
                 dcsBiosBinding.Description = description;
                 _dcsBiosBindings.Add(dcsBiosBinding);
             }
+
             SetIsDirty();
         }
 
@@ -441,6 +460,7 @@ namespace NonVisuals.Saitek.Panels
                     break;
                 }
             }
+
             if (!found)
             {
                 var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70();
@@ -449,6 +469,7 @@ namespace NonVisuals.Saitek.Panels
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
+
             SetIsDirty();
         }
 
@@ -464,6 +485,7 @@ namespace NonVisuals.Saitek.Panels
                     break;
                 }
             }
+
             if (!found)
             {
                 var dcsBiosBindingLCD = new DCSBIOSOutputBindingPZ70();
@@ -472,12 +494,13 @@ namespace NonVisuals.Saitek.Panels
                 dcsBiosBindingLCD.PZ70LCDPosition = pz70LCDPosition;
                 _dcsBiosLcdBindings.Add(dcsBiosBindingLCD);
             }
+
             SetIsDirty();
         }
 
         public void AddOrUpdateDCSBIOSLcdBinding(PZ70LCDPosition pz70LCDPosition)
         {
-            //Removes config
+            // Removes config
             foreach (var dcsBiosBindingLCD in _dcsBiosLcdBindings)
             {
                 if (dcsBiosBindingLCD.DialPosition == _pz70DialPosition && dcsBiosBindingLCD.PZ70LCDPosition == pz70LCDPosition)
@@ -486,6 +509,7 @@ namespace NonVisuals.Saitek.Panels
                     break;
                 }
             }
+
             SetIsDirty();
         }
 
@@ -500,7 +524,7 @@ namespace NonVisuals.Saitek.Panels
                 SetIsDirty();
                 return;
             }
-            //This must accept lists
+
             var found = false;
 
             foreach (var tmpBipLink in _bipLinks)
@@ -514,39 +538,42 @@ namespace NonVisuals.Saitek.Panels
                     break;
                 }
             }
+
             if (!found && bipLinkPZ70.BIPLights.Count > 0)
             {
                 bipLinkPZ70.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
                 bipLinkPZ70.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
                 _bipLinks.Add(bipLinkPZ70);
             }
+
             SetIsDirty();
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
             var pz70SwitchOnOff = (PZ70SwitchOnOff)panelSwitchOnOff;
 
-            //This must accept lists
             var found = false;
 
-            foreach (var osCommandBinding in _osCommandBindings)
+            foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
             {
-                if (osCommandBinding.DialPosition == _pz70DialPosition && osCommandBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && osCommandBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
+                if (operatingSystemCommandBinding.DialPosition == _pz70DialPosition && operatingSystemCommandBinding.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && operatingSystemCommandBinding.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                 {
-                    osCommandBinding.OSCommandObject = osCommand;
+                    operatingSystemCommandBinding.OSCommandObject = operatingSystemCommand;
                     found = true;
                     break;
                 }
             }
+
             if (!found)
             {
-                var osCommandBindingPZ70 = new OSCommandBindingPZ70();
-                osCommandBindingPZ70.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
-                osCommandBindingPZ70.OSCommandObject = osCommand;
-                osCommandBindingPZ70.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
-                _osCommandBindings.Add(osCommandBindingPZ70);
+                var operatingSystemCommandBindingPZ70 = new OSCommandBindingPZ70();
+                operatingSystemCommandBindingPZ70.MultiPanelPZ70Knob = pz70SwitchOnOff.Switch;
+                operatingSystemCommandBindingPZ70.OSCommandObject = operatingSystemCommand;
+                operatingSystemCommandBindingPZ70.WhenTurnedOn = pz70SwitchOnOff.ButtonState;
+                _operatingSystemCommandBindings.Add(operatingSystemCommandBindingPZ70);
             }
+
             SetIsDirty();
         }
 
@@ -567,6 +594,7 @@ namespace NonVisuals.Saitek.Panels
                     }
                 }
             }
+
             if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.DCSBIOS)
             {
                 foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -578,6 +606,7 @@ namespace NonVisuals.Saitek.Panels
                     }
                 }
             }
+
             if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.BIPS)
             {
                 foreach (var bipLink in _bipLinks)
@@ -589,23 +618,24 @@ namespace NonVisuals.Saitek.Panels
                     }
                 }
             }
+
             if (controlListPZ70 == ControlListPZ70.ALL || controlListPZ70 == ControlListPZ70.OSCOMMAND)
             {
-                OSCommandBindingPZ70 osCommandBindingPZ70 = null;
-                for (int i = 0; i < _osCommandBindings.Count; i++)
+                OSCommandBindingPZ70 operatingSystemCommandBindingPZ70 = null;
+                for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
                 {
-                    var osCommand = _osCommandBindings[i];
+                    var operatingSystemCommand = _operatingSystemCommandBindings[i];
 
-                    if (osCommand.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
+                    if (operatingSystemCommand.MultiPanelPZ70Knob == pz70SwitchOnOff.Switch && operatingSystemCommand.WhenTurnedOn == pz70SwitchOnOff.ButtonState)
                     {
-                        osCommandBindingPZ70 = _osCommandBindings[i];
+                        operatingSystemCommandBindingPZ70 = _operatingSystemCommandBindings[i];
                         found = true;
                     }
                 }
 
-                if (osCommandBindingPZ70 != null)
+                if (operatingSystemCommandBindingPZ70 != null)
                 {
-                    _osCommandBindings.Remove(osCommandBindingPZ70);
+                    _operatingSystemCommandBindings.Remove(operatingSystemCommandBindingPZ70);
                 }
             }
 
@@ -709,11 +739,6 @@ namespace NonVisuals.Saitek.Panels
                             }
                     }
                 }
-
-                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                {
-                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ70MultiPanel, (int)multiPanelKnob.MultiPanelPZ70Knob, multiPanelKnob.IsOn, 0);
-                }
             }
 
             UpdateLCD();
@@ -733,7 +758,7 @@ namespace NonVisuals.Saitek.Panels
                  * Instead the buttons global bool value must be used!
                  * 
                  */
-                if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) && multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
+                if (Common.IsEmulationModesFlagSet(EmulationMode.KeyboardEmulationOnly) && (multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC))
                 {
                     Interlocked.Add(ref _doUpdatePanelLCD, 1);
                     LCDDialChangesHandle(multiPanelKnob);
@@ -741,16 +766,30 @@ namespace NonVisuals.Saitek.Panels
                 }
 
                 var found = false;
+                var keyBindingFound = false;
                 foreach (var knobBinding in _knobBindings)
                 {
                     if (!isFirstReport && knobBinding.DialPosition == _pz70DialPosition && knobBinding.OSKeyPress != null && knobBinding.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && knobBinding.WhenTurnedOn == multiPanelKnob.IsOn)
                     {
                         if (knobBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC || knobBinding.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_DEC)
                         {
-                            if (!SkipCurrentLcdKnobChange())
+                            keyBindingFound = true;
+                            if (!PluginManager.DisableKeyboardAPI && !SkipCurrentLcdKnobChange())
                             {
                                 knobBinding.OSKeyPress.Execute(new CancellationToken());
                             }
+                            
+                            if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                            {
+                                PluginManager.Get().PanelEventHandler.PanelEvent(
+                                    ProfileHandler.SelectedProfile().Description, 
+                                    HIDInstanceId, 
+                                    (int)PluginGamingPanelEnum.PZ70MultiPanel, 
+                                    (int)multiPanelKnob.MultiPanelPZ70Knob, 
+                                    multiPanelKnob.IsOn,
+                                    knobBinding.OSKeyPress.KeySequence);
+                            }
+
                             found = true;
                         }
                         else
@@ -761,6 +800,18 @@ namespace NonVisuals.Saitek.Panels
                         break;
                     }
                 }
+
+                if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                        ProfileHandler.SelectedProfile().Description,
+                        HIDInstanceId,
+                        (int)PluginGamingPanelEnum.PZ70MultiPanel,
+                        (int)multiPanelKnob.MultiPanelPZ70Knob,
+                        multiPanelKnob.IsOn,
+                        null);
+                }
+
                 if (!isFirstReport && !found)
                 {
                     foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -772,15 +823,17 @@ namespace NonVisuals.Saitek.Panels
                         }
                     }
                 }
-                foreach (var osCommand in _osCommandBindings)
+
+                foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
                 {
-                    if (!isFirstReport && osCommand.DialPosition == _pz70DialPosition && osCommand.OSCommandObject != null && osCommand.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && osCommand.WhenTurnedOn == multiPanelKnob.IsOn)
+                    if (!isFirstReport && operatingSystemCommand.DialPosition == _pz70DialPosition && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && operatingSystemCommand.WhenTurnedOn == multiPanelKnob.IsOn)
                     {
-                        osCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
                         break;
                     }
                 }
+
                 foreach (var bipLinkPZ70 in _bipLinks)
                 {
                     if (!isFirstReport && bipLinkPZ70.BIPLights.Count > 0 && bipLinkPZ70.MultiPanelPZ70Knob == multiPanelKnob.MultiPanelPZ70Knob && bipLinkPZ70.WhenTurnedOn == multiPanelKnob.IsOn)
@@ -799,7 +852,7 @@ namespace NonVisuals.Saitek.Panels
                 return;
             }
 
-            bool increase = multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC;
+            var increase = multiPanelKnob.MultiPanelPZ70Knob == MultiPanelPZ70Knobs.LCD_WHEEL_INC;
             switch (_pz70DialPosition)
             {
                 case PZ70DialPosition.ALT:
@@ -1288,8 +1341,8 @@ namespace NonVisuals.Saitek.Panels
 
         public List<OSCommandBindingPZ70> OSCommandHashSet
         {
-            get => _osCommandBindings;
-            set => _osCommandBindings = value;
+            get => _operatingSystemCommandBindings;
+            set => _operatingSystemCommandBindings = value;
         }
 
         public HashSet<DCSBIOSOutputBindingPZ70> LCDBindings

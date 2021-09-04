@@ -1,21 +1,20 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using ClassLibraryCommon;
-using DCSFlightpanels.Bills;
-
-namespace DCSFlightpanels.CustomControls
+﻿namespace DCSFlightpanels.CustomControls
 {
-    public abstract class TextBoxBaseStreamDeckInput : TextBox
-    {
-        public BillBaseInput Bill { get; set; }
-    }
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
+    using ClassLibraryCommon;
+
+    using DCSFlightpanels.Bills;
+
 
     public abstract class TextBoxBaseInput : TextBox
     {
         public BillBaseInput Bill { get; set; }
+
         protected abstract BillBaseInput GetBill { get; }
 
         protected TextBoxBaseInput()
@@ -32,7 +31,7 @@ namespace DCSFlightpanels.CustomControls
         {
             try
             {
-                var textBox = ((TextBoxBaseInput)sender);
+                var textBox = (TextBoxBaseInput)sender;
                 if (textBox.ContextMenu == null)
                 {
                     return;
@@ -41,7 +40,8 @@ namespace DCSFlightpanels.CustomControls
                 if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.Control)
                 {
                     textBox.ContextMenu.IsOpen = true;
-                    ((ContextMenuPanelTextBox)textBox.ContextMenu).SetVisibility(textBox.GetBill.IsEmpty(),
+                    ((ContextMenuPanelTextBox)textBox.ContextMenu).SetVisibility(
+                        textBox.GetBill.IsEmpty(),
                         textBox.GetBill.ContainsKeyStroke(),
                         textBox.GetBill.ContainsKeySequence(),
                         textBox.GetBill.ContainsDCSBIOS(),
@@ -51,7 +51,8 @@ namespace DCSFlightpanels.CustomControls
                 }
                 else if (e.Key == Key.V && Keyboard.Modifiers == ModifierKeys.Control)
                 {
-                    var menuItemVisibilities = ((ContextMenuPanelTextBox)textBox.ContextMenu).GetVisibility(textBox.GetBill.IsEmpty(), 
+                    var menuItemVisibilities = ((ContextMenuPanelTextBox)textBox.ContextMenu).GetVisibility(
+                        textBox.GetBill.IsEmpty(), 
                         textBox.GetBill.ContainsKeyStroke(), 
                         textBox.GetBill.ContainsKeySequence(), 
                         textBox.GetBill.ContainsDCSBIOS(), 
@@ -170,16 +171,5 @@ namespace DCSFlightpanels.CustomControls
                 Common.ShowErrorMessageBox(ex);
             }
         }
-    }
-
-
-}
-
-
-namespace DCSFlightpanels.CustomControls
-{
-    public class TextBoxBaseOutput : TextBox
-    {
-        public BillBaseOutput Bill { get; set; }
     }
 }

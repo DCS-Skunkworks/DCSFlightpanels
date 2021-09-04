@@ -10,10 +10,12 @@ using ThreadState = System.Threading.ThreadState;
 
 namespace NonVisuals
 {
+    using MEF;
+
     [Serializable]
     public class KeyPress
     {
-        private SortedList<int, KeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, KeyPressInfo>();
+        private SortedList<int, IKeyPressInfo> _sortedKeyPressInfoList = new SortedList<int, IKeyPressInfo>();
         private string _description = "Key press sequence";
         [NonSerialized] private Thread _executingThread;
 
@@ -54,7 +56,7 @@ namespace NonVisuals
             _description = description;
         }
 
-        public KeyPress(string information, SortedList<int, KeyPressInfo> sortedList)
+        public KeyPress(string information, SortedList<int, IKeyPressInfo> sortedList)
         {
             _description = information;
             _sortedKeyPressInfoList = sortedList;
@@ -116,7 +118,7 @@ namespace NonVisuals
             }
         }
 
-        private void ExecuteThreaded(CancellationToken cancellationToken, SortedList<int, KeyPressInfo> sortedList)
+        private void ExecuteThreaded(CancellationToken cancellationToken, SortedList<int, IKeyPressInfo> sortedList)
         {
             try
             {
@@ -269,7 +271,7 @@ namespace NonVisuals
             }
         }
 
-        public string GetVirtualKeyCodesAsString(KeyPressInfo keyPressInfo)
+        public string GetVirtualKeyCodesAsString(IKeyPressInfo keyPressInfo)
         {
             var result = new StringBuilder();
 
@@ -441,8 +443,8 @@ namespace NonVisuals
                 {
                     var keyPressInfo = new KeyPressInfo();
                     var entry = array[i];
-                    entry = entry.Replace("[", "");
-                    entry = entry.Replace("]", "");
+                    entry = entry.Replace("[", string.Empty);
+                    entry = entry.Replace("]", string.Empty);
                     //FiftyMilliSec,VK_A,FiftyMilliSec
                     keyPressInfo.LengthOfBreak = (KeyPressLength)Enum.Parse(typeof(KeyPressLength), entry.Substring(0, entry.IndexOf(",", StringComparison.Ordinal)));
                     entry = entry.Substring(entry.IndexOf(",", StringComparison.Ordinal) + 1);
@@ -509,7 +511,7 @@ namespace NonVisuals
         }
 
         [JsonProperty("KeySequence", Required = Required.Default)]
-        public SortedList<int, KeyPressInfo> KeySequence
+        public SortedList<int, IKeyPressInfo> KeySequence
         {
             get => _sortedKeyPressInfoList;
             set => _sortedKeyPressInfoList = value;

@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Collections.Generic;
+
+    using MEF;
+
+    using NonVisuals.Saitek.Panels;
+
     [Serializable]
     public class KeyBindingPZ70 : KeyBinding
     {
@@ -21,21 +24,22 @@ namespace NonVisuals.Saitek
             }
             if (settings.StartsWith("MultiPanelKnob{"))
             {
-                //MultiPanelKey{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // MultiPanelKey{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //MultiPanelKey{ALT}
-                var param0 = parameters[0].Replace("MultiPanelKnob{", "").Replace("}", "");
+                // MultiPanelKey{ALT}
+                var param0 = parameters[0].Replace("MultiPanelKnob{", string.Empty).Replace("}", string.Empty);
                 _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
 
-                //{1KNOB_ENGINE_LEFT}
-                var param1 = parameters[1].Replace("{", "").Replace("}", "");
-                //1KNOB_ENGINE_LEFT
+                // {1KNOB_ENGINE_LEFT}
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
+
+                // 1KNOB_ENGINE_LEFT
                 WhenTurnedOn = param1.Substring(0, 1) == "1";
                 param1 = param1.Substring(1);
                 _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), param1);
 
-                //OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
+                // OSKeyPress{[FiftyMilliSec,RCONTROL + RSHIFT + VK_R][FiftyMilliSec,RCONTROL + RSHIFT + VK_W]}
                 OSKeyPress = new KeyPress();
                 OSKeyPress.ImportString(parameters[2]);
             }

@@ -2,19 +2,22 @@
 //  added by Capt Zeen
 //
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Radios.Knobs;
-using NonVisuals.Saitek;
-
-
 namespace NonVisuals.Radios
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using MEF;
+
+    using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
+    using NonVisuals.Radios.Knobs;
+    using NonVisuals.Saitek;
 
     public class RadioPanelPZ69FA18C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
@@ -469,11 +472,11 @@ namespace NonVisuals.Radios
                 {
                     case CurrentFA18CRadioMode.COMM1:    // show comm1 frequencies in upper panel
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
 
                             uint integerCOMM1 = _comm1CockpitFreq / 100;
                             uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
-                            frequencyAsString = "" + integerCOMM1;
+                            frequencyAsString = string.Empty + integerCOMM1;
                             frequencyAsString = frequencyAsString + ".";
                             frequencyAsString = frequencyAsString + decimalCOMM1;
 
@@ -502,10 +505,10 @@ namespace NonVisuals.Radios
 
                     case CurrentFA18CRadioMode.COMM2:     //  show comm2 frequencies in upper panel
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             uint integerCOMM2 = _comm2CockpitFreq / 100;
                             uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
-                            frequencyAsString = "" + integerCOMM2;
+                            frequencyAsString = string.Empty + integerCOMM2;
                             frequencyAsString = frequencyAsString + ".";
                             frequencyAsString = frequencyAsString + decimalCOMM2;
 
@@ -599,11 +602,11 @@ namespace NonVisuals.Radios
 
                     case CurrentFA18CRadioMode.COMM1:     //  show comm1 frequencies in lower panel
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
 
                             uint integerCOMM1 = _comm1CockpitFreq / 100;
                             uint decimalCOMM1 = _comm1CockpitFreq - (integerCOMM1 * 100);
-                            frequencyAsString = "" + integerCOMM1;
+                            frequencyAsString = string.Empty + integerCOMM1;
                             frequencyAsString = frequencyAsString + ".";
                             frequencyAsString = frequencyAsString + decimalCOMM1;
 
@@ -630,10 +633,10 @@ namespace NonVisuals.Radios
 
                     case CurrentFA18CRadioMode.COMM2:     //  show comm2 frequencies in lower panel
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             uint integerCOMM2 = _comm2CockpitFreq / 100;
                             uint decimalCOMM2 = _comm2CockpitFreq - (integerCOMM2 * 100);
-                            frequencyAsString = "" + integerCOMM2;
+                            frequencyAsString = string.Empty + integerCOMM2;
                             frequencyAsString = frequencyAsString + ".";
                             frequencyAsString = frequencyAsString + decimalCOMM2;
 
@@ -1268,7 +1271,7 @@ namespace NonVisuals.Radios
 
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 
@@ -1374,7 +1377,7 @@ namespace NonVisuals.Radios
 
             try
             {
-                var bigFrequencyAsString = "";
+                var bigFrequencyAsString = string.Empty;
 
 
 
@@ -1441,7 +1444,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -1453,7 +1456,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
     }

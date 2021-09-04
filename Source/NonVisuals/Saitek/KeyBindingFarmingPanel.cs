@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace NonVisuals.Saitek
 {
+    using MEF;
+
     [Serializable]
     public class KeyBindingFarmingPanel : KeyBinding
     {

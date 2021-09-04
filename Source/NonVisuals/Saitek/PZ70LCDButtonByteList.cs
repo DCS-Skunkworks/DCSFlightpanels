@@ -4,6 +4,8 @@ using NonVisuals.Saitek.Panels;
 
 namespace NonVisuals.Saitek
 {
+    using MEF;
+
     public class PZ70LCDButtonByteList
     {
         /*

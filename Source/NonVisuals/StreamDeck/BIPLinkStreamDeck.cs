@@ -4,6 +4,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
     public class BIPLinkStreamDeck : BIPLink
     {
         /*
@@ -13,13 +15,13 @@ namespace NonVisuals.StreamDeck
 
         [JsonProperty("StreamDeckButtonName", Required = Required.Default)]
         public EnumStreamDeckButtonNames StreamDeckButtonName { get; set; }
-        public string Layer { get; set; } = "";
+        public string Layer { get; set; } = string.Empty;
 
         public override void ImportSettings(string settings){}
 
         public override string ExportSettings()
         {
-            return "";
+            return string.Empty;
         }
 
         private int GetNewKeyValue()

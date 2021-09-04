@@ -47,7 +47,7 @@
         public double freqMin = 1;
         public double freq = 1;
         public Modulation modulation = Modulation.DISABLED;
-        public string name = "";
+        public string name = string.Empty;
         public double secFreq = 1;
         public float volume = 1.0f;
 

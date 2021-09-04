@@ -4,6 +4,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
+    using MEF;
 
     public class RadioPanelKnobM2000C : ISaitekPanelKnob
     {

@@ -1,14 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using Newtonsoft.Json;
-using NonVisuals.Interfaces;
-
-namespace NonVisuals.StreamDeck
+﻿namespace NonVisuals.StreamDeck
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
 
+    using ClassLibraryCommon;
+
+    using MEF;
+
+    using Newtonsoft.Json;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.Plugin;
 
     [Serializable]
     public class StreamDeckButton : IDisposable
@@ -113,6 +118,21 @@ namespace NonVisuals.StreamDeck
         {
             if (ActionForPress == null)
             {
+                /*
+                 * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event.
+                 * Otherwise it is sent from ActionTypeKey together with key configs associated with the button.
+                 */
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                        ProfileHandler.SelectedProfile().Description, 
+                        StreamDeckPanelInstance.HIDInstanceId, 
+                        (int)(int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
+                        (int)StreamDeckButtonName, 
+                        true, 
+                        null);
+                }
+
                 return;
             }
 
@@ -180,7 +200,50 @@ namespace NonVisuals.StreamDeck
             _cancellationTokenSource.Cancel();
 
             if (ActionForRelease == null)
-            {
+            {/*
+                 * Must do this here as there are no ActionTypeKey for this button, otherwise Plugin would never get any event
+                 */
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    var pluginPanel = PluginGamingPanelEnum.Unknown;
+
+                    switch (this._streamDeckPanel.TypeOfPanel)
+                    {
+                        case GamingPanelEnum.StreamDeckMini:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckMini;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeck:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeck;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeckV2:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckV2;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeckMK2:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckMK2;
+                                break;
+                            }
+                        case GamingPanelEnum.StreamDeckXL:
+                            {
+                                pluginPanel = PluginGamingPanelEnum.StreamDeckXL;
+                                break;
+                            }
+                    }
+
+                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                        ProfileHandler.SelectedProfile().Description,
+                        StreamDeckPanelInstance.HIDInstanceId,
+                        (int)pluginPanel,
+                        (int)StreamDeckButtonName,
+                        false,
+                        null);
+                }
                 return;
             }
 

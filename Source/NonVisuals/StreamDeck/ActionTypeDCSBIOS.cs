@@ -8,6 +8,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
 
     [Serializable]
     public class ActionTypeDCSBIOS : DCSBIOSActionBindingBase, IStreamDeckButtonTypeBase, IStreamDeckButtonAction

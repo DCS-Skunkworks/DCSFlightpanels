@@ -165,7 +165,9 @@
     <Compile Include="Saitek\BIPLinkFarmingPanel.cs" />
     <Compile Include="Saitek\DCSBIOSBrightnessBinding.cs" />
     <Compile Include="Saitek\KeyBindingFarmingPanel.cs" />
+    <Compile Include="Saitek\LedLightChangeEventArgs.cs" />
     <Compile Include="Saitek\OSCommandBindingFarmingPanel.cs" />
+    <Compile Include="Saitek\PanelSwitchBIPLightBinding.cs" />
     <Compile Include="Saitek\Panels\BacklitPanelBIP.cs" />
     <Compile Include="Saitek\BIPFactory.cs" />
     <Compile Include="Saitek\BIPLink.cs" />
@@ -292,8 +294,6 @@
     <Compile Include="Saitek\Panels\TPMPanel.cs" />
     <Compile Include="Saitek\Panels\SwitchPanelPZ55.cs" />
     <Compile Include="StreamDeck\ZipArchiver.cs" />
-    <Compile Include="Switches.cs" />
-    <Compile Include="VirtualKeyCode.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="OSCommand.cs" />
     <Compile Include="OSCommandBinding.cs" />

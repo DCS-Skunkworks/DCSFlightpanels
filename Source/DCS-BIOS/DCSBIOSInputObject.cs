@@ -54,7 +54,7 @@ namespace DCS_BIOS
 
         public string GetDCSBIOSCommand()
         {
-            var result = "";
+            var result = string.Empty;
             switch (_interface)
             {
                 case DCSBIOSInputType.FIXED_STEP:

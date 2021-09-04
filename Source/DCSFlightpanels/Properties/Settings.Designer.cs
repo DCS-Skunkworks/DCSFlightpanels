@@ -430,5 +430,17 @@ namespace DCSFlightpanels.Properties {
                 this["EnablePlugin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableKeyboardAPI {
+            get {
+                return ((bool)(this["DisableKeyboardAPI"]));
+            }
+            set {
+                this["DisableKeyboardAPI"] = value;
+            }
+        }
     }
 }

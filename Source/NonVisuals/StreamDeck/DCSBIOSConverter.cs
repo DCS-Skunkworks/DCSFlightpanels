@@ -66,38 +66,38 @@ namespace NonVisuals.StreamDeck
             {
                 case EnumConverterOutputType.NotSet:
                     {
-                        _faceTypeText.ButtonTextTemplate = "";
-                        _faceTypeText.ButtonFinalText = "";
+                        _faceTypeText.ButtonTextTemplate = string.Empty;
+                        _faceTypeText.ButtonFinalText = string.Empty;
                         _faceTypeText.IsVisible = false;
-                        _faceTypeImage.ImageFile = "";
+                        _faceTypeImage.ImageFile = string.Empty;
                         _faceTypeImage.IsVisible = false;
-                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = "";
+                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = string.Empty;
                         _faceTypeDCSBIOSOverlay.IsVisible = false;
                         break;
                     }
                 case EnumConverterOutputType.Raw:
                     {
-                        _faceTypeImage.ImageFile = "";
+                        _faceTypeImage.ImageFile = string.Empty;
                         _faceTypeImage.IsVisible = false;
-                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = "";
+                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = string.Empty;
                         _faceTypeDCSBIOSOverlay.IsVisible = false;
                         break;
                     }
                 case EnumConverterOutputType.Image:
                     {
-                        _faceTypeText.ButtonTextTemplate = "";
-                        _faceTypeText.ButtonFinalText = "";
+                        _faceTypeText.ButtonTextTemplate = string.Empty;
+                        _faceTypeText.ButtonFinalText = string.Empty;
                         _faceTypeText.IsVisible = false;
-                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = "";
+                        _faceTypeDCSBIOSOverlay.BackgroundBitmapPath = string.Empty;
                         _faceTypeDCSBIOSOverlay.IsVisible = false;
                         break;
                     }
                 case EnumConverterOutputType.ImageOverlay:
                     {
-                        _faceTypeText.ButtonTextTemplate = "";
-                        _faceTypeText.ButtonFinalText = "";
+                        _faceTypeText.ButtonTextTemplate = string.Empty;
+                        _faceTypeText.ButtonFinalText = string.Empty;
                         _faceTypeText.IsVisible = false;
-                        _faceTypeImage.ImageFile = "";
+                        _faceTypeImage.ImageFile = string.Empty;
                         _faceTypeImage.IsVisible = false;
                         break;
                     }
@@ -270,7 +270,7 @@ namespace NonVisuals.StreamDeck
 
         private string GetOutputAsString(EnumConverterOutputType converterOutputType)
         {
-            var result = "";
+            var result = string.Empty;
             switch (converterOutputType)
             {
                 case EnumConverterOutputType.NotSet:
@@ -305,7 +305,7 @@ namespace NonVisuals.StreamDeck
 
         private string GetComparatorAsString(EnumComparator comparator)
         {
-            var result = "";
+            var result = string.Empty;
 
             switch (comparator)
             {
@@ -363,7 +363,7 @@ namespace NonVisuals.StreamDeck
                 {
                     case EnumConverterOutputType.Raw:
                         {
-                            return "";
+                            return string.Empty;
                         }
                     case EnumConverterOutputType.Image:
                         {
@@ -415,7 +415,7 @@ namespace NonVisuals.StreamDeck
                 {
                     case EnumConverterOutputType.NotSet:
                         {
-                            return "";
+                            return string.Empty;
                         }
                     case EnumConverterOutputType.Raw:
                         {
@@ -430,7 +430,7 @@ namespace NonVisuals.StreamDeck
                             return _faceTypeDCSBIOSOverlay.ButtonTextTemplate;
                         }
                 }
-                return "";
+                return string.Empty;
             }
 
             set

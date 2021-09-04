@@ -8,7 +8,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-
+    using MEF;
 
     public class RadioPanelKnobFA18C : ISaitekPanelKnob
     {

@@ -6,6 +6,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.DCSBIOSBindings
 {
+    using MEF;
+
     [Serializable]
     public class DCSBIOSOutputBindingPZ69
     {
@@ -35,12 +37,12 @@ namespace NonVisuals.DCSBIOSBindings
 
                 //[0]
                 //RadioPanelDCSBIOSLCD{COM1}
-                var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", "").Replace("}", "");
+                var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", string.Empty).Replace("}", string.Empty);
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
 
                 //[1]
                 //{LowerLCD}
-                var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz69LCDPosition = (PZ69LCDPosition)Enum.Parse(typeof(PZ69LCDPosition), param1);
 
                 //[2]
@@ -55,12 +57,12 @@ namespace NonVisuals.DCSBIOSBindings
 
                 //[0]
                 //MultiPanelDCSBIOSFormulaLCD{COM1}
-                var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", "").Replace("}", "").Trim();
+                var param0 = parameters[0].Replace("RadioPanelDCSBIOSLCD{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
 
                 //[1]
                 //{UpperLCD}
-                var param1 = parameters[1].Replace("{", "").Replace("}", "").Trim();
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty).Trim();
                 _pz69LCDPosition = (PZ69LCDPosition)Enum.Parse(typeof(PZ69LCDPosition), param1);
 
                 //[2]

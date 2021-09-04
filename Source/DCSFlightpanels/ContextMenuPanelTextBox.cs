@@ -1,31 +1,18 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using ClassLibraryCommon;
-using NonVisuals.Saitek;
-using NonVisuals;
-
-namespace DCSFlightpanels
+﻿namespace DCSFlightpanels
 {
-    public class DCSFPContextMenuVisibility
-    {
-        public bool AddNullKeyVisible = false;
-        public bool EditSequenceVisible = false;
-        public bool EditDCSBIOSVisible = false;
-        public bool EditBIPVisible = false;
-        public bool EditOSCommandVisible = false;
-        public bool CopyVisible = false;
-        public bool CopyKeyStrokeVisible = false;
-        public bool CopyKeySequenceVisible = false;
-        public bool CopyDCSBIOSVisible = false;
-        public bool CopyBIPLinkVisible = false;
-        public bool CopyOSCommandVisible = false;
-        public bool PasteVisible = false;
-        public bool DeleteSettingsVisible = false;
-    }
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+
+    using ClassLibraryCommon;
+
+    using NonVisuals;
+    using NonVisuals.Saitek;
+
 
     public class ContextMenuPanelTextBox : ContextMenu
     {
+        private readonly bool _keyboardEmulationOnly;
         private MenuItem _contextMenuItemAddNullKey;
         private MenuItem _contextMenuItemEditSequence;
         private MenuItem _contextMenuItemEditDCSBIOS;
@@ -39,10 +26,8 @@ namespace DCSFlightpanels
         private MenuItem _contextMenuItemCopyOSCommand;
         private MenuItem _contextMenuItemPaste;
         private MenuItem _contextMenuItemDeleteSettings;
-
-
+        
         private TextBox _textBox;
-        private readonly bool _keyboardEmulationOnly;
 
         public ContextMenuPanelTextBox(bool keyboardEmulationOnly)
         {
@@ -121,10 +106,10 @@ namespace DCSFlightpanels
             try
             {
                 CopyPackage copyPackage = null;
-                var iDataObject = Clipboard.GetDataObject();
-                if (iDataObject != null && iDataObject.GetDataPresent("NonVisuals.CopyPackage"))
+                var dataObject = Clipboard.GetDataObject();
+                if (dataObject != null && dataObject.GetDataPresent("NonVisuals.CopyPackage"))
                 {
-                    copyPackage = (CopyPackage)iDataObject.GetData("NonVisuals.CopyPackage");
+                    copyPackage = (CopyPackage)dataObject.GetData("NonVisuals.CopyPackage");
                     if (copyPackage?.SourceName == TextBox.Name)
                     {
                         copyPackage = null;

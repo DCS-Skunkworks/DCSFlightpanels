@@ -35,7 +35,7 @@ namespace NonVisuals
         {
             if (_instance == null)
             {
-                return "";
+                return string.Empty;
             }
             var stringBuilder = new StringBuilder(100);
             stringBuilder.Append("HIDHandler has the following skeletons (" + _instance.HIDSkeletons.Count + ") :\n");

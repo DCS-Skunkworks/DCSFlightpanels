@@ -100,10 +100,10 @@ namespace DCSFlightpanels.Windows
 
             if (_dcsbiosControl == null && _dcsBiosOutput == null)
             {
-                TextBoxControlId.Text = "";
-                TextBoxMaxValue.Text = "";
-                TextBoxOutputType.Text = "";
-                TextBoxControlDescription.Text = "";
+                TextBoxControlId.Text = string.Empty;
+                TextBoxMaxValue.Text = string.Empty;
+                TextBoxOutputType.Text = string.Empty;
+                TextBoxControlDescription.Text = string.Empty;
             }
         }
 
@@ -207,16 +207,15 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                if (TextBoxSearchWord.Text == "")
+                if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
                     var textImageBrush = new ImageBrush();
                     textImageBrush.ImageSource =
-                        new BitmapImage(
-                            new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute)
-                        );
+                        new BitmapImage(new Uri("pack://application:,,,/dcsfp;component/Images/cue_banner_search_dcsbios.png", UriKind.RelativeOrAbsolute));
                     textImageBrush.AlignmentX = AlignmentX.Left;
                     textImageBrush.Stretch = Stretch.Uniform;
+
                     // Use the brush to paint the button's background.
                     TextBoxSearchWord.Background = textImageBrush;
                 }

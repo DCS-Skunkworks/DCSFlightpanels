@@ -44,10 +44,16 @@
                 <RadioButton Name="RadioButtonRealtime" >Realtime</RadioButton>
             </StackPanel>
             <CheckBox Content="Minimize to System Tray" Name="CheckBoxMinimizeToTray" IsChecked="False" Margin="0,10,0,0"  />
-            <CheckBox Content="Enable Plugin Support (see Github Wiki for more info)" Name="CheckBoxEnablePluginSupport" IsChecked="False" Margin="0,10,0,0" />
+            <GroupBox Header="Plugin Settings" Margin="0,10,0,0">
+                <StackPanel>
+                    <CheckBox Content="Enable Plugin Support (see Github Wiki for more info)" Name="CheckBoxEnablePluginSupport" IsChecked="False" Margin="0,5,0,0" />
+                    <CheckBox Content="Disable DCSFP keyboard API" Name="CheckBoxDisableKeyboardAPI" IsChecked="False" Margin="0,5,0,0" />
+                </StackPanel>
+            </GroupBox>
+            
 
 
-            <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,20,5,0" >VERY IMPORTANT - DELETE OLD SETTINGS</TextBlock>
+            <TextBlock FontSize="25" HorizontalAlignment="Center" Margin="5,15,5,0" >VERY IMPORTANT - DELETE OLD SETTINGS</TextBlock>
             <TextBlock TextWrapping="Wrap" Margin="5,5,5,0" FontSize="14" Background="AliceBlue">
                 <Italic>
                     Do this to avoid weird problems with things not working, settings not taken into account.

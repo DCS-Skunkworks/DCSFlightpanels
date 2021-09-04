@@ -210,7 +210,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
             if (_dcsbiosDecoder.UseFormula)
             {
                 CheckBoxUseFormula.IsChecked = true;
-                TextBoxFormula.Text = string.IsNullOrEmpty(_dcsbiosDecoder.Formula) ? "" : _dcsbiosDecoder.Formula;
+                TextBoxFormula.Text = string.IsNullOrEmpty(_dcsbiosDecoder.Formula) ? string.Empty : _dcsbiosDecoder.Formula;
             }
 
             if (_dcsbiosDecoder.DCSBIOSOutput != null)
@@ -235,7 +235,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
                     {
                         try
                         {
-                            SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : "");
+                            SetFormulaError(_dcsbiosDecoder.HasErrors ? _dcsbiosDecoder.LastFormulaError : string.Empty);
                             SetFormulaResult(_dcsbiosDecoder.FormulaResult);
                             if (_dcsbiosDecoder.DecoderSourceType == DCSBiosOutputType.INTEGER_TYPE)
                             {
@@ -419,11 +419,11 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                TextBoxDCSBIOSId.Text = "";
-                LabelSourceRawValue.Content = "";
-                LabelResult.Content = "";
-                LabelErrors.Content = "";
-                TextBoxSearchWord.Text = "";
+                TextBoxDCSBIOSId.Text = string.Empty;
+                LabelSourceRawValue.Content = string.Empty;
+                LabelResult.Content = string.Empty;
+                LabelErrors.Content = string.Empty;
+                TextBoxSearchWord.Text = string.Empty;
                 TextBoxSearchWord.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosDecoder.RemoveDCSBIOSOutput();
                 _dcsbiosControl = null;
@@ -511,7 +511,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         private void TextBoxSearch_OnGotFocus(object sender, RoutedEventArgs e)
         {
             var textbox = (TextBox)sender;
-            textbox.Text = "";
+            textbox.Text = string.Empty;
             textbox.Foreground = new SolidColorBrush(Colors.Black);
         }
 
@@ -525,7 +525,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                if (TextBoxSearchWord.Text == "")
+                if (TextBoxSearchWord.Text == string.Empty)
                 {
                     // Create an ImageBrush.
                     var textImageBrush = new ImageBrush();
@@ -732,7 +732,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                _dcsbiosDecoder.Formula = TextBoxFormula.Text.Replace(Environment.NewLine, "");
+                _dcsbiosDecoder.Formula = TextBoxFormula.Text.Replace(Environment.NewLine, string.Empty);
                 SetIsDirty();
                 SetFormState();
             }

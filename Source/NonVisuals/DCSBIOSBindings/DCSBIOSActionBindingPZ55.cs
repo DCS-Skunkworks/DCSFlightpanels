@@ -6,6 +6,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.DCSBIOSBindings
 {
+    using MEF;
+
     [Serializable]
     public class DCSBIOSActionBindingPZ55 : DCSBIOSActionBindingBase
     {

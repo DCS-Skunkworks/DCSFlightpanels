@@ -61,7 +61,7 @@ namespace DCS_BIOS
                     return dcsbiosInputObject.Description;
                 }
             }
-            return "";
+            return string.Empty;
         }
 
         public int GetMaxValueForInterface(DCSBIOSInputType dcsbiosInputType)

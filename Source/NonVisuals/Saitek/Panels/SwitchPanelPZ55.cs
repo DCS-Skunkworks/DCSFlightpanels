@@ -10,6 +10,8 @@ using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public enum SwitchPanelPZ55LEDPosition : byte
@@ -25,7 +27,7 @@ namespace NonVisuals.Saitek.Panels
         private readonly object _dcsBiosDataReceivedLock = new object();
         private HashSet<DCSBIOSActionBindingPZ55> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingPZ55>();
         private HashSet<KeyBindingPZ55> _keyBindings = new HashSet<KeyBindingPZ55>();
-        private List<OSCommandBindingPZ55> _osCommandBindings = new List<OSCommandBindingPZ55>();
+        private List<OSCommandBindingPZ55> _operatingSystemCommandBindings = new List<OSCommandBindingPZ55>();
         private HashSet<BIPLinkPZ55> _bipLinks = new HashSet<BIPLinkPZ55>();
         private SwitchPanelPZ55LEDs _ledUpperColor = SwitchPanelPZ55LEDs.ALL_DARK;
         private SwitchPanelPZ55LEDs _ledLeftColor = SwitchPanelPZ55LEDs.ALL_DARK;
@@ -92,9 +94,9 @@ namespace NonVisuals.Saitek.Panels
                     }
                     else if (setting.StartsWith("SwitchPanelOSPZ55"))
                     {
-                        var osCommand = new OSCommandBindingPZ55();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
+                        var operatingSystemCommand = new OSCommandBindingPZ55();
+                        operatingSystemCommand.ImportSettings(setting);
+                        _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
                     else if (setting.StartsWith("SwitchPanelLed"))
                     {
@@ -141,11 +143,11 @@ namespace NonVisuals.Saitek.Panels
                     result.Add(keyBinding.ExportSettings());
                 }
             }
-            foreach (var osCommand in _osCommandBindings)
+            foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
-                if (!osCommand.OSCommandObject.IsEmpty)
+                if (!operatingSystemCommand.OSCommandObject.IsEmpty)
                 {
-                    result.Add(osCommand.ExportSettings());
+                    result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -233,7 +235,7 @@ namespace NonVisuals.Saitek.Panels
         public override void ClearSettings(bool setIsDirty = false)
         {
             _keyBindings.Clear();
-            _osCommandBindings.Clear();
+            _operatingSystemCommandBindings.Clear();
             _listColorOutputBinding.Clear();
             _dcsBiosBindings.Clear();
             _bipLinks.Clear();
@@ -258,8 +260,8 @@ namespace NonVisuals.Saitek.Panels
 
         public List<OSCommandBindingPZ55> OSCommandList
         {
-            get => _osCommandBindings;
-            set => _osCommandBindings = value;
+            get => _operatingSystemCommandBindings;
+            set => _operatingSystemCommandBindings = value;
         }
 
         private void SetLandingGearLedsManually(PanelLEDColor panelLEDColor)
@@ -353,21 +355,49 @@ namespace NonVisuals.Saitek.Panels
                     }
                 }
 
+                var keyBindingFound = false;
                 foreach (var keyBinding in _keyBindings)
                 {
                     if (!isFirstReport && keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
                     {
-                        keyBinding.OSKeyPress.Execute(new CancellationToken());
+                        keyBindingFound = true;
+                        if (!PluginManager.DisableKeyboardAPI)
+                        {
+                            keyBinding.OSKeyPress.Execute(new CancellationToken());
+                        }
+                        
+                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                        {
+                            PluginManager.Get().PanelEventHandler.PanelEvent(
+                                ProfileHandler.SelectedProfile().Description, 
+                                HIDInstanceId, 
+                                (int)PluginGamingPanelEnum.PZ55SwitchPanel, 
+                                (int)switchPanelKey.SwitchPanelPZ55Key, 
+                                switchPanelKey.IsOn,
+                                keyBinding.OSKeyPress.KeySequence);
+                        }
+
                         found = true;
                         break;
                     }
                 }
 
-                foreach (var osCommand in _osCommandBindings)
+                if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && osCommand.WhenTurnedOn == switchPanelKey.IsOn)
+                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                        ProfileHandler.SelectedProfile().Description,
+                        HIDInstanceId,
+                        (int)PluginGamingPanelEnum.PZ55SwitchPanel,
+                        (int)switchPanelKey.SwitchPanelPZ55Key,
+                        switchPanelKey.IsOn,
+                        null);
+                }
+
+                foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
+                {
+                    if (!isFirstReport && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && operatingSystemCommand.WhenTurnedOn == switchPanelKey.IsOn)
                     {
-                        osCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
                         break;
                     }
@@ -392,11 +422,6 @@ namespace NonVisuals.Saitek.Panels
                             break;
                         }
                     }
-                }
-
-                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                {
-                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)switchPanelKey.SwitchPanelPZ55Key, switchPanelKey.IsOn, 0);
                 }
             }
         }
@@ -457,7 +482,7 @@ namespace NonVisuals.Saitek.Panels
 
         public string GetKeyPressForLoggingPurposes(SwitchPanelKey switchPanelKey)
         {
-            var result = "";
+            var result = string.Empty;
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.OSKeyPress != null && keyBinding.SwitchPanelPZ55Key == switchPanelKey.SwitchPanelPZ55Key && keyBinding.WhenTurnedOn == switchPanelKey.IsOn)
@@ -507,7 +532,7 @@ namespace NonVisuals.Saitek.Panels
             SetIsDirty();
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
@@ -550,28 +575,28 @@ namespace NonVisuals.Saitek.Panels
             SetIsDirty();
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
             var pz55SwitchOnOff = (PZ55SwitchOnOff)panelSwitchOnOff;
             //This must accept lists
             var found = false;
 
-            foreach (var osCommandBinding in _osCommandBindings)
+            foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
             {
-                if (osCommandBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && osCommandBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
+                if (operatingSystemCommandBinding.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && operatingSystemCommandBinding.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                 {
-                    osCommandBinding.OSCommandObject = osCommand;
+                    operatingSystemCommandBinding.OSCommandObject = operatingSystemCommand;
                     found = true;
                     break;
                 }
             }
             if (!found)
             {
-                var osCommandBindingPZ55 = new OSCommandBindingPZ55();
-                osCommandBindingPZ55.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
-                osCommandBindingPZ55.OSCommandObject = osCommand;
-                osCommandBindingPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
-                _osCommandBindings.Add(osCommandBindingPZ55);
+                var operatingSystemCommandBindingPZ55 = new OSCommandBindingPZ55();
+                operatingSystemCommandBindingPZ55.SwitchPanelPZ55Key = pz55SwitchOnOff.Switch;
+                operatingSystemCommandBindingPZ55.OSCommandObject = operatingSystemCommand;
+                operatingSystemCommandBindingPZ55.WhenTurnedOn = pz55SwitchOnOff.ButtonState;
+                _operatingSystemCommandBindings.Add(operatingSystemCommandBindingPZ55);
             }
             SetIsDirty();
         }
@@ -687,21 +712,21 @@ namespace NonVisuals.Saitek.Panels
             
             if (controlListPZ55 == ControlListPZ55.ALL || controlListPZ55 == ControlListPZ55.OSCOMMANDS)
             {
-                OSCommandBindingPZ55 osCommandBindingPZ55  = null;
-                for (int i = 0; i < _osCommandBindings.Count; i++)
+                OSCommandBindingPZ55 operatingSystemCommandBindingPZ55  = null;
+                for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
                 {
-                    var osCommand = _osCommandBindings[i];
+                    var operatingSystemCommand = _operatingSystemCommandBindings[i];
 
-                    if (osCommand.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && osCommand.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
+                    if (operatingSystemCommand.SwitchPanelPZ55Key == pz55SwitchOnOff.Switch && operatingSystemCommand.WhenTurnedOn == pz55SwitchOnOff.ButtonState)
                     {
-                        osCommandBindingPZ55 = _osCommandBindings[i];
+                        operatingSystemCommandBindingPZ55 = _operatingSystemCommandBindings[i];
                         found = true;
                     }
                 }
 
-                if (osCommandBindingPZ55 != null)
+                if (operatingSystemCommandBindingPZ55 != null)
                 {
-                    _osCommandBindings.Remove(osCommandBindingPZ55);
+                    _operatingSystemCommandBindings.Remove(operatingSystemCommandBindingPZ55);
                 }
             }
 
@@ -799,7 +824,7 @@ namespace NonVisuals.Saitek.Panels
                             break;
                         }
                 }
-                OnLedLightChanged(new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
+                this.LedLightChanged(new SaitekPanelLEDPosition(switchPanelPZ55LEDPosition), switchPanelPZ55LEDColor);
                 SetLandingGearLED(_ledUpperColor | _ledLeftColor | _ledRightColor);
             }
             catch (Exception e)

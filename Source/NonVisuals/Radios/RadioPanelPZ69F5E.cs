@@ -11,6 +11,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class RadioPanelPZ69F5E : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
@@ -920,7 +922,7 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    var frequencyAsString = "";
+                                    var frequencyAsString = string.Empty;
                                     lock (_lockUhfDialsObject1)
                                     {
                                         frequencyAsString = GetUhfDialFrequencyForPosition(1, _uhfCockpitFreq1DialPos);
@@ -969,7 +971,7 @@ namespace NonVisuals.Radios
 
                             //Frequency selector 3      RIGHT
                             //X=0 / Y=1
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockTacanDialsObject1)
                             {
                                 lock (_lockTacanDialsObject2)
@@ -1017,7 +1019,7 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    var frequencyAsString = "";
+                                    var frequencyAsString = string.Empty;
                                     lock (_lockUhfDialsObject1)
                                     {
                                         frequencyAsString = GetUhfDialFrequencyForPosition(1, _uhfCockpitFreq1DialPos);
@@ -1056,7 +1058,7 @@ namespace NonVisuals.Radios
                         }
                     case CurrentF5ERadioMode.TACAN:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockTacanDialsObject1)
                             {
                                 lock (_lockTacanDialsObject2)
@@ -1816,7 +1818,7 @@ namespace NonVisuals.Radios
 
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 
@@ -1964,7 +1966,7 @@ namespace NonVisuals.Radios
                     }
                     break;
             }
-            return "";
+            return string.Empty;
         }
 
         private void SaveCockpitFrequencyUhf()
@@ -1990,7 +1992,7 @@ namespace NonVisuals.Radios
              */
             try
             {
-                var bigFrequencyAsString = "";
+                var bigFrequencyAsString = string.Empty;
                 var smallFrequencyAsString = "0.";
                 lock (_lockUhfDialsObject1)
                 {
@@ -2088,7 +2090,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -2100,7 +2102,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
     }

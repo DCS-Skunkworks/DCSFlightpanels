@@ -17,6 +17,8 @@ using NonVisuals.StreamDeck.Events;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonAction.xaml
     /// </summary>
@@ -242,7 +244,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         public void SetIsDirty()
         {
             _isDirty = true;
-            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, "", _streamDeckPanel.BindingHash);
+            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton.StreamDeckButtonName, string.Empty, _streamDeckPanel.BindingHash);
         }
 
         public bool IsDirty
@@ -335,13 +337,13 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     }
                 case EnumStreamDeckActionType.OSCommand:
                     {
-                        var osCommandBindingStreamDeck = (ActionTypeOS)streamDeckButtonAction;
-                        var textBoxOSCommand = osCommandBindingStreamDeck.WhenTurnedOn ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
-                        textBoxOSCommand.Bill.OSCommandObject = osCommandBindingStreamDeck.OSCommandObject;
+                        var operatingSystemCommandBindingStreamDeck = (ActionTypeOS)streamDeckButtonAction;
+                        var textBoxOSCommand = operatingSystemCommandBindingStreamDeck.WhenTurnedOn ? TextBoxOSCommandButtonOn : TextBoxOSCommandButtonOff;
+                        textBoxOSCommand.Bill.OSCommandObject = operatingSystemCommandBindingStreamDeck.OSCommandObject;
 
                         if (forPress)
                         {
-                            ShowSoundConfig(osCommandBindingStreamDeck);
+                            ShowSoundConfig(operatingSystemCommandBindingStreamDeck);
                         }
 
                         SetFormState();
@@ -635,7 +637,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 if (textBox.Bill.ContainsDCSBIOS())
                 {
                     dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(),
-                        textBox.Name.Replace("TextBox", ""),
+                        textBox.Name.Replace("TextBox", string.Empty),
                         textBox.Bill.DCSBIOSBinding.DCSBIOSInputs,
                         textBox.Text,
                         true);
@@ -644,7 +646,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                 }
                 else
                 {
-                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(), textBox.Name.Replace("TextBox", ""), null, true);
+                    dcsbiosControlsConfigsWindow = new DCSBIOSInputControlsWindow(GlobalHandler.GetProfile(), textBox.Name.Replace("TextBox", string.Empty), null, true);
                 }
 
                 dcsbiosControlsConfigsWindow.ShowDialog();
@@ -750,9 +752,9 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                         //User made no changes
                         return;
                     }
-                    var osCommand = osCommandWindow.OSCommandObject;
-                    textBox.Bill.OSCommandObject = osCommand;
-                    textBox.Text = osCommand.Name;
+                    var operatingSystemCommand = osCommandWindow.OSCommandObject;
+                    textBox.Bill.OSCommandObject = operatingSystemCommand;
+                    textBox.Text = operatingSystemCommand.Name;
                     SetIsDirty();
                 }
                 ButtonFocus.Focus();
@@ -874,7 +876,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
 
         private void DeleteSoundConfig()
         {
-            TextBoxSoundFile.Text = "";
+            TextBoxSoundFile.Text = string.Empty;
             CheckBoxPlaySoundFile.IsChecked = false;
         }
 
@@ -1223,7 +1225,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                var imageRelativePath = "";
+                var imageRelativePath = string.Empty;
                 var directory = SettingsManager.LastSoundFileDirectory;
 
                 var dialogResult = StreamDeckUICommon.BrowseForSoundFile(ref directory, ref imageRelativePath);

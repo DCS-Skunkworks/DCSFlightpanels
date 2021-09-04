@@ -3,6 +3,8 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.StreamDeck.Events
 {
+    using MEF;
+
     public static class EventHandlers
     {
 

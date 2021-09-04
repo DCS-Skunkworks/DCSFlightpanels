@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
-{ 
+{
+    using MEF;
 
     public class RadioPanelKnobSA342 : ISaitekPanelKnob
     {

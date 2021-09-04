@@ -1,9 +1,10 @@
 ﻿namespace SamplePanelEventPlugin
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
-    using NonVisuals;
+    using MEF;
 
     public class PanelEventFileWriter
     {
@@ -18,26 +19,40 @@
         }
 
 
-        public static void WriteInfo(string profile, string panelHidId, int panelId, int switchId, bool pressed, int extraInfo)
+        public static void WriteInfo(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             if (_panelEventFileWriter == null)
             {
                 _panelEventFileWriter = new PanelEventFileWriter();
             }
-            _panelEventFileWriter.WriteInfoToFile(profile, panelHidId, panelId, switchId, pressed, extraInfo);
+            _panelEventFileWriter.WriteInfoToFile(profile, panelHidId, panelId, switchId, pressed, keySequence);
         }
 
-        private void WriteInfoToFile(string profile, string panelHidId, int panelId, int switchId, bool pressed, int extraInfo)
+        private void WriteInfoToFile(string profile, string panelHidId, int panelId, int switchId, bool pressed, SortedList<int, IKeyPressInfo> keySequence)
         {
             lock (_lockObject)
             {
-                File.AppendAllText(_filePath + _filename, GetInfoFromEnums(profile, panelHidId, panelId, switchId, pressed, extraInfo));
+                File.AppendAllText(_filePath + _filename, GetInfoFromEnums(profile, panelHidId, panelId, switchId, pressed));
+
+                if (keySequence != null)
+                {
+                    foreach (var keyPressInfo in keySequence)
+                    {
+                        File.AppendAllText(
+                            _filePath + _filename,
+                            "\t" + 
+                            Enum.GetName(typeof(KeyPressLength), keyPressInfo.Value.LengthOfBreak) + " " +
+                            Enum.GetName(typeof(KeyPressLength), keyPressInfo.Value.LengthOfKeyPress) + " " +
+                            keyPressInfo.Value.VirtualKeyCodesAsString
+                            + "\n");
+                    }
+                }
             }
         }
 
-        private string GetInfoFromEnums(string profile, string panelHidId, int panelId, int switchId, bool pressed, int extraInfo)
+        private string GetInfoFromEnums(string profile, string panelHidId, int panelId, int switchId, bool pressed)
         {
-            var panel = (PluginGamingPanelEnum)panelId;//Enum.GetName(typeof(GamingPanelInternalEnum), panelId);
+            var panel = (PluginGamingPanelEnum)panelId; // Enum.GetName(typeof(GamingPanelInternalEnum), panelId);
             var result = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss") + " " + profile + " " + Enum.GetName(typeof(PluginGamingPanelEnum), panelId) + "  ";
 
             switch (panel)

@@ -10,6 +10,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class RadioPanelPZ69P51D : RadioPanelPZ69Base, IRadioPanel
@@ -259,7 +261,7 @@ namespace NonVisuals.Radios
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                            PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 
@@ -458,7 +460,7 @@ namespace NonVisuals.Radios
                             {
                                 //Pos     0    1    2    3    4
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = _vhf1CockpitPresetActiveButton.ToString();
@@ -480,7 +482,7 @@ namespace NonVisuals.Radios
                             {
                                 //Pos     0    1    2    3    4
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockVhf1DialObject1)
                                 {
                                     channelAsString = _vhf1CockpitPresetActiveButton.ToString();
@@ -666,7 +668,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -678,7 +680,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

@@ -9,6 +9,8 @@ using NonVisuals.StreamDeck.Events;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
     public enum LayerNavType
     {
         None = 3, //Do not change value because of JSON.
@@ -31,9 +33,9 @@ namespace NonVisuals.StreamDeck
         [JsonProperty("TargetLayer", Required = Required.Default)]
         public string TargetLayer;
         [JsonProperty("RemoteStreamdeckBindingHash", Required = Required.Default)]
-        public string RemoteStreamdeckBindingHash = "";
+        public string RemoteStreamdeckBindingHash = string.Empty;
         [JsonProperty("RemoteStreamdeckTargetLayer", Required = Required.Default)]
-        public string RemoteStreamdeckTargetLayer = "";
+        public string RemoteStreamdeckTargetLayer = string.Empty;
 
         [NonSerialized]
         private StreamDeckPanel _streamDeckPanel;

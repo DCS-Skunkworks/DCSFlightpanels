@@ -86,8 +86,10 @@ namespace DCSFlightpanels.Windows
             TextBoxSRSToPort.TextChanged += TextBoxSRS_OnTextChanged;
             CheckBoxMinimizeToTray.Checked += CheckBoxMinimizeToTray_OnChecked;
             CheckBoxMinimizeToTray.Unchecked += CheckBoxMinimizeToTray_OnUnchecked;
-            CheckBoxEnablePluginSupport.Checked += CheckBoxEnablePluginSupport_OnChecked;
-            CheckBoxEnablePluginSupport.Unchecked += this.CheckBoxEnablePluginSupport_UnChecked;
+            CheckBoxEnablePluginSupport.Checked += CheckBoxMinimizeToTray_OnChecked;
+            CheckBoxEnablePluginSupport.Unchecked += this.CheckBoxMinimizeToTray_OnUnchecked;
+            CheckBoxDisableKeyboardAPI.Checked += CheckBoxMinimizeToTray_OnChecked;
+            CheckBoxDisableKeyboardAPI.Unchecked += this.CheckBoxMinimizeToTray_OnUnchecked;
         }
 
         private void LoadSettings()
@@ -131,6 +133,7 @@ namespace DCSFlightpanels.Windows
 
             CheckBoxMinimizeToTray.IsChecked = Settings.Default.RunMinimized;
             CheckBoxEnablePluginSupport.IsChecked = Settings.Default.EnablePlugin;
+            CheckBoxDisableKeyboardAPI.IsChecked = Settings.Default.DisableKeyboardAPI;
 
             if (Common.PartialDCSBIOSEnabled())
             {
@@ -231,7 +234,8 @@ namespace DCSFlightpanels.Windows
                     Settings.Default.Save();
 
                     Settings.Default.RunMinimized = CheckBoxMinimizeToTray.IsChecked == true;
-                    Settings.Default.EnablePlugin = this.CheckBoxEnablePluginSupport.IsChecked == true;
+                    Settings.Default.EnablePlugin = CheckBoxEnablePluginSupport.IsChecked == true;
+                    Settings.Default.DisableKeyboardAPI = this.CheckBoxDisableKeyboardAPI.IsChecked == true;
                     Settings.Default.Save();
                 }
 
@@ -544,31 +548,7 @@ namespace DCSFlightpanels.Windows
             ButtonOk.IsEnabled = true;
         }
 
-        private void CheckBoxEnablePluginSupport_OnChecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
         private void CheckBoxMinimizeToTray_OnUnchecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
-        private void CheckBoxEnablePluginSupport_UnChecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
-        private void CheckBoxSystemStartup_OnChecked(object sender, RoutedEventArgs e)
-        {
-            _generalChanged = true;
-            ButtonOk.IsEnabled = true;
-        }
-
-        private void CheckBoxSystemStartup_OnUnchecked(object sender, RoutedEventArgs e)
         {
             _generalChanged = true;
             ButtonOk.IsEnabled = true;

@@ -17,6 +17,8 @@ using Theraot.Core;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
@@ -230,42 +232,6 @@ namespace NonVisuals.StreamDeck
             {
                 streamDeckButton.DoRelease(CancellationToken.None);
             }
-
-            var pluginPanel = PluginGamingPanelEnum.Unknown;
-
-            switch (_panelType)
-            {
-                case GamingPanelEnum.StreamDeckMini:
-                    {
-                        pluginPanel = PluginGamingPanelEnum.StreamDeckMini;
-                        break;
-                    }
-                case GamingPanelEnum.StreamDeck:
-                    {
-                        pluginPanel = PluginGamingPanelEnum.StreamDeck;
-                        break;
-                    }
-                case GamingPanelEnum.StreamDeckV2:
-                    {
-                        pluginPanel = PluginGamingPanelEnum.StreamDeckV2;
-                        break;
-                    }
-                case GamingPanelEnum.StreamDeckMK2:
-                    {
-                        pluginPanel = PluginGamingPanelEnum.StreamDeckMK2;
-                        break;
-                    }
-                case GamingPanelEnum.StreamDeckXL:
-                    {
-                        pluginPanel = PluginGamingPanelEnum.StreamDeckXL;
-                        break;
-                    }
-            }
-
-            if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-            {
-                PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)pluginPanel, (int)streamDeckButton.StreamDeckButtonName, e.IsDown, 0);
-            }
         }
 
         protected override void StartListeningForPanelChanges()
@@ -360,7 +326,7 @@ namespace NonVisuals.StreamDeck
 
         public string GetKeyPressForLoggingPurposes(StreamDeckButton streamDeckButton)
         {
-            var result = "";
+            var result = string.Empty;
             /*foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.OSKeyPress != null && keyBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)

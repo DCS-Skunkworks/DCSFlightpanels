@@ -7,6 +7,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.DCSBIOSBindings
 {
+    using MEF;
+
     [Serializable]
     public class DCSBIOSActionBindingPZ69 : DCSBIOSActionBindingBase
     {
@@ -36,10 +38,10 @@ namespace NonVisuals.DCSBIOSBindings
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //RadioPanelDCSBIOSControl{COM1}
-                var param0 = parameters[0].Replace("RadioPanelDCSBIOSControl{", "").Replace("}", "");
+                var param0 = parameters[0].Replace("RadioPanelDCSBIOSControl{", string.Empty).Replace("}", string.Empty);
                 _pz69DialPosition = (PZ69DialPosition) Enum.Parse(typeof(PZ69DialPosition), param0);
 
-                var param1 = parameters[1].Replace("{", "").Replace("}", "");
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
                 WhenTurnedOn = (param1.Substring(0, 1) == "1");
                 if (param1.Contains("|"))
                 {

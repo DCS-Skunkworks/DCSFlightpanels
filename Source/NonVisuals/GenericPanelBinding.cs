@@ -11,7 +11,7 @@ namespace NonVisuals
         private string _hidInstance;
         private string _bindingHash;
         private List<string> _settings = new List<string>(50);
-        private string _jsonString = "";
+        private string _jsonString = string.Empty;
         private bool _hardwareWasFound = false;
         private bool _hasBeenDeleted = false;
 

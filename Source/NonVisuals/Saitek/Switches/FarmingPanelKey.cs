@@ -4,6 +4,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Saitek.Switches
 {
+    using MEF;
 
     public class FarmingPanelKey : ISaitekPanelKnob
     {

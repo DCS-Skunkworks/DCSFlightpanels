@@ -19,6 +19,8 @@ using RadioButton = System.Windows.Controls.RadioButton;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for UserControlStreamDeckButtonFace.xaml
     /// </summary>
@@ -172,7 +174,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         public void SetIsDirty()
         {
             _isDirty = true;
-            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton, "", _streamDeckPanel.BindingHash);
+            EventHandlers.SenderNotifiesIsDirty(this, _streamDeckButton, string.Empty, _streamDeckPanel.BindingHash);
         }
 
         public bool IsDirty
@@ -638,7 +640,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         {
             try
             {
-                var imageRelativePath = "";
+                var imageRelativePath = string.Empty;
                 var directory = SettingsManager.LastImageFileDirectory;
 
                 var dialogResult = StreamDeckUICommon.BrowseForImage(ref directory, ref imageRelativePath);

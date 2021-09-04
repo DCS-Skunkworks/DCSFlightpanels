@@ -70,7 +70,7 @@ namespace NonVisuals.Saitek
             {
                 return;
             }
-            var color = "";
+            var color = string.Empty;
             if (settings.Contains("SwitchPanelLedUp"))
             {
                 SaitekLEDPosition = new SaitekPanelLEDPosition(SwitchPanelPZ55LEDPosition.UP);

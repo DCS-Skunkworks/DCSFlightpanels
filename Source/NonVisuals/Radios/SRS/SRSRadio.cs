@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 
 namespace NonVisuals.Radios.SRS
 {
+    using MEF;
+
     public enum SRSRadioMode
     {
         Frequency,
@@ -605,7 +607,7 @@ namespace NonVisuals.Radios.SRS
 
             { "Command": 4,"RadioId":1}
             --channel down(if channels have been configured)*/
-            var result = "";
+            var result = string.Empty;
             if (increase)
             {
                 result = "{\"Command\": 3,\"RadioId\":" + radioId + "}\n";

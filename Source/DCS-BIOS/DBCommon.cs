@@ -7,7 +7,7 @@ namespace DCS_BIOS
 
         public static string PrintBitStrings(byte[] array)
         {
-            var result = "";
+            var result = string.Empty;
             for (int i = 0; i < array.Length; i++)
             {
                 var str = Convert.ToString(array[i], 2).PadLeft(8, '0');

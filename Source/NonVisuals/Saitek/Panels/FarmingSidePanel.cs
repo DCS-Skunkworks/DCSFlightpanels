@@ -8,13 +8,15 @@ using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class FarmingSidePanel : SaitekPanel
     {
         private HashSet<DCSBIOSActionBindingFarmingPanel> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingFarmingPanel>();
         private HashSet<KeyBindingFarmingPanel> _keyBindings = new HashSet<KeyBindingFarmingPanel>();
-        private List<OSCommandBindingFarmingPanel> _osCommandBindings = new List<OSCommandBindingFarmingPanel>();
+        private List<OSCommandBindingFarmingPanel> _operatingSystemCommandBindings = new List<OSCommandBindingFarmingPanel>();
         private HashSet<BIPLinkFarmingPanel> _bipLinks = new HashSet<BIPLinkFarmingPanel>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
@@ -76,9 +78,9 @@ namespace NonVisuals.Saitek.Panels
                     }
                     else if (setting.StartsWith("FarmingPanelOS"))
                     {
-                        var osCommand = new OSCommandBindingFarmingPanel();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
+                        var operatingSystemCommand = new OSCommandBindingFarmingPanel();
+                        operatingSystemCommand.ImportSettings(setting);
+                        _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
                     else if (setting.StartsWith("FarmingPanelDCSBIOSControl{"))
                     {
@@ -115,11 +117,11 @@ namespace NonVisuals.Saitek.Panels
                     result.Add(keyBinding.ExportSettings());
                 }
             }
-            foreach (var osCommand in _osCommandBindings)
+            foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
-                if (!osCommand.OSCommandObject.IsEmpty)
+                if (!operatingSystemCommand.OSCommandObject.IsEmpty)
                 {
-                    result.Add(osCommand.ExportSettings());
+                    result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -183,7 +185,7 @@ namespace NonVisuals.Saitek.Panels
         public override void ClearSettings(bool setIsDirty = false)
         {
             _keyBindings.Clear();
-            _osCommandBindings.Clear();
+            _operatingSystemCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _bipLinks.Clear();
 
@@ -207,8 +209,8 @@ namespace NonVisuals.Saitek.Panels
 
         public List<OSCommandBindingFarmingPanel> OSCommandList
         {
-            get => _osCommandBindings;
-            set => _osCommandBindings = value;
+            get => _operatingSystemCommandBindings;
+            set => _operatingSystemCommandBindings = value;
         }
 
         private void FarmingSidePanelSwitchChanged(bool isFirstReport, IEnumerable<object> hashSet)
@@ -220,25 +222,53 @@ namespace NonVisuals.Saitek.Panels
 
             foreach (var farmingPanelKeyObject in hashSet)
             {
-                //Looks which switches has been switched and sees whether any key emulation has been tied to them.
+                // Looks which switches has been switched and sees whether any key emulation has been tied to them.
                 var farmingPanelKey = (FarmingPanelKey)farmingPanelKeyObject;
                 var found = false;
 
+                var keyBindingFound = false;
                 foreach (var keyBinding in _keyBindings)
                 {
                     if (!isFirstReport && keyBinding.OSKeyPress != null && keyBinding.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && keyBinding.WhenTurnedOn == farmingPanelKey.IsOn)
                     {
-                        keyBinding.OSKeyPress.Execute(new CancellationToken());
+                        keyBindingFound = true;
+                        if (!PluginManager.DisableKeyboardAPI)
+                        {
+                            keyBinding.OSKeyPress.Execute(new CancellationToken());
+                        }
+
+                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                        {
+                            PluginManager.Get().PanelEventHandler.PanelEvent(
+                                ProfileHandler.SelectedProfile().Description,
+                                HIDInstanceId,
+                                (int)PluginGamingPanelEnum.FarmingPanel,
+                                (int)farmingPanelKey.FarmingPanelMKKey,
+                                farmingPanelKey.IsOn,
+                                keyBinding.OSKeyPress.KeySequence);
+                        }
+
                         found = true;
                         break;
                     }
                 }
 
-                foreach (var osCommand in _osCommandBindings)
+                if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && osCommand.WhenTurnedOn == farmingPanelKey.IsOn)
+                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                        ProfileHandler.SelectedProfile().Description,
+                        HIDInstanceId,
+                        (int)PluginGamingPanelEnum.FarmingPanel,
+                        (int)farmingPanelKey.FarmingPanelMKKey,
+                        farmingPanelKey.IsOn,
+                        null);
+                }
+
+                foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
+                {
+                    if (!isFirstReport && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && operatingSystemCommand.WhenTurnedOn == farmingPanelKey.IsOn)
                     {
-                        osCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
                         break;
                     }
@@ -264,18 +294,13 @@ namespace NonVisuals.Saitek.Panels
                         }
                     }
                 }
-
-                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                {
-                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.FarmingPanel, (int)farmingPanelKey.FarmingPanelMKKey, farmingPanelKey.IsOn, 0);
-                }
             }
         }
 
 
         public string GetKeyPressForLoggingPurposes(FarmingPanelKey farmingPanelKey)
         {
-            var result = "";
+            var result = string.Empty;
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.OSKeyPress != null && keyBinding.FarmingPanelKey == farmingPanelKey.FarmingPanelMKKey && keyBinding.WhenTurnedOn == farmingPanelKey.IsOn)
@@ -325,7 +350,7 @@ namespace NonVisuals.Saitek.Panels
             SetIsDirty();
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
             if (keySequence.Count == 0)
@@ -368,28 +393,28 @@ namespace NonVisuals.Saitek.Panels
             SetIsDirty();
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
             var farmingPanelOnOff = (FarmingPanelOnOff)panelSwitchOnOff;
             //This must accept lists
             var found = false;
 
-            foreach (var osCommandBinding in _osCommandBindings)
+            foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
             {
-                if (osCommandBinding.FarmingPanelKey == farmingPanelOnOff.Switch && osCommandBinding.WhenTurnedOn == farmingPanelOnOff.ButtonState)
+                if (operatingSystemCommandBinding.FarmingPanelKey == farmingPanelOnOff.Switch && operatingSystemCommandBinding.WhenTurnedOn == farmingPanelOnOff.ButtonState)
                 {
-                    osCommandBinding.OSCommandObject = osCommand;
+                    operatingSystemCommandBinding.OSCommandObject = operatingSystemCommand;
                     found = true;
                     break;
                 }
             }
             if (!found)
             {
-                var osCommandBindingFarmingPanel = new OSCommandBindingFarmingPanel();
-                osCommandBindingFarmingPanel.FarmingPanelKey = farmingPanelOnOff.Switch;
-                osCommandBindingFarmingPanel.OSCommandObject = osCommand;
-                osCommandBindingFarmingPanel.WhenTurnedOn = farmingPanelOnOff.ButtonState;
-                _osCommandBindings.Add(osCommandBindingFarmingPanel);
+                var operatingSystemCommandBindingFarmingPanel = new OSCommandBindingFarmingPanel();
+                operatingSystemCommandBindingFarmingPanel.FarmingPanelKey = farmingPanelOnOff.Switch;
+                operatingSystemCommandBindingFarmingPanel.OSCommandObject = operatingSystemCommand;
+                operatingSystemCommandBindingFarmingPanel.WhenTurnedOn = farmingPanelOnOff.ButtonState;
+                _operatingSystemCommandBindings.Add(operatingSystemCommandBindingFarmingPanel);
             }
             SetIsDirty();
         }
@@ -510,21 +535,21 @@ namespace NonVisuals.Saitek.Panels
             
             if (controlListFarmingPanel == ControlListFarmingPanel.ALL || controlListFarmingPanel == ControlListFarmingPanel.OSCOMMANDS)
             {
-                OSCommandBindingFarmingPanel osCommandBindingFarmingPanel  = null;
-                for (int i = 0; i < _osCommandBindings.Count; i++)
+                OSCommandBindingFarmingPanel operatingSystemCommandBindingFarmingPanel  = null;
+                for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
                 {
-                    var osCommand = _osCommandBindings[i];
+                    var operatingSystemCommand = _operatingSystemCommandBindings[i];
 
-                    if (osCommand.FarmingPanelKey == farmingPanelOnOff.Switch && osCommand.WhenTurnedOn == farmingPanelOnOff.ButtonState)
+                    if (operatingSystemCommand.FarmingPanelKey == farmingPanelOnOff.Switch && operatingSystemCommand.WhenTurnedOn == farmingPanelOnOff.ButtonState)
                     {
-                        osCommandBindingFarmingPanel = _osCommandBindings[i];
+                        operatingSystemCommandBindingFarmingPanel = _operatingSystemCommandBindings[i];
                         found = true;
                     }
                 }
 
-                if (osCommandBindingFarmingPanel != null)
+                if (operatingSystemCommandBindingFarmingPanel != null)
                 {
-                    _osCommandBindings.Remove(osCommandBindingFarmingPanel);
+                    _operatingSystemCommandBindings.Remove(operatingSystemCommandBindingFarmingPanel);
                 }
             }
 

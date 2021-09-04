@@ -11,6 +11,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class RadioPanelPZ69F14B : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
@@ -1626,7 +1628,7 @@ namespace NonVisuals.Radios
 
                             //Frequency selector 3      RIGHT
                             //X=0 / Y=1
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockPilotTacanTensDialObject)
                             {
                                 lock (_lockPilotTacanOnesObject)
@@ -1646,7 +1648,7 @@ namespace NonVisuals.Radios
                         }
                     case CurrentF14RadioMode.RIO_TACAN:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockRioTacanTensDialObject)
                             {
                                 lock (_lockRioTacanOnesObject)
@@ -1678,7 +1680,7 @@ namespace NonVisuals.Radios
                             }
                             else
                             {
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockRioLink4HundredsDial)
                                 {
                                     lock (_lockRioLink4TensDial)
@@ -1764,7 +1766,7 @@ namespace NonVisuals.Radios
                         }
                     case CurrentF14RadioMode.PLT_TACAN:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockPilotTacanTensDialObject)
                             {
                                 lock (_lockPilotTacanOnesObject)
@@ -1784,7 +1786,7 @@ namespace NonVisuals.Radios
                         }
                     case CurrentF14RadioMode.RIO_TACAN:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockRioTacanTensDialObject)
                             {
                                 lock (_lockRioTacanOnesObject)
@@ -1816,7 +1818,7 @@ namespace NonVisuals.Radios
                             }
                             else
                             {
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockRioLink4HundredsDial)
                                 {
                                     lock (_lockRioLink4TensDial)
@@ -1849,7 +1851,7 @@ namespace NonVisuals.Radios
 
         private string GetUHFCockpitFrequencyAsString()
         {
-            var frequencyAsString = "";
+            var frequencyAsString = string.Empty;
             lock (_lockUhfDialBigFreqObject)
             {
                 lock (_lockUhfDial3FreqObject)
@@ -1869,7 +1871,7 @@ namespace NonVisuals.Radios
 
         private string GetVUHFCockpitFrequencyAsString()
         {
-            var frequencyAsString = "";
+            var frequencyAsString = string.Empty;
             lock (_lockVuhfBigFreqObject)
             {
                 lock (_lockVuhfDial3FreqObject)
@@ -3014,7 +3016,7 @@ namespace NonVisuals.Radios
                     
                     if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                     {
-                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                        PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
                 }
 
@@ -3288,7 +3290,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -3300,7 +3302,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

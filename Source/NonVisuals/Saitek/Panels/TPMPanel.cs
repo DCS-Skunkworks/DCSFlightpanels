@@ -8,13 +8,15 @@ using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class TPMPanel : SaitekPanel
     {
         private HashSet<DCSBIOSActionBindingTPM> _dcsBiosBindings = new HashSet<DCSBIOSActionBindingTPM>();
         private HashSet<KeyBindingTPM> _keyBindings = new HashSet<KeyBindingTPM>();
-        private List<OSCommandBindingTPM> _osCommandBindings = new List<OSCommandBindingTPM>();
+        private List<OSCommandBindingTPM> _operatingSystemCommandBindings = new List<OSCommandBindingTPM>();
         private HashSet<BIPLinkTPM> _bipLinks = new HashSet<BIPLinkTPM>();
         private readonly object _dcsBiosDataReceivedLock = new object();
 
@@ -76,9 +78,9 @@ namespace NonVisuals.Saitek.Panels
                     }
                     else if (setting.StartsWith("TPMPanelOSCommand"))
                     {
-                        var osCommand = new OSCommandBindingTPM();
-                        osCommand.ImportSettings(setting);
-                        _osCommandBindings.Add(osCommand);
+                        var operatingSystemCommand = new OSCommandBindingTPM();
+                        operatingSystemCommand.ImportSettings(setting);
+                        _operatingSystemCommandBindings.Add(operatingSystemCommand);
                     }
                     else if (setting.StartsWith("TPMPanelDCSBIOSControl{"))
                     {
@@ -114,11 +116,11 @@ namespace NonVisuals.Saitek.Panels
                     result.Add(keyBinding.ExportSettings());
                 }
             }
-            foreach (var osCommand in _osCommandBindings)
+            foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
             {
-                if (!osCommand.OSCommandObject.IsEmpty)
+                if (!operatingSystemCommand.OSCommandObject.IsEmpty)
                 {
-                    result.Add(osCommand.ExportSettings());
+                    result.Add(operatingSystemCommand.ExportSettings());
                 }
             }
             foreach (var dcsBiosBinding in _dcsBiosBindings)
@@ -174,7 +176,7 @@ namespace NonVisuals.Saitek.Panels
         public override void ClearSettings(bool setIsDirty = false)
         {
             _keyBindings.Clear();
-            _osCommandBindings.Clear();
+            _operatingSystemCommandBindings.Clear();
             _dcsBiosBindings.Clear();
             _bipLinks.Clear();
 
@@ -192,8 +194,8 @@ namespace NonVisuals.Saitek.Panels
 
         public List<OSCommandBindingTPM> OSCommandHashSet
         {
-            get => _osCommandBindings;
-            set => _osCommandBindings = value;
+            get => _operatingSystemCommandBindings;
+            set => _operatingSystemCommandBindings = value;
         }
 
         public HashSet<BIPLinkTPM> BipLinkHashSet
@@ -227,21 +229,49 @@ namespace NonVisuals.Saitek.Panels
             {
                 var tpmPanelSwitch = (TPMPanelSwitch)tpmPanelSwitchObject;
                 var found = false;
+
+                var keyBindingFound = false;
                 foreach (var keyBinding in _keyBindings)
                 {
                     if (!isFirstReport && keyBinding.OSKeyPress != null && keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
-                        keyBinding.OSKeyPress.Execute(new CancellationToken());
                         found = true;
+                        keyBindingFound = true;
+                        if (!PluginManager.DisableKeyboardAPI)
+                        {
+                            keyBinding.OSKeyPress.Execute(new CancellationToken());
+                        }
+
+                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                        {
+                            PluginManager.Get().PanelEventHandler.PanelEvent(
+                                ProfileHandler.SelectedProfile().Description, 
+                                HIDInstanceId, 
+                                (int)PluginGamingPanelEnum.TPM, 
+                                (int)tpmPanelSwitch.TPMSwitch, 
+                                tpmPanelSwitch.IsOn,
+                                keyBinding.OSKeyPress.KeySequence);
+                        }
                         break;
                     }
                 }
-
-                foreach (var osCommand in _osCommandBindings)
+                
+                if (!keyBindingFound && PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                 {
-                    if (!isFirstReport && osCommand.OSCommandObject != null && osCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && osCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
+                    PluginManager.Get().PanelEventHandler.PanelEvent(
+                        ProfileHandler.SelectedProfile().Description,
+                        HIDInstanceId,
+                        (int)PluginGamingPanelEnum.TPM,
+                        (int)tpmPanelSwitch.TPMSwitch,
+                        tpmPanelSwitch.IsOn,
+                        null);
+                }
+
+                foreach (var operatingSystemCommand in _operatingSystemCommandBindings)
+                {
+                    if (!isFirstReport && operatingSystemCommand.OSCommandObject != null && operatingSystemCommand.TPMSwitch == tpmPanelSwitch.TPMSwitch && operatingSystemCommand.WhenTurnedOn == tpmPanelSwitch.IsOn)
                     {
-                        osCommand.OSCommandObject.Execute(new CancellationToken());
+                        operatingSystemCommand.OSCommandObject.Execute(new CancellationToken());
                         found = true;
                         break;
                     }
@@ -267,17 +297,12 @@ namespace NonVisuals.Saitek.Panels
                         }
                     }
                 }
-
-                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                {
-                    PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.TPM, (int)tpmPanelSwitch.TPMSwitch, tpmPanelSwitch.IsOn, 0);
-                }
             }
         }
 
         public string GetKeyPressForLoggingPurposes(TPMPanelSwitch tpmPanelSwitch)
         {
-            var result = "";
+            var result = string.Empty;
             foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.OSKeyPress != null && keyBinding.TPMSwitch == tpmPanelSwitch.TPMSwitch && keyBinding.WhenTurnedOn == tpmPanelSwitch.IsOn)
@@ -324,28 +349,28 @@ namespace NonVisuals.Saitek.Panels
             SetIsDirty();
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff)panelSwitchOnOff;
             //This must accept lists
             var found = false;
 
-            foreach (var osCommandBinding in _osCommandBindings)
+            foreach (var operatingSystemCommandBinding in _operatingSystemCommandBindings)
             {
-                if (osCommandBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && osCommandBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
+                if (operatingSystemCommandBinding.TPMSwitch == tpmPanelSwitchOnOff.Switch && operatingSystemCommandBinding.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                 {
-                    osCommandBinding.OSCommandObject = osCommand;
+                    operatingSystemCommandBinding.OSCommandObject = operatingSystemCommand;
                     found = true;
                     break;
                 }
             }
             if (!found)
             {
-                var osCommandBindingTPM = new OSCommandBindingTPM();
-                osCommandBindingTPM.TPMSwitch = tpmPanelSwitchOnOff.Switch;
-                osCommandBindingTPM.OSCommandObject = osCommand;
-                osCommandBindingTPM.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
-                _osCommandBindings.Add(osCommandBindingTPM);
+                var operatingSystemCommandBindingTPM = new OSCommandBindingTPM();
+                operatingSystemCommandBindingTPM.TPMSwitch = tpmPanelSwitchOnOff.Switch;
+                operatingSystemCommandBindingTPM.OSCommandObject = operatingSystemCommand;
+                operatingSystemCommandBindingTPM.WhenTurnedOn = tpmPanelSwitchOnOff.ButtonState;
+                _operatingSystemCommandBindings.Add(operatingSystemCommandBindingTPM);
             }
             SetIsDirty();
         }
@@ -370,7 +395,7 @@ namespace NonVisuals.Saitek.Panels
             SetIsDirty();
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
             var tpmPanelSwitchOnOff = (TPMSwitchOnOff) panelSwitchOnOff;
             if (keySequence.Count == 0)
@@ -520,21 +545,21 @@ namespace NonVisuals.Saitek.Panels
 
             if (controlListTPM == ControlListTPM.ALL || controlListTPM == ControlListTPM.OSCOMMAND)
             {
-                OSCommandBindingTPM osCommandBindingTPM = null;
-                for (int i = 0; i < _osCommandBindings.Count; i++)
+                OSCommandBindingTPM operatingSystemCommandBindingTPM = null;
+                for (int i = 0; i < _operatingSystemCommandBindings.Count; i++)
                 {
-                    var osCommand = _osCommandBindings[i];
+                    var operatingSystemCommand = _operatingSystemCommandBindings[i];
 
-                    if (osCommand.TPMSwitch == tpmPanelSwitchOnOff.Switch && osCommand.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
+                    if (operatingSystemCommand.TPMSwitch == tpmPanelSwitchOnOff.Switch && operatingSystemCommand.WhenTurnedOn == tpmPanelSwitchOnOff.ButtonState)
                     {
-                        osCommandBindingTPM = _osCommandBindings[i];
+                        operatingSystemCommandBindingTPM = _operatingSystemCommandBindings[i];
                         found = true;
                     }
                 }
 
-                if (osCommandBindingTPM != null)
+                if (operatingSystemCommandBindingTPM != null)
                 {
-                    _osCommandBindings.Remove(osCommandBindingTPM);
+                    _operatingSystemCommandBindings.Remove(operatingSystemCommandBindingTPM);
                 }
             }
 

@@ -20,6 +20,8 @@
 
         public static bool PlugSupportActivated { get; set; }
 
+        public static bool DisableKeyboardAPI { get; set; }
+
         public static bool HasPlugin()
         {
             return Get().PanelEventHandler != null;
@@ -36,6 +38,7 @@
             return _pluginManager;
         }
 
+
         private void LoadPlugins()
         {
             try
@@ -49,15 +52,16 @@
                 // catalog.Catalogs.Add(new AssemblyCatalog(assembly));
                 Debug.WriteLine(AppDomain.CurrentDomain.BaseDirectory + "Extensions");
                 catalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory + "Extensions"));
+
                 // catalog.Catalogs.Add(new DirectoryCatalog(@"C:\dev\repos\DCSFlightpanels\Source\SamplePanelEventHandlerPlugin\bin\Debug"));
 
                 // Create the CompositionContainer with the parts in the catalog.
                 _container = new CompositionContainer(catalog);
                 _container.ComposeParts(this);
             }
-            catch (CompositionException compositionException)
+            catch (Exception ex)
             {
-                Common.ShowErrorMessageBox(compositionException, "Failed to load plugin");
+                Common.ShowErrorMessageBox(ex, "Failed to load plugin");
             }
         }
 

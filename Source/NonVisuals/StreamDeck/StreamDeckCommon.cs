@@ -4,6 +4,10 @@ using System.Windows.Controls;
 
 namespace NonVisuals.StreamDeck
 {
+    using ClassLibraryCommon;
+
+    using MEF;
+
     public static class StreamDeckCommon
     {
 
@@ -53,6 +57,35 @@ namespace NonVisuals.StreamDeck
             }
         }
 
+        public static PluginGamingPanelEnum ConvertEnum(GamingPanelEnum panel)
+        {
+            switch (panel)
+            {
+                case GamingPanelEnum.StreamDeckMini:
+                    {
+                        return PluginGamingPanelEnum.StreamDeckMini;
+                    }
+                case GamingPanelEnum.StreamDeck:
+                    {
+                        return PluginGamingPanelEnum.StreamDeck;
+                    }
+                case GamingPanelEnum.StreamDeckV2:
+                    {
+                        return PluginGamingPanelEnum.StreamDeckV2;
+                    }
+                case GamingPanelEnum.StreamDeckMK2:
+                    {
+                        return PluginGamingPanelEnum.StreamDeckMK2;
+                    }
+                case GamingPanelEnum.StreamDeckXL:
+                    {
+                        return PluginGamingPanelEnum.StreamDeckXL;
+                    }
+            }
+
+            return PluginGamingPanelEnum.Unknown;
+        }
+
         public static string GetDCSFPTemporaryFolder()
         {
             var folder = Path.GetTempPath() + "DCSFP";
@@ -70,7 +103,7 @@ namespace NonVisuals.StreamDeck
                 return -1;
             }
 
-            return int.Parse(streamDeckButtonName.ToString().Replace("BUTTON", ""));
+            return int.Parse(streamDeckButtonName.ToString().Replace("BUTTON", string.Empty));
         }
 
         public static EnumStreamDeckButtonNames ButtonName(int streamDeckButtonNumber)

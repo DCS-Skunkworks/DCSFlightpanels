@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using System.Windows.Media;
-using DCS_BIOS;
-using NonVisuals.Saitek;
-using NonVisuals.StreamDeck;
-
-namespace DCSFlightpanels.Bills
+﻿namespace DCSFlightpanels.Bills
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
+    using DCS_BIOS;
+
+    using NonVisuals.Saitek;
+    using NonVisuals.StreamDeck;
+
     public class BillStreamDeckAction : BillBaseInputStreamDeck
     {
         private StreamDeckButtonOnOff _button;
@@ -25,7 +27,7 @@ namespace DCSFlightpanels.Bills
             _dcsbiosBindingStreamDeck = null;
             _bipLinkStreamDeck = null;
             TextBox.Background = Brushes.LightSteelBlue;
-            TextBox.Text = "";
+            TextBox.Text = string.Empty;
         }
 
         public BillStreamDeckAction(TextBox textBox, StreamDeckButtonOnOff button, StreamDeckPanel streamDeckPanel)
@@ -91,7 +93,7 @@ namespace DCSFlightpanels.Bills
                 }
                 else
                 {
-                    TextBox.Text = "";
+                    TextBox.Text = string.Empty;
                 }
             }
         }

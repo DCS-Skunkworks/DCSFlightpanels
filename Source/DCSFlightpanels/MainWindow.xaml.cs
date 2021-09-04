@@ -1,6 +1,4 @@
-﻿
-
-/*
+﻿/*
  Custom Resharper Naming abbreviations
  ADF AJS ALL ALT APR BIOS BIP BIPS COM CRS DB DCS DCSBIOS DCSBIOSJSON DME DRO HDG HF IAS ICS IFF ILS IP IX JSON KEYS LCD LCDPZ LE LED NADIR NAV OS PZ REV SA SRS TACAN TPM UH UHF USB VHF VID VS XPDR XY ZY ARC ARN APX ABRIS OK ID FA ZA AV8BNA COMM NS DCSFP
 */
@@ -53,13 +51,6 @@ namespace DCSFlightpanels
     using Timer = System.Timers.Timer;
     using UserControl = System.Windows.Controls.UserControl;
 
-    /*
-     * REPORT_SIZE : size of a report in bits
-     * REPORT_COUNT : of fields (of that size)
-     */
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : IGamingPanelListener, IDcsBiosDataListener, IGlobalHandler, IProfileHandlerListener, IUserMessageHandler, IDisposable, IHardwareConflictResolver
     {
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
@@ -108,6 +99,7 @@ namespace DCSFlightpanels
                 DCSFPProfile.ParseSettings(DBCommon.GetDCSBIOSJSONDirectory(Settings.Default.DCSBiosJSONLocation));
 
                 PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
+                PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
 
                 if (Settings.Default.RunMinimized)
                 {
@@ -215,7 +207,7 @@ namespace DCSFlightpanels
 
         private void CheckErrorLogAndDCSBIOSLocation()
         {
-            //FUGLY, I know but something quick to help the users
+            // FUGLY, I know but something quick to help the users
             try
             {
                 var loggerText = File.ReadAllText(_errorLogFile);
@@ -254,7 +246,7 @@ namespace DCSFlightpanels
                 return;
             }
 
-            LabelAirframe.Content = DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile) ? "" : dcsfpProfile.Description;
+            LabelAirframe.Content = DCSFPProfile.IsNoFrameLoadedYet(dcsfpProfile) ? string.Empty : dcsfpProfile.Description;
 
             /*
              * Special case as loaded type of radio panel depends on profile settings, all other panels are the same regardless of profile.
@@ -325,7 +317,7 @@ namespace DCSFlightpanels
                 {
                     var tabItem = (TabItem)TabControlPanels.Items[counter];
                     var userControl = (UserControlBase)tabItem.Content;
-                    var gamingPanelUserControl = ((IGamingPanelUserControl)tabItem.Content);
+                    var gamingPanelUserControl = (IGamingPanelUserControl)tabItem.Content;
                     var gamingPanel = gamingPanelUserControl.GetGamingPanel();
 
                     if (gamingPanel != null && gamingPanel.HIDInstanceId == instanceId)
@@ -343,6 +335,7 @@ namespace DCSFlightpanels
                                 break;
                             }
                         }
+
                         break;
                     }
 
@@ -368,7 +361,7 @@ namespace DCSFlightpanels
                         var tabItem = (TabItem)TabControlPanels.Items.GetItemAt(0);
                         var userControl = (UserControlBase)tabItem.Content;
                         TabControlPanels.Items.Remove(tabItem);
-                        var gamingPanelUserControl = ((IGamingPanelUserControl)tabItem.Content);
+                        var gamingPanelUserControl = (IGamingPanelUserControl)tabItem.Content;
                         var gamingPanel = gamingPanelUserControl.GetGamingPanel();
 
                         if (gamingPanel != null)
@@ -379,7 +372,8 @@ namespace DCSFlightpanels
                             _panelUserControls.Remove(userControl);
                             closedItemCount++;
                         }
-                    } while (TabControlPanels.Items.Count > 0);
+                    }
+                    while (TabControlPanels.Items.Count > 0);
 
                     _profileFileInstanceIDs.Clear();
                 }
@@ -603,7 +597,7 @@ namespace DCSFlightpanels
                                 break;
                             }
                         }
-                    } //for each
+                    } // for each
                 }
 
                 SortTabs();
@@ -661,7 +655,6 @@ namespace DCSFlightpanels
                                     else if (DCSFPProfile.IsA10C(_profileHandler.Profile) && !_profileHandler.Profile.UseGenericRadio)
                                     {
                                         var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlA10C(hidSkeleton, tabItem, this);
-                                        //var radioPanelPZ69UserControl = new RadioPanelPZ69UserControlFullEmulator(hidSkeleton, tabItem, this);
                                         _panelUserControls.Add(radioPanelPZ69UserControl);
                                         _profileHandler.Attach(radioPanelPZ69UserControl);
                                         tabItem.Content = radioPanelPZ69UserControl;
@@ -834,7 +827,7 @@ namespace DCSFlightpanels
                                     break;
                                 }
                         }
-                    } //for each
+                    } // for each
                 }
 
                 SortTabs();
@@ -964,7 +957,9 @@ namespace DCSFlightpanels
             }
         }
 
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
+        {
+        }
 
         public void PanelSettingsChanged(object sender, PanelEventArgs e)
         {
@@ -1035,11 +1030,17 @@ namespace DCSFlightpanels
             }
         }
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
+        {
+        }
 
-        public void DeviceAttached(object sender, PanelEventArgs e) { }
+        public void DeviceAttached(object sender, PanelEventArgs e)
+        {
+        }
 
-        public void DeviceDetached(object sender, PanelEventArgs e) { }
+        public void DeviceDetached(object sender, PanelEventArgs e)
+        {
+        }
 
         private void MainWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -1063,12 +1064,13 @@ namespace DCSFlightpanels
             }
         }
 
-        private void TimerCheckDcsBiosStatus(object sender, ElapsedEventArgs e) { }
-
+        private void TimerCheckDcsBiosStatus(object sender, ElapsedEventArgs e)
+        {
+        }
 
         private async void CheckForNewDCSFPRelease()
         {
-            //#if !DEBUG
+            // #if !DEBUG
             var assembly = Assembly.GetExecutingAssembly();
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             try
@@ -1083,7 +1085,7 @@ namespace DCSFlightpanels
                     Settings.Default.Save();
                     var lastRelease = await client.Repository.Release.GetLatest("DCSFlightpanels", "DCSFlightpanels");
                     var thisReleaseArray = fileVersionInfo.FileVersion.Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-                    var gitHubReleaseArray = lastRelease.TagName.Replace("v.", "").Replace("v", "").Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    var gitHubReleaseArray = lastRelease.TagName.Replace("v.", string.Empty).Replace("v", string.Empty).Split(new[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
                     var newerAvailable = false;
                     if (int.Parse(gitHubReleaseArray[0]) > int.Parse(thisReleaseArray[0]))
                     {
@@ -1167,7 +1169,7 @@ namespace DCSFlightpanels
         {
             if (DCSFPProfile.IsNoFrameLoadedYet(_profileHandler.Profile))
             {
-                Title = "";
+                Title = string.Empty;
             }
             else if (_profileHandler.IsNewProfile)
             {
@@ -1496,7 +1498,7 @@ namespace DCSFlightpanels
                         return;
                     }
 
-                    var streamDeckArguments = Settings.Default.LoadStreamDeck ? "" : Constants.CommandLineArgumentNoStreamDeck + " ";
+                    var streamDeckArguments = Settings.Default.LoadStreamDeck ? string.Empty : Constants.CommandLineArgumentNoStreamDeck + " ";
                     Process.Start("dcsfp.exe", streamDeckArguments + Constants.CommandLineArgumentOpenProfile + "\"" + bindingsFile + "\"");
                 }
             }
@@ -1654,7 +1656,7 @@ namespace DCSFlightpanels
                         _statusMessagesTimer.Interval = 1000;
                     }
 
-                    Dispatcher?.BeginInvoke((Action)(() => LabelInformation.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(() => LabelInformation.Text = string.Empty));
 
                     if (_statusMessages.Count == 0)
                     {
@@ -1774,6 +1776,7 @@ namespace DCSFlightpanels
                 }
 
                 PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
+                PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
             }
         }
 

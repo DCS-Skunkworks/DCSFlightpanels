@@ -15,17 +15,19 @@
     using DCSFlightpanels.Interfaces;
     using DCSFlightpanels.Windows;
 
+    using MEF;
+
     using NonVisuals;
     using NonVisuals.Interfaces;
     using NonVisuals.Plugin;
     using NonVisuals.Saitek;
     using NonVisuals.Saitek.Panels;
     using NonVisuals.Saitek.Switches;
-
+    
     using Brush = System.Windows.Media.Brush;
     using Brushes = System.Windows.Media.Brushes;
     using Image = System.Windows.Controls.Image;
-    using SwitchPanelPZ55Keys = NonVisuals.SwitchPanelPZ55Keys;
+    using SwitchPanelPZ55Keys = MEF.SwitchPanelPZ55Keys;
 
     /// <summary>
     /// Interaction logic for SwitchPanelPZ55UserControl.xaml
@@ -331,7 +333,7 @@
                 if (e.HidInstance.Equals(_switchPanelPZ55.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ55SwitchPanel)
                 {
                     Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ55.Text = string.Empty));
                 }
             }
             catch (Exception ex)
@@ -797,12 +799,12 @@
                     }
                 }
 
-                foreach (var osCommand in _switchPanelPZ55.OSCommandList)
+                foreach (var operatingSystemCommand in _switchPanelPZ55.OSCommandList)
                 {
-                    var textBox = (PZ55TextBox)GetTextBox(osCommand.SwitchPanelPZ55Key, osCommand.WhenTurnedOn);
-                    if (osCommand.OSCommandObject != null)
+                    var textBox = (PZ55TextBox)GetTextBox(operatingSystemCommand.SwitchPanelPZ55Key, operatingSystemCommand.WhenTurnedOn);
+                    if (operatingSystemCommand.OSCommandObject != null)
                     {
-                        textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
+                        textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                     }
                 }
 
@@ -875,7 +877,7 @@
             {
                 if (_switchPanelPZ55 != null)
                 {
-                    TextBoxLogPZ55.Text = "";
+                    TextBoxLogPZ55.Text = string.Empty;
                     TextBoxLogPZ55.Text = _switchPanelPZ55.HIDInstanceId;
                     Clipboard.SetText(_switchPanelPZ55.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
@@ -886,14 +888,7 @@
                 Common.ShowErrorMessageBox(ex);
             }
         }
-
-        private void ButtonSwitchPanelInfo_OnClick(object sender, RoutedEventArgs e)
-        {
-            var bytes = Encoding.UTF8.GetBytes(Properties.Resources.PZ55Notes);
-            var informationWindow = new InformationRichTextWindow(bytes);
-            informationWindow.ShowDialog();
-        }
-
+        
         private void CheckBoxManualLEDs_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -1206,8 +1201,14 @@
         {
             try
             {
-                //var panelEventHandler = new PanelEventHandler();
-                //panelEventHandler.PanelEvent("A-10C", "HIDID", (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, 1, 0);
+                /*var panelEventHandler = new PanelEventHandler();
+                KeyBindingPZ55 kkeyBindingPZ55 = new KeyBindingPZ55();
+                foreach (var keyBindingPZ55 in _switchPanelPZ55.KeyBindingsHashSet)
+                {
+                    kkeyBindingPZ55 = keyBindingPZ55;
+                }*/
+
+                //panelEventHandler.PanelEvent("A-10C", "HIDID", (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, true, kkeyBindingPZ55.OSKeyPress.KeySequence);
                 //var pluginManager = new PluginManager();
                 //pluginManager.LoadPlugins();
                 //pluginManager.PanelEventHandler.PanelEvent("A-10C", "HIDID", (int)PluginGamingPanelEnum.PZ55SwitchPanel, (int)SwitchPanelPZ55Keys.KNOB_ENGINE_BOTH, 1, 0);

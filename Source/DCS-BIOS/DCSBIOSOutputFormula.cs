@@ -110,8 +110,9 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutputFormula cannot import string : " + str);
             }
-            value = value.Replace("DCSBiosOutputFormula{", "").Replace("}", "");
-            //(AAP_EGIPWR+1)/2
+            value = value.Replace("DCSBiosOutputFormula{", string.Empty).Replace("}", string.Empty);
+
+            // (AAP_EGIPWR+1)/2
             _formula = value;
 
             ExtractDCSBIOSOutputsInFormula();

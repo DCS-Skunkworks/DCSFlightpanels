@@ -10,6 +10,8 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
     using NonVisuals.Plugin;
 
     public class RadioPanelPZ69F86F : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
@@ -453,7 +455,7 @@ namespace NonVisuals.Radios
 
                         if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
                         {
-                            PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, 0);
+                            PluginManager.Get().PanelEventHandler.PanelEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                         }
                     }
 
@@ -850,12 +852,12 @@ namespace NonVisuals.Radios
                                 //      " 1" -> "18"
                                 //Pos     0 .. 17
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockARC27PresetDialObject1)
                                 {
                                     channelAsString = (_arc27PresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
-                                var modeAsString = "";
+                                var modeAsString = string.Empty;
                                 lock (_lockARC27ModeDialObject1)
                                 {
                                     modeAsString = (_arc27ModeCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -876,12 +878,12 @@ namespace NonVisuals.Radios
                                 //Frequency
                                 //Band
 
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockARN6FrequencyObject)
                                 {
                                     frequencyAsString = (_arn6CockpitFrequency).ToString().PadLeft(4, ' ');
                                 }
-                                var bandAsString = "";
+                                var bandAsString = string.Empty;
                                 lock (_lockARN6BandObject)
                                 {
                                     bandAsString = (_arn6CockpitBand + 1).ToString().PadLeft(2, ' ');
@@ -930,7 +932,7 @@ namespace NonVisuals.Radios
                                 //Emergency ON OFF
                                 //Modes
 
-                                var modeAsString = "";
+                                var modeAsString = string.Empty;
                                 lock (_lockAPX6ModeObject)
                                 {
                                     modeAsString = (_apx6ModeCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -954,12 +956,12 @@ namespace NonVisuals.Radios
                                 //      " 1" -> "18"
                                 //Pos     0 .. 17
 
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockARC27PresetDialObject1)
                                 {
                                     channelAsString = (_arc27PresetCockpitDialPos).ToString().PadLeft(2, ' ');
                                 }
-                                var modeAsString = "";
+                                var modeAsString = string.Empty;
                                 lock (_lockARC27ModeDialObject1)
                                 {
                                     modeAsString = (_arc27ModeCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -980,12 +982,12 @@ namespace NonVisuals.Radios
                                 //Frequency
                                 //Band
 
-                                var frequencyAsString = "";
+                                var frequencyAsString = string.Empty;
                                 lock (_lockARN6FrequencyObject)
                                 {
                                     frequencyAsString = (_arn6CockpitFrequency).ToString().PadLeft(4, ' ');
                                 }
-                                var bandAsString = "";
+                                var bandAsString = string.Empty;
                                 lock (_lockARN6BandObject)
                                 {
                                     bandAsString = (_arn6CockpitBand + 1).ToString().PadLeft(2, ' ');
@@ -1034,7 +1036,7 @@ namespace NonVisuals.Radios
                                 //Emergency ON OFF
                                 //Modes
 
-                                var modeAsString = "";
+                                var modeAsString = string.Empty;
                                 lock (_lockAPX6ModeObject)
                                 {
                                     modeAsString = (_apx6ModeCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -1271,7 +1273,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -1283,7 +1285,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

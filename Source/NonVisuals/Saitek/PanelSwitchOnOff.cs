@@ -1,5 +1,7 @@
 ﻿namespace NonVisuals.Saitek
 {
+    using MEF;
+
     public class PanelSwitchOnOff
     {
     }

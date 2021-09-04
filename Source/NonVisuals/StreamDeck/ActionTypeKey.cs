@@ -10,6 +10,10 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
+    using NonVisuals.Plugin;
+
     [Serializable]
     public class ActionTypeKey : KeyBinding, IStreamDeckButtonTypeBase, IStreamDeckButtonAction
     {
@@ -25,7 +29,7 @@ namespace NonVisuals.StreamDeck
             _streamDeckPanel = streamDeckPanel;
         }
 
-        
+
         public new int GetHash()
         {
             unchecked
@@ -52,7 +56,7 @@ namespace NonVisuals.StreamDeck
             }
         }
 
-        
+
         public bool IsRunning()
         {
             return OSKeyPress.IsRunning();
@@ -61,7 +65,22 @@ namespace NonVisuals.StreamDeck
         public void Execute(CancellationToken threadCancellationToken)
         {
             Common.PlaySoundFile(false, SoundFile, Volume);
-            OSKeyPress.Execute(threadCancellationToken);
+
+            if (!PluginManager.DisableKeyboardAPI)
+            {
+                OSKeyPress.Execute(threadCancellationToken);
+            }
+
+            if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+            {
+                PluginManager.Get().PanelEventHandler.PanelEvent(
+                    ProfileHandler.SelectedProfile().Description,
+                    StreamDeckPanelInstance.HIDInstanceId,
+                    (int)StreamDeckCommon.ConvertEnum(_streamDeckPanel.TypeOfPanel),
+                    (int)StreamDeckButtonName,
+                    true,
+                    OSKeyPress.KeySequence);
+            }
         }
 
 
@@ -74,23 +93,6 @@ namespace NonVisuals.StreamDeck
 
         public static HashSet<ActionTypeKey> SetNegators(HashSet<ActionTypeKey> keyBindings)
         {
-            /*if (keyBindings == null)
-            {
-                return null;
-            }
-            foreach (var keyBindingStreamDeck in keyBindings)
-            {
-                //Clear all negators
-                keyBindingStreamDeck.OSKeyPress.NegatorOSKeyPresses.Clear();
-
-                foreach (var keyBinding in keyBindings)
-                {
-                    if (keyBinding != keyBindingStreamDeck && keyBinding.EnumStreamDeckButtonName == keyBindingStreamDeck.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn != keyBindingStreamDeck.WhenTurnedOn)
-                    {
-                        keyBindingStreamDeck.OSKeyPress.NegatorOSKeyPresses.Add(keyBinding.OSKeyPress);
-                    }
-                }
-            }*/
             return keyBindings;
         }
 
@@ -121,7 +123,7 @@ namespace NonVisuals.StreamDeck
         [JsonProperty("HasSound", Required = Required.Default)]
         public bool HasSound => !string.IsNullOrEmpty(SoundFile) && File.Exists(SoundFile);
 
-        
+
         public void PlaySound()
         {
             Common.PlaySoundFile(false, SoundFile, Volume);

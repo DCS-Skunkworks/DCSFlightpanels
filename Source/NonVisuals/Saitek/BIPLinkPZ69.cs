@@ -1,10 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+
+    using MEF;
+
+    using NonVisuals.Saitek.Panels;
+
     [Serializable]
     public class BIPLinkPZ69 : BIPLink
     {
@@ -12,6 +15,7 @@ namespace NonVisuals.Saitek
          This class binds a physical switch on the PZ55 with a BIP LED
          */
         public PZ70DialPosition DialPosition { get; set; }
+
         private RadioPanelPZ69KnobsEmulator _panelPZ69Knob;
 
         public override void ImportSettings(string settings)
@@ -22,13 +26,14 @@ namespace NonVisuals.Saitek
             }
             if (settings.StartsWith("RadioPanelBIPLink{"))
             {
-                //RadioPanelBIPLink{1UpperCOM1}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // RadioPanelBIPLink{1UpperCOM1}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 // 0 1 2 3
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //RadioPanelBIPLink{1UpperCOM1}
-                var param0 = parameters[0].Replace("RadioPanelBIPLink{", "").Replace("}", "").Trim();
-                //1UpperCOM1
+                // RadioPanelBIPLink{1UpperCOM1}
+                var param0 = parameters[0].Replace("RadioPanelBIPLink{", string.Empty).Replace("}", string.Empty).Trim();
+
+                // 1UpperCOM1
                 WhenOnTurnedOn = param0.Substring(0, 1) == "1";
                 param0 = param0.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param0);
@@ -43,7 +48,7 @@ namespace NonVisuals.Saitek
                     }
                     if (parameters[i].StartsWith("Description["))
                     {
-                        var tmp = parameters[i].Replace("Description[", "").Replace("]", "");
+                        var tmp = parameters[i].Replace("Description[", string.Empty).Replace("]", string.Empty);
                         _description = tmp;
                     }
                 }
@@ -52,11 +57,12 @@ namespace NonVisuals.Saitek
 
         public override string ExportSettings()
         {
-            //RadioPanelBIPLink{1UpperCOM1}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+            // RadioPanelBIPLink{1UpperCOM1}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
             if (_bipLights == null || _bipLights.Count == 0)
             {
                 return null;
             }
+
             var onStr = WhenOnTurnedOn ? "1" : "0";
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("RadioPanelBIPLink{" + onStr + Enum.GetName(typeof(RadioPanelPZ69KnobsEmulator), RadioPanelPZ69Knob) + "}");
@@ -69,6 +75,7 @@ namespace NonVisuals.Saitek
             {
                 stringBuilder.Append(SaitekConstants.SEPARATOR_SYMBOL + "Description[" + _description + "]");
             }
+
             return stringBuilder.ToString();
         }
 
@@ -78,6 +85,7 @@ namespace NonVisuals.Saitek
             {
                 return 0;
             }
+
             return _bipLights.Keys.Max() + 1;
         }
 

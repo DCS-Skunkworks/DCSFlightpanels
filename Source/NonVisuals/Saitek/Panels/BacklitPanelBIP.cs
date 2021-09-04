@@ -7,6 +7,8 @@ using DCS_BIOS;
 
 namespace NonVisuals.Saitek.Panels
 {
+    using MEF;
+
     public class BacklitPanelBIP : SaitekPanel
     {
         private readonly byte[] _upperRowBytes = { (byte)0x0, (byte)0x0 }; //byte 1 & 4
@@ -337,20 +339,20 @@ namespace NonVisuals.Saitek.Panels
 
         public string GetPosString(BIPLedPositionEnum bipLedPositionEnum)
         {
-            //Position_1_1
-            return bipLedPositionEnum.ToString().Replace("Position_", "");
-            //1_1
+            // Position_1_1
+            return bipLedPositionEnum.ToString().Replace("Position_", string.Empty);
+            // 1_1
         }
 
         public int GetIndex(BIPLedPositionEnum bipLedPositionEnum)
         {
-            //Position_1_1
-            return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(2, 1)); ;
+            // Position_1_1
+            return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(2, 1)); 
         }
 
         public int GetRow(BIPLedPositionEnum bipLedPositionEnum)
         {
-            //Position_1_1
+            // Position_1_1
             return int.Parse(bipLedPositionEnum.ToString().Remove(0, 9).Substring(0, 1));
         }
 
@@ -618,7 +620,7 @@ namespace NonVisuals.Saitek.Panels
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -630,7 +632,7 @@ namespace NonVisuals.Saitek.Panels
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

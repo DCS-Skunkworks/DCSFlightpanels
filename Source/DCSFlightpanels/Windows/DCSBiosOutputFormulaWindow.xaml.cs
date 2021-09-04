@@ -123,10 +123,10 @@ namespace DCSFlightpanels.Windows
 
             if (_dcsbiosControl == null && _dcsBiosOutput == null)
             {
-                TextBoxControlId.Text = "";
-                TextBoxMaxValue.Text = "";
-                TextBoxOutputType.Text = "";
-                TextBoxControlDescription.Text = "";
+                TextBoxControlId.Text = string.Empty;
+                TextBoxMaxValue.Text = string.Empty;
+                TextBoxOutputType.Text = string.Empty;
+                TextBoxControlDescription.Text = string.Empty;
             }
         }
 
@@ -345,7 +345,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                TextBlockFormulaErrors.Text = "";
+                TextBlockFormulaErrors.Text = string.Empty;
                 LabelResult.Content = "Result : " + _jaceExtended.Evaluate(TextBoxFormula.Text);
                 SetFormState();
             }
@@ -424,7 +424,7 @@ namespace DCSFlightpanels.Windows
                 CheckBoxUseFormula.IsChecked = false;
                 _dcsbiosControl = null;
                 _dcsBiosOutput = null;
-                TextBoxFormula.Text = "";
+                TextBoxFormula.Text = string.Empty;
                 SetFormState();
             }
             catch (Exception ex)

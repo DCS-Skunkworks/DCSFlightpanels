@@ -1,8 +1,11 @@
-﻿using System;
-using NonVisuals.Saitek.Panels;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+
+    using MEF;
+
+    using NonVisuals.Saitek.Panels;
+
     [Serializable]
     public class OSCommandBindingPZ70 : OSCommandBinding
     {
@@ -21,21 +24,22 @@ namespace NonVisuals.Saitek
             }
             if (settings.StartsWith("MultiPanelOSPZ70{"))
             {
-                //MultiPanelOSPZ70{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // MultiPanelOSPZ70{ALT}\o/{1KNOB_ENGINE_LEFT}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //MultiPanelOSPZ70{ALT}
-                var param0 = parameters[0].Replace("MultiPanelOSPZ70{", "").Replace("}", "");
+                // MultiPanelOSPZ70{ALT}
+                var param0 = parameters[0].Replace("MultiPanelOSPZ70{", string.Empty).Replace("}", string.Empty);
                 _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
 
-                //{1KNOB_ENGINE_LEFT}
-                var param1 = parameters[1].Replace("{", "").Replace("}", "");
-                //1KNOB_ENGINE_LEFT
+                // {1KNOB_ENGINE_LEFT}
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
+
+                // 1KNOB_ENGINE_LEFT
                 WhenTurnedOn = param1.Substring(0, 1) == "1";
                 param1 = param1.Substring(1);
                 _multiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), param1);
 
-                //OSCommand{FILE\o/ARGUMENTS\o/NAME}
+                // OSCommand{FILE\o/ARGUMENTS\o/NAME}
                 OSCommandObject = new OSCommand();
                 OSCommandObject.ImportString(parameters[2]);
             }

@@ -4,6 +4,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Saitek.Switches
 {
+    using MEF;
 
     [Flags]
     public enum SwitchPanelPZ55LEDs : byte
