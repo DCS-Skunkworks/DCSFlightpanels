@@ -100,6 +100,10 @@ namespace DCSFlightpanels
 
                 PluginManager.PlugSupportActivated = Settings.Default.EnablePlugin;
                 PluginManager.DisableKeyboardAPI = Settings.Default.DisableKeyboardAPI;
+                if (PluginManager.HasPlugin())
+                {
+                    LabelPluginInformation.Text = "Plugin [" + PluginManager.Get().PanelEventHandler.PluginName + "] is now loaded.";
+                }
 
                 if (Settings.Default.RunMinimized)
                 {
