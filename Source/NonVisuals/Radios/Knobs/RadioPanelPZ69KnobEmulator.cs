@@ -4,53 +4,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-
-    public enum PZ69DialPosition
-    {
-        UpperCOM1 = 0,
-        UpperCOM2 = 2,
-        UpperNAV1 = 4,
-        UpperNAV2 = 8,
-        UpperADF = 16,
-        UpperDME = 32,
-        UpperXPDR = 64,
-        LowerCOM1 = 4096,
-        LowerCOM2 = 8192,
-        LowerNAV1 = 16384,
-        LowerNAV2 = 32768,
-        LowerADF = 65536,
-        LowerDME = 131072,
-        LowerXPDR = 262144,
-        Unknown = 0x80000
-    }
-
-    public enum RadioPanelPZ69KnobsEmulator
-    {
-        UpperCOM1 = 0,
-        UpperCOM2 = 2,
-        UpperNAV1 = 4,
-        UpperNAV2 = 8,
-        UpperADF = 16,
-        UpperDME = 32,
-        UpperXPDR = 64,
-        UpperSmallFreqWheelInc = 128,
-        UpperSmallFreqWheelDec = 256,
-        UpperLargeFreqWheelInc = 512,
-        UpperLargeFreqWheelDec = 1024,
-        UpperFreqSwitch = 2056,
-        LowerCOM1 = 4096,
-        LowerCOM2 = 8192,
-        LowerNAV1 = 16384,
-        LowerNAV2 = 32768,
-        LowerADF = 65536,
-        LowerDME = 131072,
-        LowerXPDR = 262144,
-        LowerSmallFreqWheelInc = 8388608,
-        LowerSmallFreqWheelDec = 524288,
-        LowerLargeFreqWheelInc = 1048576,
-        LowerLargeFreqWheelDec = 2097152,
-        LowerFreqSwitch = 4194304
-    }
+    using MEF;
 
     public enum CurrentEmulatorRadioMode
     {

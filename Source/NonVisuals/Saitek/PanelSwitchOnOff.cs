@@ -1,10 +1,7 @@
-﻿using NonVisuals.Radios.Knobs;
- using NonVisuals.Saitek.Switches;
- using NonVisuals.StreamDeck;
-
-
- namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using MEF;
+
     public class PanelSwitchOnOff
     {
     }

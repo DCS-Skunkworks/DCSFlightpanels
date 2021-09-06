@@ -9,6 +9,7 @@ using ClassLibraryCommon;
 using DCSFlightpanels.Bills;
 using DCSFlightpanels.CustomControls;
 using DCSFlightpanels.Shared;
+using NonVisuals;
 using NonVisuals.Interfaces;
 using NonVisuals.StreamDeck;
 using NonVisuals.StreamDeck.Events;
@@ -16,6 +17,8 @@ using NonVisuals.StreamDeck.Events;
 
 namespace DCSFlightpanels.PanelUserControls.StreamDeck
 {
+    using MEF;
+
     public abstract class UserControlStreamDeckUIBase : UserControl, IIsDirty, INvStreamDeckListener, IStreamDeckConfigListener, IOledImageListener
     {
         protected readonly List<StreamDeckImage> ButtonImages = new List<StreamDeckImage>();
@@ -23,7 +26,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
         protected bool UserControlLoaded;
         protected StreamDeckPanel _streamDeckPanel;
 
-        private string _lastShownLayer = "";
+        private string _lastShownLayer = string.Empty;
 
         protected virtual void SetFormState() { }
 
@@ -392,7 +395,7 @@ namespace DCSFlightpanels.PanelUserControls.StreamDeck
                     continue;
                 }
                 buttonImage.Bill = new BillStreamDeckFace();
-                buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", ""));
+                buttonImage.Bill.StreamDeckButtonName = (EnumStreamDeckButtonNames)Enum.Parse(typeof(EnumStreamDeckButtonNames), "BUTTON" + buttonImage.Name.Replace("ButtonImage", string.Empty));
                 buttonImage.Bill.SelectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, System.Drawing.Color.Green);
                 buttonImage.Bill.DeselectedImage = BitMapCreator.GetButtonImageFromResources(buttonImage.Bill.StreamDeckButtonName, Color.Blue);
                 buttonImage.Bill.StreamDeckPanelInstance = _streamDeckPanel;

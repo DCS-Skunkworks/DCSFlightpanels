@@ -34,7 +34,7 @@ namespace DCS_BIOS
         private string _controlId;
         //The user has entered these two depending on type
         private uint _specifiedValueInt;
-        private string _specifiedValueString = "";
+        private string _specifiedValueString = string.Empty;
 
         private string _controlDescription;
         private int _maxValue;
@@ -293,7 +293,7 @@ namespace DCS_BIOS
 
         public void ImportString(string str)
         {
-            //DCSBiosOutput{AAP_EGIPWR|Equals|0}
+            // DCSBiosOutput{AAP_EGIPWR|Equals|0}
             var value = str;
             if (string.IsNullOrEmpty(str))
             {
@@ -303,8 +303,9 @@ namespace DCS_BIOS
             {
                 throw new Exception("DCSBiosOutput cannot import string : " + str);
             }
-            value = value.Replace("DCSBiosOutput{", "").Replace("}", "");
-            //AAP_EGIPWR|Equals|0
+            value = value.Replace("DCSBiosOutput{", string.Empty).Replace("}", string.Empty);
+
+            // AAP_EGIPWR|Equals|0
             var entries = value.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
             _controlId = entries[0];
             var dcsBIOSControl = DCSBIOSControlLocator.GetControl(_controlId);

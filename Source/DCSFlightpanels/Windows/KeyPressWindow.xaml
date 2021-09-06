@@ -7,11 +7,11 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
         xmlns:nonVisuals="clr-namespace:NonVisuals;assembly=NonVisuals"
         xmlns:classLibraryCommon="clr-namespace:ClassLibraryCommon;assembly=ClassLibraryCommon"
+        xmlns:mef="clr-namespace:MEF;assembly=MEF"
         Title="Configure key press" Height="257" Width="633" WindowStartupLocation="CenterScreen"  Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico" KeyDown="KeyPressWindow_OnKeyDown">
     <windows:Window.Resources>
         <data:ObjectDataProvider x:Key="KeyPressLengthEnum"  MethodName="GetValues" ObjectType="{x:Type system:Enum}">
-            <data:ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="classLibraryCommon:KeyPressLength"></x:Type>
+            <data:ObjectDataProvider.MethodParameters><x:Type TypeName="mef:KeyPressLength"></x:Type>
             </data:ObjectDataProvider.MethodParameters>
         </data:ObjectDataProvider>
     </windows:Window.Resources>

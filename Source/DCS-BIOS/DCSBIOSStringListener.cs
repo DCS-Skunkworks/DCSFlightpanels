@@ -129,7 +129,7 @@ namespace DCS_BIOS
                                 //Common.DebugP("**********data = [" + data + "] ****************");
                                 //Common.DebugP("**********hex = [" + hex + "] ****************");
                                 var secondByte = new[] { Convert.ToByte(hex.Substring(0, 2), 16) };
-                                var firstChar = "";
+                                var firstChar = string.Empty;
                                 byte[] firstByte = new byte[10];
                                 if (hex.Length == 3) 
                                 {

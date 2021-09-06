@@ -1,9 +1,9 @@
-﻿using System;
-using NonVisuals.Radios.Knobs;
-
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+
+    using MEF;
+
     [Serializable]
     public class OSCommandBindingPZ69Emulator : OSCommandBinding
     {
@@ -21,17 +21,17 @@ namespace NonVisuals.Saitek
             }
             if (settings.StartsWith("RadioPanelOSPZ69{"))
             {
-                //RadioPanelOSPZ69{1UpperCOM1}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // RadioPanelOSPZ69{1UpperCOM1}\o/OSCommand{FILE\o/ARGUMENTS\o/NAME}\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //RadioPanelOSPZ69{1UpperCOM1}
-                var param0 = parameters[0].Replace("RadioPanelOSPZ69{", "").Replace("}", "");
-                //1UpperCOM1
+                // RadioPanelOSPZ69{1UpperCOM1}
+                var param0 = parameters[0].Replace("RadioPanelOSPZ69{", string.Empty).Replace("}", string.Empty);
+                // 1UpperCOM1
                 WhenTurnedOn = (param0.Substring(0, 1) == "1");
                 param0 = param0.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param0);
 
-                //OSCommand{FILE\o/ARGUMENTS\o/NAME}
+                // OSCommand{FILE\o/ARGUMENTS\o/NAME}
                 OSCommandObject = new OSCommand();
                 OSCommandObject.ImportString(parameters[1]);
             }

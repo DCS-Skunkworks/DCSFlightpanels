@@ -18,10 +18,10 @@ namespace NonVisuals.StreamDeck
     public class DCSBIOSDecoder : FaceTypeDCSBIOS, IDcsBiosDataListener, IDCSBIOSStringListener, IDisposable
     {
         private DCSBIOSOutput _dcsbiosOutput = null;
-        private string _formula = "";
+        private string _formula = string.Empty;
         private bool _useFormula = false;
         private double _formulaResult = Double.MaxValue;
-        private string _lastFormulaError = "";
+        private string _lastFormulaError = string.Empty;
         private List<DCSBIOSConverter> _dcsbiosConverters = new List<DCSBIOSConverter>();
         private volatile bool _valueUpdated = true;
         [NonSerialized] private int _jaceId = 0;
@@ -182,7 +182,7 @@ namespace NonVisuals.StreamDeck
                     {
                         if (string.IsNullOrWhiteSpace(e.StringData))
                         {
-                            StringDcsBiosValue = "";
+                            StringDcsBiosValue = string.Empty;
                         }
                         else if (e.StringData.Length < _dcsbiosOutput.MaxLength)
                         {
@@ -243,7 +243,7 @@ namespace NonVisuals.StreamDeck
                     }
                     else if (DecoderSourceType == DCSBiosOutputType.STRING_TYPE && !TreatStringAsNumber)
                     {
-                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, (string.IsNullOrWhiteSpace(StringDcsBiosValue) ? "" : StringDcsBiosValue));
+                        ButtonFinalText = ButtonTextTemplate.Replace(StreamDeckConstants.DCSBIOSValuePlaceHolder, string.IsNullOrWhiteSpace(StringDcsBiosValue) ? string.Empty : StringDcsBiosValue);
                         showImage = true;
                     }
                     else if (!string.IsNullOrEmpty(ButtonTextTemplate))
@@ -297,7 +297,7 @@ namespace NonVisuals.StreamDeck
                         BlackoutKey();
                     }
                 }
-                _lastFormulaError = "";
+                _lastFormulaError = string.Empty;
             }
             catch (Exception exception)
             {
@@ -358,11 +358,11 @@ namespace NonVisuals.StreamDeck
 
         public void Clear()
         {
-            _formula = "";
+            _formula = string.Empty;
             _dcsbiosOutput = null;
             _dcsbiosConverters.Clear();
             _valueUpdated = false;
-            _lastFormulaError = "";
+            _lastFormulaError = string.Empty;
             _formulaResult = 0;
         }
 
@@ -394,7 +394,7 @@ namespace NonVisuals.StreamDeck
                 _valueUpdated = true;
                 _dcsbiosOutput = value;
                 UintDcsBiosValue = uint.MaxValue;
-                StringDcsBiosValue = "";
+                StringDcsBiosValue = string.Empty;
                 if (_dcsbiosOutput.DCSBiosOutputType == DCSBiosOutputType.STRING_TYPE)
                 {
                     DCSBIOSStringManager.AddListener(_dcsbiosOutput, this);
@@ -586,7 +586,7 @@ namespace NonVisuals.StreamDeck
                         _dcsbiosConverters.Clear();
                         if (!_useFormula)
                         {
-                            _formula = "";
+                            _formula = string.Empty;
                         }
                         break;
                     }

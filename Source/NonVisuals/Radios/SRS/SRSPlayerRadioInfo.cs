@@ -65,14 +65,14 @@ namespace NonVisuals.Radios.SRS
             IN_COCKPIT = 1
         }
 
-        public string name = "";
+        public string name = string.Empty;
         public SRSDcsPosition pos = new SRSDcsPosition();
         public volatile bool ptt = false;
 
         public SRSRadioInformation[] radios = new SRSRadioInformation[11]; //10 + intercom
         public RadioSwitchControls control = RadioSwitchControls.HOTAS;
         public short selected = 0;
-        public string unit = "";
+        public string unit = string.Empty;
         public uint unitId;
 
         public static readonly uint UnitIdOffset = 100000001; // this is where non aircraft "Unit" Ids start from for satcom intercom

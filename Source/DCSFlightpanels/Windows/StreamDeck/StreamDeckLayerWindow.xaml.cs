@@ -54,7 +54,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
         {
             try
             {
-                TextBoxLayerName.Text = TextBoxLayerName.Text.Replace("|", "").Replace("{", "").Replace("}", "").Replace("*", "");
+                TextBoxLayerName.Text = TextBoxLayerName.Text.Replace("|", string.Empty).Replace("{", string.Empty).Replace("}", string.Empty).Replace("*", string.Empty);
                 ButtonOk.IsEnabled = TextBoxLayerName.Text.Length >= MINIMUM_LENGTH;
             }
             catch (Exception ex)

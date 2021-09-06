@@ -10,6 +10,10 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
+    using NonVisuals.Plugin;
+
     public class RadioPanelPZ69A10C : RadioPanelPZ69Base, IDCSBIOSStringListener, IRadioPanel
     {
         private HashSet<RadioPanelKnobA10C> _radioPanelKnobs = new HashSet<RadioPanelKnobA10C>();
@@ -1998,10 +2002,10 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    var dial1 = "";
-                                    var dial2 = "";
-                                    var dial3 = "";
-                                    var dial4 = "";
+                                    var dial1 = string.Empty;
+                                    var dial2 = string.Empty;
+                                    var dial3 = string.Empty;
+                                    var dial4 = string.Empty;
                                     lock (_lockVhfFmDialsObject1)
                                     {
                                         dial1 = GetVhfFmDialFrequencyForPosition(1, _vhfFmCockpitFreq1DialPos);
@@ -2032,7 +2036,7 @@ namespace NonVisuals.Radios
                         {
                             //Mhz   "108" "109" "110" "111"
                             //Khz   "10" "15" "30" "35" "50" "55" "70" "75" "90" "95"
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockIlsDialsObject1)
                             {
                                 frequencyAsString = GetILSDialFrequencyForPosition(1, _ilsCockpitFreq1DialPos);
@@ -2058,7 +2062,7 @@ namespace NonVisuals.Radios
 
                             //Frequency selector 3      RIGHT
                             //X=0 / Y=1
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockTacanDialsObject1)
                             {
                                 lock (_lockTacanDialsObject2)
@@ -2157,10 +2161,10 @@ namespace NonVisuals.Radios
                                 }
                                 else
                                 {
-                                    var dial1 = "";
-                                    var dial2 = "";
-                                    var dial3 = "";
-                                    var dial4 = "";
+                                    var dial1 = string.Empty;
+                                    var dial2 = string.Empty;
+                                    var dial3 = string.Empty;
+                                    var dial4 = string.Empty;
                                     lock (_lockVhfFmDialsObject1)
                                     {
                                         dial1 = GetVhfFmDialFrequencyForPosition(1, _vhfFmCockpitFreq1DialPos);
@@ -2189,7 +2193,7 @@ namespace NonVisuals.Radios
                         }
                     case CurrentA10RadioMode.ILS:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockIlsDialsObject1)
                             {
                                 frequencyAsString = GetILSDialFrequencyForPosition(1, _ilsCockpitFreq1DialPos);
@@ -2205,7 +2209,7 @@ namespace NonVisuals.Radios
                         }
                     case CurrentA10RadioMode.TACAN:
                         {
-                            var frequencyAsString = "";
+                            var frequencyAsString = string.Empty;
                             lock (_lockTacanDialsObject1)
                             {
                                 lock (_lockTacanDialsObject2)
@@ -2244,7 +2248,7 @@ namespace NonVisuals.Radios
             //Frequency selector 4      VHFAM_FREQ4
             //      "00" "25" "50" "75", only "00" and "50" used.
             //Pos     0    1    2    3
-            var frequencyAsString = "";
+            var frequencyAsString = string.Empty;
             lock (_lockVhfAmDialsObject1)
             {
                 frequencyAsString = GetVhfAmDialFrequencyForPosition(1, _vhfAmCockpitFreq1DialPos);
@@ -2290,7 +2294,7 @@ namespace NonVisuals.Radios
             //Pos     0    1    2    3
 
             //251.75
-            var frequencyAsString = "";
+            var frequencyAsString = string.Empty;
             lock (_lockUhfDialsObject1)
             {
                 frequencyAsString = GetUhfDialFrequencyForPosition(1, _uhfCockpitFreq1DialPos);
@@ -3729,8 +3733,12 @@ namespace NonVisuals.Radios
                             }
                     }
 
-
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                    }
                 }
+
                 AdjustFrequency(hashSet);
             }
         }
@@ -3942,7 +3950,7 @@ namespace NonVisuals.Radios
                     }
                     break;
             }
-            return "";
+            return string.Empty;
         }
 
         private string GetUhfDialFrequencyForPosition(int dial, uint position)
@@ -4018,7 +4026,8 @@ namespace NonVisuals.Radios
                     }
                     break;
             }
-            return "";
+
+            return string.Empty;
         }
 
         private string GetVhfFmDialFrequencyForPosition(int dial, uint position)
@@ -4132,7 +4141,8 @@ namespace NonVisuals.Radios
                     }
                     break;
             }
-            return "";
+
+            return string.Empty;
         }
 
         private string GetILSDialFrequencyForPosition(int dial, uint position)
@@ -4216,7 +4226,8 @@ namespace NonVisuals.Radios
                     }
                     break;
             }
-            return "";
+
+            return string.Empty;
         }
 
         private int GetILSDialPosForFrequency(int dial, int freq)
@@ -5127,8 +5138,8 @@ namespace NonVisuals.Radios
              */
             try
             {
-                var bigFrequencyAsString = "";
-                var smallFrequencyAsString = "";
+                var bigFrequencyAsString = string.Empty;
+                var smallFrequencyAsString = string.Empty;
                 lock (_lockUhfDialsObject1)
                 {
                     bigFrequencyAsString = GetUhfDialFrequencyForPosition(1, _uhfCockpitFreq1DialPos);
@@ -5336,7 +5347,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -5348,7 +5359,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

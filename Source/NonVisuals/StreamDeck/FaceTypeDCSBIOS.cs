@@ -11,8 +11,8 @@ namespace NonVisuals.StreamDeck
     {
         [JsonProperty("FaceType", Required = Required.Default)]
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOS;
-        private string _buttonTextTemplate ="";
-        private string _buttonFinalText = "";
+        private string _buttonTextTemplate =string.Empty;
+        private string _buttonFinalText = string.Empty;
         private Font _textFont = SettingsManager.DefaultFont;
         private Color _fontColor = SettingsManager.DefaultFontColor;
         private Color _backgroundColor = SettingsManager.DefaultBackgroundColor;

@@ -1,31 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using HidLibrary;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek.Switches;
-
-namespace NonVisuals.Saitek.Panels
+﻿namespace NonVisuals.Saitek.Panels
 {
+    using System;
+    using System.Collections.Generic;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using HidLibrary;
+
+    using MEF;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek.Switches;
 
     public abstract class SaitekPanel : GamingPanel
     {
         public abstract void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff);
+
         public abstract void AddOrUpdateKeyStrokeBinding(PanelSwitchOnOff panelSwitchOnOff, string keyPress, KeyPressLength keyPressLength);
-        public abstract void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence);
+
+        public abstract void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence);
+
         public abstract void AddOrUpdateDCSBIOSBinding(PanelSwitchOnOff panelSwitchOnOff, List<DCSBIOSInput> dcsbiosInputs, string description);
+
         public abstract void AddOrUpdateBIPLinkBinding(PanelSwitchOnOff panelSwitchOnOff, BIPLink bipLink);
-        public abstract void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand);
+
+        public abstract void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand);
+
         public abstract DcsOutputAndColorBinding CreateDcsOutputAndColorBinding(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor, DCSBIOSOutput dcsBiosOutput);
 
         protected HashSet<ISaitekPanelKnob> SaitekPanelKnobs = new HashSet<ISaitekPanelKnob>();
+
         protected byte[] OldSaitekPanelValue = { 0, 0, 0 };
+
         protected byte[] NewSaitekPanelValue = { 0, 0, 0 };
+
         protected byte[] OldSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
+
         protected byte[] NewSaitekPanelValueTPM = { 0, 0, 0, 0, 0 };
+
         protected byte[] OldPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
         protected byte[] NewPanelValueFarmingPanel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         protected SaitekPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton) : base(typeOfGamingPanel, hidSkeleton)
@@ -39,7 +55,7 @@ namespace NonVisuals.Saitek.Panels
             {
                 if (HIDSkeletonBase.HIDReadDevice != null && !Closed)
                 {
-                    //Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType + " " + GuidString + "\n");
+                    // Debug.Write("Adding callback " + HIDSkeletonBase.PanelInfo.GamingPanelType + " " + GuidString + "\n");
                     HIDSkeletonBase.HIDReadDevice.ReadReport(OnReport);
                 }
             }
@@ -208,33 +224,28 @@ namespace NonVisuals.Saitek.Panels
 
 
         public delegate void LedLightChangedEventHandler(object sender, LedLightChangeEventArgs e);
+
         public event LedLightChangedEventHandler OnLedLightChangedA;
 
-        protected virtual void OnLedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
+        protected virtual void LedLightChanged(SaitekPanelLEDPosition saitekPanelLEDPosition, PanelLEDColor panelLEDColor)
         {
             OnLedLightChangedA?.Invoke(this, new LedLightChangeEventArgs() { UniqueId = HIDInstanceId, LEDPosition = saitekPanelLEDPosition, LEDColor = panelLEDColor });
         }
-
-        //For those that wants to listen to this panel
-        public override void Attach(IGamingPanelListener iGamingPanelListener)
+         
+        // For those that wants to listen to this panel
+        public override void Attach(IGamingPanelListener gamingPanelListener)
         {
-            OnLedLightChangedA += iGamingPanelListener.LedLightChanged;
-            base.Attach(iGamingPanelListener);
+            OnLedLightChangedA += gamingPanelListener.LedLightChanged;
+            base.Attach(gamingPanelListener);
         }
 
-        //For those that wants to listen to this panel
-        public override void Detach(IGamingPanelListener iGamingPanelListener)
+        // For those that wants to listen to this panel
+        public override void Detach(IGamingPanelListener gamingPanelListener)
         {
-            OnLedLightChangedA -= iGamingPanelListener.LedLightChanged;
-            base.Detach(iGamingPanelListener);
+            OnLedLightChangedA -= gamingPanelListener.LedLightChanged;
+            base.Detach(gamingPanelListener);
         }
     }
 
-    public class LedLightChangeEventArgs : EventArgs
-    {
-        public string UniqueId { get; set; }
-        public SaitekPanelLEDPosition LEDPosition { get; set; }
-        public PanelLEDColor LEDColor { get; set; }
-    }
 
 }

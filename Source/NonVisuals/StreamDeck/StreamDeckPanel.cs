@@ -17,6 +17,10 @@ using Theraot.Core;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
+    using NonVisuals.Plugin;
+
     public class StreamDeckPanel : GamingPanel, INvStreamDeckListener, IStreamDeckConfigListener, IDisposable
     {
         private IStreamDeckBoard _streamDeckBoard;
@@ -24,7 +28,7 @@ namespace NonVisuals.StreamDeck
         private readonly StreamDeckLayerHandler _streamDeckLayerHandler;
         private readonly object _lcdLockObject = new object();
         private readonly object _lcdDataVariablesLockObject = new object();
-
+        private GamingPanelEnum _panelType;
         private static readonly List<StreamDeckPanel> StreamDeckPanels = new List<StreamDeckPanel>();
 
         private int _buttonCount = 0;
@@ -35,6 +39,7 @@ namespace NonVisuals.StreamDeck
 
         public StreamDeckPanel(GamingPanelEnum panelType, HIDSkeleton hidSkeleton) : base(panelType, hidSkeleton)
         {
+            _panelType = panelType;
             switch (panelType)
             {
                 case GamingPanelEnum.StreamDeckMini:
@@ -322,7 +327,7 @@ namespace NonVisuals.StreamDeck
 
         public string GetKeyPressForLoggingPurposes(StreamDeckButton streamDeckButton)
         {
-            var result = "";
+            var result = string.Empty;
             /*foreach (var keyBinding in _keyBindings)
             {
                 if (keyBinding.OSKeyPress != null && keyBinding.EnumStreamDeckButtonName == enumStreamDeckButton.EnumStreamDeckButtonName && keyBinding.WhenTurnedOn == enumStreamDeckButton.IsPressed)

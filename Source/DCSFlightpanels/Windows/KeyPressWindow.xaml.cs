@@ -9,6 +9,8 @@ using NonVisuals.Interfaces;
 
 namespace DCSFlightpanels.Windows
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for KeyPressWindow.xaml
     /// </summary>
@@ -92,7 +94,7 @@ namespace DCSFlightpanels.Windows
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
-                var result = "";
+                var result = string.Empty;
                 foreach (var str in hashSetOfKeysPressed)
                 {
                     if (!string.IsNullOrEmpty(result))
@@ -121,7 +123,7 @@ namespace DCSFlightpanels.Windows
             {
                 if (e.ChangedButton == MouseButton.Left)
                 {
-                    ((TextBox)sender).Text = "";
+                    ((TextBox)sender).Text = string.Empty;
                     ((TextBox)sender).Tag = null;
                     SetIsDirty();
                     SetFormState();

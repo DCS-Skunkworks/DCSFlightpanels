@@ -9,6 +9,8 @@ using NonVisuals;
 
 namespace DCSFlightpanels.Windows
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for KeyPressReadingWindow.xaml
     /// </summary>
@@ -106,7 +108,7 @@ namespace DCSFlightpanels.Windows
                 {
                     hashSetOfKeysPressed.Add(Enum.GetName(typeof(VirtualKeyCode), virtualKeyCode));
                 }
-                var result = "";
+                var result = string.Empty;
                 foreach (var str in hashSetOfKeysPressed)
                 {
                     if (!string.IsNullOrEmpty(result))
@@ -147,7 +149,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                TextBoxKeyPress.Text = "";
+                TextBoxKeyPress.Text = string.Empty;
                 SetFormState();
             }
             catch (Exception ex)

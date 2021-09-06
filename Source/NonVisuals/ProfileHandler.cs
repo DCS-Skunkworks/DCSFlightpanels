@@ -1,37 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Windows;
-using ClassLibraryCommon;
-using DCS_BIOS;
-using NonVisuals.Interfaces;
-using NonVisuals.Properties;
-using Theraot.Core;
-using MessageBox = System.Windows.MessageBox;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
-
-namespace NonVisuals
+﻿namespace NonVisuals
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Text;
+    using System.Windows;
+
+    using ClassLibraryCommon;
+
+    using DCS_BIOS;
+
+    using MEF;
+
+    using NonVisuals.Interfaces;
+    using NonVisuals.Properties;
+
+    using Theraot.Core;
+
+    using MessageBox = System.Windows.MessageBox;
+    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+    using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
     public class ProfileHandler : IProfileHandlerListener, IIsDirty
     {
-        //Both directory and filename
-        private string _filename = Path.GetFullPath((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))) + "\\" + "dcsfp_profile.bindings";
-        private string _lastProfileUsed = "";
-        private bool _isDirty;
-        private bool _isNewProfile;
-        //private readonly List<string> _listPanelSettingsData = new List<string>();
-        private readonly object _lockObject = new object();
         private const string OPEN_FILE_DIALOG_FILE_NAME = "*.bindings";
         private const string OPEN_FILE_DIALOG_DEFAULT_EXT = ".bindings";
         private const string OPEN_FILE_DIALOG_FILTER = "DCSFlightpanels (.bindings)|*.bindings";
-        //private DCSFPProfile _airframe = DCSFPProfile.NOFRAMELOADEDYET;
-        private DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
+
+        private static DCSFPProfile _dcsfpProfile = DCSFPProfile.GetNoFrameLoadedYet();
 
         private readonly List<KeyValuePair<string, GamingPanelEnum>> _profileFileInstanceIDs = new List<KeyValuePair<string, GamingPanelEnum>>();
+        private readonly object _lockObject = new object();
+        
+        //Both directory and filename
+        private string _filename = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)) + "\\" + "dcsfp_profile.bindings";
+        private string _lastProfileUsed = string.Empty;
+        private bool _isDirty;
+        private bool _isNewProfile;
+
         private bool _profileLoaded;
 
         private IHardwareConflictResolver _hardwareConflictResolver;
@@ -193,44 +200,44 @@ namespace NonVisuals
                         else
                         {
                             //Backward compability
-                            var airframeAsString = fileLine.Replace("Airframe=", "").Trim();
+                            var airframeAsString = fileLine.Replace("Airframe=", string.Empty).Trim();
                             tmpProfile = DCSFPProfile.GetBackwardCompatible(airframeAsString);
                         }
                     }
                     else if (fileLine.StartsWith("Profile="))
                     {
-                        tmpProfile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", "")));
+                        tmpProfile = DCSFPProfile.GetProfile(int.Parse(fileLine.Replace("Profile=", string.Empty)));
                     }
                     else if (fileLine.StartsWith("OperationLevelFlag="))
                     {
-                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", "").Trim())); //backward compat 13.03.2021
+                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("OperationLevelFlag=", string.Empty).Trim())); // backward compat 13.03.2021
                     }
                     else if (fileLine.StartsWith("EmulationModesFlag="))
                     {
-                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("EmulationModesFlag=", "").Trim()));
+                        Common.SetEmulationModesFlag(int.Parse(fileLine.Replace("EmulationModesFlag=", string.Empty).Trim()));
                     }
                     else if (fileLine.StartsWith("UseGenericRadio="))
                     {
-                        tmpProfile.UseGenericRadio = (bool.Parse(fileLine.Replace("UseGenericRadio=", "").Trim()));
+                        tmpProfile.UseGenericRadio = bool.Parse(fileLine.Replace("UseGenericRadio=", string.Empty).Trim());
                     }
                     else if (!fileLine.StartsWith("#") && fileLine.Length > 0)
                     {
-                        //Process all these lines.
+                        // Process all these lines.
                         if (fileLine.StartsWith("PanelType="))
                         {
-                            currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", "").Trim());
+                            currentPanelType = (GamingPanelEnum)Enum.Parse(typeof(GamingPanelEnum), fileLine.Replace("PanelType=", string.Empty).Trim());
                             genericPanelBinding = new GenericPanelBinding();
                             genericPanelBinding.PanelType = currentPanelType;
                         }
                         else if (fileLine.StartsWith("PanelInstanceID="))
                         {
-                            currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", "").Trim();
+                            currentPanelInstanceID = fileLine.Replace("PanelInstanceID=", string.Empty).Trim();
                             genericPanelBinding.HIDInstance = currentPanelInstanceID;
                             _profileFileInstanceIDs.Add(new KeyValuePair<string, GamingPanelEnum>(currentPanelInstanceID, currentPanelType));
                         }
                         else if (fileLine.StartsWith("BindingHash="))
                         {
-                            currentBindingHash = fileLine.Replace("BindingHash=", "").Trim();
+                            currentBindingHash = fileLine.Replace("BindingHash=", string.Empty).Trim();
                             genericPanelBinding.BindingHash = currentBindingHash;
                         }
                         else if (fileLine.StartsWith("PanelSettingsVersion="))
@@ -268,7 +275,7 @@ namespace NonVisuals
                                 var line = fileLine;
                                 if (line.StartsWith("\t"))
                                 {
-                                    line = line.Replace("\t", "");
+                                    line = line.Replace("\t", string.Empty);
                                 }
 
                                 genericPanelBinding.Settings.Add(line);
@@ -568,6 +575,11 @@ namespace NonVisuals
             IsDirty = true;
         }
 
+        public static DCSFPProfile SelectedProfile()
+        {
+            return _dcsfpProfile;
+        }
+
         public DCSFPProfile Profile
         {
             get => _dcsfpProfile;
@@ -578,6 +590,7 @@ namespace NonVisuals
                 {
                     SetIsDirty();
                 }
+
                 _dcsfpProfile = value;
                 Common.ResetEmulationModesFlag();
                 SetEmulationModeFlag();

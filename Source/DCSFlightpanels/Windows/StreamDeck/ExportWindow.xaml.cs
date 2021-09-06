@@ -19,7 +19,7 @@ namespace DCSFlightpanels.Windows.StreamDeck
     {
         private bool _formLoaded = false;
         private StreamDeckPanel _streamDeckPanel;
-        private string _zipFileName = "";
+        private string _zipFileName = string.Empty;
 
 
 
@@ -149,9 +149,9 @@ namespace DCSFlightpanels.Windows.StreamDeck
                 }
                 else
                 {
-                    TextBoxLayerName.Text = "";
-                    TextBoxButtonName.Text = "";
-                    TextBoxDescription.Text = "";
+                    TextBoxLayerName.Text = string.Empty;
+                    TextBoxButtonName.Text = string.Empty;
+                    TextBoxDescription.Text = string.Empty;
                 }
                 SetFormState();
             }

@@ -91,11 +91,11 @@ namespace DCSFlightpanels
                             {
                                 if (arg.Contains("NEWPROFILE"))
                                 {
-                                    Settings.Default.LastProfileFileUsed = "";
+                                    Settings.Default.LastProfileFileUsed = string.Empty;
                                 }
                                 else
                                 {
-                                    Settings.Default.LastProfileFileUsed = arg.ToLower().Replace("\"", "").Replace("'", "").Replace(Constants.CommandLineArgumentOpenProfile.ToLower(), "");
+                                    Settings.Default.LastProfileFileUsed = arg.ToLower().Replace("\"", string.Empty).Replace("'", string.Empty).Replace(Constants.CommandLineArgumentOpenProfile.ToLower(), string.Empty);
                                 }
                                 Settings.Default.Save();
                                 closeCurrentInstance = true;

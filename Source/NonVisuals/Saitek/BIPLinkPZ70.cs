@@ -1,11 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+
+    using MEF;
+
+    using NonVisuals.Saitek.Panels;
+
     [Serializable]
     public class BIPLinkPZ70 : BIPLink
     {
@@ -14,6 +16,7 @@ namespace NonVisuals.Saitek
          */
 
         public PZ70DialPosition DialPosition { get; set; }
+
         public MultiPanelPZ70Knobs MultiPanelPZ70Knob { get; set; }
 
         public override void ImportSettings(string settings)
@@ -24,13 +27,13 @@ namespace NonVisuals.Saitek
             }
             if (settings.StartsWith("MultipanelBIPLink{"))
             {
-                //MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+                // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
                 // 0 1 2 3
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
-                //MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}
-                var param0 = parameters[0].Replace("MultipanelBIPLink{", "").Replace("}", "").Trim();
-                //ALT|1KNOB_ENGINE_LEFT
+                // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}
+                var param0 = parameters[0].Replace("MultipanelBIPLink{", string.Empty).Replace("}", string.Empty).Trim();
+                // ALT|1KNOB_ENGINE_LEFT
                 var tmpArray = param0.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 WhenOnTurnedOn = tmpArray[1].Substring(0, 1) == "1";
                 MultiPanelPZ70Knob = (MultiPanelPZ70Knobs)Enum.Parse(typeof(MultiPanelPZ70Knobs), tmpArray[1].Substring(1));
@@ -46,7 +49,7 @@ namespace NonVisuals.Saitek
                     }
                     if (parameters[i].StartsWith("Description["))
                     {
-                        var tmp = parameters[i].Replace("Description[", "").Replace("]", "");
+                        var tmp = parameters[i].Replace("Description[", string.Empty).Replace("]", string.Empty);
                         _description = tmp;
                     }
                 }
@@ -55,7 +58,7 @@ namespace NonVisuals.Saitek
 
         public override string ExportSettings()
         {
-            //MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+            // MultipanelBIPLink{ALT|1KNOB_ENGINE_LEFT}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/BIPLight{Position_1_4|GREEN|FourSec|f5fe6e63e0c05a20f519d4b9e46fab3e}\o/Description["Set Engines On"]\o/\\?\hid#vid_06a3&pid_0d67#9&231fd360&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
             if (_bipLights == null || _bipLights.Count == 0)
             {
                 return null;

@@ -23,6 +23,8 @@ using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Radios.Emulators
 {
+    using MEF;
+
     public partial class RadioPanelPZ69UserControlGeneric : UserControlBase, IGamingPanelListener, IProfileHandlerListener, IGamingPanelUserControl, IPanelUI
     {
         private readonly RadioPanelPZ69Generic _radioPanelPZ69;
@@ -104,17 +106,29 @@ namespace DCSFlightpanels.Radios.Emulators
             }
         }
 
-        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e) { }
+        public void PanelBindingReadFromFile(object sender, PanelBindingReadFromFileEventArgs e)
+        {
+        }
 
-        public void SettingsCleared(object sender, PanelEventArgs e) { }
+        public void SettingsCleared(object sender, PanelEventArgs e)
+        {
+        }
 
-        public void LedLightChanged(object sender, LedLightChangeEventArgs e) { }
+        public void LedLightChanged(object sender, LedLightChangeEventArgs e)
+        {
+        }
 
-        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e) { }
+        public void PanelDataAvailable(object sender, PanelDataToDCSBIOSEventEventArgs e)
+        {
+        }
 
-        public void DeviceAttached(object sender, PanelEventArgs e) { }
+        public void DeviceAttached(object sender, PanelEventArgs e)
+        {
+        }
 
-        public void DeviceDetached(object sender, PanelEventArgs e) { }
+        public void DeviceDetached(object sender, PanelEventArgs e)
+        {
+        }
 
         public void SettingsApplied(object sender, PanelEventArgs e)
         {
@@ -122,8 +136,8 @@ namespace DCSFlightpanels.Radios.Emulators
             {
                 if (e.HidInstance.Equals(_radioPanelPZ69.HIDInstanceId) && e.PanelType == GamingPanelEnum.PZ69RadioPanel)
                 {
-                    Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
-                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = ""));
+                    Dispatcher?.BeginInvoke((Action)ShowGraphicConfiguration);
+                    Dispatcher?.BeginInvoke((Action)(() => TextBoxLogPZ69.Text = string.Empty));
                 }
             }
             catch (Exception ex)
@@ -136,7 +150,7 @@ namespace DCSFlightpanels.Radios.Emulators
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(ShowGraphicConfiguration));
+                Dispatcher?.BeginInvoke((Action)ShowGraphicConfiguration);
             }
             catch (Exception ex)
             {
@@ -336,7 +350,7 @@ namespace DCSFlightpanels.Radios.Emulators
             {
                 if (textBox.Name.EndsWith("Numbers"))
                 {
-                    textBox.Text = "";
+                    textBox.Text = string.Empty;
                 }
             }
         }
@@ -687,13 +701,13 @@ namespace DCSFlightpanels.Radios.Emulators
                     }
                 }
 
-                foreach (var osCommand in _radioPanelPZ69.OSCommandHashSet)
+                foreach (var operatingSystemCommand in _radioPanelPZ69.OSCommandHashSet)
                 {
-                    var textBox = (PZ69GenericTextBox)GetTextBox(osCommand.RadioPanelPZ69Key, osCommand.WhenTurnedOn);
-                    if (osCommand.OSCommandObject != null && (osCommand.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || osCommand.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
-                        if (osCommand.OSCommandObject != null)
+                    var textBox = (PZ69GenericTextBox)GetTextBox(operatingSystemCommand.RadioPanelPZ69Key, operatingSystemCommand.WhenTurnedOn);
+                    if (operatingSystemCommand.OSCommandObject != null && (operatingSystemCommand.DialPosition == _radioPanelPZ69.PZ69UpperDialPosition || operatingSystemCommand.DialPosition == _radioPanelPZ69.PZ69LowerDialPosition))
+                        if (operatingSystemCommand.OSCommandObject != null)
                         {
-                            textBox.Bill.OSCommandObject = osCommand.OSCommandObject;
+                            textBox.Bill.OSCommandObject = operatingSystemCommand.OSCommandObject;
                         }
                 }
 
@@ -1152,7 +1166,7 @@ namespace DCSFlightpanels.Radios.Emulators
             {
                 if (_radioPanelPZ69 != null)
                 {
-                    TextBoxLogPZ69.Text = "";
+                    TextBoxLogPZ69.Text = string.Empty;
                     TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
                     Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");

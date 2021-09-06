@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using System.Windows.Media;
-using DCS_BIOS;
-using DCSFlightpanels.Interfaces;
-using NonVisuals.DCSBIOSBindings;
-using NonVisuals.Interfaces;
-using NonVisuals.Saitek;
-using NonVisuals.Saitek.Panels;
-
-namespace DCSFlightpanels.Bills
+﻿namespace DCSFlightpanels.Bills
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+
+    using DCSFlightpanels.Interfaces;
+
+    using DCS_BIOS;
+
+    using NonVisuals.DCSBIOSBindings;
+    using NonVisuals.Interfaces;
+    using NonVisuals.Saitek;
+    using NonVisuals.Saitek.Panels;
+
     public class BillPZ55 : BillBaseInput
     {
         private DCSBIOSActionBindingPZ55 _dcsbiosBindingPZ55;
@@ -86,7 +89,7 @@ namespace DCSFlightpanels.Bills
                 }
                 else
                 {
-                    TextBox.Text = "";
+                    TextBox.Text = string.Empty;
                 }
             }
         }
@@ -119,8 +122,6 @@ namespace DCSFlightpanels.Bills
             }
             _dcsbiosBindingPZ55.DCSBIOSInputs = dcsBiosInputs;
         }
-
-
         
         public override void ClearAll()
         {
@@ -129,7 +130,7 @@ namespace DCSFlightpanels.Bills
             KeyPress = null;
             OSCommandObject = null;
             TextBox.Background = Brushes.White;
-            TextBox.Text = "";
+            TextBox.Text = string.Empty;
         }
     }
 }

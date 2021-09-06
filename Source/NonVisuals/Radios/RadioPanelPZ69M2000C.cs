@@ -11,6 +11,10 @@ using NonVisuals.Saitek;
 
 namespace NonVisuals.Radios
 {
+    using MEF;
+
+    using NonVisuals.Plugin;
+
     public class RadioPanelPZ69M2000C : RadioPanelPZ69Base, IRadioPanel, IDCSBIOSStringListener
     {
         private CurrentM2000CRadioMode _currentUpperRadioMode = CurrentM2000CRadioMode.VUHF;
@@ -23,7 +27,7 @@ namespace NonVisuals.Radios
         private readonly object _lockVUHFPresetDialObject = new object();
         private DCSBIOSOutput _vhfDcsbiosOutputPresetFreqString;
         private DCSBIOSOutput _vhfDcsbiosOutputPresetDial;
-        private string _vhfPresetCockpitFrequency = "";
+        private string _vhfPresetCockpitFrequency = string.Empty;
         private volatile uint _vhfPresetCockpitDialPos = 1;
         private const string VHFPresetCommandInc = "VHF_CH_SEL INC\n";
         private const string VHFPresetCommandDec = "VHF_CH_SEL DEC\n";
@@ -39,7 +43,7 @@ namespace NonVisuals.Radios
         private readonly object _lockUHFPresetDialObject = new object();
         private DCSBIOSOutput _uhfDcsbiosOutputPresetFreqString;
         private DCSBIOSOutput _uhfDcsbiosOutputPresetDial;
-        private string _uhfPresetCockpitFrequency = "";
+        private string _uhfPresetCockpitFrequency = string.Empty;
         private volatile uint _uhfPresetCockpitDialPos = 1;
         private const string UHF_PRESET_COMMAND_INC = "UHF_PRESET_KNOB INC\n";
         private const string UHF_PRESET_COMMAND_DEC = "UHF_PRESET_KNOB DEC\n";
@@ -507,7 +511,13 @@ namespace NonVisuals.Radios
                                     break;
                                 }
                         }
+
+                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                        {
+                            PluginManager.DoEvent(ProfileHandler.SelectedProfile().Description, HIDInstanceId, (int)PluginGamingPanelEnum.PZ69RadioPanel, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                        }
                     }
+
                     AdjustFrequency(hashSet);
                     ShowFrequenciesOnPanel();
                 }
@@ -901,7 +911,7 @@ namespace NonVisuals.Radios
                     {
                         case CurrentM2000CRadioMode.VUHF:
                             {
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockVUHFPresetDialObject)
                                 {
                                     channelAsString = (_vhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -924,7 +934,7 @@ namespace NonVisuals.Radios
                             }
                         case CurrentM2000CRadioMode.UHF:
                             {
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockUHFPresetDialObject)
                                 {
                                     channelAsString = (_uhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -946,8 +956,8 @@ namespace NonVisuals.Radios
                             }
                         case CurrentM2000CRadioMode.TACAN:
                             {
-                                var channelAsString = "";
-                                var modeAsString = "";
+                                var channelAsString = string.Empty;
+                                var modeAsString = string.Empty;
                                 lock (_lockTACANDialObject)
                                 {
                                     channelAsString = (_tacanXYSelectCockpitDialPos).ToString().PadRight(3, ' ') + (_tacanTensCockpitDialPos).ToString() + (_tacanOnesCockpitDialPos).ToString();
@@ -959,8 +969,8 @@ namespace NonVisuals.Radios
                             }
                         case CurrentM2000CRadioMode.VOR:
                             {
-                                var channelAsString = "";
-                                var settingsAsString = "";
+                                var channelAsString = string.Empty;
+                                var settingsAsString = string.Empty;
                                 lock (_lockTACANDialObject)
                                 {
                                     var ones = _vorOnesCockpitDialPos + 8;
@@ -983,7 +993,7 @@ namespace NonVisuals.Radios
                     {
                         case CurrentM2000CRadioMode.VUHF:
                             {
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockVUHFPresetDialObject)
                                 {
                                     channelAsString = (_vhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -1005,7 +1015,7 @@ namespace NonVisuals.Radios
                             }
                         case CurrentM2000CRadioMode.UHF:
                             {
-                                var channelAsString = "";
+                                var channelAsString = string.Empty;
                                 lock (_lockUHFPresetDialObject)
                                 {
                                     channelAsString = (_uhfPresetCockpitDialPos).ToString().PadLeft(2, ' ');
@@ -1027,8 +1037,8 @@ namespace NonVisuals.Radios
                             }
                         case CurrentM2000CRadioMode.TACAN:
                             {
-                                var channelAsString = "";
-                                var modeAsString = "";
+                                var channelAsString = string.Empty;
+                                var modeAsString = string.Empty;
                                 lock (_lockTACANDialObject)
                                 {
                                     channelAsString = (_tacanXYSelectCockpitDialPos).ToString().PadRight(3, ' ') + (_tacanTensCockpitDialPos).ToString() + (_tacanOnesCockpitDialPos).ToString();
@@ -1040,8 +1050,8 @@ namespace NonVisuals.Radios
                             }
                         case CurrentM2000CRadioMode.VOR:
                             {
-                                var channelAsString = "";
-                                var settingsAsString = "";
+                                var channelAsString = string.Empty;
+                                var settingsAsString = string.Empty;
                                 lock (_lockTACANDialObject)
                                 {
                                     var ones = _vorOnesCockpitDialPos + 8;
@@ -1264,7 +1274,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, KeyPressInfo> keySequence)
+        public override void AddOrUpdateSequencedKeyBinding(PanelSwitchOnOff panelSwitchOnOff, string description, SortedList<int, IKeyPressInfo> keySequence)
         {
         }
 
@@ -1276,7 +1286,7 @@ namespace NonVisuals.Radios
         {
         }
 
-        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand osCommand)
+        public override void AddOrUpdateOSCommandBinding(PanelSwitchOnOff panelSwitchOnOff, OSCommand operatingSystemCommand)
         {
         }
 

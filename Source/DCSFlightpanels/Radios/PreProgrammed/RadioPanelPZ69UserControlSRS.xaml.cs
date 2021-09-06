@@ -17,6 +17,8 @@ using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Radios.PreProgrammed
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlSRS.xaml
     /// </summary>
@@ -397,7 +399,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
             {
                 if (_radioPanelPZ69SRS != null)
                 {
-                    TextBoxLogPZ69.Text = "";
+                    TextBoxLogPZ69.Text = string.Empty;
                     TextBoxLogPZ69.Text = _radioPanelPZ69SRS.HIDInstanceId;
                     Clipboard.SetText(_radioPanelPZ69SRS.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");
@@ -435,7 +437,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
                     var numberFormat = new NumberFormatInfo();
                     numberFormat.NumberDecimalSeparator = ".";
                     numberFormat.NumberDecimalDigits = 3;
-                    numberFormat.NumberGroupSeparator = "";
+                    numberFormat.NumberGroupSeparator = string.Empty;
                     Settings.Default.SRSSmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
                     _radioPanelPZ69SRS.SmallFreqStepping = double.Parse(ComboBoxSmallFreqStepping.SelectedValue.ToString(), numberFormat);
                     Settings.Default.Save();

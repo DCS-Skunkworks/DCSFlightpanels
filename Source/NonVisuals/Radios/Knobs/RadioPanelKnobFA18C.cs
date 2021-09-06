@@ -8,42 +8,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-    public enum RadioPanelPZ69KnobsFA18C
-    {
-        UPPER_COMM1 = 0,
-        UPPER_COMM2 = 2,
-        UPPER_VHFFM = 4,
-        UPPER_ILS = 8,
-        UPPER_TACAN = 16,
-        UPPER_DME = 32,
-        UPPER_XPDR = 64,
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_COMM1 = 4096,
-        LOWER_COMM2 = 8192,
-        LOWER_VHFFM = 16384,
-        LOWER_ILS = 32768,
-        LOWER_TACAN = 65536,
-        LOWER_DME = 131072,
-        LOWER_XPDR = 262144,
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    public enum CurrentFA18CRadioMode
-    {
-        COMM2 = 0,
-        VHFFM = 2,
-        COMM1 = 4,
-        TACAN = 8,
-        ILS = 16
-    }
+    using MEF;
 
     public class RadioPanelKnobFA18C : ISaitekPanelKnob
     {

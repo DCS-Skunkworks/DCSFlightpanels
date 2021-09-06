@@ -16,13 +16,15 @@ using StreamDeckSharp;
 
 namespace NonVisuals.StreamDeck
 {
+    using MEF;
+
     public class StreamDeckLayerHandler
     {
         private readonly StreamDeckPanel _streamDeckPanel = null;
         private volatile List<StreamDeckLayer> _layerList = new List<StreamDeckLayer>();
         private const string HOME_LAYER_ID = "*";
         private volatile List<string> _layerHistory = new List<string>();
-        private volatile string _selectedLayerName = "";
+        private volatile string _selectedLayerName = string.Empty;
         private readonly IStreamDeckBoard _streamDeckBoard;
         private EnumStreamDeckButtonNames _selectedButtonName = EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON;
 
@@ -512,7 +514,7 @@ namespace NonVisuals.StreamDeck
 
         public int SelectedButtonNumber
         {
-            get => _selectedButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON ? 999 : int.Parse(_selectedButtonName.ToString().Replace(StreamDeckConstants.NUMBER_BUTTON_PREFIX, ""));
+            get => _selectedButtonName == EnumStreamDeckButtonNames.BUTTON0_NO_BUTTON ? 999 : int.Parse(_selectedButtonName.ToString().Replace(StreamDeckConstants.NUMBER_BUTTON_PREFIX, string.Empty));
             set
             {
                 if (SelectedButtonNumber != value)

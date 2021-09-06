@@ -122,7 +122,7 @@ namespace DCSFlightpanels.Windows
                                 Dispatcher?.BeginInvoke(
                                     (Action)delegate
                                     {
-                                        LabelErrors.Content = "";
+                                        LabelErrors.Content = string.Empty;
                                     });
                                 Dispatcher?.Invoke(() =>
                                 {
@@ -374,7 +374,7 @@ namespace DCSFlightpanels.Windows
                 }
                 var result = _jaceExtended.CalculationEngine.Calculate(formula, variables);
 
-                LabelErrors.Content = "";
+                LabelErrors.Content = string.Empty;
                 LabelResult.Content = "Result : " + result;
                 SetFormState();
             }
@@ -491,7 +491,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                TextBoxId1.Text = "";
+                TextBoxId1.Text = string.Empty;
                 TextBoxSearch1.Text = _typeToSearch;
                 TextBoxSearch1.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput1 = null;
@@ -507,7 +507,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                TextBoxId2.Text = "";
+                TextBoxId2.Text = string.Empty;
                 TextBoxSearch2.Text = _typeToSearch;
                 TextBoxSearch2.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput2 = null;
@@ -523,7 +523,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                TextBoxId3.Text = "";
+                TextBoxId3.Text = string.Empty;
                 TextBoxSearch3.Text = _typeToSearch;
                 TextBoxSearch3.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput3 = null;
@@ -539,7 +539,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                TextBoxId4.Text = "";
+                TextBoxId4.Text = string.Empty;
                 TextBoxSearch4.Text = _typeToSearch;
                 TextBoxSearch4.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput4 = null;
@@ -555,7 +555,7 @@ namespace DCSFlightpanels.Windows
         {
             try
             {
-                TextBoxId5.Text = "";
+                TextBoxId5.Text = string.Empty;
                 TextBoxSearch5.Text = _typeToSearch;
                 TextBoxSearch5.Foreground = new SolidColorBrush(Colors.Gainsboro);
                 _dcsbiosOutput5 = null;
@@ -605,7 +605,7 @@ namespace DCSFlightpanels.Windows
         private void TextBoxSearch_OnGotFocus(object sender, RoutedEventArgs e)
         {
             var textbox = (TextBox)sender;
-            textbox.Text = "";
+            textbox.Text = string.Empty;
             textbox.Foreground = new SolidColorBrush(Colors.Black);
         }
 

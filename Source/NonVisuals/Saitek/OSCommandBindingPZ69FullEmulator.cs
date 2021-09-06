@@ -1,9 +1,9 @@
-﻿using System;
-using NonVisuals.Radios.Knobs;
-
-
-namespace NonVisuals.Saitek
+﻿namespace NonVisuals.Saitek
 {
+    using System;
+
+    using MEF;
+
     [Serializable]
     public class OSCommandBindingPZ69FullEmulator : OSCommandBinding
     {
@@ -19,17 +19,18 @@ namespace NonVisuals.Saitek
             {
                 throw new ArgumentException("Import string empty. (KeyBinding)");
             }
+
             if (settings.StartsWith("RadioPanelOSPZ69Full{"))
             {
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
-                var param0 = parameters[0].Replace("RadioPanelOSPZ69Full{", "").Replace("}", "");
+                var param0 = parameters[0].Replace("RadioPanelOSPZ69Full{", string.Empty).Replace("}", string.Empty);
                 _pz69DialPosition = (PZ69DialPosition)Enum.Parse(typeof(PZ69DialPosition), param0);
-                var param1 = parameters[1].Replace("{", "").Replace("}", "");
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
                 WhenTurnedOn = param1.Substring(0, 1) == "1";
                 param1 = param1.Substring(1);
                 _panelPZ69Knob = (RadioPanelPZ69KnobsEmulator)Enum.Parse(typeof(RadioPanelPZ69KnobsEmulator), param1);
 
-                //OSCommand{FILE\o/ARGUMENTS\o/NAME}
+                // OSCommand{FILE\o/ARGUMENTS\o/NAME}
                 OSCommandObject = new OSCommand();
                 OSCommandObject.ImportString(parameters[2]);
             }

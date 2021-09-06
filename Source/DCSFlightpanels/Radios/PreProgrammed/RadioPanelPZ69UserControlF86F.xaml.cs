@@ -16,6 +16,8 @@ using NonVisuals.Saitek.Panels;
 
 namespace DCSFlightpanels.Radios.PreProgrammed
 {
+    using MEF;
+
     /// <summary>
     /// Interaction logic for RadioPanelPZ69UserControlF86F.xaml
     /// </summary>
@@ -377,7 +379,7 @@ namespace DCSFlightpanels.Radios.PreProgrammed
             {
                 if (_radioPanelPZ69 != null)
                 {
-                    TextBoxLogPZ69.Text = "";
+                    TextBoxLogPZ69.Text = string.Empty;
                     TextBoxLogPZ69.Text = _radioPanelPZ69.HIDInstanceId;
                     Clipboard.SetText(_radioPanelPZ69.HIDInstanceId);
                     MessageBox.Show("The Instance Id for the panel has been copied to the Clipboard.");

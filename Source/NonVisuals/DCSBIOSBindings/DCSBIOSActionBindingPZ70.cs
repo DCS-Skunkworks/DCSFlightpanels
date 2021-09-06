@@ -5,10 +5,11 @@ using System.Text;
 using DCS_BIOS;
 using NonVisuals.Saitek;
 using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.DCSBIOSBindings
 {
+    using MEF;
+
     [Serializable]
     public class DCSBIOSActionBindingPZ70 : DCSBIOSActionBindingBase
     {
@@ -37,13 +38,13 @@ namespace NonVisuals.DCSBIOSBindings
                 var parameters = settings.Split(new[] { SaitekConstants.SEPARATOR_SYMBOL }, StringSplitOptions.RemoveEmptyEntries);
 
                 //MultiPanelDCSBIOSControl{ALT}
-                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControl{", "").Replace("}", "");
+                var param0 = parameters[0].Replace("MultiPanelDCSBIOSControl{", string.Empty).Replace("}", string.Empty);
                 _pz70DialPosition = (PZ70DialPosition)Enum.Parse(typeof(PZ70DialPosition), param0);
 
                 //{1KNOB_ALT}
                 //or
                 //{1KNOB_ALT|Landing gear up and blablabla description}
-                var param1 = parameters[1].Replace("{", "").Replace("}", "");
+                var param1 = parameters[1].Replace("{", string.Empty).Replace("}", string.Empty);
                 //1KNOB_ALT
                 //or
                 //1KNOB_ALT|Landing gear up and blablabla description

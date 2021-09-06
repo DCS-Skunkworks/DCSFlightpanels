@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:DCSFlightpanels.Windows"
         xmlns:common="clr-namespace:ClassLibraryCommon;assembly=ClassLibraryCommon"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:mef="clr-namespace:MEF;assembly=MEF"
         mc:Ignorable="d"
         Title="" Height="200" Width="250" WindowStartupLocation="CenterScreen" Icon="/dcsfp;component/Images/flightpanels02_8Rc_icon.ico"
         ResizeMode="NoResize"
@@ -14,7 +15,7 @@
     <Window.Resources>
         <ObjectDataProvider x:Key="DataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="common:KeyPressLength"/>
+                <x:Type TypeName="mef:KeyPressLength"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>

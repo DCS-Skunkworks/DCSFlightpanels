@@ -10,7 +10,7 @@ namespace NonVisuals.StreamDeck
     {
         [JsonProperty("FaceType", Required = Required.Default)]
         public new EnumStreamDeckFaceType FaceType => EnumStreamDeckFaceType.DCSBIOSOverlay;
-        private string _backgroundBitmapPath = "";
+        private string _backgroundBitmapPath = string.Empty;
         [NonSerialized] private Bitmap _backgroundBitmap = null;
         private bool _loadBackground = false;
         private double _dcsbiosValue = 0;

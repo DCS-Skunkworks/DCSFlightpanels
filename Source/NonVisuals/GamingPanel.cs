@@ -47,7 +47,7 @@ namespace NonVisuals
 
         protected abstract void StartListeningForPanelChanges();
 
-        private string _randomBindingHash = "";
+        private string _randomBindingHash = string.Empty;
 
         protected GamingPanel(GamingPanelEnum typeOfGamingPanel, HIDSkeleton hidSkeleton)
         {

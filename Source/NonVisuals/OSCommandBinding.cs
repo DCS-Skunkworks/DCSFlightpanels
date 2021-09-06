@@ -11,7 +11,7 @@ namespace NonVisuals
          */
         private bool _whenOnTurnedOn = true;
         
-        private OSCommand _osCommand;
+        private OSCommand _operatingSystemCommand;
 
         internal abstract void ImportSettings(string settings);
         
@@ -22,7 +22,7 @@ namespace NonVisuals
             unchecked
             {
                 var result = _whenOnTurnedOn.GetHashCode();
-                result = (result * 397) ^ (_osCommand?.GetHash() ?? 0);
+                result = (result * 397) ^ (_operatingSystemCommand?.GetHash() ?? 0);
                 return result;
             }
         }
@@ -35,8 +35,8 @@ namespace NonVisuals
 
         public OSCommand OSCommandObject
         {
-            get => _osCommand;
-            set => _osCommand = value;
+            get => _operatingSystemCommand;
+            set => _operatingSystemCommand = value;
         }
     }
 }

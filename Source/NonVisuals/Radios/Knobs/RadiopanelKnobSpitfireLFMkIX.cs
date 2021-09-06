@@ -4,51 +4,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-    public enum RadioPanelPZ69KnobsSpitfireLFMkIX
-    {
-        UPPER_HFRADIO = 0,      //COM1
-        UPPER_IFF = 2,      //COM2
-        UPPER_NO_USE0 = 4,          //NAV1
-        UPPER_NO_USE1 = 8,             //NAV2
-        UPPER_NO_USE2 = 16,       //ADF
-        UPPER_NO_USE3 = 32,          //DME_
-        UPPER_NO_USE4 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_HFRADIO = 4096,   //COM1
-        LOWER_IFF = 8192,   //COM2
-        LOWER_NO_USE0 = 16384,      //NAV1
-        LOWER_NO_USE1 = 32768,          //NAV2
-        LOWER_NO_USE2 = 65536,    //ADF
-        LOWER_NO_USE3 = 131072,      //DME_
-        LOWER_NO_USE4 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    public enum CurrentSpitfireLFMkIXRadioMode
-    {
-        /*
-         *  COM1 Large Freq Mode
-         *  COM1 Small Fine Channel/OFF
-         *  Freq. Selector Mode
-         *  
-         *  COM2 Large IFF Circuit B
-         *  COM2 Small IFF Circuit D
-         *  COM2 ACT/STBY IFF Destruction
-         *     
-         */
-        HFRADIO = 0,
-        HFRADIO2 = 2,
-        IFF = 4,
-        NOUSE = 64
-    }
+    using MEF;
 
     public class RadioPanelKnobSpitfireLFMkIX : ISaitekPanelKnob
     {

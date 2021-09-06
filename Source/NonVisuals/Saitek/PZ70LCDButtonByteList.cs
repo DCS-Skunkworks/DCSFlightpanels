@@ -1,10 +1,11 @@
 ﻿using System;
 using ClassLibraryCommon;
 using NonVisuals.Saitek.Panels;
-using NonVisuals.Saitek.Switches;
 
 namespace NonVisuals.Saitek
 {
+    using MEF;
+
     public class PZ70LCDButtonByteList
     {
         /*

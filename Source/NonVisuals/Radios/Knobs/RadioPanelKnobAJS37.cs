@@ -4,41 +4,7 @@ using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios.Knobs
 {
-    public enum RadioPanelPZ69KnobsAJS37
-    {
-        UPPER_FR22 = 0,      //COM1
-        UPPER_FR24 = 2,      //COM2
-        UPPER_TILS = 4,          //NAV1
-        UPPER_NO_USE0 = 8,             //NAV2
-        UPPER_NO_USE1 = 16,       //ADF
-        UPPER_NO_USE2 = 32,          //DME_
-        UPPER_NO_USE3 = 64,            //XPDR
-        UPPER_SMALL_FREQ_WHEEL_INC = 128,
-        UPPER_SMALL_FREQ_WHEEL_DEC = 256,
-        UPPER_LARGE_FREQ_WHEEL_INC = 512,
-        UPPER_LARGE_FREQ_WHEEL_DEC = 1024,
-        UPPER_FREQ_SWITCH = 2056,
-        LOWER_FR22 = 4096,   //COM1
-        LOWER_FR24 = 8192,   //COM2
-        LOWER_TILS = 16384,      //NAV1
-        LOWER_NO_USE0 = 32768,          //NAV2
-        LOWER_NO_USE1 = 65536,    //ADF
-        LOWER_NO_USE2 = 131072,      //DME_
-        LOWER_NO_USE3 = 262144,        //XPDR
-        LOWER_SMALL_FREQ_WHEEL_INC = 8388608,
-        LOWER_SMALL_FREQ_WHEEL_DEC = 524288,
-        LOWER_LARGE_FREQ_WHEEL_INC = 1048576,
-        LOWER_LARGE_FREQ_WHEEL_DEC = 2097152,
-        LOWER_FREQ_SWITCH = 4194304
-    }
-
-    public enum CurrentAJS37RadioMode
-    {
-        FR22 = 0,
-        FR24 = 2,
-        TILS = 4,
-        NOUSE = 64
-    }
+    using MEF;
 
     public class RadioPanelKnobAJS37 : ISaitekPanelKnob
     {
