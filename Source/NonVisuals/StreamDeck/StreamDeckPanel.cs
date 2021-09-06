@@ -49,6 +49,7 @@ namespace NonVisuals.StreamDeck
                     }
                 case GamingPanelEnum.StreamDeck:
                 case GamingPanelEnum.StreamDeckV2:
+                case GamingPanelEnum.StreamDeckMK2:
                     {
                         _buttonCount = 15;
                         break;
